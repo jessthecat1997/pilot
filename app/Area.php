@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Area extends Model
 {
+	// ETO YUNG SAMPLE CHANGES NI NEIL
 	use SoftDeletes;
 
 	protected $fillable = [
