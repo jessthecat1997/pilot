@@ -1,0 +1,93 @@
+#navtop
+{
+	background-color: #019a70;
+	height: 50px;
+	border-style: none;
+	border-radius: 0px;
+	color: #fff;
+	width: 100%;
+}
+#useracc
+{
+	color:#fff;
+}
+#frstgrp
+{
+	border-bottom: 1px solid #fff;
+	color: #2ad4a5;
+}
+#sidebrand
+{
+	height: 200px;
+	background-color: #fff;
+}
+#navv
+{
+	color: #2ad4a5;
+}
+#sidebar
+{
+	background-color: #fff;
+}
+#logo
+{
+	margin-left: -8px;
+	margin-top: 18px;
+	width : 200px;
+	height: 175px;
+}
+#collapse1
+{
+	background-color: rgba(0,0,0,0.3);
+}
+#collapse2
+{
+	background-color: rgba(0,0,0,0.3);
+}
+#collapse3
+{
+	background-color: rgba(0,0,0,0.3);
+}
+#collapse4
+{
+	background-color: rgba(0,0,0,0.3);
+}
+#btnSave
+{
+	background-color: #2ad4a5;
+}
+hr
+{
+	border-color:  #2ad4a5;
+}
+.panel-body
+{
+	background-color: #fff;
+}
+.nav-tabs > li.active > a:focus
+{
+	background-color: #2ad4a5;
+	color: #fff;
+}
+.nav-tabs > .active > a
+{
+	color: #2ad4a5;
+	background-color: #fff;
+}
+.buts
+{
+	background-color: #2ad4a5;
+	color:#fff;
+}
+#title
+{
+	border-bottom: 2px solid #2ad4a5;
+}
+.dropdown-toggle
+{
+	color:#2ad4a5 ;
+}
+.dropdown-menu
+{
+	color: #2ad4a5;
+}
