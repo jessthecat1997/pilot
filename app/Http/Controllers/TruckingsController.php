@@ -378,6 +378,8 @@ class TruckingsController extends Controller
                 $total_penalty_client += $delivery_bills[$i]->amount;
             }
         }
+        $total_penalty_consignee = number_format((float)$total_penalty_consignee, 2, '.', '');
+        $total_penalty_client = number_format((float)$total_penalty_client, 2, '.', '');
 
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')

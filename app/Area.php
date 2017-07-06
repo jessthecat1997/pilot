@@ -13,7 +13,7 @@ class Area extends Model
 	protected $fillable = [
 	'description',
 	];
-
+	//AAIS
 	protected $dates = [
 	'deleted_at',
 	];

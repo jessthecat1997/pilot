@@ -29,7 +29,7 @@
 
 							<div class="form-group">        
 								<label class="control-label col-md-5 pull-left" for="status">Status: </label>
-								<span class="control-label col-sm- pull-right" id="status">
+								<span class="control-label col-sm-7 pull-right" id="status">
 									@php
 									switch($delivery[0]->status){
 									case 'C': echo "Cancelled"; break;
@@ -171,13 +171,13 @@
 					<thead>
 						<tr>
 							<td>
-								<strong><h5>From</h5></strong>
+								<h5><strong>From</strong></h5>
 							</td>
 							<td>
-								<strong><h5>To</h5></strong>
+								<h5><strong>To</strong></h5>
 							</td>
 							<td>
-								<strong><h5>Amount</h5></strong>
+								<h5><strong>Amount</strong></h5>
 							</td>
 						</tr>
 					</thead>
@@ -286,22 +286,22 @@
 					<table class = "table table-responsive table-hover" >
 						<thead>
 							<tr>
-								<td>
+								<td width="5%">
 
 								</td>
-								<td>
+								<td width="10%">
 									<strong>Billed To</strong>
 								</td>
-								<td>
+								<td width="20%">
 									<strong>Description</strong>
 								</td>
-								<td>
-									<strong>Amount</strong>
-								</td>
-								<td>
+								<td width="30%">
 									<strong>Remarks</strong>
 								</td>
-								<td>
+								<td width="15%">
+									<strong>Amount</strong>
+								</td>
+								<td width="10%">
 									<strong>Actions</strong>
 								</td>
 							</tr>
@@ -310,9 +310,14 @@
 							@php 
 							$delivery_bill_ctr = 1;
 							@endphp
+
 							@forelse($delivery_bills as $delivery_bill)
-							<tr>
-								<td>
+
+							@if($delivery_bill->isBilledTo == '0')<tr style="background-color: rgba(230, 255, 179, 0.3);">
+							@else
+							<tr style="background-color: rgba(255, 133, 102, 0.3);">
+								@endif
+								<td style="text-align: center;">
 									{{ $delivery_bill_ctr++}}
 								</td>
 								<td>
@@ -327,22 +332,33 @@
 									{{ $delivery_bill->charge_description }}
 								</td>
 								<td>
-									{{ $delivery_bill->amount }}
-								</td>
-								<td>
 									{{ $delivery_bill->remarks}}
 								</td>
-								<td>
+								<td style="text-align: right;">
+									Php {{ $delivery_bill->amount }}
+								</td>
+								<td style="text-align: center;">
 									<button class = "btn btn-sm btn-primary">View</button>
 								</td>
 							</tr>
 							@empty
 							<tr>
-								<td colspan="5">
+								<td colspan="6">
 									<h5 style="text-align: center;">No records available.</h5>
 								</td>
 							</tr>
 							@endforelse
+							<tr>
+								<td colspan="4">
+									<h4 style="text-align: right;"><strong>Total:</strong></h4>
+								</td>
+								<td>
+									<h4 style="text-align: right;"><strong>Php 9999.00</strong></h4>
+								</td>
+								<td>
+
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -475,16 +491,16 @@
 						'del_head_id' : {{ $delivery[0]->id }},
 					},
 					success : function (data) {		
-						
+
 					}
 				})
 			}
 		})
 
 		$(document).on('click', '.close-penalty-fee-noncontract', function(e){
-			
+
 			$('#pncf_penalty_amount').val("");
-			
+
 		})
 
 		$(document).on('change', '.pncf_consignee', function(e){
