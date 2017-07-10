@@ -19,18 +19,34 @@
 			page-break-after: always;
 		}
 
+
 	</style>
 </head>
 <body>
 	<div class="row">
 		<div class = "container">
-			<h3 style="text-align: center;">Pilot Cargo Chain Solutions Inc.</h3>
-			<h4 style="text-align: center;">Fax: 523-0201</h4>
-			<h4 style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</h4>
-			<h4 style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</h4>
-
+			<div style="float: left;">
+				<img src="{{ public_path() }}\images\pilotlogo.png"/>
+			</div>
+			<div style="margin-left: 200px;">
+				<br />
+				<br />
+				<small><strong style="text-align: center;">Suite 318 Velco Center Building Port Area Manila</strong></small>
+				<br />
+				<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
+				<br />
+				<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
+				<br />
+				<small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
+			</div>
+			<br />
+			<br />
+			<div style="text-align: center;">
+				<small style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</small>
+			</div>
 			<hr />
 			<h3>Rates</h3>
+
 			<table style="border: 1px solid black; width: 100%;">
 				<thead>
 					<tr>

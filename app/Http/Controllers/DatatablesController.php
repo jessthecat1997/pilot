@@ -1412,34 +1412,66 @@ class DatatablesController extends Controller
 
 	public function get_contracts(Request $request)
 	{
-		$contracts = DB::table('contract_headers')
-		->select('id', 'dateEffective', 'dateExpiration')
-		->where('consignees_id', '=', $request->consignee_id)
-		->get();
+		if($request->contractFor == "0"){
+			$contracts = DB::table('contract_headers')
+			->select('id', 'dateEffective', 'dateExpiration')
+			->where('consignees_id', '=', $request->consignee_id)
+			->get();
 
-		return Datatables::of($contracts)
-		->addColumn('status', function ($contract){
-			$from = Carbon::parse($contract->dateEffective);
-			$to = Carbon::parse($contract->dateExpiration);
+			return Datatables::of($contracts)
+			->addColumn('status', function ($contract){
+				$from = Carbon::parse($contract->dateEffective);
+				$to = Carbon::parse($contract->dateExpiration);
 
-			if( Carbon::now()->between($from, $to) == true)
-			{
-				return 'Active';
-			}
-			else
-			{
-				return 'Expired';
-			}
-		})
-		->addColumn('action', function ($contract){
-			return
-			'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' . 
-			'<button value = "" class = "btn btn-md btn-success select-contract-header">Select</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateEffective)->diffForHumans() }}')
-		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-		->make(true);
+				if( Carbon::now()->between($from, $to) == true)
+				{
+					return 'Active';
+				}
+				else
+				{
+					return 'Expired';
+				}
+			})
+			->addColumn('action', function ($contract){
+				return
+				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' . 
+				'<button value = "" class = "btn btn-md btn-success select-contract-header">Select</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateEffective)->diffForHumans() }}')
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+			->make(true);
+		}
+		else{
+			$contracts = DB::table('contract_headers')
+			->select('id', 'dateEffective', 'dateExpiration')
+			->where('consignees_id', '=', $request->consignee_id)
+			->get();
+
+			return Datatables::of($contracts)
+			->addColumn('status', function ($contract){
+				$from = Carbon::parse($contract->dateEffective);
+				$to = Carbon::parse($contract->dateExpiration);
+
+				if( Carbon::now()->between($from, $to) == true)
+				{
+					return 'Active';
+				}
+				else
+				{
+					return 'Expired';
+				}
+			})
+			->addColumn('action', function ($contract){
+				return
+				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' . 
+				'<button value = "" class = "btn btn-md btn-success select-contract-penalty">Select</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateEffective)->diffForHumans() }}')
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+			->make(true);
+		}
 	}
 
 }
