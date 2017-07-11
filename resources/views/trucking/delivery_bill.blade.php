@@ -45,18 +45,18 @@
 				<div class = "col-md-4">
 					<div class = "col-md-12">
 						<h5><strong>Delivery Fee:</strong></h5>
-						<h3 style="text-align: center;" class = "delivery_fee">Php {{ $delivery[0]->amount }}</h3>
+						<h3 style="text-align: center;"><span class = "delivery_fee">Php {{ $delivery[0]->amount }}</span></h3>
 						<hr />
 					</div>
 					
 					<div class = "col-md-12">
 						<h5><strong>Total Consignee Charges: </strong></h5>
-						<h3 style="text-align: center;" class="total_penalty_consignee">Php {{ $total_penalty_consignee }}</h3>
+						<h3 style="text-align: center;">Php <span class="total_penalty_consignee_head">{{ $total_penalty_consignee }}</span></h3>
 						<hr />
 					</div>
 					<div class = "col-md-12">
 						<h5><strong>Total Pilot Charges:</strong></h5>
-						<h3 style="text-align: center;" class="total_penalty_client">Php {{ $total_penalty_client }}</h3>
+						<h3 style="text-align: center;">Php <span class="total_penalty_client_head">{{ $total_penalty_client }}</span></h3>
 					</div>
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 					<div id="contract" class="tab-pane fade">
 						<br />
 						<div class="modal_non_contract_form">
-							<form class="form-horizontal" role="form" name = "del_bill_form_con">
+							<form class="form-horizontal" name = "del_bill_form_con" id = "del_bill_form_con">
 								{{ csrf_field() }}
 
 								<div class="form-group">
@@ -172,16 +172,16 @@
 				<table class = "table table-responsive table-hover" id = "contract_details_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 20%; text-align: center;">
 								<h5><strong>From</strong></h5>
 							</td>
-							<td>
+							<td style="width: 20%; text-align: center;">
 								<h5><strong>To</strong></h5>
 							</td>
-							<td>
+							<td style="width: 20%; text-align: center;">
 								<h5><strong>Amount</strong></h5>
 							</td>
-							<td>
+							<td style="width: 20%; text-align: center;">
 								<h5><strong>Action</strong></h5>
 							</td>
 						</tr>
@@ -197,13 +197,13 @@
 
 				<hr />
 				<div class = "collapse" id = "contract_delivery_collapse">
-					<form class="form-horizontal" role="form" name = "con_bill_form_con">
+					<form class="form-horizontal" name = "con_bill_form_con" id = "con_bill_form_con">
 						{{ csrf_field() }}
 
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="cbfc_amount">Delivery Fee: *</label>
 							<div class="col-sm-8"> 
-								<input class = "form-control" type = "number" name = "cbfc_amount" id = "cbfc_amount" style="text-align: right" />
+								<input class = "form-control cbfc_amount" type = "number" name = "cbfc_amount" id = "cbfc_amount" disabled style="text-align: right" />
 							</div>
 						</div>
 
@@ -217,7 +217,51 @@
 
 				</div>
 				<div class = "collapse" id = "contract_penalty_collapse">
-					
+					<form class="form-horizontal penalty_contract_form" name="penalty_contract_form">
+						{{ csrf_field() }}
+
+						<div class="form-group">         
+							<label class="control-label col-md-3 pull-left" for="status">Charged To:</label>
+							<div class = "col-md-9">
+								<label class="radio-inline"><input type = "radio" checked id = "pcf_responsibleCon" name = "pcf_responsible" value = "N" class = " pull-right checkradio pncf_consignee"/>Consignee</label>
+								<label class="radio-inline"><input type = "radio" id = "pcf_responsibleCli" name = "pcf_responsible"  value = "Y" class = "pull-right checkradio pncf_client"/>Pilot</label>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3" for="containerNumber">Charge:</label>
+							<div class = "col-md-9">
+								<select class = "form-control" required id = "pcf_penalty_penalty" name="pcf_penalty_penalty">
+									<option></option>
+									@forelse($charges as $charge)
+									<option value = "{{ $charge->id }}">{{ $charge->description }}</option>
+									@empty
+
+									@endforelse
+								</select>
+							</div>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-3" for="containerReturnTo">Charge Fee:</label>
+							<div class = "col-md-9">
+								<input type = "number" class = "form-control" style="text-align: right;" id = "pcf_penalty_amount"  name = "pcf_penalty_amount" required />
+							</div>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-3" for="containerReturnTo">Remarks:</label>
+							<div class = "col-md-9">
+								<textarea  class = "form-control"  id = "pcf_penalty_remarks" name = "pcf_penalty_remarks" style="width: 100%;"></textarea>
+							</div>
+						</div>
+
+						<div class = "form-group" style="margin-right: 2.0%;">
+							<div class='btn-toolbar pull-right'>
+								<button type = "submit" class = "btn btn-md btn-success save-penalty-fee-contract">Save</button>
+								<button class="btn btn-md  btn-danger close-penalty-fee-noncontract" data-dismiss = "modal">Close</button>
+							</div>
+						</div>
+
+					</form>
 				</div>
 			</div>
 		</div>
@@ -243,7 +287,7 @@
 					<div id="contract_charge" class="tab-pane fade">
 						<br />
 						<div class = "pncf_form">
-							<form class="form-horizontal" role="form" name="penalty_non_contract_form">
+							<form class="form-horizontal" role="form" name="penalty_non_contract_form" id = "penalty_non_contract_form">
 								{{ csrf_field() }}
 
 								<div class="form-group">         
@@ -461,8 +505,8 @@
 									<h4 style="text-align: right;">Total Pilot Charge:</h4>
 								</td>
 								<td colspan="2">
-									<h4 style="text-align: right;" class="total_penalty_consignee"><strong>Php {{ $total_penalty_consignee }}</strong></h4>
-									<h4 style="text-align: right;" class="total_penalty_client"><strong>Php {{ $total_penalty_client }}</strong></h4>
+									<h4 style="text-align: right;"><strong>Php <span class="total_penalty_consignee_body">{{ $total_penalty_consignee }}</span></strong></h4>
+									<h4 style="text-align: right;"><strong>Php <span class="total_penalty_client_body">{{ $total_penalty_client }}</span></strong></h4>
 								</td>
 								
 							</tr>
@@ -540,6 +584,32 @@
 			}
 		});
 
+		var penalty_contract_form = $(".penalty_contract_form").validate({
+			rules: {
+				pcf_penalty_penalty : {
+					required: true,
+				},
+
+				pcf_penalty_amount : {
+					required: true,
+					number: true,
+				},
+				
+			},
+			messages: {
+				pcf_penalty_penalty : {
+					required : "Please select a penalty",
+				},
+
+				pcf_penalty_amount : {
+					required : "Amount is required.",
+					number : "Enter a valid number."
+				}
+
+				
+			}
+		});
+
 		var contracts = $('#con_contracts').DataTable({
 			processing: true,
 			serverSide: true,
@@ -575,6 +645,7 @@
 		var others_modal_reset = $('#othersModal').html();
 		var contract_table_reset = $('#contract_details').html();
 		var pncf_responsible  = 0;
+		var pcf_responsible = 0;
 
 		$(document).on('click', '.new-delivery-bill', function(e){
 			e.preventDefault();
@@ -598,7 +669,7 @@
 					contract_header = data[0];
 					contract_details = data[1];
 					for(var i = 0; i < contract_details.length; i++){
-						contract_rows += '<tr><td>'+ contract_details[i].from +'</td><td>'+ contract_details[i].to +'</td><td>' + contract_details[i].amount + '</td><td><button class = "btn btn-md btn-success">Select</td></tr>'
+						contract_rows += '<tr><td>'+ contract_details[i].from +'</td><td>'+ contract_details[i].to +'</td><td style= "text-align: right;">' + contract_details[i].amount + '</td><td style = "text-align: center;"><button class = "btn btn-md btn-success select-contract-rate">Select</td></tr>';
 					}
 					$('#contract_details').html(contract_table_reset);
 
@@ -636,7 +707,7 @@
 					contract_header = data[0];
 					contract_details = data[1];
 					for(var i = 0; i < contract_details.length; i++){
-						contract_rows += '<tr><td>'+ contract_details[i].from +'</td><td>'+ contract_details[i].to +'</td><td>' + contract_details[i].amount + '</td><td><button class = "btn btn-md btn-success">Select</td></tr>'
+						contract_rows += '<tr><td>'+ contract_details[i].from +'</td><td>'+ contract_details[i].to +'</td><td style= "text-align: right;">' + contract_details[i].amount + '</td><td style = "text-align: center;"><button class = "btn btn-md btn-success">Select</td></tr>';
 					}
 					$('#contract_details').html(contract_table_reset);
 
@@ -678,6 +749,28 @@
 						var delivery_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 						$('.delivery_fee').text("Php " + delivery_fee);
 
+						$('#del_bill_form_con').trigger('reset');
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Delivery Fee added successfully!");
+
 					}
 				})
 			}
@@ -685,10 +778,9 @@
 
 		$(document).on('click', '.save-delivery-fee-contract', function(e){
 			e.preventDefault();
-			$('#cbfc_amount').valid();
-			con_bill_form_con.valid();
-			if($('#cbfc_amount').valid()){
-				
+			$('.cbfc_amount').valid();
+			if($('#cbfc_amount').val() != null && $('.cbfc_amount').valid() && $('#cbfc_amount').val() != ""){
+				$('#contractModal').modal('hide');
 				$.ajax({
 					type: 'PUT',
 					url:  '{{ route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/update_delivery_bill',
@@ -700,6 +792,27 @@
 						var delivery_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 						$('.delivery_fee').text("Php " + delivery_fee);
 
+						$('#con_bill_form_con').trigger('reset');
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Delivery Fee added successfully!");
 					}
 				})
 			}
@@ -726,11 +839,82 @@
 					},
 					success : function (data) {		
 						if(data.isBilledTo == 0){
-							var delivery_fee = parseFloat(Math.round(data.amount * 100) / 100) + $;
-							// $('.total_penalty_consignee').text(data.)
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							
+							$('.total_penalty_consignee_head').text(total);
+							$('.total_penalty_consignee_body').text(total);
 						}
 						else{
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var current_consignee = parseFloat($('.total_penalty_client_head').text());
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							
+							$('.total_penalty_client_head').text(total);
+							$('.total_penalty_client_body').text(total);
+						}
+					}
+				})
+				$('#penalty_non_contract_form').trigger("reset");
 
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]("Charge added successfully!");
+			}
+		})
+
+		$(document).on('click', '.save-penalty-fee-contract', function(e){
+			e.preventDefault();
+			$('#pcf_penalty_amount').valid();	
+			$('#pcf_penalty_penalty').valid();
+
+			if($('#pcf_penalty_amount').valid() == true && $('#pcf_penalty_penalty').valid() == true){
+				$('#contractModal').modal('hide');
+				$.ajax({
+					type: 'POST',
+					url:  '{{ route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/store_delivery_bill',
+					data: {
+						'_token' : $('input[name=_token').val(),
+						'charges_id' : $('#pcf_penalty_penalty').val(),
+						'amount' : 	$('#pcf_penalty_amount').val(),
+						'isBilled' : 0,
+						'isBilledTo' : pcf_responsible,
+						'remarks' : $('#pcf_penalty_remarks').val(),
+						'del_head_id' : {{ $delivery[0]->id }},
+					},
+					success : function (data) {		
+						if(data.isBilledTo == 0){
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							
+							$('.total_penalty_consignee_head').text(total);
+							$('.total_penalty_consignee_body').text(total);
+						}
+						else{
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var current_consignee = parseFloat($('.total_penalty_client_head').text());
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							
+							$('.total_penalty_client_head').text(total);
+							$('.total_penalty_client_body').text(total);
 						}
 					}
 				})
@@ -745,14 +929,23 @@
 		})
 		$(document).on('change', '.pncf_client', function(e){
 			pncf_responsible = 1;
+			pcf_responsible = 1;
 		})
 		$(document).on('change', '.pncf_consignee', function(e){
 			pncf_responsible = 0;
+			pcf_responsible = 0;
 		})
+
 
 		$(document).on('click', '.view-charge-information',function(e){
 			e.preventDefault();
 			$('#viewChargeModal').modal('show');
+		})
+
+		$(document).on('click', '.select-contract-rate', function(e){
+			e.preventDefault();
+			console.log($(this).closest('tr').find('td:nth-child(3)').html());
+			$('#cbfc_amount').val($(this).closest('tr').find('td:nth-child(3)').html());
 		})
 
 
