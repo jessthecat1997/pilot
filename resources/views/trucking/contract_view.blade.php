@@ -14,25 +14,29 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label class="control-label col-sm-5" for="contactNumber">Contract #:</label>
-							<label class="control-label col-sm-7" for="address" style = "text-align: right;">{{ $contract->id }}</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->id }}</label>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-5" for="contactNumber">Consignee:</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->companyName }}</label>
 						</div>
 						<div class="form-group">        
 							<label class="control-label col-sm-5" for="contactNumber">Date Effective:</label>
-							<label class="control-label col-sm-7" for="address" style = "text-align: right;">{{ $contract->dateEffective }}</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->dateEffective }}</label>
 						</div>
 						<div class="form-group">        
 							<label class="control-label col-sm-5" for="contactNumber">Date Expiration:</label>
-							<label class="control-label col-sm-7" for="address" style = "text-align: right;">{{ $contract->dateExpiration }}, ({{ Carbon\Carbon::parse($contract->dateExpiration)->diffForHumans() }})</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->dateExpiration }}, ({{ Carbon\Carbon::parse($contract[0]->dateExpiration)->diffForHumans() }})</label>
 						</div>
 					</form>
 				</div>
 				<div class = "col-md-6">
 					<h3>Terms &amp; Conditions</h3>
 					<div style = "overflow-y: scroll; height: 300px;">
-						@if($contract->specificDetails == null)
+						@if($contract[0]->specificDetails == null)
 						<h5 style="text-align: center;">No specified details</h5>
 						@else
-						<p><pre class = "">{{ $contract->specificDetails }}</pre></p>
+						<p><pre class = "">{{ $contract[0]->specificDetails }}</pre></p>
 
 						@endif
 					</div>
@@ -84,7 +88,7 @@
 					</table>
 				</div>
 				<br />
-				<a href = "{{ route('contracts.index') }}/{{ $contract->id }}/show_pdf" class="btn btn-md btn-primary pull-right">Generate PDF</a>
+				<a href = "{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf" class="btn btn-md btn-primary pull-right">Generate PDF</a>
 			</div>
 		</div>
 	</div>

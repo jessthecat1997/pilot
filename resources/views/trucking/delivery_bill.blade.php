@@ -5,7 +5,7 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
-				<h3>Bill Delivery <button class="btn btn-sm btn-success pull-right new-delivery-bill">New Delivery Bill</button></h3>
+				<h3>Bill Delivery <button class="btn btn-sm btn-success pull-right new-delivery-bill">New Delivery Fee</button></h3>
 			</div>
 			<div class = "panel-body">
 				<div class = "col-md-8">
@@ -373,59 +373,37 @@
 				<h3 class="modal-title">View Charge</h3>
 			</div>
 			<div class = "modal-body">
+				<form class="form-horizontal" role="form" name="penalty_non_contract_form" id = "penalty_non_contract_form">
+					{{ csrf_field() }}
 
-				<h4><strong>Information</strong></h4>
-				<hr />
-				<div>
-					<div class = "form-horizontal">
-						<div class="form-group">
-							<label class="control-label col-md-4 pull-left" for="contract_companyName">Consignee:</label>
-							<span class="control-label col-md-8 pull-right" id = "contract_companyName">{{ $consignee[0]->companyName }}</span>
-						</div>
-						
-						<div class="form-group">
-							<label class="control-label col-md-4 pull-left" for="contract_dateEffective">Date Effective:</label>
-							<span class="control-label col-md-8 pull-right" id = "contract_dateEffective"></span>
-						</div>
-
-						<div class="form-group">
-							<label class="control-label col-md-4 pull-left" for="contract_dateExpiration">Contract Expiration Date:</label>
-							<span class="control-label col-md-8 pull-right" id = "contract_dateExpiration"></span>
-						</div>
-
-						<div class="form-group">
-							<label class="control-label col-md-4 pull-left" for="contract_status">Status:</label>
-							<span class="control-label col-md-8 pull-right" id = "contract_status"></span>
+					<div class="form-group">         
+						<label class="control-label col-md-3 pull-left" for="status">Charged To:</label>
+						<div class = "col-md-9">
+							<label class="control-label pull-left" id = "view_charge_charged_to">Consignee</label>
 						</div>
 					</div>
-				</div>
-
-				<h4><strong>Rates</strong></h4>
-				<hr />
-				<table class = "table table-responsive table-hover" id = "contract_details_table">
-					<thead>
-						<tr>
-							<td>
-								<h5><strong>From</strong></h5>
-							</td>
-							<td>
-								<h5><strong>To</strong></h5>
-							</td>
-							<td>
-								<h5><strong>Amount</strong></h5>
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-
-					</tbody>
-				</table>
-
-				<h4><strong>Terms &amp; Conditions</strong></h4>
-				<hr />
-				<label id="contract_specifications"></label>
-
-				<hr />
+					<div class="form-group">
+						<label class="control-label col-md-3" for="containerNumber">Charge:</label>
+						<div class = "col-md-9">
+							<label class="control-label pull-left" id = "view_charge_charge">Demurrage</label>
+						</div>
+					</div>
+					<div class="form-group">         
+						<label class="control-label col-md-3" for="containerReturnTo">Charge Fee:</label>
+						<div class = "col-md-9">
+							<label class="control-label pull-left" id = "view_charge_charge_fee">MAM</label>
+						</div>
+					</div>
+					<div class="form-group">         
+						<label class="control-label col-md-3" for="containerReturnTo">Remarks:</label>
+						<div class = "col-md-9">
+							<textarea  class = "form-control"  id = "pncf_penalty_remarks" name = "pncf_penalty_remarks" style="width: 100%;"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class = "modal-footer">
+				<button class="btn btn-md  btn-danger close-penalty-fee-noncontract" data-dismiss = "modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -841,7 +819,7 @@
 						if(data.isBilledTo == 0){
 							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
 							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
-							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
 							
 							$('.total_penalty_consignee_head').text(total);
 							$('.total_penalty_consignee_body').text(total);
@@ -849,7 +827,7 @@
 						else{
 							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
 							var current_consignee = parseFloat($('.total_penalty_client_head').text());
-							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
 							
 							$('.total_penalty_client_head').text(total);
 							$('.total_penalty_client_body').text(total);
@@ -903,7 +881,8 @@
 						if(data.isBilledTo == 0){
 							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
 							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
-							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
+							console.log(total);
 							
 							$('.total_penalty_consignee_head').text(total);
 							$('.total_penalty_consignee_body').text(total);
@@ -911,7 +890,7 @@
 						else{
 							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
 							var current_consignee = parseFloat($('.total_penalty_client_head').text());
-							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100);
+							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
 							
 							$('.total_penalty_client_head').text(total);
 							$('.total_penalty_client_body').text(total);

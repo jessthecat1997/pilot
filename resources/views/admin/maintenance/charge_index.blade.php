@@ -255,7 +255,7 @@ $('#btnSave').on('click', function(e){
 					"showMethod": "fadeIn",
 					"hideMethod": "fadeOut"
 				}
-				toastr["success"]("Record updated successfully")
+				toastr["success"]("Record updated successfully");
 
 				chtable.ajax.reload();
 				$('#chModal').modal('hide');

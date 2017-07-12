@@ -22,14 +22,19 @@ class ContractsController extends Controller
     public function manage_contract(Request $request){
         try
         {
-            $contract = ContractHeader::findOrFail($request->contract_id);
+            $contract = DB::table('contract_headers')
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName')
+            ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+            ->where('contract_headers.id', '=', $request->contract_id)
+            ->get();
+
+            
             $contract_details = DB::table('contract_details')
             ->select('A.description AS from', 'B.description AS to', 'amount')
             ->join('areas AS A', 'areas_id_from', '=', 'A.id')
             ->join('areas AS B', 'areas_id_to', '=', 'B.id')
             ->where('contract_headers_id', '=', $request->contract_id)
             ->get();
-            
             return view('/trucking.contract_view', compact(['contract', 'contract_details']));
 
         }

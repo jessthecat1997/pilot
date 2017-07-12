@@ -6,7 +6,7 @@
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
 				@if($delivery[0]->status == 'F' || $delivery[0]->status == 'C')
-				<h3>Delivery Information: <button  disabled class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Information</button></h3>
+				<h3>Delivery Information: <button  disabled class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button></h3>
 				@elseif($delivery[0]->status == 'P')
 				<h3>Delivery Information: <button  class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Information</button></h3>
 				@endif
@@ -207,7 +207,7 @@
 								@empty
 								<tr>
 									<td colspan="4">
-									<h5>No records found.</h5>
+										<h5>No records found.</h5>
 									</td>
 								</tr>
 								@endforelse
@@ -289,7 +289,7 @@
 								@empty
 								<tr>
 									<td colspan="4">
-									<h5>No records found.</h5>
+										<h5>No records found.</h5>
 									</td>
 								</tr>
 								@endforelse
@@ -348,7 +348,7 @@
 								@empty
 								<tr>
 									<td colspan="4">
-									<h5 style="text-align: center;">No records found.</h5>
+										<h5 style="text-align: center;">No records found.</h5>
 									</td>
 								</tr>
 								@endforelse
