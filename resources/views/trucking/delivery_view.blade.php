@@ -19,24 +19,24 @@
 						{{ csrf_field() }}
 						<div class="form-group">
 							<label class="control-label col-md-5 pull-left" for="deliveryID">Delivery #:</label>
-							<span class="control-label col-md-3 pull-right" id = "deliveryID">{{ $delivery[0]->id }}</span>
+							<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $delivery[0]->id }}</span>
 						</div>
 						<div class="form-group">         
 							<label class="control-label col-md-5 pull-left" for="deliveryDestination">Destination:</label>
-							<span class="control-label col-md-3 pull-right" id ="deliveryDestination" style = "text-align: right;">{{ $delivery[0]->deliveryAddress }}</span>
+							<span class="control-label col-md-7 pull-right" id ="deliveryDestination" style = "text-align: right;">{{ $delivery[0]->deliveryAddress }}</span>
 						</div>
 						<div class="form-group">         
 							<label class="control-label col-md-5 pull-left" for="deliveryDriver">Driver:</label>
-							<span class="control-label col-md-3 pull-right" id ="deliveryDriver" style = "text-align: right;">{{ $delivery[0]->driverName }}</span>
+							<span class="control-label col-md-7 pull-right" id ="deliveryDriver" style = "text-align: right;">{{ $delivery[0]->driverName }}</span>
 						</div>
 						<div class="form-group">         
 							<label class="control-label col-md-5 pull-left" for="deliveryHelper">Helper:</label>
-							<span class="control-label col-md-3 pull-right" id ="deliveryHelper" style = "text-align: right;">{{ $delivery[0]->helperName }}</span>
+							<span class="control-label col-md-7 pull-right" id ="deliveryHelper" style = "text-align: right;">{{ $delivery[0]->helperName }}</span>
 						</div>
 
 						<div class="form-group">        
 							<label class="control-label col-md-5 pull-left" for="status">Status: </label>
-							<span class="control-label col-sm-3 pull-right" id="status">
+							<span class="control-label col-sm-7 pull-right" id="status">
 								@php
 								switch($delivery[0]->status){
 								case 'C': echo "Cancelled"; break;
@@ -95,19 +95,19 @@
 					<div class="form-group">
 						<input type = "hidden" id = "containerID" name = "containerID" />
 						<label class="control-label col-md-5 pull-left" for="containerNumber">Container Number:</label>
-						<span class="control-label col-md-6" id = "containerNumber" style = "text-align: left"></span>
+						<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: right;"></span></strong>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnTo">Container Return To:</label>
-						<span class="control-label col-md-6 " id ="containerReturnTo"  style = "text-align: left"></span>
+						<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: right;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnAddress">Container Return Address:</label>
-						<span class="control-label col-md-6 " id ="containerReturnAddress"  style = "text-align: left"></span>
+						<span class="control-label col-md-7 " id ="containerReturnAddress"  style = "text-align: right;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="status">Container Returned:</label>
-						<div class = "col-md-7">
+						<div class = "col-md-7" style="text-align: right;">
 							<div class="radio">
 								<label class="radio-inline"><input type = "radio" name = "status" id = "yes" value = "Y" class = "col-md-3 pull-right checkradio"/>Yes</label>
 								<label class="radio-inline"><input type = "radio" name = "status" id = "no" value = "N" class = "col-md-3 pull-right checkradio" />No</label>
@@ -116,11 +116,11 @@
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
-						<span class="control-label col-md-7 " id ="containerReturnDate"  style = "text-align: left"></span>
+						<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: right;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Date Returned: </label>
-						<div class = "col-md-6 dateReturned_view">
+						<div class = "col-md-7 dateReturned_view pull-left">
 							<input type = "date" name = "actutaldateReturned" id = "actutaldateReturned"  class = "form-control" disabled />
 						</div>
 					</div>
@@ -370,7 +370,7 @@
 	$(document).ready(function(){
 		var container_status;
 		var reset_container_table = $('#drModal').html();
-		var return_date_html = '<span class="control-label" id ="view_return_date"  style = "text-align: left"></span>';
+		var return_date_html = '<span class="control-label pull-right" id ="view_return_date"  style = "text-align: left"></span>';
 
 		$(document).on('click', '.view-container-detail', function(e){
 			e.preventDefault();
