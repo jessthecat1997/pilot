@@ -10,10 +10,9 @@
 				<div class = "panel-body">
 					<div class = "col-md-12">
 						<h3 id = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>
-						<hr />
 						<div class = "collapse" id = "consignee_warning">
 							<div class="alert alert-danger">
-								<strong>Danger!</strong> No selected consignee.
+								<strong>Warning!</strong> No selected consignee.
 							</div>
 						</div>
 						<div class = "panel-default">
@@ -55,16 +54,18 @@
 										<form class="form-horizontal" role="form">
 											{{ csrf_field() }}
 											<div class="form-group">
-												<label class="control-label col-sm-4" for="firstName">Consignee:</label>
-												<div class="col-sm-6">
-													<select name = "consigneeType" id = "consigneeType" class="form-control">
-														<option value = "0">
-															Walk-in
-														</option>
-														<option value = "1">
-															Regular
-														</option>
-													</select>
+												<div class = "collapse">
+													<label class="control-label col-sm-4" for="firstName">Consignee:</label>
+													<div class="col-sm-6">
+														<select name = "consigneeType" id = "consigneeType" class="form-control">
+															<option value = "0">
+																Walk-in
+															</option>
+															<option value = "1">
+																Regular
+															</option>
+														</select>
+													</div>
 												</div>
 											</div>
 											<div class="form-group">
@@ -154,15 +155,15 @@
 
 						<br />
 						<br />
-						<h3><small>2</small>&nbsp;&nbsp;Contract Information</h3>
 						<hr />
-						<form class = "form-horizontal">
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="consigneeName">Consignee:</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" name = "consigneeName" id="consigneeName" placeholder="Consignee Name">
-								</div>
+						<h3 id = "contract_duration_title"><small>2</small>&nbsp;&nbsp;Contract Duration</h3>
+						<br />
+						<div class = "collapse" id = "contract_duration_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Something is wrong with the duration.
 							</div>
+						</div>
+						<form class = "form-horizontal">
 							<div class="form-group">
 								<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 								<div class="col-sm-8">
@@ -181,90 +182,97 @@
 						<br />
 					</div>
 					<div class = "col-md-12">
-						<h3 id = "contract_rate_title"><small>3</small>&nbsp;&nbsp;Contract Rates</h3>
 						<hr />
-						<div class = "col-md-12" style="overflow-x: auto;">
-							<div class = "panel-default">
-								<div class = "collapse" id = "contract_table_warning">
-									<div class="alert alert-danger">
-										<strong>Danger!</strong> Requires at least one contract rate.
-									</div>
-								</div>
-								<div class = "collapse" id = "contract_rates_warning">
-									<div class="alert alert-danger">
-										<strong>Danger!</strong> Something is wrong with the rates.
-									</div>
-								</div>
-								<form id = "contract_rates_form">
-									<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
-										<thead>
-											<tr>
-												<td width="30%">
-													<strong>Area From</strong>
-												</td>
-												<td width="30%">
-													<strong>Area To</strong>
-												</td>
-
-												<td width="30%">
-													<strong>Amount</strong>
-												</td>
-												<td width="10%" style="text-align: center;">
-													<strong>Action</strong>
-												</td>
-											</tr>
-										</thead>
-										<tr id = "contract-row">
-											<td>
-												<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
-													<option></option>
-													@forelse($areas as $area)
-													<option value = "{{ $area->id }}">
-														{{ $area->description }}
-													</option>
-													@empty
-
-													@endforelse
-												</select>
-											</td>
-											<td>
-												<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
-													<option>
-
-													</option>
-													@forelse($areas as $area)
-													<option value = "{{ $area->id }}">
-														{{ $area->description }}
-													</option>
-													@empty
-
-													@endforelse
-												</select>
-											</td>
-
-											<td>
-												<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
-
-											</td>
-											<td style="text-align: center;x">
-												<button class = "btn btn-danger btn-md delete-contract-row">x</button>
-											</td>
-										</tr>
-									</table>
-									<div class = "col-md-4">
-										<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-md new-contract-row pull-left">New Rate</button>
-									</div>
-									<div classs = "col-md-8">
-
-									</div>
-									<br />
-								</form>
+						<h3 id = "contract_rate_title"><small>3</small>&nbsp;&nbsp;Contract Rates</h3>
+						<br />
+						<div class = "collapse" id = "contract_table_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Requires at least one contract rate.
 							</div>
 						</div>
+						<div class = "collapse" id = "contract_rates_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Something is wrong with the rates.
+							</div>
+						</div>
+						<div class = "panel panel-default">
+							<div class = "col-md-12" style="overflow-x: auto;">
+								<div class = "panel-default">
+									<form id = "contract_rates_form">
+										<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
+											<thead>
+												<tr>
+													<td width="30%">
+														<strong>Area From</strong>
+													</td>
+													<td width="30%">
+														<strong>Area To</strong>
+													</td>
+
+													<td width="30%">
+														<strong>Amount</strong>
+													</td>
+													<td width="10%" style="text-align: center;">
+														<strong>Action</strong>
+													</td>
+												</tr>
+											</thead>
+											<tr id = "contract-row">
+												<td>
+													<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
+														<option></option>
+														@forelse($areas as $area)
+														<option value = "{{ $area->id }}">
+															{{ $area->description }}
+														</option>
+														@empty
+
+														@endforelse
+													</select>
+												</td>
+												<td>
+													<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
+														<option>
+
+														</option>
+														@forelse($areas as $area)
+														<option value = "{{ $area->id }}">
+															{{ $area->description }}
+														</option>
+														@empty
+
+														@endforelse
+													</select>
+												</td>
+
+												<td>
+													<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
+
+												</td>
+												<td style="text-align: center;x">
+													<button class = "btn btn-danger btn-md delete-contract-row">x</button>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div class = "col-md-4">
+									<button  type = "submit" style="width: 90	%; margin-left: 20px;" class = "btn btn-primary btn-md new-contract-row pull-left">New Rate</button>
+								</div>
+								<div classs = "col-md-8">
+
+								</div>
+							</div>
+							<br />
+						</div>
 					</div>
+					<br />
 					<div class="col-md-12">
-						<h3><small>4</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
 						<hr />
+						<h3><small>4</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
+						<br />
 						<textarea class = "form-control" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails" id = "specificDetails"></textarea>
 					</div>
 					<div class="col-md-12">
@@ -457,14 +465,13 @@
 					var amount = parseFloat($(this).val());
 				}
 				catch(err){
-					console.log(typeof(amount));
+					
 				}
 				if(typeof(amount) === "string"){
-					console.log("boi");
+					
 				}
 				else{
-					console.log(typeof(amount));
-					console.log('pak');
+
 				}
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
@@ -517,14 +524,14 @@ function validateContractRows()
 	cv_id_descrp = [];
 	amount_value_descrp = [];
 
+	rate_pairs = [];
+
 	from = document.getElementsByName('areas_id_from');
 	to = document.getElementsByName('areas_id_to');
 	amount = document.getElementsByName('amount');
 	error = "";
 
 	for(var i = 0; i < from.length; i++){
-
-
 		if(from[i].value === "")
 		{
 			from[i].style.borderColor = 'red';	
@@ -558,11 +565,50 @@ function validateContractRows()
 
 		else
 		{
-			amount[i].style.borderColor = 'green';
-			amount_value.push(amount[i].value);
+			if(amount[i].value < 0){
+				amount[i].style.borderColor = 'red';
+				error += "Amount Required.";
+			}
+			else{
+				amount[i].style.borderColor = 'green';
+				amount_value.push(amount[i].value);
+			}
 		}
+
+		if(from[i].value === to[i].value){
+			from[i].style.borderColor = 'red';
+			to[i].style.borderColor = 'red';
+			error += "Same.";
+		}
+
+		pair = {
+			from: from[i].value,
+			to : to[i].value
+		};
+		rate_pairs.push(pair);
+	}
+	var i, j, n;
+	found= false;
+	n=rate_pairs.length;
+
+	for (i=0; i<n; i++) {                        
+		for (j=i+1; j<n; j++)
+		{              
+			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+				found = true;
+				from[i].style.borderColor = 'red';
+				to[i].style.borderColor = 'red';
+
+				from[j].style.borderColor = 'red';
+				to[j].style.borderColor = 'red';
+			}
+		}	
+	}
+	if(found == true){
+		error+= "Existing rate.";
 	}
 
+	//Final validation
 	if(error.length == 0){
 		return true;
 	}
@@ -586,10 +632,29 @@ function finalvalidateContractRows()
 	cv_id_descrp = [];
 	amount_value_descrp = [];
 
+	rate_pairs = [];
+
 	from = document.getElementsByName('areas_id_from');
 	to = document.getElementsByName('areas_id_to');
 	amount = document.getElementsByName('amount');
 	error = "";
+
+	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "")
+	{
+		if($('#dateExpiration').val() < $('#dateEffective').val()){
+			error += "Invalid duration";
+			$('#contract_duration_warning').addClass('in');
+			location.href = "#contract_duration_title";
+		}
+		else{
+			$('#contract_duration_warning').removeClass('in');
+		}
+	}
+	else{
+		error += "No date effective";
+		$('#contract_duration_warning').addClass('in');
+		location.href = "#contract_duration_title";
+	}
 
 	if(consigneeID === null)
 	{
@@ -647,9 +712,48 @@ function finalvalidateContractRows()
 
 		else
 		{
-			amount[i].style.borderColor = 'green';
-			amount_value.push(amount[i].value);
+			if(amount[i].value < 0){
+				amount[i].style.borderColor = 'red';
+				error += "Amount Required.";
+			}
+			else{
+				amount[i].style.borderColor = 'green';
+				amount_value.push(amount[i].value);
+			}
 		}
+
+		if(from[i].value === to[i].value){
+			from[i].style.borderColor = 'red';
+			to[i].style.borderColor = 'red';
+			error += "Same.";
+			$('#contract_rates_warning').addClass('in');
+		}	
+
+		pair = {
+			from: from[i].value,
+			to : to[i].value
+		};
+		rate_pairs.push(pair);
+	}
+	var i, j, n;
+	found= false;
+	n=rate_pairs.length;
+	for (i=0; i<n; i++) {                        
+		for (j=i+1; j<n; j++)
+		{              
+			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+				found = true;
+				from[i].style.borderColor = 'red';
+				to[i].style.borderColor = 'red';
+
+				from[j].style.borderColor = 'red';
+				to[j].style.borderColor = 'red';
+			}
+		}	
+	}
+	if(found == true){
+		error+= "Existing rate.";
+		$('#contract_rates_warning').addClass('in');
 	}
 
 	if(error.length == 0){

@@ -15,7 +15,7 @@ class StoreReceiveType extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:20|alpha',
+        'description' => 'required| max:20|min:2|unique:receive_types|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

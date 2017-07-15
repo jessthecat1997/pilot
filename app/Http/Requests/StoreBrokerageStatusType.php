@@ -14,7 +14,7 @@ class StoreBrokerageStatusType extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:20|alpha',
+        'description' => 'required| max:20|min:3|unique:brokerage_status_types|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

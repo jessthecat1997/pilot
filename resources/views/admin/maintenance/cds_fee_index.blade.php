@@ -1,5 +1,7 @@
+
 @extends('layouts.maintenance')
 @section('content')
+
 <div class = "container-fluid">
 	<div class = "row">
 		<h3><img src="/images/bar.png"> Maintenance | Container Delivery System Fee</h3>
@@ -38,7 +40,7 @@
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST">
+		<form role="form" method = "POST" id ="commentForm" >
 			{{ csrf_field() }}
 			<div class="modal fade" id="cdsModal" role="dialog">
 				<div class="modal-dialog">
@@ -48,22 +50,24 @@
 							<h4 class="modal-title">New CDS Fee</h4>
 						</div>
 						<div class="modal-body">			
-						
-							<div class="form-group">
-								<label>Fee *</label>
-								<input type = "text" class = "form-control" name = "fee" id = "fee" />
+
+							<div class="form-group required">
+								<label class = "control-label">Fee</label>
+								<input type = "text" class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" />
+
 							</div>
 
-							<div class="form-group">
-								<label>Date Effective *</label>
-								<input type = "date" class = "form-control" name = "dateEffective" id="dateEffective" />
+							<div class="form-group required">
+								<label class = "control-label">Date Effective</label>
+								<input type = "date" class = "form-control" name = "dateEffective" id="dateEffective" data-rule-required="true"/>
+								
 							</div>
 							
 							<input type="hidden" name = "currentFee" value = "0" />
 						</div>
 						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -78,14 +82,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 						</div>
 					</div>
 				</div>
@@ -103,28 +108,70 @@
 		color: #fff;
 	}
 </style>
+
+
 @endpush
 @push('scripts')
+
+
+
+
+
 <script type="text/javascript">
 	var data;
 	$(document).ready(function(){
+
 		var cdstable = $('#cds_table').DataTable({
 			processing: true,
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/cdsData',
 			columns: [
-			{ data: 'id' },
-			{ data: 'fee' },
-			{ data: 'dateEffective' },
-			{ data: 'created_at'},
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'id'},
+			{ data: 'fee',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },                              
+				{ data: 'dateEffective' },
+				{ data: 'created_at'},
+				{ data: 'action', orderable: false, searchable: false }
 
-			]
-		});
+				],	"order": [[ 0, "desc" ]],
+			});
+
+
+
+		/*
+		function formatNumber(n) {
+			return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		*/
+		
+		$("#commentForm").validate({
+			rules: 
+			{
+				fee:
+				{
+					required: true,
+				},
+
+				dateEffective:
+				{
+					required: true,
+					date: true,
+				}
+			},
+        onkeyup: false, //turn off auto validate whilst typing
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+		
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New CDS Fee');
 			$('#cdsModal').modal('show');
+			$('#fee').val("");
+			$('#dateEffective').val("");
 
 		});
 		$(document).on('click', '.edit',function(e){
@@ -141,6 +188,11 @@
 			data = cdstable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
+
+
+		
+
+
 
 
 
@@ -181,10 +233,22 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
+
+
+
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
+
+
+
+	var fee_nocomma = $('#fee').maskMoney('unmasked')[0];
+	if (fee_nocomma == "0.00"){
+		fee_nocomma = "";
+	}
+
 	e.preventDefault();
 	var title = $('.modal-title').text();
+
 	if(title == "New CDS Fee")
 	{
 		$.ajax({
@@ -192,18 +256,19 @@ $('#btnSave').on('click', function(e){
 			url:  '/admin/cds_fee',
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'fee' : $('input[name=fee]').val(),
+				'fee' : fee_nocomma,
 				'dateEffective' : $('input[name=dateEffective]').val(),
 				'currentFee' : $('input[name=currentFee]').val(),
 			},
 			success: function (data)
 			{
 				
-				cdstable.ajax.reload();
-				$('#cdsModal').modal('hide');
-				$('.modal-title').text('New CDS Fee');
-				$('#fee').val('');
-				$('#dateEffective').val('');
+				if(typeof(data) === "object"){
+					cdstable.ajax.reload();
+					$('#cdsModal').modal('hide');
+					$('.modal-title').text('New CDS Fee');
+					$('#fee').val('');
+					$('#dateEffective').val('');
 
 
 					//Show success
@@ -226,23 +291,39 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully")
+					toastr["success"]("Record added successfully")
+				}else{
+
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+	        console.log(i + " => " + v); // view in console for error messages
+	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+	    });
+					
 				}
-			})
+			},
+			
+		})
 	}
 	else
 	{
+
+
 		$.ajax({
 			type: 'PUT',
 			url:  '/admin/cds_fee/' + data.id,
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'fee' : $('input[name=fee]').val(),
+				'fee' : fee_nocomma,
 				'dateEffective' : $('input[name=dateEffective]').val(),
 				'currentFee' : $('input[name=currentFee]').val(),
 			},
 			success: function (data)
 			{
+				
+
 				toastr.options = {
 					"closeButton": false,
 					"debug": false,
@@ -265,6 +346,8 @@ $('#btnSave').on('click', function(e){
 
 				cdstable.ajax.reload();
 				$('#cdsModal').modal('hide');
+				$('#fee').val("");
+				$('#dateEffective').val("");
 				$('.modal-title').text('New CDS Fee');
 			}
 		})
@@ -277,5 +360,8 @@ function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
 	$('label.error').remove();
 }
+
+
+
 </script>
 @endpush

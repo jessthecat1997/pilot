@@ -14,9 +14,9 @@ class StoreConsignee extends FormRequest
     public function rules()
     {
         return [
-        'firstName' => 'required',
-        'middleName' => 'nullable',
-        'lastName' => 'required',
+        'firstName' => 'required|regex:/^[\p{L}\p{N} .-]+$/',
+        'middleName' => 'nullable|regex:/^[\p{L}\p{N} .-]+$/',
+        'lastName' => 'required|regex:/^[\p{L}\p{N} .-]+$/',
 
         ];
     }

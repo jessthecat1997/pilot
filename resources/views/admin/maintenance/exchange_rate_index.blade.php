@@ -4,7 +4,7 @@
 	<div class = "row">
 		<h3><img src="/images/bar.png"> Maintenance | Exchange Rate</h3>
 		<hr>
-		<h5>Current Exchange Rate: P </h5>
+		<h5>Current Exchange Rate: Php</h5>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#erModal" style = "width: 100%;">New Exchange Rate</button>
 		</div>
@@ -20,10 +20,10 @@
 								No.
 							</td>
 							<td>
-								Description
+								Rate
 							</td>
 							<td>
-								Rate
+								Remarks
 							</td>
 							<td>
 								Date Effective
@@ -42,7 +42,7 @@
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST">
+		<form role="form" method = "POST" id="commentForm">
 			{{ csrf_field() }}
 			<div class="modal fade" id="erModal" role="dialog">
 				<div class="modal-dialog">
@@ -53,26 +53,26 @@
 						</div>
 						<div class="modal-body">			
 							<div class="form-group">
-								<label>Description *</label>
-								<input type = "text" class = "form-control" name = "description" id = "description" required />
-							</div>
-							<div class="form-group">
 								<label>Current Rate: </label>
-								<input type = "text" class = "form-control" value = "P 0.00" style = "text-align: right" />
+								<input type = "text" class = "form-control money" value = "P 0.00" style = "text-align: right" readonly = "true" />
 							</div>
-							<div class="form-group">
-								<label>Rate *</label>
-								<input type = "text" class = "form-control" name = "rate" id = "rate" />
+							<div class="form-group  required">
+								<label class ="control-label">Rate</label>
+								<input type = "text" class = "form-control money" name = "rate" id = "rate" data-rule-required="true" />
 							</div>
-							<div class="form-group">
-								<label>Date Effective</label>
-								<input type = "date" class = "form-control" name = "dateEffective" id="dateEffective" />
+							<div class="form-group required">
+								<label class = "control-label">Date Effective</label>
+								<input type = "date" class = "form-control" name = "dateEffective" id="dateEffective" data-rule-required="true" />
+							</div>
+							<div class=" ">
+								<label class = "form-group">Remarks</label>
+								<textarea  row = "6" class = "form-control" id = "description" ></textarea> </div>
 							</div>
 							<input type="hidden" name = "currentRate" value = "0" />
-						</div>
+						
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -87,14 +87,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -128,18 +129,44 @@
 			ajax: 'http://localhost:8000/admin/erData',
 			columns: [
 			{ data: 'id' },
+			{ data: 'rate',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },
 			{ data: 'description' },
-			{ data: 'rate' },
 			{ data: 'dateEffective' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
-		});
+				],	"order": [[ 0, "desc" ]],
+			});
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				rate:
+				{
+					required: true,
+				},
+				dateEffective:
+				{
+					required: true,
+				},
+
+
+			},
+        onkeyup: false, //turn off auto validate whilst typing
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Exchange Rate');
 			$('#description').val("");
+			$('rate').val("");
+			$('dateEffective').val("");
 			$('#erModal').modal('show');
 
 		});
@@ -198,8 +225,17 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
+
+
+
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
+
+	var rate_nocomma = $('#rate').maskMoney('unmasked')[0];
+	if (rate_nocomma == "0.00"){
+		rate_nocomma = "";
+	}
+
 	e.preventDefault();
 	var title = $('.modal-title').text();
 	if(title == "New Exchange Rate")
@@ -209,19 +245,23 @@ $('#btnSave').on('click', function(e){
 			url:  '/admin/exchange_rate',
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-				'rate' : $('input[name=rate]').val(),
+				'rate' : rate_nocomma,
 				'dateEffective' : $('input[name=dateEffective]').val(),
+				'description' : $('input[name=description]').val(),
 				'currentRate' : $('input[name=currentRate]').val(),
 			},
 			success: function (data)
 			{
 				
-				ertable.ajax.reload();
-				$('#erModal').modal('hide');
-				$('#description').val("");
-				$('.modal-title').text('New Exchange Rate');
 
+
+
+				if(typeof(data) === "object"){
+					ertable.ajax.reload();
+					$('#erModal').modal('hide');
+	
+
+					$('.modal-title').text('New Exchange Rate');
 					//Show success
 
 					toastr.options = {
@@ -244,7 +284,19 @@ $('#btnSave').on('click', function(e){
 					}
 					toastr["success"]("Record addded successfully")
 				}
-			})
+				else{
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+	        console.log(i + " => " + v); // view in console for error messages
+	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+	    });
+					
+				}
+			},
+			
+		})
 	}
 	else
 	{
@@ -254,7 +306,7 @@ $('#btnSave').on('click', function(e){
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'description' : $('input[name=description]').val(),
-				'rate' : $('input[name=rate]').val(),
+				'rate' : rate_nocomma,
 				'dateEffective' : $('input[name=dateEffective]').val(),
 				'currentRate' : $('input[name=currentRate]').val(),
 			},
@@ -283,11 +335,17 @@ $('#btnSave').on('click', function(e){
 				ertable.ajax.reload();
 				$('#erModal').modal('hide');
 				$('#description').val("");
+				$('rate').val("");
+				$('dateEffective').val("");
 				$('.modal-title').text('New Exchange Rate');
 			}
 		})
 	}
 });
+
+
+
+
 
 });
 

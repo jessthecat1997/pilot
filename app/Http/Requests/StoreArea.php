@@ -15,8 +15,12 @@ class StoreArea extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required|max:50',
+        'description' => 'required|max:50|min:2|unique:areas|regex:/^[\p{L}\p{N} .-]+$/',
+
+
         ];
+
+
     }
 
     //Overriding the response 422

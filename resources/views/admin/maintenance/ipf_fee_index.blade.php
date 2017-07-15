@@ -41,7 +41,7 @@
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST">
+		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
 			<div class="modal fade" id="ipfModal" role="dialog">
 				<div class="modal-dialog">
@@ -51,27 +51,27 @@
 							<h4 class="modal-title">New IPF Range</h4>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Dutiable Value Minimum: * </label>
-								<input type = "text" class = "form-control" value = "0.00" style = " text-align: right" id="minimum"  name="minimum" />
+							<div class="form-group  required">
+								<label class = "control-label">Dutiable Value Minimum:</label>
+								<input type = "text" class = "form-control money_s" data-rule-required="true" id="minimum" name = "minimum"/>
 							</div>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Dutiable Value Maximum: * </label>
-								<input type = "text" class = "form-control" value = "0.00" style = " text-align: right" id="maximum"  name="maximum" />
+							<div class="form-group required">
+								<label class = "control-label">Dutiable Value Maximum:</label>
+								<input type = "text" class = "form-control money_s" id="maximum"  name="maximum" data-rule-required="true" />
 							</div>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Import Processing Fee Amount: * </label>
-								<input type = "text" class = "form-control" value = "0.00" style = " text-align: right" id="amount"  name="amount" />
+							<div class="form-group required">
+								<label class = "control-label">Import Processing Fee Amount:</label>
+								<input type = "text" class = "form-control money"  id="amount"  name="amount" data-rule-required="true"/>
 							</div>
 
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -86,14 +86,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -123,14 +124,61 @@
 			ajax: 'http://localhost:8000/admin/ipfData',
 			columns: [
 			{ data: 'id' },
-			{ data: 'minimum' },
-			{ data: 'maximum' },
-			{ data: 'amount' },
+			{ data: 'minimum',
+            "render" : function( data, type, full ) {
+                return formatNumber_s(data); } },
+			{ data: 'maximum',
+            "render" : function( data, type, full ) {
+                return formatNumber_s(data); } },
+			{ data: 'amount',
+            "render" : function( data, type, full ) {
+                return formatNumber(data); } },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
+			],	"order": [[ 0, "desc" ]],
 		});
+
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				minimum:
+				{
+					required: true,
+				},
+				maximum:
+				{
+					required: true,
+				},
+				amount:
+				{
+					required: true,
+				},
+
+			},
+			messages: {
+				minimum:
+				{
+					required: "This field is required",
+				},
+				maximum:
+				{
+					required:"This field is required",
+				},
+				amount:
+				{
+					required: "This field is required",
+				},
+			},
+        onkeyup: false, //turn off auto validate whilst typing
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+
+
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New IPF Range');
@@ -194,6 +242,22 @@ $('#btnDelete').on('click', function(e){
 
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
+
+
+	var minimum_nocomma = $('#minimum').maskMoney('unmasked')[0];
+	var maximum_nocomma = $('#maximum').maskMoney('unmasked')[0];
+	var amount_nocomma = $('#amount').maskMoney('unmasked')[0];
+
+	if (minimum_nocomma == "0.00"){
+		minimum_nocomma = "";
+	}
+	if (maximum_nocomma == "0.00"){
+		maximum_nocomma = "";
+	}
+	if (amount_nocomma == "0.00"){
+		amount_nocomma = "";
+	}
+
 	e.preventDefault();
 	var title = $('.modal-title').text();
 	if(title == "New IPF Range")
@@ -203,9 +267,9 @@ $('#btnSave').on('click', function(e){
 			url:  '/admin/ipf_fee',
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'minimum' : $('input[name=minimum]').val(),
-				'maximum' : $('input[name=maximum]').val(),
-				'amount' : $('input[name=amount]').val(),
+				'minimum' : minimum_nocomma,
+				'maximum' : maximum_nocomma,
+				'amount' : amount_nocomma,
 			},
 			success: function (data)
 			{
@@ -239,8 +303,8 @@ $('#btnSave').on('click', function(e){
 					ipftable.ajax.reload();
 					$('#ipfModal').modal('hide');
 					$('#minimum').val('');
-                    $('#maximum').val('');
-                    $('#amount').val('');
+					$('#maximum').val('');
+					$('#amount').val('');
 					$('.modal-title').text('New IPF Range');
 
 
@@ -266,9 +330,9 @@ $('#btnSave').on('click', function(e){
 			url:  '/admin/ipf_fee/' + data.id,
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'minimum' : $('input[name=minimum]').val(),
-				'maximum' : $('input[name=maximum]').val(),
-				'amount' : $('input[name=amount]').val(),
+				'minimum' : minimum_nocomma,
+				'maximum' : maximum_nocomma,
+				'amount' : amount_nocomma,
 			},
 			success: function (data)
 			{

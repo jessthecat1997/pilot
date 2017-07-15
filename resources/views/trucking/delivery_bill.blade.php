@@ -377,27 +377,21 @@
 					{{ csrf_field() }}
 
 					<div class="form-group">         
-						<label class="control-label col-md-3 pull-left" for="status">Charged To:</label>
-						<div class = "col-md-9">
-							<label class="control-label pull-left" id = "view_charge_charged_to">Consignee</label>
-						</div>
+						<label class="control-label col-md-3 pull-left" for="view_charge_charged_to">Charged To:</label>
+						<label class="control-label col-md-9 pull-right" id = "view_charge_charged_to"></label>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-md-3" for="containerNumber">Charge:</label>
-						<div class = "col-md-9">
-							<label class="control-label pull-left" id = "view_charge_charge">Demurrage</label>
-						</div>
+						<label class="control-label col-md-3 pull-left" for="view_charge_charge">Charge:</label>
+						<label class="control-label col-md-9 pull-left" id = "view_charge_charge"></label>
 					</div>
 					<div class="form-group">         
-						<label class="control-label col-md-3" for="containerReturnTo">Charge Fee:</label>
-						<div class = "col-md-9">
-							<label class="control-label pull-left" id = "view_charge_charge_fee">MAM</label>
-						</div>
+						<label class="control-label col-md-3 pull-left" for="view_charge_charge_fee">Charge Fee:</label>
+						<label class="control-label col-md-9 pull-left" id = "view_charge_charge_fee"></label>
 					</div>
 					<div class="form-group">         
-						<label class="control-label col-md-3" for="containerReturnTo">Remarks:</label>
+						<label class="control-label col-md-3" for="view_charge_remarks">Remarks:</label>
 						<div class = "col-md-9">
-							<textarea  class = "form-control"  id = "pncf_penalty_remarks" name = "pncf_penalty_remarks" style="width: 100%;"></textarea>
+							<textarea  class = "form-control"  id = "view_charge_remarks" style="width: 100%;"></textarea>
 						</div>
 					</div>
 				</form>
@@ -461,7 +455,7 @@
 									{{ $delivery_bill->charge_description }}
 								</td>
 								<td>
-									{{ $delivery_bill->remarks}}
+									<span class = "charges_remarks_span">{{ $delivery_bill->remarks}}</span>
 								</td>
 								<td style="text-align: right;">
 									Php {{ $delivery_bill->amount }}
@@ -918,7 +912,13 @@
 
 		$(document).on('click', '.view-charge-information',function(e){
 			e.preventDefault();
+			$('#view_charge_charged_to').html($(this).closest('tr').find('td:eq(0)').html());
+			$('#view_charge_charge').html($(this).closest('tr').find('td:eq(1)').html());
+			$('#view_charge_charge_fee').html($(this).closest('tr').find('td:eq(3)').html());
+			$('#view_charge_remarks').val($(this).closest('tr').find('.charges_remarks_span').text());
+
 			$('#viewChargeModal').modal('show');
+
 		})
 
 		$(document).on('click', '.select-contract-rate', function(e){

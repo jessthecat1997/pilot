@@ -132,7 +132,8 @@
                           <li><a href="{{ route('exchange_rate.utilities_index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
                           <li><a href="{{ route('receive_type.utilities_index') }}" class = "class-receive-type">Receive Type</a></li>
                           <li><a href="{{ route('brokerage_fee.utilities_index') }}">Brokerage Fee</a></li>
-                          <li><a href = "{{ route('cds_fee.utilities_index') }}">CDS Fee</a></li>
+                          <li><a href = "{{ route('cds_fee.utilities_index') }}">Container Delivery System Fee</a></li>
+                          <li><a href = "{{ route('ipf_fee.utilities_index') }}">Import Processing Fee</a></li>
                       </ul>
                   </li>
                   <li class="dropdown">

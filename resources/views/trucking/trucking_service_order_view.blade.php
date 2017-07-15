@@ -29,7 +29,7 @@
 							</div>
 							<div class="form-group">        
 								<label class="control-label col-md-5 pull-left" for="tr_deliveryDate">Delivery Date:</label>
-								<span class="control-label col-sm-5 pull-right" id="tr_deliveryDate">{{ $service_order->deliveryDate }}, ({{ Carbon\Carbon::parse($service_order->deliveryDate)->diffForHumans() }})</span>
+								<span class="control-label col-sm-5 pull-right" id="tr_deliveryDate">{{ Carbon\Carbon::parse($service_order->deliveryDate)->toFormattedDateString() }}, ({{ Carbon\Carbon::parse($service_order->deliveryDate)->diffForHumans() }})</span>
 							</div>
 
 							<div class="form-group">        

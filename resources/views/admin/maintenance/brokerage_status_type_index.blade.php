@@ -2,16 +2,13 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-	<h3><img src="/images/bar.png"> Maintenance | Brokerage Status</h3>
+		<h3><img src="/images/bar.png"> Maintenance | Brokerage Status</h3>
 		<hr>
-		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#bfModal" style = "width: 100%;">New Brokerage Fee Range</button>
-		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "col-md-2 col-md-offset-9">
-			<button  class="btn btn-success btn-md new" data-toggle="modal" data-target="#bstModal" style = "width: 100%;">New Brokerage Status</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#bstModal" style = "width: 100%;">New Brokerage Status</button>
 		</div>
 	</div>
 	<br />
@@ -45,7 +42,7 @@
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST">
+		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
 			<div class="modal fade" id="bstModal" role="dialog">
 				<div class="modal-dialog">
@@ -55,14 +52,14 @@
 							<h4 class="modal-title">New Brokerage Status</h4>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Description *</label>
+							<div class="form-group required">
+								<label class = "control-label">Description</label>
 								<input type = "text" class = "form-control" name = "description" id = "description" required />
 							</div>
 						</div>
 						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -77,14 +74,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -117,8 +115,30 @@
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
+			],	"order": [[ 0, "desc" ]],
 		});
+
+
+
+		$(document).ready(function() {
+			$("#commentForm").validate({
+				rules: 
+				{
+					description:
+					{
+						required: true,
+						minlength: 3,
+						maxlength: 50,
+					},
+
+				},
+        onkeyup: false, //turn off auto validate whilst typing
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+		});
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Brokerage Status');
@@ -181,6 +201,27 @@ $('#btnDelete').on('click', function(e){
 
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
+
+	$("#commentForm").validate({
+				rules: 
+				{
+					description:
+					{
+						required: true,
+						minlength: 3,
+						maxlength: 50,
+					},
+
+				},
+        
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+
+
+
+
 	e.preventDefault();
 	var title = $('.modal-title').text();
 	if(title == "New Brokerage Status")

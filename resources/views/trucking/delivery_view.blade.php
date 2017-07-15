@@ -363,6 +363,16 @@
 	</div>
 </div>
 @endif
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<div class = "col-md-8">
+
+		</div>
+		<div class = "col-md-4">
+			<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Generate Delivery Receipt</button>
+		</div>
+	</div>
+</div>
 @endsection
 
 @push('scripts')
@@ -465,6 +475,10 @@
 					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
 				}	
 			})
+		})
+
+		$(document).on('click', '.generate_delivery_receipt', function(e){
+			
 		})
 	})
 

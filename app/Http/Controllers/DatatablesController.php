@@ -32,7 +32,7 @@ class DatatablesController extends Controller
 		return Datatables::of($vtypes)
 		->addColumn('action', function ($vtype) {
 			return
-			'<button value = "'. $vtype->id .'" style="margin-right:10px;" class="btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $vtype->id .'" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $vtype->id .'" class="btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{$id}}')
@@ -44,7 +44,7 @@ class DatatablesController extends Controller
 		return Datatables::of($sots)
 		->addColumn('action', function ($sot){
 			return
-			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -57,7 +57,7 @@ class DatatablesController extends Controller
 		return Datatables::of($charges)
 		->addColumn('action', function ($ch){
 			return
-			'<button value = "'. $ch->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ch->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $ch->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -70,7 +70,7 @@ class DatatablesController extends Controller
 		return Datatables::of($bst)
 		->addColumn('action', function ($bs){
 			return
-			'<button value = "'. $bs->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $bs->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $bs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -83,7 +83,7 @@ class DatatablesController extends Controller
 		return Datatables::of($cts)
 		->addColumn('action', function ($ct){
 			return
-			'<button value = "'. $ct->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $ct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -96,7 +96,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ers)
 		->addColumn('action', function ($er){
 			return
-			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -109,7 +109,7 @@ class DatatablesController extends Controller
 		return Datatables::of($rts)
 		->addColumn('action', function ($rt){
 			return
-			'<button value = "'. $rt->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $rt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $rt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -122,7 +122,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ets)
 		->addColumn('action', function ($et){
 			return
-			'<button value = "'. $et->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $et->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $et->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -152,12 +152,17 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function v_datatable(){
-		$vs = Vehicle::select(['vehicle_types_id', 'plateNumber', 'model','dateRegistered', 'created_at']);
+		$vs = DB::table('vehicles')
+		->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+		->select('description', 'plateNumber', 'model','dateRegistered', 'vehicles.created_at')
+		->where('vehicles.deleted_at', '=', null)
+		->get();
+
 
 		return Datatables::of($vs)
 		->addColumn('action', function ($v) {
 			return
-			'<button value = "'. $v->plateNumber .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $v->plateNumber .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $v->plateNumber .'" style="width:100;" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->make(true);
@@ -246,7 +251,7 @@ class DatatablesController extends Controller
 		return Datatables::of($bills)
 		->addColumn('action', function ($bil){
 			return
-			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $bil->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -261,7 +266,7 @@ class DatatablesController extends Controller
 		->leftjoin('consignees','consignee_service_order_headers.consignees_id','=','consignees.id')
 		->select('brokerage_service_orders.created_at','consignee_service_order_headers.id',DB::raw('CONCAT(employees.firstName, employees.lastName) as Employee'), 'companyName', 'supplier', DB::raw('CONCAT(container_types.description,  containerNumber) as CONTRS'), 'docking', 'awb', 'deposit')
 		->orderBy('brokerage_service_orders.created_at')
-		->groupBy(DB::raw('MONTH(brokerage_service_orders.created_at)'))
+        ->groupBy(DB::raw('MONTH(brokerage_service_orders.created_at)'))
 		->get();
 		return Datatables::of($shipments)
 		->make(true);
@@ -273,7 +278,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ars)
 		->addColumn('action', function ($ar){
 			return
-			'<button value = "'. $ar->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $ar->id .'"   style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $ar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -299,7 +304,7 @@ class DatatablesController extends Controller
 		return Datatables::of($bfs)
 		->addColumn('action', function ($bf){
 			return
-			'<button value = "'. $bf->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $bf->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -356,14 +361,14 @@ class DatatablesController extends Controller
 	}
 
 
-	public function trucking_so_datatable(Request $request){
+	public function trucking_so_datatable(){
 		$truckings = DB::table('trucking_service_orders')
 		->select('trucking_service_orders.id', 'companyName','deliveryDate', 'destination', 'status')
 		->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
 		->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->where('trucking_service_orders.status', '!=', ['F', 'C'])
 		->get();
-
 		return Datatables::of($truckings)
 		->addColumn('action', function ($trucking){
 			return
@@ -378,8 +383,8 @@ class DatatablesController extends Controller
 				case 'P':
 				return 'Pending';
 				break;
-				case 'C':
-				return 'Cancelled';
+				case 'O':
+				return 'Ongoing';
 				break;
 				default:
 				return 'Unknown';

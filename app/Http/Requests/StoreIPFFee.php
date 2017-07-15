@@ -16,7 +16,10 @@ class StoreIPFFee extends FormRequest
     public function rules()
     {
         return [
-            //
+        
+        'minimum' => 'required|unique:ipf_fees',
+        'maximum' => 'required|unique:ipf_fees',
+        'amount' => 'required',
         ];
     }
 

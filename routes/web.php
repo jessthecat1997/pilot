@@ -183,6 +183,7 @@ Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'Truckings
 Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsController@view_delivery')->name('delivery.view');
 Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
+Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
 Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');

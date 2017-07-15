@@ -14,6 +14,7 @@ class StoreBilling extends FormRequest
     public function rules()
     {
         return [
+        'description' => 'required|max:50|min:2|unique:billings|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

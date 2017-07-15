@@ -15,8 +15,8 @@ class StoreEmployee extends FormRequest
     public function rules()
     {
         return [
-        'firstName' => 'required',
-        'lastName'=> 'required',
+        'firstName' => 'required|regex:/^[\p{L}\p{N} .-]+$/',
+        'lastName'=> 'required|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

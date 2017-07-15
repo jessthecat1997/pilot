@@ -15,7 +15,7 @@ class StoreEmployeeType extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:45',
+        'description' => 'required| max:45|min:5|unique:employee_types|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

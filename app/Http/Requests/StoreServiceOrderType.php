@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Response;
 
 class StoreServiceOrderType extends FormRequest
 {
@@ -15,7 +16,7 @@ class StoreServiceOrderType extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:20|alpha',
+       'description' => 'required|max:50|min:2|unique:service_order_types|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

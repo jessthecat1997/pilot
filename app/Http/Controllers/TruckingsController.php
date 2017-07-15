@@ -443,4 +443,60 @@ class TruckingsController extends Controller
         $pdf = PDF::loadView('reports/pdfview', compact(['data']));
         return $pdf->stream();
     }
+
+    public function delivery_pdf(Request $request){
+        $so_id = $request->trucking_id;
+
+        $delivery = DB::table('delivery_receipt_headers')
+        ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
+        ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
+        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->join('trucking_service_orders AS E', 'delivery_receipt_headers.tr_so_id', '=', 'E.id')
+        ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
+        ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')
+        ->join('consignees AS H', 'G.consignees_id', '=', 'H.id')
+        ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
+        ->select(
+            'delivery_receipt_headers.id',
+            'delivery_receipt_headers.plateNumber',
+            'delivery_receipt_headers.status',
+            'delivery_receipt_headers.deliveryAddress',
+            DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
+            DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
+            'delivery_receipt_headers.withContainer',
+            'H.companyName',
+            'E.deliveryDate'
+            )
+        ->get();
+
+        if($delivery[0]->withContainer == 0){
+            $delivery_details = DB::table('delivery_non_container_details')
+            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('del_head_id', '=', $delivery[0]->id)
+            ->get();
+        }
+        else{
+            $container_with_detail = [];
+            $delivery_containers = DB::table('delivery_containers')
+            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
+            ->where('del_head_id', '=', $delivery[0]->id)
+            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'remarks', 'del_head_id')
+            ->get();
+            foreach ($delivery_containers as $container) {
+                $container_details =  DB::table('delivery_container_details')
+                ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+                ->where('container_id', '=', $container->id)
+                ->get();
+
+                $new_row['container'] = $container;
+                $new_row['details'] = $container_details;
+                array_push($container_with_detail, $new_row);
+            }
+
+        }
+        
+        $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+        return $pdf->stream();
+    }
 }

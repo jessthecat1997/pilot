@@ -14,7 +14,7 @@ class StoreCharge extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:20|alpha',
+        'description' => 'required| max:20|min:2|unique:charges|regex:/^[\p{L}\p{N} .-]+$/',
         ];
     }
 

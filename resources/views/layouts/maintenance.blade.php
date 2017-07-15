@@ -127,12 +127,13 @@
                   <li class="dropdown">
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Brokerage <span class="caret"></span></a>
                       <ul class="dropdown-menu">
-                          <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
+                           <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
                           <li><a href="{{ route('charge.index') }}" class = "class-charge">Charges</a></li>
                           <li><a href="{{ route('exchange_rate.index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
                           <li><a href="{{ route('receive_type.index') }}" class = "class-receive-type">Receive Type</a></li>
                           <li><a href="{{ route('brokerage_fee.index') }}">Brokerage Fee</a></li>
-                          <li><a href="{{ route('cds_fee.index') }}">CDS Fee</a></li>
+                          <li><a href="{{ route('cds_fee.index') }}">Container Delivery System Fee</a></li>
+                          <li><a href = "{{ route('ipf_fee.index') }}">Import Processing Fee</a></li>
                       </ul>
                   </li>
                   <li class="dropdown">
@@ -167,6 +168,8 @@
 <script src="/js/app.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jquery.validate.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jquery.maskMoney.js"></script>
 
 <script>
     $("#menu-toggle").click(function(e) {
@@ -174,6 +177,37 @@
         $("#wrapper").toggleClass("toggled");
     });
 </script>
+
+
+<script type="text/javascript">
+    var $currency = "Php";
+    var $currency_s = "$"
+    //₱
+    $(".money").maskMoney({prefix: $currency + ' ',thousands:',', decimal:'.', allowZero: true}).attr('maxlength', 22) ;
+
+    $(".money_s").maskMoney({prefix: $currency_s + ' ',thousands:',', decimal:'.', allowZero: true}).attr('maxlength', 22) ;
+
+
+</script>
+
+<script type="text/javascript">
+
+
+    function formatNumber(n) {
+        var currency = "Php ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+</script>
+
+<script type="text/javascript">
+    
+    
+    function formatNumber_s(n) {
+        var currency = "$ ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+</script>
+
 @stack('scripts')
 </body>
 </html>

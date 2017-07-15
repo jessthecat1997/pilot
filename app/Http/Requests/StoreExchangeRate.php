@@ -4,9 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
-
 class StoreExchangeRate extends FormRequest
 {
+
     public function authorize()
     {
         return true;
@@ -15,7 +15,11 @@ class StoreExchangeRate extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:20|alpha',
+
+        'rate'          => 'required',
+        'dateEffective' => 'required|unique:exchange_rates|date|before:tomorrow|',
+
+
         ];
     }
 

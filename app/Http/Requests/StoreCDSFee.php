@@ -13,11 +13,14 @@ class StoreCDSFee extends FormRequest
         return true;
     }
 
-  
+    
     public function rules()
     {
         return [
-            //
+
+        'fee' => 'required|numeric',
+        'dateEffective' => 'required|unique:cds_fees',
+      
         ];
     }
 

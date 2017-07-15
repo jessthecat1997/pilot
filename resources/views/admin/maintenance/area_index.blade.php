@@ -1,5 +1,6 @@
 @extends('layouts.maintenance')
 @section('content')
+
 <div class = "container-fluid">
 	<div class = "row">
 		<h3><img src="/images/bar.png"> Maintenance | Area</h3>
@@ -40,7 +41,7 @@
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST">
+		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
 			<div class="modal fade" id="arModal" role="dialog">
 				<div class="modal-dialog">
@@ -50,14 +51,15 @@
 							<h4 class="modal-title">New Area</h4>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Description *</label>
-								<input type = "text" class = "form-control" name = "description" id = "description" required />
+							<div class="form-group required">
+								<label class = "control-label">Description</label>
+								<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
+								
 							</div>
 						</div>
 						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -72,14 +74,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -112,8 +115,38 @@
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
+			],	"order": [[ 0, "desc" ]],
 		});
+
+		$(document).ready(function() {
+			$("#commentForm").validate({
+				rules: 
+				{
+					description:
+					{
+						required: true,
+						minlength: 2,
+						maxlength: 50,
+					},
+
+				},
+
+
+			});
+
+			$('#commentForm input').on('keyup blur', function () {
+				if ($('#commentForm').valid()) {
+					$('button.submit').prop('disabled', false);
+				} else {
+					$('button.submit').prop('disabled', 'disabled');
+				}
+			});
+
+
+
+		});
+
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Area');
@@ -126,7 +159,7 @@
 			var bst_id = $(this).val();
 			data = artable.row($(this).parents()).data();
 			$('#description').val(data.description);
-			$('.modal-title').text('Edit Brokerage Status');
+			$('.modal-title').text('Update Area');
 			$('#arModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){

@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<section class="content">
-		<form role="form" method = "POST" class="form-group">
+		<form role="form" method = "POST" class="form-group" id = "commentForm">
 			{{ csrf_field() }}
 			<div class="modal fade" id="vModal" role="dialog">
 				<div class="modal-dialog">
@@ -50,11 +50,11 @@
 							<h4 class="modal-title">New Vehicle</h4>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Vehicle Type *</label>
+							<div class="form-group required">
+								<label class = "control-label">Vehicle Type</label>
 								<select class = "form-control" name = "vehicle_types_id" id = "vehicle_types_id">
-									<option>
-
+									<option selected disabled>
+										--Choose a vehicle type--
 									</option>
 									@forelse($vts as $vt)
 									<option value = "{{ $vt->id }}">
@@ -66,26 +66,27 @@
 							</div>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Plate Number *</label>
+							<div class="form-group required">
+								<label class = "control-label">Plate Number</label>
 								<input type = "text" class = "form-control" name = "plateNumber" id = "plateNumber" required />
 							</div>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Model *</label>
+							<div class="form-group required">
+								<label class = "control-label">Model</label>
 								<input type = "text" class = "form-control" name = "model" id = "model" required />
 							</div>
+
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Date Registered *</label>
+							<div class="form-group required">
+								<label class = "control-label">Date Registered</label>
 								<input type = "date" class = "form-control" name = "dateRegistered" id = "dateRegistered" required />
 							</div>
 						</div>
 						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -100,14 +101,15 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
+						
+							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							<button class = "btn btn-danger	" id = "btnDelete" >Delete</button>
 						</div>
 					</div>
 				</div>
@@ -141,15 +143,62 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/vData',
 			columns: [
-			{ data: 'vehicle_types_id' },
+			{ data: 'description' },
 			{ data: 'plateNumber' },
 			{ data: 'model' },
 			{ data: 'dateRegistered' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
+			],	"order": [[ 0, "desc" ]],
 		});
+
+		$.validator.addMethod("valueNotEquals", function(value, element, arg){
+			return arg != value;
+		}, "Value must not equal arg.");
+
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				plateNumber:
+				{
+					required: true,
+					maxlength: 20,
+				},
+
+				model:{
+					required: true,
+					minlength: 5,
+
+				},
+				dateRegistered:{
+					required: true,
+				},
+				SelectName: 
+				{ 
+					valueNotEquals: "default" 
+				},
+			},
+
+			messages: 
+			{
+				SelectName: 
+				{ 
+					valueNotEquals: "Please select a vehicle type!"
+				}
+			}, 
+
+        onkeyup: false, //turn off auto validate whilst typing
+        submitHandler: function (form) {
+        	return false;
+        }
+    });
+
+
+
+
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Vehicle');

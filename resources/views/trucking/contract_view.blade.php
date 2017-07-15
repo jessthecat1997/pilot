@@ -11,6 +11,7 @@
 			<div class = "panel-body">
 				<div class = "col-md-6">
 					<h3>Contract Information</h3>
+					<hr />
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<label class="control-label col-sm-5" for="contactNumber">Contract #:</label>
@@ -22,17 +23,18 @@
 						</div>
 						<div class="form-group">        
 							<label class="control-label col-sm-5" for="contactNumber">Date Effective:</label>
-							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->dateEffective }}</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ Carbon\Carbon::parse($contract[0]->dateEffective)->toFormattedDateString() }}</label>
 						</div>
 						<div class="form-group">        
 							<label class="control-label col-sm-5" for="contactNumber">Date Expiration:</label>
-							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->dateExpiration }}, ({{ Carbon\Carbon::parse($contract[0]->dateExpiration)->diffForHumans() }})</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ Carbon\Carbon::parse($contract[0]->dateExpiration)->toFormattedDateString() }}, ({{ Carbon\Carbon::parse($contract[0]->dateExpiration)->diffForHumans() }})</label>
 						</div>
 					</form>
 				</div>
 				<div class = "col-md-6">
 					<h3>Terms &amp; Conditions</h3>
-					<div style = "overflow-y: scroll; height: 300px;">
+					<hr />
+					<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
 						@if($contract[0]->specificDetails == null)
 						<h5 style="text-align: center;">No specified details</h5>
 						@else
@@ -50,18 +52,19 @@
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 				<h3>Contract Rates</h3>
-				<div class = "col-md-10 col-md-offset-1">
+				<hr />
+				<div class = "col-md-10 col-md-offset-1 panel-default panel">
 					<table class = "table table-striped table-responsive">
 						<thead>
 							<tr>
 								<td>
-									<h4>From</h4>
+									<h4>Area From</h4>
 								</td>
 								<td>
-									<h4>To</h4>
+									<h4>Area To</h4>
 								</td>
 								<td>
-									<h4>Amount</h4>
+									<h4 style="text-align: right ">Amount</h4>
 								</td>
 							</tr>
 						</thead>
@@ -74,7 +77,7 @@
 								{{ $contract_detail->to }}
 							</td>
 							<td style="text-align: right;"> 
-								{{ $contract_detail->amount }}
+								Php {{ $contract_detail->amount }}
 							</td>
 
 						</tr>
@@ -86,9 +89,11 @@
 						</tr>
 						@endforelse
 					</table>
+					<br />
+					<br />
 				</div>
 				<br />
-				<a href = "{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf" class="btn btn-md btn-primary pull-right">Generate PDF</a>
+				<button class="btn btn-md btn-primary pull-right generate_pdf">Generate PDF</button>
 			</div>
 		</div>
 	</div>
@@ -102,5 +107,17 @@
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
+	pre {border: 0; background-color: transparent;}
 </style>
+@endpush
+
+@push('scripts')
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on('click', '.generate_pdf', function(e){
+			console.log("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
+			window.open("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
+		})
+	})
+</script>
 @endpush

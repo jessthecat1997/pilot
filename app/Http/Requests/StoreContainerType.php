@@ -15,7 +15,7 @@ class StoreContainerType extends FormRequest
     public function rules()
     {
         return [
-        'description' => 'required| max:45',
+        'description' => 'required| max:45|min:2|unique:container_types',
         ];
     }
 
