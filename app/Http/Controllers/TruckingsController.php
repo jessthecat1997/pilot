@@ -143,6 +143,16 @@ class TruckingsController extends Controller
         }
     }
 
+    public function new_delivery(Request $request)
+    {
+        $so_id = $request->trucking_id;
+        $container_volumes = ContainerType::all();
+        $vehicle_types = VehicleType::all();
+        $employees = Employee::all();
+
+        return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id']));
+    }
+
     public function store_delivery(Request $request)
     {
         if($request->containerNumber == null)

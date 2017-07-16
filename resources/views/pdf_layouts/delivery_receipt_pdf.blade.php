@@ -30,13 +30,16 @@
 			word-wrap: break-word;
 		}
 
-		#dtr tr td {
+		#dtr tr td 	{
 			border: 1px transparent!important;
 		}
 
-		.value {
-			border-left: 1px transparent!important;
+		#header tr td 	{
+			border: 1px transparent!important;
 		}
+
+
+		.remove_left
 
 
 	</style>
@@ -45,7 +48,6 @@
 <body>
 	<div class="row">
 		<div class = "container" style="text-align: center;">
-			<br />
 			<h2><small><strong style="text-align: center;">PILOT CARGO CHAINS SOLUTION INC.</strong></small></h2>
 			
 			<small><strong style="text-align: center;">3rd Floor, Unit 318 Velco Center Building, R.S. Oca &amp; A.C. Delgado St.</strong></small>
@@ -55,53 +57,63 @@
 			<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
 		</div>
 		<br />
-		<div style = "width: 100%;">
-			<div style="width: 50%;">
-				<h3><strong>Delivery Receipt</strong></h3>
-			</div>
-		</div>
+		<table style="width: 100%;" id = "header" >
+			<tr>
+				<td style="width: 80%;">
+					<h3>Delivery Receipt</h3>
+				</td>
+				<td style="width: 5%;">
+					<span>No.</span>
+				</td>
+				<td style="width: 15%; text-align: center; padding-top: 5px;"">
+
+					<span style="padding-top: 10px;">{{ $delivery[0]->id }}</span>
+					<hr style="margin-top: 5px;" />
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div style="width: 100%;">
 		<table style="width: 100%;" id = "info">
 			<tr>
-				<td >
-					<span>Consignee:</span>
+				<td  style="border-right: 1px solid transparent;">
+					<span><strong>Consignee:</strong></span>
 				</td>
-				<td colspan="3" class="value">
+				<td colspan="3" style="border-left: 1px solid transparent; margin-left: -80px;">
 					<span>{{ $delivery[0]->companyName }}</span>
 				</td>
-				<td>
-					<span>Date</span>
+				<td style="border-right: 1px solid transparent;">
+					<span><strong>Date: </strong></span>
 				</td>
-				<td>
+				<td style="border-left: 1px solid transparent;">
 					<span>{{ Carbon\Carbon::parse($delivery[0]->deliveryDate)->toFormattedDateString() }}</span>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<span>Address:</span>
+				<td style="width: 10%; border-right: 1px solid transparent;">
+					<span><strong>Address: </strong></span>
 				</td>
-				<td colspan="5">
+				<td colspan="5" style="border-left: 1px solid transparent;">
 					<span>{{ $delivery[0]->deliveryAddress }}</span>
 				</td>
 			</tr>
 			<tr>
-				<td style="width: 25%;">
-					<small>DELIVERED BY:</small> Plate #
+				<td style="width: 25%; border-right: 1px solid transparent;">
+					<strong><small>DELIVERED:</small> Plate #</strong>
 				</td>
-				<td style="width: 15%;">
+				<td style="width: 15%; border-left: 1px solid transparent;">
 					<span>{{ $delivery[0]->plateNumber }}</span>
 				</td>
-				<td style="width: 10%;">
-					<span>Driver:</span>
+				<td style="width: 10%; border-right: 1px solid transparent;">
+					<span><strong>Driver:</strong></span>
 				</td>
-				<td style="width: 20%;">
+				<td style="width: 20%; border-left: 1px solid transparent;">
 					<span>{{ $delivery[0]->driverName }}</span>
 				</td>
-				<td style="width: 10%;">
-					<span>Helper:</span>
+				<td style="width: 10%; border-right: 1px solid transparent;">
+					<span><strong>Helper: </strong></span>
 				</td>
-				<td style="width: 20%;">
+				<td style="width: 20%; border-left: 1px solid transparent;">
 					<span>{{ $delivery[0]->helperName }}</span>
 				</td>
 			</tr>
@@ -111,39 +123,117 @@
 	<br />
 	
 	@if($delivery[0]->withContainer == 1)
-	<table style="width: 100%;">
-		<thead>
-			<tr>
-				<th style="width: 10%;">
-					Quantity
-					<br />
-					Marks &amp;
-					<br />
-					Numbers
-				</th>
-				<th style="width: 20%;">
-					Gross Weight
-					<br />
-					And
-					<br />
-					Measurement
-				</th>
-				<th style="width: 70%;">
-					Description of Goods / Shipments
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
+	<section>
+		<table style="width: 100%;">
+				<tr>
+					<th style="width: 10%;">
+						Quantity
+						<br />
+						Marks &amp;
+						<br />
+						Numbers
+					</th>
+					<th style="width: 20%;">
+						Gross Weight
+						<br />
+						And
+						<br />
+						Measurement
+					</th>
+					<th style="width: 70%;">
+						Description of Goods / Shipments
+					</th>
+				</tr>
+			<tbody>
+				@forelse($container_with_detail as $container)
+				@php
+				$num = 1;
+				@endphp
 
-				</td>
-				<td>
+				<tr>
+					<td style="text-align: center;">
+						{{ $container['container']->containerVolume }}
+					</td>
+					<td colspan="2">
+						Container Number: {{ $container['container']->containerNumber }}
+					</td>
+				</tr>
 
-				</td>
-			</tr>
-		</tbody>
-	</table>
+				@forelse($container['details'] as $detail)
+				<tr>
+					<td style="text-align: right;">
+						{{ $num++ }}
+					</td>
+					<td style="text-align: right;">
+						{{ $detail->grossWeight }}
+					</td>
+					<td>
+						{{ $detail->descriptionOfGoods }}
+						@if( $detail->supplier != "")
+						<br />
+						Supplier: {{ $detail->supplier }}
+						@endif
+					</td>
+				</tr>
+				@empty
+				<tr>
+					<td colspan="3">
+						<h5 style="text-align: center;">No records found.</h5>
+					</td>
+				</tr>
+				@endforelse
+				@empty
+
+				@endforelse
+				<tr>
+					<td colspan="3">
+						<table style="width: 100%;" id = "dtr">
+							<tr>
+								<td class="remove_table_tr" style="width: 5%;">
+									Date:
+								</td>
+								<td class = "remove_table_tr" style="width: 25%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+								<td class="remove_table_tr" style="width: 15%;">
+									Time in:
+								</td>
+								<td class = "remove_table_tr" style="width: 20%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+								<td class="remove_table_tr" style="width: 5%;">
+									Signature: 
+								</td>
+								<td class = "remove_table_tr" style="width: 30%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+							</tr>
+							<tr>
+								<td class="remove_table_tr" style="width: 5%;">
+									Date:
+								</td>
+								<td class = "remove_table_tr" style="width: 25%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+								<td class="remove_table_tr" style="width: 15%;">
+									Time out:
+								</td>
+								<td class = "remove_table_tr" style="width: 20%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+								<td class="remove_table_tr" style="width: 5%;">
+									Signature: 
+								</td>
+								<td class = "remove_table_tr" style="width: 30%;">
+									<hr  style="margin-top: 18px;" />
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
 	@else
 	@php
 	$num = 1;
@@ -173,8 +263,10 @@
 				</td>
 				<td>
 					{{ $delivery_detail->descriptionOfGoods }}
+					@if($delivery_detail->supplier != "")
 					<br />
 					Supplier : {{ $delivery_detail->supplier }}
+					@endif
 				</td>
 			</tr>
 

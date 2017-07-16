@@ -3,7 +3,6 @@
 @section('content')
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel default-panel">
 			<div class = "panel-heading">
 				<h3>Manage Trucking</h3>
 				<hr />	
@@ -88,7 +87,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</div>
 </div>
 <div class = "row">
@@ -96,9 +94,9 @@
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 				@if($service_order->status == 'P' )
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right" data-toggle="modal" data-target="#myModal">New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery">New Delivery</button></h4>
 				@else
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right" disabled data-toggle="modal" data-target="#myModal">New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
 				<table class = "table table-responsive" id = "deliveries_table">
@@ -458,9 +456,13 @@
 			$('#_destination').val($('#tr_destination').text().trim());
 			$('#_shippingLine').val($('#tr_shippingLine').text().trim());
 			$('#_portOfCfsLocation').val($('#tr_portOfCfsLocation').text().trim());
-			$('#_status').val($('#tr_status').text().trim());
-			
+			$('#_status').val($('#tr_status').text().trim());			
 		})
+		$(document).on('click', '.new-delivery', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/create";	
+		})
+
 		$(document).on('click', '.save-trucking-information', function(e){
 			$.ajax({
 

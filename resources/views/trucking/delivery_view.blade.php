@@ -478,7 +478,7 @@
 		})
 
 		$(document).on('click', '.generate_delivery_receipt', function(e){
-			
+			window.open("{{ route('trucking.index') }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/show_pdf");
 		})
 	})
 

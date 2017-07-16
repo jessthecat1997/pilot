@@ -383,8 +383,8 @@ class DatatablesController extends Controller
 				case 'P':
 				return 'Pending';
 				break;
-				case 'O':
-				return 'Ongoing';
+				case 'C':
+				return 'Cancelled';
 				break;
 				default:
 				return 'Unknown';

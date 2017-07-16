@@ -115,7 +115,6 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$(document).on('click', '.generate_pdf', function(e){
-			console.log("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
 			window.open("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
 		})
 	})

@@ -15,7 +15,8 @@ class CreateBillingsTable extends Migration
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 50);
+            $table->string('name', 50);
+            $table->string('description', 50)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
