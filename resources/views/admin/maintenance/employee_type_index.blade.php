@@ -15,16 +15,16 @@
 				<table class = "table-responsive table" id = "ch_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								No.
 							</td>
-							<td>
+							<td style="width: 30%;">
+								Name
+							</td>
+							<td style="width: 40%;">
 								Description
 							</td>
-							<td>
-								Created at
-							</td>
-							<td>
+							<td style="width: 25%;">
 								Actions
 							</td>
 						</tr>
@@ -46,13 +46,17 @@
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
-								<label class = "control-label">Description </label>
-								<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
+								<label class = "control-label">Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name"  required />
+							</div>
+							<div class="form-group">
+								<label class = "control-label">Description: </label>
+								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>				
+							<button class = "btn btn-danger	" data-dismiss= "modal">Close</button>				
 						</div>
 					</div>
 				</div>
@@ -103,6 +107,9 @@
 @push('scripts')
 <script type="text/javascript">
 	var data;
+	var temp_name = null;
+	var temp_desc = null;
+
 	$(document).ready(function(){
 		var ettable = $('#ch_table').DataTable({
 			processing: true,
@@ -110,8 +117,8 @@
 			ajax: 'http://localhost:8000/admin/etData',
 			columns: [
 			{ data: 'id' },
+			{ data: 'name'},
 			{ data: 'description' },
-			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -120,25 +127,31 @@
 		$("#commentForm").validate({
 			rules: 
 			{
-				description:
+				name:
 				{
 					required: true,
-					minlength: 2,
+					minlength: 3,
+					maxlength: 50,
+				},
+
+				description:
+				{
 					maxlength: 50,
 				},
 
 			},
-        onkeyup: false, //turn off auto validate whilst typing
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
+			onkeyup: false,
+			submitHandler: function (form) {
+				return false;
+			}
+		});
 
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Employee Type');
 			$('#description').val("");
+			$('#name').val("");
 			$('#etModal').modal('show');
 
 		});
@@ -146,8 +159,14 @@
 			resetErrors();
 			var et_id = $(this).val();
 			data = ettable.row($(this).parents()).data();
+
 			$('#description').val(data.description);
-			$('.modal-title').text('Edit Vehicle Type');
+			$('#name').val(data.name);
+			
+			temp_name = data.name;
+			temp_desc = data.description;
+
+			$('.modal-title').text('Update Employee Type');
 			$('#etModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -157,66 +176,18 @@
 		});
 
 
-
-// Confirm Delete Button
-$('#btnDelete').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '/admin/employee_type/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			ettable.ajax.reload();
-			$('#confirm-delete').modal('hide');
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
-
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-	e.preventDefault();
-	var title = $('.modal-title').text();
-	if(title == "New Employee Type")
-	{
-		$.ajax({
-			type: 'POST',
-			url:  '/admin/employee_type',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
-			{
-				if(typeof(data) === "object"){
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/employee_type/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
 					ettable.ajax.reload();
-					$('#etModal').modal('hide');
-					$('#description').val("");
-					$('.modal-title').text('New Employee Type');
-
-					//Show success
+					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
 						"closeButton": false,
@@ -236,63 +207,158 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully")
+					toastr["success"]("Record deactivated successfully");
 				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
-				}
-			},
-			
-		})
-	}
-	else
-	{
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/employee_type/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
+			})
+		});
+
+		$('#btnSave').on('click', function(e){
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			$('#name').valid();
+			$('#description').valid();
+
+			if(title == "New Employee Type")
 			{
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
+				if($('#name').valid() && $('#description').valid()){
+
+					$('#btnSave').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/employee_type',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'description' : $('#description').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								ettable.ajax.reload();
+								$('#etModal').modal('hide');
+								$('#description').val("");
+								$('#name').val("");
+								$('.modal-title').text('New Employee Type');
+
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully");
+
+								$('#btnSave').removeAttr('disabled');
+
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+								$('#btnSave').removeAttr('disabled');
+
+							}
+						},
+
+					})
 				}
-				toastr["success"]("Record updated successfully")
-
-				ettable.ajax.reload();
-				$('#etModal').modal('hide');
-				$('#description').val("");
-				$('.modal-title').text('New Employee Type');
 			}
-		})
-	}
-});
+			else
+			{
+				if($('#name').valid() && $('#description').valid())
+				{
+					if($('#name').val() === temp_name && $('#description').val() === temp_desc)
+					{
+						$('#name').val("");
+						$('#description').val("");
+						$('#btnSave').removeAttr('disabled');
+						$('#etModal').modal('hide');
+					}
+					else
+					{
+						$('#btnSave').attr('disabled', 'true');
 
-});
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/employee_type/' + data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									ettable.ajax.reload();
+									$('#etModal').modal('hide');
+									$('#description').val("");
+									$('#name').val("");
+									$('.modal-title').text('New Employee Type');
+
+
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record addded successfully");
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v);
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+							}
+						})
+					}
+				}
+			}
+		});
+
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

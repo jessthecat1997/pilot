@@ -94,6 +94,9 @@
                         <li>
                             <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
+                         <li>
+                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
+                        </li>
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
                         </li>
@@ -149,7 +152,7 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Biling <span class="caret"></span></a>
                 <ul class="dropdown-menu">
 
-                    <li class="active"><a href="{{ route('billingmain.index') }}" class="class-billing">Billing</a></li>
+                    <li class="active"><a href="{{ route('billing.index') }}" class="class-billing">Billing</a></li>
                     <li><a href="{{ route('employee_type.index') }}" class = "class-employee-type">Employee Type</a></li>
                 </ul>
             </li>

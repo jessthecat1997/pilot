@@ -16,16 +16,16 @@
 				<table class = "table-responsive table" id = "vtype_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								No.
 							</td>
-							<td>
+							<td style="width: 30%;">
+								Name
+							</td>
+							<td style="width: 40%;">
 								Description
 							</td>
-							<td>
-								Created at
-							</td>
-							<td>
+							<td style="width: 25%;">
 								Actions
 							</td>
 						</tr>
@@ -46,10 +46,14 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">New Vehicle Type</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="form-group required">
-								<label class = "control-label">Description</label>
-								<input type = "text" class = "form-control" name = "description" id = "description" required />
+								<label class = "control-label">Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name" required />
+							</div>		
+							<div class="form-group">
+								<label class = "control-label">Description: </label>
+								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -75,7 +79,7 @@
 							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-						
+
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
@@ -84,135 +88,160 @@
 			</div>
 		</form>
 	</section>
-	@endsection
-	@push('styles')
-	<style>
-		.class-vehicle-type{
-			border-left: 10px solid #2ad4a5;
-			background-color:rgba(128,128,128,0.1);
-			color: #fff;
-		}
-		.maintenance
-		{
-			border-left: 10px solid #2ad4a5;
-			background-color:rgba(128,128,128,0.1);
-			color: #fff;
-		}
-	</style>
-	@endpush
-	@push('scripts')
-	<script type="text/javascript">
-		var data;
-		$(document).ready(function(){
-			var vtable = $('#vtype_table').DataTable({
-				processing: true,
-				serverSide: true,
-				ajax: '{{ route("vt.data") }}',
-				columns: [
-				{ data: 'id' },
-				{ data: 'description' },
-				{ data: 'created_at'},
-				{ data: 'action', orderable: false, searchable: false }
+</div>
 
-				],	"order": [[ 0, "desc" ]],
-			});
-
-			$("#commentForm").validate({
-				rules: 
-				{
-					description:
-					{
-						required: true,
-						minlength: 3,
-						maxlength: 20,
-					},
-
-				},
-        onkeyup: false, //turn off auto validate whilst typing
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
-			$(document).on('click', '.new', function(e){
-				resetErrors();
-				$('.modal-title').text('New Vehicle Type');
-				$('#description').val("");
-				$('#vtModal').modal('show');
-
-			});
-			$(document).on('click', '.edit',function(e){
-				resetErrors();
-				var vt_id = $(this).val();
-				data = vtable.row($(this).parents()).data();
-				$('#description').val(data.description);
-				$('.modal-title').text('Edit Vehicle Type');
-				$('#vtModal').modal('show');
-			});
-			$(document).on('click', '.deactivate', function(e){
-				var vt_id = $(this).val();
-				data = vtable.row($(this).parents()).data();
-				$('#confirm-delete').modal('show');
-			});
-
-
-
-// Confirm Delete Button
-$('#btnDelete').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '/admin/vehicletype/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			vtable.ajax.reload();
-			$('#confirm-delete').modal('hide');
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
-
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-	e.preventDefault();
-	var title = $('.modal-title').text();
-	if(title == "New Vehicle Type")
+@endsection
+@push('styles')
+<style>
+	.class-vehicle-type{
+		border-left: 10px solid #2ad4a5;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
 	{
-		$.ajax({
-			type: 'POST',
-			url:  '/admin/vehicletype',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
+		border-left: 10px solid #2ad4a5;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
+@push('scripts')
+<script type="text/javascript">
+	var data;
+	var temp_name = null;
+	var temp_desc = null;
+	$(document).ready(function(){
+		var vtable = $('#vtype_table').DataTable({
+			scrollX: true,
+			processing: true,
+			serverSide: true,
+			ajax: '{{ route("vt.data") }}',
+			columns: [
+			{ data: 'id' },
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
+
+		$("#commentForm").validate({
+			rules: 
 			{
-				if(typeof(data) === "object"){
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+				},
+
+				description:
+				{
+					maxlength: 50,
+				},
+
+			},
+			onkeyup: false, 
+			submitHandler: function (form) {
+				return false;
+			}
+		});
+		$(document).on('click', '.new', function(e){
+			resetErrors();
+			$('.modal-title').text('New Vehicle Type');
+			$('#description').val("");
+			$('#name').val("");
+			$('#vtModal').modal('show');
+
+		});
+		$(document).on('click', '.edit',function(e){
+			resetErrors();
+			var vt_id = $(this).val();
+			data = vtable.row($(this).parents()).data();
+
+			$('#description').val(data.description);
+			$('#name').val(data.name);
+
+			temp_name = data.name;
+			temp_desc = data.description;
+
+			$('.modal-title').text('Edit Vehicle Type');
+			$('#vtModal').modal('show');
+		});
+		$(document).on('click', '.deactivate', function(e){
+			var vt_id = $(this).val();
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-delete').modal('show');
+		});
+
+
+
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/vehicletype/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
 					vtable.ajax.reload();
-					$('#vtModal').modal('hide');
-					$('#description').val("");
-					$('.modal-title').text('New Vehicle Type');
+					$('#confirm-delete').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record deactivated successfully")
+				}
+			})
+		});
+
+
+		$('#btnSave').on('click', function(e){
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			$('#name').valid();
+			$('#description').valid();
+
+			if(title == "New Vehicle Type")
+			{
+				if($('#name').valid() && $('#description').valid()){
+
+					$('#btnSave').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/vehicletype',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'description' : $('#description').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								vtable.ajax.reload();
+								$('#vtModal').modal('hide');
+								$('#description').val("");
+								$('.modal-title').text('New Vehicle Type');
 
 					//Show success
 
@@ -234,63 +263,108 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully")
+					toastr["success"]("Record addded successfully");
+
+					$('#name').val("");
+					$('#description').val("");
+					$('#btnSave').removeAttr('disabled');
+					
 				}
 				else{
 					resetErrors();
 					var invdata = JSON.parse(data);
 					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
+						console.log(i + " => " + v);
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+					});
+					$('#btnSave').removeAttr('disabled');
 					
 				}
 			},
 			
 		})
-	}
-	else
-	{
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/vehicletype/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
-			{
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
 				}
-				toastr["success"]("Record updated successfully")
-
-				vtable.ajax.reload();
-				$('#vtModal').modal('hide');
-				$('#description').val("");
-				$('.modal-title').text('New Vehicle Type');
 			}
-		})
-	}
-});
+			else
+			{
+				if($('#name').valid() && $('#description').valid()){
+					if($('#name').val() === temp_name && $('#description').val() === temp_desc){
+						$('#name').val("");
+						$('#description').val("");
+						$('#btnSave').removeAttr('disabled');
+						$('#vtModal').modal('hide');
+					}
+					else{
+						$('#btnSave').attr('disabled', 'true');
 
-});
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/vehicletype/' + data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									vtable.ajax.reload();
+									$('#vtModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Vehicle Type');
+
+					//Show success
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record updated successfully");
+
+					$('#name').val("");
+					$('#description').val("");
+					$('#btnSave').removeAttr('disabled');
+					
+				}
+				else{
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+						console.log(i + " => " + v);
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+					});
+					$('#btnSave').removeAttr('disabled');
+					
+				}
+			},
+			
+		})
+					}
+				}
+			}
+		});
+
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

@@ -52,7 +52,7 @@
 												<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
 													<option></option>
 													@forelse($container_volumes as $container_volume)
-													<option value = "{{ $container_volume->id }}">{{ $container_volume->description }}</option>
+													<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
 													@empty
 
 													@endforelse
@@ -163,7 +163,7 @@
 						<select class="form-control" id = "vehicle_type">
 							<option value = "0"></option>
 							@forelse($vehicle_types as $vehicle_type)
-							<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->description  }}</option>
+							<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
 							@empty
 							@endforelse
 						</select>

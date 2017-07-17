@@ -24,6 +24,7 @@ class ContainerTypesController extends Controller
     public function update(StoreContainerType $request, $id)
     {
         $container_type = ContainerType::findOrFail($id);
+        $container_type->name = $request->name;
         $container_type->description = $request->description;
         $container_type->save();
 

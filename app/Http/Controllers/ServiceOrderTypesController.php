@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreServiceOrderType;
 use App\service_order_type;
 
 class ServiceOrderTypesController extends Controller
@@ -14,15 +15,16 @@ class ServiceOrderTypesController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreServiceOrderType $request)
     {
         $sot = service_order_type::create($request->all());
         return $sot;
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreServiceOrderType $request, $id)
     {
         $sot = service_order_type::findOrFail($id);
+        $sot->name = $request->name;
         $sot->description = $request->description;
         $sot->save();
 

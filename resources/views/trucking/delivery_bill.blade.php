@@ -5,7 +5,7 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
-				<h3>Bill Delivery <button class="btn btn-sm btn-success pull-right new-delivery-bill">New Delivery Fee</button></h3>
+				<h3>Bill Delivery <button class="btn btn-sm btn-success pull-right new-delivery-bill">Set Delivery Fee</button></h3>
 			</div>
 			<div class = "panel-body">
 				<div class = "col-md-8">
@@ -234,7 +234,7 @@
 								<select class = "form-control" required id = "pcf_penalty_penalty" name="pcf_penalty_penalty">
 									<option></option>
 									@forelse($charges as $charge)
-									<option value = "{{ $charge->id }}">{{ $charge->description }}</option>
+									<option value = "{{ $charge->id }}">{{ $charge->name }}</option>
 									@empty
 
 									@endforelse

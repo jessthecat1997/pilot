@@ -95,11 +95,11 @@
                         <li>
                             <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
-                        <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
+                         <li>
+                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
+                            <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li>
                             <a href="{{ route('billingdetails.index') }}" class = "class-billing">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Billing</a>

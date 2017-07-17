@@ -24,6 +24,7 @@ class EmployeeTypesController extends Controller
     public function update(StoreEmployeeType $request, $id)
     {
         $employee_type = EmployeeType::findOrFail($id);
+        $employee_type->name = $request->name;
         $employee_type->description = $request->description;
         $employee_type->save();
 

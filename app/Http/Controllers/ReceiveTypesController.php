@@ -24,6 +24,7 @@ class ReceiveTypesController extends Controller
     public function update(StoreReceiveType $request, $id)
     {
         $receive_type = ReceiveType::findOrFail($id);
+        $receive_type->name = $request->name;
         $receive_type->description = $request->description;
         $receive_type->save();
 

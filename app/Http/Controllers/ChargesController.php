@@ -25,6 +25,7 @@ class ChargesController extends Controller
     public function update(StoreCharge $request, $id)
     {
         $charge = Charge::findOrFail($id);
+        $charge->name = $request->name;
         $charge->description = $request->description;
         $charge->save();
 

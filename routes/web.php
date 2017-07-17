@@ -45,7 +45,6 @@ Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','IpfFeesController');
-Route::resource('/admin/billingmain', 'BillingsController');
 
 
 //Utilities Routes

@@ -15,9 +15,27 @@ class StoreServiceOrderType extends FormRequest
 
     public function rules()
     {
-        return [
-       'description' => 'required|max:50|min:2|unique:service_order_types|regex:/^[\p{L}\p{N} .-]+$/',
-        ];
+        switch ($this->method()) {
+            case 'POST':
+
+            return [
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
+            'description' => 'max:50'
+            ];
+
+            break;
+            
+            case 'PUT':
+
+            return [
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name,'. $this->segment(3) ,
+            'description' => 'max:50'
+            ];
+
+            break;
+            
+            default: break;
+        }
     }
 
     //Overriding the response 422

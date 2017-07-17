@@ -12,19 +12,19 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "sotype_table">
+				<table class = "table-responsive table" id = "sotype_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								No.
 							</td>
-							<td>
+							<td style="width: 25%;">
+								Name
+							</td>
+							<td style="width: 40%;">
 								Description
 							</td>
-							<td>
-								Created at
-							</td>
-							<td>
+							<td style="width: 30%;">
 								Actions
 							</td>
 						</tr>
@@ -46,9 +46,15 @@
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
-								<label class = "control-label">Description</label>
-								<input type = "text" class = "form-control" name = "description" id = "description" required />
+								<label class = "control-label">Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>
+
+							<div class="form-group">
+								<label class = "control-label">Description: </label>
+								<textarea class = "form-control" name = "description" id = "description"></textarea>
+							</div>
+
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
@@ -102,41 +108,47 @@
 @push('scripts')
 <script type="text/javascript">
 	var data;
+	var temp_name = null;
+	var temp_desc = null;
 	$(document).ready(function(){
 		var sotable = $('#sotype_table').DataTable({
+			scrollX: true,
 			processing: true,
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/sotData',
 			columns: [
 			{ data: 'id' },
+			{ data: 'name' },
 			{ data: 'description' },
-			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
 		});
 
 
-		$("#commentForm").validate({
+		var validator = $("#commentForm").validate({
 			rules: 
 			{
-				description:
+				name:
 				{
 					required: true,
-					minlength: 2,
-					maxlength: 45,
+					minlength: 3,
+					maxlength: 50,
+				},
+
+				description:
+				{
+					maxlength: 50,
 				},
 
 			},
-        onkeyup: false, //turn off auto validate whilst typing
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
+
+		});
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Service Order Type');
+			$('#name').val("");
 			$('#description').val("");
 			$('#sotModal').modal('show');
 
@@ -145,8 +157,11 @@
 			resetErrors();
 			var vt_id = $(this).val();
 			data = sotable.row($(this).parents()).data();
+			$('#name').val(data.name);	
 			$('#description').val(data.description);
-			$('.modal-title').text('Update Vehicle Type');
+			temp_name = data.name;
+			temp_desc = data.description;
+			$('.modal-title').text('Update Service Order Type');
 			$('#sotModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -198,22 +213,28 @@ $('#btnDelete').on('click', function(e){
 $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
+
 	if(title == "New Service Order Type")
 	{
-		$.ajax({
-			type: 'POST',
-			url:  '/admin/service_ordertype',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
-			{
-				if(typeof(data) === "object"){
-					sotable.ajax.reload();
-					$('#sotModal').modal('hide');
-					$('#description').val("");
-					$('.modal-title').text('New Service Order Type');
+		if($('#name').valid() && $('#description').valid()){
+			
+			$('#btnSave').attr('disabled', 'true');
+
+			$.ajax({
+				type: 'POST',
+				url:  '/admin/service_ordertype',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'name' : $('#name').val(),
+					'description' : $('#description').val(),
+				},
+				success: function (data)
+				{
+					if(typeof(data) === "object"){
+						sotable.ajax.reload();
+						$('#sotModal').modal('hide');
+						$('#description').val("");
+						$('.modal-title').text('New Service Order Type');
 
 					//Show success
 
@@ -235,59 +256,103 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully")
+					toastr["success"]("Record addded successfully");
+
+					$('#name').val("");
+					$('#description').val("");
+					$('#sotModal').modal('hide');
+
+					$('#btnSave').removeAttr('disabled');
 				}
 				else{
 					resetErrors();
 					var invdata = JSON.parse(data);
 					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
+						console.log(i + " => " + v); 
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+					});
+
+					$('#btnSave').removeAttr('disabled');
 					
 				}
 			},
 			
 		})
+		}
 	}
 	else
 	{
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/service_ordertype/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
-			{
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]("Record updated successfully")
-
-				sotable.ajax.reload();
-				$('#sotModal').modal('hide');
+		if($('#name').valid() && $('#description').valid()){
+			if($('#name').val() === temp_name && $('#description').val() === temp_desc){
+				$('#name').val("");
 				$('#description').val("");
-				$('.modal-title').text('New Vehicle Type');
+				$('#btnSave').removeAttr('disabled');
+				$('#sotModal').modal('hide');
 			}
+			else{
+				$('#btnSave').attr('disabled', 'true');
+
+				$.ajax({
+					type: 'PUT',
+					url:  '/admin/service_ordertype/' + data.id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'description' : $('#description').val(),
+					},
+					success: function (data)
+					{
+						if(typeof(data) === "object"){
+							sotable.ajax.reload();
+							$('#sotModal').modal('hide');
+							$('#description').val("");
+							$('.modal-title').text('New Service Order Type');
+
+					//Show success
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record updated successfully");
+
+					$('#name').val("");
+					$('#description').val("");
+					$('#sotModal').modal('hide');
+					$('#btnSave').removeAttr('disabled');
+				}
+				else{
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+						console.log(i + " => " + v);
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+					});
+
+					$('#btnSave').removeAttr('disabled');
+					
+				}
+			},
+			
 		})
+			}
+		}
 	}
 });
 

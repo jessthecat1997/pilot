@@ -10,7 +10,7 @@ class EmployeeType extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-	'description',
+	'name', 'description',
 	];
 
 	protected $dates = [

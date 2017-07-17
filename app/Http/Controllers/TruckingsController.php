@@ -97,16 +97,8 @@ class TruckingsController extends Controller
 
             $vehicles = DB::table('vehicles')
             ->join('vehicle_types', 'vehicle_types_id', '=', 'vehicle_types.id')
-            ->select('plateNumber', 'description', 'model')
+            ->select('plateNumber', 'name', 'model')
             ->where('vehicles.deleted_at', '=', null)
-            ->get();
-            
-            $deliveriesx = DB::table('delivery_receipt_headers')
-            ->join('employees AS A', 'emp_id_driver', '=', 'A.id')
-            ->join('employees AS B', 'emp_id_helper', '=', 'B.id')
-            ->join('vehicles', 'delivery_receipt_headers.plateNumber', '=', 'vehicles.plateNumber')
-            ->select('delivery_receipt_headers.id', 'delivery_receipt_headers.plateNumber')
-            ->where('tr_so_id', '=', $so_id)
             ->get();
             
             $deliveries = DB::table('delivery_receipt_headers')
@@ -372,7 +364,7 @@ class TruckingsController extends Controller
         $delivery_bills = DB::table('delivery_billings')
         ->join('charges', 'charges_id', '=', 'charges.id')
         ->orderBy('isBilledTo')
-        ->select('charges.description AS charge_description', 'charges_id', 'amount', 'isBilled', 'isBilledTo', 'remarks')
+        ->select('charges.name AS charge_description', 'charges_id', 'amount', 'isBilled', 'isBilledTo', 'remarks')
         ->where('del_head_id', '=',  $delivery[0]->id)
         ->get();
 

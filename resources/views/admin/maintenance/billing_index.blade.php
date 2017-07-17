@@ -3,10 +3,10 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Billing</h3>
+		<h3><img src="/images/bar.png"> Maintenance | Bill</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sotModal" style = "width: 100%;">New Billing</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sotModal" style = "width: 100%;">New Bill</button>
 		</div>
 	</div>
 	<br />
@@ -16,16 +16,16 @@
 				<table class = "table-responsive table" id = "bill_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								No.
 							</td>
-							<td>
+							<td style="width: 30%;">
+								Name
+							</td>
+							<td style="width: 40%;">
 								Description
 							</td>
-							<td>
-								Created at
-							</td>
-							<td>
+							<td style="width: 25%;">
 								Actions
 							</td>
 						</tr>
@@ -45,10 +45,14 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">New Billing</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="form-group required">
-								<label class = "control-label" >Description</label>
-								<input type = "text" class = "form-control" name = "description" id = "description" minlength = "2" data-rule-required="true" />
+								<label class = "control-label" >Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name" required />
+							</div>	
+							<div class="form-group ">
+								<label class = "control-label" >Description: </label>
+								<textarea class = "form-control" name = "description" id = "description" ></textarea>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -98,6 +102,9 @@
 @push('scripts')
 <script type="text/javascript">
 	var data;
+	var temp_name = "";
+	var temp_desc = "";
+
 	$(document).ready(function(){
 		var billtable = $('#bill_table').DataTable({
 			processing: true,
@@ -105,8 +112,8 @@
 			ajax: '{{ route("bill.data") }}',
 			columns: [
 			{ data: 'id' },
+			{ data: 'name'},
 			{ data: 'description' },
-			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -116,19 +123,24 @@
 			$("#commentForm").validate({
 				rules: 
 				{
-					description:
+					name:
 					{
 						required: true,
-						minlength: 2,
+						minlength: 3,
+						maxlength: 50,
+					},
+
+					description:
+					{
 						maxlength: 50,
 					},
 
 				},
-        onkeyup: false, //turn off auto validate whilst typing
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
+				onkeyup: false, 
+				submitHandler: function (form) {
+					return false;
+				}
+			});
 		});
 
 
@@ -137,6 +149,7 @@
 			resetErrors();
 			$('.modal-title').text('New Billing');
 			$('#description').val("");
+			$('#name').val("");
 			$('#billModal').modal('show');
 
 		});
@@ -144,8 +157,14 @@
 			resetErrors();
 			var b_id = $(this).val();
 			data = billtable.row($(this).parents()).data();
+
 			$('#description').val(data.description);
-			$('.modal-title').text('Edit Billing');
+			$('#name').val(data.name);
+
+			temp_desc = data.description;
+			temp_name = data.name;
+
+			$('.modal-title').text('Update Bill');
 			$('#billModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -155,66 +174,18 @@
 		});
 
 
-
-// Confirm Delete Button
-$('#btnDelete').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '{{ route("billing.store") }}/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			billtable.ajax.reload();
-			$('#confirm-delete').modal('hide');
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
-
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-	e.preventDefault();
-	var title = $('.modal-title').text();
-	if(title == "New Billing")
-	{
-		$.ajax({
-			type: 'POST',
-			url:  '{{ route("billing.index") }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
-			{
-				if(typeof(data) === "object"){
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '{{ route("billing.store") }}/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
 					billtable.ajax.reload();
-					$('#billModal').modal('hide');
-					$('#description').val("");
-					$('.modal-title').text('New Billing');
-
-					//Show success
+					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
 						"closeButton": false,
@@ -234,63 +205,155 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record added successfully")
+					toastr["success"]("Record deactivated successfully");
 				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
-				}
-			},
-			
-		})
-	}
-	else
-	{
-		$.ajax({
-			type: 'PUT',
-			url:  '{{ route("billing.store") }}'+ '/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'description' : $('input[name=description]').val(),
-			},
-			success: function (data)
+			})
+		});
+
+
+		$('#btnSave').on('click', function(e){
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			$('#description').valid();
+			$('#name').valid();
+
+			if(title == "New Billing")
 			{
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
+				if($('#name').valid() && $('#description').valid()){
+
+					$('#btnSave').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'POST',
+						url:  '{{ route("billing.index") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'description' : $('#description').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								billtable.ajax.reload();
+								$('#billModal').modal('hide');
+								$('#description').val("");
+								$('.modal-title').text('New Bill');
+
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully");
+
+								$('#btnSave').removeAttr('disabled');
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+								$('#btnSave').removeAttr('disabled');
+
+							}
+						},
+
+					})
 				}
-				toastr["success"]("Record updated successfully")
-
-				sotable.ajax.reload();
-				$('#billModal').modal('hide');
-				$('#description').val("");
-				$('.modal-title').text('New Billing');
 			}
-		})
-	}
-});
+			else
+			{
+				if($('#name').valid() && $('#description').valid())
+				{
+					if($('#name').val() === temp_name && $('#description').val() === temp_desc)
+					{
+						$('#name').val("");
+						$('#description').val("");
+						$('#btnSave').removeAttr('disabled');
+						$('#billModal').modal('hide');
+					}
+					else
+					{
+						$('#btnSave').attr('disabled', 'true');
 
-});
+						$.ajax({
+							type: 'PUT',
+							url:  '{{ route("billing.store") }}'+ '/' + data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									billtable.ajax.reload();
+									$('#billModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Bill');
+
+
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully");
+
+									$('#btnSave').removeAttr('disabled');
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+							}
+						})
+					}
+				}
+			}
+		});
+
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

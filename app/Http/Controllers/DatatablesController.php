@@ -27,7 +27,7 @@ use Carbon\Carbon;
 class DatatablesController extends Controller
 {
 	public function vt_datatable(){
-		$vtypes = VehicleType::select(['id', 'description', 'created_at']);
+		$vtypes = VehicleType::select(['id', 'name','description', 'created_at']);
 
 		return Datatables::of($vtypes)
 		->addColumn('action', function ($vtype) {
@@ -39,7 +39,7 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function sot_datatable(){
-		$sots = service_order_type::select(['id', 'description', 'created_at']);
+		$sots = service_order_type::select(['id', 'name', 'description', 'created_at']);
 		
 		return Datatables::of($sots)
 		->addColumn('action', function ($sot){
@@ -52,7 +52,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ch_datatable(){
-		$charges = Charge::select(['id', 'description','created_at']);
+		$charges = Charge::select(['id', 'name', 'description','created_at']);
 		
 		return Datatables::of($charges)
 		->addColumn('action', function ($ch){
@@ -78,7 +78,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ct_datatable(){
-		$cts = ContainerType::select(['id', 'description', 'created_at']);
+		$cts = ContainerType::select(['id', 'name','description', 'created_at']);
 		
 		return Datatables::of($cts)
 		->addColumn('action', function ($ct){
@@ -104,7 +104,7 @@ class DatatablesController extends Controller
 	}
 
 	public function rt_datatable(){
-		$rts = ReceiveType::select(['id', 'description', 'created_at']);
+		$rts = ReceiveType::select(['id', 'name', 'description', 'created_at']);
 		
 		return Datatables::of($rts)
 		->addColumn('action', function ($rt){
@@ -117,7 +117,7 @@ class DatatablesController extends Controller
 	}
 
 	public function et_datatable(){
-		$ets = EmployeeType::select(['id', 'description', 'created_at']);
+		$ets = EmployeeType::select(['id', 'name', 'description', 'created_at']);
 		
 		return Datatables::of($ets)
 		->addColumn('action', function ($et){
@@ -194,7 +194,6 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	/*select companyName, bd.amount, rc.amount from billings as b left join billing_invoice_details as bd on b.id = bd.billings_id left join billing_invoice_headers as bh on bd.bi_head_id = bh.id left join consignee_service_order_headers as ch on bh.so_head_id = ch.id left join refundable_charges as rc on ch.id = rc.so_head_id left join consignees as c on ch.consignees_id = c.id*/
 	public function payment_so_datatable(Request $request){
 		$pso_heads = DB::table('billings')
 		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
@@ -246,7 +245,7 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function bill_datatable(){
-		$bills = Billing::select(['id', 'description', 'created_at']);
+		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
 
 		return Datatables::of($bills)
 		->addColumn('action', function ($bil){
@@ -257,7 +256,7 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
-	//select bso.created_at, ch.id, CONCAT(e.firstName,' ', e.lastName) as Employee, companyName, supplier, CONCAT(ct.description,' ', containerNumber) as CONTRS,docking,awb, deposit from brokerage_service_orders as bso left join consignee_service_order_headers as ch on bso.consigneeSODetails_id = ch.id left join employees as e on ch.employees_id = e.id left join container_types as ct on bso.containerType_id = ct.id left join consignees as c on ch.consignees_id = c.id
+	
 	public function shipment_datatable(){
 		$shipments = DB::table('brokerage_service_orders')
 		->leftjoin('consignee_service_order_headers', 'brokerage_service_orders.consigneeSODetails_id','=', 'consignee_service_order_headers.id')
@@ -266,7 +265,7 @@ class DatatablesController extends Controller
 		->leftjoin('consignees','consignee_service_order_headers.consignees_id','=','consignees.id')
 		->select('brokerage_service_orders.created_at','consignee_service_order_headers.id',DB::raw('CONCAT(employees.firstName, employees.lastName) as Employee'), 'companyName', 'supplier', DB::raw('CONCAT(container_types.description,  containerNumber) as CONTRS'), 'docking', 'awb', 'deposit')
 		->orderBy('brokerage_service_orders.created_at')
-        ->groupBy(DB::raw('MONTH(brokerage_service_orders.created_at)'))
+		->groupBy(DB::raw('MONTH(brokerage_service_orders.created_at)'))
 		->get();
 		return Datatables::of($shipments)
 		->make(true);
@@ -286,7 +285,7 @@ class DatatablesController extends Controller
 	}
 
 	public function bl_datatable(){
-		$bills = Billing::select(['id', 'description', 'created_at']);
+		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
 		
 		return Datatables::of($bills)
 		->addColumn('action', function ($bill){
@@ -320,8 +319,7 @@ class DatatablesController extends Controller
 		return Datatables::of($contract_headers)
 		->addColumn('action', function ($contract_header){
 			return
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary view-contract-details">View</button>' . 
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary view-contract-details">View</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

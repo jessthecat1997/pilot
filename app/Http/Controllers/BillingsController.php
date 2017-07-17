@@ -21,10 +21,10 @@ class BillingsController extends Controller
 		$b = Billing::create($request->all());
 		return $b;
 	}
-	public function update(StoreVehicle $request, $id)
+	public function update(StoreBilling $request, $id)
 	{
 		$bill = Billing::findOrFail($id);
-		$bill->model = $request->model;
+		$bill->name = $request->name;
 		$bill->description = $request->description;
 		$bill->save();
 		return $bill;

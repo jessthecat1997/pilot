@@ -10,7 +10,7 @@ class ReceiveType extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-	'description',
+	'name', 'description',
 	];
 
 	protected $dates = [

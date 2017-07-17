@@ -14,9 +14,27 @@ class StoreContainerType extends FormRequest
 
     public function rules()
     {
-        return [
-        'description' => 'required| max:45|min:2|unique:container_types',
-        ];
+        switch ($this->method()) {
+            case 'POST':
+
+            return [
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:container_types,name',
+            'description' => 'max:50'
+            ];
+
+            break;
+            
+            case 'PUT':
+
+            return [
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:container_types,name,'. $this->segment(3) ,
+            'description' => 'max:50'
+            ];
+
+            break;
+            
+            default: break;
+        }
     }
 
     //Overriding the response 422
