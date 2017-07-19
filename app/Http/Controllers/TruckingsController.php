@@ -36,7 +36,29 @@ class TruckingsController extends Controller
     public function create()
     {
         $employees = Employee::all();
-        return view('trucking.trucking_service_order_create', compact(['employees']));
+        
+        $portOfCfsLocation = DB::table('trucking_service_orders')
+        ->select(DB::raw('DISTINCT portOfCfsLocation'))
+        ->get();
+
+        $locations = [];
+        foreach ($portOfCfsLocation as  $value) {
+            array_push($locations, $value->portOfCfsLocation);
+        }
+
+        $ships = [];
+        $shippingLine = DB::table('trucking_service_orders')
+        ->select(DB::raw('DISTINCT shippingLine'))
+        ->get();
+        foreach ($shippingLine as $value) {
+            array_push($ships, $value->shippingLine);
+        }
+
+        $locations_string = "var locations = " . json_encode($locations) . ";";
+        $ships_string = "var ships = " . json_encode($ships) . ";";
+
+
+        return view('trucking.trucking_service_order_create', compact(['employees', 'locations_string', 'ships_string']));
     }
 
     
@@ -409,7 +431,7 @@ class TruckingsController extends Controller
             }
 
         }
-        //return $container_with_detail;
+       
         return view('trucking.delivery_bill', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee', 'charges', 'delivery_bills', 'total_penalty_consignee', 'total_penalty_client']));
     }
 

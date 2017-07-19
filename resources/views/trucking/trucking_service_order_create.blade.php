@@ -7,7 +7,6 @@
 				<h3>New Trucking Service Order</h3>
 				<hr />
 			</div>
-
 			<div class = "panel-body">
 				<div class="panel-heading">
 					<h4 id = "basic-information-heading"><small>1</small> Consignee Information</h4>
@@ -56,17 +55,19 @@
 									<br />
 									<form class="form-horizontal" role="form">
 										{{ csrf_field() }}
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="firstName">Consignee:</label>
-											<div class="col-sm-6">
-												<select name = "consigneeType" id = "consigneeType" class="form-control">
-													<option value = "0">
-														Walk-in
-													</option>
-													<option value = "1">
-														Regular
-													</option>
-												</select>
+										<div class = "collapse">
+											<div class="form-group">
+												<label class="control-label col-sm-4" for="firstName">Consignee:</label>
+												<div class="col-sm-6">
+													<select name = "consigneeType" id = "consigneeType" class="form-control">
+														<option value = "0">
+															Walk-in
+														</option>
+														<option value = "1">
+															Regular
+														</option>
+													</select>
+												</div>
 											</div>
 										</div>
 										<div class="form-group">
@@ -217,7 +218,7 @@
 @endsection
 @push('styles')
 <style>
-.delivery
+	.delivery
 	{
 		border-left: 10px solid #2ad4a5;
 		background-color:rgba(128,128,128,0.1);
@@ -227,10 +228,20 @@
 
 @push('scripts')
 <script type="text/javascript">
-$('#collapse1').addClass('in');
+	$('#collapse1').addClass('in');
 	var data;
 	var cs_id;
 	$(document).ready(function(){
+		{!! $locations_string !!}
+		$( "#portOfCfsLocation" ).autocomplete({
+			source: locations
+		});
+
+		{!! $ships_string !!}
+		$('#shippingLine').autocomplete({
+			source: ships
+		})
+
 		var cstable = $('#cs_table').DataTable({			
 			responsive: true,
 			scrollX: true,

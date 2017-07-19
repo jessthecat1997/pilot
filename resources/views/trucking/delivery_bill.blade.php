@@ -304,7 +304,7 @@
 										<select class = "form-control" required id = "pncf_penalty_penalty" name="pncf_penalty_penalty">
 											<option></option>
 											@forelse($charges as $charge)
-											<option value = "{{ $charge->id }}">{{ $charge->description }}</option>
+											<option value = "{{ $charge->id }}">{{ $charge->name }}</option>
 											@empty
 
 											@endforelse
@@ -415,7 +415,7 @@
 			</div>
 			<div class = "panel-body">
 				<div class = "col-md-12" style="overflow-x:auto">
-					<table class = "table table-responsive" >
+					<table class = "table table-responsive" id = "charges_table">
 						<thead>
 							<tr>
 								
@@ -436,11 +436,22 @@
 								</td>
 							</tr>
 						</thead>
+						@php
+						$con_charges = 0;
+						$cli_charges = 0;
+						@endphp
 						<tbody>
 							@forelse($delivery_bills as $delivery_bill)
 
 							@if($delivery_bill->isBilledTo == '0')<tr style="background-color: rgba(230, 255, 179, 0.3);">
+							@php
+							$con_charges++;
+							@endphp
 							@else
+
+							@php
+							$cli_charges++;
+							@endphp
 							<tr style="background-color: rgba(255, 133, 102, 0.3);">
 								@endif
 								<td>
@@ -496,7 +507,7 @@
 @push('scripts')
 <script>
 	$(document).ready(function(){
-		//Validations
+		var con_penalty_index  = ("{{ $con_charges }}") - 1;
 
 		var del_bill_form_con = $("form[name='del_bill_form_con']").validate({
 			rules: {
@@ -636,7 +647,8 @@
 				data: {
 					'_token' : $('input[name=_token').val(),
 				},
-				success : function (data) {
+				success : function (data) 
+				{
 					contract_rows = "";
 					contract_header = data[0];
 					contract_details = data[1];
@@ -645,7 +657,7 @@
 					}
 					$('#contract_details').html(contract_table_reset);
 
-					//Apply changes
+					
 					$('#contract_dateEffective').text(date_eff);
 					$('#contract_dateExpiration').text(date_exp);
 					$('#contract_status').text(status);
@@ -683,7 +695,7 @@
 					}
 					$('#contract_details').html(contract_table_reset);
 
-					//Apply changes
+					
 					$('#contract_dateEffective').text(date_eff);
 					$('#contract_dateExpiration').text(date_exp);
 					$('#contract_status').text(status);
@@ -807,21 +819,31 @@
 						'isBilled' : 0,
 						'isBilledTo' : pncf_responsible,
 						'remarks' : $('#pncf_penalty_remarks').val(),
-						'del_head_id' : {{ $delivery[0]->id }},
+						'del_head_id' : "{{ $delivery[0]->id }}",
 					},
-					success : function (data) {		
+					success : function (data) {
 						if(data.isBilledTo == 0){
-							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
 							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
+
+							new_penalty_row = "<tr style = 'background-color: rgba(230, 255, 179, 0.3);'><td>Consignee</td><td>"+ $('#pncf_penalty_penalty option[value="' + data.charges_id +'"').text() +"</td><td><span class='charges_remarks_span'>"+data.remarks +"</span></td><td style = 'text-align: right;'>Php " + penalty_fee +"</td><td style = 'text-align: center;'><button class = 'btn btn-sm btn-primary view-charge-information'>View</button></td></tr>";
+
+							$('#charges_table > tbody > tr:eq(' + con_penalty_index + ')').after(new_penalty_row);
+
+							con_penalty_index++;
 							
 							$('.total_penalty_consignee_head').text(total);
 							$('.total_penalty_consignee_body').text(total);
 						}
 						else{
-							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 							var current_consignee = parseFloat($('.total_penalty_client_head').text());
 							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
+
+							new_penalty_row = "<tr style = 'background-color: rgba(255, 133, 102, 0.3);'><td>Pilot</td><td>"+ $('#pncf_penalty_penalty option[value="' + data.charges_id +'"').text() +"</td><td><span class='charges_remarks_span'>"+data.remarks +"</span></td><td style = 'text-align: right;'>Php " + penalty_fee +"</td><td style = 'text-align: center;'><button class = 'btn btn-sm btn-primary view-charge-information'>View</button></td></tr>";
+
+							$('#charges_table > tbody > tr:last').before(new_penalty_row);
 							
 							$('.total_penalty_client_head').text(total);
 							$('.total_penalty_client_body').text(total);
@@ -873,22 +895,51 @@
 					},
 					success : function (data) {		
 						if(data.isBilledTo == 0){
-							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 							var current_consignee = parseFloat($('.total_penalty_consignee_head').text());
 							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
-							console.log(total);
+							
+							new_penalty_row = "<tr style = 'background-color: rgba(230, 255, 179, 0.3);'><td>Consignee</td><td>"+ $('#pncf_penalty_penalty option[value="' + data.charges_id +'"').text() +"</td><td><span class='charges_remarks_span'>"+data.remarks +"</span></td><td style = 'text-align: right;'>Php " + penalty_fee +"</td><td style = 'text-align: center;'><button class = 'btn btn-sm btn-primary view-charge-information'>View</button></td></tr>";
+
+							$('#charges_table > tbody > tr:eq(' + con_penalty_index + ')').after(new_penalty_row);
+
+							con_penalty_index++;
 							
 							$('.total_penalty_consignee_head').text(total);
 							$('.total_penalty_consignee_body').text(total);
 						}
 						else{
-							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100);
+							var penalty_fee = parseFloat(Math.round(data.amount * 100) / 100).toFixed(2);
 							var current_consignee = parseFloat($('.total_penalty_client_head').text());
 							total = parseFloat(Math.round((current_consignee + penalty_fee) * 100) / 100).toFixed(2);
+
+							new_penalty_row = "<tr style = 'background-color: rgba(255, 133, 102, 0.3);'><td>Pilot</td><td>"+ $('#pncf_penalty_penalty option[value="' + data.charges_id +'"').text() +"</td><td><span class='charges_remarks_span'>"+data.remarks +"</span></td><td style = 'text-align: right;'>Php " + penalty_fee +"</td><td style = 'text-align: center;'><button class = 'btn btn-sm btn-primary view-charge-information'>View</button></td></tr>";
+
+							$('#charges_table > tbody > tr:last').before(new_penalty_row);
 							
 							$('.total_penalty_client_head').text(total);
 							$('.total_penalty_client_body').text(total);
 						}
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Charge added successfully!");
 					}
 				})
 			}
