@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^0.8.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
+        "maddhatter/laravel-fullcalendar": "^1.2",
         "yajra/laravel-datatables-oracle": "7.2"
     },
     "require-dev": {

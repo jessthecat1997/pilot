@@ -8,7 +8,7 @@
 				@if($delivery[0]->status == 'F' || $delivery[0]->status == 'C')
 				<h3>Delivery Information: <button  disabled class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button></h3>
 				@elseif($delivery[0]->status == 'P')
-				<h3>Delivery Information: <button  class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Information</button></h3>
+				<h3>Delivery Information: <button  class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button></h3>
 				@endif
 			</div>
 			<div class = "panel-body">
@@ -95,33 +95,33 @@
 					<div class="form-group">
 						<input type = "hidden" id = "containerID" name = "containerID" />
 						<label class="control-label col-md-5 pull-left" for="containerNumber">Container Number:</label>
-						<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: right;"></span></strong>
+						<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: left;"></span></strong>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnTo">Container Return To:</label>
-						<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: right;"></span>
+						<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: left;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnAddress">Container Return Address:</label>
-						<span class="control-label col-md-7 " id ="containerReturnAddress"  style = "text-align: right;"></span>
+						<span class="control-label col-md-7 " id ="containerReturnAddress"  style = "text-align: left;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="status">Container Returned:</label>
-						<div class = "col-md-7" style="text-align: right;">
+						<div class = "col-md-7" style="text-align: left;">
 							<div class="radio">
 								<label class="radio-inline"><input type = "radio" name = "status" id = "yes" value = "Y" class = "col-md-3 pull-right checkradio"/>Yes</label>
-								<label class="radio-inline"><input type = "radio" name = "status" id = "no" value = "N" class = "col-md-3 pull-right checkradio" />No</label>
+								<label class="radio-inline"><input checked type = "radio" name = "status" id = "no" value = "N" class = "col-md-3 pull-right checkradio" />No</label>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
-						<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: right;"></span>
+						<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: left;"></span>
 					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Date Returned: </label>
-						<div class = "col-md-7 dateReturned_view pull-left">
-							<input type = "date" name = "actutaldateReturned" id = "actutaldateReturned"  class = "form-control" disabled />
+						<div class = "col-md-7 dateReturned_view pull-left" style="text-align: left;">
+							<input type = "date" name = "actutaldateReturned" id = "actutaldateReturned"  class = "form-control" disabled  required />
 						</div>
 					</div>
 					<table class = "table table-responsive" id = "container_detail">
@@ -143,9 +143,10 @@
 						</tbody>
 					</table>
 					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="remarks">Remarks: </label>
+						<label class="control-label col-md-5" style="text-align: left;" for="remarks">Remarks: </label>
+						<br />
 						<div class = "col-md-12">
-							<textarea name = "remarks" id = "remarks"  class = "form-control" placeholder="Remarks about the container"></textarea>
+							<textarea name = "remarks" id = "remarks"  class = "form-control" placeholder=""></textarea>
 						</div>
 					</div>
 				</form>
@@ -230,7 +231,7 @@
 			<div class = "panel-body">
 				<div class = "col-md-10">
 					<form class="form-horizontal" role="form">
-						<table id = "detail_table" class = "table table-responsive">
+						<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
 							<thead>
 								<tr>
 									<td>
@@ -262,11 +263,16 @@
 								<tr>
 									<td>
 										{{ $num++ }}
-										<input type = "hidden" class = "containerReturnDate" value= "{{ $delivery_container->containerReturnDate }}" />
+										<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
 										<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
 										<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
 										<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
-										<input type = "hidden" class = "dateReturned" value = "{{ $delivery_container->dateReturned }}" />
+										<input type = "hidden" class = "dateReturned" 
+										value = "@if($delivery_container->dateReturned == null)
+										@else
+										{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
+										@endif"
+										/>
 										<input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
 									</td>
 									<td>
@@ -276,10 +282,17 @@
 										<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
 									</td>
 									<td>
-										<span class = "containerReturnStatus">{{ $delivery_container->containerReturnStatus }}</span>
+										<span class = "containerReturnStatus">
+											@php
+											switch($delivery_container->containerReturnStatus){
+											case 'Y': echo "Returned"; break;
+											case 'N': echo "Pending"; break;
+											default : echo "Unknown"; break; }
+											@endphp
+										</span>
 									</td>
 									<td>
-										<span class = "containerReturnDate">{{ $delivery_container->containerReturnDate}}</span>
+										<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
 									</td>
 
 									<td>
@@ -312,7 +325,7 @@
 					<form class="form-horizontal" role="form">				
 						@forelse($container_with_detail as $container)
 						<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
-						<table class = "table table-responsive" id = "{{ $container['container']->id }}_table">
+						<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;">
 							<thead>	
 								<tr>
 									<td>
@@ -322,7 +335,7 @@
 										Description of Good
 									</td>
 									<td>
-										Gross Weight
+										Gross Weight(kg)
 									</td>
 									<td>
 										Supplier
@@ -332,9 +345,6 @@
 							<tbody>
 								@forelse($container['details'] as $detail)
 								<tr>
-									<td>
-										{{ $detail->id }}
-									</td>
 									<td>
 										{{ $detail->descriptionOfGoods }}
 									</td>
@@ -380,8 +390,8 @@
 	$(document).ready(function(){
 		var container_status;
 		var reset_container_table = $('#drModal').html();
-		var return_date_html = '<span class="control-label pull-right" id ="view_return_date"  style = "text-align: left"></span>';
-
+		var return_date_html = '<span class="control-label" id ="view_return_date"  style = "text-align: left"></span>';
+		var con_status = "N";
 		$(document).on('click', '.view-container-detail', function(e){
 			e.preventDefault();
 			current_table = ($('#' + $(this).val()+ '_table > tbody').html());
@@ -394,15 +404,17 @@
 			$('#containerReturnAddress').text($(this).closest('tr').find(".containerReturnAddress").val());
 			$('#containerReturnDate').text($(this).closest('tr').find(".containerReturnDate").val());
 			$('#containerReturnTo').text($(this).closest('tr').find(".containerReturnTo").val());
-			container_status = $(this).closest('tr').find(".containerReturnStatus").text();
+			container_status = $(this).closest('tr').find(".containerReturnStatus").text().trim();
+			console.log(container_status);
 
-
-			if($(this).closest('tr').find(".dateReturned").val() === ""){
+			if($(this).closest('tr').find(".dateReturned").val().trim() === ""){
 				$('#remarks').val($(this).closest('tr').find(".remarks").val());
-				if($(this).closest('tr').find(".containerReturnStatus").text() === "N"){
+				if($(this).closest('tr').find(".containerReturnStatus").text().trim() === "Pending"){
 					$('#no').attr('checked', true);
+					
 				}
 				else{
+					console.log(container_status);
 					$('#yes').attr('checked', true);
 					$('#actutaldateReturned').removeAttr('disabled');
 				}
@@ -424,36 +436,57 @@
 		})
 		$(document).on('click', '.save-container-information', function(e){
 			e.preventDefault();
-			$('#drModal').modal('hide');
+			if(con_status == "Y"){
+				$('#actutaldateReturned').valid();
+				if($('#actutaldateReturned').valid()){
+					$.ajax({
+						type: 'PUT',
+						url:  '{{ route("trucking.store") }}/{{ $so_id }}/update_container/' + $('#containerID').val(),
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'containerID' : $('#containerID').val(),
+							'dateReturned' : $('#actutaldateReturned').val(),
+							'status' :con_status,
+							'remarks' : $('#remarks').val(),
 
-			
-			$.ajax({
-				type: 'PUT',
-				url:  '{{ route("trucking.store") }}/{{ $so_id }}/update_container/' + $('#containerID').val(),
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'containerID' : $('#containerID').val(),
-					'dateReturned' : $('#actutaldateReturned').val(),
-					'status' :container_status,
-					'remarks' : $('#remarks').val(),
-					
-				},
-				success: function (data){
-					window.location.reload();
+						},
+						success: function (data){
+							$('#drModal').modal('hide');
+						}
+
+					})
 				}
+			}
+			else
+			{
+				$.ajax({
+					type: 'PUT',
+					url:  '{{ route("trucking.store") }}/{{ $so_id }}/update_container/' + $('#containerID').val(),
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'containerID' : $('#containerID').val(),
+						'dateReturned' : $('#actutaldateReturned').val(),
+						'status' :con_status,
+						'remarks' : $('#remarks').val(),
 
-			})
+					},
+					success: function (data){
+						$('#drModal').modal('hide');
+					}
+
+				})
+			}
 
 		})
 
 		$(document).on('change', '#yes', function(e){
 			$('#actutaldateReturned').removeAttr('disabled');
-			container_status = "Y";
+			con_status = "Y";
 		})
 		$(document).on('change', '#no', function(e){
 			$('#actutaldateReturned').attr('disabled', true);
 			$('#actutaldateReturned').val('');
-			container_status = "N";
+			con_status = "N";
 		})
 
 		$(document).on('click', '.update-delivery-information', function(e){
@@ -483,11 +516,11 @@
 	})
 
 
-	function validate_container(){
-		var error = "";
-		if($('#actutaldateReturned').val() === null){
-			error += "Date returned is required.";
-		}
+function validate_container(){
+	var error = "";
+	if($('#actutaldateReturned').val() === null){
+		error += "Date returned is required.";
 	}
+}
 </script>
 @endpush

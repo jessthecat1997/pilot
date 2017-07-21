@@ -204,7 +204,7 @@
 								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
 								@if( $pending_trucking != 0)
-								<option value = "F" disabled>Finished</option>
+								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
 								@else
 								<option value = "F" >Finished</option>
 								@endif

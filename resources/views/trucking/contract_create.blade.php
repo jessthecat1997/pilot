@@ -29,20 +29,17 @@
 										<table class="table table-responsive" id = "cs_table">
 											<thead>
 												<tr>
-													<td width="30%">
+													<td width="25%">
 														Full Name
 													</td>
-													<td width="30%">
+													<td width="25%">
 														Company Name
 													</td>
-													<td width="15%">
+													<td width="25%">
 														Email
 													</td>
-													<td width="15%"> 
-														Contact Number
-													</td>
 													<td width="10%">
-														Actions
+														Action
 													</td>
 												</tr>
 											</thead>
@@ -323,7 +320,6 @@
 			{ data: 'firstName' },
 			{ data: 'companyName' },
 			{ data: 'email' },
-			{ data: 'contactNumber' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],

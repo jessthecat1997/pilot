@@ -19,6 +19,10 @@
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-5" for="contactNumber">Consignee:</label>
+							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->name }}</label>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-5" for="contactNumber">Company Name:</label>
 							<label class="control-label col-sm-7" for="address" style = "text-align: left;">{{ $contract[0]->companyName }}</label>
 						</div>
 						<div class="form-group">        

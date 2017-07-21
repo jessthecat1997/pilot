@@ -23,12 +23,11 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName')
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
 
-            
             $contract_details = DB::table('contract_details')
             ->select('A.description AS from', 'B.description AS to', 'amount')
             ->join('areas AS A', 'areas_id_from', '=', 'A.id')

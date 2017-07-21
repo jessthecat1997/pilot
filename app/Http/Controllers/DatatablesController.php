@@ -322,6 +322,9 @@ class DatatablesController extends Controller
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary view-contract-details">View</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
 		->make(true);
 	}
 

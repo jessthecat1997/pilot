@@ -31,17 +31,14 @@
 												<td width="20%">
 													Full Name
 												</td>
-												<td width="20%">
+												<td width="30%">
 													Company Name
 												</td>
 												<td width="20%">
 													Email
 												</td>
-												<td width="10%"> 
-													Contact Number
-												</td>
 												<td width="10%">
-													Created At
+													Contact Number
 												</td>
 												<td width="10%">
 													Actions
@@ -232,12 +229,12 @@
 	var data;
 	var cs_id;
 	$(document).ready(function(){
-		{!! $locations_string !!}
+		{!! $location_string !!}
 		$( "#portOfCfsLocation" ).autocomplete({
 			source: locations
 		});
 
-		{!! $ships_string !!}
+		{!! $ship_string !!}
 		$('#shippingLine').autocomplete({
 			source: ships
 		})
@@ -255,7 +252,6 @@
 			{ data: 'companyName' },
 			{ data: 'email' },
 			{ data: 'contactNumber' },
-			{ data: 'created_at' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],

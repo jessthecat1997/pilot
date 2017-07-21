@@ -200,6 +200,9 @@ Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/store_delivery_bill'
 //DOMPDF
 Route::get('/dompdfExample', 'TruckingsController@create_pdf');
 
+//FullCalendar
+Route::get('/FullCalendar', 'TruckingsController@show_calendar');
+
 
 //Utilities home route
 Route::resource('/admin/utilities', 'UtilitiesController');

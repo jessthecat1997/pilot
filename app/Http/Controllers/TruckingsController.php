@@ -35,11 +35,12 @@ class TruckingsController extends Controller
 
     public function create()
     {
-        $employees = Employee::all();
-        
         $portOfCfsLocation = DB::table('trucking_service_orders')
-        ->select(DB::raw('DISTINCT portOfCfsLocation'))
-        ->get();
+        ->select('portOfCfsLocation')
+        ->distinct()
+        ->get();   
+             
+        $employees = Employee::all();
 
         $locations = [];
         foreach ($portOfCfsLocation as  $value) {
@@ -48,17 +49,18 @@ class TruckingsController extends Controller
 
         $ships = [];
         $shippingLine = DB::table('trucking_service_orders')
-        ->select(DB::raw('DISTINCT shippingLine'))
+        ->select('shippingLine')
+        ->distinct()
         ->get();
         foreach ($shippingLine as $value) {
             array_push($ships, $value->shippingLine);
         }
 
-        $locations_string = "var locations = " . json_encode($locations) . ";";
-        $ships_string = "var ships = " . json_encode($ships) . ";";
+        $location_string = "var locations = " . json_encode($locations) . ";";
+        $ship_string = "var ships = " . json_encode($ships) . ";";
 
 
-        return view('trucking.trucking_service_order_create', compact(['employees', 'locations_string', 'ships_string']));
+        return view('trucking.trucking_service_order_create', compact(['employees', 'location_string', 'ship_string']));
     }
 
     
@@ -431,12 +433,16 @@ class TruckingsController extends Controller
             }
 
         }
-       
+
         return view('trucking.delivery_bill', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee', 'charges', 'delivery_bills', 'total_penalty_consignee', 'total_penalty_client']));
     }
 
     public function get_contract_details(Request $request){
-        $contract = ContractHeader::findOrFail($request->contract_id);
+        $contract = DB::table('contract_headers')
+        ->join('consignees AS A', 'consignees_id', '=', 'A.id')
+        ->select(DB::raw('CONCAT(firstName, lastName AS name'), 'dateEffective', 'dateExpiration', 'specificDetails')
+        ->where('contract_headers.id', '=', $request->contract_id)
+        ->get();
         $contract_details = DB::table('contract_details')
         ->select('A.description AS from', 'B.description AS to', 'amount')
         ->join('areas AS A', 'areas_id_from', '=', 'A.id')
@@ -522,5 +528,8 @@ class TruckingsController extends Controller
         
         $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
         return $pdf->stream();
+    }
+    public function show_calendar(){
+        return 'wow';
     }
 }
