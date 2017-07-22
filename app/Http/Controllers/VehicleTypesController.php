@@ -25,6 +25,7 @@ class VehicleTypesController extends Controller
 
     public function update(StoreVehicleType $request, $id)
     {
+        
         $vehicle_type = VehicleType::findOrFail($id);
         $vehicle_type->name = $request->name;
         $vehicle_type->description = $request->description;

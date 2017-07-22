@@ -16,12 +16,6 @@
 							<thead>
 								<tr>
 									<td>
-										Service Order#
-									</td>
-									<td>
-										Estimated Delivery date
-									</td>
-									<td>
 										Consignee
 									</td>
 									<td>
@@ -65,14 +59,12 @@
 			serverSide: true,
 			ajax: current_route,
 			columns: [
-			{ data: 'id' },
-			{ data: 'deliveryDate' },
 			{ data: 'companyName' },
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
 			
 			],
-			"order": [[ 3, "desc" ]],
+			"order": [[ 0, "desc" ]],
 		});
 	})
 </script>

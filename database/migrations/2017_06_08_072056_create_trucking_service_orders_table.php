@@ -15,7 +15,6 @@ class CreateTruckingServiceOrdersTable extends Migration
     {
         Schema::create('trucking_service_orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('deliveryDate');
             $table->text('destination', 200);
             $table->string('shippingLine', 100)->nullable();
             $table->string('portOfCfsLocation', 100)->nullable();

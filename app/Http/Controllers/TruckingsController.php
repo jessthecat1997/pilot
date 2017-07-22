@@ -39,7 +39,7 @@ class TruckingsController extends Controller
         ->select('portOfCfsLocation')
         ->distinct()
         ->get();   
-             
+
         $employees = Employee::all();
 
         $locations = [];
@@ -79,7 +79,6 @@ class TruckingsController extends Controller
         $new_so_detail->save();
 
         $new_trucking  = new TruckingServiceOrder;
-        $new_trucking->deliveryDate = $request->deliveryDate;
         $new_trucking->destination = $request->destination;
         $new_trucking->shippingLine = $request->shippingLine;
         $new_trucking->portOfCfsLocation = $request->portOfCfsLocation;
@@ -494,8 +493,7 @@ class TruckingsController extends Controller
             DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer',
-            'H.companyName',
-            'E.deliveryDate'
+            'H.companyName'
             )
         ->get();
 
@@ -530,6 +528,19 @@ class TruckingsController extends Controller
         return $pdf->stream();
     }
     public function show_calendar(){
-        return 'wow';
-    }
+       $events = [];
+
+       $events[] = \Calendar::event(
+        'Event One', 
+        false, 
+        '2017-02-11T0800', 
+        '2017-02-13T0800',
+        0
+        );
+       $calendar = \Calendar::addEvents($events)
+       ->setOptions([ //set fullcalendar options
+        'firstDay' => 1
+        ]); 
+       return view('pdf_layouts.calendar', compact('calendar'));
+   }
 }

@@ -364,7 +364,7 @@ class DatatablesController extends Controller
 
 	public function trucking_so_datatable(){
 		$truckings = DB::table('trucking_service_orders')
-		->select('trucking_service_orders.id', 'companyName','deliveryDate', 'destination', 'status')
+		->select('trucking_service_orders.id','companyName', 'destination', 'status')
 		->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
 		->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -375,7 +375,6 @@ class DatatablesController extends Controller
 			return
 			'<a href = "/trucking/'. $trucking->id .'/view" class = "btn btn-md btn-info view-service-order">Manage</a>';
 		})
-		->editColumn('deliveryDate', '{{ Carbon\Carbon::parse($deliveryDate)->diffForHumans() }}')
 		->editColumn('status', function($trucking){
 			switch ($trucking->status) {
 				case 'F':

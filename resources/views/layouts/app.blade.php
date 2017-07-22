@@ -96,7 +96,7 @@
                         <li>
                             <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
-                         <li>
+                        <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
@@ -144,6 +144,9 @@
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+    
+    <script type="text/javascript" charset="utf8" src="/js/fullCalendar/moment.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="/js/fullCalendar/fullcalendar.min.js"></script>
 
     <script>
         $("#menu-toggle").click(function(e) {

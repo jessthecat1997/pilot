@@ -26,10 +26,6 @@
 								<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
 								<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
 							</div>
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_deliveryDate">Delivery Date:</label>
-								<span class="control-label col-sm-5 pull-right" id="tr_deliveryDate">{{ Carbon\Carbon::parse($service_order->deliveryDate)->toFormattedDateString() }}, ({{ Carbon\Carbon::parse($service_order->deliveryDate)->diffForHumans() }})</span>
-							</div>
 
 							<div class="form-group">        
 								<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
@@ -60,8 +56,8 @@
 						</form>
 					</div>
 				</div>
-				<div>
-					<div class="col-md-4">
+				<div class = "col-md-4">
+					<div class="col-md-12">
 						<div class = "default-panel panel">
 							<div class = "panel-heading">
 								<h4 style="text-align: center;">Successful Deliveries</h4>
@@ -69,7 +65,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-12">
 						<div class = "default-panel panel">
 							<div class = "panel-heading">
 								<h4 style="text-align: center;">Cancelled Deliveries</h4>
@@ -77,7 +73,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-12">
 						<div class = "default-panel panel">
 							<div class = "panel-heading">
 								<h4 style="text-align: center;">Pending Deliveries</h4>

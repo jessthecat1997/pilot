@@ -166,12 +166,6 @@
 				<form class="form-horizontal" role="form">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="deliveryDate">Delivery Date:</label>
-						<div class="col-sm-6">
-							<input type = "date" class = "form-control" name = "deliveryDate" id = "deliveryDate" />
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" name = "shippingLine" id="shippingLine" placeholder="Enter Shipping Line">
@@ -306,7 +300,7 @@
 					'destination' : $('#destination').val(),
 					'portOfCfsLocation' : $('#portOfCfsLocation').val(),
 					'processedBy' : $('#processedBy').val(),
-					'deliveryDate' : $('#deliveryDate').val(),
+					
 				},
 				success: function(data){
 					if(typeof(data) == "object"){
