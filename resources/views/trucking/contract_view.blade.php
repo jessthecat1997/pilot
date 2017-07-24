@@ -42,7 +42,7 @@
 						@if($contract[0]->specificDetails == null)
 						<h5 style="text-align: center;">No specified details</h5>
 						@else
-						<p><pre class = "">{{ $contract[0]->specificDetails }}</pre></p>
+						<p><pre class = "">{!! $contract[0]->specificDetails !!}</pre></p>
 
 						@endif
 					</div>
@@ -97,7 +97,7 @@
 					<br />
 				</div>
 				<br />
-				<button class="btn btn-md btn-primary pull-right generate_pdf">Generate PDF</button>
+				<button class="btn btn-md btn-primary pull-right generate_pdf">Generate Quotation</button>
 			</div>
 		</div>
 	</div>

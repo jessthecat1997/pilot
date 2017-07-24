@@ -44,7 +44,7 @@ class ContractsController extends Controller
 
     public function create()
     {
-        $areas = Area::all();
+        $areas = Area::where('deleted_at', '=', null)->orderBy('description', 'asc')->get();
         $volumes = ContainerType::all();
 
         return view('/trucking.contract_create', compact(['areas', 'volumes']));
@@ -94,7 +94,12 @@ class ContractsController extends Controller
     {
         try
         {
-            $contract = ContractHeader::findOrFail($request->contract_id);
+            $contract = DB::table('contract_headers')
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'))
+            ->join('consignees', 'consignees_id', '=', 'consignees.id')
+            ->where('contract_headers.id', '=', $request->contract_id)
+            ->get();
+
             $contract_details = DB::table('contract_details')
             ->select('A.description AS from', 'B.description AS to', 'amount')
             ->join('areas AS A', 'areas_id_from', '=', 'A.id')
@@ -108,5 +113,10 @@ class ContractsController extends Controller
         catch(Exception $e){
             return redirect('/trucking/contracts');
         }
+    }
+
+    public function real_contract(Request $request)
+    {
+        
     }
 }

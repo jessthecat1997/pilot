@@ -154,6 +154,7 @@
 			$('#arModal').modal('show');
 
 		});
+		
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			var bst_id = $(this).val();

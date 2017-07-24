@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>View Contract</title>
 	<style type="text/css">
 		table {
 			border-collapse: collapse;
@@ -18,9 +18,8 @@
 		{
 			page-break-after: always;
 		}
-
-
 	</style>
+
 </head>
 <body>
 	<div class="row">
@@ -45,49 +44,59 @@
 				<small style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</small>
 			</div>
 			<hr />
-			<h3>Rates</h3>
 
-			<table style="border: 1px solid black; width: 100%;">
-				<thead>
-					<tr>
-						<th width="30%" style="text-align: center;">
-							<strong>From</span></strong>
-						</th>
-						<th width="30%" style="text-align: center;">
-							<strong>To</strong>
-						</th>
-						<th width="30%" style="text-align: center;">
-							<strong>Rate</strong>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					@forelse($contract_details as $contract_detail)
-					<tr>
-						<td>
-							{{ $contract_detail->from }}
-						</td>
-						<td>
-							{{ $contract_detail->to }}
-						</td>
-						<td style="text-align: right;">
-							{{ $contract_detail->amount }}
-						</td>
-					</tr>
-					@empty
-					<tr>
-						<td>
-							<h4 style="text-align: center;">No records available.</h4>
-						</td>
-					</tr>
-					@endforelse
-				</tbody>
-			</table>
+			<div>
+				@if(count($contract_details) > 0)
+				<h3>Rates</h3>
+
+				<table style="border: 1px solid black; width: 100%;">
+					<thead>
+						<tr>
+							<th width="30%" style="text-align: center;">
+								<strong>From</span></strong>
+							</th>
+							<th width="30%" style="text-align: center;">
+								<strong>To</strong>
+							</th>
+							<th width="30%" style="text-align: center;">
+								<strong>Rate</strong>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($contract_details as $contract_detail)
+						<tr>
+							<td>
+								{{ $contract_detail->from }}
+							</td>
+							<td>
+								{{ $contract_detail->to }}
+							</td>
+							<td style="text-align: right;">
+								{{ $contract_detail->amount }}
+							</td>
+						</tr>
+						@empty
+						<tr>
+							<td>
+								<h4 style="text-align: center;">No records available.</h4>
+							</td>
+						</tr>
+						@endforelse
+					</tbody>
+				</table>
+
+				@endif
+			</div>
+
+			<br />
+			<h3>Terms and Conditions</h3>
+			@if($contract[0]->specificDetails == null)
+			<h5 style="text-align: center;">No specified details</h5>
+			@else
+			<p>{!! $contract[0]->specificDetails !!}</p>
+			@endif
 			
-			<br />
-			<h3>Terms and Conditions:</h3>
-			<p>{{ $contract->specificDetails }}</p>
-			<br />
 			<br />
 			<p>Looking forward to do business with you and your company.</p>
 			<br />
@@ -96,9 +105,20 @@
 
 			<br />
 			<br />
-			<strong>JAY CASTILLO, LCB/MCA.</strong>
-			<br>
-			President
+			<table style="width: 100%;">
+				<tr>
+					<td style="width: 50%; border: 1px solid transparent;">
+						<strong>JAY CASTILLO, LCB/MCA.</strong>
+						<br>
+						President
+					</td>
+					<td style="width: 50%; border: 1px solid transparent;">
+						<strong>{{ strtoupper($contract[0]->name) }}, {{ strtoupper($contract[0]->companyName) }}</strong>
+						<br>
+						Conforme
+					</td>
+				</tr>	
+			</table>
 		</div>
 	</div>
 </body>

@@ -48,7 +48,7 @@
 <body>
 	<div class="row">
 		<div class = "container" style="text-align: center;">
-			<h2><small><strong style="text-align: center;">PILOT CARGO CHAINS SOLUTION INC.</strong></small></h2>
+			<h2><small><strong style="text-align: center;">PILOT CARGO CHAIN SOLUTION INC.</strong></small></h2>
 			
 			<small><strong style="text-align: center;">3rd Floor, Unit 318 Velco Center Building, R.S. Oca &amp; A.C. Delgado St.</strong></small>
 			<br />
@@ -355,6 +355,6 @@
 	<br />
 	<br />
 	<hr />
-	<p><small><small>NOTE: Responsibility of PILOT CARGO CHAINS SOLUTIONS INC., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small></p>
+	<p><small><small>NOTE: Responsibility of PILOT CARGO CHAIN SOLUTIONS INC., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small></p>
 </body>
 </html>

@@ -145,9 +145,6 @@
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
     
-    <script type="text/javascript" charset="utf8" src="/js/fullCalendar/moment.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/fullCalendar/fullcalendar.min.js"></script>
-
     <script>
         $("#menu-toggle").click(function(e) {
             e.preventDefault();

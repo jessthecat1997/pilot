@@ -149,10 +149,6 @@
 							</div>
 							
 						</div>
-
-
-						<br />
-						<br />
 						<hr />
 						<h3 id = "contract_duration_title"><small>2</small>&nbsp;&nbsp;Contract Duration</h3>
 						<br />
@@ -183,106 +179,168 @@
 						<hr />
 						<h3 id = "contract_rate_title"><small>3</small>&nbsp;&nbsp;Contract Rates</h3>
 						<br />
-						<div class = "collapse" id = "contract_table_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one contract rate.
-							</div>
-						</div>
 						<div class = "collapse" id = "contract_rates_warning">
 							<div class="alert alert-danger">
 								<strong>Warning!</strong> Something is wrong with the rates.
 							</div>
 						</div>
-						<div class = "panel panel-default">
-							<div class = "col-md-12" style="overflow-x: auto;">
-								<div class = "panel-default">
-									<form id = "contract_rates_form">
-										<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
-											<thead>
-												<tr>
-													<td width="30%">
-														<strong>Area From</strong>
-													</td>
-													<td width="30%">
-														<strong>Area To</strong>
-													</td>
+						<div class = "col-md-12" style="overflow-x: auto;">
+							<div class = "panel-default">
+								<form id = "contract_rates_form">
+									<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
+										<thead>
+											<tr>
+												<th width="30%">
+													<strong>Area From</strong>
+												</th>
+												<th width="30%">
+													<strong>Area To</strong>
+												</th>
 
-													<td width="30%">
-														<strong>Amount</strong>
-													</td>
-													<td width="10%" style="text-align: center;">
-														<strong>Action</strong>
-													</td>
-												</tr>
-											</thead>
-											<tr id = "contract-row">
-												<td>
-													<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
-														<option></option>
-														@forelse($areas as $area)
-														<option value = "{{ $area->id }}">
-															{{ $area->description }}
-														</option>
-														@empty
-
-														@endforelse
-													</select>
-												</td>
-												<td>
-													<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
-														<option>
-
-														</option>
-														@forelse($areas as $area)
-														<option value = "{{ $area->id }}">
-															{{ $area->description }}
-														</option>
-														@empty
-
-														@endforelse
-													</select>
-												</td>
-
-												<td>
-													<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
-
-												</td>
-												<td style="text-align: center;x">
-													<button class = "btn btn-danger btn-md delete-contract-row">x</button>
-												</td>
+												<th width="30%">
+													<strong>Amount</strong>
+												</th>
+												<th width="10%" style="text-align: center;">
+													<strong>Action</strong>
+												</th>
 											</tr>
-										</table>
-									</form>
-								</div>
-							</div>
-							<div class="row">
-								<div class = "col-md-4">
-									<button  type = "submit" style="width: 90	%; margin-left: 20px;" class = "btn btn-primary btn-md new-contract-row pull-left">New Rate</button>
-								</div>
-								<div classs = "col-md-8">
+										</thead>
+										<tr id = "contract-row">
+											<td>
+												<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
+													<option></option>
+													@forelse($areas as $area)
+													<option value = "{{ $area->id }}">
+														{{ $area->description }}
+													</option>
+													@empty
 
-								</div>
+													@endforelse
+												</select>
+											</td>
+											<td>
+												<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
+													<option>
+
+													</option>
+													@forelse($areas as $area)
+													<option value = "{{ $area->id }}">
+														{{ $area->description }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>
+											</td>
+
+											<td>
+												<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
+
+											</td>
+											<td style="text-align: center;">
+												<button class = "btn btn-danger btn-md delete-contract-row">x</button>
+											</td>
+										</tr>
+									</table>
+								</form>
 							</div>
-							<br />
+						</div>
+						<div class="row">
+							<div class = "col-md-4">
+								<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
+							</div>
+							<div class = "col-md-4">
+
+							</div>
+							<div class = "col-md-4">
+								<a class = "btn pull-left" data-target="#arModal" data-toggle = "modal">+ New Area</a>
+							</div>
 						</div>
 					</div>
 					<br />
 					<div class="col-md-12">
 						<hr />
 						<h3><small>4</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
-						<br />
-						<textarea class = "form-control" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails" id = "specificDetails"></textarea>
+						<div class = "collapse" id = "term_condition_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Terms and Condition(s) is required.
+							</div>
+						</div>
+						<div class = "collapse" id = "term_condition_count_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Requires at least one term and condition.
+							</div>
+						</div>
+						<div class = "col-md-12">
+							<table style="width: 100%;" class="table table-responsive" id = "term_table">
+								<thead>
+									<tr>
+										<th style="width: 95%;">
+											Description
+										</th>
+										<th style="width: 5%; text-align: center;">
+											Action
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id = "term-condition-row">
+										<td>
+											<textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails"></textarea>
+										</td>
+										<td style="text-align: center;">
+											<button class = "btn btn-danger btn-md delete-term-row">x</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div classs = "col-md-8">
+
+							</div>
+							<div class = "col-md-4" style="text-align: center;">
+								<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Term &amp; Condition</button>
+							</div>
+						</div>
 					</div>
 					<div class="col-md-12">
 						<h3><small>5</small>&nbsp;&nbsp;Finalize</h3>
-						<button class = "btn btn-md btn-success finalize-contract" style = "width: 100%;">Create Contract</button>
+						<div style=" text-align: center;">
+							<button class = "btn btn-md btn-success finalize-contract" style = "width: 100%;">Create Contract</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<section class="content">
+		<form role="form" method = "POST" id = "commentForm">
+			{{ csrf_field() }}
+			<div class="modal fade" id="arModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">New Area</h4>
+						</div>
+						<div class="modal-body">			
+							<div class="form-group required">
+								<label class = "control-label">Name: </label>
+								<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
+								
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
 </div> 
-</div>
 @endsection
 @push('styles')
 <style>
@@ -307,7 +365,9 @@
 
 	$(document).ready(function(){
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
+		var term_condition_row = "<tr>" + $('#term-condition-row').html() + "</tr>";
 		$('#collapse1').addClass('in');
+		$('#contract-row').remove();
 
 		var cstable = $('#cs_table').DataTable({			
 			responsive: true,
@@ -326,6 +386,78 @@
 
 		});
 		$.fn.dataTable.ext.errMode = 'throw';
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				description:
+				{
+					required: true,
+					minlength: 2,
+					maxlength: 50,
+				},
+
+			},
+
+
+		});
+		$(document).on('click', '#btnSave', function(e){
+			e.preventDefault();
+			$('#description').valid();
+
+			if($('#description').valid()){
+				$('#btnSave').attr('disabled', 'true');
+				$.ajax({
+					type: 'POST',
+					url:  "{{ route('area.store') }}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'description' : $('input[name=description]').val(),
+					},
+					success: function (data)
+					{
+						if(typeof(data) === "object"){
+							$('#description').val("");
+
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record addded successfully");
+
+							$('#btnSave').removeAttr('disabled');
+							$('#arModal').modal('hide');
+						}
+						else{
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v); 
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+								$('#btnSave').removeAttr('disabled');
+							});
+
+						}
+					},
+
+				})
+			}
+		})
 
 		$(document).on('click', '.changeConsignee', function(e){
 			$('#con_collapse').addClass('in');
@@ -426,6 +558,25 @@
 			}
 		})
 
+		$(document).on('click', '.delete-term-row', function(e){
+			e.preventDefault();
+			$('#term_condition_count_warning').removeClass('in');
+			if ($('#term_table > tbody > tr').length == 1)
+			{
+				$(this).closest('tr').remove();
+				$('#term_condition_count_warning').addClass('fade in');
+			}
+			else
+			{
+				$(this).closest('tr').remove();			
+			}
+		})
+		$(document).on('click', '.new-term-row', function(e){
+			e.preventDefault();
+			$('#term_condition_count_warning').removeClass('in');
+			$('#term_table > tbody').append(term_condition_row);
+		})
+
 		$(document).on('click', '.new-contract-row', function(e){
 			e.preventDefault();
 			$('#contract_table_warning').removeClass('fade in');
@@ -495,7 +646,7 @@
 						'to_id_descrp' : to_id_descrp,
 						'amount' : amount_value,
 						'consigneeID' : consigneeID,
-						'specificDetails' : $('#specificDetails').val(),
+						'specificDetails' : terms_and_condition_string,
 					},
 
 					success: function (data){
@@ -629,11 +780,14 @@ function finalvalidateContractRows()
 	cv_id_descrp = [];
 	amount_value_descrp = [];
 
+	terms_and_condition_string = "";
+
 	rate_pairs = [];
 
 	from = document.getElementsByName('areas_id_from');
 	to = document.getElementsByName('areas_id_to');
 	amount = document.getElementsByName('amount');
+	terms = document.getElementsByName('specificDetails');
 	error = "";
 
 	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "")
@@ -663,13 +817,7 @@ function finalvalidateContractRows()
 		$('#consignee_warning').removeClass('in');
 	}
 
-	if($('#contract_parent_table > tbody > tr').length == 0){
-		error+= "No rates";
-		location.href='#contract_rate_title';
-	}
-	else{
-		$('#contract_rates_warning').removeClass('in');
-	}
+	
 	for(var i = 0; i < from.length; i++){
 
 
@@ -732,9 +880,11 @@ function finalvalidateContractRows()
 		};
 		rate_pairs.push(pair);
 	}
+
 	var i, j, n;
 	found= false;
 	n=rate_pairs.length;
+
 	for (i=0; i<n; i++) {                        
 		for (j=i+1; j<n; j++)
 		{              
@@ -748,11 +898,24 @@ function finalvalidateContractRows()
 			}
 		}	
 	}
+
+	for (var i = 0; i < terms.length; i++){
+		if(terms[i].value === ""){
+			terms[i].style.borderColor = 'red';
+			error += "Terms and Condition is required";
+		}
+		else{
+			terms[i].style.borderColor = "green";
+			terms_and_condition_string += (i + 1) + ". " + terms[i].value + "<br />";
+		}
+	}
+	console.log(terms_and_condition_string);
+
 	if(found == true){
 		error+= "Existing rate.";
 		$('#contract_rates_warning').addClass('in');
 	}
-
+	console.log(error);
 	if(error.length == 0){
 		return true;
 	}
