@@ -115,8 +115,28 @@ class ContractsController extends Controller
         }
     }
 
-    public function real_contract(Request $request)
+    public function agreement_pdf(Request $request)
     {
-        
+       try
+        {
+            $contract = DB::table('contract_headers')
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address')
+            ->join('consignees', 'consignees_id', '=', 'consignees.id')
+            ->where('contract_headers.id', '=', $request->contract_id)
+            ->get();
+
+            $contract_details = DB::table('contract_details')
+            ->select('A.description AS from', 'B.description AS to', 'amount')
+            ->join('areas AS A', 'areas_id_from', '=', 'A.id')
+            ->join('areas AS B', 'areas_id_to', '=', 'B.id')
+            ->where('contract_headers_id', '=', $request->contract_id)
+            ->get();
+
+            $pdf = PDF::loadView('pdf_layouts.agreement_pdf', compact(['contract', 'contract_details']));
+            return $pdf->stream();
+        }
+        catch(Exception $e){
+            return redirect('/trucking/contracts');
+        }
     }
 }

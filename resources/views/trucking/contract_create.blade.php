@@ -735,9 +735,10 @@ function validateContractRows()
 		};
 		rate_pairs.push(pair);
 	}
+
 	var i, j, n;
-	found= false;
-	n=rate_pairs.length;
+	found = false;
+	n = rate_pairs.length;
 
 	for (i=0; i<n; i++) {                        
 		for (j=i+1; j<n; j++)
