@@ -72,6 +72,16 @@ $('#collapse1').addClass('in');
 			var contract_id = $(this).val();
 			window.location.replace("{{route('contracts.index') }}/" + contract_id + "/view"); 
 		})
+
+		$(document).on('click', '.amend-contract', function(e){
+			e.preventDefault();
+			window.location.replace("{{ route('contracts.index')}}/" + $(this).val() + "/amend");
+		})
+
+		$(document).on('click', '.print-contract-details', function(e){
+			e.preventDefault();
+			window.open("{{ route('trucking.index') }}/contracts/" + $(this).val() + "/agreement_pdf");
+		})
 	})
 </script>
 @endpush

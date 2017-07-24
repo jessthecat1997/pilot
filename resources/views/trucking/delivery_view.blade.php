@@ -438,7 +438,7 @@
 			e.preventDefault();
 			if(con_status == "Y"){
 				$('#actutaldateReturned').valid();
-				if($('#actutaldateReturned').valid()){
+				if($('#actutaldateReturned').valid()){-
 					$.ajax({
 						type: 'PUT',
 						url:  '{{ route("trucking.store") }}/{{ $so_id }}/update_container/' + $('#containerID').val(),

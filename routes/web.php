@@ -189,6 +189,7 @@ Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->na
 Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
 Route::get('/trucking/contracts/create_view', 'ContractsController@view_contract');
 Route::get('/trucking/contracts/{contract_id}/view', 'ContractsController@manage_contract');
+Route::get('/trucking/contracts/{contract_id}/amend', 'ContractsController@amend_contract');
 Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor?}', 'DatatablesController@get_contracts')->name('get_contracts');
 Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
 Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');

@@ -320,8 +320,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($contract_header){
 			return
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-info view-contract-details">View</button>' .
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary view-contract-details">Amend</button>' .
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-success view-contract-details">Print</button>';
+			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary amend-contract">Amend</button>' .
+			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-success print-contract-details">Print</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')

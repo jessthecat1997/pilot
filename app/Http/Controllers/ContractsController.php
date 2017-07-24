@@ -120,7 +120,7 @@ class ContractsController extends Controller
        try
         {
             $contract = DB::table('contract_headers')
-            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address')
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
@@ -134,6 +134,29 @@ class ContractsController extends Controller
 
             $pdf = PDF::loadView('pdf_layouts.agreement_pdf', compact(['contract', 'contract_details']));
             return $pdf->stream();
+        }
+        catch(Exception $e){
+            return redirect('/trucking/contracts');
+        }
+    }
+    public function amend_contract(Request $request)
+    {
+       try
+        {
+            $contract = DB::table('contract_headers')
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+            ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+            ->where('contract_headers.id', '=', $request->contract_id)
+            ->get();
+
+            $contract_details = DB::table('contract_details')
+            ->select('A.description AS from', 'B.description AS to', 'amount')
+            ->join('areas AS A', 'areas_id_from', '=', 'A.id')
+            ->join('areas AS B', 'areas_id_to', '=', 'B.id')
+            ->where('contract_headers_id', '=', $request->contract_id)
+            ->get();
+            return view('/trucking.contract_view', compact(['contract', 'contract_details']));
+
         }
         catch(Exception $e){
             return redirect('/trucking/contracts');
