@@ -150,7 +150,7 @@ class ContractsController extends Controller
             ->get();
 
             $contract_details = DB::table('contract_details')
-            ->select('A.description AS from', 'B.description AS to', 'amount')
+            ->select('A.description AS from', 'B.description AS to', 'amount', 'contract_details.id', 'A.id as area_from_id', 'B.id as area_to_id')
             ->join('areas AS A', 'areas_id_from', '=', 'A.id')
             ->join('areas AS B', 'areas_id_to', '=', 'B.id')
             ->where('contract_headers_id', '=', $request->contract_id)
@@ -163,6 +163,35 @@ class ContractsController extends Controller
         }
         catch(Exception $e){
             return redirect('/trucking/contracts');
+        }
+    }
+
+    public function update(Request $request, $id){
+
+        switch ($request->update_type) {
+            case '1':
+                $contract = ContractHeader::findOrFail($request->contract_id);
+                $contract->dateEffective = $request->dateEffective;
+                $contract->dateExpiration = $request->dateExpiration;
+
+                $contract->save();
+
+                return $contract;
+
+                break;
+            
+            case '2':
+                $contract_detail = ContractDetail::findOrFail($request->contract_detail_id);
+                $contract_detail->area_from_id = $request->area_from_id;
+                $contract_detail->area_to_id = $request->area_to_id;
+
+                $contract_detail->savev();
+
+                return $contract_detail->save();
+                
+            default:
+                
+                break;
         }
     }
 }

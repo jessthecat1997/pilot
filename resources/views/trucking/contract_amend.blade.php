@@ -85,6 +85,10 @@
 								Php {{ $contract_detail->amount }}
 							</td>
 							<td style="text-align: center;">
+								<input type="hidden" value = "{{ $contract_detail->id }}" class = "contract_detail_id">
+								<input type="hidden" value = "{{ $contract_detail->area_from_id }}" class = "contract_area_from_id">
+								<input type="hidden" value = "{{ $contract_detail->area_to_id }}" class = "contract_area_to_id">
+								<input type="hidden" value = "{{ $contract_detail->amount }}" class = "contract_amount">
 								<button class="btn btn-sm btn-primary update-contract-rate">Update</button>
 							</td>
 
@@ -134,6 +138,7 @@
 					</div>
 					<div class="modal-body">			
 						<div class="form-group">
+							<input type = "hidden" value="" class="selected_contract_detail">
 							<label class = "control-label">Area From: </label>
 							<select id = "area_from" class="form-control">
 								<option></option>
@@ -146,7 +151,7 @@
 						</div>
 						<div class="form-group">
 							<label class = "control-label">Area To: </label>
-							<select id = "area_from" class="form-control">
+							<select id = "area_to" class="form-control">
 								<option></option>
 								@forelse($areas as $area)
 								<option value = "{{ $area->id }}">{{ $area->description }}</option>
@@ -216,6 +221,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
+
 		$(document).on('click', '.generate_pdf', function(e){
 			window.open("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
 		})
@@ -223,6 +229,14 @@
 		$(document).on('click', '.update-contract-rate', function(e){
 			e.preventDefault();
 			$('#crModal').modal('show');
+
+			console.log(this);
+			console.log($(this).closest('tr').find(".contract_detail_id").val());
+
+
+			$('.selected_contract_detail').val($(this).closest('tr').find('.contract_detail_id').val());
+			$('#area_from').val($(this).closest('tr').find('.contract_area_from_id').val());
+			$('#area_to').val($(this).closest('tr').find('.contract_area_to_id').val());
 		})
 
 		$(document).on('click', '.change-contract-duration', function(e){
@@ -235,12 +249,46 @@
 
 		$(document).on('click', '.update_delivery_rate_save', function(e){
 			e.preventDefault();
+			
+			$.ajax({
+				type: 'PUT',
+				url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
+				data: {
+					'_token' : $('input[name=_token').val(),
+					'update_type' : 2,
+					'areas_id_from' : $('#area_from').val(),
+					'areas_id_to' :  $('#area_to').val(),
+					'amount' : $('#amount').val(),
+					'contract_detail_id' : $(),
+
+				},
+				success: function (data)
+				{
+					console.log(data);
+				}
+			});
 
 		})
 
 		$(document).on('click', '.update_contract_duration_save', function(e){
 			e.preventDefault();
 
+			$.ajax({
+				type: 'PUT',
+				url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
+				data: {
+					'_token' : $('input[name=_token').val(),
+					'update_type' : 1,
+					'dateEffective' : $('#dateEffective').val(),
+					'dateExpiration' : $('#dateExpiration').val(),
+					'contract_id' : {{ $contract[0]->id }},
+
+				},
+				success: function (data)
+				{
+					console.log(data);
+				}
+			});
 
 		})
 	})
