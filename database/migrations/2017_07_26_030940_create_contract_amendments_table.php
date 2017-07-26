@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAgreementConditionsTable extends Migration
+class CreateContractAmendmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateAgreementConditionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('agreement_conditions', function (Blueprint $table) {
+        Schema::create('contract_amendments', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('condition', 1500);
+            $table->string('amendment', 250);
+            $table->integer('contract_headers_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('contract_headers_id')->references('id')->on('contract_headers');
         });
     }
 
@@ -27,6 +30,6 @@ class CreateAgreementConditionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('agreement_conditions');
+        Schema::dropIfExists('contract_amendments');
     }
 }

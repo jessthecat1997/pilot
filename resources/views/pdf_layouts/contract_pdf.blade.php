@@ -46,6 +46,23 @@
 			<hr />
 
 			<div>
+				<br />
+				<br />
+				<strong>{{ Carbon\Carbon::parse($contract[0]->created_at)->toFormattedDateString() }}</strong>
+				<br />
+				<br />
+				Mr./Mrs.
+				<br />
+				<br />
+				<span><strong>{{ $contract[0]->name }}</strong></span>
+				<br />
+				<br />
+				<br />
+				We are pleased to submit our proposal for your import and Export requirements to and from the following destinations;
+				
+			</div>
+
+			<div>
 				@if(count($contract_details) > 0)
 				<h3>Rates</h3>
 

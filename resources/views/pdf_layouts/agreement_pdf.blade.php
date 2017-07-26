@@ -209,24 +209,36 @@
 			<p><strong>CITY OF TAGUIG		)S.S</strong></p>
 			<p>		<strong>BEFORE ME,</strong> a Notary Public in _______________________________, this _______ day of _________________ 2016, personally appeared the following with their respective Community Tax Certificate No./ Passport No. as herein below indicate:</p>
 
-			<table align="center">
-				<tr>
-					<th><strong><u>Name</u></strong></th>
-					<th><strong><u>CTC/Passprt No.</u></strong></th>
-					<th><strong><u>Date/Place Issued</u></strong></th>
-				</tr>
-				<tr>
-					<td><strong>KOICHI SAWAMI</strong></td>
-					<td>PPT. No. TZ1056335</td>
-					<td>3/27/2015 Embassy of Japan</td>
-				</tr>
-				<tr>
-					<td><strong>JOSELITO A. CASTILLO</strong></td>
-				</tr>
+			<table align="center" style="width: 100%;" >
+				<thead>
+					<tr>
+						<td style="width: 10%;"></td>
+						<td style="width: 70%;"><strong><u>Name</u></strong></td>
+						<td style="width: 20%;"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="width: 10%;"></td>
+						<td style="width: 70%;"><strong>{{ strtoupper($contract[0]->name) }}</strong></td>
+						<td style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td style="width: 10%;"></td>
+						<td style="width: 70%;"><strong>JOSELITO A. CASTILLO</strong></td>
+						<td style="width: 20%;"></td>
+					</tr>
+				</tbody>
 			</table>
 
-			<p><strong>KNOWN TO ME</strong> to be the same person who executed the foregoing instrument and they acknowledge that the same of their own free and voluntary act and deed as well as that of the entities they respectively represent.</p>
-			<p><strong>WITNESSED MY HAND AND SEAL,</strong> at the place and on the dates first abovewritten.</p>
+			<br />
+
+			<p>
+				<strong>KNOWN TO ME</strong> to be the same person who executed the foregoing instrument and they acknowledge that the same of their own free and voluntary act and deed as well as that of the entities they respectively represent.
+			</p>
+			<p>
+				<strong>WITNESSED MY HAND AND SEAL,</strong> at the place and on the dates first above written.
+			</p>
 
 			Doc No. ___________<br/>
 			Page No. ___________<br/>

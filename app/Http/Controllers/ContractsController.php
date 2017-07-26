@@ -95,7 +95,7 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'))
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'contract_headers.created_at')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
@@ -155,7 +155,10 @@ class ContractsController extends Controller
             ->join('areas AS B', 'areas_id_to', '=', 'B.id')
             ->where('contract_headers_id', '=', $request->contract_id)
             ->get();
-            return view('/trucking.contract_view', compact(['contract', 'contract_details']));
+
+            $areas = Area::all();
+
+            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas']));
 
         }
         catch(Exception $e){
