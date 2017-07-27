@@ -163,11 +163,14 @@ class ContractsController extends Controller
             $amendments = DB::table('contract_amendments')
             ->select('created_at', 'amendment')
             ->where('contract_headers_id', '=', $request->contract_id)
+            ->orderBy('created_at', 'DESC')
             ->get();
 
+            $terms = explode('<br />', $contract[0]->specificDetails);
+            array_pop($terms);
          
 
-            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas', 'amendments']));
+            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas', 'amendments', 'terms']));
 
         }
         catch(Exception $e){
@@ -198,6 +201,18 @@ class ContractsController extends Controller
                 $contract_detail->save();
 
                 return $contract_detail;
+
+                break;
+
+             case '3':
+                $contract = ContractHeader::findOrFail($request->contract_id);
+                $contract->specificDetails = $request->specificDetails;
+
+                $contract->save();
+
+                return $contract;
+
+                break;
 
             default:
                 
