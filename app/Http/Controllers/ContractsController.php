@@ -9,6 +9,8 @@ use App\ContainerType;
 use App\Area;
 use App\ContractHeader;
 use App\ContractDetail;
+use App\ContractAmendment;
+use Response;
 use App;
 use PDF;
 
@@ -158,7 +160,14 @@ class ContractsController extends Controller
 
             $areas = Area::all();
 
-            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas']));
+            $amendments = DB::table('contract_amendments')
+            ->select('created_at', 'amendment')
+            ->where('contract_headers_id', '=', $request->contract_id)
+            ->get();
+
+         
+
+            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas', 'amendments']));
 
         }
         catch(Exception $e){
@@ -182,16 +191,37 @@ class ContractsController extends Controller
             
             case '2':
                 $contract_detail = ContractDetail::findOrFail($request->contract_detail_id);
-                $contract_detail->area_from_id = $request->area_from_id;
-                $contract_detail->area_to_id = $request->area_to_id;
-
-                $contract_detail->savev();
-
-                return $contract_detail->save();
+                $contract_detail->areas_id_from = $request->areas_id_from;
+                $contract_detail->areas_id_to = $request->areas_id_to;
+                $contract_detail->amount = $request->amount;
                 
+                $contract_detail->save();
+
+                return $contract_detail;
+
             default:
                 
                 break;
         }
+    }
+    public function store_contract_rates(Request $request)
+    {
+       
+            $contract_detail = new ContractDetail;
+            $contract_detail->areas_id_from = $request->areas_id_from;
+            $contract_detail->areas_id_to = $request->areas_id_to;
+            $contract_detail->amount = $request->amount;
+            $contract_detail->contract_headers_id = $request->contract_id;
+
+            $contract_detail->save();
+
+            $contract_amendment = new ContractAmendment;
+            $contract_amendment->amendment = "Added new rate: " . $request->from_descrp . " to " . $request->to_descrp . ": Php " 
+            . $contract_detail->amount;
+            $contract_amendment->contract_headers_id = $request->contract_id;
+
+            $contract_amendment->save();
+            
+            return Response::make(array($contract_detail, $contract_amendment));
     }
 }

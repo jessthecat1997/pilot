@@ -1480,5 +1480,28 @@ class DatatablesController extends Controller
 			->make(true);
 		}
 	}
+	public function get_contract_details(Request $request)
+	{
+
+		$contract_details = DB::table('contract_details')
+		->select('A.description AS from', 'B.description AS to', 'amount', 'contract_details.id', 'A.id AS from_id', 'B.id AS to_id')
+		->join('areas AS A', 'areas_id_from', '=', 'A.id')
+		->join('areas AS B', 'areas_id_to', '=', 'B.id')
+		->where('contract_headers_id', '=', $request->contract_id)
+		->get();
+		
+		return Datatables::of($contract_details)
+		->addColumn('action', function ($cd){
+			return
+			'<button style="text-align: center;" class = "btn btn-md btn-primary update-contract-rate">Update</button> 
+			<input type = "hidden" class = "selected_contract_detail" value = "' . $cd->id  .'" />
+			<input type = "hidden" class = "selected_from_id" value = "' . $cd->from_id  .'" />
+			<input type = "hidden" class = "selected_to_id" value = "' . $cd->to_id  .'" />
+			<input type = "hidden" class = "selected_amount" value = "' . $cd->amount  .'" />
+			';
+		})
+		->editColumn('amount', 'Php {{ $amount }}')
+		->make(true);
+	}
 
 }

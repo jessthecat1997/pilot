@@ -194,6 +194,8 @@ Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor
 Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
 Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
 Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
+Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
+Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
 //Delivery to Temporary Billing
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
 Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
