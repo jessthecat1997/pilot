@@ -236,18 +236,14 @@
 		var con_ReturnTo = [];
 		var con_ReturnAddress = [];
 		var con_ReturnDate = [];
-
 		var descrp_goods = [];
 		var gross_weights = [];
 		var suppliers = [];
-
 		var modal_reset = $('#myModal').html();
 		var delivery_id = 0;
 		var vehicle_type_id = 0;
 		var wodetail_row = "<tr>" + $('#wodescription_row').html() + "</tr>";
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
-
-
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
 			$('#_destination').val($('#tr_destination').text().trim());
@@ -258,7 +254,6 @@
 		})
 		$(document).on('click', '.save-trucking-information', function(e){
 			$.ajax({
-
 				type: 'PUT',
 				url: '{{ route("trucking.store") }}/{{ $so_id }}',
 				data: {
@@ -273,22 +268,16 @@
 					$('#tr_shippingLine').text($('#_shippingLine').val());
 					$('#tr_portOfCfsLocation').text($('#_portOfCfsLocation').val());
 					$('#tr_status').text($('#_status > option:selected').text());
-
 					$('#_destination').val();
 					$('#_shippingLine').val();
 					$('#_portOfCfsLocation').val();
-
 					window.location.reload();
 				}
 			})
 		})
-
 		$(document).on('click', '.view-delivery-information', function(e){
-
 		})
-
 		$(document).on('click', '.save-delivery-information', function(e){
-
 			$.ajax({
 				type: 'PUT',
 				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
@@ -303,9 +292,7 @@
 				}	
 			})
 		})
-
 		// Container
-
 		$(document).on('click', '.add-new-container', function(e){
 			e.preventDefault();
 			if(validateContainer() === true){
@@ -325,37 +312,25 @@
 				$('#cargo_delivery_details').append('<table class = "table-responsive table" id = "' + $(this).closest("tr").find('.row_containerNumber').val() + '_table"><thead><tr><td>Container Number: '+ $(this).closest("tr").find('.row_containerNumber').val() +'</tr></td><tr><td>Description of Goods</td><td>Gross Weight(kg)</td><td>Supplier</td><td>Action</td></tr></thead><tbody><tr id = "description_row"><td width="35%"><input type = "text" name = "'+ id +'_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "'+ id +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+ id +'_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  id + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "' + id +'">x</button></td></tr></tbody></table>');
 			}
 		})
-
-
 		$(document).on('click', '.add-container-detail', function(e){
 			e.preventDefault();
 			var id = $(this).val();
 			var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id+'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  $(this).val() + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
 			$('#'+ $(this).val() + ":last-child").append(detail_row);
 		})
-
 		$(document).on('click', '.remove-container-detail', function(e){
 			e.preventDefault();
 			if($('#'+ $(this).val() +' > tbody > tr').length > 1){
 				$(this).closest('tr').remove();
 			}
 		})
-
-
-
-
-
-
-
 		// Non Container ------------------------------------------------------------------------------------------------------------------------
-
 		$(document).on('click', '.add-new-detail', function(e){
 			e.preventDefault();
 			if(validateDetail() === true){
 				$('#detail_table:last-child').append(wodetail_row);
 			}
 		})
-
 		$(document).on('click', '.remove-current-detail', function(e){
 			e.preventDefault();
 			if($('#detail_table > tbody > tr').length > 1){
@@ -365,7 +340,6 @@
 				//Do nothing
 			}
 		})
-
 		$(document).on('click', '.woadd-new-detail', function(e){
 			e.preventDefault();
 			
@@ -373,7 +347,6 @@
 				$('#wodetail_table:last').append(wodetail_row);
 			}
 		})
-
 		$(document).on('click', '.woremove-current-detail', function(e){
 			e.preventDefault();
 			if($('#wodetail_table > tbody > tr').length > 1){
@@ -397,7 +370,6 @@
 						}
 						$('#vehicle').find('option').not(':first').remove();
 						$('#vehicle').html(new_rows);
-
 					}
 				},
 				error: function(data) {
@@ -408,7 +380,6 @@
 			})
 		})
 		
-
 		$(document).on('click', '.save-delivery', function(e){
 			if($("#choices li.active").text() === "Non Container"){
 				if(validateDetail() === true){
@@ -424,7 +395,6 @@
 							'emp_id_driver' : $('#driver').val(),
 							'emp_id_helper' : $('#helper').val(),
 							'deliveryAddress' : $('.deladd').val(),
-
 						},
 						success: function(data){
 							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -436,7 +406,6 @@
 				if(validateContainer() == true){
 					validateContainerDetail();
 					$.ajax({
-
 						type: 'POST',
 						url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',
 						data: {
@@ -451,7 +420,6 @@
 							'containerReturnAddress' : con_ReturnAddress,
 							'containerReturnDate' : con_ReturnDate,
 							'container_data' : results,
-
 						},
 						success: function(data){
 							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -464,10 +432,7 @@
 			json = [];
 			var linkData;
 			for (var i = 0; i < con_Number.length; i++) {
-
 				var child = [{ }];
-
-
 				child[0]['container'] = [{
 					containerNumber : con_Number[i],
 					containerVolume : con_Volume[i],
@@ -475,16 +440,12 @@
 					containerReturnAddress : con_ReturnAddress[i],
 					containerReturnDate : con_ReturnDate[i]
 				}];
-
 				child[0]['details'] = [];
-
 				table_detail_row_count = $('#' + con_Number[i] + "_table > tbody > tr").length;
 				var name = con_Number[i] + "_table";
-
 				con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
 				con_gw = document.getElementsByName(name + '_grossWeight');
 				con_supp = document.getElementsByName(name + '_supplier');
-
 				for (var j = 0; j < table_detail_row_count; j++) {
 					
 					child[0].details.push({
@@ -493,29 +454,23 @@
 						supplier : con_supp[j].value
 					});
 				}
-
 				json.push(child);
 			}
-
 			results = JSON.stringify(json);
 			console.log(results);
 		}
-
 		function validateContainer(){
 			con_Number = [];
 			con_Volume = [];
 			con_ReturnTo = [];
 			con_ReturnAddress = [];
 			con_ReturnDate = [];
-
 			var error = "";
-
 			con_number = document.getElementsByName("containerNumber");
 			con_volume = document.getElementsByName("containerVolume");
 			con_to = document.getElementsByName("containerReturnTo");
 			con_address = document.getElementsByName("containerReturnAddress");
 			con_date = document.getElementsByName("containerReturnDate");
-
 			for(var i = 0; i < con_number.length; i++)
 			{
 				if(con_number[i].value === ""){
@@ -549,21 +504,17 @@
 					con_ReturnDate.push(con_date[i].value);
 				}
 			}
-
 			if(error.length === 0){
 				return true;
 			}
 			else{
 				return false;
 			}
-
 		}
-
 		function validateDetail(){
 			descrp_goods = [];
 			gross_weights = [];
 			suppliers = [];
-
 			var error = "";
 			if($("#choices li.active").text() === "Non Container"){
 				descrp = document.getElementsByName("wodescriptionOfGoods");
