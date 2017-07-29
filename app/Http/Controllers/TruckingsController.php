@@ -179,6 +179,7 @@ class TruckingsController extends Controller
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 0;
+            $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->tr_so_id = $request->trucking_id;
 
             $new_delivery_head->save();
@@ -201,6 +202,7 @@ class TruckingsController extends Controller
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;
             $new_delivery_head->deliveryAddress = $request->deliveryAddress;
+            $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 1;
@@ -438,8 +440,7 @@ class TruckingsController extends Controller
 
     public function get_contract_details(Request $request){
         $contract = DB::table('contract_headers')
-        ->join('consignees AS A', 'consignees_id', '=', 'A.id')
-        ->select(DB::raw('CONCAT(firstName, lastName AS name'), 'dateEffective', 'dateExpiration', 'specificDetails')
+        ->select('dateEffective', 'dateExpiration', 'specificDetails')
         ->where('contract_headers.id', '=', $request->contract_id)
         ->get();
         $contract_details = DB::table('contract_details')

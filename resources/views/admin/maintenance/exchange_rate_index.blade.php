@@ -231,7 +231,7 @@ $('#btnDelete').on('click', function(e){
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
 
-	var rate_nocomma = $('#rate').maskMoney('unmasked')[0];
+	var rate_nocomma = $('#rate').inputmask("unmaskedvalue");
 	if (rate_nocomma == "0.00"){
 		rate_nocomma = "";
 	}

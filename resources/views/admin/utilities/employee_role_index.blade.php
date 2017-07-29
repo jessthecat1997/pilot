@@ -63,7 +63,7 @@
 									</option>
 									@forelse($employee_types as $employee_type)
 									<option value = "{{ $employee_type->id }} ">
-										{{ $employee_type->description }}
+										{{ $employee_type->name }}
 									</option>
 									@empty
 									@endforelse
@@ -124,7 +124,7 @@
 			ajax: '/admin/emp_roleData/{{ $employee_id }}/data',
 			columns: [
 			{ data: 'id' },
-			{ data: 'description' },
+			{ data: 'name' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 

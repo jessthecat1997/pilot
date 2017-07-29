@@ -188,7 +188,7 @@
 							</thead>
 							<tbody>
 								@php
-								$num = 1
+								$num = 1;
 								@endphp
 								@forelse($delivery_details as $delivery_detail)
 								<tr>

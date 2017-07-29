@@ -314,7 +314,6 @@ class DatatablesController extends Controller
 		$contract_headers = DB::table('contract_headers')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
 		->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'companyName', 'contract_headers.created_at')
-		->whereRaw('NOW() BETWEEN dateEffective AND dateExpiration')
 		->get();
 		return Datatables::of($contract_headers)
 		->addColumn('action', function ($contract_header){
@@ -351,7 +350,7 @@ class DatatablesController extends Controller
 		$employee_roles = DB::table('employee_roles')
 		->join('employees', 'employee_id', '=', 'employees.id')
 		->join('employee_types', 'employee_type_id', '=', 'employee_types.id')
-		->select('employee_roles.id', 'description','employee_roles.created_at')
+		->select('employee_roles.id', 'name','employee_roles.created_at')
 		->where('employee_id', '=', $id)
 		->where('employee_roles.deleted_at', '=', null)
 		->get();
@@ -417,9 +416,9 @@ class DatatablesController extends Controller
 	}
 
 	public function ipf_datatable(){
-		$ipffs = IpfFee::select(['id',  'minimum', 'maximum','amount',   'created_at']);
-		
-		return Datatables::of($ipffs)
+		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
+
+		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
 			return
 			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
@@ -428,7 +427,6 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
-
 	public function cds_deactivated(Request $request){
 		$cds;
 		if ($request->filter == 0){

@@ -5,7 +5,7 @@
 		<div class = "col-md-10 col-md-offset-1">
 			<div class = "panel default-panel">
 				<div class  = "panel-heading">
-					<h3>Active Contracts<a href="{{route('contracts.create')}}" role = "button" class = "btn btn-success pull-right">Create New Contract</a></h3>
+					<h3>Contracts<a href="{{route('contracts.create')}}" role = "button" class = "btn btn-success pull-right">Create New Contract</a></h3>
 					<hr />
 				</div>
 				<div class = "panel-body">

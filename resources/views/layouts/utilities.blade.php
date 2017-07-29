@@ -128,9 +128,7 @@
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Brokerage <span class="caret"></span></a>
                       <ul class="dropdown-menu">
                           <li><a href="{{ route('sot.utilities_index') }}" class = "class-service-order">Service Order Type</a></li>
-                          <li><a href="{{ route('charges.utilities_index') }}" class = "class-charge">Charges</a></li>
                           <li><a href="{{ route('exchange_rate.utilities_index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
-                          <li><a href="{{ route('receive_type.utilities_index') }}" class = "class-receive-type">Receive Type</a></li>
                           <li><a href="{{ route('brokerage_fee.utilities_index') }}">Brokerage Fee</a></li>
                           <li><a href = "{{ route('cds_fee.utilities_index') }}">Container Delivery System Fee</a></li>
                           <li><a href = "{{ route('ipf_fee.utilities_index') }}">Import Processing Fee</a></li>
@@ -142,22 +140,21 @@
                       <li><a href="{{ route('area.index') }}">Area</a></li>
                       <li><a href="{{ route('vehicle_type.utilities_index') }}" class = "class-vehicle-type">Vehicle Type</a></li>
                       <li><a href="{{ route('vehicle.utilities_index') }}" class = "class-vehicle">Vehicle</a></li>
-                      <li><a href="{{ route('container_type.utilities_index') }}" class = "class-container-type">Container Type</a></li>
+                      <li><a href="{{ route('container_type.utilities_index') }}" class = "class-container-type">Container Volume</a></li>
                   </ul>
               </li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Biling <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-
-                    <li class="active"><a href="" class="class-billing">Billing</a></li>
-                    <li><a href="{{ route('employee.index') }}" class = "class-employee-type">Employee</a></li>
-                </ul>
-            </li>
-        </ul>
-        <div class="row">
-            @yield('content')
-        </div>
+                  <li><a href="{{ route('charges.utilities_index') }}" class = "class-charge">Charges</a></li>
+                  <li class="active"><a href="" class="class-billing">Bills</a></li>
+              </ul>
+          </li>
+      </ul>
+      <div class="row">
+        @yield('content')
     </div>
+</div>
 </div>
 <!-- /#page-content-wrapper -->
 </div>

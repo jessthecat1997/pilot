@@ -22,7 +22,8 @@ class CreateConsigneesTable extends Migration
             $table->string('email', 100);
             $table->text('address');
             $table->string('contactNumber', 30);
-            $table->boolean('consigneeType');
+            $table->string('businessStyle', 100);
+            $table->string('TIN', 20);
             $table->timestamps();
             $table->softDeletes();
         });

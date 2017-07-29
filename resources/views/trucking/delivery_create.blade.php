@@ -93,6 +93,10 @@
 									<input type = "text" name = "deladdcon" id = "deladdcon" class = "form-control deladdcon" />
 								</div>
 								<div class="form-group">
+									<label class="control-label" for = "deldatecon">Delivery Date:</label>
+									<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
+								</div>
+								<div class="form-group">
 									<label class="control-label" for="wodetail_table">Delivery Content:</label>
 								</div>
 								<div id = "cargo_delivery_details">
@@ -111,6 +115,10 @@
 								<div class="form-group">
 									<label class="control-label" for = "deladd">Delivery Address:</label>
 									<input type = "text" name = "deladd" id = "deladd" class = "form-control deladd" />
+								</div>
+								<div class="form-group">
+									<label class="control-label" for = "deldate">Delivery Date:</label>
+									<input type = "date" name = "deldate" id = "deldate" class = "form-control deladdcon" />
 								</div>
 								<div class="form-group">
 									<label class="control-label" for="wodetail_table">Delivery Content:</label>
@@ -395,6 +403,7 @@
 							'emp_id_driver' : $('#driver').val(),
 							'emp_id_helper' : $('#helper').val(),
 							'deliveryAddress' : $('.deladd').val(),
+							'deliveryDate' : $('#deldate').val(),
 						},
 						success: function(data){
 							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -414,6 +423,7 @@
 							'emp_id_driver' : $('#driver').val(),
 							'emp_id_helper' : $('#helper').val(),
 							'deliveryAddress' : $('.deladdcon').val(),
+							'deliveryDate' : $('#deldatecon').val(),
 							'containerNumber' : con_Number,
 							'containerVolume' : con_Volume,
 							'containerReturnTo' : con_ReturnTo,
@@ -524,15 +534,19 @@
 			for(var i = 0; i < descrp.length; i++){
 				if(descrp[i].value === ""){
 					error += "No description";
+					descrp[i].style.borderColor = 'red';
 				}
 				else{
 					descrp_goods.push(descrp[i].value);
+					descrp[i].style.borderColor = 'green';
 				}
 				if(gw[i].value === ""){
 					error += "No gross weight";
+					gw[i].style.borderColor = 'red';
 				}
 				else{
 					gross_weights.push(gw[i].value);
+					gw[i].style.borderColor = 'green';
 				}
 				if(supp[i].value === ""){
 					suppliers.push("");

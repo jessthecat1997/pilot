@@ -241,7 +241,7 @@ $('#btnSave').on('click', function(e){
 
 
 
-	var fee_nocomma = $('#fee').maskMoney('unmasked')[0];
+	var fee_nocomma = $('#fee').inputmask('unmaskedvalue');
 	if (fee_nocomma == "0.00"){
 		fee_nocomma = "";
 	}

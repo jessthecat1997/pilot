@@ -18,7 +18,6 @@ class CreateDeliveryReceiptHeadersTable extends Migration
             $table->integer('emp_id_driver')->unsigned();
             $table->integer('emp_id_helper')->unsigned();
             $table->text('deliveryAddress', 200)->nullable();
-            $table->dateTime('deliveryDateTime');
             $table->string('plateNumber', 20);
             $table->boolean('withContainer');
             $table->char('status', 1);

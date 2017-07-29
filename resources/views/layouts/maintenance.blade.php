@@ -12,13 +12,14 @@
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
+    <link href= "/js/select2/select2.css" rel = "stylesheet">
     <link href="/css/app.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/sidebar/css/simple-sidebar.css" rel="stylesheet">
+
     
     @stack('styles')
 
@@ -94,7 +95,7 @@
                         <li>
                             <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
-                         <li>
+                        <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
@@ -130,37 +131,35 @@
                   <li class="dropdown">
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Brokerage <span class="caret"></span></a>
                       <ul class="dropdown-menu">
-                           <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
-                          <li><a href="{{ route('charge.index') }}" class = "class-charge">Charges</a></li>
-                          <li><a href="{{ route('exchange_rate.index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
-                          <li><a href="{{ route('receive_type.index') }}" class = "class-receive-type">Receive Type</a></li>
-                          <li><a href="{{ route('brokerage_fee.index') }}">Brokerage Fee</a></li>
-                          <li><a href="{{ route('cds_fee.index') }}">Container Delivery System Fee</a></li>
-                          <li><a href = "{{ route('ipf_fee.index') }}">Import Processing Fee</a></li>
-                      </ul>
-                  </li>
-                  <li class="dropdown">
+                         <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
+                         <li><a href="{{ route('exchange_rate.index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
+                         <li><a href="{{ route('brokerage_fee.index') }}">Brokerage Fee</a></li>
+                         <li><a href="{{ route('cds_fee.index') }}">Container Delivery System Fee</a></li>
+                         <li><a href = "{{ route('ipf_fee.index') }}">Import Processing Fee</a></li>
+                     </ul>
+                 </li>
+                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Delivery <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a href="{{ route('area.index') }}">Area</a></li>
                       <li><a href="{{ route('vehicletype.index') }}" class = "class-vehicle-type">Vehicle Type</a></li>
                       <li><a href="{{ route('vehicle.index') }}" class = "class-vehicle">Vehicle</a></li>
-                      <li><a href="{{ route('container_type.index') }}" class = "class-container-type">Container Type</a></li>
+                      <li><a href="{{ route('container_type.index') }}" class = "class-container-type">Container Volume</a></li>
                   </ul>
               </li>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Biling <span class="caret"></span></a>
                 <ul class="dropdown-menu">
+                 <li><a href="{{ route('charge.index') }}" class = "class-charge">Charges</a></li>
+                 <li class="active"><a href="{{ route('billing.index') }}" class="class-billing">Bills </a></li>
 
-                    <li class="active"><a href="{{ route('billing.index') }}" class="class-billing">Billing</a></li>
-                    <li><a href="{{ route('employee_type.index') }}" class = "class-employee-type">Employee Type</a></li>
-                </ul>
-            </li>
-        </ul>
-        <div class="row">
-            @yield('content')
-        </div>
+             </ul>
+         </li>
+     </ul>
+     <div class="row">
+        @yield('content')
     </div>
+</div>
 </div>
 <!-- /#page-content-wrapper -->
 </div>
@@ -171,8 +170,10 @@
 <script src="/js/app.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
-<script  type = "text/javascript" charset = "utf8" src="/js/jquery.validate.js"></script>
-<script  type = "text/javascript" charset = "utf8" src="/js/jquery.maskMoney.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/jquery.validate.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 
 <script>
     $("#menu-toggle").click(function(e) {
@@ -183,32 +184,50 @@
 
 
 <script type="text/javascript">
-    var $currency = "Php";
-    var $currency_s = "$"
-    //₱
-    $(".money").maskMoney({prefix: $currency + ' ',thousands:',', decimal:'.', allowZero: true}).attr('maxlength', 22) ;
-
-    $(".money_s").maskMoney({prefix: $currency_s + ' ',thousands:',', decimal:'.', allowZero: true}).attr('maxlength', 22) ;
 
 
-</script>
+    $('.money').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+        
+        
+        
+    });
 
-<script type="text/javascript">
+    $('.money_er').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 3,
+        autoGroup: true,
+        rightAlign: true,
+        
+        
+    });
 
 
     function formatNumber(n) {
         var currency = "Php ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
-</script>
-
-<script type="text/javascript">
-    
-    
     function formatNumber_s(n) {
         var currency = "$ ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
+
+
+
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+
 </script>
 
 @stack('scripts')
