@@ -170,77 +170,28 @@ class DatatablesController extends Controller
 	public function so_head_datatable(){
 		$so_heads = DB::table('consignee_service_order_headers')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'paymentStatus', 'consignee_service_order_headers.created_at')
+		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.description','paymentStatus', 'consignee_service_order_headers.created_at')
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
 			return
-			'<button value = "'. $so_head->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectConsignee">Select</button>';
+			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectCon">Select</a>';
 		})
 		->make(true);
 	}
-	public function sorder_datatable(){
-		$sorders = DB::table('consignee_service_order_headers')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->leftjoin('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id','companyName', 'paymentStatus')
+	public function pso_head_datatable(){
+		$pso_heads = DB::table('consignee_service_order_headers')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.description','paymentStatus', 'consignee_service_order_headers.created_at')
 		->get();
-
-		return Datatables::of($sorders)
-		->addColumn('action', function ($sorder) {
-			return
-			'<button value = "'. $sorder->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectCon">Select</button>';
-		})
-		->make(true);
-	}
-
-	public function payment_so_datatable(Request $request){
-		$pso_heads = DB::table('billings')
-		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('billing_invoice_headers.id','description', DB::raw('CONCAT(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$request->id)
-		->get();
-
-
 		return Datatables::of($pso_heads)
-		->make(true);
-	}
-	public function totbill_datatable(Request $request){
-		$totbillamt = DB::table('billing_invoice_details')
-		->select('id', DB::raw('CONCAT(SUM(amount-(amount*discount/100)))as Total'))
-		->where('bi_head_id', '=', $request->id)
-		->get();
-		return Datatables::of($totbillamt)
-		->addColumn('action', function ($billamt) {
+		->addColumn('action', function ($pso_head) {
 			return
-			'<button value = "'. $billamt->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectTotBill">Select</button>';
-		})
-		->make(true);
-	}
-	public function rc_datatable(Request $request){
-		$rc_heads = DB::table('refundable_charges')
-		->leftjoin('consignee_service_order_headers', 'refundable_charges.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('consignee_service_order_headers.id','description', DB::raw('CONCAT(refundable_charges.amount) as TotalRC'))
-		->where('refundable_charges.so_head_id','=',$request->id)
-		->get();
-
-
-		return Datatables::of($rc_heads)
-		->make(true);
-	}
-	public function totrc_datatable(Request $request){
-		$totrc = DB::table('refundable_charges')
-		->select('id', DB::raw('CONCAT(SUM(amount))as Total'))
-		->where('so_head_id', '=', $request->id)
-		->get();
-		return Datatables::of($totrc)
-		->addColumn('action', function ($rcamt) {
-			return
-			'<button value = "'. $rcamt->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectTotRC">Select</button>';
+			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info select">Select</a>';
 		})
 		->make(true);
 	}
