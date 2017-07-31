@@ -88,7 +88,7 @@
 					</div>
 					<div class="form-group col-sm-12">
 						<label class="control-label col-sm-3">Vat Rate (%): </label>
-						<div class="col-sm-2"> 
+						<div class="col-sm-6"> 
 							<input type="text" class="form-control" name="vat" id="vat" required>
 						</div>
 					</div>
