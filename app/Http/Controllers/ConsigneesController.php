@@ -44,4 +44,8 @@ class ConsigneesController extends Controller
 		$consignee = Consignee::findOrFail($id);
 		$consignee->delete();
 	}
+
+	public function home(){
+		return view('welcome');
+	}
 }

@@ -55,6 +55,7 @@
 		
 		var emtable = $('#pending_trucking_so_table').DataTable({
 			processing: true,
+			deferRender: true,
 			"scrollX": true,
 			serverSide: true,
 			ajax: current_route,

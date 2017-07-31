@@ -494,7 +494,8 @@ class TruckingsController extends Controller
             DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer',
-            'H.companyName'
+            'H.companyName',
+            'delivery_receipt_headers.deliveryDateTime'
             )
         ->get();
 
