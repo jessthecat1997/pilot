@@ -16,6 +16,7 @@ class CreateVehiclesTable extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->string('plateNumber',20);
             $table->string('model',100);
+            $table->string('bodyType',100);
             $table->date('dateRegistered');
             $table->integer('vehicle_types_id')->unsigned();
             $table->timestamps();

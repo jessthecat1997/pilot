@@ -15,7 +15,7 @@ class CreateBrokerageStatusTypesTable extends Migration
     {
         Schema::create('brokerage_status_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 50);
+            $table->string('description', 150);
             $table->timestamps();
             $table->softDeletes();
         });
