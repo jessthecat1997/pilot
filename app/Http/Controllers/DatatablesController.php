@@ -154,7 +154,7 @@ class DatatablesController extends Controller
 	public function v_datatable(){
 		$vs = DB::table('vehicles')
 		->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
-		->select('description', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+		->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
 		->where('vehicles.deleted_at', '=', null)
 		->get();
 

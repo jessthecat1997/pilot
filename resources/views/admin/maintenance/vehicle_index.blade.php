@@ -72,11 +72,11 @@
 			<form role="form" method = "POST" class="form-group" id = "commentForm">
 				{{ csrf_field() }}
 				<div class="modal fade" id="vModal" role="dialog">
-					<div class="modal-dialog">
+					<div class="modal-dialog ">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="vModal-title">New Vehicle</h4>
+								<h4 id="vModal-title">New Vehicle</h4>
 							</div>
 							<div class="modal-body">			
 								<div class="form-group required">
@@ -102,13 +102,13 @@
 							<div class="modal-body">			
 								<div class="form-group required">
 									<label class = "control-label">Body Type</label>
-									<input type = "text" class = "form-control" name = "bodyType" id = "bodyType"  />
+									<input type = "text" class = "form-control" name = "bodyType" id = "bodyType" min="5"  />
 								</div>
 							</div>
 							<div class="modal-body">			
 								<div class="form-group required">
 									<label class = "control-label">LTO Date Registered</label>
-									<input type = "date" class = "form-control" name = "dateRegistered" id = "dateRegistered" required />
+									<input type = "date" class = "form-control" name = "dateRegistered" id = "dateRegistered" />
 								</div>
 							</div>
 							<div class="modal-footer">
@@ -180,7 +180,7 @@
 				serverSide: true,
 				ajax: 'http://localhost:8000/admin/vData',
 				columns: [
-				{ data: 'description' },
+				{ data: 'name' },
 				{ data: 'plateNumber' },
 				{ data: 'model' },
 				{ data: 'bodyType'},
@@ -198,96 +198,109 @@
 			
 
 			$("#vehicle_types_id").select2({
-				data: vehicle_type
-			})
-
-			$("#commentForm").validate({
-				rules: 
-				{
-					plateNumber:
-					{
-						required: true,
-						maxlength: 20,
-					},
-
-					model:{
-						required: true,
-						minlength: 5,
-
-					},
-					dateRegistered:{
-						required: true,
-					},
-					SelectName: 
-					{ 
-						valueNotEquals: "default" 
-					},
-					bodyType:{
-						required: true,
-					}
+				data: vehicle_type,
+				sorter: function(data) {
+					return data.sort(function (a, b) {
+						if (a.text > b.text) {
+							return 1;
+						}
+						if (a.text < b.text) {
+							return -1;
+						}
+						return 0;
+					});
 				},
-
-				messages: 
-				{
-					SelectName: 
-					{ 
-						valueNotEquals: "Please select a vehicle type!"
-					}
-				}, 
-
-				onkeyup: function(element) {$(element).valid()}, 
-				submitHandler: function (form) {
-					return false;
-				}
 			});
 
+					$("#commentForm").validate({
+						rules: 
+						{
+							plateNumber:
+							{
+								required: true,
+								maxlength: 20,
+							},
 
-			$(document).on('click', '.new', function(e){
-				resetErrors();
-				$('vModal-title').text('New Vehicle');
-				$('#model').val("");
-				$('#vModal').modal('show');
+							model:{
+								required: true,
+								minlength: 5,
 
-			});
-			$(document).on('click', '.edit',function(e){
-				resetErrors();
-				data = vtable.row($(this).parents()).data();
-				$('#model').val(data.model);
-				$('#bodyType').val(data.bodyType);
-				$('.modal-title').text('Update Vehicle');
-				$('#vModal').modal('show');
-			});
-			$(document).on('click', '.deactivate', function(e){
-				data = vtable.row($(this).parents()).data();
-				$('#confirm-delete').modal('show');
-			});
+							},
+							dateRegistered:{
+								required: true,
+							},
+							SelectName: 
+							{ 
+								valueNotEquals: "default" 
+							},
+							bodyType:{
+								required: true,
+								minlength:5,
+							}
+						},
 
-			$(document).on('click', '.new_vehicle_type', function(e){
-				resetErrors();
-				$('vtModal-title').text('New Vehicle Type');
-				$('#model').val("");
-				$('#vtModal').modal('show');
-			});
+						messages: 
+						{
+							SelectName: 
+							{ 
+								valueNotEquals: "Please select a vehicle type!"
+							}
+						}, 
+
+						onkeyup: function(element) {$(element).valid()}, 
+						submitHandler: function (form) {
+							return false;
+						}
+					});
+
+
+					$(document).on('click', '.new', function(e){
+						resetErrors();
+						$('#vModal-title').text('New Vehicle');
+						$('#model').val("");
+						$('#vModal').modal('show');
+
+					});
+					$(document).on('click', '.edit',function(e){
+						resetErrors();
+						data = vtable.row($(this).parents()).data();
+						$('#plateNumber').val(data.plateNumber)
+						$('#model').val(data.model);
+						$('#bodyType').val(data.bodyType);
+						$('#vModal-title').text('Update Vehicle');
+						$('#vModal').modal('show');
+					});
+					$(document).on('click', '.deactivate', function(e){
+						data = vtable.row($(this).parents()).data();
+						$('#confirm-delete').modal('show');
+					});
+
+					$(document).on('click', '.new_vehicle_type', function(e){
+						resetErrors();
+						$('vtModal-title').text('New Vehicle Type');
+						$('#model').val("");
+						$('#vtModal').modal('show');
+					});
 
 
 
 
 
-			$('#btnDelete').on('click', function(e){
-				e.preventDefault();
-				$.ajax({
-					type: 'DELETE',
-					url:  '/admin/vehicle/' + data.plateNumber,
-					data: {
-						'_token' : $('input[name=_token').val()
-					},
-					success: function (data)
-					{
-						vtable.ajax.reload();
-						$('#confirm-delete').modal('hide');
-					}
-				})
-			});
+					$('#btnDelete').on('click', function(e){
+						e.preventDefault();
+						$.ajax({
+							type: 'DELETE',
+							url:  '/admin/vehicle/' + data.plateNumber,
+							data: {
+								'_token' : $('input[name=_token').val()
+							},
+							success: function (data)
+							{
+								vtable.ajax.reload();
+								$('#confirm-delete').modal('hide');
+							}
+						})
+					});
 
 
 
@@ -322,7 +335,7 @@ $('#btnSave').on('click', function(e){
 					$('#vModal').modal('hide');
 					$('#model').val("");
 					$('#dateRegistered').val("");
-					$('$bodyType').val("");
+					$('#bodyType').val("");
 					$('.modal-title').text('New Vehicle');
 				}
 				
@@ -334,7 +347,7 @@ $('#btnSave').on('click', function(e){
 	{
 		var vt_id = $('#vehicle_types_id').val();
 		console.log(title);
-			$.ajax({
+		$.ajax({
 			type: 'PUT',
 			url:  '/admin/vehicle/' + data.plateNumber,
 			data: {
