@@ -131,34 +131,34 @@
                   <li class="dropdown">
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Brokerage <span class="caret"></span></a>
                       <ul class="dropdown-menu">
-                         <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
-                         <li><a href="{{ route('exchange_rate.index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
-                         <li><a href="{{ route('brokerage_fee.index') }}">Brokerage Fee</a></li>
-                         <li><a href="{{ route('cds_fee.index') }}">Container Delivery System Fee</a></li>
-                         <li><a href = "{{ route('ipf_fee.index') }}">Import Processing Fee</a></li>
-                     </ul>
-                 </li>
-                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Delivery <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="{{ route('area.index') }}">Area</a></li>
-                      <li><a href="{{ route('vehicletype.index') }}" class = "class-vehicle-type">Vehicle Type</a></li>
-                      <li><a href="{{ route('vehicle.index') }}" class = "class-vehicle">Vehicle</a></li>
-                      <li><a href="{{ route('container_type.index') }}" class = "class-container-type">Container Volume</a></li>
-                  </ul>
-              </li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Biling <span class="caret"></span></a>
+                       <li><a href="{{ route('service_ordertype.index') }}" class = "class-service-order">Service Order Type</a></li>
+                       <li><a href="{{ route('exchange_rate.index') }}" class = "class-exchange-rate">Exchange Rate</a></li>
+                       <li><a href="{{ route('brokerage_fee.index') }}">Brokerage Fee</a></li>
+                       <li><a href="{{ route('cds_fee.index') }}">Container Delivery System Fee</a></li>
+                       <li><a href = "{{ route('ipf_fee.index') }}">Import Processing Fee</a></li>
+                   </ul>
+               </li>
+               <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Delivery <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                 <li><a href="{{ route('charge.index') }}" class = "class-charge">Charges</a></li>
-                 <li class="active"><a href="{{ route('billing.index') }}" class="class-billing">Bills </a></li>
+                  <li><a href="{{ route('area.index') }}">Area</a></li>
+                  <li><a href="{{ route('vehicletype.index') }}" class = "class-vehicle-type">Vehicle Type</a></li>
+                  <li><a href="{{ route('vehicle.index') }}" class = "class-vehicle">Vehicle</a></li>
+                  <li><a href="{{ route('container_type.index') }}" class = "class-container-type">Container Volume</a></li>
+              </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Biling <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li><a href="{{ route('charge.index') }}" class = "class-charge">Charges</a></li>
+               <li class="active"><a href="{{ route('billing.index') }}" class="class-billing">Bills </a></li>
 
-             </ul>
-         </li>
-     </ul>
-     <div class="row">
-        @yield('content')
-    </div>
+           </ul>
+       </li>
+   </ul>
+   <div class="row">
+    @yield('content')
+</div>
 </div>
 </div>
 <!-- /#page-content-wrapper -->
@@ -217,6 +217,12 @@
         var currency = "$ ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
+
+    function format_container_volume(n) {
+        var unit = "m";
+        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
+    }
+
 
 
 

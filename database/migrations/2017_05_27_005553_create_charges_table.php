@@ -18,7 +18,7 @@ class CreateChargesTable extends Migration
             $table->string('name', 50);
             $table->string('description', 150)->nullable();
             $table->boolean('chargeType');
-            $table->decimal('amount'10,3);
+            $table->decimal('amount', 10, 3);
             $table->timestamps();
             $table->softDeletes();
         });

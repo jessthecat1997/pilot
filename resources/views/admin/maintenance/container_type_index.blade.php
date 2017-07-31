@@ -12,19 +12,28 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "ch_table">
+				<table class = "table-responsive table" id = "ch_table" style="text-align:center">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
-								No.
-							</td>
-							<td style="width: 30%;">
+							<td style="width: 15%;">
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td style="width: 10%;">
+								Length<br>
+								(meters)
+							</td>
+							<td style="width: 10%;">
+								Width<br>
+								(meters)
+							</td>
+							<td style="width: 10%;">
+								Height<br>
+								(meters)
+							</td>
+							<td style="width: 20%;">
 								Description
 							</td>
-							<td style="width: 25%;">
+							<td style="width: 20%;">
 								Actions
 							</td>
 						</tr>
@@ -53,10 +62,36 @@
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
+
+							<div class="form-group ">
+								<label class = "control-label" style = "text-align: center">Volume </label>
+								<br>
+								<div class="form-group required">
+									<label class = "control-label">Length: </label>
+									<div class = "form-group input-group">
+										<input type = "text" class = "form-control money" style= "text-align: right" 
+										value ="0" name = "length" id = "length"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
+									</div>
+								</div>
+								<div class="form-group required">
+									<label class = "control-label">Width: </label>
+									<div class = "form-group input-group">
+										<input type = "text" class = "form-control money"  style= "text-align: right"
+										value ="0" name = "width" id = "width"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
+									</div>
+								</div>
+								<div class="form-group required">
+									<label class = "control-label">Height: </label>
+									<div class = "form-group input-group">
+										<input type = "text" class = "form-control money"  style= "text-align: right"
+										value ="0" name = "height" id = "height"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -109,6 +144,9 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
+	var temp_length = null;
+	var temp_width = null;
+	var temp_height = null
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
 			scrollX: true,
@@ -116,13 +154,21 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/ctData',
 			columns: [
-			{ data: 'id' },
 			{ data: 'name'},
-			{ data: 'description' },
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'length',
+			"render" : function( data, type, full ) {
+				return format_container_volume(data); }},
+				{ data: 'width',
+				"render" : function( data, type, full ) {
+					return format_container_volume(data); }},
+					{ data: 'height' ,
+					"render" : function( data, type, full ) {
+						return format_container_volume(data); }},
+						{ data: 'description' },
+						{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
-		});
+						],	"order": [[ 0, "desc" ]],
+					});
 
 		$("#commentForm").validate({
 			rules: 
@@ -135,22 +181,40 @@
 				},
 				description:
 				{
-					maxlength: 50,
-				}
+					maxlength: 150,
+				},
+				length:
+				{
+					required:true,
+
+				},
+				width:
+				{
+					required:true,
+
+				},
+				height:
+				{
+					required:true,
+
+				},
 
 			},
-			onkeyup: false, 
+			onkeyup: function(element) {$(element).valid()}, 
 			submitHandler: function (form) {
 				return false;
 			}
 		});
 
-		
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Container Volume');
 			$('#description').val("");
 			$('#name').val("");
+			$('#length').val("");
+			$('#width').val("");
+			$('#height').val("");
 			$('#ctModal').modal('show');
 
 		});
@@ -158,12 +222,18 @@
 			resetErrors();
 			var ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
-			
+
 			$('#description').val(data.description);
 			$('#name').val(data.name);
-
+			$('#length').val(data.length);
+			$('#width').val(data.width);
+			$('#height').val(data.height);
 			temp_name = data.name;
 			temp_desc = data.description;
+			temp_length = data.description;
+			temp_width = data.description;
+			temp_height = data.description;
+
 
 			$('.modal-title').text('Update Container Volume');
 			$('#ctModal').modal('show');
@@ -218,10 +288,14 @@
 
 			$('#name').valid();
 			$('#description').valid();
+			$('#length').valid();
+			$('#width').valid();
+			$('#height').valid();
+
 
 			if(title == "New Container Volume")
 			{
-				if($('#name').valid() && $('#description').valid()){
+				if($('#name').valid() && $('#description').valid() && $('#length').valid() &&	$('#width').valid() && $('#height').valid()){
 
 					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
@@ -231,15 +305,21 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
+							'length' : $('#length').inputmask('unmaskedvalue'),
+							'width' : $('#width').inputmask('unmaskedvalue'),
+							'height' : $('#height').inputmask('unmaskedvalue'),
 						},
 						success: function (data)
 						{
 							if(typeof(data) === "object"){
 								cttable.ajax.reload();
 								$('#ctModal').modal('hide');
+								$('#name').val("");
 								$('#description').val("");
+								$('#length').val("");
+								$('#width').val("");
+								$('#height').val("");
 								$('.modal-title').text('New Container Volume');
-
 
 
 								toastr.options = {
@@ -284,12 +364,20 @@
 			}
 			else
 			{
-				if($('#name').valid() && $('#description').valid())
+				if($('#name').valid() && $('#description').valid() && $('#length').valid() && $('#width').valid() && $('#height').valid())
 				{
-					if($('#name').val() === temp_name && $('#description').val() === temp_desc)
+
+					if($('#name').val() === temp_name &&
+						$('#description').val() === temp_desc && 
+						$('#length').inputmask("unmaskedvalue") === temp_length && 
+						$('#width').inputmask("unmaskedvalue")=== temp_width &&
+						$('#height').inputmask("unmaskedvalue") === temp_height )
 					{
 						$('#name').val("");
 						$('#description').val("");
+						$('#length').val("");
+						$('#width').val("");
+						$('#height').val("");
 						$('#btnSave').removeAttr('disabled');
 						$('#ctModal').modal('hide');
 					}
@@ -304,6 +392,10 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
+								'length' : $('#length').inputmask("unmaskedvalue"),
+								'width' : $('#width').inputmask("unmaskedvalue"),
+								'height' : $('#height').inputmask("unmaskedvalue"),
+
 							},
 							success: function (data)
 							{
@@ -311,6 +403,9 @@
 									cttable.ajax.reload();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
+									$('#length').val("");
+									$('#width').val("");
+									$('#height').val("");
 									$('.modal-title').text('New Container Volume');
 
 
@@ -357,7 +452,7 @@
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

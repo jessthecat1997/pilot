@@ -26,6 +26,9 @@ class ContainerTypesController extends Controller
         $container_type = ContainerType::findOrFail($id);
         $container_type->name = $request->name;
         $container_type->description = $request->description;
+        $container_type->length = $request->length;
+        $container_type->width = $request->width;
+        $container_type->height = $request->height;
         $container_type->save();
 
         return $container_type;
@@ -43,7 +46,7 @@ class ContainerTypesController extends Controller
         $container_type = ContainerType::withTrashed()
         ->where('id',$request->id)
         ->restore();
-  
+
     }
 
     public function ct_utilities(){
