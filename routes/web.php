@@ -139,20 +139,19 @@ Route::get('pdfview',array('as'=>'pdfview','uses'=>'PaymentsController@pdfview')
 //Skipper
 //Payments
 Route::resource('/payment', 'PaymentsController');
-Route::get('sorder/sorderData', 'DatatablesController@sorder_datatable')->name('sorder.data');
-Route::get('pso/pso_headData', 'DatatablesController@payment_so_datatable')->name('pso_head.data');
-Route::get('rc/rcData', 'DatatablesController@rc_datatable')->name('rc_head.data');
-Route::get('/payment/{id}/so_id_data', 'DatatablesController@payment_so_datatable');
-Route::get('/payment/{id}/rcso_id_data', 'DatatablesController@rc_datatable');
-Route::get('totbill/totbillData', 'DatatablesController@totbill_datatable')->name('totbill.data');
-Route::get('/payment/{id}/totbill_data', 'DatatablesController@totbill_datatable');
-Route::get('/payment/{id}/totrc_data', 'DatatablesController@totrc_datatable');
+Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
+Route::get('/payment/{payment_id}/show_pdf', 'PaymentsController@payment_pdf');
 
 //Billing
-Route::resource('/billingdetails', 'BillingDetailsController');
+Route::resource('/billing', 'BillingDetailsController');
+Route::get('/billing/view/{id}/create', 'BillingDetailsController@show_billing');
+Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
+Route::get('admin/invoice/{so_head_id}', 'BillingDetailsController@billing_invoice')->name('invoice.data');
+// Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
+Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
+Route::get('billing', 'BillingDetailsController@index')->name('view.index');
+Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
 
-Route::get('so/so_headData', 'DatatablesController@so_head_datatable')->name('so_head.data');
-Route::post('/billing/bill_create', 'BillingsController@create_bill')->name('create_bill');
 
 //Maintenance data
 Route::get('/admin/billData', 'DatatablesController@bill_datatable')->name('bill.data');
