@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExchangeRatesTable extends Migration
+class CreateStandardAreaRateDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateExchangeRatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('exchange_rates', function (Blueprint $table) {
+        Schema::create('standard_area_rate_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 150)->nullable();
-            $table->decimal('rate', 10, 7);
-            $table->boolean('currentRate');
-            $table->dateTime('dateEffective');
+            $table->integer('standard_area_rate_headers_id')->unsigned();
+             $table->decimal('amount', 19, 2);
             $table->timestamps();
-            $table->softDeletes();
 
+            $table->foreign('standard_area_rate_headers_id')->references('id')->on('standard_area_rate_headers');
         });
     }
 
@@ -32,6 +30,6 @@ class CreateExchangeRatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exchange_rates');
+        Schema::dropIfExists('standard_area_rate_details');
     }
 }
