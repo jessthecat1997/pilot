@@ -21,67 +21,127 @@
 								<div class="row">
 									<h4>&nbsp;Container Information</h4>
 									<hr />
-									<table class = "table table-responsive" id = "container_table">
-										<thead>
-											<tr>
-												<td width = "20%">
-													Container No.
-												</td>
-												<td width = "15%">
-													Volume
-												</td>
-												<td width = "20%">
-													Return To
-												</td>
-												<td width = "20%">
-													Return Address
-												</td>
-												<td width = "5%">
-													Return Date
-												</td>
-												<td width="20%">
-													Action
-												</td>
-											</tr>
-										</thead>
-										<tbody>
-											<tr id = "container_row">
-												<td>
-													<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
-												</td>
-												<td>
-													<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
-														<option></option>
-														@forelse($container_volumes as $container_volume)
-														<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
-														@empty
+									<div id = "containers">
+										<div class="panel-group" id = "container_copy">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" href="#0_container ">Container</a>
+													</h4>
+												</div>
+												<div id="0_container" class="panel-collapse collapse in">
+													<div class="panel-body">
+														<div class = "row">
+															<div class = "col-md-6">
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
+																		<div class="col-sm-8">
+																			<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
+																		</div>
+																	</div>
+																</div>
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Container Volume:</label>
+																		<div class="col-sm-8">
+																			<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
+																				<option></option>
+																				@forelse($container_volumes as $container_volume)
+																				<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
+																				@empty
 
-														@endforelse
-													</select>
-												</td>
-												<td>
-													<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
-												</td>
-												<td>
-													<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea>
-												</td>
-												<td>
-													<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
-												</td>
-												<td>
-													<button class = "btn btn-sm btn-success save-container-row">Add</button>
-													<button class = "btn btn-sm btn-danger remove-container-row">Delete</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+																				@endforelse
+																			</select>
+																		</div>
+																	</div>
+																</div>
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
+																		<div class="col-sm-8">
+																			<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class = "col-md-6">
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
+																		<div class="col-sm-8">
+																			<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
+																		</div>
+																	</div>
+																</div>
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
+																		<div class="col-sm-8">
+																			<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class = "col-md-12">
+															<table class="table table-responsive" id = "0_details">
+																<thead>
+																	<tr>
+																		<td>
+																			Description of good
+																		</td>
+																		<td>
+																			Gross Weight
+																		</td>
+																		<td>
+																			Supplier
+																		</td>
+																		<td>
+																			Action
+																		</td>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td width="35%">
+																			<input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
+																		</td>
+																		<td width="20%">
+																			<input type = "number" name = "0_grossWeight" class = "form-control"/>
+																		</td>
+																		<td width="30%">
+																			<input type = "text" name = "0_supplier"  class = "form-control" />
+																		</td>
+																		<td width="15%">
+																			<button class = "btn btn-md btn-danger remove-container-detail" value = "0">
+																				x
+																			</button>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<div class="row">
+															<div class ="col-md-9">
+
+															</div>
+																<div class= "col-md-3" style="text-align: center;">
+																<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="row">
 									<div class= "col-md-3" style="text-align: center;">
-									<button class = "btn btn-primary btn-sm add-new-container" style="width: 80%;">New Container</button>
+										<button class = "btn btn-primary btn-sm add-new-container" style="width: 80%;">New Container</button>
 									</div>
-									<div class ="col-md-9	">
-										
+									<div class ="col-md-9">
+
 									</div>
 								</div>
 								<hr />
@@ -96,16 +156,12 @@
 									<label class="control-label" for = "deldatecon">Delivery Date:</label>
 									<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
 								</div>
-								<div class="form-group">
-									<label class="control-label" for="wodetail_table">Delivery Content:</label>
-								</div>
-								<div id = "cargo_delivery_details">
-
-								</div>
 							</form>
+
 						</div>
 					</div>
 				</div>
+
 				<div id="wocontainer" class="tab-pane fade">
 					<div class = "panel">
 						<div class = "panel-body">
@@ -252,6 +308,10 @@
 		var vehicle_type_id = 0;
 		var wodetail_row = "<tr>" + $('#wodescription_row').html() + "</tr>";
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
+
+		var container_copy = "<div class='panel-group'>" + $('#container_copy').html() + "</div>";
+		var container_ctr = 1;
+		var container_array = [0];
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
 			$('#_destination').val($('#tr_destination').text().trim());
@@ -284,6 +344,7 @@
 			})
 		})
 		$(document).on('click', '.view-delivery-information', function(e){
+
 		})
 		$(document).on('click', '.save-delivery-information', function(e){
 			$.ajax({
@@ -303,9 +364,17 @@
 		// Container
 		$(document).on('click', '.add-new-container', function(e){
 			e.preventDefault();
-			if(validateContainer() === true){
-				$('#container_table tr:last').after(container_row);
-			}
+			new_container = container_copy.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			container_array.push(container_ctr);
+			container_ctr++;
+			console.log(new_container);
+			$('#container_copy:last-child').append(new_container);
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
@@ -320,17 +389,18 @@
 				$('#cargo_delivery_details').append('<table class = "table-responsive table" id = "' + $(this).closest("tr").find('.row_containerNumber').val() + '_table"><thead><tr><td>Container Number: '+ $(this).closest("tr").find('.row_containerNumber').val() +'</tr></td><tr><td>Description of Goods</td><td>Gross Weight(kg)</td><td>Supplier</td><td>Action</td></tr></thead><tbody><tr id = "description_row"><td width="35%"><input type = "text" name = "'+ id +'_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "'+ id +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+ id +'_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  id + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "' + id +'">x</button></td></tr></tbody></table>');
 			}
 		})
-		$(document).on('click', '.add-container-detail', function(e){
+
+		$(document).on('click', '.new-container-detail', function(e){
 			e.preventDefault();
 			var id = $(this).val();
-			var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id+'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  $(this).val() + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
-			$('#'+ $(this).val() + ":last-child").append(detail_row);
+			console.log(id);
+			var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
+			$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+
 		})
 		$(document).on('click', '.remove-container-detail', function(e){
 			e.preventDefault();
-			if($('#'+ $(this).val() +' > tbody > tr').length > 1){
-				$(this).closest('tr').remove();
-			}
+			$(this).closest('tr').remove();
 		})
 		// Non Container ------------------------------------------------------------------------------------------------------------------------
 		$(document).on('click', '.add-new-detail', function(e){
@@ -441,7 +511,7 @@
 		function validateContainerDetail(){
 			json = [];
 			var linkData;
-			for (var i = 0; i < con_Number.length; i++) {
+			for (var i = 0; i < container_array.length; i++) {
 				var child = [{ }];
 				child[0]['container'] = [{
 					containerNumber : con_Number[i],
@@ -451,9 +521,11 @@
 					containerReturnDate : con_ReturnDate[i]
 				}];
 				child[0]['details'] = [];
-				table_detail_row_count = $('#' + con_Number[i] + "_table > tbody > tr").length;
-				var name = con_Number[i] + "_table";
+				table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
+
+				var name = 0;
 				con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
+				console.log(con_descrp);
 				con_gw = document.getElementsByName(name + '_grossWeight');
 				con_supp = document.getElementsByName(name + '_supplier');
 				for (var j = 0; j < table_detail_row_count; j++) {
