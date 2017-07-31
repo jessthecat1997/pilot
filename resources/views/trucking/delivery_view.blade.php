@@ -329,9 +329,6 @@
 							<thead>	
 								<tr>
 									<td>
-
-									</td>
-									<td>
 										Description of Good
 									</td>
 									<td>

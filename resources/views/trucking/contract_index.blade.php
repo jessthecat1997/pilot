@@ -55,6 +55,7 @@ $('#collapse1').addClass('in');
 	$(document).ready(function(){
 		var chtable = $('#contracts_table').DataTable({
 			processing: false,
+			deferRender: true,
 			scrollX: true,
 			serverSide: true,
 			ajax: "{{ route('contract.data') }}",

@@ -28,8 +28,8 @@
 													<h4 class="panel-title">
 														<a data-toggle="collapse" href="#0_container ">Container</a>
 														<div class="pull-right">
-														<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
-														<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
+															<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
+															<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
 														</div>
 													</h4>
 												</div>
@@ -130,7 +130,7 @@
 															<div class ="col-md-9">
 
 															</div>
-																<div class= "col-md-3" style="text-align: center;">
+															<div class= "col-md-3" style="text-align: center;">
 																<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
 															</div>
 														</div>
@@ -380,12 +380,20 @@
 			new_container = new_container.replace('0_', container_ctr + "_");
 			container_array.push(container_ctr);
 			container_ctr++;
-			console.log(new_container);
 			$('#container_copy:last-child').append(new_container);
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
+			var id = $(this).val();
+			for(var i = 0; i < container_array.length; i ++){
+				if(container_array[i] == id[0])
+				{
+					container_array.splice(i, 1);
+				}
+			}
+			console.log(container_array);
 			$('#' + $(this).val()).remove();
+			
 		})
 		$(document).on('click', '.save-container-row', function(e){
 			e.preventDefault();
@@ -651,6 +659,10 @@
 				return false;
 			}
 		}
+
 	})
+
+
+
 </script>
 @endpush

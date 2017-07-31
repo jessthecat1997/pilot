@@ -106,6 +106,7 @@
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
 			processing: true,
+			deferRender: true,
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/chData',
 			columns: [
