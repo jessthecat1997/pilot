@@ -66,7 +66,7 @@
 												</div>
 											</div>
 											
-											<div class="form-group">
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="firstName">First Name:</label>
 												<div class="col-sm-6">
 													<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
@@ -78,31 +78,43 @@
 													<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
 												</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="pwd">Last Name:</label>
 												<div class="col-sm-6">          
 													<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
 												</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="companyName">Company Name:</label>
 												<div class="col-sm-6">          
 													<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
 												</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+												</div>
+											</div>
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="TIN">TIN:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+												</div>
+											</div>
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="email">Email</label>
 												<div class="col-sm-6">          
 													<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
 												</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="address">Address:</label>
 												<div class="col-sm-6">          
 													<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
 												</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group required">
 												<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
 												<div class="col-sm-6">          
 													<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
@@ -372,6 +384,7 @@
 		var cstable = $('#cs_table').DataTable({			
 			responsive: true,
 			"scrollX": true,
+			deferRender: true,
 			processing: true,
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/csData',
@@ -466,7 +479,8 @@
 			$('#companyName').val("");
 			$('#email').val("");
 			$('#contactNumber').val("");
-
+			$('#businessStyle').val("");
+			$('#TIN').val();
 			$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>');
 			consigneeID = null;
 		})
@@ -487,7 +501,8 @@
 					'email' : $('#email').val(),
 					'address' : $('#contactNumber').val(),
 					'contactNumber' : $('#contactNumber').val(),
-					'consigneeType' : $('#consigneeType').val(),
+					'businessStyle' : $('#businessStyle').val(),
+					'TIN' : $('#TIN').val(),
 
 				},
 				success: function (data) {

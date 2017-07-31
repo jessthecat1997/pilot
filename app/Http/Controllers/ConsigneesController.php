@@ -30,6 +30,8 @@ class ConsigneesController extends Controller
 		$consignee->address = $request->address;
 		$consignee->contactNumber = $request->contactNumber;
 		$consignee->consigneeType = $request->consigneeType;
+		$consignee->businessStyle = $request->businessStyle;
+		$consignee->TIN = $request->TIN;
 
 		$consignee->save();
 
