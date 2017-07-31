@@ -23,10 +23,14 @@
 									<hr />
 									<div id = "containers">
 										<div class="panel-group" id = "container_copy">
-											<div class="panel panel-default">
+											<div class="panel panel-default" id = "0_panel">
 												<div class="panel-heading">
 													<h4 class="panel-title">
 														<a data-toggle="collapse" href="#0_container ">Container</a>
+														<div class="pull-right">
+														<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
+														<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
+														</div>
 													</h4>
 												</div>
 												<div id="0_container" class="panel-collapse collapse in">
@@ -371,6 +375,9 @@
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
 			container_array.push(container_ctr);
 			container_ctr++;
 			console.log(new_container);
@@ -378,9 +385,7 @@
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
-			$(this).closest('tr').remove();
-			var id = $(this).closest("tr").find('.row_containerNumber').val() + '_table';
-			$('#' + id).remove();
+			$('#' + $(this).val()).remove();
 		})
 		$(document).on('click', '.save-container-row', function(e){
 			e.preventDefault();
@@ -509,6 +514,7 @@
 			}
 		})
 		function validateContainerDetail(){
+			error = "";
 			json = [];
 			var linkData;
 			for (var i = 0; i < container_array.length; i++) {
@@ -523,9 +529,9 @@
 				child[0]['details'] = [];
 				table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
 
-				var name = 0;
+				var name = container_array[i];
+				
 				con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
-				console.log(con_descrp);
 				con_gw = document.getElementsByName(name + '_grossWeight');
 				con_supp = document.getElementsByName(name + '_supplier');
 				for (var j = 0; j < table_detail_row_count; j++) {
@@ -557,33 +563,43 @@
 			{
 				if(con_number[i].value === ""){
 					error += "Container number is required.";
+					con_number[i].style.borderColor = 'red';
 				}
 				else{
 					con_Number.push(con_number[i].value);
+					con_number[i].style.borderColor = 'green';
 				}
 				if(con_volume[i].value === ""){
 					error += "Container volume is required.";
+					con_volume[i].style.borderColor = 'red';
 				}
 				else{
 					con_Volume.push(con_volume[i].options[con_volume[i].selectedIndex].text);
+					con_volume[i].style.borderColor = 'green';
 				}
 				if(con_to[i].value === ""){
 					error += "Container return to is required.";
+					con_to[i].style.borderColor = 'red';
 				}
 				else{
 					con_ReturnTo.push(con_to[i].value);
+					con_to[i].style.borderColor = 'green';
 				}
 				if(con_address[i].value === ""){
 					error += "Container return address is required.";
+					con_address[i].style.borderColor = 'red';
 				}
 				else{
 					con_ReturnAddress.push(con_address[i].value);
+					con_address[i].style.borderColor = 'green';
 				}
 				if(con_date[i].value === ""){
 					error += "Container return date is required.";
+					con_date[i].style.borderColor = 'red';
 				}
 				else{
 					con_ReturnDate.push(con_date[i].value);
+					con_date[i].style.borderColor = 'green';
 				}
 			}
 			if(error.length === 0){
