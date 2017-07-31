@@ -316,6 +316,7 @@
 		var container_copy = "<div class='panel-group'>" + $('#container_copy').html() + "</div>";
 		var container_ctr = 1;
 		var container_array = [0];
+		var selected_container = 0;
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
 			$('#_destination').val($('#tr_destination').text().trim());
@@ -406,9 +407,13 @@
 		$(document).on('click', '.new-container-detail', function(e){
 			e.preventDefault();
 			var id = $(this).val();
-			console.log(id);
-			var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
-			$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+			selected_container = id[0];
+			if(validateCurrentContainerDetail() == true){
+				
+				console.log(id);
+				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
+				$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+			}
 
 		})
 		$(document).on('click', '.remove-container-detail', function(e){
@@ -521,6 +526,41 @@
 				}
 			}
 		})
+		function validateCurrentContainerDetail()
+		{
+			error = "";
+			con_descrp = document.getElementsByName(selected_container + '_descriptionOfGoods');
+			con_gw = document.getElementsByName(selected_container + '_grossWeight');
+			con_supp = document.getElementsByName(selected_container + '_supplier');
+			for (var j = 0; j < con_descrp.length; j++) {
+				if(con_descrp[j].value === "")
+				{
+					con_descrp[j].style.borderColor = "red";
+					error += "Description is required";
+				}
+				else
+				{
+					con_descrp[j].style.borderColor = 'green';
+				}
+				if(con_gw[j].value === "")
+				{
+					error+= "Weight is required";
+					con_gw[j].style.borderColor = 'red';
+				}
+				else
+				{
+					con_gw[j].style.borderColor = 'green';
+				}
+			}
+			if(error.length == 0){
+				return true;
+			} 
+			else
+			{
+				return false;
+			}
+
+		}
 		function validateContainerDetail(){
 			error = "";
 			json = [];
@@ -539,11 +579,29 @@
 
 				var name = container_array[i];
 				
+
 				con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
 				con_gw = document.getElementsByName(name + '_grossWeight');
 				con_supp = document.getElementsByName(name + '_supplier');
 				for (var j = 0; j < table_detail_row_count; j++) {
-					
+					if(con_descrp[j].value === "")
+					{
+						con_descrp[j].style.borderColor = "red";
+						error += "Description is required";
+					}
+					else
+					{
+						con_descrp[j].style.borderColor = 'green';
+					}
+					if(con_gw[j].value === "")
+					{
+						error+= "Weight is required";
+						con_gw[j].style.borderColor = 'red';
+					}
+					else
+					{
+						con_gw[j].style.borderColor = 'green';
+					}
 					child[0].details.push({
 						descriptionOfGood : con_descrp[j].value,
 						grossWeight : con_gw[j].value,
@@ -554,6 +612,17 @@
 			}
 			results = JSON.stringify(json);
 			console.log(results);
+
+			if(error.length == 0){
+				return true;
+			}
+			else
+			{
+				console.log(error);
+				return false;
+			}
+
+
 		}
 		function validateContainer(){
 			con_Number = [];
