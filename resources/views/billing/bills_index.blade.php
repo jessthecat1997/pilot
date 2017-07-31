@@ -80,13 +80,13 @@
 			<div class="panel-heading" id="heading">New Bill</div>
 			<div class="panel-body">
 				<div class="collapse in" id="new_bill_collapse">
-					<div class="form-group">
+					<div class="form-group col-sm-12">
 						<label class="control-label col-sm-3">Payment Allowance (day/s): </label>
 						<div class="col-sm-6"> 
 							<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group col-sm-12">
 						<label class="control-label col-sm-3">Vat Rate (%): </label>
 						<div class="col-sm-2"> 
 							<input type="text" class="form-control" name="vat" id="vat" required>
@@ -145,6 +145,9 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="form-group col-sm-6">
+					<a class="btn btn-info finalize-billing col-sm-6">Save</a>
+				</div>
 				<!-- <div class="row collapse" id="billings_collapse">
 					<table class = "table-responsive table" id="bill_table">
 						<thead>
@@ -173,6 +176,7 @@
 				<!-- end ng payment allowance -->
 			</div>
 		</div>
+		<hr>
 		<div class="panel-default panel">
 			<div class="panel-heading" id="heading">New Refundable Charges</div>
 			<div class="panel-body">
@@ -228,10 +232,10 @@
 						</tr>
 					</tbody>
 				</table>
+				<div class="form-group col-sm-6">
+					<a class="btn btn-info finalize-billing col-sm-6">Save</a>
+				</div>
 			</div>
-		</div>
-		<div class="form-group col-sm-6">
-			<a class="btn btn-info finalize-billing col-sm-6">Save</a>
 		</div>
 	</div>
 </div>
@@ -292,6 +296,7 @@
 					'_token' : $('input[name=_token]').val(),
 					'so_head_id' : so_head_id,
 					'paymentAllowance' : $('#paymentAllowance').val(),
+					'vatRate' : $('#vat').val(),
 					'billings_id' : bill_id,
 					'amount' : amount_value,
 					'discount' : discount_value,

@@ -148,6 +148,7 @@ class BillingDetailsController extends Controller
 		$billing_header = new BillingInvoiceHeader;
 		$billing_header->so_head_id = $request->so_head_id;
 		$billing_header->paymentAllowance = $request->paymentAllowance;
+		$billing_header->vatRate = $request->vatRate;
 		$billing_header->save();
 
 		$billing_header =  BillingInvoiceHeader::all()->last();
@@ -162,6 +163,25 @@ class BillingDetailsController extends Controller
 			$billing_detail->save();
 		}
 	}
+	// public function store_rc(Request $request)
+	// {
+	// 	$refundable_charge = new ;
+	// 	$billing_header->so_head_id = $request->so_head_id;
+	// 	$billing_header->paymentAllowance = $request->paymentAllowance;
+	// 	$billing_header->save();
+
+	// 	$billing_header =  BillingInvoiceHeader::all()->last();
+
+	// 	for($i = 0; $i<count($request->billings_id); $i++)
+	// 	{
+	// 		$billing_detail = new BillingInvoiceDetails;
+	// 		$billing_detail->billings_id = $request->billings_id[$i];
+	// 		$billing_detail->amount = $request->amount[$i];
+	// 		$billing_detail->discount = $request->discount[$i];
+	// 		$billing_detail->bi_head_id = $billing_header->id;
+	// 		$billing_detail->save();
+	// 	}
+	// }
 	public function billing_pdf($request)
 	{
 		$bills = DB::table('consignee_service_order_details')
