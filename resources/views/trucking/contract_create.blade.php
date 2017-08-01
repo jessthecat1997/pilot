@@ -50,22 +50,6 @@
 										<br />
 										<form class="form-horizontal" role="form">
 											{{ csrf_field() }}
-											<div class="form-group">
-												<div class = "collapse">
-													<label class="control-label col-sm-4" for="firstName">Consignee:</label>
-													<div class="col-sm-6">
-														<select name = "consigneeType" id = "consigneeType" class="form-control">
-															<option value = "0">
-																Walk-in
-															</option>
-															<option value = "1">
-																Regular
-															</option>
-														</select>
-													</div>
-												</div>
-											</div>
-											
 											<div class="form-group required">
 												<label class="control-label col-sm-4" for="firstName">First Name:</label>
 												<div class="col-sm-6">
@@ -122,7 +106,7 @@
 											</div>
 											<div class="form-group">        
 												<div class="col-sm-offset-5 col-sm-10">
-													<input type = "submit" class = "btn btn-info btn-md" id = "btnConsigneeSave" value = "Create Consignee"/>
+													<button class = "btn btn-info btn-md" id = "btnConsigneeSave" >Save Consignee</button>
 													<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 												</div>
 											</div>
@@ -480,7 +464,7 @@
 			$('#email').val("");
 			$('#contactNumber').val("");
 			$('#businessStyle').val("");
-			$('#TIN').val();
+			$('#TIN').val("");
 			$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>');
 			consigneeID = null;
 		})
@@ -489,60 +473,62 @@
 		$('#btnConsigneeSave').on('click', function(e){
 			e.preventDefault();
 
-			$.ajax({
-				type: 'POST',
-				url: '{{ route("consignee.store") }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'firstName' : $('#firstName').val(),
-					'middleName' : $('#middleName').val(),
-					'lastName' : $('#lastName').val(),
-					'companyName' : $('#companyName').val(),
-					'email' : $('#email').val(),
-					'address' : $('#contactNumber').val(),
-					'contactNumber' : $('#contactNumber').val(),
-					'businessStyle' : $('#businessStyle').val(),
-					'TIN' : $('#TIN').val(),
+			if(validateConsignee() == true){
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("consignee.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'firstName' : $('#firstName').val(),
+						'middleName' : $('#middleName').val(),
+						'lastName' : $('#lastName').val(),
+						'companyName' : $('#companyName').val(),
+						'email' : $('#email').val(),
+						'address' : $('#contactNumber').val(),
+						'contactNumber' : $('#contactNumber').val(),
+						'businessStyle' : $('#businessStyle').val(),
+						'TIN' : $('#TIN').val(),
 
-				},
-				success: function (data) {
-					if(typeof(data) == "object"){
-						$('#collapse_1').removeClass('in');
-						$('#collapse_2').addClass('in');
-						$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
-						$('#_companyName').val($('#companyName').val());
-						
-						cs_id = data.id;
-						
-						switch ($('#consigneeType').val()){
-							case "0":
-							$('#_consigneeType').val("Walk-in");
-							break;
-							case "1":
-							$('#_consigneeType').val("Regular");
-						}
-						$('#_email').val($('#email').val());
-						$('#_contactNumber').val($('#contactNumber').val());
+					},
+					success: function (data) {
+						if(typeof(data) == "object"){
+							$('#collapse_1').removeClass('in');
+							$('#collapse_2').addClass('in');
+							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
+							$('#_companyName').val($('#companyName').val());
 
-						$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information<button class="btn btn-info pull-right changeConsignee">Change Consignee</button></h3>');
+							cs_id = data.id;
 
-						cstable.ajax.reload();
-						$('#firstName').val("");
-						$('#middleName').val("");
-						$('#lastName').val("");
-						$('#companyName').val("");
-						$('#email').val("");
-						$('#address').val("");
-						$('#contactNumber').val("");
-						$('#detail_collapse').addClass('in');
-						$('#con_collapse').removeClass('in');
+							switch ($('#consigneeType').val()){
+								case "0":
+								$('#_consigneeType').val("Walk-in");
+								break;
+								case "1":
+								$('#_consigneeType').val("Regular");
+							}
+							$('#_email').val($('#email').val());
+							$('#_contactNumber').val($('#contactNumber').val());
 
-						$('#_lastName').val(data.firstName + ' ' + data.middleName + ' ' + data.lastName);
-						consigneeID = data.id;
-						$('#consignee_warning').removeClass('in');
-					}	
-				}
-			})
+							$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information<button class="btn btn-info pull-right changeConsignee">Change Consignee</button></h3>');
+
+							cstable.ajax.reload();
+							$('#firstName').val("");
+							$('#middleName').val("");
+							$('#lastName').val("");
+							$('#companyName').val("");
+							$('#email').val("");
+							$('#address').val("");
+							$('#contactNumber').val("");
+							$('#detail_collapse').addClass('in');
+							$('#con_collapse').removeClass('in');
+
+							$('#_lastName').val(data.firstName + ' ' + data.middleName + ' ' + data.lastName);
+							consigneeID = data.id;
+							$('#consignee_warning').removeClass('in');
+						}	
+					}
+				})
+			}
 		});
 
 		$(document).on('click', '.selectConsignee' ,function(e){
@@ -784,6 +770,94 @@ function validateContractRows()
 
 }
 
+function validateConsignee()
+{
+	var error = "";
+	if($('#firstName').val() === ""){
+		$('#firstName').css('border-color', 'red');
+		error += "First name is required. \n";
+	}
+	else
+	{
+		$('#firstName').css('border-color', 'green');
+	}
+	if($('#middleName').val() === ""){
+		$('#middleName').css('border-color', 'green');
+	}
+	else
+	{
+		$('#middleName').css('border-color', 'green');
+	}
+	if($('#lastName').val() === ""){
+		$('#lastName').css('border-color', 'red');
+		error += "Last name is required.\n";
+	}
+	else
+	{
+		$('#lastName').css('border-color', 'green');
+	}
+
+	if($('#companyName').val() === ""){
+		$('#companyName').css('border-color', 'red');
+		error += "Company name is required.\n";
+	}
+	else
+	{
+		$('#companyName').css('border-color', 'green');
+	}
+
+	if($('#businessStyle').val() === ""){
+		$('#businessStyle').css('border-color', 'red');
+		error += "Business Style is required.\n";
+	}
+	else
+	{
+		$('#businessStyle').css('border-color', 'green');
+	}
+
+	if($('#TIN').val() === ""){
+		$('#TIN').css('border-color', 'red');
+		error += "TIN is required.\n";
+	}
+	else
+	{
+		$('#TIN').css('border-color', 'green');
+	}
+	if($('#email').val() === ""){
+		$('#email').css('border-color', 'red');
+		error += "Email is required.\n";
+	}
+	else
+	{
+		$('#email').css('border-color', 'green');
+	}
+	if($('#address').val() === ""){
+		$('#address').css('border-color', 'red');
+		error += "Address is required.\n";
+	}
+	else
+	{
+		$('#address').css('border-color', 'green');
+	}
+	if($('#contactNumber').val() === ""){
+		$('#contactNumber').css('border-color', 'red');
+		error += "Contact Number is required.\n";
+	}
+	else
+	{
+		$('#contactNumber').css('border-color', 'green');
+	}
+	console.log(error);
+	if(error.length == 0){
+
+		return true;
+	}
+	else{
+		return false;
+	}
+
+}
+
 function finalvalidateContractRows()
 {
 	from_id = [];
@@ -934,6 +1008,7 @@ function finalvalidateContractRows()
 	console.log(error);
 	if(error.length == 0){
 		return true;
+
 	}
 
 	else
