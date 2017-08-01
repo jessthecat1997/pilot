@@ -67,48 +67,60 @@
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="firstName">First Name:</label>
-											<div class="col-sm-6">
-												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+										<div class="form-group required">
+												<label class="control-label col-sm-4" for="firstName">First Name:</label>
+												<div class="col-sm-6">
+													<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+											<div class="form-group">
+												<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="email">Email</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="address">Address:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="TIN">TIN:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="email">Email</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+												</div>
 											</div>
-										</div>
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="address">Address:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
+												</div>
+											</div>
+											<div class="form-group required">
+												<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+												<div class="col-sm-6">          
+													<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+												</div>
+											</div>
 										<div class="form-group">        
 											<div class="col-sm-offset-5 col-sm-10">
 												<input type = "submit" class = "btn btn-info btn-md" id = "btnConsigneeSave" value = "Create Consignee"/>
@@ -238,6 +250,7 @@
 			scrollX: true,
 			scrollX: "100%",
 			processing: true,
+			deferRender: true,
 			serverSide: true,
 			ajax: '{{ route("consignee.data") }}',
 			columns: [
@@ -263,6 +276,7 @@
 			$('#_email').val(data.email);
 			$('#_contactNumber').val(data.contactNumber);
 
+
 			$("#basic-information-heading").html('<h4 id = "basic-information-heading"><small>1</small> Consignee Information<button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h4>');
 		})
 
@@ -284,6 +298,7 @@
 			$('#_consigneeType').val("");
 			$('#_email').val("");
 			$('#_contactNumber').val("");
+
 
 			$("#basic-information-heading").html('<h4 id = "basic-information-heading"><small>1</small> Consignee Information</h4>');
 
@@ -325,7 +340,8 @@
 					'email' : $('#email').val(),
 					'address' : $('#contactNumber').val(),
 					'contactNumber' : $('#contactNumber').val(),
-					'consigneeType' : $('#consigneeType').val(),
+					'businessStyle' : $('#businessStyle').val(),
+					'TIN' : $('#TIN').val(),
 
 				},
 				success: function (data) {
@@ -357,6 +373,8 @@
 						$('#email').val("");
 						$('#address').val("");
 						$('#contactNumber').val("");
+						$('#TIN').val("");
+						$('#businessStyle').val("");
 					}	
 				}
 			})

@@ -16,7 +16,7 @@ class CreateConsigneesTable extends Migration
         Schema::create('consignees', function (Blueprint $table) {
             $table->increments('id');
             $table->string('firstName', 45);
-            $table->string('middleName', 45);
+            $table->string('middleName', 45)->nullable();
             $table->string('lastName', 45);
             $table->string('companyName', 250);
             $table->string('email', 100);
