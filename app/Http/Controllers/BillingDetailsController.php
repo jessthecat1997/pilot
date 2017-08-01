@@ -98,4 +98,6 @@ class BillingDetailsController extends Controller
 		return $pdf->stream();
 	}
 	
+=======
+>>>>>>> parent of 37d9d9b... Billing views and controllers
 }
