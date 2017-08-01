@@ -10,7 +10,7 @@ class Charge extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-	'name', 'description',
+	'name', 'description','chargeType','amount',
 	];
 
 	protected $dates = [

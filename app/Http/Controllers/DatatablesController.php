@@ -52,7 +52,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ch_datatable(){
-		$charges = Charge::select(['id', 'name', 'description','created_at']);
+		$charges = Charge::select(['id', 'name', 'description','chargeType','amount','created_at']);
 		
 		return Datatables::of($charges)
 		->addColumn('action', function ($ch){
