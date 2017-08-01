@@ -58,7 +58,7 @@
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -81,7 +81,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>

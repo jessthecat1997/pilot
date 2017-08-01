@@ -198,7 +198,7 @@
     $('.money_er').inputmask("numeric", {
         radixPoint: ".",
         groupSeparator: ",",
-        digits: 3,
+        digits: 7,
         autoGroup: true,
         rightAlign: true,
         

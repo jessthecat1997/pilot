@@ -232,6 +232,9 @@
 		});
 
 
+
+
+
 		$("#commentForm").validate({
 			rules: 
 			{
@@ -249,16 +252,27 @@
 		});
 
 
+		$(document).on('click', '.new', function(e){
+			resetErrors();
+			$('.modal-title').text('New Import Processing Fee Range');
+			
+			$('#dateEffective').val("");
+			var now = new Date();
+			var day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth() + 1)).slice(-2);
+			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+			$('#dateEffective').val(today);
+
+			$('#ipfModal').modal('show');
+
+		});
+
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
+			$('.modal-title').text('Update Import Processing Fee Range');
 			var ipf_id = $(this).val();
-			data = ipftable.row($(this).parents()).data();
-			$('#dateEffective').val(data.dateEffective);
-			for(var i = 0; i < (data.minimum).length; i++){
-				$('#minimum').val(data.minimum);
-				$('#maximum').val(data.maximum);
-				$('#amount').val(data.amount); 
-			}
+
+	
 			
 			$('.modal-title').text('Update Import Prcessing Fee Range');
 			$('#ipfModal').modal('show');

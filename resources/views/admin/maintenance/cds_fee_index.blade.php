@@ -53,7 +53,11 @@
 
 							<div class="form-group required">
 								<label class = "control-label">Fee</label>
-								<input type = "text" class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" />
+								<div class = "form-group input-group " >
+									<span class = "input-group-addon">Php</span>
+									<input type = "text" class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" value="0.00" />
+								</div>
+								
 
 							</div>
 
@@ -67,7 +71,7 @@
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -89,7 +93,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 							
 						</div>
 					</div>
@@ -137,13 +141,10 @@
 				],	"order": [[ 0, "desc" ]],
 			});
 
+		
 
 
-		/*
-		function formatNumber(n) {
-			return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		}
-		*/
+
 		
 		$("#commentForm").validate({
 			rules: 
@@ -172,6 +173,11 @@
 			$('#cdsModal').modal('show');
 			$('#fee').val("");
 			$('#dateEffective').val("");
+			var now = new Date();
+			var day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth() + 1)).slice(-2);
+			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+			$('#dateEffective').val(today);
 
 		});
 		$(document).on('click', '.edit',function(e){
