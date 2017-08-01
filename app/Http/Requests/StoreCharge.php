@@ -18,7 +18,8 @@ class StoreCharge extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:charges,name',
-            'description' => 'max:50'
+            'description' => 'max:150',
+            'amount' => 'required',
             ];
 
             break;
@@ -27,7 +28,8 @@ class StoreCharge extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:charges,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+            'description' => 'max:150',
+            'amount' => 'required',
             ];
 
             break;

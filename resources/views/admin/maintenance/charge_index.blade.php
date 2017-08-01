@@ -15,14 +15,17 @@
 				<table class = "table-responsive table" id = "ch_table">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
-								No.
-							</td>
 							<td style="width: 30%;">
 								Name
 							</td>
 							<td style="width: 40%;">
 								Description
+							</td>
+							<td style="width: 40%;">
+								Charge Type
+							</td>
+							<td style="width: 40%;">
+								Amount
 							</td>
 							<td style="width: 25%;">
 								Actions
@@ -52,6 +55,18 @@
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
+							</div>
+							<div class="form-group">
+								<label class = "control-label">Charge Type: </label>
+								<input type="radio" name="chargeType" value="0"> Fixed
+								<input type="radio" name="chargeType" value="1">Rate
+							</div>
+							<div class="form-group">
+								<label class = "control-label">Amount: </label>
+								<div class = "form-group input-group " >
+									<span class = "input-group-addon">Php</span>
+									<input type = "text" class = "form-control money" name = "amount" id = "amount" data-rule-required="true" value= "0.00"/>
+								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -110,9 +125,11 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/chData',
 			columns: [
-			{ data: 'id' },
+			
 			{ data: 'name' },
 			{ data: 'description' },
+			{ data: 'chargeType' },
+			{ data: 'amount' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -130,7 +147,7 @@
 
 				description:
 				{
-					maxlength: 50,
+					maxlength: 150,
 				},
 
 			},
@@ -146,6 +163,7 @@
 			$('.modal-title').text('New Charge');
 			$('#name').val("");
 			$('#description').val("");
+			$('#amount').val("");
 			$('#chModal').modal('show');
 
 		});
@@ -156,6 +174,9 @@
 			
 			$('#description').val(data.description);
 			$('#name').val(data.name);
+			$("[name=chargeType]").val([data.chargeType]);
+			$('#amount').val(data.amount);
+
 
 			temp_name = data.name;
 			temp_desc = data.description;
@@ -227,6 +248,8 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
+							'amount':$('#amount').inputmask('unmaskedvalue'),
+							'chargeType': $('input[name=chargeType]:checked').val(),
 						},
 						success: function (data)
 						{
@@ -235,6 +258,7 @@
 								$('#chModal').modal('hide');
 								$('#name').val("");
 								$('#description').val("");
+								$('#amount').val("");
 								$('.modal-title').text('New Charge');
 
 
@@ -302,53 +326,56 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
+								'amount':$('#amount').inputmask('unmaskedvalue'),
+								'chargeType': $('input[name=chargeType]:checked').val(),
 							},
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-								chtable.ajax.reload();
-								$('#chModal').modal('hide');
-								$('#name').val("");
-								$('#description').val("");
-								$('.modal-title').text('New Charge');
+									chtable.ajax.reload();
+									$('#chModal').modal('hide');
+									$('#name').val("");
+									$('#description').val("");
+									$('#amount').val("");
+									$('.modal-title').text('New Charge');
 
 
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]("Record addded successfully");
-
-								$('#btnSave').removeAttr('disabled');
-
-							}
-							else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record addded successfully");
 
 									$('#btnSave').removeAttr('disabled');
-								});
 
-							}
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+										$('#btnSave').removeAttr('disabled');
+									});
+
+								}
 							}
 						})
 					}
