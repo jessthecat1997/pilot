@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ConsigneesController@home');
 
 Auth::routes();
 
@@ -134,7 +132,7 @@ Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data'
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
 
-Route::get('pdfview',array('as'=>'pdfview','uses'=>'PaymentsController@pdfview'));
+Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
 //Payments
