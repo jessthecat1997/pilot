@@ -57,8 +57,14 @@
 								<input type = "text" class = "form-control money" value = "P 0.00" style = "text-align: right" readonly = "true" />
 							</div>
 							<div class="form-group  required">
-								<label class ="control-label">Rate</label>
-								<input type = "text" class = "form-control money" name = "rate" id = "rate" data-rule-required="true" />
+								<label class ="control-label">1 US Dollar equals</label>
+								<div class = "form-group input-group " >
+									<span class = "input-group-addon">Php</span>
+									<input type = "text" class = "form-control money_er" name = "rate" id = "rate" data-rule-required="true" value= "0.0000000"/>
+								</div>
+
+
+
 							</div>
 							<div class="form-group required">
 								<label class = "control-label">Date Effective</label>
@@ -69,91 +75,93 @@
 								<textarea  row = "6" class = "form-control" id = "description" ></textarea> </div>
 							</div>
 							<input type="hidden" name = "currentRate" value = "0" />
-						
-						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+
+							<div class="modal-footer">
+								<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
-	</section>
-	<section class="content">
-		<form role = "form" method = "POST">
-			{{ csrf_field() }}
-			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Deactivate record
-						</div>
-						<div class="modal-body">
-							Confirm Deactivating
-						</div>
-						<div class="modal-footer">
-							
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</form>
+		</section>
+		<section class="content">
+			<form role = "form" method = "POST">
+				{{ csrf_field() }}
+				{{ method_field('DELETE') }}
+				<div class="modal fade" id="confirm-delete" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								Deactivate record
+							</div>
+							<div class="modal-body">
+								Confirm Deactivating
+							</div>
+							<div class="modal-footer">
+
+								<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
-	</section>
-</div>
-@endsection
-@push('styles')
-<style>
-	.class-exchange-rate{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
-@push('scripts')
-<script type="text/javascript">
-	var data;
-	$(document).ready(function(){
-		var ertable = $('#er_table').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: 'http://localhost:8000/admin/erData',
-			columns: [
-			{ data: 'id' },
-			{ data: 'rate',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },
-			{ data: 'description' },
-			{ data: 'dateEffective' },
-			{ data: 'created_at'},
-			{ data: 'action', orderable: false, searchable: false }
+			</form>
+		</section>
+	</div>
+	@endsection
+	@push('styles')
+	<style>
+		.class-exchange-rate{
+			border-left: 10px solid #2ad4a5;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
+		}
+		.maintenance
+		{
+			border-left: 10px solid #2ad4a5;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
+		}
+	</style>
+	@endpush
+	@push('scripts')
+	<script type="text/javascript">
+		var data;
+		$(document).ready(function(){
+			var ertable = $('#er_table').DataTable({
+				processing: true,
+				serverSide: true,
+				ajax: 'http://localhost:8000/admin/erData',
+				columns: [
+				{ data: 'id' },
+				{ data: 'rate',
+				"render" : function( data, type, full ) {
+					return formatNumber(data); } },
+					{ data: 'description' },
+					{ data: 'dateEffective' },
+					{ data: 'created_at'},
+					{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+					],	"order": [[ 0, "desc" ]],
+				});
 
-		$("#commentForm").validate({
-			rules: 
-			{
-				rate:
+
+
+			$("#commentForm").validate({
+				rules: 
 				{
-					required: true,
-				},
-				dateEffective:
-				{
-					required: true,
-				},
+					rate:
+					{
+						required: true,
+					},
+					dateEffective:
+					{
+						required: true,
+					},
 
 
-			},
+				},
         onkeyup: false, //turn off auto validate whilst typing
         submitHandler: function (form) {
         	return false;
@@ -161,30 +169,37 @@
     });
 
 
-		$(document).on('click', '.new', function(e){
-			resetErrors();
-			$('.modal-title').text('New Exchange Rate');
-			$('#description').val("");
-			$('rate').val("");
-			$('dateEffective').val("");
-			$('#erModal').modal('show');
+			$(document).on('click', '.new', function(e){
+				resetErrors();
+				$('.modal-title').text('New Exchange Rate');
+				$('#description').val("");
+				$('rate').val("");
+				$('dateEffective').val("");
+				var now = new Date();
 
-		});
-		$(document).on('click', '.edit',function(e){
-			resetErrors();
-			var ct_id = $(this).val();
-			data = ertable.row($(this).parents()).data();
-			$('#description').val(data.description);
-			$('#rate').val(data.rate);
-			$('#dateEffective').val(data.dateEffective);
-			$('.modal-title').text('Edit Exchange Rate');
-			$('#erModal').modal('show');
-		});
-		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
-			data = ertable.row($(this).parents()).data();
-			$('#confirm-delete').modal('show');
-		});
+				var day = ("0" + now.getDate()).slice(-2);
+				var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				$('#dateEffective').val(today);
+
+				$('#erModal').modal('show');
+
+			});
+			$(document).on('click', '.edit',function(e){
+				resetErrors();
+				var ct_id = $(this).val();
+				data = ertable.row($(this).parents()).data();
+				$('#description').val(data.description);
+				$('#rate').val(data.rate);
+				$('#dateEffective').val(data.dateEffective);
+				$('.modal-title').text('Edit Exchange Rate');
+				$('#erModal').modal('show');
+			});
+			$(document).on('click', '.deactivate', function(e){
+				var ct_id = $(this).val();
+				data = ertable.row($(this).parents()).data();
+				$('#confirm-delete').modal('show');
+			});
 
 
 
@@ -259,7 +274,7 @@ $('#btnSave').on('click', function(e){
 				if(typeof(data) === "object"){
 					ertable.ajax.reload();
 					$('#erModal').modal('hide');
-	
+
 
 					$('.modal-title').text('New Exchange Rate');
 					//Show success

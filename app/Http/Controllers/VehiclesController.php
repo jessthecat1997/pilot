@@ -28,6 +28,7 @@ class VehiclesController extends Controller
         $vehicle = Vehicle::findOrFail($id);
         $vehicle->model = $request->model;
         $vehicle->dateRegistered = $request->dateRegistered;
+        $vehicle->bodyType = $request->bodyType;
         $vehicle->save();
         return $vehicle;
     }

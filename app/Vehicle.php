@@ -16,6 +16,7 @@ class Vehicle extends Model
     	'plateNumber',
     	'model',
     	'dateRegistered',
+        'bodyType',
     ];
     protected $dates = [
     	'deleted_at',
