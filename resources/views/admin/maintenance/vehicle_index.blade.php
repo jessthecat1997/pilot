@@ -195,6 +195,18 @@
 			}, "Value must not equal arg.");
 
 
+			Inputmask("A{3} 9{4}").mask($("#plateNumber"));
+
+
+			var now = new Date();
+
+			var day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+
+			$('#dateRegistered').val(today);
 			
 
 			$("#vehicle_types_id").select2({
@@ -212,95 +224,98 @@
 				},
 			});
 
-					$("#commentForm").validate({
-						rules: 
-						{
-							plateNumber:
-							{
-								required: true,
-								maxlength: 20,
-							},
+			$("#commentForm").validate({
+				rules: 
+				{
+					plateNumber:
+					{
+						required: true,
+						maxlength: 20,
+					},
 
-							model:{
-								required: true,
-								minlength: 5,
+					model:{
+						required: true,
+						minlength: 5,
 
-							},
-							dateRegistered:{
-								required: true,
-							},
-							SelectName: 
-							{ 
-								valueNotEquals: "default" 
-							},
-							bodyType:{
-								required: true,
-								minlength:5,
-							}
-						},
+					},
+					dateRegistered:{
+						required: true,
+					},
+					SelectName: 
+					{ 
+						valueNotEquals: "default" 
+					},
+					bodyType:{
+						required: true,
+						minlength:5,
+					}
+				},
 
-						messages: 
-						{
-							SelectName: 
-							{ 
-								valueNotEquals: "Please select a vehicle type!"
-							}
-						}, 
+				messages: 
+				{
+					SelectName: 
+					{ 
+						valueNotEquals: "Please select a vehicle type!"
+					}
+				}, 
 
-						onkeyup: function(element) {$(element).valid()}, 
-						submitHandler: function (form) {
-							return false;
-						}
-					});
-
-
-					$(document).on('click', '.new', function(e){
-						resetErrors();
-						$('#vModal-title').text('New Vehicle');
-						$('#model').val("");
-						$('#vModal').modal('show');
-
-					});
-					$(document).on('click', '.edit',function(e){
-						resetErrors();
-						data = vtable.row($(this).parents()).data();
-						$('#plateNumber').val(data.plateNumber)
-						$('#model').val(data.model);
-						$('#bodyType').val(data.bodyType);
-						$('#vModal-title').text('Update Vehicle');
-						$('#vModal').modal('show');
-					});
-					$(document).on('click', '.deactivate', function(e){
-						data = vtable.row($(this).parents()).data();
-						$('#confirm-delete').modal('show');
-					});
-
-					$(document).on('click', '.new_vehicle_type', function(e){
-						resetErrors();
-						$('vtModal-title').text('New Vehicle Type');
-						$('#model').val("");
-						$('#vtModal').modal('show');
-					});
+				onkeyup: function(element) {$(element).valid()}, 
+				submitHandler: function (form) {
+					return false;
+				}
+			});
 
 
+			$(document).on('click', '.new', function(e){
+				resetErrors();
+				$('#vModal-title').text('New Vehicle');
+				$('#model').val("");
+				$('#bodyType').val("");
+				$('#dateRegistered').val("");
+				$('#vModal').modal('show');
+
+			});
+			$(document).on('click', '.edit',function(e){
+				resetErrors();
+				data = vtable.row($(this).parents()).data();
+				$('#plateNumber').val(data.plateNumber)
+				$('#model').val(data.model);
+				$('#bodyType').val(data.bodyType);
+				$('#dateRegistered').val(data.dateRegistered);
+				$('#vModal-title').text('Update Vehicle');
+				$('#vModal').modal('show');
+			});
+			$(document).on('click', '.deactivate', function(e){
+				data = vtable.row($(this).parents()).data();
+				$('#confirm-delete').modal('show');
+			});
+
+			$(document).on('click', '.new_vehicle_type', function(e){
+				resetErrors();
+				$('vtModal-title').text('New Vehicle Type');
+				$('#name').val("");
+				$('#vtModal').modal('show');
+			});
 
 
 
-					$('#btnDelete').on('click', function(e){
-						e.preventDefault();
-						$.ajax({
-							type: 'DELETE',
-							url:  '/admin/vehicle/' + data.plateNumber,
-							data: {
-								'_token' : $('input[name=_token').val()
-							},
-							success: function (data)
-							{
-								vtable.ajax.reload();
-								$('#confirm-delete').modal('hide');
-							}
-						})
-					});
+
+
+			$('#btnDelete').on('click', function(e){
+				e.preventDefault();
+				$.ajax({
+					type: 'DELETE',
+					url:  '/admin/vehicle/' + data.plateNumber,
+					data: {
+						'_token' : $('input[name=_token').val()
+					},
+					success: function (data)
+					{
+						vtable.ajax.reload();
+						$('#confirm-delete').modal('hide');
+					}
+				})
+			});
 
 
 
@@ -356,7 +371,7 @@ $('#btnSave').on('click', function(e){
 				'plateNumber' : $('input[name=plateNumber]').val(),
 				'model' : $('input[name=model]').val(),
 				'dateRegistered' : $('input[name=dateRegistered]').val(),
-				'bodyType' :$('input[name=dateRegistered]').val(),
+				'bodyType' :$('input[name=bodyType]').val(),
 			},
 			success: function (data)
 			{
