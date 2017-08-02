@@ -19,9 +19,17 @@ Route::get('/home', 'HomeController@index');
 
 // Brokerage Routes
 Route::resource('/brokerage', 'BrokerageController');
+Route::resource('/brokerage/newserviceorder', 'BrokerageController');
+Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
+Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
+
+Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
+Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
+
 
 //Consignee
 Route::resource('/consignee', 'ConsigneesController');
+Route::post('CreateConsignee', 'ConsigneesController@storebrok')->name('createconsignee');
 Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
 
 
@@ -43,6 +51,7 @@ Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','IpfFeesController');
+Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 
 
 //Utilities Routes
@@ -131,7 +140,7 @@ Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data'
 Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
-
+Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper

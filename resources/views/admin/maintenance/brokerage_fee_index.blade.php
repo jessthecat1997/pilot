@@ -165,7 +165,7 @@
                     <div class="modal-footer">
 
                         <button class = "btn btn-danger " id = "btnDelete" >Deactivate</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -248,24 +248,9 @@
             }
         });
 
-        $(document).on('click', '.new', function(e){
-            resetErrors();
-            $('.modal-title').text('New Brokerage Fee Range');
-            
-            $('#dateEffective').val("");
-            var now = new Date();
-            var day = ("0" + now.getDate()).slice(-2);
-            var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-            $('#dateEffective').val(today);
-
-            $('#bfModal').modal('show');
-
-        });
 
         $(document).on('click', '.edit',function(e){
             resetErrors();
-            $('.modal-title').text('Update Brokerage Fee Range');
             var bf_id = $(this).val();
             data = bftable.row($(this).parents()).data();
             $('#dateEffective').val(data.dateEffective);
@@ -402,7 +387,7 @@
             e.preventDefault();
 
             if(finalvalidatebfRows() === true){
-
+                
                 var title = $('.modal-title').text();
                 if(title == "New Brokerage Fee Range")
                 {
@@ -423,7 +408,7 @@
 
                         success: function (data){
 
-
+                            
 
                             bftable.ajax.reload();
                             $('#bfModal').modal('hide');
@@ -535,7 +520,7 @@ function validatebfRows()
         }
 
         if(minimum[i].value>maximum[i].value){
-
+            
             maximum[i].style.borderColor = 'red';
             error += "Minimum is greater than maximum";
             $('#bf_warning').addClass('in');

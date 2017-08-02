@@ -13,13 +13,13 @@
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/sidebar/css/simple-sidebar.css" rel="stylesheet">
-    
+
     @stack('styles')
 
     <!-- Scripts -->
@@ -92,7 +92,7 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group">
                         <li>
-                            <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('brokerage.index') }}" class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>

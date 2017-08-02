@@ -8,10 +8,11 @@ class BrokerageServiceOrder extends Model
 {
     use SoftDeletes;
 
-	protected $fillable = [
-		 'expectedArrivalDate' , 'arrivalDate' , 'deposit' ,
-		 'containerNumber' ,'statusType' ,'receiveTypeDescription' ,'awbType' ,'awb' ,'billOfLading' , 'vessel' ,'docking' ,'consigneeSODetails_id' ,
-	];
+    public $timestamps = false;
+
+  protected $fillable = [
+     'shipper', 'expectedArrivalDate' , 'arrivalArea', 'freightType', 'freightBillNo', 'Weight', 'statusType','consigneeSODetails_id' ,
+  ];
 
 	protected $dates = [
 	'deleted_at',

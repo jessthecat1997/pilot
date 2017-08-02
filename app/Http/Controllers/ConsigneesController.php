@@ -19,6 +19,14 @@ class ConsigneesController extends Controller
 		return $cs;
 	}
 
+	public function storebrok()
+	{
+		$cs = Consignee::create(request()->all());
+
+		return view ('brokerage.brokerage_create');
+
+	}
+
 	public function update(StoreConsignee $request, $id)
 	{
 		$consignee = Consignee::findOrFail($id);
