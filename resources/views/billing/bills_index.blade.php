@@ -5,7 +5,7 @@
 <div class = "container-fluid">
 	<div class="row">
 		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading">Billing Details</div>
+			<div class="panel-heading" id="heading">Consignee Details</div>
 			<div class = "panel-body">
 				<div class="col-sm-12">
 					<form class="form-horizontal col-sm-12">
@@ -118,9 +118,9 @@
 											<option>
 
 											</option>
-											@forelse($billings as $bill)
+											@forelse($billings as $billing)
 											<option value = "{{ $bill->id }}">
-												{{ $bill->description }}
+												{{ $billing->name }}
 											</option>
 											@empty
 
@@ -233,7 +233,7 @@
 					</tbody>
 				</table>
 				<div class="form-group col-sm-6">
-					<a class="btn btn-info finalize-billing col-sm-6">Save</a>
+					<a class="btn btn-info finalize-ref col-sm-6">Save</a>
 				</div>
 			</div>
 		</div>
@@ -285,6 +285,31 @@
 	})
 
 	$(document).on('click', '.finalize-billing', function(e){
+		if(validateContractRows() === true){
+			console.log(bill_id);
+			console.log(amount_value);
+			console.log(discount_value);
+			$.ajax({
+				method: 'POST',
+				url: '{{ route("billing.store") }}',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'so_head_id' : so_head_id,
+					'paymentAllowance' : $('#paymentAllowance').val(),
+					'vatRate' : $('#vat').val(),
+					'billings_id' : bill_id,
+					'amount' : amount_value,
+					'discount' : discount_value,
+					'bi_head_id' : $('#soHead_id').val(),
+				},
+				success: function (data){
+					$('#billings_collapse').addClass('in');
+					window.location.href = '{{ route("view.index") }}/{{ $bill->id }}/show_pdf';
+				}
+			})
+		}
+	})
+	$(document).on('click', '.finalize-ref', function(e){
 		if(validateContractRows() === true){
 			console.log(bill_id);
 			console.log(amount_value);

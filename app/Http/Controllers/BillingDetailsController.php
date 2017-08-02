@@ -90,8 +90,6 @@ class BillingDetailsController extends Controller
 		->select('charges.description', 'delivery_billings.amount')
 		->where('del_head_id', '=', $request)
 		->get();
-
-
 		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery']));
 
 
@@ -134,7 +132,6 @@ class BillingDetailsController extends Controller
 		->select('id', 'paymentAllowance', 'created_at')
 		->where('so_head_id', '=', $request->so_head_id)
 		->get();
-
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
@@ -193,14 +190,7 @@ class BillingDetailsController extends Controller
 		->where('billing_invoice_headers.id', '=', $request)
 		->get();
 
-		$particulars = DB::table('billings')
-		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('description', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$request)
-		->get();
+		
 
 		$totalamt = DB::table('billing_invoice_details')
 		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
@@ -221,15 +211,17 @@ class BillingDetailsController extends Controller
 		->where('billing_invoice_headers.id', '=', $request)
 		->get();
 
+		$billing_header =  BillingInvoiceHeader::all('id')->last();
 		$particulars = DB::table('billings')
 		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
 		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('refundable_charges', 'billing_invoice_headers.id', '=', 'refundable_charges.so_head_id')
 		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('billings.description','refundable_charges.description','refundable_charges.amount', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('billing_invoice_headers.id','=',$request)
+		->select('description', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id','=',$billing_header->id)
 		->get();
+		return $particulars;
+		
 
 		$totalamt = DB::table('billing_invoice_details')
 		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')

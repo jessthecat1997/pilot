@@ -16,6 +16,7 @@ class CreateBillingInvoiceHeadersTable extends Migration
         Schema::create('billing_invoice_headers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('paymentAllowance');
+            $table->decimal('vatRate',4,3);
             $table->integer('so_head_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
