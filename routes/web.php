@@ -215,3 +215,4 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
 //Utilities home route
 Route::resource('/admin/utilities', 'UtilitiesController');
+Route::resource('/admin/settings', 'BusinessSettingsController');

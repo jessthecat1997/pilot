@@ -3,86 +3,86 @@
 @section('content')
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
-			<div class = "panel-heading">
-				<h3>Manage Trucking</h3>
-				<hr />	
-			</div>
-			<div class = "panel-body panel">
-				<div class="col-md-8">
-					@if($service_order->status == 'P')
-					<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
-					@else
-					<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
-					@endif
-					<br />
-					<div>
-						<form class="form-horizontal" role="form">
-							{{ csrf_field() }}
-							<div class="form-group">
-								<label class="control-label col-md-5 pull-left" for="tr_address">Trucking Service Order #:</label>
-								<span class="control-label col-md-5 pull-right" id = "tr_address">{{ $service_order->id }}</span>
-							</div>
-							<div class="form-group">         
-								<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
-								<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
-							</div>
+		<div class = "panel-heading">
+			<h3>Manage Trucking</h3>
+			<hr />	
+		</div>
+		<div class = "panel-body panel">
+			<div class="col-md-8">
+				@if($service_order->status == 'P')
+				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				@else
+				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				@endif
+				<br />
+				<div>
+					<form class="form-horizontal" role="form">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label class="control-label col-md-5 pull-left" for="tr_address">Trucking Service Order #:</label>
+							<span class="control-label col-md-5 pull-right" id = "tr_address">{{ $service_order->id }}</span>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
+							<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
+						</div>
 
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_shippingLine">
-									@if($service_order->shippingLine == null)
-									None
-									@else
-									{{ $service_order->shippingLine }}
-									@endif
-								</span>
-							</div>
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_portOfCfsLocation">Port of Cfs Location: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_portOfCfsLocation">{{ $service_order->portOfCfsLocation }}</span>
-							</div>
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_status">Status: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_status">
-									@php
-									switch($service_order->status){
-									case 'C': echo "Cancelled"; break;
-									case 'F': echo "Finished"; break;
-									case 'P': echo "Pending"; break;
-									default : echo "Unknown"; break; }
-									@endphp
-								</span>
-							</div>
-						</form>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_shippingLine">
+								@if($service_order->shippingLine == null)
+								None
+								@else
+								{{ $service_order->shippingLine }}
+								@endif
+							</span>
+						</div>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_portOfCfsLocation">Port of Cfs Location: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_portOfCfsLocation">{{ $service_order->portOfCfsLocation }}</span>
+						</div>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_status">Status: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_status">
+								@php
+								switch($service_order->status){
+								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+								@endphp
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class = "col-md-4">
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Successful Deliveries</h4>
+							<h1 style="text-align: center;" class = "success_delivery">{{ $success_trucking }}</h1>
+						</div>
 					</div>
 				</div>
-				<div class = "col-md-4">
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Successful Deliveries</h4>
-								<h1 style="text-align: center;" class = "success_delivery">{{ $success_trucking }}</h1>
-							</div>
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Cancelled Deliveries</h4>
+							<h1 style="text-align: center;" class = "cancelled_delivery">{{ $cancelled_trucking }}</h1>
 						</div>
 					</div>
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Cancelled Deliveries</h4>
-								<h1 style="text-align: center;" class = "cancelled_delivery">{{ $cancelled_trucking }}</h1>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Pending Deliveries</h4>
-								<h1 style="text-align: center;" class = "pending_delivery">{{ $pending_trucking }}</h1>
-							</div>
+				</div>
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Pending Deliveries</h4>
+							<h1 style="text-align: center;" class = "pending_delivery">{{ $pending_trucking }}</h1>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 	</div>
 </div>
 <div class = "row">
@@ -135,10 +135,10 @@
 						<td>
 							@php
 							switch($delivery->status){
-							case 'C': echo "Cancelled"; break;
-							case 'F': echo "Finished"; break;
-							case 'P': echo "Pending"; break;
-							default : echo "Unknown"; break; }
+							case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
+							case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+							case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+							default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
 							@endphp
 							
 						</td>
