@@ -134,7 +134,7 @@
 			<div class="modal-body">
 				<form class="form-horizontal" role="form">
 					{{ csrf_field() }}
-					<div class="form-group">
+					<div class="form-group required">
 						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
 						<div class="col-sm-8"> 
 							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
@@ -142,6 +142,14 @@
 								<option value = "C">Cancelled</option>
 								<option value = "F">Finished</option>
 							</select>
+						</div>
+					</div>
+					<div class = "collapse delivery_remarks_collapse">
+						<div class="form-group required">
+							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
+							<div class="col-sm-8"> 
+								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
+							</div>
 						</div>
 					</div>
 				</form>
@@ -455,7 +463,7 @@
 			serverSide: true,
 			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
 			columns: [
-	
+
 			{ data: 'id' },
 			{ data: 'deliveryAddress' },
 			{ data: 'plateNumber' },
@@ -465,6 +473,19 @@
 
 			],	"order": [[ 0, "desc" ]],
 		});
+
+		$(document).on('change', '#deliveryStatus', function(e){
+			e.preventDefault();
+			if($('#deliveryStatus').val() == "C"){
+				console.log('aa');
+				$('.delivery_remarks_collapse').addClass('in');
+			}
+			else
+			{
+				$('.delivery_remarks_collapse').removeClass('in');
+			}
+
+		})
 
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
