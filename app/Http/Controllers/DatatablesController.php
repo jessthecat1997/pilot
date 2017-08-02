@@ -399,6 +399,43 @@ class DatatablesController extends Controller
 
 	}
 
+	public function get_trucking_deliveries(Request $request)
+	{
+		$deliveries = DB::table('delivery_receipt_headers')
+            ->select('id', 'deliveryAddress', 'plateNumber', 'created_at', 'status')
+            ->where('deleted_at', '=', null)
+            ->where('tr_so_id','=', $request->trucking_id)
+            ->get();
+        return Datatables::of($deliveries)
+        ->addColumn('created_at_date', function ($delivery){
+			return
+			"$delivery->created_at";
+		})
+		->addColumn('action', function ($delivery){
+			return
+			"<button class = 'btn btn-primary view_delivery'>View</button>" . 
+			"<button class = 'btn btn-info select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
+			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
+		})
+		->editColumn('status', function($trucking){
+			switch ($trucking->status) {
+				case 'F':
+				return 'Finished';
+				break;
+				case 'P':
+				return 'Pending';
+				break;
+				case 'C':
+				return 'Cancelled';
+				break;
+				default:
+				return 'Unknown';
+				break;
+			}
+		})
+		->make(true);
+	}
+
 
 	//Utility Deactivate
 

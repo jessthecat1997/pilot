@@ -95,69 +95,66 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive" id = "deliveries_table">
+				<table class = "table table-responsive" id = "delivery_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								ID
 							</td>
-							<td>
+							<td style="width: 30%;">
 								Address
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Vehicle
 							</td>
-							<td>
+							<td style="width: 15%;">
 								Created At
 							</td>
-							<td>
+							<td style="width: 10%;">
 								Status
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Actions
 							</td>
 						</tr>
 					</thead>
-					@forelse($deliveries as $delivery)
-					<tr>
-						<td>
-							{{ $delivery->id }}
-						</td>
-						<td>
-							{{ $delivery->deliveryAddress }}
-						</td>
-						<td>
-							{{ $delivery->plateNumber }}
-						</td>
-						<td>
-							{{ Carbon\Carbon::parse($delivery->created_at)->diffForHumans() }}
-						</td>
-						<td>
-							@php
-							switch($delivery->status){
-							case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
-							case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-							case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-							default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-							@endphp
-							
-						</td>
-						<td>
-							<a class = "btn btn-primary btn-sm" href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/{{ $delivery->id }}/view">View </a>
-						</td>
-					</tr>
-					@empty
-					<tr>
-						<td colspan="6">
-							<h5 style="text-align: center;">No records found.</h5>
-						</td>
-					</tr>
-					@endforelse
 				</table> 
 			</div>
 		</div>
 	</div>
 </div>
+
+<div id="deliveryModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Delivery Information</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					{{ csrf_field() }}
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
+						<div class="col-sm-8"> 
+							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
+								<option value = "P">Pending</option>
+								<option value = "C">Cancelled</option>
+								<option value = "F">Finished</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
+				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div id="trModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
@@ -446,6 +443,28 @@
 		var wodetail_row = "<tr>" + $('#wodescription_row').html() + "</tr>";
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
+		var selected_delivery = null;
+
+		$(document).on('click', '.view_delivery', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/" + $(this).closest("tr").find('.delivery-id').val() + "/view";
+		})
+		var delivery_table = $('#delivery_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: true,
+			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
+			columns: [
+	
+			{ data: 'id' },
+			{ data: 'deliveryAddress' },
+			{ data: 'plateNumber' },
+			{ data: 'created_at_date' },
+			{ data: 'status' },
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
 
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
@@ -490,6 +509,11 @@
 
 		})
 
+		$(document).on('click', '.select-delivery', function(e){
+			e.preventDefault();
+			selected_delivery = $(this).closest("tr").find('.delivery-id').val();
+		})
+
 		$(document).on('click', '.save-delivery-information', function(e){
 
 			$.ajax({
@@ -498,7 +522,8 @@
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : delivery_id,
+					'delivery_head_id' : selected_delivery,
+
 					
 				},
 				success: function(data){
@@ -614,6 +639,21 @@
 			})
 		})
 		
+		$(document).on('click', '.save-delivery-information', function(e){
+			$.ajax({
+				type: 'PUT',
+				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'status' : $('#deliveryStatus').val(),
+					'delivery_head_id' : $('#deliveryID').text(),
+					
+				},
+				success: function(data){
+					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
+				}	
+			})
+		})
 
 		$(document).on('click', '.save-delivery', function(e){
 			if($("#choices li.active").text() === "Non Container"){
