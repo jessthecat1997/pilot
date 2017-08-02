@@ -56,4 +56,9 @@ class ConsigneesController extends Controller
 	public function home(){
 		return view('welcome');
 	}
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> master

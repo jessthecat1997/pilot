@@ -3,86 +3,86 @@
 @section('content')
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
-			<div class = "panel-heading">
-				<h3>Manage Trucking</h3>
-				<hr />	
-			</div>
-			<div class = "panel-body panel">
-				<div class="col-md-8">
-					@if($service_order->status == 'P')
-					<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
-					@else
-					<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
-					@endif
-					<br />
-					<div>
-						<form class="form-horizontal" role="form">
-							{{ csrf_field() }}
-							<div class="form-group">
-								<label class="control-label col-md-5 pull-left" for="tr_address">Trucking Service Order #:</label>
-								<span class="control-label col-md-5 pull-right" id = "tr_address">{{ $service_order->id }}</span>
-							</div>
-							<div class="form-group">         
-								<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
-								<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
-							</div>
+		<div class = "panel-heading">
+			<h3>Manage Trucking</h3>
+			<hr />	
+		</div>
+		<div class = "panel-body panel">
+			<div class="col-md-8">
+				@if($service_order->status == 'P')
+				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				@else
+				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				@endif
+				<br />
+				<div>
+					<form class="form-horizontal" role="form">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label class="control-label col-md-5 pull-left" for="tr_address">Trucking Service Order #:</label>
+							<span class="control-label col-md-5 pull-right" id = "tr_address">{{ $service_order->id }}</span>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
+							<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
+						</div>
 
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_shippingLine">
-									@if($service_order->shippingLine == null)
-									None
-									@else
-									{{ $service_order->shippingLine }}
-									@endif
-								</span>
-							</div>
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_portOfCfsLocation">Port of Cfs Location: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_portOfCfsLocation">{{ $service_order->portOfCfsLocation }}</span>
-							</div>
-							<div class="form-group">        
-								<label class="control-label col-md-5 pull-left" for="tr_status">Status: </label>
-								<span class="control-label col-sm-5 pull-right" id="tr_status">
-									@php
-									switch($service_order->status){
-									case 'C': echo "Cancelled"; break;
-									case 'F': echo "Finished"; break;
-									case 'P': echo "Pending"; break;
-									default : echo "Unknown"; break; }
-									@endphp
-								</span>
-							</div>
-						</form>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_shippingLine">
+								@if($service_order->shippingLine == null)
+								None
+								@else
+								{{ $service_order->shippingLine }}
+								@endif
+							</span>
+						</div>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_portOfCfsLocation">Port of Cfs Location: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_portOfCfsLocation">{{ $service_order->portOfCfsLocation }}</span>
+						</div>
+						<div class="form-group">        
+							<label class="control-label col-md-5 pull-left" for="tr_status">Status: </label>
+							<span class="control-label col-sm-5 pull-right" id="tr_status">
+								@php
+								switch($service_order->status){
+								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+								@endphp
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class = "col-md-4">
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Successful Deliveries</h4>
+							<h1 style="text-align: center;" class = "success_delivery">{{ $success_trucking }}</h1>
+						</div>
 					</div>
 				</div>
-				<div class = "col-md-4">
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Successful Deliveries</h4>
-								<h1 style="text-align: center;" class = "success_delivery">{{ $success_trucking }}</h1>
-							</div>
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Cancelled Deliveries</h4>
+							<h1 style="text-align: center;" class = "cancelled_delivery">{{ $cancelled_trucking }}</h1>
 						</div>
 					</div>
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Cancelled Deliveries</h4>
-								<h1 style="text-align: center;" class = "cancelled_delivery">{{ $cancelled_trucking }}</h1>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-12">
-						<div class = "default-panel panel">
-							<div class = "panel-heading">
-								<h4 style="text-align: center;">Pending Deliveries</h4>
-								<h1 style="text-align: center;" class = "pending_delivery">{{ $pending_trucking }}</h1>
-							</div>
+				</div>
+				<div class="col-md-12">
+					<div class = "default-panel panel">
+						<div class = "panel-heading">
+							<h4 style="text-align: center;">Pending Deliveries</h4>
+							<h1 style="text-align: center;" class = "pending_delivery">{{ $pending_trucking }}</h1>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 	</div>
 </div>
 <div class = "row">
@@ -95,69 +95,74 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive" id = "deliveries_table">
+				<table class = "table table-responsive" id = "delivery_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 5%;">
 								ID
 							</td>
-							<td>
+							<td style="width: 30%;">
 								Address
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Vehicle
 							</td>
-							<td>
+							<td style="width: 15%;">
 								Created At
 							</td>
-							<td>
+							<td style="width: 10%;">
 								Status
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Actions
 							</td>
 						</tr>
 					</thead>
-					@forelse($deliveries as $delivery)
-					<tr>
-						<td>
-							{{ $delivery->id }}
-						</td>
-						<td>
-							{{ $delivery->deliveryAddress }}
-						</td>
-						<td>
-							{{ $delivery->plateNumber }}
-						</td>
-						<td>
-							{{ Carbon\Carbon::parse($delivery->created_at)->diffForHumans() }}
-						</td>
-						<td>
-							@php
-							switch($delivery->status){
-							case 'C': echo "Cancelled"; break;
-							case 'F': echo "Finished"; break;
-							case 'P': echo "Pending"; break;
-							default : echo "Unknown"; break; }
-							@endphp
-							
-						</td>
-						<td>
-							<a class = "btn btn-primary btn-sm" href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/{{ $delivery->id }}/view">View </a>
-						</td>
-					</tr>
-					@empty
-					<tr>
-						<td colspan="6">
-							<h5 style="text-align: center;">No records found.</h5>
-						</td>
-					</tr>
-					@endforelse
 				</table> 
 			</div>
 		</div>
 	</div>
 </div>
+
+<div id="deliveryModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Delivery Information</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					{{ csrf_field() }}
+					<div class="form-group required">
+						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
+						<div class="col-sm-8"> 
+							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
+								<option value = "P">Pending</option>
+								<option value = "C">Cancelled</option>
+								<option value = "F">Finished</option>
+							</select>
+						</div>
+					</div>
+					<div class = "collapse delivery_remarks_collapse">
+						<div class="form-group required">
+							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
+							<div class="col-sm-8"> 
+								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
+				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div id="trModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 
@@ -446,6 +451,41 @@
 		var wodetail_row = "<tr>" + $('#wodescription_row').html() + "</tr>";
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
+		var selected_delivery = null;
+
+		$(document).on('click', '.view_delivery', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/" + $(this).closest("tr").find('.delivery-id').val() + "/view";
+		})
+		var delivery_table = $('#delivery_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: true,
+			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
+			columns: [
+
+			{ data: 'id' },
+			{ data: 'deliveryAddress' },
+			{ data: 'plateNumber' },
+			{ data: 'created_at_date' },
+			{ data: 'status' },
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
+
+		$(document).on('change', '#deliveryStatus', function(e){
+			e.preventDefault();
+			if($('#deliveryStatus').val() == "C"){
+				console.log('aa');
+				$('.delivery_remarks_collapse').addClass('in');
+			}
+			else
+			{
+				$('.delivery_remarks_collapse').removeClass('in');
+			}
+
+		})
 
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
@@ -490,6 +530,11 @@
 
 		})
 
+		$(document).on('click', '.select-delivery', function(e){
+			e.preventDefault();
+			selected_delivery = $(this).closest("tr").find('.delivery-id').val();
+		})
+
 		$(document).on('click', '.save-delivery-information', function(e){
 
 			$.ajax({
@@ -498,7 +543,8 @@
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : delivery_id,
+					'delivery_head_id' : selected_delivery,
+
 					
 				},
 				success: function(data){
@@ -614,6 +660,21 @@
 			})
 		})
 		
+		$(document).on('click', '.save-delivery-information', function(e){
+			$.ajax({
+				type: 'PUT',
+				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'status' : $('#deliveryStatus').val(),
+					'delivery_head_id' : $('#deliveryID').text(),
+					
+				},
+				success: function(data){
+					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
+				}	
+			})
+		})
 
 		$(document).on('click', '.save-delivery', function(e){
 			if($("#choices li.active").text() === "Non Container"){
