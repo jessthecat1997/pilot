@@ -309,7 +309,7 @@ class TruckingsController extends Controller
             $delivery_containers = DB::table('delivery_containers')
             ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
             ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'remarks', 'del_head_id')
+            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
             ->get();
             foreach ($delivery_containers as $container) {
                 $container_details =  DB::table('delivery_container_details')
@@ -511,7 +511,7 @@ class TruckingsController extends Controller
             $delivery_containers = DB::table('delivery_containers')
             ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
             ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'remarks', 'del_head_id')
+            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
             ->get();
             foreach ($delivery_containers as $container) {
                 $container_details =  DB::table('delivery_container_details')
