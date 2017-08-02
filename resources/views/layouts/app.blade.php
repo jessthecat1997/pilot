@@ -102,9 +102,6 @@
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
                         </li>
-                        <li>
-                            <a href="{{ route('billingdetails.index') }}" class = "class-billing">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Billing</a>
-                        </li>
                         <li id ="frstgrp">
                             <a href="{{ route('payment.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/payment.png">&nbsp;&nbsp;Payments</a>
                         </li>

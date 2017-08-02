@@ -56,23 +56,23 @@
 													</div>
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-														<div class="col-sm-6">          
+														<div class="col-sm-6">
 															<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-														<div class="col-sm-6">          
+														<div class="col-sm-6">
 															<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
 														</div>
 													</div>
-													<div class="form-group">        
+													<div class="form-group">
 														<div class="col-sm-offset-5 col-sm-10">
 															<input type = "submit" class = "btn btn-info btn-md" id = "btnConsigneeSave" value = "Create Consignee"/>
 															<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 														</div>
 													</div>
-												</form>	
+												</form>
 											</div>
 										</div>
 									</div>
@@ -107,7 +107,7 @@
 												@forelse($rts as $rt)
 												<option value = "{{ $rt->id }}">{{ $rt->description }}</option>
 												@empty
-												
+
 												@endforelse
 											</select>
 										</div>
@@ -118,7 +118,7 @@
 											<input type = "date" name = "dateArrival" class = "form-control" />
 										</div>
 									</div>
-								</form>			
+								</form>
 							</div>
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 						</div>
 						<div id="collapse3" class="panel-collapse collapse">
 							<div class="panel-body">
-								
+
 							</div>
 						</div>
 					</div>
@@ -165,7 +165,7 @@
 			var cs_id = $(this).val();
 			data = cstable.row($(this).parents()).data();
 			$('#_firstName').val(data.firstName);
-			
+
 		})
 
 		$(document).on('click', '.panel-title' , function(e){
@@ -173,7 +173,7 @@
 
 				$('#collapse_1').addClass('in');
 				$('#collapse_2').removeClass('in');
-				
+
 			}
 
 		})
@@ -200,7 +200,7 @@
 						$('#firstName').val("");
 						$('#middleName').val("");
 						$('#lastName').val("");
-					}	
+					}
 				}
 			})
 		})

@@ -19,9 +19,17 @@ Route::get('/home', 'HomeController@index');
 
 // Brokerage Routes
 Route::resource('/brokerage', 'BrokerageController');
+Route::resource('/brokerage/newserviceorder', 'BrokerageController');
+Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
+Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
+
+Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
+Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
+
 
 //Consignee
 Route::resource('/consignee', 'ConsigneesController');
+Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
 
 
