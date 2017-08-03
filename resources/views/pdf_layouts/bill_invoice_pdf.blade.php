@@ -133,7 +133,7 @@
 					@forelse($particulars as $part)
 					<tr>
 						<td style="text-align: center;">
-							{{ $part->description }}
+							{{ $part->name }}
 						</td>
 						<td style="text-align: right;">
 							Php {{ $part->Total }}
