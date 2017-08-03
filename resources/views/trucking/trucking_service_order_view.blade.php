@@ -460,7 +460,7 @@
 		var delivery_table = $('#delivery_table').DataTable({
 			processing: false,
 			deferRender: true,
-			serverSide: true,
+			serverSide: false,
 			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
 			columns: [
 

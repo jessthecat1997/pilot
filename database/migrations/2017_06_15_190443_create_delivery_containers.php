@@ -17,6 +17,8 @@ class CreateDeliveryContainers extends Migration
             $table->increments('id');
             $table->string('containerNumber', 11);
             $table->string('containerVolume', 4);
+            $table->string('shippingLine', 100)->nullable();
+            $table->string('portOfCfsLocation', 100)->nullable();
             $table->string('containerReturnTo', 200);
             $table->text('containerReturnAddress', 300);
             $table->dateTime('containerReturnDate');

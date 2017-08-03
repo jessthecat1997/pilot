@@ -113,8 +113,9 @@
 	$(document).ready(function(){
 		var sotable = $('#sotype_table').DataTable({
 			scrollX: true,
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/sotData',
 			columns: [
 			{ data: 'id' },
