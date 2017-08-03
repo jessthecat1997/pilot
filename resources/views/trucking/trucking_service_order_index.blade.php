@@ -54,7 +54,8 @@
 		current_route = route.replace('//view', '/1/view');
 		
 		var emtable = $('#pending_trucking_so_table').DataTable({
-			processing: true,
+			processing: false,
+			deferRender: true,
 			"scrollX": true,
 			serverSide: true,
 			ajax: current_route,

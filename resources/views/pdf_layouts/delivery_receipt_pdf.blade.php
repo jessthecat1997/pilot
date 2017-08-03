@@ -86,7 +86,7 @@
 					<span><strong>Date: </strong></span>
 				</td>
 				<td style="border-left: 1px solid transparent;">
-					
+					<span>{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->toFormattedDateString() }}</span>
 				</td>
 			</tr>
 			<tr>

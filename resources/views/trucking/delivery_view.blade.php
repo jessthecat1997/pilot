@@ -39,10 +39,10 @@
 							<span class="control-label col-sm-7 pull-right" id="status">
 								@php
 								switch($delivery[0]->status){
-								case 'C': echo "Cancelled"; break;
-								case 'F': echo "Finished"; break;
-								case 'P': echo "Pending"; break;
-								default : echo "Unknown"; break; }
+								case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
+								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
 								@endphp
 							</span>
 						</div>
@@ -285,8 +285,8 @@
 										<span class = "containerReturnStatus">
 											@php
 											switch($delivery_container->containerReturnStatus){
-											case 'Y': echo "Returned"; break;
-											case 'N': echo "Pending"; break;
+											case 'Y':  echo "<span class = 'label label-success'>Returned</span>"; break;
+											case 'N':  echo "<span class = 'label label-warning'>Pending</span>"; break;
 											default : echo "Unknown"; break; }
 											@endphp
 										</span>
@@ -449,6 +449,7 @@
 						},
 						success: function (data){
 							$('#drModal').modal('hide');
+							window.location.reload();
 						}
 
 					})
@@ -469,6 +470,7 @@
 					},
 					success: function (data){
 						$('#drModal').modal('hide');
+						window.location.reload();
 					}
 
 				})

@@ -13,14 +13,14 @@
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/sidebar/css/simple-sidebar.css" rel="stylesheet">
-    
+
     @stack('styles')
 
     <!-- Scripts -->
@@ -86,41 +86,38 @@
                     </a>
                 </li>
                 <li>
-                    <a href="Dashboard.html"><img src="/images/dashboard.png">&nbsp;&nbsp;Dashboard</a>
+                    <a href="Dashboard.html">&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
-                    <a data-toggle="collapse" href="#collapse1"><img src="/images/so.png">&nbsp;&nbsp;Transactions</a>
+                    <a data-toggle="collapse" href="#collapse1">&nbsp;&nbsp;Transactions</a>
                 </li>
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group">
                         <li>
-                            <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
+                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('view.index') }}" class = "class-billing">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Billing</a>
+                            <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li id ="frstgrp">
-                            <a href="{{ route('payment.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/payment.png">&nbsp;&nbsp;Payments</a>
+                            <a href="{{ route('payment.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payments</a>
                         </li>
                     </ul>
                 </div>
                 <li>
-                    <a href="{{ route('shipment.index') }}"><img src="/images/reports.png">&nbsp;&nbsp;Reports</a>
+                    <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Reports</a>
                 </li>
                 <li>
-                    <a href="{{ route('service_ordertype.index') }}" class = "maintenance"><img src="/images/maintenance.png">&nbsp;&nbsp;Maintenance</a>
+                    <a href="{{ route('service_ordertype.index') }}" class = "maintenance">&nbsp;&nbsp;Maintenance</a>
                 </li>
                 <li>
-                    <a href="{{ route('shipment.index') }}"><img src="/images/reports.png">&nbsp;&nbsp;Queries</a>
+                    <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Queries</a>
                 </li>
                 <li>
-                    <a href="{{ route('utilities.index') }}" class="utilities"><img src="/images/utilities.png">&nbsp;&nbsp;Utilities</a>
+                    <a href="{{ route('utilities.index') }}" class="utilities">&nbsp;&nbsp;Utilities</a>
                 </li>
             </ul>
         </div>
@@ -144,7 +141,7 @@
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    
+
     <script>
         $("#menu-toggle").click(function(e) {
             e.preventDefault();

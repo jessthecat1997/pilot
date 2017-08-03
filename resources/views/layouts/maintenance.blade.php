@@ -20,7 +20,7 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="/sidebar/css/simple-sidebar.css" rel="stylesheet">
 
-    
+
     @stack('styles')
 
     <!-- Scripts -->
@@ -93,16 +93,16 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group">
                         <li>
-                            <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('brokerage.index') }}" class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('view.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
+                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/delivery.png">&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li>
-                            <a href="{{ route('billingdetails.index') }}" class = "class-billing">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Billing</a>
+                            <a href="{{ route('view.index') }}" class = "class-billing">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/billing.png">&nbsp;&nbsp;Billing</a>
                         </li>
                         <li id ="frstgrp">
                             <a href="{{ route('payment.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/payment.png">&nbsp;&nbsp;Payments</a>
@@ -193,19 +193,19 @@
         autoGroup: true,
         rightAlign: true,
         removeMaskOnSubmit:true,
-        
-        
-        
+
+
+
     });
 
     $('.money_er').inputmask("numeric", {
         radixPoint: ".",
         groupSeparator: ",",
-        digits: 3,
+        digits: 7,
         autoGroup: true,
         rightAlign: true,
-        
-        
+
+
     });
 
 

@@ -16,7 +16,9 @@ class CreateStandardAreaRateDetails extends Migration
         Schema::create('standard_area_rate_details', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('standard_area_rate_headers_id')->unsigned();
-             $table->decimal('amount', 19, 2);
+            $table->string('areaFrom', 50);
+            $table->string('areaTo', 50);
+            $table->decimal('amount', 19, 2);
             $table->timestamps();
 
             $table->foreign('standard_area_rate_headers_id')->references('id')->on('standard_area_rate_headers');

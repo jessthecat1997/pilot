@@ -23,7 +23,7 @@
 										No.
 									</td>
 									<td>
-										Description
+										Destination
 									</td>
 									<td>
 										Created at
@@ -52,14 +52,15 @@
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
-								<label class = "control-label">Description</label>
+								<label>The default pick-up point is Pier. Set the destination rates.  </label>
+								<label class = "control-label">Destination:</label>
 								<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
 								
 							</div>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -82,7 +83,7 @@
 						<div class="modal-footer">
 							
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>

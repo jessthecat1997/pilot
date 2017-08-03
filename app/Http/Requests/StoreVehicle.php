@@ -14,29 +14,46 @@ class StoreVehicle extends FormRequest
 
     public function rules()
     {
+     switch ($this->method()) {
+        case 'POST':
         return [
         'vehicle_types_id' => 'required',
-        'plateNumber' => 'required| max:20|min:2|unique:vehicles|alpha_dash',
+        'plateNumber' => 'required| max:20|min:2|unique:vehicles',
         'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
         'dateRegistered' => 'required',
         ];
 
+        break;
 
-     
-    }
-
-    public function messages()
-    {
+        case 'PUT':
         return [
-        'vehicle_types_id.required' => 'Please choose a vehicle type.',
+        'vehicle_types_id' => 'required',
+        'plateNumber' => 'required| max:20|min:2|unique:vehicles',
+        'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
+        'dateRegistered' => 'required',
         ];
 
+        break;
+        
+        default: break;
     }
 
+
+
+}
+
+public function messages()
+{
+    return [
+    'vehicle_types_id.required' => 'Please choose a vehicle type.',
+    ];
+
+}
+
     //Overriding the response 422
-    public function response(array $errors)
-    {
-        return Response::make(json_encode($errors), 200);
-    }
+public function response(array $errors)
+{
+    return Response::make(json_encode($errors), 200);
+}
 
 }

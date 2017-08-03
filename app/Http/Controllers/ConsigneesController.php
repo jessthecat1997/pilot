@@ -19,6 +19,14 @@ class ConsigneesController extends Controller
 		return $cs;
 	}
 
+	public function storebrok()
+	{
+		$cs = Consignee::create(request()->all());
+
+		return view ('brokerage.brokerage_create');
+
+	}
+
 	public function update(StoreConsignee $request, $id)
 	{
 		$consignee = Consignee::findOrFail($id);
@@ -30,6 +38,8 @@ class ConsigneesController extends Controller
 		$consignee->address = $request->address;
 		$consignee->contactNumber = $request->contactNumber;
 		$consignee->consigneeType = $request->consigneeType;
+		$consignee->businessStyle = $request->businessStyle;
+		$consignee->TIN = $request->TIN;
 
 		$consignee->save();
 
@@ -42,4 +52,13 @@ class ConsigneesController extends Controller
 		$consignee = Consignee::findOrFail($id);
 		$consignee->delete();
 	}
+
+	public function home(){
+		return view('welcome');
+	}
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> master

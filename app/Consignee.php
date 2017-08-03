@@ -10,7 +10,7 @@ class Consignee extends Model
     use SoftDeletes;
 
    	protected $fillable = [
-   		'firstName', 'middleName', 'lastName', 'companyName', 'email', 'address', 'contactNumber', 'consigneeType'
+   		'firstName', 'middleName', 'lastName', 'companyName', 'email', 'address', 'contactNumber', 'businessStyle', 'TIN'
    	];
 
    	protected $dates = [

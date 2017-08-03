@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ConsigneesController@home');
 
 Auth::routes();
 
@@ -21,9 +19,17 @@ Route::get('/home', 'HomeController@index');
 
 // Brokerage Routes
 Route::resource('/brokerage', 'BrokerageController');
+Route::resource('/brokerage/newserviceorder', 'BrokerageController');
+Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
+Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
+
+Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
+Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
+
 
 //Consignee
 Route::resource('/consignee', 'ConsigneesController');
+Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
 
 
@@ -45,6 +51,7 @@ Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','IpfFeesController');
+Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 
 
 //Utilities Routes
@@ -133,8 +140,8 @@ Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data'
 Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
-
-Route::get('pdfview',array('as'=>'pdfview','uses'=>'PaymentsController@pdfview'));
+Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
+Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
 //Payments
@@ -183,6 +190,7 @@ Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsCont
 Route::get('/trucking/{trucking_id}/delivery/create', 'TruckingsController@new_delivery')->name('delivery.create');
 Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
+Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
 Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
@@ -209,3 +217,4 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
 //Utilities home route
 Route::resource('/admin/utilities', 'UtilitiesController');
+Route::resource('/admin/settings', 'BusinessSettingsController');
