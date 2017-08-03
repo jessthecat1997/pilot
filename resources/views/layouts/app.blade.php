@@ -94,11 +94,7 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group">
                         <li>
-<<<<<<< Updated upstream
-                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/images/so.png">&nbsp;&nbsp;Brokerage</a>
-=======
-                            <a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
->>>>>>> Stashed changes
+                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</a>
