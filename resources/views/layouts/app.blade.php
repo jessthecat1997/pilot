@@ -40,7 +40,7 @@
                     <a class="navbar-brand" id="menu-toggle" href="#menu-toggle">
                         <img src="/images/burger.png">
                     </a>
-                    <a class="navbar-brand" style="color: #fff;">
+                    <a class="navbar-brand" style="color: #fff;" id="vert">
                         Hauling Services Management System
                     </a>
                 </div>
@@ -80,10 +80,13 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li class="sidebar-brand" id="sidebrand">
+                <!-- <li class="sidebar-brand" id="sidebrand">
                     <a href="#">
                         <img src="/images/pilotlogo.png" id="logo">
                     </a>
+                </li> -->
+                <li>
+                    &nbsp;
                 </li>
                 <li>
                     <a href="Dashboard.html">&nbsp;&nbsp;Dashboard</a>
@@ -102,8 +105,8 @@
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery</a>
                         </li>
-                        <li id ="frstgrp">
-                            <a href="{{ route('payment.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payments</a>
+                        <li id="frstgrp">
+                            <a href="{{ route('view.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing and Payment</a>
                         </li>
                     </ul>
                 </div>

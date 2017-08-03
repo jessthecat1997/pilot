@@ -6,6 +6,7 @@
 	border-radius: 0px;
 	color: #fff;
 	width: 100%;
+	border-bottom: 1px solid white;
 }
 #useracc
 {
@@ -91,3 +92,7 @@ hr
 {
 	color: #2ad4a5;
 }
+/*#vert
+{
+	border-left: 2px solid white;
+}*/
