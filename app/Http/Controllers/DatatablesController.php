@@ -346,7 +346,7 @@ class DatatablesController extends Controller
             ->where('tr_so_id','=', $request->trucking_id)
             ->get();
         return Datatables::of($deliveries)
-        ->addColumn('created_at_date', function ($delivery){
+        ->addColumn('created_at_date', function($delivery){
 			return
 			"$delivery->created_at";
 		})
@@ -356,21 +356,8 @@ class DatatablesController extends Controller
 			"<button class = 'btn btn-info select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
-		->editColumn('status', function($trucking){
-			switch ($trucking->status) {
-				case 'F':
-				return 'Finished';
-				break;
-				case 'P':
-				return 'Pending';
-				break;
-				case 'C':
-				return 'Cancelled';
-				break;
-				default:
-				return 'Unknown';
-				break;
-			}
+		->editColumn('status', function(){
+			return '<button>AWS</button>';
 		})
 		->make(true);
 	}
