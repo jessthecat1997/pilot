@@ -178,24 +178,6 @@
 				<form class="form-horizontal" role="form">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" name = "shippingLine" id="shippingLine" placeholder="Enter Shipping Line">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="destination">Destination:</label>
-						<div class="col-sm-6">          
-							<input type="text" class="form-control" name = "destination" id="destination" placeholder="Enter destination">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="portOfCfsLocation">Port Of CFS (Cargo Freight Station) Location:</label>
-						<div class="col-sm-6">          
-							<input type="text" class="form-control" name = "portOfCfsLocation" id="portOfCfsLocation" placeholder="Enter port of cfs location">
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="control-label col-sm-4" for="noOfDeliveries">Processed by:</label>
 						<div class="col-sm-6">          
 							<select name = "processedBy" id = "processedBy" class = "form-control">
@@ -235,23 +217,13 @@
 	var data;
 	var cs_id;
 	$(document).ready(function(){
-		{!! $location_string !!}
-		$( "#portOfCfsLocation" ).autocomplete({
-			source: locations
-		});
-
-		{!! $ship_string !!}
-		$('#shippingLine').autocomplete({
-			source: ships
-		})
-
 		var cstable = $('#cs_table').DataTable({			
 			responsive: true,
 			scrollX: true,
 			scrollX: "100%",
-			processing: true,
+			processing: false,
 			deferRender: true,
-			serverSide: true,
+			serverSide: false,
 			ajax: '{{ route("consignee.data") }}',
 			columns: [
 

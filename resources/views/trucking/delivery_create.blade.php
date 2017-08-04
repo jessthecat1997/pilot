@@ -10,7 +10,7 @@
 		<div class="panel-body">
 			<ul class="nav nav-pills nav-justified" id = "choices">
 				<li class="active"><a data-toggle="pill" href="#wcontainer">Container</a></li>
-				<li><a data-toggle="pill" href="#wocontainer">Non Container</a></li>
+				<li><a data-toggle="pill" href="#wocontainer">Without Container</a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="wcontainer" class="tab-pane fade in active">
@@ -438,7 +438,7 @@
 			e.preventDefault();
 			$(this).closest('tr').remove();
 		})
-		// Non Container ------------------------------------------------------------------------------------------------------------------------
+		// Without Container ------------------------------------------------------------------------------------------------------------------------
 		$(document).on('click', '.add-new-detail', function(e){
 			e.preventDefault();
 			if(validateDetail() === true){
@@ -495,7 +495,7 @@
 		})
 		
 		$(document).on('click', '.save-delivery', function(e){
-			if($("#choices li.active").text() === "Non Container"){
+			if($("#choices li.active").text() === "Without Container"){
 				if(validateDetail() === true){
 					$.ajax({
 						type: 'POST',
@@ -735,7 +735,7 @@
 			gross_weights = [];
 			suppliers = [];
 			var error = "";
-			if($("#choices li.active").text() === "Non Container"){
+			if($("#choices li.active").text() === "Without Container"){
 				descrp = document.getElementsByName("wodescriptionOfGoods");
 				gw = document.getElementsByName("wogrossWeight");
 				supp = document.getElementsByName("wosupplier");

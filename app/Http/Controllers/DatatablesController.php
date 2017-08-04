@@ -304,7 +304,7 @@ class DatatablesController extends Controller
 
 	public function trucking_so_datatable(){
 		$truckings = DB::table('trucking_service_orders')
-		->select('trucking_service_orders.id','companyName', 'destination', 'status')
+		->select('trucking_service_orders.id','companyName', 'status')
 		->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
 		->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')

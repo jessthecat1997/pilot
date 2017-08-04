@@ -439,6 +439,24 @@
 			}
 			
 		})
+		$(document).on('click', '.save-delivery-information', function(e){
+
+			$.ajax({
+				type: 'PUT',
+				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'status' : $('#deliveryStatus').val(),
+					'delivery_head_id' :  {{ $delivery[0]->id }},
+
+					
+				},
+				success: function(data){
+					location.reload();
+				}	
+			})
+		})
+
 		$(document).on('click', '.close-container-information', function(e){
 			e.preventDefault();
 			$('#drModal').modal('hide');
