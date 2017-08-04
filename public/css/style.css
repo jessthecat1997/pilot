@@ -96,3 +96,7 @@ hr
 {
 	border-left: 2px solid white;
 }*/
+ul
+{
+	list-style-type: circle;
+}

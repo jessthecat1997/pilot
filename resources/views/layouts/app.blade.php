@@ -95,7 +95,7 @@
                     <a data-toggle="collapse" href="#collapse1">&nbsp;&nbsp;Transactions</a>
                 </li>
                 <div id="collapse1" class="pane;-collapse collapse">
-                    <ul class="list-group">
+                    <ul class="list-group" style="list-style-type: circle;">
                         <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
                         </li>
