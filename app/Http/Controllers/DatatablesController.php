@@ -409,7 +409,7 @@ class DatatablesController extends Controller
         return Datatables::of($deliveries)
         ->addColumn('created_at_date', function($delivery){
 			return
-			"$delivery->created_at";
+			Carbon::parse($delivery->created_at)->diffForHumans();
 		})
 		->addColumn('action', function ($delivery){
 			return
@@ -417,8 +417,22 @@ class DatatablesController extends Controller
 			"<button class = 'btn btn-info select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
-		->editColumn('status', function(){
-			return '<button>AWS</button>';
+		->editColumn('status', function($deliveries){
+			switch ($deliveries->status) {
+				case 'F':
+					return 'Finished';
+					break;
+				case 'P':
+					return 'Pending';
+					break;
+				case 'C':
+					return 'Cancelled';
+					break;
+				
+				default:
+					return 'Unknown';
+					break;
+			}
 		})
 		->make(true);
 	}

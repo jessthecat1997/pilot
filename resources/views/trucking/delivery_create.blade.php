@@ -62,14 +62,30 @@
 																</div>
 																<div class = "form-horizontal">
 																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
+																		<div class="col-sm-8">
+																			<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" />
+																		</div>
+																	</div>
+																</div>
+																<div class = "form-horizontal">
+																	<div class="form-group required">
+																		<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
+																		<div class="col-sm-8">
+																			<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" />
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class = "col-md-6">
+																<div class = "form-horizontal">
+																	<div class="form-group required">
 																		<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																		<div class="col-sm-8">
 																			<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
 																		</div>
 																	</div>
 																</div>
-															</div>
-															<div class = "col-md-6">
 																<div class = "form-horizontal">
 																	<div class="form-group required">
 																		<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
@@ -301,6 +317,8 @@
 		var detail_object = [];
 		var con_Number = [];
 		var con_Volume = [];
+		var con_ShippingLine = [];
+		var con_PortOfCfsLocation = [];
 		var con_ReturnTo = [];
 		var con_ReturnAddress = [];
 		var con_ReturnDate = [];
@@ -517,6 +535,8 @@
 							'containerReturnTo' : con_ReturnTo,
 							'containerReturnAddress' : con_ReturnAddress,
 							'containerReturnDate' : con_ReturnDate,
+							'shippingLine' : con_ShippingLine,
+							'portOfCfsLocation' : con_PortOfCfsLocation,
 							'container_data' : results,
 						},
 						success: function(data){
@@ -570,6 +590,8 @@
 				child[0]['container'] = [{
 					containerNumber : con_Number[i],
 					containerVolume : con_Volume[i],
+					shippingLine : con_ShippingLine[i],
+					portOfCfsLocation : con_PortOfCfsLocation[i],
 					containerReturnTo : con_ReturnTo[i],
 					containerReturnAddress : con_ReturnAddress[i],
 					containerReturnDate : con_ReturnDate[i]
@@ -614,7 +636,7 @@
 			console.log(results);
 
 			if(error.length == 0){
-				return true;
+				return 0;
 			}
 			else
 			{
@@ -630,12 +652,16 @@
 			con_ReturnTo = [];
 			con_ReturnAddress = [];
 			con_ReturnDate = [];
+			con_ShippingLine = [];
+			con_PortOfCfsLocation = [];
 			var error = "";
 			con_number = document.getElementsByName("containerNumber");
 			con_volume = document.getElementsByName("containerVolume");
 			con_to = document.getElementsByName("containerReturnTo");
 			con_address = document.getElementsByName("containerReturnAddress");
 			con_date = document.getElementsByName("containerReturnDate");
+			con_ship = document.getElementsByName('shippingLine');
+			con_port = document.getElementsByName('portOfCfsLocation');
 			for(var i = 0; i < con_number.length; i++)
 			{
 				if(con_number[i].value === ""){
@@ -678,7 +704,25 @@
 					con_ReturnDate.push(con_date[i].value);
 					con_date[i].style.borderColor = 'green';
 				}
+				if(con_port[i].value === ""){
+					error += "Container port is required.";
+					con_port[i].style.borderColor = 'red';
+				}
+				else{
+					con_PortOfCfsLocation.push(con_port[i].value);
+					con_port[i].style.borderColor = 'green';
+				}
+				if(con_ship[i].value === ""){
+					error += "Container ship is required.";
+					con_ship[i].style.borderColor = 'red';
+				}
+				else
+				{
+					con_ShippingLine.push(con_ship[i].value);
+					con_ship[i].style.borderColor = 'green';
+				}
 			}
+			console.log(error);
 			if(error.length === 0){
 				return true;
 			}

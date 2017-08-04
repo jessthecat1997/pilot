@@ -97,6 +97,14 @@
 						<label class="control-label col-md-5 pull-left" for="containerNumber">Container Number:</label>
 						<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: left;"></span></strong>
 					</div>
+					<div class="form-group">
+						<label class="control-label col-md-5 pull-left" for="shippingLine">Shipping Line:</label>
+						<strong><span class="control-label col-md-7" id = "shippingLine" style = "text-align: left;"></span></strong>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-5 pull-left" for="portOfCfsLocation">Port of Cfs Location:</label>
+						<strong><span class="control-label col-md-7" id = "portOfCfsLocation" style = "text-align: left;"></span></strong>
+					</div>
 					<div class="form-group">         
 						<label class="control-label col-md-5 pull-left" for="containerReturnTo">Container Return To:</label>
 						<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: left;"></span>
@@ -234,23 +242,23 @@
 						<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
 							<thead>
 								<tr>
-									<td>
+									<td style="width: 5%;">
 
 									</td>
-									<td>
+									<td style="width: 25%;">
 										Container Number
 									</td>
-									<td>
+									<td style="width: 20%;">
 										Volume
 									</td>
-									<td>
+									<td style="width: 20%;">
 										Status
 									</td>
-									<td>
+									<td style="width: 20%;">
 										Container Return Date
 									</td>
-									<td>
-										Actions
+									<td style="width: 10%;">
+										Action
 									</td>
 								</tr>
 							</thead>
@@ -266,6 +274,8 @@
 										<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
 										<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
 										<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
+										<input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
+										<input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
 										<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
 										<input type = "hidden" class = "dateReturned" 
 										value = "@if($delivery_container->dateReturned == null)
@@ -401,6 +411,9 @@
 			$('#containerReturnAddress').text($(this).closest('tr').find(".containerReturnAddress").val());
 			$('#containerReturnDate').text($(this).closest('tr').find(".containerReturnDate").val());
 			$('#containerReturnTo').text($(this).closest('tr').find(".containerReturnTo").val());
+			$('#shippingLine').text($(this).closest('tr').find(".shippingLine").val());
+			$('#portOfCfsLocation').text($(this).closest('tr').find(".portOfCfsLocation").val());
+
 			container_status = $(this).closest('tr').find(".containerReturnStatus").text().trim();
 			console.log(container_status);
 
@@ -493,21 +506,7 @@
 			$('#deliveryModal').modal('show');
 		})
 
-		$(document).on('click', '.save-delivery-information', function(e){
-			$.ajax({
-				type: 'PUT',
-				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : $('#deliveryID').text(),
-					
-				},
-				success: function(data){
-					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
-				}	
-			})
-		})
+		
 
 		$(document).on('click', '.generate_delivery_receipt', function(e){
 			window.open("{{ route('trucking.index') }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/show_pdf");

@@ -1,5 +1,19 @@
 @extends('layouts.app')
 
+@push('styles')
+<style type="text/css">
+	span.control-label {
+		font-size: 20px;
+	}
+	span.label {
+		font-size: 15px;
+	}
+	strong {
+		font-size: 15px;
+	}
+</style>
+@endpush
+
 @section('content')
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
@@ -8,76 +22,69 @@
 			<hr />	
 		</div>
 		<div class = "panel-body panel">
-			<div class="col-md-8">
+			<div class="col-md-12">
 				@if($service_order->status == 'P')
-				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
 				@else
-				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Edit Information</button></h4>
+				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
 				@endif
 				<br />
 				<div>
-					<form class="form-horizontal" role="form">
-						{{ csrf_field() }}
-						<div class="form-group">
-							<label class="control-label col-md-5 pull-left" for="tr_address">Trucking Service Order #:</label>
-							<span class="control-label col-md-5 pull-right" id = "tr_address">{{ $service_order->id }}</span>
-						</div>
-						<div class="form-group">         
-							<label class="control-label col-md-5 pull-left" for="tr_destination">Destination:</label>
-							<span class="control-label col-md-5 pull-right" id ="tr_destination" style = "text-align: right;">{{ $service_order->destination }}</span>
-						</div>
-
-						<div class="form-group">        
-							<label class="control-label col-md-5 pull-left" for="tr_shippingLine">Shipping Line: </label>
-							<span class="control-label col-sm-5 pull-right" id="tr_shippingLine">
-								@if($service_order->shippingLine == null)
-								None
-								@else
-								{{ $service_order->shippingLine }}
-								@endif
-							</span>
-						</div>
-						<div class="form-group">        
-							<label class="control-label col-md-5 pull-left" for="tr_portOfCfsLocation">Port of Cfs Location: </label>
-							<span class="control-label col-sm-5 pull-right" id="tr_portOfCfsLocation">{{ $service_order->portOfCfsLocation }}</span>
-						</div>
-						<div class="form-group">        
-							<label class="control-label col-md-5 pull-left" for="tr_status">Status: </label>
-							<span class="control-label col-sm-5 pull-right" id="tr_status">
-								@php
-								switch($service_order->status){
-								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-								@endphp
-							</span>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class = "col-md-4">
-				<div class="col-md-12">
-					<div class = "default-panel panel">
-						<div class = "panel-heading">
-							<h4 style="text-align: center;">Successful Deliveries</h4>
-							<h1 style="text-align: center;" class = "success_delivery">{{ $success_trucking }}</h1>
-						</div>
+					<div class = "col-md-8">
+						<form class="form-horizontal" role="form">
+							{{ csrf_field() }}
+							<div class = "form-group">
+								<div class = "col-md-4" style="text-align: right;">
+									<strong>Trucking Service Order #:</strong>
+								</div>
+								<div class = "col-md-8">
+									<span class="control-label" id = "tr_address">{{ $service_order->id }}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class = "col-md-4" style="text-align: right;">
+									<strong>Consignee:</strong>
+								</div>
+								<div class = "col-md-8">
+									<span class="control-label" id = "tr_address">{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</span>
+								</div>
+							</div>
+							<div class = "form-group">
+								<div class = "col-md-4" style="text-align: right;">
+									<strong>Company Name:</strong>
+								</div>
+								<div class = "col-md-8">
+									<span class="control-label" id = "tr_address">{{ $service_order_details[0]->companyName }}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class = "col-md-4" style="text-align: right;">
+									<strong>Status:</strong>
+								</div>
+								<div class = "col-md-8">
+									<span class="control-label" id="tr_status">
+										@php
+										switch($service_order->status){
+										case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+										case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+										case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+										default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+										@endphp
+									</span>
+								</div>
+							</div>
+						</form>
 					</div>
-				</div>
-				<div class="col-md-12">
-					<div class = "default-panel panel">
-						<div class = "panel-heading">
-							<h4 style="text-align: center;">Cancelled Deliveries</h4>
-							<h1 style="text-align: center;" class = "cancelled_delivery">{{ $cancelled_trucking }}</h1>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class = "default-panel panel">
-						<div class = "panel-heading">
-							<h4 style="text-align: center;">Pending Deliveries</h4>
-							<h1 style="text-align: center;" class = "pending_delivery">{{ $pending_trucking }}</h1>
+					<div class = "col-md-4">
+						<h4 style="text-align: center;">Delivery Status</h4>
+						<div class = "col-md-12">
+							<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
+							<br />
+							<br />
+							<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
+							<br />
+							<br />
+							<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
 						</div>
 					</div>
 				</div>
@@ -173,30 +180,6 @@
 				<h4 class="modal-title">Trucking Information</h4>
 			</div>
 			<div class="modal-body">	
-				<div class = "form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="_destination">Destination</label>
-						<div class="col-sm-8"> 
-							<input type = "text" class="form-control" name = "_destination" id = "_destination"/> 
-						</div>
-					</div>
-				</div>
-				<div class = "form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="_shippingLine">Shipping Line</label>
-						<div class="col-sm-8"> 
-							<input type = "text" class="form-control" name = "_shippingLine" id = "_shippingLine"/> 
-						</div>
-					</div>
-				</div>
-				<div class = "form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="_portOfCfsLocation">Port Of Cfs Location</label>
-						<div class="col-sm-8"> 
-							<input type = "text" class="form-control" name = "_portOfCfsLocation" id = "_portOfCfsLocation"/> 
-						</div>
-					</div>
-				</div>
 				<div class = "form-horizontal">
 					<div class="form-group">
 						<label class="control-label col-sm-3" for="_status">Status</label>
@@ -489,10 +472,16 @@
 
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
-			$('#_destination').val($('#tr_destination').text().trim());
-			$('#_shippingLine').val($('#tr_shippingLine').text().trim());
-			$('#_portOfCfsLocation').val($('#tr_portOfCfsLocation').text().trim());
-			$('#_status').val($('#tr_status').text().trim());			
+			status = "{{ $service_order->status }}";
+			switch(status){
+				case 'P' : $('#_status > option:eq(0)').attr('selected', 'true');
+				break;
+				case 'C' : $('#_status > option:eq(1)').attr('selected', 'true');
+				break;
+				case 'F' : $('#_status > option:eq(2)').attr('selected', 'true');
+				break;
+				
+			}
 		})
 		$(document).on('click', '.new-delivery', function(e){
 			e.preventDefault();

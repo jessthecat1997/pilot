@@ -111,6 +111,13 @@ class TruckingsController extends Controller
         {
             $so_id = $request->trucking_id;
             $service_order = TruckingServiceOrder::findOrFail($so_id);
+            $service_order_details = DB::table('trucking_service_orders')
+            ->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
+            ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+            ->join('consignees', 'consignees_id', '=', 'consignees.id')
+            ->select('firstName', 'middleName', 'lastName', 'companyName')
+            ->where('trucking_service_orders.id', '=', $so_id)
+            ->get();
 
             $employees = Employee::all();
             
@@ -150,7 +157,7 @@ class TruckingsController extends Controller
 
 
 
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details']));   
         }
         catch(ModelNotFoundException $e)
         {
@@ -165,7 +172,17 @@ class TruckingsController extends Controller
         $vehicle_types = VehicleType::all();
         $employees = Employee::all();
 
-        return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id']));
+        $delivery = TruckingServiceOrder::findOrFail($so_id);
+
+        if($delivery->status == 'P')
+        {
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id']));
+        }
+        else{
+            return 'Cannot create new deliveries';
+        }
+
+
     }
 
     public function store_delivery(Request $request)
@@ -193,7 +210,7 @@ class TruckingsController extends Controller
                 $new_noncon_detail->del_head_id =  $new_delivery_head->id;
                 $new_noncon_detail->save();
             }
-            
+
         }
         else
         {
@@ -220,6 +237,8 @@ class TruckingsController extends Controller
 
                     $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
                     $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
+                    $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
+                    $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
                     $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
                     $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
                     $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
@@ -230,7 +249,7 @@ class TruckingsController extends Controller
 
                     $new_delivery_container->save();
 
-                    
+
                     foreach ($container_detail->details as $key => $container_detail_data){
 
                         $new_delivery_container_detail = new DeliveryContainerDetail;
@@ -294,7 +313,7 @@ class TruckingsController extends Controller
             DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer'
             )
-        
+
         ->get();
 
         if($delivery[0]->withContainer == 0){
@@ -309,7 +328,7 @@ class TruckingsController extends Controller
             $delivery_containers = DB::table('delivery_containers')
             ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
             ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
+            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
             ->get();
             foreach ($delivery_containers as $container) {
                 $container_details =  DB::table('delivery_container_details')
@@ -383,7 +402,7 @@ class TruckingsController extends Controller
             DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer'
             )
-        
+
         ->get();
 
         $delivery_bills = DB::table('delivery_billings')
@@ -525,21 +544,21 @@ class TruckingsController extends Controller
             }
 
         }
-        
+
         $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
         return $pdf->stream();
     }
     public function show_calendar(){
-       $events = [];
+     $events = [];
 
-       $events[] = \Calendar::event(
+     $events[] = \Calendar::event(
         'Event One', 
         false, 
         '2017-02-11T0800', 
         '2017-02-13T0800',
         0
         );
-       $calendar = \Calendar::addEvents($events)
+     $calendar = \Calendar::addEvents($events)
        ->setOptions([ //set fullcalendar options
         'firstDay' => 1
         ]); 
