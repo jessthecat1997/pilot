@@ -304,7 +304,11 @@ class DatatablesController extends Controller
 
 	public function trucking_so_datatable(){
 		$truckings = DB::table('trucking_service_orders')
-		->select('trucking_service_orders.id','companyName', 'status')
+		->select(
+			'trucking_service_orders.id',
+			'companyName',
+			'status',
+			DB::raw('CONCAT(firstName, " ", lastName) AS name'))
 		->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
 		->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -341,12 +345,12 @@ class DatatablesController extends Controller
 	public function get_trucking_deliveries(Request $request)
 	{
 		$deliveries = DB::table('delivery_receipt_headers')
-            ->select('id', 'deliveryAddress', 'plateNumber', 'created_at', 'status')
-            ->where('deleted_at', '=', null)
-            ->where('tr_so_id','=', $request->trucking_id)
-            ->get();
-        return Datatables::of($deliveries)
-        ->addColumn('created_at_date', function($delivery){
+		->select('id', 'deliveryAddress', 'plateNumber', 'created_at', 'status')
+		->where('deleted_at', '=', null)
+		->where('tr_so_id','=', $request->trucking_id)
+		->get();
+		return Datatables::of($deliveries)
+		->addColumn('created_at_date', function($delivery){
 			return
 			Carbon::parse($delivery->created_at)->diffForHumans();
 		})
@@ -359,18 +363,18 @@ class DatatablesController extends Controller
 		->editColumn('status', function($deliveries){
 			switch ($deliveries->status) {
 				case 'F':
-					return 'Finished';
-					break;
+				return 'Finished';
+				break;
 				case 'P':
-					return 'Pending';
-					break;
+				return 'Pending';
+				break;
 				case 'C':
-					return 'Cancelled';
-					break;
+				return 'Cancelled';
+				break;
 				
 				default:
-					return 'Unknown';
-					break;
+				return 'Unknown';
+				break;
 			}
 		})
 		->make(true);

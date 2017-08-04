@@ -19,10 +19,13 @@
 										Consignee
 									</td>
 									<td>
+										Company Name
+									</td>
+									<td>
 										Status
 									</td>
 									<td>
-										Actions
+										Action
 									</td>
 								</tr>
 							</thead>
@@ -60,6 +63,7 @@
 			serverSide: true,
 			ajax: current_route,
 			columns: [
+			{ data: 'name' },
 			{ data: 'companyName' },
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
