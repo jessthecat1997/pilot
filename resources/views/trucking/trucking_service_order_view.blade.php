@@ -33,12 +33,21 @@
 					<div class = "col-md-8">
 						<form class="form-horizontal" role="form">
 							{{ csrf_field() }}
+							<div class="form-group">
+								<label class="control-label col-md-5 pull-left" for="deliveryID"><strong>Trucking Service Order #:</strong></label>
+								<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $service_order->id }}</span>
+							</div>
+							
+						</form>
+
+						<form class="form-horizontal" role="form">
+							{{ csrf_field() }}
 							<div class = "form-group">
 								<div class = "col-md-4" style="text-align: right;">
-									<strong>Trucking Service Order #:</strong>
+									
 								</div>
 								<div class = "col-md-8">
-									<span class="control-label" id = "tr_address">{{ $service_order->id }}</span>
+									<span class="control-label" id = "tr_address"></span>
 								</div>
 							</div>
 							<div class="form-group">
