@@ -63,8 +63,8 @@
 			serverSide: true,
 			ajax: current_route,
 			columns: [
-			{ data: 'name' },
-			{ data: 'companyName' },
+			{ data: 'name'},
+			{ data: 'companyName'},
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
 			
