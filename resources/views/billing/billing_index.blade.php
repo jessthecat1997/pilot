@@ -5,67 +5,61 @@
 <div class = "container-fluid">
 	<div class="row">
 		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading"><h4>Consignee Details</h4></div>
-			<div class = "panel-body">
-				<div class="col-sm-12">
-					<form class="form-horizontal col-sm-12">
-						{{ csrf_field() }}
-						<div class="form-group">
-							<label class="control-label col-sm-2">Consignee: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-5" id="consignee"><strong>{{ $bill->companyName }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2">Address: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-5" id="address"><strong>{{ $bill->address }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2">Service: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-5" id="sotype"><strong>{{ $bill->description }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-					</form>
-					<br>
-					<div class="form-group col-sm-3">
-						<a href='/billing/view/{{ $bill->id }}/create' class="btn btn-info form-control col-sm-3 add_bill">New Bill</a>
+			<div class="panel-heading" id="heading">Consignee Details</div>
+			<div class = "panel-body col-sm-12">
+				<form class="form-horizontal col-sm-4">
+					{{ csrf_field() }}
+					<div class="form-group">
+						<label class="control-label col-sm-1">Consignee: </label>
+						@forelse($bills as $bill)
+						<label class="control-label col-sm-6" id="consignee"><strong>{{ $bill->companyName }}</strong></label>
+						@empty
+						@endforelse
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-1">Address: </label>
+						@forelse($bills as $bill)
+						<label class="control-label col-sm-6" id="address"><strong>{{ $bill->address }}</strong></label>
+						@empty
+						@endforelse
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-1">Service: </label>
+						@forelse($bills as $bill)
+						<label class="control-label col-sm-6" id="sotype"><strong>{{ $bill->name }}</strong></label>
+						@empty
+						@endforelse
+					</div>
+					<div class="form-group col-sm-12">
+						<a href='/billing/view/{{ $bill->id }}/create' class="btn btn-info form-control col-sm-4 add_bill">New Bill</a>
+					</div>
+				</form>
+
+				<div class="col-sm-8">
+					<div class="panel-heading"><center><strong>Billing Invoice</strong></center></div>
+					<div class = "panel-body">
+						<br>
+						<table class = "table-responsive table" id = "bill_hist_table">
+							<thead>
+								<tr>
+									<td>
+										ID
+									</td>
+									<td>
+										Payment Allowance
+									</td>
+									<td>
+										Date Billed
+									</td>
+									<td>
+										Actions
+									</td>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<hr>
-<div class="container-fluid">
-	<div class="row" id="bill_hist">
-		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading"><h4>Billing Invoice</h4></div>
-			<div class = "panel-body">
 				<br>
-				<table class = "table-responsive table" id = "bill_hist_table">
-					<thead>
-						<tr>
-							<td>
-								ID
-							</td>
-							<td>
-								Payment Allowance
-							</td>
-							<td>
-								Date Billed
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
 			</div>
 		</div>
 	</div>
