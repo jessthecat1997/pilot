@@ -22,30 +22,16 @@ class BillingDetailsController extends Controller
 	public function show(Request $request, $id)
 	{
 
-		$billings = Billing::all();
-		$total_bills = DB::table('billing_invoice_details')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$request)
-		->get();
-
-		$charges = Charge::all();
-
-		$delivery = DB::table('delivery_billings')
-		->leftjoin('charges', 'delivery_billings.charges_id', '=', 'charges.id')
-		->select('charges.description', 'delivery_billings.amount')
-		->where('del_head_id', '=', $request)
+		$bills = DB::table('billing_invoice_headers')
+		->join('consignee_service_order_headers','billing_invoice_headers.so_head_id','=','consignee_service_order_headers.id')
+		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
+		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
 		$so_head_id = $id;
-
-		$bills = DB::table('consignee_service_order_details')
-		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
-		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('consignee_service_order_details.id','companyName','service_order_types.description', 'address')
-		->where('so_headers_id', '=', $id)
-		->get();
 
 		return view('billing/billing_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery', 'so_head_id']));
 

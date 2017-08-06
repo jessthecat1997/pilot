@@ -96,7 +96,12 @@ hr
 {
 	border-left: 2px solid white;
 }*/
-ul
+#heading
 {
-	list-style-type: circle;
+	background-color: #019a70;
+	color:#fff;
+}
+.panel-body
+{
+	border: 1px solid rgba(0,0,0,0.3);
 }
