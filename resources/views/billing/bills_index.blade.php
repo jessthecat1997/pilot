@@ -1,191 +1,69 @@
 @extends('layouts.app')
 @section('content')
 <h3><img src="/images/bar.png"> Billing</h3>
+<div class="pull-left">
+	<button class="btn btn-info">Back</button>
+</div>
+<br/>
 <hr>
 <div class = "container-fluid">
 	<div class="row">
 		<div class = "panel-default panel">
 			<div class="panel-heading" id="heading">Consignee Details</div>
-			<div class = "panel-body">
-				<div class="col-sm-12">
-					<form class="form-horizontal col-sm-12">
-						{{ csrf_field() }}
-						<div class="form-group">
-							<label class="control-label col-sm-2">ID: </label> 
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-3" id="so_head_id"><strong>{{ $bill->id }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2">Consignee: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-3" id="consignee"><strong>{{ $bill->companyName }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2">Address: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-3" id="address"><strong>{{ $bill->address }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-2">Service: </label>
-							@forelse($bills as $bill)
-							<label class="control-label col-sm-3" id="sotype"><strong>{{ $bill->description }}</strong></label>
-							@empty
-							@endforelse
-						</div>
-					</form>
-				</div>
-			</div>
+			<table class="table">
+				<tbody>
+					<tr>
+						<td class="active"><strong>No.: </strong></td>
+						@forelse($bills as $bill)
+						<td class = "success" id="consignee"><strong>{{ $bill->id }}</strong></td>
+						@empty
+						@endforelse
+					</tr>
+					<tr>
+						<td class="active"><strong>Consignee: </strong></td>
+						@forelse($bills as $bill)
+						<td class = "success" id="consignee"><strong>{{ $bill->companyName }}</strong></td>
+						@empty
+						@endforelse
+					</tr>
+					<tr>
+						<td class="active"><strong>Address: </strong></td>
+						@forelse($bills as $bill)
+						<td class="success" id="address"><strong>{{ $bill->address }}</strong></td>
+						@empty
+						@endforelse
+					</tr>
+					<tr>
+						<td class="active"><strong>Service Order: </strong></td>
+						@forelse($bills as $bill)
+						<td class="success" id="sotype"><strong>{{ $bill->name }}</strong></td>
+						@empty
+						@endforelse
+					</tr>
+				</tbody>
+			</table>
 		</div>
-		<hr>
-		<div class="panel-default panel collapse" id="del_collapse">
-			<div class="panel-heading" id="heading">Delivery Bill</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class = "panel-default panel">
+			<div class="panel-heading" id="heading">Add Bill and Refundable Charges</div>
 			<div class="panel-body">
-				<table class="table-responsive table-hover">
+				<div class="form-group col-sm-12">
+					<label class="control-label col-sm-3">Payment Allowance (day/s): </label>
+					<div class="col-sm-6"> 
+						<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
+					</div>
+				</div>
+				<div class="form-group col-sm-12">
+					<label class="control-label col-sm-3">Vat Rate (%): </label>
+					<div class="col-sm-6"> 
+						<input type="text" class="form-control" name="vat" id="vat" required>
+					</div>
+				</div>
+				<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
 					<thead>
 						<tr>
-							<td>
-								Charges
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							@forelse($delivery as $del)
-							<td>
-								{{ $del->description }}
-							</td>
-							@empty
-							@endforelse
-							@forelse($delivery as $del)
-							<td>
-								{{ $del->amount }}
-							</td>
-							@empty
-							@endforelse
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">New Bill</div>
-			<div class="panel-body">
-				<div class="collapse in" id="new_bill_collapse">
-					<div class="form-group col-sm-12">
-						<label class="control-label col-sm-3">Payment Allowance (day/s): </label>
-						<div class="col-sm-6"> 
-							<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
-						</div>
-					</div>
-					<div class="form-group col-sm-12">
-						<label class="control-label col-sm-3">Vat Rate (%): </label>
-						<div class="col-sm-6"> 
-							<input type="text" class="form-control" name="vat" id="vat" required>
-						</div>
-					</div>
-					<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
-						<thead>
-							<tr>
-								<td>
-									Description *
-								</td>
-								<td>
-									Amount *
-								</td>
-								<td>
-									Discount *
-								</td>
-								<td>
-									Action
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr id = "billing-row" name="billing-row">
-								<form class="form-horizontal">
-									{{ csrf_field() }}
-									<td>
-										<select name = "bill_id" class = "form-control ">
-											<option>
-
-											</option>
-											@forelse($billings as $billing)
-											<option value = "{{ $bill->id }}">
-												{{ $billing->name }}
-											</option>
-											@empty
-
-											@endforelse
-										</select>
-									</td>
-
-									<td>
-										<input type = "text" name = "amount" class = "form-control" style="text-align: right">
-
-									</td>
-									<td>
-										<input type = "text" name = "discount" class = "form-control" style="text-align: right">
-
-									</td>
-									<td>
-										<button class = "btn btn-info btn-md new-billing-row">Add Row</button>
-										<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
-									</td>
-								</form>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="form-group col-sm-6">
-					<a class="btn btn-info finalize-billing col-sm-6">Save</a>
-				</div>
-				<!-- <div class="row collapse" id="billings_collapse">
-					<table class = "table-responsive table" id="bill_table">
-						<thead>
-							<tr>
-								<td>
-									<strong>Description</strong>
-								</td>
-								<td>
-									<strong>Amount</strong>
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-					<div class="form-group">
-						<label class="control-label col-sm-2">Total: </label>
-						<div class="col-sm-3"> 
-							
-						</div>
-					</div>
-					<div class="form-group col-sm-12">
-						<a href="{{ route('payment.index') }}" class="btn btn-info col-sm-6">Proceed to Payment</a>
-					</div>
-				</div> -->
-				<!-- end ng payment allowance -->
-			</div>
-		</div>
-		<hr>
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">New Refundable Charges</div>
-			<div class="panel-body">
-				<table class="table responsive table-hover" width="100%" id="charge_parent_table" style = "overflow-x: scroll;">
-					<thead>
-						<tr>
-							<td>
-								Charges *
-							</td>
 							<td>
 								Description *
 							</td>
@@ -193,22 +71,30 @@
 								Amount *
 							</td>
 							<td>
+								Discount *
+							</td>
+							<td>
 								Action
 							</td>
 						</tr>
 					</thead>
 					<tbody>
-						<tr id = "charge-row" name="charge-row">
+						<tr>
+							<td colspan="4">
+							<button class = "btn btn-info btn-md new-billing-row pull-right">Add Row</button>
+							</td>
+						</tr>
+						<tr id = "billing-row" name="billing-row">
 							<form class="form-horizontal">
 								{{ csrf_field() }}
 								<td>
-									<select name = "charge_id" class = "form-control ">
+									<select name = "bill_id" class = "form-control ">
 										<option>
 
 										</option>
-										@forelse($charges as $ch)
-										<option value = "{{ $ch->id }}">
-											{{ $ch->description }}
+										@forelse($billings as $billing)
+										<option value = "{{ $bill->id }}">
+											{{ $billing->name }}
 										</option>
 										@empty
 
@@ -217,15 +103,14 @@
 								</td>
 
 								<td>
-									<input type = "text" name = "rc_description" class = "form-control" style="text-align: right">
+									<input type = "text" name = "amount" class = "form-control" style="text-align: right">
 
 								</td>
 								<td>
-									<input type = "text" name = "rc_amount" class = "form-control" style="text-align: right">
+									<input type = "text" name = "discount" class = "form-control" style="text-align: right">
 
 								</td>
 								<td>
-									<button class = "btn btn-info btn-md new-billing-row">Add Row</button>
 									<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
 								</td>
 							</form>
@@ -233,7 +118,7 @@
 					</tbody>
 				</table>
 				<div class="form-group col-sm-6">
-					<a class="btn btn-info finalize-ref col-sm-6">Save</a>
+					<a class="btn btn-info finalize-billing col-sm-6">Save</a>
 				</div>
 			</div>
 		</div>
@@ -343,7 +228,7 @@
 		billID = document.getElementsByName('bill_id');
 		discount = document.getElementsByName('discount');
 		amount = document.getElementsByName('amount');
-		
+
 
 		error = "";
 

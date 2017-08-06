@@ -1,38 +1,39 @@
 @extends('layouts.app')
 @section('content')
+<h3><img src="/images/bar.png"> Billing</h3>
+<hr>
 <div class="container-fluid">
 	<div class="row">
-		<div class = "panel-default panel c" id="so_collapse">
-			<div class = "panel-body">
+		<div class = "panel-default panel" id="so_collapse">
 				<div>
-					<h3>Select Service Order</h3>
-					<br>
-					<table class = "table-responsive table" id = "so_head_table">
-						<thead>
-							<tr>
-								<td>
-									ID
-								</td>
-								<td>
-									Consignee
-								</td>
-								<td>
-									Service Order Type
-								</td>
-								<td>
-									Status
-								</td>
-								<td>
-									Date Created
-								</td>
-								<td>
-									Actions
-								</td>
-							</tr>
-						</thead>
-					</table>
+					<div class="panel-heading" id="heading">Select Service Order</div>
+					<div class="panel-body">
+						<table class = "table-responsive table" id = "so_head_table">
+							<thead>
+								<tr>
+									<td>
+										ID
+									</td>
+									<td>
+										Consignee
+									</td>
+									<td>
+										Service Order Type
+									</td>
+									<td>
+										Status
+									</td>
+									<td>
+										Date Created
+									</td>
+									<td>
+										Actions
+									</td>
+								</tr>
+							</thead>
+						</table>
+					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 </div>

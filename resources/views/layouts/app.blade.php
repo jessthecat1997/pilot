@@ -40,9 +40,8 @@
                     <a class="navbar-brand" id="menu-toggle" href="#menu-toggle">
                         <img src="/images/burger.png">
                     </a>
-                    <a class="navbar-brand" style="color: #fff;" id="vert">
-                        Hauling Services Management System
-                    </a>
+                    <a class="navbar-brand" style="color: #fff;"><img src="/images/pilotlogo.png" id="logo"></a>
+                    <a class="navbar-brand" style="color: #fff;" id="vert">Hauling Services Management System</a>
                 </div>
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Right Side Of Navbar -->
