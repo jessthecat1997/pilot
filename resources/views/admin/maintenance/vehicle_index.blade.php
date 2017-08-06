@@ -81,7 +81,7 @@
 							<div class="modal-body">			
 								<div class="form-group required">
 									<label class = "control-label">Vehicle Type</label>
-									<select class = "form-control vehicle_types_id"  id = "vehicle_types_id">
+									<select class = "form-control vehicle_types_id select2"  id = "vehicle_types_id">
 									</select>
 								</div>
 								<div><button  id = "nvt" class = "btn btn-md btn-info new_vehicle_type pull-right" data-toggle = 'modal' data-target = "#vtModal"  >New Vehicle Type </button></div>

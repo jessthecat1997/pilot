@@ -151,7 +151,7 @@
 							</select>
 						</div>
 					</div>
-					<div class = "collapse delivery_remarks_collapse">
+					<div class = "collapse delivery_remarks_collapse fade">
 						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
 							<div class="col-sm-8"> 
