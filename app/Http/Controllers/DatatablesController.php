@@ -19,6 +19,7 @@ use App\Area;
 use App\CdsFee;
 use App\IpfFee;
 use App\BrokerageFee;
+use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
 use Illuminate\Support\Facades\DB;
@@ -207,15 +208,28 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
-	public function br_bills_datatable()
+	public function br_bills_datatable(Request $request)
 	{
+		$billing_header =  BillingInvoiceHeader::all('id')->last();
 		$br_bills = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_invoice_details.billings_id', '=', 'billings.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
+		->where('consignee_service_order_headers.id', '=', $billing_header->id)
 		->get();
 		return Datatables::of($br_bills)
+		->make(true);
+	}
+	public function br_rc_datatable(Request $request)
+	{
+		$billing_header =  BillingInvoiceHeader::all('id')->last();
+		$br_rc = DB::table('refundable_charges')
+		->join('consignee_service_order_headers', 'refundable_charges.so_head_id', '=', 'consignee_service_order_headers.id')
+		->select('refundable_charges.description', 'amount')
+		->where('consignee_service_order_headers.id', '=', $billing_header->id)
+		->get();
+		return Datatables::of($br_rc)
 		->make(true);
 	}
 	public function shipment_datatable(){

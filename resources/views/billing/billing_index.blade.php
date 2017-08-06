@@ -41,7 +41,7 @@
 	<hr>
 	<div class="row collapse in" id="bill_collapse">
 		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">List of billings</div>
+			<div class="panel-heading" id="heading">List of Bills and Refundable Charges</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "br_bill_table">
 					<thead>
@@ -63,12 +63,24 @@
 						</tr>
 					</thead>
 				</table>
+				<table class = "table-responsive table" id = "br_rc_table">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
 	<div class="row collapse" id="hist_collapse">
 		<div class="panel-default panel">
-		<div class="panel-heading" id="heading">Billing History</div>
+			<div class="panel-heading" id="heading">Billing History</div>
 			<div class = "panel-body">
 				<br>
 				<table class = "table-responsive table" id = "bill_hist_table">
@@ -113,12 +125,21 @@
 	var data;
 	$(document).ready(function(){
 		var br_table = $('#br_bill_table').DataTable({
-			processing: true,
+			processing: false,
 			serverSide: true,
 			ajax: "{{ route('br_bill.data') }}",
 			columns: [
 			{ data: 'name' },
 			{ data: 'Total' }
+			]
+		})
+		var rc_table = $('#br_rc_table').DataTable({
+			processing: false,
+			serverSide: true,
+			ajax: "{{ route('br_rc.data') }}",
+			columns: [
+			{ data: 'description' },
+			{ data: 'amount' }
 			]
 		})
 	})

@@ -159,6 +159,7 @@ Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('t
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
 Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
 Route::get('admin/br_bill', 'DatatablesController@br_bills_datatable')->name('br_bill.data');
+Route::get('admin/br_rc', 'DatatablesController@br_rc_datatable')->name('br_rc.data');
 
 
 //Maintenance data
