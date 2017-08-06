@@ -151,13 +151,14 @@ Route::get('/payment/{payment_id}/show_pdf', 'PaymentsController@payment_pdf');
 
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
-Route::get('/billing/view/{id}/create', 'BillingDetailsController@show_billing');
+Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
 Route::get('admin/invoice/{so_head_id}', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
 Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
+Route::get('admin/br_bill', 'DatatablesController@br_bills_datatable')->name('br_bill.data');
 
 
 //Maintenance data

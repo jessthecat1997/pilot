@@ -22,13 +22,12 @@ class BillingDetailsController extends Controller
 	public function show(Request $request, $id)
 	{
 
-		$bills = DB::table('billing_invoice_headers')
-		->join('consignee_service_order_headers','billing_invoice_headers.so_head_id','=','consignee_service_order_headers.id')
+		$bills = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
-		->where('billing_invoice_headers.id', '=', $id)
+		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
 		$so_head_id = $id;
@@ -64,32 +63,6 @@ class BillingDetailsController extends Controller
 		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery']));
 		
 	}
-	public function display_bill($request)
-	{
-		$bill_counts = DB::table('billing_invoice_headers')
-		->select(DB::raw('COUNT(id) as count'))
-		->where('so_head_id', '=', $request)
-		->get();
-
-		
-
-		$particulars = DB::table('billings')
-		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('description', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('billing_invoice_headers.id','=',$bill_counts)
-		->get();
-
-		$totalamt = DB::table('billing_invoice_details')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.id','=',$bill_counts)
-		->get();
-
-		return view('billing/billing_display_index', compact(['bills', 'particulars','bill_counts', 'totalamt']));
-	}
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
@@ -124,37 +97,15 @@ class BillingDetailsController extends Controller
 			$billing_detail->save();
 		}
 	}
-
-	public function billing_pdf($request)
+	public function bill_pdf(Request $request,$id)
 	{
-		$bills = DB::table('consignee_service_order_details')
-		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		$bills = DB::table('consignee_service_order_headers')
+		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('consignee_service_order_details.id','companyName','service_order_types.description', 'address', 'billing_invoice_headers.created_at','TIN', 'businessStyle')
-		->where('billing_invoice_headers.id', '=', $request)
-		->get();
-
-		
-
-		$totalamt = DB::table('billing_invoice_details')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$request)
-		->get();
-		$pdf = PDF::loadView('pdf_layouts.billing_invoice_pdf', compact(['particulars', 'totalamt', 'bills']));
-		return $pdf->stream();
-	}
-	public function bill_pdf(Request $request)
-	{
-		$bills = DB::table('consignee_service_order_details')
-		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
-		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('consignee_service_order_details.id','companyName','service_order_types.name', 'address', 'billing_invoice_headers.created_at','TIN', 'businessStyle')
-		->where('billing_invoice_headers.id', '=', $request)
+		->select('consignee_service_order_details.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
 		$billing_header =  BillingInvoiceHeader::all()->last();
@@ -171,7 +122,7 @@ class BillingDetailsController extends Controller
 		$totalamt = DB::table('billing_invoice_details')
 		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.id','=',$request)
+		->where('billing_invoice_headers.id','=',$billing_header->id)
 		->get();
 		
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['particulars', 'totalamt', 'bills']));
