@@ -48,6 +48,17 @@
 			<h3><center>Billing Invoice</center></h3>
 			<table style="width: 100%; border: 1px solid black">
 				<tr>
+					<td style="border:1px solid transparent; text-align: left;" width="20%">
+						<h3>Invoice No.:</h3>
+					</td>
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						@forelse($bills as $bill)
+						<h3>0{{ $bill->id }}</h3>
+						@empty
+						@endforelse
+					</td>
+				</tr>
+				<tr>
 					<td style="border:1px solid transparent;" width="20%">
 						BILLED TO:
 					</td>
@@ -88,7 +99,7 @@
 					</td>
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							LOL
+							
 						</strong>
 					</td>
 				</tr>
@@ -146,12 +157,23 @@
 						</td>
 					</tr>
 					@endforelse
+					@forelse($br_rc as  $rc)
+					<tr>
+						<td style="text-align: center;">
+							{{ $rc->description }}
+						</td>
+						<td style="text-align: right;">
+							Php {{ $rc->amount }}
+						</td>
+					</tr>
+					@empty
+					@endforelse
 					<tr>
 						<td width="70%" style="text-align: right;">
 							<strong>TOTAL</strong>
 						</td>
-						@forelse($totalamt as $total)
-						<td width="30%" style="text-align: right;">
+						@forelse($totalbill as $total)
+						<td width="30%" style="text-align: right;" id="total">
 							Php {{ $total->Total }}
 						</td>
 					</tr>

@@ -14,6 +14,9 @@
 						<td class = "success" id="consignee"><strong>{{ $bill->companyName }}</strong></td>
 						@empty
 						@endforelse
+						<td class="success">
+							
+						</td>
 					</tr>
 					<tr>
 						<td class="active"><strong>Address: </strong></td>
@@ -21,6 +24,9 @@
 						<td class="success" id="address"><strong>{{ $bill->address }}</strong></td>
 						@empty
 						@endforelse
+						<td class="success">
+							
+						</td>
 					</tr>
 					<tr>
 						<td class="active"><strong>Service Order: </strong></td>
@@ -28,10 +34,20 @@
 						<td class="success" id="sotype"><strong>{{ $bill->name }}</strong></td>
 						@empty
 						@endforelse
+						<td class="success">
+							
+						</td>
 					</tr>
 					<tr>
 						<td>
-							<button class="btn btn-info" id="bill_hist">View Billing History</button>
+
+						</td>
+						<td>
+							<button class="btn btn-info col-sm-3 pull-right" id="bill_hist">View Billing History</button>
+						</td>
+						<td>
+							
+							<a href='/billing/{{ $bill->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
 						</td>
 					</tr>
 				</tbody>
@@ -40,19 +56,11 @@
 	</div>
 	<hr>
 	<div class="row collapse in" id="bill_collapse">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">List of Bills and Refundable Charges</div>
+		<div class="panel-default col-sm-6">
+			<div class="panel-heading" id="heading">List of Bills</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "br_bill_table">
 					<thead>
-						<tr>
-							<td>
-								&nbsp;
-							</td>
-							<td>
-								<a href='/billing/{{ $bill->id }}/create' class="btn btn-info form-control col-sm-4 add_bill">New Bill</a>
-							</td>
-						</tr>
 						<tr>
 							<td>
 								Name
@@ -63,6 +71,11 @@
 						</tr>
 					</thead>
 				</table>
+			</div>
+		</div>
+		<div class="panel-default col-sm-6">
+			<div class="panel-heading" id="heading">List of Refundable Charges</div>
+			<div class="panel-body">
 				<table class = "table-responsive table" id = "br_rc_table">
 					<thead>
 						<tr>
@@ -74,6 +87,41 @@
 							</td>
 						</tr>
 					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="panel-default panel">
+			<div class="panel-heading" id="heading">Delivery Bill</div>
+			<div class="panel-body">
+				<table class="table-responsive table">
+					<thead>
+						<tr>
+							<td>
+								Charges
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							@forelse($delivery as $del)
+							<td>
+								{{ $del->description }}
+							</td>
+							@empty
+							@endforelse
+							@forelse($delivery as $del)
+							<td>
+								{{ $del->amount }}
+							</td>
+							@empty
+							@endforelse
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>

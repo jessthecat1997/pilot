@@ -2,7 +2,7 @@
 @section('content')
 <h3><img src="/images/bar.png"> Billing</h3>
 <div class="pull-left">
-	<button class="btn btn-info">Back</button>
+	<a href="/billing/{{ $so_head_id }}" class="btn btn-info">Back</a>
 </div>
 <br/>
 <hr>
@@ -46,21 +46,29 @@
 	</div>
 	<hr>
 	<div class="row">
+		<table class="table">
+			<tbody>
+				<tr>
+					<td style="width: 20%">
+						<strong>Payment Allowance (day/s):</strong>
+					</td>
+					<td style="width: 30%">
+						<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
+					</td>
+					<td style="width: 20%">
+						<strong>Vat Rate:</strong>
+					</td>
+					<td style="width: 30%">
+						<input type="text" class="form-control" name="vat" id="vat" required>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row">
 		<div class = "panel-default panel">
 			<div class="panel-heading" id="heading">Add Bill and Refundable Charges</div>
 			<div class="panel-body">
-				<div class="form-group col-sm-12">
-					<label class="control-label col-sm-3">Payment Allowance (day/s): </label>
-					<div class="col-sm-6"> 
-						<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
-					</div>
-				</div>
-				<div class="form-group col-sm-12">
-					<label class="control-label col-sm-3">Vat Rate (%): </label>
-					<div class="col-sm-6"> 
-						<input type="text" class="form-control" name="vat" id="vat" required>
-					</div>
-				</div>
 				<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
 					<thead>
 						<tr>
@@ -81,7 +89,7 @@
 					<tbody>
 						<tr>
 							<td colspan="4">
-							<button class = "btn btn-info btn-md new-billing-row pull-right">Add Row</button>
+								<button class = "btn btn-info btn-md new-billing-row pull-right">New Bill</button>
 							</td>
 						</tr>
 						<tr id = "billing-row" name="billing-row">
