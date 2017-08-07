@@ -30,6 +30,12 @@ class BillingDetailsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
+		$delivery = DB::table('delivery_billings')
+		->leftjoin('charges', 'delivery_billings.charges_id', '=', 'charges.id')
+		->select('charges.description', 'delivery_billings.amount')
+		->where('del_head_id', '=', $id)
+		->get();
+
 		$so_head_id = $id;
 
 		return view('billing/billing_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery', 'so_head_id']));
@@ -46,12 +52,6 @@ class BillingDetailsController extends Controller
 
 		$charges = Charge::all();
 
-		$delivery = DB::table('delivery_billings')
-		->leftjoin('charges', 'delivery_billings.charges_id', '=', 'charges.id')
-		->select('charges.description', 'delivery_billings.amount')
-		->where('del_head_id', '=', $id)
-		->get();
-
 		$bills = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
@@ -60,7 +60,9 @@ class BillingDetailsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
-		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery']));
+		$so_head_id = $id;
+
+		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery', 'so_head_id']));
 		
 	}
 	public function billing_invoice(Request $request)
@@ -104,7 +106,7 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('consignee_service_order_details.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
+		->select('billing_invoice_headers.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
@@ -124,17 +126,14 @@ class BillingDetailsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $billing_header->id)
 		->get();
 
-		$totalamt = DB::table('billing_invoice_details')
+		$totalbill = DB::table('billing_invoice_details')
 		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('refundable_charges', 'refundable_charges.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'), DB::raw('SUM(refundable_charges.amount)'))
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
 		->where('billing_invoice_headers.so_head_id','=',$billing_header->id)
 		->get();
 		
-		// select SUM(bd.amount), rc.amount from billing_invoice_details as bd left join billing_invoice_headers as bh on bd.bi_head_id=bh.id left join consignee_service_order_headers as ch on bh.so_head_id = ch.id LEFT join refundable_charges as rc on rc.so_head_id = ch.id where bh.so_head_id =1
-		return $totalamt;
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['particulars', 'totalamt', 'bills']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['particulars', 'totalbill', 'bills', 'br_rc']));
 		return $pdf->stream();
 	}
 	
