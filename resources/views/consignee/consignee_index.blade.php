@@ -5,7 +5,7 @@
 		<h3><img src="/images/bar.png"> Consignee</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#chModal" style = "width: 100%;">New Consignee</button>
+			<button  class="btn btn-info btn-md new-consignee" style = "width: 100%;">New Consignee</button>
 		</div>
 	</div>
 	<br />
@@ -146,6 +146,7 @@
 			responsive: true,
 			scrollX: true,
 			scrollX: "100%",
+			deferRender: true,
 			processing: false,
 			serverSide: false,
 			ajax: '{{ route("consignee_get_data") }}',
@@ -161,6 +162,26 @@
 			],
 
 		});
+		$(document).on('click', '.new-consignee', function(e){
+			e.preventDefault();
+			$('#chModal').modal('show');
+
+		})
+
+		$(document).on('click', '.selectConsignee', function(e){
+			e.preventDefault();
+			console.log($(this).closest('tr').find('.businessStyle').val());
+			$('#chModal').modal('show');
+			$('#firstName').val($(this).closest('tr').find('.firstName').val());
+			$('#middleName').val($(this).closest('tr').find('.middleName').val());
+			$('#lastName').val($(this).closest('tr').find('.lastName').val());
+			$('#companyName').val($(this).closest('tr').find('.companyName').val());
+			$('#email').val($(this).closest('tr').find('.email').val());
+			$('#address').val($(this).closest('tr').find('.address').val());
+			$('#contactNumber').val($(this).closest('tr').find('.contactNumber').val());
+			$('#businessStyle').val($(this).closest('tr').find('.businessStyle').val());
+			$('#TIN').val($(this).closest('tr').find('.TIN').val());
+		})
 
 		$(document).on('click', '.save-consignee-information', function(e){
 			e.preventDefault();

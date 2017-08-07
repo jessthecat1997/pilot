@@ -154,16 +154,24 @@ class DatatablesController extends Controller
 	}
 
 	public function consignee_datatable_main(){
-		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at']);
+		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
 
 		return Datatables::of($consignees)
 
 		->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-		->removeColumn('middleName')
-		->removeColumn('lastName')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($consignee){
 			return
-			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">Select</button>';
+			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">View</button>'.
+			'<input type = "hidden" value = "'. $consignee->firstName .'" class = "firstName" />
+			<input type = "hidden" value = "'. $consignee->middleName .'" class = "moddleName" />
+			<input type = "hidden" value = "'. $consignee->lastName .'" class = "lastName" />
+			<input type = "hidden" value = "'. $consignee->companyName .'" class = "companyName" />
+			<input type = "hidden" value = "'. $consignee->email .'" class = "email" />
+			<input type = "hidden" value = "'. $consignee->contactNumber .'" class = "contactNumber" />
+			<input type = "hidden" value = "'. $consignee->businessStyle .'" class = "businessStyle" />
+			<input type = "hidden" value = "'. $consignee->TIN .'" class = "TIN" />'
+			;
 		})
 		->editColumn('consigneeType', function($consignee){
 			if( $consignee->consigneeType == 0){
