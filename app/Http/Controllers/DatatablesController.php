@@ -152,6 +152,30 @@ class DatatablesController extends Controller
 		})
 		->make(true);
 	}
+
+	public function consignee_datatable_main(){
+		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at']);
+
+		return Datatables::of($consignees)
+
+		->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+		->removeColumn('middleName')
+		->removeColumn('lastName')
+		->addColumn('action', function ($consignee){
+			return
+			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">Select</button>';
+		})
+		->editColumn('consigneeType', function($consignee){
+			if( $consignee->consigneeType == 0){
+				return 'Walk-in';
+			}
+			else{
+				return 'Regular';
+			}
+		})
+		->make(true);
+	}
+
 	public function v_datatable(){
 		$vs = DB::table('vehicles')
 		->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
