@@ -165,11 +165,29 @@
 <script src="/js/app.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/jquery.validate.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
 
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+    });
+
+
+
+     $('.percentage').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        max:100,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+
+
+
     });
 </script>
 @stack('scripts')

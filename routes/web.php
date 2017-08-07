@@ -52,7 +52,8 @@ Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','IpfFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-
+Route::resource('/admin/vat_rate','VatRatesController');
+Route::resource('/admin/bank_account','BankAccountsController');
 
 //Utilities Routes
 Route::resource('/utilities/employee', 'EmployeesController');
@@ -140,6 +141,8 @@ Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data'
 Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
+Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
+
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('pdfview','PaymentsController@pdfview');
 

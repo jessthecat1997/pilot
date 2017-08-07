@@ -19,6 +19,7 @@ use App\Area;
 use App\CdsFee;
 use App\IpfFee;
 use App\BrokerageFee;
+use App\VatRate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -427,6 +428,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
 			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function vr_datatable(){
+		$vrs = VatRate::select(['id',  'rate', 'dateEffective', 'created_at']);
+
+		return Datatables::of($vrs)
+		->addColumn('action', function ($vrs){
+			return
+			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
