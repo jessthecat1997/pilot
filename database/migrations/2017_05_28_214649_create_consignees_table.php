@@ -20,7 +20,15 @@ class CreateConsigneesTable extends Migration
             $table->string('lastName', 45);
             $table->string('companyName', 250);
             $table->string('email', 100);
-            $table->text('address');
+            $table->string('address', 100);
+            $table->string('city', 100);
+            $table->string('st_prov', 100);
+            $table->string('zip', 10);
+            $table->string('b_address', 100);
+            $table->string('b_city', 100);
+            $table->string('b_st_prov', 100);
+            $table->string('b_zip', 10);
+            $table->text('billing_address');
             $table->string('contactNumber', 30);
             $table->string('businessStyle', 100);
             $table->string('TIN', 20);

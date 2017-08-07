@@ -52,7 +52,7 @@
 				<div class="modal-body">	
 					<form class="form-horizontal" role="form">
 						{{ csrf_field() }}
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-4" for="firstName">First Name:</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
@@ -64,31 +64,31 @@
 								<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-4" for="pwd">Last Name:</label>
 							<div class="col-sm-6">          
 								<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-4" for="companyName">Company Name:</label>
 							<div class="col-sm-6">          
 								<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-4" for="email">Email</label>
 							<div class="col-sm-6">          
 								<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="address">Address:</label>
+						<div class="form-group required">
+							<label class="control-label col-sm-4" for="address">Billing Address:</label>
 							<div class="col-sm-6">          
 								<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
 							<div class="col-sm-6">          
 								<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">

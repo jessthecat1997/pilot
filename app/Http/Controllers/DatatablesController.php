@@ -154,7 +154,7 @@ class DatatablesController extends Controller
 	}
 
 	public function consignee_datatable_main(){
-		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
+		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'address', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
 
 		return Datatables::of($consignees)
 
@@ -164,9 +164,10 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">View</button>'.
 			'<input type = "hidden" value = "'. $consignee->firstName .'" class = "firstName" />
-			<input type = "hidden" value = "'. $consignee->middleName .'" class = "moddleName" />
+			<input type = "hidden" value = "'. $consignee->middleName .'" class = "middleName" />
 			<input type = "hidden" value = "'. $consignee->lastName .'" class = "lastName" />
 			<input type = "hidden" value = "'. $consignee->companyName .'" class = "companyName" />
+			<input type = "hidden" value = "'. $consignee->address .'" class = "address" />
 			<input type = "hidden" value = "'. $consignee->email .'" class = "email" />
 			<input type = "hidden" value = "'. $consignee->contactNumber .'" class = "contactNumber" />
 			<input type = "hidden" value = "'. $consignee->businessStyle .'" class = "businessStyle" />
