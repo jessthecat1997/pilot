@@ -13,12 +13,28 @@ class StoreConsignee extends FormRequest
 
     public function rules()
     {
+     switch ($this->method()) {
+        case 'POST':
         return [
-        'firstName' => 'required|regex:/^[\p{L}\p{N} .-]+$/',
-        'middleName' => 'nullable|regex:/^[\p{L}\p{N} .-]+$/',
-        'lastName' => 'required|regex:/^[\p{L}\p{N} .-]+$/',
-
+        'firstName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
+        'lastName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
+        'email' => 'required| unique:consignees',
+        'address' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
         ];
+
+        break;
+
+        case 'PUT':
+        return [
+        'vehicle_types_id' => 'required',
+        'plateNumber' => 'required| max:20|min:2|unique:vehicles',
+        'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
+        'dateRegistered' => 'required',
+        ];
+
+        break;
+        
+        default: break;
     }
 
     //Overriding the response 422

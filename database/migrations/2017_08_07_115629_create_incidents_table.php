@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+
+class CreateIncidentsTable extends Migration
+{
+
+    public function up()
+    {
+        Schema::create('employee_incidents', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('employees_id')->unsigned();
+            $table->string('description', 1000);
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('employees_id')->references('id')->on('employees');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('employee_incidents');
+    }
+}

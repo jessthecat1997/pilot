@@ -13,7 +13,7 @@
 						<thead>
 							<tr>
 								<td>
-									Contract Number
+									Contract No.
 								</td>
 								<td>
 									Consignee
@@ -57,7 +57,7 @@ $('#collapse1').addClass('in');
 			processing: false,
 			deferRender: true,
 			scrollX: true,
-			serverSide: true,
+			serverSide: false,
 			ajax: "{{ route('contract.data') }}",
 			columns: [
 			{ data: 'id' },

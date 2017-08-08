@@ -31,6 +31,8 @@ Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('b
 Route::resource('/consignee', 'ConsigneesController');
 Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
+Route::get('admin/csDatamain', 'DatatablesController@consignee_datatable_main')->name('consignee_get_data');
+Route::get('admin/getCities/{province_id?}', 'ConsigneesController@get_cities')->name('get_prov_cities');
 
 
 

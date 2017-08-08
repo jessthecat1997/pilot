@@ -51,10 +51,8 @@
 				<strong>{{ Carbon\Carbon::parse($contract[0]->created_at)->toFormattedDateString() }}</strong>
 				<br />
 				<br />
-				Mr./Mrs.
+				Mr./Mrs. <span><strong>{{ $contract[0]->name }}</strong></span>
 				<br />
-				<br />
-				<span><strong>{{ $contract[0]->name }}</strong></span>
 				<br />
 				<br />
 				<br />
