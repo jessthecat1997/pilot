@@ -50,67 +50,165 @@
 					<h4 class="modal-title">Consignee Information</h4>
 				</div>
 				<div class="modal-body">	
-					<form class="form-horizontal" role="form">
-						{{ csrf_field() }}
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="firstName">First Name:</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+					<div class = "panel-default">
+						<div id="con_collapse" class="collapse in">
+							<ul class="nav nav-tabs">
+								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
+								<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="physical_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_province">Province:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_province" id="phy_province" class = "form-control">
+													<option value = '0'></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}" >
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>     
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_city" id="phy_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+											<div class="col-md-8">          
+												<label class="switch">
+													<input type="checkbox" class = "checkbox same_billing_address">
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="billing_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_province">Province:</label>
+											<div class="col-sm-8">
+												<select name = "bill_province" id="bill_province"  class = "form-control">
+													<option value = '0'></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}">
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>          
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "bill_city" id="bill_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="new_con" class="tab-pane fade in active">
+									<br />
+									<form class="form-horizontal" role="form">
+										{{ csrf_field() }}
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="firstName">First Name:</label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="email">Email</label>
+											<div class="col-sm-6">          
+												<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="TIN">TIN:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+											</div>
+										</div>
+
+									</form>	
+								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="email">Email</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="address">Billing Address:</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="businessStyle">Business Style: </label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="TIN">TIN: </label>
-							<div class="col-sm-6">          
-								<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN number">
-							</div>
-						</div>
-					</form>
+					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success save-consignee-information" data-dismiss="modal">Save</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 				</div>
 			</div>
 		</div>
@@ -162,6 +260,81 @@
 			],
 
 		});
+
+		$(document).on('change', '#phy_province', function(e){
+
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#phy_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#phy_city').find('option').not(':first').remove();
+						$('#phy_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '#bill_province', function(e){
+
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#bill_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#bill_city').find('option').not(':first').remove();
+						$('#bill_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '.same_billing_address', function(e){
+			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
+			if(checked == true){
+				$('#bill_address').attr('disabled', 'true');
+				$('#bill_address').val("");
+				$('#bill_zip').val("");
+				$('#bill_zip').attr('disabled', 'true');
+				$('#bill_city').attr('disabled', 'true');
+				$('#bill_province').attr('disabled', 'true');
+			}
+			else{
+				$('#bill_address').removeAttr('disabled');
+				$('#bill_province').removeAttr('disabled');
+				$('#bill_city').removeAttr('disabled');
+				$('#bill_zip').removeAttr('disabled');
+			}
+			
+		})
+
 		$(document).on('click', '.new-consignee', function(e){
 			e.preventDefault();
 			$('#chModal').modal('show');
@@ -185,11 +358,13 @@
 
 		$(document).on('click', '.save-consignee-information', function(e){
 			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
 
 			if(validateConsignee() == true){
+
 				$.ajax({
 					type: 'POST',
-					url: '{{ route("consignee.store") }}',
+					url: '{{ route("consignee.index") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'firstName' : $('#firstName').val(),
@@ -197,13 +372,27 @@
 						'lastName' : $('#lastName').val(),
 						'companyName' : $('#companyName').val(),
 						'email' : $('#email').val(),
-						'address' : $('#contactNumber').val(),
 						'contactNumber' : $('#contactNumber').val(),
 						'businessStyle' : $('#businessStyle').val(),
 						'TIN' : $('#TIN').val(),
+						
+						'address' : $('#phy_address').val(),
+						'city' : $('#phy_city').text(),
+						'st_prov' : $('#phy_province').text(),
+						'zip' : $('#phy_zip').val(),
+
+						'b_address' : $('#bill_address').val(),
+						'b_city' : $('#bill_city').text(),
+						'b_st_prov' : $('#bill_province').text(),
+						'b_zip' : $('#bill_zip').val(),
+
+						'same_billing_address' : checked,
+
+
 
 					},
 					success: function (data) {
+						console.log(data);
 						if(typeof(data) == "object"){
 							$('#collapse_1').removeClass('in');
 							$('#collapse_2').addClass('in');
@@ -300,14 +489,6 @@
 			else
 			{
 				$('#email').css('border-color', 'green');
-			}
-			if($('#address').val() === ""){
-				$('#address').css('border-color', 'red');
-				error += "Address is required.\n";
-			}
-			else
-			{
-				$('#address').css('border-color', 'green');
 			}
 			if($('#contactNumber').val() === ""){
 				$('#contactNumber').css('border-color', 'red');
