@@ -327,6 +327,8 @@
 				$('#bill_province').attr('disabled', 'true');
 			}
 			else{
+				$('#bill_province').val("");
+				$('#bill_city').val("");
 				$('#bill_address').removeAttr('disabled');
 				$('#bill_province').removeAttr('disabled');
 				$('#bill_city').removeAttr('disabled');
