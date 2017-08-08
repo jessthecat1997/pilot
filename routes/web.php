@@ -178,6 +178,11 @@ Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->
 //Jessie
 
 
+//Locations
+Route::resource('/location', 'LocationsController');
+Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
+
+
 // Trucking Route
 Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');
 Route::resource('/trucking/contracts', 'ContractsController');

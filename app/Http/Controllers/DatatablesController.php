@@ -450,6 +450,17 @@ class DatatablesController extends Controller
 	}
 
 
+	public function location_datatable(){
+		$locations = DB::table('locations')
+		->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+		->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+		->select('locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name')
+		->where('locations.deleted_at', '=', null)
+		->get();
+		return $locations;
+	}
+
+
 	//Utility Deactivate
 
 	public function cds_datatable(){
