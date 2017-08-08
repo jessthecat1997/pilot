@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaymentsTable extends Migration
+class CreateBiilingExpensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('billing_revenues', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('amount',19,2);
-            $table->integer('so_head_id')->unsigned();
+            $table->string('description', 200)
+            $table->decimal('amount',10,2);
+            $table->decimal('tax', 2,2);
+            $table->integer('bill_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('so_head_id')->references('id')->on('consignee_service_order_headers');
-            $table->foreign('payment_mode_id')->references('id')->on('payment_modes');
+            $table->foreign('bill_id')->references('id')->on('billings');
         });
     }
 
@@ -32,6 +33,7 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+         Schema::dropIfExists('billing_revenues');
+    }
     }
 }
