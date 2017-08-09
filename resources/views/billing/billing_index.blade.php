@@ -10,30 +10,23 @@
 				<tbody>
 					<tr>
 						<td class="active"><strong>Consignee: </strong></td>
-						@forelse($bills as $bill)
-						<td class = "success" id="consignee"><strong>{{ $bill->companyName }}</strong></td>
-						@empty
-						@endforelse
+						
+						<td class = "success" id="consignee"><strong>{{ $bills[0]->companyName }}</strong></td>
 						<td class="success">
 							
 						</td>
 					</tr>
 					<tr>
 						<td class="active"><strong>Address: </strong></td>
-						@forelse($bills as $bill)
-						<td class="success" id="address"><strong>{{ $bill->address }}</strong></td>
-						@empty
-						@endforelse
+						<td class="success" id="address"><strong>{{ $bills[0]->address }}</strong></td>
 						<td class="success">
 							
 						</td>
 					</tr>
 					<tr>
 						<td class="active"><strong>Service Order: </strong></td>
-						@forelse($bills as $bill)
-						<td class="success" id="sotype"><strong>{{ $bill->name }}</strong></td>
-						@empty
-						@endforelse
+
+						<td class="success" id="sotype"><strong>{{ $bills[0]->name }}</strong></td>
 						<td class="success">
 							
 						</td>
@@ -46,8 +39,7 @@
 							<button class="btn btn-info col-sm-3 pull-right" id="bill_hist">View Billing History</button>
 						</td>
 						<td>
-							
-							<a href='/billing/{{ $bill->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
+							<a value='/billing/{{ $bills[0]->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
 						</td>
 					</tr>
 				</tbody>
@@ -57,7 +49,7 @@
 	<hr>
 	<div class="row collapse in" id="bill_collapse">
 		<div class="panel-default col-sm-6">
-			<div class="panel-heading" id="heading">List of Bills</div>
+			<div class="panel-heading" id="heading">List of Revenues</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "br_bill_table">
 					<thead>
@@ -74,7 +66,7 @@
 			</div>
 		</div>
 		<div class="panel-default col-sm-6">
-			<div class="panel-heading" id="heading">List of Refundable Charges</div>
+			<div class="panel-heading" id="heading">List of Expenses</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "br_rc_table">
 					<thead>
