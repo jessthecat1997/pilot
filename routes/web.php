@@ -217,6 +217,14 @@ Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@co
 Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
+
+//Vanessa addition
+
+
+Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
+Route::resource('/trucking/contracts_template','ContractTemplatesController');
+
+
 //Delivery to Temporary Billing
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
 Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');

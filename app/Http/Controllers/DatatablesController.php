@@ -80,7 +80,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ct_datatable(){
-		$cts = ContainerType::select(['id', 'name','description','length','width','height', 'created_at']);
+		$cts = ContainerType::select(['id', 'name','description','maxWeight', 'created_at']);
 
 		return Datatables::of($cts)
 		->addColumn('action', function ($ct){

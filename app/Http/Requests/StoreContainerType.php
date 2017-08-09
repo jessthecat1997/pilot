@@ -18,7 +18,7 @@ class StoreContainerType extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:container_types,name',
+            'name' => 'required|unique:container_types,name',
             'description' => 'max:50'
             ];
 
@@ -27,7 +27,7 @@ class StoreContainerType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:container_types,name,'. $this->segment(3) ,
+            'name' => 'required| unique:container_types,name,'. $this->segment(3) ,
             'description' => 'max:50'
             ];
 
