@@ -237,6 +237,18 @@
 	</section>
 </div>
 @endsection
+
+@push('styles')
+<style>
+	.consignee
+	{
+		border-left: 10px solid #2ad4a5;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
+
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){

@@ -16,6 +16,8 @@ class CreateLocationsTable extends Migration
             $table->integer('cities_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('cities_id')->references('id')->on('location_cities');
         });
     }
 
