@@ -96,10 +96,19 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                         <li>
-                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('consignee.index') }}"  class = "consignee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consignee</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location.index') }}"  class = "location">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Location</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('quotation.index') }}"  class = "quotation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quotation</a>
                         </li>
                         <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
                             <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery</a>
