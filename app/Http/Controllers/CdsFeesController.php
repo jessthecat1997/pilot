@@ -19,6 +19,7 @@ class CdsFeesController extends Controller
     {
         $cds = CdsFee::create($request->all());
         return $cds;
+        
     }
 
 

@@ -28,7 +28,7 @@ Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('b
 
 
 //Consignee
-Route::resource('/consignee', 'ConsigneesController');
+Route::resource('consignee', 'ConsigneesController');
 Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
 Route::get('admin/csDatamain', 'DatatablesController@consignee_datatable_main')->name('consignee_get_data');
@@ -182,6 +182,8 @@ Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->
 Route::resource('/location', 'LocationsController');
 Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
 
+//Quotations
+Route::resource('/quotation', 'QuotationsController');
 
 // Trucking Route
 Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');

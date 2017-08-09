@@ -454,10 +454,22 @@ class DatatablesController extends Controller
 		$locations = DB::table('locations')
 		->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
 		->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
-		->select('locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name')
+		->select('locations.id', 'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
 		->where('locations.deleted_at', '=', null)
+		->orderBy('location_name')
 		->get();
-		return $locations;
+
+		return Datatables::of($locations)
+		->addColumn('action', function ($location){
+			return
+			'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
+			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' . 
+			'<button value = "'. $location->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $location->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
 	}
 
 
