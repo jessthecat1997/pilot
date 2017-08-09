@@ -17,13 +17,9 @@ class CreateBillingInvoiceDetailsTable extends Migration
             $table->increments('id');
             $table->decimal('amount', 19, 3);
             $table->decimal('discount', 3, 2);
-            $table->integer('billings_id')->unsigned();
-            $table->integer('bi_head_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('bi_head_id')->references('id')->on('billing_invoice_headers');
-            $table->foreign('billings_id')->references('id')->on('billings');
         });
     }
 

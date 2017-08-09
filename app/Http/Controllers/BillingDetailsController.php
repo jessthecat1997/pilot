@@ -37,8 +37,9 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$so_head_id = $id;
+		
 
-		return view('billing/billing_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery', 'so_head_id']));
+		return view('billing/billing_index', compact(['bills', 'delivery', 'so_head_id']));
 
 	}
 	public function show_billing(Request $request, $id)

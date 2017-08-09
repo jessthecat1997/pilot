@@ -21,7 +21,6 @@ class CreatePaymentsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('so_head_id')->references('id')->on('consignee_service_order_headers');
-            $table->foreign('payment_mode_id')->references('id')->on('payment_modes');
         });
     }
 
