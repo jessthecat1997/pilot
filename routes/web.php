@@ -187,6 +187,8 @@ Route::get('/locationData', 'DatatablesController@location_datatable')->name('lo
 
 //Quotations
 Route::resource('/quotation', 'QuotationsController');
+Route::get('/quotation/{id}/print', 'QuotationsController@print');
+Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
 
 // Trucking Route
 Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');

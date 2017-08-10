@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>View Contract</title>
+	<title>View Quotation</title>
 	<style type="text/css">
 		table {
 			border-collapse: collapse;
@@ -48,10 +48,10 @@
 			<div>
 				<br />
 				<br />
-				<strong>{{ Carbon\Carbon::parse($contract[0]->created_at)->toFormattedDateString() }}</strong>
+				<strong>{{ Carbon\Carbon::parse($quotation[0]->created_at)->toFormattedDateString() }}</strong>
 				<br />
 				<br />
-				Mr./Mrs. <span><strong>{{ $contract[0]->name }}</strong></span>
+				Mr./Mrs. <span><strong>{{ $quotation[0]->name }}</strong></span>
 				<br />
 				<br />
 				<br />
@@ -61,7 +61,7 @@
 			</div>
 
 			<div>
-				@if(count($contract_details) > 0)
+				@if(count($quotation_details) > 0)
 				<h3>Rates</h3>
 
 				<table style="border: 1px solid black; width: 100%;">
@@ -79,16 +79,16 @@
 						</tr>
 					</thead>
 					<tbody>
-						@forelse($contract_details as $contract_detail)
+						@forelse($quotation_details as $quotation_detail)
 						<tr>
 							<td>
-								{{ $contract_detail->from }}
+								{{ $quotation_detail->from }}
 							</td>
 							<td>
-								{{ $contract_detail->to }}
+								{{ $quotation_detail->to }}
 							</td>
 							<td style="text-align: right;">
-								{{ $contract_detail->amount }}
+								{{ $quotation_detail->amount }}
 							</td>
 						</tr>
 						@empty
@@ -106,10 +106,10 @@
 
 			<br />
 			<h3>Terms and Conditions</h3>
-			@if($contract[0]->specificDetails == null)
+			@if($quotation[0]->specificDetails == null)
 			<h5 style="text-align: center;">No specified details</h5>
 			@else
-			<p>{!! $contract[0]->specificDetails !!}</p>
+			<p>{!! $quotation[0]->specificDetails !!}</p>
 			@endif
 			
 			<br />
@@ -128,7 +128,7 @@
 						President
 					</td>
 					<td style="width: 50%; border: 1px solid transparent;">
-						<strong>{{ strtoupper($contract[0]->name) }}, {{ strtoupper($contract[0]->companyName) }}</strong>
+						<strong>{{ strtoupper($quotation[0]->name) }}, {{ strtoupper($quotation[0]->companyName) }}</strong>
 						<br>
 						Conforme
 					</td>

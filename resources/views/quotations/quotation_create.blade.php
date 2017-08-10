@@ -623,7 +623,7 @@
 					},
 
 					success: function (data){
-
+						window.location.replace("{{ route('quotation.index') }}/" + data.id);
 					}
 
 				})
