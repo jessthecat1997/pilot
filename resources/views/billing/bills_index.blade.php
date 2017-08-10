@@ -50,12 +50,6 @@
 			<tbody>
 				<tr>
 					<td style="width: 20%">
-						<strong>Payment Allowance (day/s):</strong>
-					</td>
-					<td style="width: 30%">
-						<input type="text" class="form-control" name="paymentAllowance" id="paymentAllowance" required>
-					</td>
-					<td style="width: 20%">
 						<strong>Vat Rate:</strong>
 					</td>
 					<td style="width: 30%">
@@ -67,7 +61,7 @@
 	</div>
 	<div class="row">
 		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading">Add Bill and Refundable Charges</div>
+			<div class="panel-heading" id="heading">Add Bill</div>
 			<div class="panel-body">
 				<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
 					<thead>

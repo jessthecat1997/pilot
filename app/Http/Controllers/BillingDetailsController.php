@@ -111,30 +111,22 @@ class BillingDetailsController extends Controller
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
+
 		$billing_header =  BillingInvoiceHeader::all()->last();
-		$particulars = DB::table('billings')
-		->leftjoin('billing_invoice_details', 'billings.id', '=', 'billing_invoice_details.billings_id')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('billing_invoice_headers.id','=',$billing_header->id)
+		$revenues = DB::table('billing_revenues')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_revenues.bill_id', '=','billings.id')
+		->select('billings.name', 'billing_revenues.amount')
+		->where('billing_invoice_headers.id', '=', $billing_header->id)
 		->get();
-
-		$br_rc = DB::table('refundable_charges')
-		->join('consignee_service_order_headers', 'refundable_charges.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('refundable_charges.description', 'amount')
-		->where('consignee_service_order_headers.id', '=', $billing_header->id)
-		->get();
-
-		$totalbill = DB::table('billing_invoice_details')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->leftjoin('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$billing_header->id)
+		$expenses = DB::table('billing_expenses')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_expenses.bill_id', '=','billings.id')
+		->select('billings.name', 'billing_expenses.amount')
+		->where('billing_invoice_headers.id', '=', $billing_header->id)
 		->get();
 		
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['particulars', 'totalbill', 'bills', 'br_rc']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['revenues', 'expenses', 'bills', 'br_rc']));
 		return $pdf->stream();
 	}
 	

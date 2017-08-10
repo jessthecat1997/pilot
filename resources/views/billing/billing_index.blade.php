@@ -141,7 +141,7 @@
 		var br_table = $('#exp_table').DataTable({
 			processing: false,
 			serverSide: true,
-			ajax: "{{ route('expenses.data') }}",
+			ajax: "{{ route('expenses.data', $so_head_id) }}",
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -151,7 +151,7 @@
 		var rc_table = $('#rev_table').DataTable({
 			processing: false,
 			serverSide: true,
-			ajax: "{{ route('revenue.data') }}",
+			ajax: "{{ route('revenue.data',$so_head_id) }}",
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -168,8 +168,9 @@
 			ajax: "{{ route('invoice.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
-			{ data: 'paymentAllowance' },
-			{ data: 'created_at' },
+			{ data: 'vatRate' },
+			{ data: 'date_billed' },
+			{ data: 'due_date' },
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})

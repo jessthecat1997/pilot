@@ -141,13 +141,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					@forelse($particulars as $part)
+					@forelse($revenues as $rev)
 					<tr>
 						<td style="text-align: center;">
-							{{ $part->name }}
+							{{ $rev->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $part->Total }}
+							Php {{ $rev->amount }}
 						</td>
 					</tr>
 					@empty
@@ -157,24 +157,13 @@
 						</td>
 					</tr>
 					@endforelse
-					@forelse($br_rc as  $rc)
+					@forelse($expenses as $exp)
 					<tr>
 						<td style="text-align: center;">
-							{{ $rc->description }}
+							{{ $exp->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $rc->amount }}
-						</td>
-					</tr>
-					@empty
-					@endforelse
-					<tr>
-						<td width="70%" style="text-align: right;">
-							<strong>TOTAL</strong>
-						</td>
-						@forelse($totalbill as $total)
-						<td width="30%" style="text-align: right;" id="total">
-							Php {{ $total->Total }}
+							Php {{ $exp->amount }}
 						</td>
 					</tr>
 					@empty
@@ -184,6 +173,7 @@
 						</td>
 					</tr>
 					@endforelse
+					
 				</tbody>
 			</table>
 			<br />
