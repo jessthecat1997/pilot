@@ -167,7 +167,7 @@
 		var br_table = $('#br_bill_table').DataTable({
 			processing: false,
 			serverSide: true,
-			ajax: "{{ route('br_bill.data') }}",
+			ajax: "{{ route('expenses.data') }}",
 			columns: [
 			{ data: 'name' },
 			{ data: 'Total' }
@@ -176,7 +176,7 @@
 		var rc_table = $('#br_rc_table').DataTable({
 			processing: false,
 			serverSide: true,
-			ajax: "{{ route('br_rc.data') }}",
+			ajax: "{{ route('revenue.data') }}",
 			columns: [
 			{ data: 'description' },
 			{ data: 'amount' }

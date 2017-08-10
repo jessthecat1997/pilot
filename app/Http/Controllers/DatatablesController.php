@@ -241,18 +241,19 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
-	public function br_bills_datatable(Request $request)
+	public function expenses_datatable(Request $request)
 	{
 		$billing_header =  BillingInvoiceHeader::all('id')->last();
-		$br_bills = DB::table('billing_invoice_details')
-		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('billings', 'billing_invoice_details.billings_id', '=', 'billings.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('consignee_service_order_headers.id', '=', $billing_header->id)
+		$exps = DB::table('billing_expenses')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
+		->where('billing_expenses.bi_head_id', '=', $billing_header->id)
 		->get();
-		return Datatables::of($br_bills)
+		return Datatables::of($exps)
 		->make(true);
+
+		// select b.name, be.description, be.amount from billing_expenses as be left join billing_invoice_headers as bh on be.bi_head_id = bh.id LEFT JOIN billings as b on be.bill_id = b.id where be.bi_head_id = 1
 	}
 	public function br_rc_datatable(Request $request)
 	{

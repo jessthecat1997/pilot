@@ -19,10 +19,13 @@
 							<td style="width: 5%;">
 								No.
 							</td>
-							<td style="width: 30%;">
+							<td style="width: 25%;">
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td style="width: 10%;">
+								Bill Type
+							</td>
+							<td style="width: 35%;">
 								Description
 							</td>
 							<td style="width: 25%;">
@@ -50,6 +53,11 @@
 								<label class = "control-label" >Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>	
+							<div class="form-group required">
+								<label class = "control-label" >Bill Type: </label>
+								<label class="radio-inline" id="rev"><input type="radio" name="optbill1" id="optbill1">Revenue</label>
+								<label class="radio-inline" id="exp"><input type="radio" name="optbill2" id="optbill2">Expense</label>
+							</div>	
 							<div class="form-group ">
 								<label class = "control-label" >Description: </label>
 								<textarea class = "form-control" name = "description" id = "description" ></textarea>
@@ -59,6 +67,7 @@
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
+						<button id="check">check</button>
 					</div>
 				</div>
 			</div>
@@ -152,6 +161,16 @@
 			$('#name').val("");
 			$('#billModal').modal('show');
 
+		});
+		$(document).on('click', '#check',function(e){
+			if (document.getElementById("optbill1").checked == true) {
+				var rev = $()
+				alert()
+			}
+			else if (document.getElementById("optbill2").checked == true) {
+				alert("You have selected Option 2");
+			}
+			
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
