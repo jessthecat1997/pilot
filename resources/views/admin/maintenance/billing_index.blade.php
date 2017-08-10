@@ -122,6 +122,7 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'name'},
+			{ data: 'bill_type' },
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
@@ -164,8 +165,8 @@
 		});
 		$(document).on('click', '#check',function(e){
 			if (document.getElementById("optbill1").checked == true) {
-				var rev = $()
-				alert()
+				var rev = "R";
+				alert(rev);
 			}
 			else if (document.getElementById("optbill2").checked == true) {
 				alert("You have selected Option 2");
@@ -233,70 +234,136 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
-
+			var rev = "R";
+			var exp = "E";
 			$('#description').valid();
 			$('#name').valid();
 
 			if(title == "New Billing")
 			{
-				if($('#name').valid() && $('#description').valid()){
+				if (document.getElementById("optbill1").checked == true) {
+					if($('#name').valid() && $('#description').valid()){
 
-					$('#btnSave').attr('disabled', 'true');
+						$('#btnSave').attr('disabled', 'true');
 
-					$.ajax({
-						type: 'POST',
-						url:  '{{ route("billing.index") }}',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'name' : $('#name').val(),
-							'description' : $('#description').val(),
-						},
-						success: function (data)
-						{
-							if(typeof(data) === "object"){
-								billtable.ajax.reload();
-								$('#billModal').modal('hide');
-								$('#description').val("");
-								$('.modal-title').text('New Bill');
+						$.ajax({
+							type: 'POST',
+							url:  '{{ route("billing.index") }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'bill_type' : rev,
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									billtable.ajax.reload();
+									$('#billModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Bill');
 
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully");
+
+									$('#btnSave').removeAttr('disabled');
 								}
-								toastr["success"]("Record added successfully");
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 
-								$('#btnSave').removeAttr('disabled');
-							}
-							else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-								});
+									$('#btnSave').removeAttr('disabled');
 
-								$('#btnSave').removeAttr('disabled');
+								}
+							},
 
-							}
-						},
+						})
+					}
+				}
+				else if (document.getElementById("optbill2").checked == true) {
+					console.log(exp);
+					if($('#name').valid() && $('#description').valid()){
 
-					})
+						$('#btnSave').attr('disabled', 'true');
+						$.ajax({
+							type: 'POST',
+							url:  '{{ route("billing.index") }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'bill_type' : exp,
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									billtable.ajax.reload();
+									$('#billModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Bill');
+
+
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully");
+
+									$('#btnSave').removeAttr('disabled');
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+							},
+
+						})
+					}
 				}
 			}
 			else
@@ -372,7 +439,7 @@
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

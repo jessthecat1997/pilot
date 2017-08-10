@@ -39,7 +39,7 @@
 							<button class="btn btn-info col-sm-3 pull-right" id="bill_hist">View Billing History</button>
 						</td>
 						<td>
-							<a value='/billing/{{ $bills[0]->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
+							<a href='/billing/{{ $bills[0]->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
 						</td>
 					</tr>
 				</tbody>
@@ -51,11 +51,14 @@
 		<div class="panel-default col-sm-6">
 			<div class="panel-heading" id="heading">List of Revenues</div>
 			<div class="panel-body">
-				<table class = "table-responsive table" id = "br_bill_table">
+				<table class = "table-responsive table" id = "rev_table">
 					<thead>
 						<tr>
 							<td>
 								Name
+							</td>
+							<td>
+								Description
 							</td>
 							<td>
 								Amount
@@ -68,52 +71,20 @@
 		<div class="panel-default col-sm-6">
 			<div class="panel-heading" id="heading">List of Expenses</div>
 			<div class="panel-body">
-				<table class = "table-responsive table" id = "br_rc_table">
+				<table class = "table-responsive table" id = "exp_table">
 					<thead>
 						<tr>
 							<td>
 								Name
 							</td>
 							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Delivery Bill</div>
-			<div class="panel-body">
-				<table class="table-responsive table">
-					<thead>
-						<tr>
-							<td>
-								Charges
+								Description
 							</td>
 							<td>
 								Amount
 							</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							@forelse($delivery as $del)
-							<td>
-								{{ $del->description }}
-							</td>
-							@empty
-							@endforelse
-							@forelse($delivery as $del)
-							<td>
-								{{ $del->amount }}
-							</td>
-							@empty
-							@endforelse
-						</tr>
-					</tbody>
 				</table>
 			</div>
 		</div>
@@ -130,10 +101,13 @@
 								ID
 							</td>
 							<td>
-								Payment Allowance
+								Vat Rate
 							</td>
 							<td>
 								Date Billed
+							</td>
+							<td>
+								Due Date
 							</td>
 							<td>
 								Actions
@@ -164,20 +138,22 @@
 	console.log('{{ route('invoice.data',$so_head_id) }}/{{ $so_head_id }}');
 	var data;
 	$(document).ready(function(){
-		var br_table = $('#br_bill_table').DataTable({
+		var br_table = $('#exp_table').DataTable({
 			processing: false,
 			serverSide: true,
 			ajax: "{{ route('expenses.data') }}",
 			columns: [
 			{ data: 'name' },
-			{ data: 'Total' }
+			{ data: 'description' },
+			{ data: 'amount' }
 			]
 		})
-		var rc_table = $('#br_rc_table').DataTable({
+		var rc_table = $('#rev_table').DataTable({
 			processing: false,
 			serverSide: true,
 			ajax: "{{ route('revenue.data') }}",
 			columns: [
+			{ data: 'name' },
 			{ data: 'description' },
 			{ data: 'amount' }
 			]
