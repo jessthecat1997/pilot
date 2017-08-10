@@ -34,8 +34,10 @@
 						<form class="form-horizontal" role="form">
 							{{ csrf_field() }}
 							<div class="form-group">
-								<label class="control-label col-md-5 pull-left" for="deliveryID"><strong>Trucking Service Order #:</strong></label>
-								<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $service_order->id }}</span>
+								<strong><label class="control-label col-md-5 pull-left" for="deliveryID">Trucking Service Order #:</label></strong>
+								<div class = "col-md-7">
+									<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $service_order->id }}</span>
+								</div>
 							</div>
 							
 						</form>
@@ -55,7 +57,7 @@
 									<strong>Consignee:</strong>
 								</div>
 								<div class = "col-md-8">
-									<span class="control-label" id = "tr_address">{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</span>
+									<span class="control-label pull-right" id = "tr_address">{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</span>
 								</div>
 							</div>
 							<div class = "form-group">
@@ -63,7 +65,7 @@
 									<strong>Company Name:</strong>
 								</div>
 								<div class = "col-md-8">
-									<span class="control-label" id = "tr_address">{{ $service_order_details[0]->companyName }}</span>
+									<span class="control-label pull-right" id = "tr_address">{{ $service_order_details[0]->companyName }}</span>
 								</div>
 							</div>
 							<div class="form-group">
@@ -74,9 +76,9 @@
 									<span class="control-label" id="tr_status">
 										@php
 										switch($service_order->status){
-										case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+										case 'C': echo "<span class = 'label label-default pull-right'>Cancelled</span>"; break;
 										case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-										case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+										case 'P': echo "<span class = 'label label-warning pull-right'>Pending</span>"; break;
 										default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
 										@endphp
 									</span>

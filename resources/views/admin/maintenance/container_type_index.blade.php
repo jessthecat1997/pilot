@@ -2,33 +2,25 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Container Volume</h3>
+		<h3><img src="/images/bar.png"> Maintenance | Container Size</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctModal" style = "width: 100%;">New Container Volume</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctModal" style = "width: 100%;">New Container Size</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "ch_table" style="text-align:center">
+				<table class = "table-responsive table" id = "ch_table" style="text-align:left">
 					<thead>
-						<tr>
-							<td style="width: 15%;">
-								Name
+						<tr style="text-align:left">
+							<td style="width: 20%;">
+								Size
 							</td>
-							<td style="width: 10%;">
-								Length<br>
-								(meters)
-							</td>
-							<td style="width: 10%;">
-								Width<br>
-								(meters)
-							</td>
-							<td style="width: 10%;">
-								Height<br>
-								(meters)
+							<td style="width: 20%;">
+								Maximum Weight Capacity<br>
+								(kgs)
 							</td>
 							<td style="width: 20%;">
 								Description
@@ -51,43 +43,30 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Container Volume</h4>
+							<h4 class="modal-title">New Container Size</h4>
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
-								<label class = "control-label">Name: </label>
-								<input type = "text" class = "form-control" name = "name" id = "name" required />
+
+								<label class = "control-label">Size: </label>
+								<div class = "form-group input-group">
+									<input type = "text" class = "form-control money" name = "name" id = "name" required />
+									<span class = "input-group-addon">foot</span>
+								</div>
 							</div>
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
 
-							<div class="form-group ">
-								<label class = "control-label" style = "text-align: center">Volume </label>
-								<br>
-								<div class="form-group required">
-									<label class = "control-label">Length: </label>
-									<div class = "form-group input-group">
-										<input type = "text" class = "form-control money" style= "text-align: right" 
-										value ="0" name = "length" id = "length"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
-									</div>
-								</div>
-								<div class="form-group required">
-									<label class = "control-label">Width: </label>
-									<div class = "form-group input-group">
-										<input type = "text" class = "form-control money"  style= "text-align: right"
-										value ="0" name = "width" id = "width"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
-									</div>
-								</div>
-								<div class="form-group required">
-									<label class = "control-label">Height: </label>
-									<div class = "form-group input-group">
-										<input type = "text" class = "form-control money"  style= "text-align: right"
-										value ="0" name = "height" id = "height"  data-rule-required="true" /><span class = "input-group-addon">meters</span>
-									</div>
+							<div class="form-group required">
+								<label class = "control-label">Maximum Weight Capacity: </label>
+								<div class = "form-group input-group">
+									<input type = "text" class = "form-control money" style= "text-align: right" 
+									value ="0" name = "maxWeight" id = "maxWeight"  data-rule-required="true" /><span class = "input-group-addon">kgs</span>
 								</div>
 							</div>
+							
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
@@ -144,9 +123,8 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
-	var temp_length = null;
-	var temp_width = null;
-	var temp_height = null
+	var temp_maxWeight = null;
+	
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
 			scrollX: true,
@@ -154,21 +132,17 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/ctData',
 			columns: [
-			{ data: 'name'},
-			{ data: 'length',
+			{ data: 'name',
 			"render" : function( data, type, full ) {
-				return format_container_volume(data); }},
-				{ data: 'width',
+				return format_container_size(data); }},
+				{ data: 'maxWeight',
 				"render" : function( data, type, full ) {
-					return format_container_volume(data); }},
-					{ data: 'height' ,
-					"render" : function( data, type, full ) {
-						return format_container_volume(data); }},
-						{ data: 'description' },
-						{ data: 'action', orderable: false, searchable: false }
+					return format_container_maxweight(data); }},
+					{ data: 'description' },
+					{ data: 'action', orderable: false, searchable: false }
 
-						],	"order": [[ 0, "desc" ]],
-					});
+					],	"order": [[ 0, "desc" ]],
+				});
 
 		$("#commentForm").validate({
 			rules: 
@@ -176,28 +150,18 @@
 				name:
 				{
 					required: true,
-					minlength: 3,
 					maxlength: 50,
 				},
 				description:
 				{
 					maxlength: 150,
 				},
-				length:
+				maxWeight:
 				{
 					required:true,
 
 				},
-				width:
-				{
-					required:true,
 
-				},
-				height:
-				{
-					required:true,
-
-				},
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
@@ -212,9 +176,8 @@
 			$('.modal-title').text('New Container Volume');
 			$('#description').val("");
 			$('#name').val("");
-			$('#length').val("");
-			$('#width').val("");
-			$('#height').val("");
+			$('#maxWeight').val("");
+			
 			$('#ctModal').modal('show');
 
 		});
@@ -225,14 +188,11 @@
 
 			$('#description').val(data.description);
 			$('#name').val(data.name);
-			$('#length').val(data.length);
-			$('#width').val(data.width);
-			$('#height').val(data.height);
+			$('#maxWeight').val(data.maxWeight);
+			
 			temp_name = data.name;
 			temp_desc = data.description;
-			temp_length = data.description;
-			temp_width = data.description;
-			temp_height = data.description;
+			temp_maxWeight = data.description;
 
 
 			$('.modal-title').text('Update Container Volume');
@@ -288,14 +248,13 @@
 
 			$('#name').valid();
 			$('#description').valid();
-			$('#length').valid();
-			$('#width').valid();
-			$('#height').valid();
+			$('#maxWeight').valid();
+			
 
 
 			if(title == "New Container Volume")
 			{
-				if($('#name').valid() && $('#description').valid() && $('#length').valid() &&	$('#width').valid() && $('#height').valid()){
+				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() ){
 
 					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
@@ -305,9 +264,8 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
-							'length' : $('#length').inputmask('unmaskedvalue'),
-							'width' : $('#width').inputmask('unmaskedvalue'),
-							'height' : $('#height').inputmask('unmaskedvalue'),
+							'maxWeight' : $('#maxWeight').inputmask('unmaskedvalue'),
+							
 						},
 						success: function (data)
 						{
@@ -316,9 +274,8 @@
 								$('#ctModal').modal('hide');
 								$('#name').val("");
 								$('#description').val("");
-								$('#length').val("");
-								$('#width').val("");
-								$('#height').val("");
+								$('#maxWeight').val("");
+								
 								$('.modal-title').text('New Container Volume');
 
 
@@ -364,20 +321,17 @@
 			}
 			else
 			{
-				if($('#name').valid() && $('#description').valid() && $('#length').valid() && $('#width').valid() && $('#height').valid())
+				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() )
 				{
 
 					if($('#name').val() === temp_name &&
 						$('#description').val() === temp_desc && 
-						$('#length').inputmask("unmaskedvalue") === temp_length && 
-						$('#width').inputmask("unmaskedvalue")=== temp_width &&
-						$('#height').inputmask("unmaskedvalue") === temp_height )
+						$('#maxWeight').inputmask("unmaskedvalue") === temp_maxWeight  )
 					{
 						$('#name').val("");
 						$('#description').val("");
-						$('#length').val("");
-						$('#width').val("");
-						$('#height').val("");
+						$('#maxWeight').val("");
+						
 						$('#btnSave').removeAttr('disabled');
 						$('#ctModal').modal('hide');
 					}
@@ -392,9 +346,8 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
-								'length' : $('#length').inputmask("unmaskedvalue"),
-								'width' : $('#width').inputmask("unmaskedvalue"),
-								'height' : $('#height').inputmask("unmaskedvalue"),
+								'maxWeight' : $('#maxWeight').inputmask("unmaskedvalue"),
+								
 
 							},
 							success: function (data)
@@ -403,9 +356,8 @@
 									cttable.ajax.reload();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
-									$('#length').val("");
-									$('#width').val("");
-									$('#height').val("");
+									$('#maxWeight').val("");
+									
 									$('.modal-title').text('New Container Volume');
 
 

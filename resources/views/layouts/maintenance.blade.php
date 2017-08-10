@@ -218,8 +218,12 @@
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
 
-    function format_container_volume(n) {
-        var unit = "m";
+    function format_container_maxweight(n) {
+        var unit = " kgs";
+        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
+    }
+    function format_container_size(n) {
+        var unit = "-footer";
         return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
     }
 

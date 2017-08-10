@@ -10,7 +10,7 @@ class ContainerType extends Model
     use SoftDeletes;
 
 	protected $fillable = [
-	'name', 'length', 'width' , 'height' , 'description' ,
+	'name', 'maxWeight', 'description' ,
 	];
 
 	protected $dates = [
