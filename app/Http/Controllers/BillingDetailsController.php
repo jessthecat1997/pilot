@@ -45,11 +45,11 @@ class BillingDetailsController extends Controller
 	public function show_billing(Request $request, $id)
 	{
 		$billings = Billing::all();
-		$total_bills = DB::table('billing_invoice_details')
-		->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id','=',$request)
-		->get();
+		// $total_bills = DB::table('billing_invoice_details')
+		// ->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
+		// ->where('billing_invoice_headers.so_head_id','=',$request)
+		// ->get();
 
 		$charges = Charge::all();
 
@@ -69,7 +69,7 @@ class BillingDetailsController extends Controller
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
-		->select('id', 'paymentAllowance', 'created_at')
+		->select('id', 'vatRate', 'date_billed', 'due_date')
 		->where('so_head_id', '=', $request->so_head_id)
 		->get();
 

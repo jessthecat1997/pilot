@@ -35,18 +35,7 @@
 						</div>
 					</form>
 				</div>
-				<div class = "col-md-6">
-					<h3>Terms &amp; Conditions</h3>
-					<hr />
-					<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
-						@if($contract[0]->specificDetails == null)
-						<h5 style="text-align: center;">No specified details</h5>
-						@else
-						<p><pre class = "">{!! $contract[0]->specificDetails !!}</pre></p>
-
-						@endif
-					</div>
-				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -55,72 +44,40 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-body">
-				<h3>Contract Rates</h3>
+				<h3>Terms &amp; Conditions</h3>
 				<hr />
-				<div class = "col-md-10 col-md-offset-1 panel-default panel">
-					<table class = "table table-striped table-responsive">
-						<thead>
-							<tr>
-								<td>
-									<h4>Area From</h4>
-								</td>
-								<td>
-									<h4>Area To</h4>
-								</td>
-								<td>
-									<h4 style="text-align: right ">Amount</h4>
-								</td>
-							</tr>
-						</thead>
-						@forelse($contract_details as $contract_detail)
-						<tr>
-							<td>
-								{{ $contract_detail->from }}
-							</td>
-							<td>
-								{{ $contract_detail->to }}
-							</td>
-							<td style="text-align: right;"> 
-								Php {{ $contract_detail->amount }}
-							</td>
+				<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
+					@if($contract[0]->specificDetails == null)
+					<h5 style="text-align: center;">No specified details</h5>
+					@else
+					<p><pre class = "">{!! $contract[0]->specificDetails !!}</pre></p>
 
-						</tr>
-						@empty
-						<tr>
-							<td colspan="3">
-								<h5 style="text-align: center;">No records available.</h5>
-							</td>
-						</tr>
-						@endforelse
-					</table>
-					<br />
-					<br />
+					@endif
+
+					
 				</div>
-				<br />
-				<button class="btn btn-md btn-primary pull-right generate_pdf">Generate Quotation</button>
+				<button class="btn btn-md btn-primary pull-right generate_pdf print-contract-details">Generate Contract</button>
 			</div>
 		</div>
 	</div>
-</div>
-@endsection
-@push('styles')
-<style>
-	.contracts
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	pre {border: 0; background-color: transparent;}
-</style>
-@endpush
+	@endsection
+	@push('styles')
+	<style>
+		.contracts
+		{
+			border-left: 10px solid #2ad4a5;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
+		}
+		pre {border: 0; background-color: transparent;}
+	</style>
+	@endpush
 
-@push('scripts')
-<script type="text/javascript">
-	$(document).ready(function(){
-		$(document).on('click', '.generate_pdf', function(e){
-			window.open("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
+	@push('scripts')
+	<script type="text/javascript">
+		$(document).on('click', '.print-contract-details', function(e){
+			e.preventDefault();
+			window.open("{{ route('trucking.index') }}/contracts/" + {{ $contract[0]->id }} + "/agreement_pdf");
 		})
-	})
-</script>
-@endpush
+	</script>
+	@endpush

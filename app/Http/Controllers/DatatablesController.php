@@ -19,6 +19,8 @@ use App\Area;
 use App\CdsFee;
 use App\IpfFee;
 use App\BrokerageFee;
+use App\VatRate;
+use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -79,7 +81,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ct_datatable(){
-		$cts = ContainerType::select(['id', 'name','description','length','width','height', 'created_at']);
+		$cts = ContainerType::select(['id', 'name','description','maxWeight', 'created_at']);
 
 		return Datatables::of($cts)
 		->addColumn('action', function ($ct){
@@ -112,6 +114,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $rt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $rt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function ctemp_datatable(){
+		$ctemps = ContractTemplate::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($ctemps)
+		->addColumn('action', function ($ctemp){
+			return
+			'<button value = "'. $ctemp->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $ctemp->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
@@ -206,7 +221,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.description','paymentStatus', 'consignee_service_order_headers.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_headers.created_at')
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -230,7 +245,7 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function bill_datatable(){
-		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
+		$bills = Billing::select(['id', 'name', 'bill_type','description', 'created_at']);
 
 		return Datatables::of($bills)
 		->addColumn('action', function ($bil){
@@ -241,28 +256,31 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
-	public function br_bills_datatable(Request $request)
+	public function expenses_datatable(Request $request)
 	{
-		$billing_header =  BillingInvoiceHeader::all('id')->last();
-		$br_bills = DB::table('billing_invoice_details')
-		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('billings', 'billing_invoice_details.billings_id', '=', 'billings.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100),2)) as Total'))
-		->where('consignee_service_order_headers.id', '=', $billing_header->id)
+		$billing_header =  BillingInvoiceHeader::all()->last();
+		$exps = DB::table('billing_expenses')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
+		->where('billing_expenses.bi_head_id', '=', $request->id)
 		->get();
-		return Datatables::of($br_bills)
+
+		return Datatables::of($exps)
 		->make(true);
+
+		// select b.name, be.description, be.amount from billing_expenses as be left join billing_invoice_headers as bh on be.bi_head_id = bh.id LEFT JOIN billings as b on be.bill_id = b.id where be.bi_head_id = 1
 	}
-	public function br_rc_datatable(Request $request)
+	public function revenue_datatable(Request $request)
 	{
-		$billing_header =  BillingInvoiceHeader::all('id')->last();
-		$br_rc = DB::table('refundable_charges')
-		->join('consignee_service_order_headers', 'refundable_charges.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('refundable_charges.description', 'amount')
-		->where('consignee_service_order_headers.id', '=', $billing_header->id)
+		$billing_header =  BillingInvoiceHeader::all()->last();
+		$exps = DB::table('billing_revenues')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
+		->where('billing_revenues.bi_head_id', '=', $request->id)
 		->get();
-		return Datatables::of($br_rc)
+		return Datatables::of($exps)
 		->make(true);
 	}
 	public function shipment_datatable(){
@@ -483,6 +501,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
 			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function vr_datatable(){
+		$vrs = VatRate::select(['id',  'rate', 'dateEffective', 'created_at']);
+
+		return Datatables::of($vrs)
+		->addColumn('action', function ($vrs){
+			return
+			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

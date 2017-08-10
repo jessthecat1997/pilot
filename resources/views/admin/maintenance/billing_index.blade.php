@@ -19,10 +19,13 @@
 							<td style="width: 5%;">
 								No.
 							</td>
-							<td style="width: 30%;">
+							<td style="width: 25%;">
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td style="width: 10%;">
+								Bill Type
+							</td>
+							<td style="width: 35%;">
 								Description
 							</td>
 							<td style="width: 25%;">
@@ -50,6 +53,11 @@
 								<label class = "control-label" >Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>	
+							<div class="form-group required">
+								<label class = "control-label" >Bill Type: </label>
+								<label class="radio-inline" id="rev"><input type="radio" name="optbill1" id="optbill1">Revenue</label>
+								<label class="radio-inline" id="exp"><input type="radio" name="optbill2" id="optbill2">Expense</label>
+							</div>	
 							<div class="form-group ">
 								<label class = "control-label" >Description: </label>
 								<textarea class = "form-control" name = "description" id = "description" ></textarea>
@@ -59,6 +67,7 @@
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
+						<button id="check">check</button>
 					</div>
 				</div>
 			</div>
@@ -113,6 +122,7 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'name'},
+			{ data: 'bill_type' },
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
@@ -152,6 +162,16 @@
 			$('#name').val("");
 			$('#billModal').modal('show');
 
+		});
+		$(document).on('click', '#check',function(e){
+			if (document.getElementById("optbill1").checked == true) {
+				var rev = "R";
+				alert(rev);
+			}
+			else if (document.getElementById("optbill2").checked == true) {
+				alert("You have selected Option 2");
+			}
+			
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
@@ -214,70 +234,136 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
-
+			var rev = "R";
+			var exp = "E";
 			$('#description').valid();
 			$('#name').valid();
 
 			if(title == "New Billing")
 			{
-				if($('#name').valid() && $('#description').valid()){
+				if (document.getElementById("optbill1").checked == true) {
+					if($('#name').valid() && $('#description').valid()){
 
-					$('#btnSave').attr('disabled', 'true');
+						$('#btnSave').attr('disabled', 'true');
 
-					$.ajax({
-						type: 'POST',
-						url:  '{{ route("billing.index") }}',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'name' : $('#name').val(),
-							'description' : $('#description').val(),
-						},
-						success: function (data)
-						{
-							if(typeof(data) === "object"){
-								billtable.ajax.reload();
-								$('#billModal').modal('hide');
-								$('#description').val("");
-								$('.modal-title').text('New Bill');
+						$.ajax({
+							type: 'POST',
+							url:  '{{ route("billing.index") }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'bill_type' : rev,
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									billtable.ajax.reload();
+									$('#billModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Bill');
 
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully");
+
+									$('#btnSave').removeAttr('disabled');
 								}
-								toastr["success"]("Record added successfully");
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 
-								$('#btnSave').removeAttr('disabled');
-							}
-							else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-								});
+									$('#btnSave').removeAttr('disabled');
 
-								$('#btnSave').removeAttr('disabled');
+								}
+							},
 
-							}
-						},
+						})
+					}
+				}
+				else if (document.getElementById("optbill2").checked == true) {
+					console.log(exp);
+					if($('#name').valid() && $('#description').valid()){
 
-					})
+						$('#btnSave').attr('disabled', 'true');
+						$.ajax({
+							type: 'POST',
+							url:  '{{ route("billing.index") }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'bill_type' : exp,
+								'name' : $('#name').val(),
+								'description' : $('#description').val(),
+							},
+							success: function (data)
+							{
+								if(typeof(data) === "object"){
+									billtable.ajax.reload();
+									$('#billModal').modal('hide');
+									$('#description').val("");
+									$('.modal-title').text('New Bill');
+
+
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully");
+
+									$('#btnSave').removeAttr('disabled');
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+							},
+
+						})
+					}
 				}
 			}
 			else
@@ -353,7 +439,7 @@
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

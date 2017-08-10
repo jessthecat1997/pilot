@@ -2,71 +2,72 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Container Size</h3>
+
+		<h3><img src="/images/bar.png">Maintenance|Contract Template</h3>
 		<hr>
-		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctModal" style = "width: 100%;">New Container Size</button>
-		</div>
+		<div class="col-md-4 col-md-offset-4">
+			<p align="center" >
+				<strong>-WITNESSETH-</strong>
+			</p>
+
+
+
+			<strong>WHEREAS</strong>, the <strong>FIRST PARTY</strong> needs the services of a contractor to handle a portion of the delivery and / or pick-up of various products and cargoes to and from its customers.
+			<br/>
+			<br/>
+
+			<strong>WHEREAS</strong>, the <strong>SECOND PARTY</strong> is a duly licensed entity authorized to undertake hauling services on behalf of other entities sucha as the <strong>FIRST PARTY</strong> and has sufficient manpower, capital and equipment to perform the job.
+		</p>
+		<br/>
+		<br/>
 	</div>
-	<br />
+	<div class = "col-md-3 col-md-offset-9">
+		<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctempModal" style = "width: 100%;">New section</button>
+	</div>
+</div>
+<br />
+<div class = "container-fluid">
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "ch_table" style="text-align:left">
+				<table class = "table-responsive table" id = "ctemp_table">
 					<thead>
-						<tr style="text-align:left">
+						<tr>
 							<td style="width: 20%;">
-								Size
+								Section Name
 							</td>
-							<td style="width: 20%;">
-								Maximum Weight Capacity<br>
-								(kgs)
+							<td style="width: 40%;">
+								Section Description
 							</td>
-							<td style="width: 20%;">
-								Description
-							</td>
-							<td style="width: 20%;">
+							<td style="width: 25%;">
 								Actions
 							</td>
 						</tr>
 					</thead>
 				</table>
 			</div>
-		</div>
+		</div> 
 	</div>
 
 	<section class="content">
-		<form role="form" method = "POST" id = "commentForm">
+		<form role="form" method = "POST"  id = "commentForm">
 			{{ csrf_field() }}
-			<div class="modal fade" id="ctModal" role="dialog">
+			<div class="modal fade" id="ctempModal" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Container Size</h4>
+							<h4 class="modal-title">New Section</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="form-group required">
-
-								<label class = "control-label">Size: </label>
-								<div class = "form-group input-group">
-									<input type = "text" class = "form-control money" name = "name" id = "name" required />
-									<span class = "input-group-addon">foot</span>
-								</div>
-							</div>
+								<label class = "control-label">Section Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name" required />
+							</div>			
 							<div class="form-group">
-								<label class = "control-label">Description: </label>
-								<textarea class = "form-control" name = "description" id = "description"></textarea>
+								<label class = "control-label">Section Description: </label>
+								<textarea  rows= "10" class = "form-control" name = "description" id = "description"></textarea>
 							</div>
-
-							<div class="form-group required">
-								<label class = "control-label">Maximum Weight Capacity: </label>
-								<div class = "form-group input-group">
-									<input type = "text" class = "form-control money" style= "text-align: right" 
-									value ="0" name = "maxWeight" id = "maxWeight"  data-rule-required="true" /><span class = "input-group-addon">kgs</span>
-								</div>
-							</div>
-							
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
@@ -101,48 +102,31 @@
 		</form>
 	</section>
 </div>
+</div>
 @endsection
 @push('styles')
 <style>
-	.class-container-type
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+	
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
 	var data;
-	var temp_name = null;
-	var temp_desc = null;
-	var temp_maxWeight = null;
-	
+	var temp_name = "";
+	var temp_desc = "";
 	$(document).ready(function(){
-		var cttable = $('#ch_table').DataTable({
+		var ctemptable = $('#ctemp_table').DataTable({
 			scrollX: true,
 			processing: true,
 			serverSide: true,
-			ajax: 'http://localhost:8000/admin/ctData',
+			ajax: 'http://localhost:8000/admin/ctempData',
 			columns: [
-			{ data: 'name',
-			"render" : function( data, type, full ) {
-				return format_container_size(data); }},
-				{ data: 'maxWeight',
-				"render" : function( data, type, full ) {
-					return format_container_maxweight(data); }},
-					{ data: 'description' },
-					{ data: 'action', orderable: false, searchable: false }
+			{ data: 'name'},
+			{ data: 'description' },
+			{ data: 'action', orderable: false, searchable: false }
 
-					],	"order": [[ 0, "desc" ]],
-				});
+			],	"order": [[ 0, "asc" ]],
+		});
 
 		$("#commentForm").validate({
 			rules: 
@@ -152,57 +136,45 @@
 					required: true,
 					maxlength: 50,
 				},
+
 				description:
 				{
-					maxlength: 150,
+					maxlength: 1000,
 				},
-				maxWeight:
-				{
-					required:true,
-
-				},
-
 
 			},
-			onkeyup: function(element) {$(element).valid()}, 
+			onkeyup: function(element) {$(element).valid()},
 			submitHandler: function (form) {
 				return false;
 			}
 		});
-
-
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New Container Volume');
+			$('.modal-title').text('New Section');
 			$('#description').val("");
 			$('#name').val("");
-			$('#maxWeight').val("");
-			
-			$('#ctModal').modal('show');
+			$('#ctempModal').modal('show');
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
-			data = cttable.row($(this).parents()).data();
-
+			var ch_id = $(this).val();
+			data = ctemptable.row($(this).parents()).data();
 			$('#description').val(data.description);
 			$('#name').val(data.name);
-			$('#maxWeight').val(data.maxWeight);
-			
+
 			temp_name = data.name;
 			temp_desc = data.description;
-			temp_maxWeight = data.description;
 
-
-			$('.modal-title').text('Update Container Volume');
-			$('#ctModal').modal('show');
+			$('.modal-title').text('Update Section');
+			$('#ctempModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
-			data = cttable.row($(this).parents()).data();
+			var ch_id = $(this).val();
+			data = ctemptable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
+
 
 
 
@@ -210,13 +182,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/container_type/' + data.id,
+				url:  '/admin/contract_template/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					cttable.ajax.reload();
+					ctemptable.ajax.reload();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -224,7 +196,7 @@
 						"debug": false,
 						"newestOnTop": false,
 						"progressBar": false,
-						"rtl": false,
+						"ctempl": false,
 						"positionClass": "toast-bottom-right",
 						"preventDuplicates": false,
 						"onclick": null,
@@ -246,37 +218,30 @@
 			e.preventDefault();
 			var title = $('.modal-title').text();
 
-			$('#name').valid();
 			$('#description').valid();
-			$('#maxWeight').valid();
-			
+			$('#name').valid();
 
-
-			if(title == "New Container Volume")
+			if(title == "New Section")
 			{
-				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() ){
+				if($('#name').valid() && $('#description').valid()){
 
 					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/container_type',
+						url:  '/admin/contract_template',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
-							'maxWeight' : $('#maxWeight').inputmask('unmaskedvalue'),
-							
 						},
 						success: function (data)
 						{
 							if(typeof(data) === "object"){
-								cttable.ajax.reload();
-								$('#ctModal').modal('hide');
-								$('#name').val("");
+								ctemptable.ajax.reload();
+								$('#ctempModal').modal('hide');
 								$('#description').val("");
-								$('#maxWeight').val("");
-								
-								$('.modal-title').text('New Container Volume');
+								$('.modal-title').text('New Section');
+
 
 
 								toastr.options = {
@@ -284,7 +249,7 @@
 									"debug": false,
 									"newestOnTop": false,
 									"progressBar": false,
-									"rtl": false,
+									"ctempl": false,
 									"positionClass": "toast-bottom-right",
 									"preventDuplicates": false,
 									"onclick": null,
@@ -300,13 +265,12 @@
 								toastr["success"]("Record addded successfully");
 
 								$('#btnSave').removeAttr('disabled');
-
 							}
 							else{
 								resetErrors();
 								var invdata = JSON.parse(data);
 								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
+									console.log(i + " => " + v);
 									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 								});
@@ -321,44 +285,32 @@
 			}
 			else
 			{
-				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() )
+				if($('#name').valid() && $('#description').valid())
 				{
-
-					if($('#name').val() === temp_name &&
-						$('#description').val() === temp_desc && 
-						$('#maxWeight').inputmask("unmaskedvalue") === temp_maxWeight  )
+					if($('#name').val() === temp_name && $('#description').val() === temp_desc)
 					{
 						$('#name').val("");
 						$('#description').val("");
-						$('#maxWeight').val("");
-						
 						$('#btnSave').removeAttr('disabled');
-						$('#ctModal').modal('hide');
-					}
+						$('#ctempModal').modal('hide');
+					} 
 					else
 					{
-						$('#btnSave').attr('disabled', 'true');
-
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/container_type/' + data.id,
+							url:  '/admin/contract_template/' + data.id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
-								'maxWeight' : $('#maxWeight').inputmask("unmaskedvalue"),
-								
-
 							},
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-									cttable.ajax.reload();
-									$('#ctModal').modal('hide');
+									ctemptable.ajax.reload();
+									$('#ctempModal').modal('hide');
 									$('#description').val("");
-									$('#maxWeight').val("");
-									
-									$('.modal-title').text('New Container Volume');
+									$('.modal-title').text('New Section');
 
 
 
@@ -367,7 +319,7 @@
 										"debug": false,
 										"newestOnTop": false,
 										"progressBar": false,
-										"rtl": false,
+										"ctempl": false,
 										"positionClass": "toast-bottom-right",
 										"preventDuplicates": false,
 										"onclick": null,
@@ -383,13 +335,12 @@
 									toastr["success"]("Record addded successfully");
 
 									$('#btnSave').removeAttr('disabled');
-
 								}
 								else{
 									resetErrors();
 									var invdata = JSON.parse(data);
 									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
+										console.log(i + " => " + v);
 										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 									});

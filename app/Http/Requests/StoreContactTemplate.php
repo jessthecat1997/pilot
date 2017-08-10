@@ -3,23 +3,27 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Response;
 
-class StoreContainerType extends FormRequest
+class StoreContractTemplate extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
         return true;
     }
 
-    public function rules()
+       public function rules()
     {
         switch ($this->method()) {
             case 'POST':
 
             return [
-            'name' => 'required|unique:container_types,name',
-            'description' => 'max:50'
+            'name' => 'required|unique:contract_templates,name',
+            'description' => 'max:500|required'
             ];
 
             break;
@@ -27,8 +31,8 @@ class StoreContainerType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| unique:container_types,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+            'name' => 'required| unique:contract_templates,name,'. $this->segment(3) ,
+            'description' => 'max:500|required|unique:contract_templates,description,'. $this->segment(3),
             ];
 
             break;

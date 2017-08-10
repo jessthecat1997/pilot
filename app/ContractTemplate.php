@@ -5,15 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class VatRate extends Model
+class ContractTemplate extends Model
 {
-    use SoftDeletes;
+	use SoftDeletes;
 
 	protected $fillable = [
-	'description','rate','currentRate', 'dateEffective',
+	'name', 'description',
 	];
 
 	protected $dates = [
 	'deleted_at',
 	];
+    
 }

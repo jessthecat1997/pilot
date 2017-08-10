@@ -54,7 +54,8 @@ Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','IpfFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-
+Route::resource('/admin/vat_rate','VatRatesController');
+Route::resource('/admin/bank_account','BankAccountsController');
 
 //Utilities Routes
 Route::resource('/utilities/employee', 'EmployeesController');
@@ -142,6 +143,8 @@ Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data'
 Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
+Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
+
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('pdfview','PaymentsController@pdfview');
 
@@ -160,8 +163,8 @@ Route::get('admin/invoice/{so_head_id}', 'BillingDetailsController@billing_invoi
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
 Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
-Route::get('admin/br_bill', 'DatatablesController@br_bills_datatable')->name('br_bill.data');
-Route::get('admin/br_rc', 'DatatablesController@br_rc_datatable')->name('br_rc.data');
+Route::get('admin/expenses', 'DatatablesController@expenses_datatable')->name('expenses.data');
+Route::get('admin/revenue', 'DatatablesController@revenue_datatable')->name('revenue.data');
 
 
 //Maintenance data
@@ -214,6 +217,14 @@ Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@co
 Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
+
+//Vanessa addition
+
+
+Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
+Route::resource('/admin/contract_template','ContractTemplatesController');
+
+
 //Delivery to Temporary Billing
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
 Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
