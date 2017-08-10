@@ -15,7 +15,12 @@ class CreateQuotationHeadersTable extends Migration
     {
         Schema::create('quotation_headers', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('consignees_id')->unsigned();
+            $table->text('specificDetails')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('consignees_id')->references('id')->on('consignees');
         });
     }
 
