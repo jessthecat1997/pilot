@@ -3,28 +3,47 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Response;
 class StoreContractTemplate extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+    
     public function rules()
     {
-        return [
+
+
+        switch ($this->method()) {
+            case 'POST':
+
+            return [
+            'name' => 'required|unique:contract_templates,name',
+            'description' => 'max:1000|required|unique:contract_templates,description'
+            ];
+
+            break;
             
-        ];
+            case 'PUT':
+
+            return [
+            'name' => 'required| unique:contract_templates,name,'. $this->segment(3) ,
+            'description' => 'max:1000|required|unique:contract_templates,description,'. $this->segment(3),
+            ];
+
+            break;
+            
+            default: break;
+        }
+
+    }
+
+    //Overriding the response 422
+    public function response(array $errors)
+    {
+        return Response::make(json_encode($errors), 200);
     }
 }

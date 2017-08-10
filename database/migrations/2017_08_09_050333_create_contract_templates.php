@@ -11,7 +11,7 @@ class CreateContractTemplates extends Migration
         Schema::create('contract_templates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50);
-            $table->string('description', 500);
+            $table->string('description', 1000);
             $table->timestamps();
             $table->softDeletes();
         });

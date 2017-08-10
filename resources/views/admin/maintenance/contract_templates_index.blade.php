@@ -2,89 +2,106 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
+
 		<h3><img src="/images/bar.png">Maintenance|Contract Template</h3>
 		<hr>
-		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctempModal" style = "width: 100%;">New section</button>
-		</div>
-	</div>
-	<br />
-	<div class = "container-fluid">
-		<div class = "row">
-			<div class = "panel-default panel">
-				<div class = "panel-body">
-					<table class = "table-responsive table" id = "ctemp_table">
-						<thead>
-							<tr>
-								<td style="width: 20%;">
-									Section Name
-								</td>
-								<td style="width: 40%;">
-									Section Description
-								</td>
-								<td style="width: 25%;">
-									Actions
-								</td>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div> 
-		</div>
+		<div class="col-md-4 col-md-offset-4">
+			<p align="center" >
+				<strong>-WITNESSETH-</strong>
+			</p>
 
-		<section class="content">
-			<form role="form" method = "POST"  id = "commentForm">
-				{{ csrf_field() }}
-				<div class="modal fade" id="ctempModal" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">New Section</h4>
-							</div>
-							<div class="modal-body">
-								<div class="form-group required">
-									<label class = "control-label">Section Name: </label>
-									<input type = "text" class = "form-control" name = "name" id = "name" required />
-								</div>			
-								<div class="form-group">
-									<label class = "control-label">Section Description: </label>
-									<textarea class = "form-control" name = "description" id = "description"></textarea>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
-		</section>
-		<section class="content">
-			<form role = "form" method = "POST">
-				{{ csrf_field() }}
-				{{ method_field('DELETE') }}
-				<div class="modal fade" id="confirm-delete" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								Deactivate record
-							</div>
-							<div class="modal-body">
-								Confirm Deactivating
-							</div>
-							<div class="modal-footer">
-								
-								<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
-		</section>
+
+
+			<strong>WHEREAS</strong>, the <strong>FIRST PARTY</strong> needs the services of a contractor to handle a portion of the delivery and / or pick-up of various products and cargoes to and from its customers.
+			<br/>
+			<br/>
+
+			<strong>WHEREAS</strong>, the <strong>SECOND PARTY</strong> is a duly licensed entity authorized to undertake hauling services on behalf of other entities sucha as the <strong>FIRST PARTY</strong> and has sufficient manpower, capital and equipment to perform the job.
+		</p>
+		<br/>
+		<br/>
 	</div>
+	<div class = "col-md-3 col-md-offset-9">
+		<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ctempModal" style = "width: 100%;">New section</button>
+	</div>
+</div>
+<br />
+<div class = "container-fluid">
+	<div class = "row">
+		<div class = "panel-default panel">
+			<div class = "panel-body">
+				<table class = "table-responsive table" id = "ctemp_table">
+					<thead>
+						<tr>
+							<td style="width: 20%;">
+								Section Name
+							</td>
+							<td style="width: 40%;">
+								Section Description
+							</td>
+							<td style="width: 25%;">
+								Actions
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div> 
+	</div>
+
+	<section class="content">
+		<form role="form" method = "POST"  id = "commentForm">
+			{{ csrf_field() }}
+			<div class="modal fade" id="ctempModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">New Section</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group required">
+								<label class = "control-label">Section Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name" required />
+							</div>			
+							<div class="form-group">
+								<label class = "control-label">Section Description: </label>
+								<textarea  rows= "10" class = "form-control" name = "description" id = "description"></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<section class="content">
+		<form role = "form" method = "POST">
+			{{ csrf_field() }}
+			{{ method_field('DELETE') }}
+			<div class="modal fade" id="confirm-delete" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Deactivate record
+						</div>
+						<div class="modal-body">
+							Confirm Deactivating
+						</div>
+						<div class="modal-footer">
+
+							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+</div>
 </div>
 @endsection
 @push('styles')
@@ -108,7 +125,7 @@
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 0, "asc" ]],
 		});
 
 		$("#commentForm").validate({
@@ -117,17 +134,16 @@
 				name:
 				{
 					required: true,
-					minlength: 3,
 					maxlength: 50,
 				},
 
 				description:
 				{
-					maxlength: 50,
+					maxlength: 1000,
 				},
 
 			},
-			onkeyup: false,
+			onkeyup: function(element) {$(element).valid()},
 			submitHandler: function (form) {
 				return false;
 			}
@@ -150,7 +166,7 @@
 			temp_name = data.name;
 			temp_desc = data.description;
 
-			$('.modal-title').text('Edit Section');
+			$('.modal-title').text('Update Section');
 			$('#ctempModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -277,7 +293,7 @@
 						$('#description').val("");
 						$('#btnSave').removeAttr('disabled');
 						$('#ctempModal').modal('hide');
-					}
+					} 
 					else
 					{
 						$.ajax({
@@ -339,7 +355,7 @@
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
