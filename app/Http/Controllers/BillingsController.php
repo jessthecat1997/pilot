@@ -24,6 +24,7 @@ class BillingsController extends Controller
 	public function update(StoreBilling $request, $id)
 	{
 		$bill = Billing::findOrFail($id);
+		$bill->bill_type = $request->bill_type;
 		$bill->name = $request->name;
 		$bill->description = $request->description;
 		$bill->save();

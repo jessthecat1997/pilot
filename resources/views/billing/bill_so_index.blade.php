@@ -63,7 +63,7 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
-			{ data: 'description' },
+			{ data: 'name' },
 			{ data: 'paymentStatus' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
