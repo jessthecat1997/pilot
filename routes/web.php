@@ -222,7 +222,7 @@ Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsControlle
 
 
 Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
-Route::resource('/trucking/contracts_template','ContractTemplatesController');
+Route::resource('/admin/contract_template','ContractTemplatesController');
 
 
 //Delivery to Temporary Billing

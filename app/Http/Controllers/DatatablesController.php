@@ -20,6 +20,7 @@ use App\CdsFee;
 use App\IpfFee;
 use App\BrokerageFee;
 use App\VatRate;
+use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -113,6 +114,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $rt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $rt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function ctemp_datatable(){
+		$ctemps = ContractTemplate::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($ctemps)
+		->addColumn('action', function ($ctemp){
+			return
+			'<button value = "'. $ctemp->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $ctemp->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
