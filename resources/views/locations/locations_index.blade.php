@@ -58,7 +58,7 @@
 								</div>
 							</div>
 							<div class="form-group required">
-								<label class = "control-label col-md-3">Address: </label>
+								<label class = "control-label col-md-3">Address Line 1: </label>
 								<div class = "col-md-9">
 									<textarea class = "form-control" id = "address" name = "address"></textarea>
 								</div>
