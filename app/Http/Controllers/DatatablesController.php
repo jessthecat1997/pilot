@@ -490,6 +490,22 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+	public function get_quotations(){
+		$quotations = DB::table('quotation_headers')
+		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
+		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->get();
+	
+		return Datatables::of($quotations)
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
+		->addColumn('action', function ($quotation){
+			return
+			'<button value = "'. $quotation->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $quotation->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
 
 	//Utility Deactivate
 

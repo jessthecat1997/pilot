@@ -9,7 +9,7 @@
 					<hr />
 				</div>
 				<div class = "panel-body">
-					<table class = "table table-responsive" id = "contracts_table">
+					<table class = "table table-responsive" id = "quotation_table">
 						<thead>
 							<tr>
 								<td>
@@ -42,4 +42,25 @@
 		color: #fff;
 	}
 </style>
+@endpush
+
+@push('scripts')
+<script type="text/javascript">
+	$(document).ready(function(){
+		var chtable = $('#quotation_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			ajax: '{{ route("quotation_data") }}',
+			columns: [
+			
+			{ data: 'id' },
+			{ data: 'name' },
+			{ data: 'created_at' },
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
+	})
+</script>
 @endpush

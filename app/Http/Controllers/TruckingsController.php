@@ -145,11 +145,13 @@ class TruckingsController extends Controller
         $vehicle_types = VehicleType::all();
         $employees = Employee::all();
 
+        $locations = \App\Location::all();
+
         $delivery = TruckingServiceOrder::findOrFail($so_id);
 
         if($delivery->status == 'P')
         {
-            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id']));
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations']));
         }
         else{
             return 'Cannot create new deliveries';

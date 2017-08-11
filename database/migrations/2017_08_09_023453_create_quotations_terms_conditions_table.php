@@ -20,11 +20,10 @@ class CreateQuotationsTermsConditionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-        $current_time = 
-        DB::table('quotation_terms')
+        $current_time = DB::table('quotation_terms')
         ->insert(
             array(
-                'terms' => '6 Hrs. Free Unloading.',
+                'terms' => '1. 6 Hrs. Free Unloading. <br/>',
                 'created_at' => Carbon::now()->toDayDateTimeString(),
                 'updated_at' => Carbon::now()->toDayDateTimeString()
                 )
