@@ -167,6 +167,73 @@
 								<hr />
 								<h4>&nbsp;Delivery Information</h4>
 								<br />
+								<div class = "col-md-12">
+									<div class = "panel panel-default">
+										<div class = "panel-heading">
+											Pickup Location
+										</div>
+										<div class="panel-body">
+											<div class = "row">
+												<div class = "col-md-4">
+													<div class = "form-horizontal">
+														{{ csrf_field() }}	
+														<div class="form-group required">
+															<label class = "control-label col-md-3">Name: </label>
+															<div class = "col-md-9">
+																<select class = "form-control">
+																	<option></option>
+																	@forelse($locations as $location)
+																	<option value = "{{ $location->id }}">{{ $location->name }}</option>
+																	@empty
+																	@endforelse
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class = "col-md-8">
+														{{ csrf_field() }}	
+														<div class="form-group required">
+															<label class = "control-label">Address: </label>
+															<textarea class = "form-control"></textarea>
+														</div>
+														<div class = "col-md-12">
+															<div class = "col-md-4">
+																<div class =  "col-md-12">
+																	<div class = "form-group">
+																		<label class = "control-label">City</label>
+																		<input type = "text" class = "form-control" />
+																	</div>
+																</div>
+															</div>
+															<div class = "col-md-4">
+																<div class = "col-md-12">
+																	<div class = "form-group">
+																		<label class = "control-label">Province</label>
+																		<input type = "text" class = "form-control" />
+																	</div>
+																</div>
+															</div>
+															<div class = "col-md-4">
+																<div class = "col-md-12">
+																	<div class = "form-group">
+																		<label class = "control-label">ZIP</label>
+																		<input type = "text" class = "form-control" />
+																	</div>
+																</div>
+															</div>
+														</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<div class = "panel">
+
+									</div>
+								</div>
+
 
 								<div class="form-group">
 									<label class="control-label" for = "deladdcon">Delivery Address:</label>
