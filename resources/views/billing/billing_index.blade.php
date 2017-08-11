@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<h3><img src="/images/bar.png"> Billing</h3>
+<h2>&nbsp;Billing</h2>
+<div class="pull-left">
+	<a href="/billing" class="btn but">Back</a>
+</div>
+<br/>
 <hr>
 <div class = "container-fluid">
 	<div class="row">
@@ -36,10 +40,10 @@
 
 						</td>
 						<td>
-							<button class="btn btn-info col-sm-3 pull-right" id="bill_hist">View Billing History</button>
+							<button class="btn but col-sm-3 pull-right" id="bill_hist">View Billing History</button>
 						</td>
 						<td>
-							<a href='/billing/{{ $bills[0]->id }}/create' class="btn btn-info col-sm-12 add_bill">New Bill</a>
+							<a href='/billing/{{ $bills[0]->id }}/create' class="btn but col-sm-12 add_bill">New Bill</a>
 						</td>
 					</tr>
 				</tbody>
@@ -125,7 +129,7 @@
 <style>
 	.class-billing
 	{
-		border-left: 10px solid #3ce28e;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}

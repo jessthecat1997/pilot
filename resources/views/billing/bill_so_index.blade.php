@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<h3><img src="/images/bar.png"> Billing</h3>
+<h2>&nbsp;Billing</h2>
 <hr>
 <div class="container-fluid">
 	<div class="row">
@@ -42,7 +42,7 @@
 <style>
 	.class-billing
 	{
-		border-left: 10px solid #3ce28e;
+	border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -66,7 +66,7 @@
 			{ data: 'name' },
 			{ data: 'paymentStatus' },
 			{ data: 'created_at'},
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
 		})
 	})

@@ -226,7 +226,7 @@ class DatatablesController extends Controller
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
 			return
-			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectCon">Select</a>';
+			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but selectCon">Select</a>';
 		})
 		->make(true);
 	}
@@ -240,7 +240,7 @@ class DatatablesController extends Controller
 		return Datatables::of($pso_heads)
 		->addColumn('action', function ($pso_head) {
 			return
-			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info select">Select</a>';
+			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but select">Select</a>';
 		})
 		->make(true);
 	}
@@ -250,7 +250,7 @@ class DatatablesController extends Controller
 		return Datatables::of($bills)
 		->addColumn('action', function ($bil){
 			return
-			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $bil->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -344,7 +344,7 @@ class DatatablesController extends Controller
 		return Datatables::of($contract_headers)
 		->addColumn('action', function ($contract_header){
 			return
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-info view-contract-details">View</button>' .
+			'<button value = "'. $contract_header->id .'" class = "btn btn-md but view-contract-details">View</button>' .
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary amend-contract">Amend</button>' .
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-success print-contract-details">Print</button>';
 		})
@@ -363,7 +363,7 @@ class DatatablesController extends Controller
 		return Datatables::of($employees)
 		->addColumn('action', function ($employee){
 			return
-			'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn btn-info btn-md">View</a>' .
+			'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn but btn-md">View</a>' .
 			'<button value = "'. $employee->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $employee->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
@@ -404,7 +404,7 @@ class DatatablesController extends Controller
 		return Datatables::of($truckings)
 		->addColumn('action', function ($trucking){
 			return
-			'<a href = "/trucking/'. $trucking->id .'/view" class = "btn btn-md btn-info view-service-order">Manage</a>';
+			'<a href = "/trucking/'. $trucking->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
 		})
 		->editColumn('status', function($trucking){
 			switch ($trucking->status) {
@@ -444,7 +444,7 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($delivery){
 			return
 			"<button class = 'btn btn-primary view_delivery'>View</button>" . 
-			"<button class = 'btn btn-info select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
+			"<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
 		->editColumn('status', function($deliveries){
@@ -482,7 +482,7 @@ class DatatablesController extends Controller
 			return
 			'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
 			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' . 
-			'<button value = "'. $location->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $location->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $location->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 
 		})
@@ -515,7 +515,7 @@ class DatatablesController extends Controller
 		return Datatables::of($cdss)
 		->addColumn('action', function ($cds){
 			return
-			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -528,7 +528,7 @@ class DatatablesController extends Controller
 		return Datatables::of($vrs)
 		->addColumn('action', function ($vrs){
 			return
-			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -541,7 +541,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
 			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -555,7 +555,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
 			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -1651,7 +1651,7 @@ class DatatablesController extends Controller
 		return Datatables::of($brokerages)
 		->addColumn('action', function ($brokerage){
 			return
-			'<a href = "/brokerage/'. $brokerage->id .'/view" class = "btn btn-md btn-info view-service-order">Manage</a>';
+			'<a href = "/brokerage/'. $brokerage->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
 		})
 		->editColumn('statusType', function($trucking){
 			switch ($trucking->statusType) {
