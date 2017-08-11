@@ -3,43 +3,28 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Response;
+
 class StoreLocationCities extends FormRequest
 {
-     public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
     {
-        return true;
+        return false;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
-        switch ($this->method()) {
-            case 'POST':
-
-            return [
-            'name' => 'required|unique:location_cities,name|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|',
-            'provinces_id' => 'required|',
-            
-            ];
-
-            break;
-            
-            case 'PUT':
-
-            return [
-            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,'. $this->segment(3) ,
-            'provinces_id' => 'required|',
-            ];
-
-            break;
-            
-            default: break;
-        }
-    }
-
-    //Overriding the response 422
-    public function response(array $errors)
-    {
-        return Response::make(json_encode($errors), 200);
+        return [
+            //
+        ];
     }
 }

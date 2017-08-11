@@ -38,7 +38,7 @@
 	<form role="form" method = "POST" class="commentForm">
 		<div class="modal fade" id="lcModal" role="dialog">
 			<div class="form-group">
-				<div class="modal-dialog ">
+				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -78,7 +78,7 @@
 										<table class="table responsive table-hover" width="100%" id= "lc_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
-													<td >
+													<td width="20%">
 														<div class="form-group required">
 															<label class = "control-label"><strong>City</strong></label>
 														</div>
@@ -92,20 +92,35 @@
 												<td>
 
 													<div class = "form-group input-group" >
-														
+														<span class = "input-group-addon">$</span>
 														<input type = "text" class = "form-control  lc_city_valid"  placeholder="--enter a city--" 
-														 name = "city" id = "city"  data-rule-required="true"   />
+														 name = "city" id = "city"  data-rule-required="true" readonly="true"  />
 													</div>
 
 												</td>
-												
+												<td>
+													<div class = "form-group input-group">
+														<span class = "input-group-addon">$</span>
+														<input type = "text" class = "form-control money lc_maximum_valid"  
+														value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" />
+													</div>
+												</td>
+
+												<td>
+													<div class = "form-group input-group " >
+														<span class = "input-group-addon">Php</span>
+														<input type = "text" class = "form-control money amount_valid"  
+														value ="0.00" name = "amount" id = "amount"  data-rule-required="true" />
+													</div>
+
+												</td>
 												<td style="text-align: center;">
 													<button class = "btn btn-danger btn-md delete-lc-row">x</button>
 												</td>
 											</tr>
 										</table>
 										<div class = "form-group" style = "margin-left:10px">
-											<button    class = "btn btn-primary btn-md new-lc-row pull-left">New City</button>
+											<button    class = "btn btn-primary btn-md new-lc-row pull-left">New Range</button>
 											<br /><br />
 										</div>
 									</div>
@@ -160,8 +175,12 @@
 @push('scripts')
 <script type="text/javascript">
 	var city_id = [];
-	
+	var maximum_id = [];
+
+	var amount_value = [];
 	var city_id_descrp = [];
+	var maximum_id_descrp = [];
+	var amount_value_descrp = [];
 
 
 
@@ -180,18 +199,25 @@
 			ajax: 'http://localhost:8000/admin/lcData',
 			columns: [
 
-			{ data: 'province' },
+			{ data: 'dateEffective' },
 
 			{ data: 'city',
 			"render": function(data, type, row){
 				return data.split(",").join("<br/>");}
 			},
 
+			{ data: 'maximum',
+			"render": function(data, type, row){
+				return data.split(",").join("<br/>");}
+			},
+			{ data: 'amount',
+			"render": function(data, type, row){
+				return data.split(",").join("<br/>");}
+			},
 
-			
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
+			],	"order": [[ 0, "desc" ]],
 
 
 		});
@@ -203,7 +229,7 @@
 		$("#commentForm").validate({
 			rules: 
 			{
-				loc_province:
+				dateEffective:
 				{
 					required: true,
 				},
@@ -220,6 +246,14 @@
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New City');
+			
+			$('#dateEffective').val("");
+			var now = new Date();
+			var day = ("0" + now.getDate()).slice(-2);
+			var month = ("0" + (now.getMonth() + 1)).slice(-2);
+			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+			$('#dateEffective').val(today);
+
 			$('#lcModal').modal('show');
 
 		});
@@ -228,7 +262,10 @@
 			resetErrors();
 			$('.modal-title').text('Update City');
 			var lc_id = $(this).val();
-			$('.modal-title').text('Update City');
+
+	
+			
+			$('.modal-title').text('Update Import Prcessing Fee Range');
 			$('#lcModal').modal('show');
 		});
 
@@ -258,9 +295,10 @@
 
 				$('#lc_parent_table').append(lc_row);
 
-				
+				for(var i = 0; i < city.length; i++){
+					city[i+1].value = parseFloat(maximum[i].value) + 0.1;
 				}
-			
+			}
 
 		})
 
@@ -281,7 +319,9 @@
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
 
-				
+					for(var i = 0; i < city.length; i++){
+						city[i+1].value = parseFloat(maximum[i].value) + 0.1;
+					}
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -289,13 +329,34 @@
 			});
 		})
 
-		
+		$(document).on('keypress', '.amount_valid', function(e){
+			$(".amount_valid").each(function(){
+				try{
+					var amount = parseFloat($(this).val());
+				}
+				catch(err){
+
+				}
+				if(typeof(amount) === "string"){
+
+				}
+				else{
+
+				}
+				if($(this).val() != ""){
+					$(this).css('border-color', 'green');
+				}
+				else{
+					$(this).css('border-color', 'red');
+				}
+			});
+		})
 
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/location_city/' + data.id,
+				url:  '/admin/lc_fee/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -335,18 +396,19 @@
 				var title = $('.modal-title').text();
 				if(title == "New City")
 				{
-					console.log('city: ' + city_id);
-					console.log('province_id: ' +  $('#loc_province').val());	
+					console.log('min' + city_id);	
+					console.log(maximum_id);	
 					$.ajax({
-					
 						type: 'POST',
-						url:  '/admin/location_city',
+						url:  '/admin/lc_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'provinces_id' : $('#loc_province').val(),
-							'name' : city_id,
+							'dateEffective' : $('#dateEffective').val(),
+							'city' : city_id,
+							'maximum' :maximum_id,
 							'city_id_descrp' : city_id_descrp,
-						
+							'maximum_id_descrp' : maximum_id_descrp,
+							'amount' : amount_value,
 						},
 
 						success: function (data){
@@ -356,7 +418,11 @@
 							lctable.ajax.reload();
 							$('#lcModal').modal('hide');
 							$('.modal-title').text('New City');
-							$('#city').val("");
+							$('#city').val("0.00");
+							$('#maximum').val("0.00"); 
+							$('#amount').val("0.00");
+							$('#dateEffective').val("");
+
 
 							toastr.options = {
 								"closeButton": false,
@@ -393,16 +459,27 @@ function validatelcRows()
 {
 
 	city_id = [];
-	city_id_descrp = [];
+	maximum_id = [];
+	amount_value = [];
 
+	city_id_descrp = [];
+	maximum_id_descrp = [];
+	amount_value_descrp = [];
 
 	range_pairs = [];
-	
+	dateEffective = document.getElementsByName('dateEffective');
 	city =  document.getElementsByName('city');
-	
+	maximum =   document.getElementsByName('maximum');
+	amount =  document.getElementsByName('amount');
 	error = "";
 
-	
+	if(dateEffective === ""){
+
+		dateEffective.style.borderColor = 'red';	
+		error += "Date Effective Required.";
+
+	} 
+
 
 	for(var i = 0; i < city.length; i++){
 		var temp;
@@ -410,22 +487,53 @@ function validatelcRows()
 
 
 
-		if(city[i].value === "")
+		if(maximum[i].value === "")
 		{
-			city[i].style.borderColor = 'red';
-			error += "City Required.";
+			maximum[i].style.borderColor = 'red';
+			error += "Maximum Required.";
 		}
 
 		else
 		{
-			city[i].style.borderColor = 'green';
-			city_id_descrp.push(city[i].value);
-			city_id.push(city[i].value);
+			maximum[i].style.borderColor = 'green';
+			maximum_id_descrp.push(maximum[i].value);
+			maximum_id.push(maximum[i].value);
 		}
 
-		
+		if(amount[i].value === "")
+		{
+			amount[i].style.borderColor = 'red';
+			error += "Amount Required.";
+		}
+
+		else
+		{
+			if(amount[i].value < 1){
+				amount[i].style.borderColor = 'red';
+				error += "Amount Required.";
+			}
+			else{
+				amount[i].style.borderColor = 'green';
+				amount_value.push(amount[i].value);
+			}
+		}
+
+		if(city[i].value === maximum[i].value){
+
+			maximum[i].style.borderColor = 'red';
+			error += "Same.";
+		}
+
+		if(city[i].value>maximum[i].value){
+			
+			maximum[i].style.borderColor = 'red';
+			error += "city is greater than maximum";
+			$('#lc_warning').addClass('in');
+		}	
+
 		pair = {
 			city: city[i].value,
+			maximum : maximum[i].value
 		};
 		range_pairs.push(pair);
 	}
@@ -436,11 +544,13 @@ function validatelcRows()
 	for (i=0; i<n; i++) {                        
 		for (j=i+1; j<n; j++)
 		{              
-			if (range_pairs[i].city === range_pairs[j].city){
+			if (range_pairs[i].city === range_pairs[j].maximum && range_pairs[i].maximum === range_pairs[j].maximum){
 				found = true;
 				
+				maximum[i].style.borderColor = 'red';
+
 				city[j].style.borderColor = 'red';
-				
+				maximum[j].style.borderColor = 'red';
 			}
 		}	
 	}
@@ -463,21 +573,28 @@ function validatelcRows()
 	function finalvalidatelcRows()
 	{
 		city_id = [];
+		maximum_id = [];
+		amount_value = [];
+
 		city_id_descrp = [];
-		
+		maximum_id_descrp = [];
+		amount_value_descrp = [];
+
 		range_pairs = [];
 
 		city = document.getElementsByName('city');
+		maximum = document.getElementsByName('maximum');
+		amount = document.getElementsByName('amount');
 		
 		error = "";
 
-		if($('#loc_province').val() == ""){
+		if($('#dateEffective').val() == ""){
 
-			document.getElementById("loc_province").style.borderColor = "red";
-			error += "Province is required.";
+			document.getElementById("dateEffective").style.borderColor = "red";
+			error += "Date Effective Required.";
 
 		}else{
-			document.getElementById("loc_province").style.borderColor = "black";
+			document.getElementById("dateEffective").style.borderColor = "black";
 
 		}
 
@@ -487,7 +604,7 @@ function validatelcRows()
 			if(city[i].value === "")
 			{
 
-				error += "city is Required.";
+				error += "city Required.";
 				$('#lc_warning').addClass('in');
 			}
 
@@ -498,10 +615,55 @@ function validatelcRows()
 				var min = city[i].value
 				city_id.push(city[i].value);
 			}
-			
+			if(maximum[i].value === ""||maximum[i].value === "0.00"||maximum[i].value === "0")
+			{
+				maximum[i].style.borderColor = 'red';
+				error += "Maximum Required.";
+				$('#lc_warning').addClass('in');
+			}
+
+			else
+			{
+				maximum[i].style.borderColor = 'green';
+				maximum_id_descrp.push(maximum[i].value);
+				maximum_id.push(maximum[i].value);
+			}
+
+			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
+			{
+				amount[i].style.borderColor = 'red';
+				error += "Amount Required.";
+				$('#contract_rates_warning').addClass('in');
+			}
+
+			else
+			{
+				if(amount[i].value < 0){
+					amount[i].style.borderColor = 'red';
+					error += "Amount Required.";
+				}
+				else{
+					amount[i].style.borderColor = 'green';
+					amount_value.push(amount[i].value);
+				}
+			}
+
+			if(city[i].value === maximum[i].value){
+
+				maximum[i].style.borderColor = 'red';
+				error += "Same.";
+				$('#lc_warning').addClass('in');
+			}
+
+			if(city[i].value>maximum[i].value){
+
+				maximum[i].style.borderColor = 'red';
+				error += "city is greater than maximum";
+				$('#lc_warning').addClass('in');
+			}	
 			pair = {
 				city: city[i].value,
-				
+				maximum: maximum[i].value
 			};
 			range_pairs.push(pair);
 		}
@@ -511,18 +673,18 @@ function validatelcRows()
 		for (i=0; i<n; i++) {                        
 			for (j=i+1; j<n; j++)
 			{              
-				if (range_pairs[i].city === range_pairs[j].city ){
+				if (range_pairs[i].city === range_pairs[j].city && range_pairs[i].maximum === range_pairs[j].maximum){
 					found = true;
 					
-					city[i].style.borderColor = 'red';
+					maximum[i].style.borderColor = 'red';
 
 
-					city[j].style.borderColor = 'red';
+					maximum[j].style.borderColor = 'red';
 				}
 			}	
 		}
 		if(found == true){
-			error+= "Existing city.";
+			error+= "Existing rate.";
 			$('#lc_warning').addClass('in');
 		}
 
