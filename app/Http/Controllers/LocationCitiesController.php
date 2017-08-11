@@ -10,12 +10,18 @@ use App\Http\Requests\StoreLocationCities;
 
 class LocationCitiesController extends Controller
 {
-    public function index()
+	public function index()
 	{
-		return view('admin/maintenance.location_city_index');
+
+		$provinces = DB::table('location_provinces')
+		->select('name', 'id')
+		->where('deleted_at', '=', null)
+		->get();
+
+		return view('admin/maintenance.location_city_index',  compact(['provinces']));
 	}
 
-	public function store(StoreIPFFee $request)
+	public function store(StoreLocationCities $request)
 	{
 		$province = new LocationProvince;
 		
@@ -30,7 +36,7 @@ class LocationCitiesController extends Controller
 		return $province->id;
 	}
 
-	public function update(StoreIPFFee $request, $id)
+	public function update(StoreLocationCities $request, $id)
 	{
 		$province= LocationProvince::findOrFail($id);
 		$province->dateEffective = $request->dateEffective;
