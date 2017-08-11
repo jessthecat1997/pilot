@@ -59,13 +59,21 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="row">
-		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading">Add Bill</div>
+	<div class="row collapse in" id="bill_collapse">
+		<div class="panel-default col-sm-6">
+			<div class="panel-heading" id="heading">Add Revenues</div>
 			<div class="panel-body">
-				<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
+				<table class = "table-responsive table" id = "rev_table">
 					<thead>
 						<tr>
+							<td colspan="5">
+								<button class = "btn btn-info btn-md new-billing-row pull-right">New Revenue</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Name *
+							</td>
 							<td>
 								Description *
 							</td>
@@ -73,7 +81,66 @@
 								Amount *
 							</td>
 							<td>
-								Discount *
+								Tax *
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<div class="panel-default col-sm-6">
+			<div class="panel-heading" id="heading">Add Expenses</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id = "exp_table">
+					<thead>
+						<tr>
+							<td colspan="5">
+								<button class = "btn btn-info btn-md new-billing-row pull-right">New Expense</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Description *
+							</td>
+							<td>
+								Amount *
+							</td>
+							<td>
+								Tax *
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class = "panel-default panel">
+			<div class="panel-heading" id="heading">Add Revenue</div>
+			<div class="panel-body">
+				<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
+					<thead>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Description *
+							</td>
+							<td>
+								Amount *
+							</td>
+							<td>
+								Tax *
 							</td>
 							<td>
 								Action
@@ -81,11 +148,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td colspan="4">
-								<button class = "btn btn-info btn-md new-billing-row pull-right">New Bill</button>
-							</td>
-						</tr>
+						
 						<tr id = "billing-row" name="billing-row">
 							<form class="form-horizontal">
 								{{ csrf_field() }}
