@@ -167,86 +167,7 @@
 								<hr />
 								<h4>&nbsp;Delivery Information</h4>
 								<br />
-								<div class = "col-md-12">
-									<div class = "panel panel-default">
-										<div class = "panel-heading">
-											Pickup Location
-										</div>
-										<div class="panel-body">
-											<div class = "row">
-												<div class = "col-md-4">
-													<div class = "col-md-12">
-														{{ csrf_field() }}	
-														<div class="form-group required">
-															<label class = "control-label ">Location Name: </label>
-															<div class="input-group">
-																<select class = "form-control" id = "pickup_id">
-																	<option value = "0"></option>
-																	@forelse($locations as $location)
-																	<option value = "{{ $location->id }}">{{ $location->name }}</option>
-																	@empty
-																	@endforelse
-																</select>
-																<span class="input-group-btn">
-																	<button class="btn btn-primary" type="button">+</button>
-																</span>
-															</div>
-
-															
-														</div>
-													</div>
-												</div>
-												<div class = "col-md-8">
-
-
-													{{ csrf_field() }}
-													<div class = "col-md-12">
-														<div class = "col-md-12">
-															<div class = "col-md-12">
-																<div class="form-group required">
-																	<label class = "control-label">Address: </label>
-																	<textarea class = "form-control" disabled  id = "_address"></textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class = "col-md-12">
-														<div class = "col-md-4">
-															<div class =  "col-md-12">
-																<div class = "form-group">
-																	<label class = "control-label">City</label>
-																	<input type = "text" class = "form-control" disabled id = "_city" />
-																</div>
-															</div>
-														</div>
-														<div class = "col-md-4">
-															<div class = "col-md-12">
-																<div class = "form-group">
-																	<label class = "control-label">Province</label>
-																	<input type = "text" class = "form-control"  disabled id = "_province" />
-																</div>
-															</div>
-														</div>
-														<div class = "col-md-4">
-															<div class = "col-md-12">
-																<div class = "form-group">
-																	<label class = "control-label">ZIP</label>
-																	<input type = "text" class = "form-control" disabled id = "_zip" />
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class = "col-md-12">
-									<div class = "panel">
-
-									</div>
-								</div>
-
+								
 
 								<div class="form-group">
 									<label class="control-label" for = "deladdcon">Delivery Address:</label>
@@ -328,6 +249,154 @@
 			</div>
 
 			<hr />
+			<div class = "col-md-12">
+				<div class = "panel panel-default">
+					<div class = "panel-heading">
+						Pickup Location
+					</div>
+					<div class="panel-body">
+						<div class = "row">
+							<div class = "col-md-4">
+								<div class = "col-md-12">
+									{{ csrf_field() }}	
+									<div class="form-group required">
+										<label class = "control-label ">Location Name: </label>
+										<div class="input-group">
+											<select class = "form-control" id = "pickup_id">
+												<option value = "0"></option>
+												@forelse($locations as $location)
+												<option value = "{{ $location->id }}">{{ $location->name }}</option>
+												@empty
+												@endforelse
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="button">+</button>
+											</span>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+							<div class = "col-md-8">
+
+
+								{{ csrf_field() }}
+								<div class = "col-md-12">
+									<div class = "col-md-12">
+										<div class = "col-md-12">
+											<div class="form-group required">
+												<label class = "control-label">Address: </label>
+												<textarea class = "form-control" disabled  id = "_address"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<div class = "col-md-4">
+										<div class =  "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">City</label>
+												<input type = "text" class = "form-control" disabled id = "_city" />
+											</div>
+										</div>
+									</div>
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">Province</label>
+												<input type = "text" class = "form-control"  disabled id = "_province" />
+											</div>
+										</div>
+									</div>
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">ZIP</label>
+												<input type = "text" class = "form-control" disabled id = "_zip" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class = "col-md-12">
+				<div class = "panel panel-default">
+					<div class = "panel-heading">
+						Delivery Location
+					</div>
+					<div class="panel-body">
+						<div class = "row">
+							<div class = "col-md-4">
+								<div class = "col-md-12">
+									{{ csrf_field() }}	
+									<div class="form-group required">
+										<label class = "control-label ">Location Name: </label>
+										<div class="input-group">
+											<select class = "form-control" id = "deliver_id">
+												<option value = "0"></option>
+												@forelse($locations as $location)
+												<option value = "{{ $location->id }}">{{ $location->name }}</option>
+												@empty
+												@endforelse
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-primary" type="button">+</button>
+											</span>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+							<div class = "col-md-8">
+								{{ csrf_field() }}
+								<div class = "col-md-12">
+									<div class = "col-md-12">
+										<div class = "col-md-12">
+											<div class="form-group required">
+												<label class = "control-label">Address: </label>
+												<textarea class = "form-control" disabled  id = "_daddress"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<div class = "col-md-4">
+										<div class =  "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">City</label>
+												<input type = "text" class = "form-control" disabled id = "_dcity" />
+											</div>
+										</div>
+									</div>
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">Province</label>
+												<input type = "text" class = "form-control"  disabled id = "_dprovince" />
+											</div>
+										</div>
+									</div>
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											<div class = "form-group">
+												<label class = "control-label">ZIP</label>
+												<input type = "text" class = "form-control" disabled id = "_dzip" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
 			<form class = "form-horizontal">
 
 				<h4>&nbsp;Vehicle Assignment</h4>
@@ -658,6 +727,41 @@
 				$('#_city').val("");
 				$('#_province').val("");
 				$('#_zip').val("");
+			}
+			
+		})
+
+		$(document).on('change', '#deliver_id', function(e){
+			deliver_id = $(this).val();
+			if(deliver_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_daddress').val(data[0].address);
+							$('#_dcity').val(data[0].city_name);
+							$('#_dprovince').val(data[0].province_name);
+							$('#_dzip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_daddress').val("");
+				$('#_dcity').val("");
+				$('#_dprovince').val("");
+				$('#_dzip').val("");
 			}
 			
 		})
