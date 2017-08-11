@@ -167,16 +167,6 @@
 								<hr />
 								<h4>&nbsp;Delivery Information</h4>
 								<br />
-								
-
-								<div class="form-group">
-									<label class="control-label" for = "deladdcon">Delivery Address:</label>
-									<input type = "text" name = "deladdcon" id = "deladdcon" class = "form-control deladdcon" />
-								</div>
-								<div class="form-group">
-									<label class="control-label" for = "deldatecon">Delivery Date:</label>
-									<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
-								</div>
 							</form>
 
 						</div>
@@ -189,14 +179,6 @@
 							<form class="form-horizontal" role="form">
 								<h4>&nbsp;Delivery Information</h4>
 								<hr />
-								<div class="form-group">
-									<label class="control-label" for = "deladd">Delivery Address:</label>
-									<input type = "text" name = "deladd" id = "deladd" class = "form-control deladd" />
-								</div>
-								<div class="form-group">
-									<label class="control-label" for = "deldate">Delivery Date:</label>
-									<input type = "date" name = "deldate" id = "deldate" class = "form-control deladdcon" />
-								</div>
 								<div class="form-group">
 									<label class="control-label" for="wodetail_table">Delivery Content:</label>
 									<table class = "table-responsive table" id = "wodetail_table">
@@ -273,8 +255,12 @@
 												<button class="btn btn-primary" type="button">+</button>
 											</span>
 										</div>
-
-
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<div class="form-group">
+										<label class="control-label" for = "deldatecon">Pickup Date:</label>
+										<input type = "date" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
 									</div>
 								</div>
 							</div>
@@ -347,8 +333,12 @@
 												<button class="btn btn-primary" type="button">+</button>
 											</span>
 										</div>
-
-
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<div class="form-group">
+										<label class="control-label" for = "deldatecon">Delivery Date:</label>
+										<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
 									</div>
 								</div>
 							</div>
@@ -659,7 +649,7 @@
 							'emp_id_helper' : $('#helper').val(),
 							'locations_id_pick' : $('#pickup_id').val(),
 							'locations_id_del' : $('#deliver_id').val(),
-							'deliveryDate' : $('#deldate').val(),
+							'deliveryDate' : $('#deldatecon').val(),
 						},
 						success: function(data){
 							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";

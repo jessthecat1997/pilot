@@ -199,7 +199,7 @@ class TruckingsController extends Controller
         
             $new_delivery_head->locations_id_pick = $request->locations_id_pick;
             $new_delivery_head->locations_id_del = $request->locations_id_del;
-            
+
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
@@ -483,6 +483,8 @@ class TruckingsController extends Controller
         ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
         ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')
         ->join('consignees AS H', 'G.consignees_id', '=', 'H.id')
+        ->join('locations AS I', 'locations_id_del', 'I.id')
+        ->join('locations AS J', 'locations_id_pick', 'J.id')
         ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
         ->select(
             'delivery_receipt_headers.id',
@@ -491,6 +493,7 @@ class TruckingsController extends Controller
             DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer',
+            'J.address as deliveryAddress',
             'H.companyName',
             'delivery_receipt_headers.deliveryDateTime'
             )

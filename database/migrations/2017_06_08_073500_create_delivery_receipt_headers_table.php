@@ -26,6 +26,7 @@ class CreateDeliveryReceiptHeadersTable extends Migration
             $table->char('status', 1);
             $table->decimal('amount', 19, 2, 0);
             $table->dateTime('deliveryDateTime');
+            $table->dateTime('pickupDateTime');
             $table->string('remarks', 200)->nullable();
             $table->integer('tr_so_id')->unsigned();
             $table->timestamps();
