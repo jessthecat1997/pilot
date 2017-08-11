@@ -1,6 +1,6 @@
 #navtop
 {
-	background-color: #019a70;
+	background-color:	#8ddfcc;
 	height: 50px;
 	border-style: none;
 	border-radius: 0px;
@@ -33,9 +33,8 @@
 {
 	margin-top: -15px;
 	margin-right: -20px;
-	width : 65px;
+	width : 60px;
 	height: 50px;
-	background-color: #fff;
 }
 
 #collapse1
@@ -60,7 +59,7 @@
 }
 hr
 {
-	border-color:  #2ad4a5;
+	border-color:  #002B5C;
 }
 .panel-body
 {
@@ -99,10 +98,28 @@ hr
 }*/
 #heading
 {
-	background-color: #019a70;
+	background-color: #8ddfcc;
 	color:#fff;
 }
 .panel-body
 {
-	border: 1px solid rgba(0,0,0,0.3);
+	border: 1px solid #8ddfcc;
+}
+.but
+{
+	background-color:  #23375B;
+	color: #fff;
+}
+.but:focus
+{
+	color: #fff;
+}
+.but:hover
+{
+	background-color: #8ddfcc;
+	color: #fff;
+}
+h2
+{
+	border-left: 5px solid #23375B;
 }

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <link href="/sidebar/css/simple-sidebar.css" rel="stylesheet">
 
@@ -108,13 +109,13 @@
                             <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
-                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table fa-lg"></i>&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delivery</a>
+                        <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck fa-lg"></i>&nbsp;Delivery</a>
                         </li>
                         <li id="frstgrp">
-                            <a href="{{ route('view.index') }}" class = "class-payment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Billing and Payment</a>
+                            <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money fa-lg"></i>&nbsp;Billing and Payment</a>
                         </li>
                     </ul>
                 </div>
