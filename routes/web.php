@@ -184,6 +184,7 @@ Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->
 //Locations
 Route::resource('/location', 'LocationsController');
 Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
+Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->name('get_location_data');
 
 //Quotations
 Route::resource('/quotation', 'QuotationsController');

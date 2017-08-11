@@ -175,54 +175,67 @@
 										<div class="panel-body">
 											<div class = "row">
 												<div class = "col-md-4">
-													<div class = "form-horizontal">
+													<div class = "col-md-12">
 														{{ csrf_field() }}	
 														<div class="form-group required">
-															<label class = "control-label col-md-3">Name: </label>
-															<div class = "col-md-9">
-																<select class = "form-control">
-																	<option></option>
+															<label class = "control-label ">Location Name: </label>
+															<div class="input-group">
+																<select class = "form-control" id = "pickup_id">
+																	<option value = "0"></option>
 																	@forelse($locations as $location)
 																	<option value = "{{ $location->id }}">{{ $location->name }}</option>
 																	@empty
 																	@endforelse
 																</select>
+																<span class="input-group-btn">
+																	<button class="btn btn-primary" type="button">+</button>
+																</span>
 															</div>
+
+															
 														</div>
 													</div>
 												</div>
 												<div class = "col-md-8">
-														{{ csrf_field() }}	
-														<div class="form-group required">
-															<label class = "control-label">Address: </label>
-															<textarea class = "form-control"></textarea>
-														</div>
+
+
+													{{ csrf_field() }}
+													<div class = "col-md-12">
 														<div class = "col-md-12">
-															<div class = "col-md-4">
-																<div class =  "col-md-12">
-																	<div class = "form-group">
-																		<label class = "control-label">City</label>
-																		<input type = "text" class = "form-control" />
-																	</div>
-																</div>
-															</div>
-															<div class = "col-md-4">
-																<div class = "col-md-12">
-																	<div class = "form-group">
-																		<label class = "control-label">Province</label>
-																		<input type = "text" class = "form-control" />
-																	</div>
-																</div>
-															</div>
-															<div class = "col-md-4">
-																<div class = "col-md-12">
-																	<div class = "form-group">
-																		<label class = "control-label">ZIP</label>
-																		<input type = "text" class = "form-control" />
-																	</div>
+															<div class = "col-md-12">
+																<div class="form-group required">
+																	<label class = "control-label">Address: </label>
+																	<textarea class = "form-control" disabled  id = "_address"></textarea>
 																</div>
 															</div>
 														</div>
+													</div>
+													<div class = "col-md-12">
+														<div class = "col-md-4">
+															<div class =  "col-md-12">
+																<div class = "form-group">
+																	<label class = "control-label">City</label>
+																	<input type = "text" class = "form-control" disabled id = "_city" />
+																</div>
+															</div>
+														</div>
+														<div class = "col-md-4">
+															<div class = "col-md-12">
+																<div class = "form-group">
+																	<label class = "control-label">Province</label>
+																	<input type = "text" class = "form-control"  disabled id = "_province" />
+																</div>
+															</div>
+														</div>
+														<div class = "col-md-4">
+															<div class = "col-md-12">
+																<div class = "form-group">
+																	<label class = "control-label">ZIP</label>
+																	<input type = "text" class = "form-control" disabled id = "_zip" />
+																</div>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -613,6 +626,43 @@
 				}
 			}
 		})
+
+		$(document).on('change', '#pickup_id', function(e){
+			pickup_id = $(this).val();
+			if(pickup_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + pickup_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_address').val(data[0].address);
+							$('#_city').val(data[0].city_name);
+							$('#_province').val(data[0].province_name);
+							$('#_zip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_address').val("");
+				$('#_city').val("");
+				$('#_province').val("");
+				$('#_zip').val("");
+			}
+			
+		})
+
+
 		function validateCurrentContainerDetail()
 		{
 			error = "";

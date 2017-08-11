@@ -523,6 +523,8 @@ class TruckingsController extends Controller
         $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
         return $pdf->stream();
     }
+
+   
     public function show_calendar(){
      $events = [];
 
