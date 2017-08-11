@@ -20,6 +20,7 @@ use App\CdsFee;
 use App\BrokerageFee;
 use App\VatRate;
 use App\LocationProvince;
+use App\LocationCities;
 use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
@@ -323,6 +324,23 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+
+	public function lc_datatable(){
+		$lcs = DB::select("SELECT p.id,p.name , GROUP_CONCAT(c.name ORDER BY c.name ASC ) AS city FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id GROUP BY p.id");
+
+		return Datatables::of($lcs)
+		->addColumn('action', function ($lc){
+			return
+			'<button value = "'. $lc->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $lc->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+
+
+
 	public function bl_datatable(){
 		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
 
@@ -509,7 +527,7 @@ class DatatablesController extends Controller
 		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
 		->get();
-	
+
 		return Datatables::of($quotations)
 		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($quotation){
