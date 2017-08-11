@@ -17,7 +17,10 @@ class CreateDeliveryReceiptHeadersTable extends Migration
             $table->increments('id');
             $table->integer('emp_id_driver')->unsigned();
             $table->integer('emp_id_helper')->unsigned();
-            $table->text('deliveryAddress', 200)->nullable();
+            
+            $table->integer('locations_id_pick')->unsigned();
+            $table->integer('locations_id_del')->unsigned();
+
             $table->string('plateNumber', 20);
             $table->boolean('withContainer');
             $table->char('status', 1);
@@ -30,6 +33,10 @@ class CreateDeliveryReceiptHeadersTable extends Migration
 
             $table->foreign('emp_id_driver')->references('id')->on('employees');
             $table->foreign('emp_id_helper')->references('id')->on('employees');
+
+            $table->foreign('locations_id_pick')->references('id')->on('locations');
+            $table->foreign('locations_id_del')->references('id')->on('locations');
+
             $table->foreign('plateNumber')->references('plateNumber')->on('vehicles');
             $table->foreign('tr_so_id')->references('id')->on('trucking_service_orders');
         });

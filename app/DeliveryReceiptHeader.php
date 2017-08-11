@@ -10,7 +10,7 @@ class DeliveryReceiptHeader extends Model
    	use SoftDeletes;
 
    	protected $fillable = [
-   	'emp_id_driver', 'emp_id_helper', 'deliveryAddress', 'plateNumber', 'status', 'tr_so_id', 'withContainer', 'amount', 'deliveryDateTime', 'remarks'
+   	'emp_id_driver', 'emp_id_helper', 'locations_id_pickup', 'locations_id_deliver', 'plateNumber', 'status', 'tr_so_id', 'withContainer', 'amount', 'deliveryDateTime', 'remarks'
    	];
 
    	protected $dates = [
