@@ -459,9 +459,9 @@
 			columns: [
 
 			{ data: 'id' },
-			{ data: 'deliveryAddress' },
-			{ data: 'plateNumber' },
-			{ data: 'created_at_date' },
+			{ data: 'origin_name' },
+			{ data: 'origin_city' },
+			{ data: 'pick_up'}
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
 

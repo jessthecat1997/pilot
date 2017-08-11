@@ -276,7 +276,7 @@
 					<div class="col-md-12">
 						<h3><small>4</small>&nbsp;&nbsp;Finalize</h3>
 						<div style=" text-align: center;">
-							<button class = "btn btn-md btn-success finalize-contract" style = "width: 100%;">Create Contract</button>
+							<button class = "btn btn-md btn-success finalize-contract" style = "width: 100%;">Create Quotation</button>
 						</div>
 					</div>
 				</div>
