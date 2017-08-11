@@ -432,7 +432,8 @@ class DatatablesController extends Controller
 	public function get_trucking_deliveries(Request $request)
 	{
 		$deliveries = DB::table('delivery_receipt_headers')
-		->select('id', 'deliveryAddress', 'plateNumber', 'created_at', 'status')
+		->join('locations', '')
+		->select('id', 'plateNumber', 'created_at', 'status')
 		->where('deleted_at', '=', null)
 		->where('tr_so_id','=', $request->trucking_id)
 		->get();

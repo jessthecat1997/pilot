@@ -105,7 +105,7 @@ class TruckingsController extends Controller
             ->get();
             
             $deliveries = DB::table('delivery_receipt_headers')
-            ->select('id', 'deliveryAddress', 'plateNumber', 'created_at', 'status')
+            ->select('id', 'plateNumber', 'created_at', 'status')
             ->where('deleted_at', '=', null)
             ->where('tr_so_id','=', $so_id)
             ->get();
@@ -167,7 +167,10 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;
-            $new_delivery_head->deliveryAddress = $request->deliveryAddress;
+
+            $new_delivery_head->locations_id_pick = $request->locations_id_pick;
+            $new_delivery_head->locations_id_del = $request->locations_id_del;
+          
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 0;
@@ -193,7 +196,10 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;
-            $new_delivery_head->deliveryAddress = $request->deliveryAddress;
+        
+            $new_delivery_head->locations_id_pick = $request->locations_id_pick;
+            $new_delivery_head->locations_id_del = $request->locations_id_del;
+            
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
@@ -283,7 +289,6 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.id',
             'delivery_receipt_headers.plateNumber',
             'delivery_receipt_headers.status',
-            'delivery_receipt_headers.deliveryAddress',
             DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer'
@@ -372,7 +377,6 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.id',
             'delivery_receipt_headers.plateNumber',
             'delivery_receipt_headers.status',
-            'delivery_receipt_headers.deliveryAddress',
             DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer'
@@ -484,7 +488,6 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.id',
             'delivery_receipt_headers.plateNumber',
             'delivery_receipt_headers.status',
-            'delivery_receipt_headers.deliveryAddress',
             DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
             'delivery_receipt_headers.withContainer',
