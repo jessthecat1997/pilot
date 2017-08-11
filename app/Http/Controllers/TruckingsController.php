@@ -147,11 +147,13 @@ class TruckingsController extends Controller
 
         $locations = \App\Location::all();
 
+        $provinces = \App\LocationProvince::all();
+
         $delivery = TruckingServiceOrder::findOrFail($so_id);
 
         if($delivery->status == 'P')
         {
-            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations']));
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces']));
         }
         else{
             return 'Cannot create new deliveries';
@@ -203,7 +205,7 @@ class TruckingsController extends Controller
 
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->pickupDateTime = $request->pickupDate;
-            
+
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 1;
