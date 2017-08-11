@@ -12,142 +12,144 @@
 				<li class="active"><a data-toggle="pill" href="#wcontainer">Container</a></li>
 				<li><a data-toggle="pill" href="#wocontainer">Without Container</a></li>
 			</ul>
-			<div class="tab-content">
-				<div id="wcontainer" class="tab-pane fade in active">
-					<div class = "panel">
-						<div class = "panel-body">
-							<form class="form-horizontal" role="form">
-								{{ csrf_field() }}
-								<div class="row">
-									<h4>&nbsp;Container Information</h4>
-									<hr />
-									<div id = "containers">
-										<div class="panel-group" id = "container_copy">
-											<div class="panel panel-default" id = "0_panel">
-												<div class="panel-heading">
-													<h4 class="panel-title">
-														<a data-toggle="collapse" href="#0_container ">Container</a>
-														<div class="pull-right">
-															<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
-															<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
-														</div>
-													</h4>
-												</div>
-												<div id="0_container" class="panel-collapse collapse in">
-													<div class="panel-body">
-														<div class = "row">
-															<div class = "col-md-6">
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
-																		<div class="col-sm-8">
-																			<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
+			<br />
+			<div class = "col-md-12">
+				<div class="tab-content">
+					<div id="wcontainer" class="tab-pane fade in active">
+						<div class = "panel">
+							<div class = "">
+								<form class="form-horizontal" role="form">
+									{{ csrf_field() }}
+									<div class="row">
+										<h4>&nbsp;Container Information</h4>
+										<div id = "containers">
+											<div class="panel-group" id = "container_copy">
+												<div class="panel panel-default" id = "0_panel">
+													<div class="panel-heading">
+														<h4 class="panel-title">
+															<a data-toggle="collapse" href="#0_container ">Container</a>
+															<div class="pull-right">
+																<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
+																<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
+															</div>
+														</h4>
+													</div>
+													<div id="0_container" class="panel-collapse collapse in">
+														<div class="panel-body">
+															<div class = "row">
+																<div class = "col-md-6">
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
+																			<div class="col-sm-8">
+																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Container Volume:</label>
-																		<div class="col-sm-8">
-																			<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
-																				<option></option>
-																				@forelse($container_volumes as $container_volume)
-																				<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
-																				@empty
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Container Volume:</label>
+																			<div class="col-sm-8">
+																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
+																					<option></option>
+																					@forelse($container_volumes as $container_volume)
+																					<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
+																					@empty
 
-																				@endforelse
-																			</select>
+																					@endforelse
+																				</select>
+																			</div>
+																		</div>
+																	</div>
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
+																			<div class="col-sm-8">
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" />
+																			</div>
+																		</div>
+																	</div>
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
+																			<div class="col-sm-8">
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" />
+																			</div>
 																		</div>
 																	</div>
 																</div>
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
-																		<div class="col-sm-8">
-																			<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" />
+																<div class = "col-md-6">
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
+																			<div class="col-sm-8">
+																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
+																			</div>
 																		</div>
 																	</div>
-																</div>
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
-																		<div class="col-sm-8">
-																			<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" />
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
+																			<div class="col-sm-8">
+																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
+																			</div>
+																		</div>
+																	</div>
+																	<div class = "form-horizontal">
+																		<div class="form-group required">
+																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
+																			<div class="col-sm-8">
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea>
+																			</div>
 																		</div>
 																	</div>
 																</div>
 															</div>
-															<div class = "col-md-6">
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
-																		<div class="col-sm-8">
-																			<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
-																		</div>
-																	</div>
-																</div>
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
-																		<div class="col-sm-8">
-																			<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
-																		</div>
-																	</div>
-																</div>
-																<div class = "form-horizontal">
-																	<div class="form-group required">
-																		<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
-																		<div class="col-sm-8">
-																			<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea>
-																		</div>
-																	</div>
-																</div>
+															<div class = "col-md-12">
+																<table class="table table-responsive table-striped" id = "0_details">
+																	<thead>
+																		<tr>
+																			<td>
+																				Description of good
+																			</td>
+																			<td>
+																				Gross Weight
+																			</td>
+																			<td>
+																				Supplier
+																			</td>
+																			<td>
+																				Action
+																			</td>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr>
+																			<td width="35%">
+																				<input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
+																			</td>
+																			<td width="20%">
+																				<input type = "number" name = "0_grossWeight" class = "form-control"/>
+																			</td>
+																			<td width="30%">
+																				<input type = "text" name = "0_supplier"  class = "form-control" />
+																			</td>
+																			<td width="15%">
+																				<button class = "btn btn-md btn-danger remove-container-detail" value = "0">
+																					x
+																				</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
 															</div>
-														</div>
-														<div class = "col-md-12">
-															<table class="table table-responsive" id = "0_details">
-																<thead>
-																	<tr>
-																		<td>
-																			Description of good
-																		</td>
-																		<td>
-																			Gross Weight
-																		</td>
-																		<td>
-																			Supplier
-																		</td>
-																		<td>
-																			Action
-																		</td>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr>
-																		<td width="35%">
-																			<input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
-																		</td>
-																		<td width="20%">
-																			<input type = "number" name = "0_grossWeight" class = "form-control"/>
-																		</td>
-																		<td width="30%">
-																			<input type = "text" name = "0_supplier"  class = "form-control" />
-																		</td>
-																		<td width="15%">
-																			<button class = "btn btn-md btn-danger remove-container-detail" value = "0">
-																				x
-																			</button>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>
-														</div>
-														<div class="row">
-															<div class ="col-md-9">
+															<div class="row">
+																<div class ="col-md-9">
 
-															</div>
-															<div class= "col-md-3" style="text-align: center;">
-																<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
+																</div>
+																<div class= "col-md-3" style="text-align: center;">
+																	<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -155,82 +157,75 @@
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="row">
-									<div class= "col-md-3" style="text-align: center;">
-										<button class = "btn btn-primary btn-sm add-new-container" style="width: 80%;">New Container</button>
-									</div>
-									<div class ="col-md-9">
+									<div class="row">
+										<div class= "col-md-3" style="text-align: center;">
+											<button class = "btn btn-primary btn-sm add-new-container" style="width: 80%;">New Container</button>
+										</div>
+										<div class ="col-md-9">
 
+										</div>
 									</div>
-								</div>
-								<hr />
-								<h4>&nbsp;Delivery Information</h4>
-								<br />
-							</form>
+								</form>
 
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div id="wocontainer" class="tab-pane fade">
-					<div class = "panel">
-						<div class = "panel-body">
-							<form class="form-horizontal" role="form">
-								<h4>&nbsp;Delivery Information</h4>
-								<hr />
-								<div class="form-group">
-									<label class="control-label" for="wodetail_table">Delivery Content:</label>
-									<table class = "table-responsive table" id = "wodetail_table">
-										<thead>
-											<tr>
-												<td>
-													Description of Goods
-												</td>
-												<td>
-													Gross Weight(kg)
-												</td>
-												<td>
-													Supplier
-												</td>
-												<td>
-													Action
-												</td>
-											</tr>
-										</thead>
-										<tbody>
-											<tr id = "wodescription_row">
-												<td width="35%">
-													<input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
-												</td>
-												<td width="20%">
-													<input type = "number" name = "wogrossWeight" class = "form-control"/>
-												</td>
-												<td width="30%">
-													<input type = "text" name = "wosupplier"  class = "form-control" />
-												</td>
-												<td width="15%">
-													<button class = "btn btn-md btn-danger woremove-current-detail">x</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									<div class="row">
-										<div class="col-md-4">
-											<button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
-										</div>
-										<div class="col-md-8">
+					<div id="wocontainer" class="tab-pane fade">
+						<div class = "panel">
+							<div class = "">
+								<form class="form-horizontal" role="form">
+									<div class="form-group">
+										<label class="control-label" for="wodetail_table">Delivery Content:</label>
+										<table class = "table-responsive table table-striped" id = "wodetail_table">
+											<thead>
+												<tr>
+													<td>
+														Description of Goods
+													</td>
+													<td>
+														Gross Weight(kg)
+													</td>
+													<td>
+														Supplier
+													</td>
+													<td>
+														Action
+													</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr id = "wodescription_row">
+													<td width="35%">
+														<input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
+													</td>
+													<td width="20%">
+														<input type = "number" name = "wogrossWeight" class = "form-control"/>
+													</td>
+													<td width="30%">
+														<input type = "text" name = "wosupplier"  class = "form-control" />
+													</td>
+													<td width="15%">
+														<button class = "btn btn-md btn-danger woremove-current-detail">x</button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="row">
+											<div class="col-md-4">
+												<button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
+											</div>
+											<div class="col-md-8">
 
+											</div>
 										</div>
 									</div>
-								</div>
-							</form>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<hr />
 			<div class = "col-md-12">
 				<div class = "panel panel-default">
 					<div class = "panel-heading">
@@ -388,54 +383,66 @@
 
 
 			<form class = "form-horizontal">
-
-				<h4>&nbsp;Vehicle Assignment</h4>
-
-				<div class="form-group">
-					<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
-					<div class="col-sm-8"> 
-						<select class="form-control" id = "vehicle_type">
-							<option value = "0"></option>
-							@forelse($vehicle_types as $vehicle_type)
-							<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
-							@empty
-							@endforelse
-						</select>
+				<div class = "col-md-6">
+					<div class = "panel panel-default">
+						<div class = "panel-heading">
+							Vehicle Assignment
+						</div>
+						<div class = "panel-body">
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
+								<div class="col-sm-8"> 
+									<select class="form-control" id = "vehicle_type">
+										<option value = "0"></option>
+										@forelse($vehicle_types as $vehicle_type)
+										<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
+										@empty
+										@endforelse
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
+								<div class="col-sm-8"> 
+									<select class="form-control" id = "vehicle">
+										<option></option>
+									</select>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
-					<div class="col-sm-8"> 
-						<select class="form-control" id = "vehicle">
-							<option></option>
-						</select>
-					</div>
-				</div>
-				<hr />
-				<h4>&nbsp;Driver Assignment</h4>
-
-				<div class="form-group">
-					<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
-					<div class="col-sm-8">
-						<select class="form-control" id = "driver">
-							<option></option>
-							@forelse($employees as $employee)
-							<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-							@empty
-							@endforelse
-						</select>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
-					<div class="col-sm-8">
-						<select class="form-control" id = "helper">
-							<option></option>
-							@forelse($employees as $employee)
-							<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-							@empty
-							@endforelse
-						</select>
+				<div class = "col-md-6">
+					<div class = "panel-default panel">
+						<div class = "panel-heading">
+							Driver Assignment
+						</div>
+						<div class = "panel-body">
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
+								<div class="col-sm-8">
+									<select class="form-control" id = "driver">
+										<option></option>
+										@forelse($employees as $employee)
+										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+										@empty
+										@endforelse
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
+								<div class="col-sm-8">
+									<select class="form-control" id = "helper">
+										<option></option>
+										@forelse($employees as $employee)
+										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+										@empty
+										@endforelse
+									</select>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -650,6 +657,7 @@
 							'locations_id_pick' : $('#pickup_id').val(),
 							'locations_id_del' : $('#deliver_id').val(),
 							'deliveryDate' : $('#deldatecon').val(),
+							'pickupDate' : $('#pickdatecon').val(),
 						},
 						success: function(data){
 							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -671,6 +679,7 @@
 							'locations_id_pick' : $('#pickup_id').val(),
 							'locations_id_del' : $('#deliver_id').val(),
 							'deliveryDate' : $('#deldatecon').val(),
+							'pickupDate' : $('#pickdatecon').val(),
 							'containerNumber' : con_Number,
 							'containerVolume' : con_Volume,
 							'containerReturnTo' : con_ReturnTo,

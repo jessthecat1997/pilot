@@ -175,6 +175,7 @@ class TruckingsController extends Controller
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 0;
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
+            $new_delivery_head->pickupDateTime = $request->pickupDate;
             $new_delivery_head->tr_so_id = $request->trucking_id;
 
             $new_delivery_head->save();
@@ -201,6 +202,8 @@ class TruckingsController extends Controller
             $new_delivery_head->locations_id_del = $request->locations_id_del;
 
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
+            $new_delivery_head->pickupDateTime = $request->pickupDate;
+            
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 1;

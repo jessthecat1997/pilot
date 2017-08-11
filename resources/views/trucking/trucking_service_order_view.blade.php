@@ -467,6 +467,7 @@
 			{ data: 'id' },
 			{ data: 'pickup_name' },
 			{ data: 'pickup_city'},
+			{ data: 'pickupDateTime'},
 			{ data: 'deliver_name' },
 			{ data: 'deliver_city' },
 			{ data: 'deliveryDateTime'},
