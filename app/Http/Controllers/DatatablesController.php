@@ -17,9 +17,9 @@ use App\Vehicle;
 use App\Billing;
 use App\Area;
 use App\CdsFee;
-use App\IpfFee;
 use App\BrokerageFee;
 use App\VatRate;
+use App\LocationProvince;
 use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
@@ -305,6 +305,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $ar->id .'"   style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $ar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function lp_datatable(){
+		$lps = LocationProvince::select(['id', 'name', 'created_at']);
+
+		return Datatables::of($lps)
+		->addColumn('action', function ($lp){
+			return
+			'<button value = "'. $lp->id .'"   style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $lp->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

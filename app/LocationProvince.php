@@ -3,16 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class LocationProvince extends Model
 {
 	use SoftDeletes;
 
     protected $fillable = [
-    'name'
+    'name',
     ];
 
     protected $dates = [
-    'deleted_at'
-    ]
+    'deleted_at',
+    ];
 }
