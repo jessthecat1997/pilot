@@ -24,6 +24,17 @@ class LocationsController extends Controller
         return $location;
     }
 
+    public function get_location(Request $request){
+       $location =  DB::table('locations')
+        ->join('location_cities as A', 'cities_id', '=', 'A.id')
+        ->join('location_provinces as B', 'A.provinces_id', '=', 'B.id')
+        ->select('locations.address', 'A.name as city_name', 'B.name as province_name', 'zipCode')
+        ->where('locations.id', '=', $request->id)
+        ->get();
+        return $location;
+    }
+
+
 
     public function show($id)
     {

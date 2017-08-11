@@ -22,10 +22,6 @@
 							<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $delivery[0]->id }}</span>
 						</div>
 						<div class="form-group">         
-							<label class="control-label col-md-5 pull-left" for="deliveryDestination">Destination:</label>
-							<span class="control-label col-md-7 pull-right" id ="deliveryDestination" style = "text-align: right;">{{ $delivery[0]->deliveryAddress }}</span>
-						</div>
-						<div class="form-group">         
 							<label class="control-label col-md-5 pull-left" for="deliveryDriver">Driver:</label>
 							<span class="control-label col-md-7 pull-right" id ="deliveryDriver" style = "text-align: right;">{{ $delivery[0]->driverName }}</span>
 						</div>

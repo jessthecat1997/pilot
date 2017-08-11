@@ -119,19 +119,25 @@
 							<td style="width: 5%;">
 								ID
 							</td>
-							<td style="width: 30%;">
-								Address
-							</td>
-							<td style="width: 20%;">
-								Vehicle
+							<td style="width: 15%;">
+								Origin Name
 							</td>
 							<td style="width: 15%;">
-								Created At
+								Origin City
 							</td>
 							<td style="width: 10%;">
-								Status
+								Pickup Date
 							</td>
-							<td style="width: 20%;">
+							<td style="width: 15%;">
+								Destination Name
+							</td>
+							<td style="width: 15%;">
+								Destination City
+							</td>
+							<td style="width: 10%;">
+								Delivery Date
+							</td>
+							<td style="width: 15%;">
 								Actions
 							</td>
 						</tr>
@@ -459,10 +465,12 @@
 			columns: [
 
 			{ data: 'id' },
-			{ data: 'deliveryAddress' },
-			{ data: 'plateNumber' },
-			{ data: 'created_at_date' },
-			{ data: 'status' },
+			{ data: 'pickup_name' },
+			{ data: 'pickup_city'},
+			{ data: 'pickupDateTime'},
+			{ data: 'deliver_name' },
+			{ data: 'deliver_city' },
+			{ data: 'deliveryDateTime'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],

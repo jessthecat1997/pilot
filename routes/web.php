@@ -56,6 +56,7 @@ Route::resource('/admin/ipf_fee','IpfFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
+Route::resource('/admin/location_province','LocationProvincesController');
 
 //Utilities Routes
 Route::resource('/utilities/employee', 'EmployeesController');
@@ -144,8 +145,8 @@ Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data'
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
 Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
-
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
+Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
 Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
@@ -184,6 +185,7 @@ Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->
 //Locations
 Route::resource('/location', 'LocationsController');
 Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
+Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->name('get_location_data');
 
 //Quotations
 Route::resource('/quotation', 'QuotationsController');

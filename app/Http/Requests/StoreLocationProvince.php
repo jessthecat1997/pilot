@@ -3,27 +3,24 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Response;
 
-class StoreContractTemplate extends FormRequest
+class StoreLocationProvince extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-       public function rules()
+    public function rules()
     {
         switch ($this->method()) {
             case 'POST':
 
             return [
-            'name' => 'required|unique:contract_templates,name',
-            'description' => 'max:500|required'
+            'name' => 'required|unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|',
+            
             ];
 
             break;
@@ -31,8 +28,7 @@ class StoreContractTemplate extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| unique:contract_templates,name,'. $this->segment(3) ,
-            'description' => 'max:500|required|unique:contract_templates,description,'. $this->segment(3),
+            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_provinces,name,'. $this->segment(3) ,
             ];
 
             break;
