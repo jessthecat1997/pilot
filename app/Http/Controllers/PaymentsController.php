@@ -7,13 +7,45 @@ use App\Payment;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App;
+use PDF;
 
 class PaymentsController extends Controller
 {
 	public function index()
 	{
-		$payMode = PaymentMode::all();
-		return view('payment/payment_index', compact(['payMode']));
+		return view('payment/payment_so');
+	}
+	public function show(Request $request, $id)
+	{
+		$pays = DB::table('consignee_service_order_headers')
+		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
+		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
+		->where('consignee_service_order_headers.id', '=', $id)
+		->get();
+
+		// $paymodes = PaymentMode::all();
+
+		// $totalbills = DB::table('billing_invoice_details')
+		// ->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
+		// ->where('billing_invoice_headers.so_head_id','=',$id)
+		// ->get();
+
+		// $totrc = DB::table('refundable_charges')
+		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(amount),2)) as Total'))
+		// ->where('so_head_id', '=', $id)
+		// ->get();
+
+		// $delfees = DB::table('delivery_billings')
+		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(amount),2)) as Total'))
+		// ->where('del_head_id', '=', $id)
+		// ->get();
+
+		return view('payment/payment_index', compact(['pays', 'paymodes', 'totalbills', 'totrc', 'delfees']));
+
 	}
 	public function store(StorePayment $request)
 	{
@@ -24,35 +56,18 @@ class PaymentsController extends Controller
 		$new_payment->payment_mode_id = $request->payment_mode_id;
 		$new_payment->save();
 	}
-	public function getTotalAmt(Request $request)
+	public function payment_pdf(Request $request, $id)
 	{
-		$totbillamt = DB::table('billing_invoice_details')
-		->select(DB::raw('SUM(amount)'))
-		->where('bi_head_id', '=', $request->id)
+		$payments = DB::table('payments')
+		->leftjoin('consignee_service_order_headers', 'payments.so_head_id', '=', 'consignee_service_order_headers.id')
+		->leftjoin('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
+		->leftjoin('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->leftjoin('payment_modes', 'payments.payment_mode_id', '=' , 'payment_modes.id')
+		->select('consignee_service_order_details.id','companyName','payments.amount', 'payment_modes.description', 'address', 'payments.created_at','TIN', 'businessStyle')
+		->where('payments.so_head_id','=',$id)
 		->get();
-		return view::make('payment/payment_index')->with('totbillamt',$totbillamt);
-	}
-	public function getTotalRC()
-	{
-		
-	}
 
-	public function pdfview(Request $request)
-	{
-		$pay = Payment::all();
-		return view('pdfview', compact(['pay']));
-		$pays = DB::table("payments")
-		->leftJoin('consignee_service_order_headers','payments.so_head_id', '=', 'consignee_service_order_headers.id')
-		->leftJoin('consignees','consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('companyName', 'amount', 'payments.created_at')
-		->get();
-		view()->share('payments',$pays);
-
-		if($request->has('download')){
-			$pdf = PDF::loadView('pdfview');
-			return $pdf->download('pdfview.pdf');
-		}
-
-		return view('pdfview');
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments'));
+		return $pdf->stream();
 	}
 }
