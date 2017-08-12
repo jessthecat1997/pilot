@@ -225,7 +225,7 @@
 	@empty
 	@endforelse
 	];
-	var data;
+	
 
 
 	$(document).ready(function(){

@@ -67,14 +67,6 @@
 								<label class = "control-label col-md-3">Province: </label>
 								<div class = "col-md-9">
 									<select name = "loc_province" id="loc_province" class = "form-control">
-										<option value = '0'></option>
-										@forelse($provinces as $province)
-										<option value="{{ $province->id }}" >
-											{{ $province->name }}
-										</option>
-										@empty
-
-										@endforelse
 									</select>     
 								</div>
 							</div>
@@ -142,6 +134,16 @@
 
 @push('scripts')
 <script type="text/javascript">
+
+	var arr_provinces =[
+	@forelse($provinces as $province)
+	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
+	@empty
+	@endforelse
+	];
+
+	var data;
+
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
 			processing: false,
@@ -159,6 +161,38 @@
 
 			],	"order": [[ 0, "asc" ]],
 		});
+
+		$("#loc_city").select2({
+			width: '100%',
+			sorter: function(data) {
+				return data.sort(function (a, b) {
+					if (a.text > b.text) {
+						return 1;
+					}
+					if (a.text < b.text) {
+						return -1;
+					}
+					return 0;
+				});
+			},
+		});
+		$("#loc_province").select2({
+			data: arr_provinces,
+			width: '100%',
+			sorter: function(data) {
+				return data.sort(function (a, b) {
+					if (a.text > b.text) {
+						return 1;
+					}
+					if (a.text < b.text) {
+						return -1;
+					}
+					return 0;
+				});
+			},
+		});
+
+		Inputmask("9{4}").mask($("#zip"));
 
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
