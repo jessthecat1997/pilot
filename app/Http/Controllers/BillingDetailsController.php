@@ -54,12 +54,6 @@ class BillingDetailsController extends Controller
 		->select('id', 'name')
 		->where('bill_type', '=', 'E')
 		->get();
-		// $total_bills = DB::table('billing_invoice_details')
-		// ->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		// ->where('billing_invoice_headers.so_head_id','=',$request)
-		// ->get();
-
 		$bills = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
@@ -69,16 +63,6 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$so_head_id = $id;
-
-		// $types = $bill_E;
-		// if($bill_R == $types)
-		// {
-		// 	return 'rev';
-		// }
-		// else if($bill_E == $types)
-		// {
-		// 	return 'wow';
-		// }
 
 		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'delivery', 'so_head_id']));
 		
