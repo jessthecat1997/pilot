@@ -212,6 +212,15 @@
 			</div>
 		</div>
 	</div>
+	<br>
+	<div class="row">
+		<div class="form-group">
+			<a href='{{ route("view.index") }}/{{ $bill->id }}/show_pdf' class="btn but finalize-exp col-sm-6">Generate Invoice</a>
+		</div>
+		<div class="form-group">
+			<a href='/payment/{{ $so_head_id }}' class="btn but finalize-exp col-sm-6">Proceed to Payment</a>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
@@ -277,7 +286,6 @@
 					'bi_head_id' : $('#soHead_id').val(),
 				},
 				success: function (data){
-					window.location.href = '{{ route("view.index") }}/{{ $bill->id }}/show_pdf';
 				}
 			})
 		}
@@ -305,7 +313,6 @@
 					'bi_head_id' : $('#soHead_id').val(),
 				},
 				success: function (data){
-					window.location.href = '{{ route("view.index") }}/{{ $bill->id }}/show_pdf';
 				}
 			})
 		}

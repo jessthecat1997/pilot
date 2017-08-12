@@ -86,9 +86,7 @@
                     </a>
                 </li> -->
                 <li>
-                    &nbsp;
-                </li>
-                <li>
+                    <br>
                     <a href="Dashboard.html">&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
@@ -112,7 +110,7 @@
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table fa-lg"></i>&nbsp;Brokerage</a>
                         </li>
                         <li>
-                        <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck fa-lg"></i>&nbsp;Delivery</a>
+                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck fa-lg"></i>&nbsp;Delivery</a>
                         </li>
                         <li id="frstgrp">
                             <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money fa-lg"></i>&nbsp;Billing and Payment</a>
@@ -123,8 +121,51 @@
                     <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Reports</a>
                 </li>
                 <li>
-                    <a href="{{ route('service_ordertype.index') }}" class = "maintenance">&nbsp;&nbsp;Maintenance</a>
+                    <a data-toggle="collapse" href="#collapse2" class="maintenance">&nbsp;&nbsp;Maintenance</a>
                 </li>
+                <div id="collapse2" class="pane;-collapse collapse">
+                    <ul class="list-group" style="list-style-type: circle;">
+                        <li>
+                            <a href = "{{ route('service_ordertype.index') }}"  class = "class-service-order"><i class="fa fa-circle"></i>&nbsp;&nbsp;Service Order Type</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage Fee</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;IPF Fee</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('area.index') }}"  class = "class-area"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
+                        </li>
+ <!--                        <li>
+                            <a href = "{{ route('bank_account.index') }}"  class = "class-bank-account"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bank Account</a>
+                        </li> -->
+                        <li>
+                            <a href = "{{ route('receive_type.index') }}"  class = "class-receive-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Receive Type</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
+                        </li>
+                    </ul>
+                </div>
                 <li>
                     <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Queries</a>
                 </li>
