@@ -284,6 +284,18 @@ class DatatablesController extends Controller
 		return Datatables::of($exps)
 		->make(true);
 	}
+
+	public function prev_datatable(Request $request)
+	{
+		$revs = DB::table('billing_revenues')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->select('billings.name', 'billing_revenues.description', DB::raw('CONCAT(TRUNCATE(billing_revenues.amount - (billing_revenues.amount * billing_revenues.tax/100),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id', '=', $id)
+		->get();
+		return Datatables::of($revs)
+		->make(true);
+	}
 	public function shipment_datatable(){
 		$shipments = DB::table('brokerage_service_orders')
 		->leftjoin('consignee_service_order_headers', 'brokerage_service_orders.consigneeSODetails_id','=', 'consignee_service_order_headers.id')

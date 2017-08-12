@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App;
 use PDF;
+use Yajra\Datatables\Facades\Datatables;
 
 class PaymentsController extends Controller
 {
@@ -26,25 +27,10 @@ class PaymentsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
-		// $paymodes = PaymentMode::all();
+		
 
-		// $totalbills = DB::table('billing_invoice_details')
-		// ->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
-		// ->where('billing_invoice_headers.so_head_id','=',$id)
-		// ->get();
 
-		// $totrc = DB::table('refundable_charges')
-		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(amount),2)) as Total'))
-		// ->where('so_head_id', '=', $id)
-		// ->get();
-
-		// $delfees = DB::table('delivery_billings')
-		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(amount),2)) as Total'))
-		// ->where('del_head_id', '=', $id)
-		// ->get();
-
-		return view('payment/payment_index', compact(['pays', 'paymodes', 'totalbills', 'totrc', 'delfees']));
+		return view('payment/payment_index', compact(['pays']));
 
 	}
 	public function store(StorePayment $request)
@@ -53,7 +39,6 @@ class PaymentsController extends Controller
 
 		$new_payment->amount = $request->amount;
 		$new_payment->so_head_id = $request->so_head_id;
-		$new_payment->payment_mode_id = $request->payment_mode_id;
 		$new_payment->save();
 	}
 	public function payment_pdf(Request $request, $id)
