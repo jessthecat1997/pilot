@@ -25,18 +25,20 @@ class LocationCitiesController extends Controller
 		for($i = 0; $i < count($request->name); $i++){
 			$city = new LocationCities;
 			$city->name = $request->name[$i];
-			$city->provinces_id = $request->provinces_id;
+			$city->provinces_id = $request->provinces_id[$i];
 			$city->save();
-			return $city->id;
+			return $city;
 		}
-
-		
-
-
 	}
 
 	public function update(StoreLocationCities $request, $id)
 	{
+		$city = LocationCities::findOrFail($id);
+        $city->name = $request->name;
+        $city->provinces_id = $request->provinces_id;
+        $city->save();
+
+        return $city;
 		
 	}
 
@@ -44,8 +46,8 @@ class LocationCitiesController extends Controller
 	public function destroy($id)
 	{
 
-		$province = LocationProvince::findOrFail($id);
-		$province->delete();
+		$city = LocationCities::findOrFail($id);
+		$city->delete();
 	}
 
 

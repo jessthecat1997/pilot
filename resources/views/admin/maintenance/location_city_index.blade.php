@@ -86,7 +86,7 @@
 													<div class = "form-group " >
 														
 														<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" 
-														name = "city" id = "city"  data-rule-required="true"   />
+														name = "city" id = "city" value=""  data-rule-required="true"   />
 													</div>
 
 												</td>
@@ -116,6 +116,37 @@
 		<br />
 	</div>
 </div>
+</section>
+<section class="content">
+	<form role="form" method = "POST" id = "commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lcModal_update" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Update City</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group required">
+							<label class="control-label " for="province">Province:</label>
+							<select name = "loc_province_update" id="loc_province_update" class = "form-control required">
+							</select>     
+						</div>			
+						<div class="form-group required">
+							<label class = "control-label">Name:</label>
+							<input type = "text" class = "form-control" name = "city_update" id = "city_update"  minlength = "2" data-rule-required="true" />
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave_update" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
 </section>
 <section class="content">
 	<form role = "form" method = "POST">
@@ -152,7 +183,6 @@
 @push('scripts')
 <script type="text/javascript">
 	var city_id = [];
-	
 	var city_id_descrp = [];
 	var arr_provinces =[
 	@forelse($provinces as $province)
@@ -160,9 +190,9 @@
 	@empty
 	@endforelse
 	];
-
-
 	var data;
+
+
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
 		$('#collapse1').addClass('in');
@@ -178,11 +208,7 @@
 			columns: [
 
 			{ data: 'province' },
-
-			{ data: 'city',
-			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
-			},
+			{ data: 'city'},
 
 
 			
@@ -234,6 +260,24 @@
 			},
 		});
 
+		$("#loc_province_update").select2({
+			data: arr_provinces,
+			width: '100%',
+			sorter: function(data) {
+				return data.sort(function (a, b) {
+					if (a.text > b.text) {
+						return 1;
+					}
+					if (a.text < b.text) {
+						return -1;
+					}
+					return 0;
+				});
+			},
+		});
+
+
+
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
@@ -244,10 +288,16 @@
 
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update City');
+			
 			var lc_id = $(this).val();
-			$('.modal-title').text('Update City');
-			$('#lcModal').modal('show');
+			data = lctable.row($(this).parents()).data();
+
+			console.log("this is  " + data.province);
+
+			$("#loc_province_update").select2("val", $("#loc_province_update option:contains('"+data.province+"')").val() );
+
+			$('#city_update').val(data.city);
+			$('#lcModal_update').modal('show');
 		});
 
 		$(document).on('click', '.deactivate', function(e){
@@ -349,57 +399,107 @@
 
 			if(finalvalidatelcRows() === true){
 				
-				var title = $('.modal-title').text();
-				if(title == "New City")
-				{
-					console.log('city: ' + city_id);
-					console.log('province_id: ' +  $('#loc_province').val());	
-					$.ajax({
+				console.log('cities: ' + city_id);
+				console.log('provinces_id: ' +  $('#loc_province').val());	
+				$.ajax({
 
-						type: 'POST',
-						url:  '/admin/location_city',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'name' : city_id,
-							'provinces_id' : $('#loc_province').val(),
-				
-						},
+					type: 'POST',
+					url:  '/admin/location_city',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : city_id,
+						'provinces_id' : $('#loc_province').val(),
 
-						success: function (data){
+					},
 
-							
+					success: function (data){
 
-							lctable.ajax.reload();
-							$('#lcModal').modal('hide');
-							$('.modal-title').text('New City');
-							$('#city').val("");
+						
 
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-							toastr["success"]("Record addded successfully")
-							
+						lctable.ajax.reload();
+						$('#lcModal').modal('hide');
+						$('.modal-title').text('New City');
+						$('#city').val("");
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
 						}
-					})
-				}
+						toastr["success"]("Record addded successfully")
+						
+					}
+				})
+				
 			}
 		});
+
+
+		$(document).on('click', '#btnSave_update', function(e){
+			console.log('update city: ' +$('input[name=city_update').val());
+			console.log('update provinces_id: ' +  $('#loc_province').val());	
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/admin/location_city/' + data.id,
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'name' : $('input[name=city_update').val(),
+					'provinces_id' : $('#loc_province').val(),
+
+				},
+				success: function (data){
+
+					
+
+					lctable.ajax.reload();
+					$('#lcModal_update').modal('hide');
+					$('#city').val("");
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record Updated successfully")
+					
+				}
+			})
+
+
+		});
+
+
+
+
 	});
+
 
 
 

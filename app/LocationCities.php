@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use SoftDeletes;
 class LocationCities extends Model
 {
-	use SoftDeletes;
 	
     protected $fillable = [
     'name', 'provinces_id',
