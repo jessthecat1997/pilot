@@ -25,6 +25,9 @@
 									Termination Date
 								</td>
 								<td>
+									Status
+								</td>
+								<td>
 									Created At
 								</td>
 								<td>
@@ -64,6 +67,7 @@ $('#collapse1').addClass('in');
 			{ data: 'companyName' },
 			{ data: 'dateEffective' },
 			{ data: 'dateExpiration' },
+			{ data: 'status' },
 			{ data: 'created_at' },
 			{ data: 'action', orderable: false, searchable: false }
 			]

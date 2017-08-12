@@ -39,14 +39,18 @@ class TruckingsController extends Controller
 
         $employees = Employee::all();
 
-        return view('trucking.trucking_service_order_create', compact(['employees']));
+        $consignees = \App\Consignee::all();
+
+        $provinces = \App\LocationProvince::all();
+
+        return view('trucking.trucking_service_order_create', compact(['employees', 'consignees', 'provinces']));
     }
 
     
     public function store(Request $request)
     {
         $new_so_head = new ConsigneeServiceOrderHeader;
-        $new_so_head->consignees_id = $request->cs_id;
+        $new_so_head->consignees_id = $request->consignees_id;
         $new_so_head->employees_id = $request->processedBy;
         $new_so_head->paymentStatus = "U";
         $new_so_head->save();
@@ -147,11 +151,14 @@ class TruckingsController extends Controller
 
         $locations = \App\Location::all();
 
+        $provinces = \App\LocationProvince::all();
+
         $delivery = TruckingServiceOrder::findOrFail($so_id);
+
 
         if($delivery->status == 'P')
         {
-            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations']));
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces']));
         }
         else{
             return 'Cannot create new deliveries';
@@ -203,7 +210,7 @@ class TruckingsController extends Controller
 
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->pickupDateTime = $request->pickupDate;
-            
+
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 1;

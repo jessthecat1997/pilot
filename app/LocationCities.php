@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use SoftDeletes;
-class LocationCitie extends Model
+class LocationCities extends Model
 {
 	use SoftDeletes;
 	
@@ -14,5 +14,5 @@ class LocationCitie extends Model
 
     protected $dates = [
     'deleted_at',
-    ]
+    ];
 }

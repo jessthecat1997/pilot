@@ -543,24 +543,6 @@
 			selected_delivery = $(this).closest("tr").find('.delivery-id').val();
 		})
 
-		$(document).on('click', '.save-delivery-information', function(e){
-
-			$.ajax({
-				type: 'PUT',
-				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : selected_delivery,
-
-					
-				},
-				success: function(data){
-					location.reload();
-				}	
-			})
-		})
-
 		// Container
 
 		$(document).on('click', '.add-new-container', function(e){
@@ -679,7 +661,8 @@
 					
 				},
 				success: function(data){
-					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
+					delivery_table.ajax.reload();
+					$('#deliveryModal').modal('hide');
 				}	
 			})
 		})

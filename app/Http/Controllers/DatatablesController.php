@@ -20,6 +20,7 @@ use App\CdsFee;
 use App\BrokerageFee;
 use App\VatRate;
 use App\LocationProvince;
+use App\LocationCities;
 use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
@@ -323,6 +324,23 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+
+	public function lc_datatable(){
+		$lcs = DB::select("SELECT p.id,p.name , GROUP_CONCAT(c.name ORDER BY c.name ASC ) AS city FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id GROUP BY p.id");
+
+		return Datatables::of($lcs)
+		->addColumn('action', function ($lc){
+			return
+			'<button value = "'. $lc->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $lc->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+
+
+
 	public function bl_datatable(){
 		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
 
@@ -355,6 +373,19 @@ class DatatablesController extends Controller
 		->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'companyName', 'contract_headers.created_at')
 		->get();
 		return Datatables::of($contract_headers)
+		->addColumn('status', function ($contract_header){
+			$date_now = Carbon::now();
+			if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+				return 'Active';
+			}
+			else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+				return 'Expired';
+			}
+			else{
+				return 'Pending';
+			}
+			
+		})
 		->addColumn('action', function ($contract_header){
 			return
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md but view-contract-details">View</button>' .
@@ -364,7 +395,7 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
 		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-		->editColumn('created_at', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->make(true);
 	}
 
@@ -519,7 +550,7 @@ class DatatablesController extends Controller
 		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
 		->get();
-	
+
 		return Datatables::of($quotations)
 		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($quotation){
