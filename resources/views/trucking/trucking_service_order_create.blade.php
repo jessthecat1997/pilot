@@ -40,13 +40,13 @@
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
 									<div class = "col-md-4">
-										<input type = "text"  class = "form-control" id = "_cfirstName" disabled />
+										<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
 									</div>
 									<div class = "col-md-4">
-										<input type = "text"  class = "form-control" id = "_cmidddleName" disabled />
+										<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
 									</div>
 									<div class = "col-md-4">
-										<input type = "text"  class = "form-control" id = "_clastName" disabled />
+										<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
 									</div>
 								</div>
 							</div>
@@ -54,13 +54,13 @@
 								<label class = "control-label col-md-3">Contact Number: </label>
 								<div class = "col-md-3">
 									<div class = "col-md-12">
-										<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled/>
+										<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
 									</div>
 								</div>
 								<label class = "control-label col-md-2">Email: </label>
 								<div class = "col-md-4">
 									<div class = "col-md-12">
-										<input type = "text"  class = "form-control" id = "_cemail" disabled/>
+										<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
 									</div>
 								</div>
 							</div>
@@ -68,7 +68,7 @@
 								<label class = "control-label col-md-3">Company Name</label>
 								<div class = "col-md-9">
 									<div class = "col-md-12">
-										<input type = "text"  class = "form-control" id = "_ccompanyName" disabled/>
+										<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
 									</div>
 								</div>
 							</div>
@@ -76,13 +76,13 @@
 								<label class = "control-label col-md-3">Business Style: </label>
 								<div class = "col-md-3">
 									<div class = "col-md-12">
-										<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled/>
+										<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
 									</div>
 								</div>
 								<label class = "control-label col-md-2">TIN: </label>
 								<div class = "col-md-4">
 									<div class = "col-md-12">
-										<input type = "text"  class = "form-control" id = "_cTIN" disabled/>
+										<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
 									</div>
 								</div>
 							</div>
@@ -310,6 +310,7 @@
 	$(document).ready(function(){
 
 		$('#consignee_id').select2();
+		$("#consignee_id").select2('data', {id: 5, text: "HELLO"});   
 
 		$(document).on('change', '#consignee_id', function(e){
 			if($('#consignee_id').val() != 0){
@@ -518,7 +519,7 @@
 				url: '{{ route("trucking.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'cs_id' : cs_id,
+					'consignees_id' : $('#consignee_id').val(),
 					'shippingLine' : $('#shippingLine').val(),
 					'destination' : $('#destination').val(),
 					'portOfCfsLocation' : $('#portOfCfsLocation').val(),

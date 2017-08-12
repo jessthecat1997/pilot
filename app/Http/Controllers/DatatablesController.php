@@ -355,6 +355,19 @@ class DatatablesController extends Controller
 		->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'companyName', 'contract_headers.created_at')
 		->get();
 		return Datatables::of($contract_headers)
+		->addColumn('status', function ($contract_header){
+			$date_now = Carbon::now();
+			if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+				return 'Active';
+			}
+			else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+				return 'Expired';
+			}
+			else{
+				return 'Pending';
+			}
+			
+		})
 		->addColumn('action', function ($contract_header){
 			return
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md but view-contract-details">View</button>' .
@@ -364,7 +377,7 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
 		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-		->editColumn('created_at', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->make(true);
 	}
 
