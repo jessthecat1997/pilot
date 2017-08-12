@@ -39,7 +39,11 @@ class TruckingsController extends Controller
 
         $employees = Employee::all();
 
-        return view('trucking.trucking_service_order_create', compact(['employees']));
+        $consignees = \App\Consignee::all();
+
+        $provinces = \App\LocationProvince::all();
+
+        return view('trucking.trucking_service_order_create', compact(['employees', 'consignees', 'provinces']));
     }
 
     
@@ -150,6 +154,7 @@ class TruckingsController extends Controller
         $provinces = \App\LocationProvince::all();
 
         $delivery = TruckingServiceOrder::findOrFail($so_id);
+
 
         if($delivery->status == 'P')
         {
