@@ -185,6 +185,9 @@
 
 <script type="text/javascript">
 
+    
+
+
 
     $('.money').inputmask("numeric", {
         radixPoint: ".",
