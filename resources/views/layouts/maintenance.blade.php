@@ -165,7 +165,7 @@
                     </ul>
                 </div>
                 <li>
-                <a href="{{ route('shipment.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
+                    <a href="{{ route('shipment.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
                 </li>
                 <li>
                     <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
@@ -195,7 +195,7 @@
     <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>  
     <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
     <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
-   
+    
 
 
     <script>
@@ -210,6 +210,34 @@
                 $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
             }, 0);
         });
+
+        
+        $('.money').inputmask("numeric", { 
+            radixPoint: ".", 
+            groupSeparator: ",", 
+            digits: 2, 
+            autoGroup: true, 
+            rightAlign: true, 
+            removeMaskOnSubmit:true, 
+        });
+        function formatNumber(n) { 
+            var currency = "Php "; 
+            return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+        } 
+        function formatNumber_s(n) { 
+            var currency = "$ "; 
+            return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+        } 
+        
+        function format_container_maxweight(n) { 
+            var unit = " kgs"; 
+            return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
+        } 
+        function format_container_size(n) { 
+            var unit = "-footer"; 
+            return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
+        } 
+        
     </script>
     @stack('scripts')
 </body>
