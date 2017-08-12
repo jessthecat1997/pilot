@@ -11,7 +11,7 @@ class ContractTemplatesController extends Controller
 	{
 		return view('admin/maintenance.contract_templates_index');
 	}
-
+	
 
 
 	public function store(StoreContractTemplate $request)

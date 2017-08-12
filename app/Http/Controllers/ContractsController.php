@@ -10,6 +10,7 @@ use App\Area;
 use App\ContractHeader;
 use App\ContractDetail;
 use App\ContractAmendment;
+use App\ContractTemplate;
 use Response;
 use App;
 use PDF;
@@ -46,12 +47,13 @@ class ContractsController extends Controller
 
     public function create()
     {
-        $areas = Area::where('deleted_at', '=', null)->orderBy('description', 'asc')->get();
-        $volumes = ContainerType::all();
+        $description = ContractTemplate::all()->last();
 
-        return view('/trucking.contract_create', compact(['areas', 'volumes']));
+        $desc_array = explode("<br/>", $description->description);
+        array_pop($desc_array);
+
+        return view('trucking.contract_create', compact(['desc_array']));
     }
-
     public function create_contract(Request $request){
         $file = fopen('contract.txt', 'r');
         $fileContent = fread($file, filesize('contract.txt'));
