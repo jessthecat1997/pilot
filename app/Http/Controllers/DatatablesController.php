@@ -264,7 +264,7 @@ class DatatablesController extends Controller
 		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
 		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
-		->where('billing_expenses.bi_head_id', '=', $request->id)
+		->where('billing_invoice_headers.so_head_id', '=', $request->id)
 		->get();
 
 		return Datatables::of($exps)
@@ -279,7 +279,7 @@ class DatatablesController extends Controller
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
 		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
-		->where('billing_revenues.bi_head_id', '=', $request->id)
+		->where('billing_invoice_headers.so_head_id', '=', $request->id)
 		->get();
 		return Datatables::of($exps)
 		->make(true);

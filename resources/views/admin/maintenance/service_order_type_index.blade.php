@@ -93,13 +93,13 @@
 @push('styles')
 <style>
 	.class-service-order{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
 	.maintenance
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -107,6 +107,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+$('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;

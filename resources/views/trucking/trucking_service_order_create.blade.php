@@ -13,25 +13,27 @@
 				</div>
 				<div class = "panel-body">
 					<div class = "col-md-12">
-						<div class = "col-md-8">
-							<div class = "form-group">
-								<label class = "control-label">Consignee</label>
-								<div class = "input-group"  style="width: 100%;">
-									<select id = "consignee_id" class = "form-control select2-allow-clear select2">
-										<option value = "0">Select Consignee</option>
-										@forelse($consignees as $consignee)
-										<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
+						<div class = "col-md-6 col-md-offset-2">
+							<div class = "form-horizontal">
+								<div class = "form-group">
+								<label class = "control-label col-md-3">Consignee: </label>
+									<div class = "input-group col-md-9">
+										<select id = "consignee_id" class = "form-control select2-allow-clear select2">
+											<option value = "0">Select Consignee</option>
+											@forelse($consignees as $consignee)
+											<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
 
-										@empty
+											@empty
 
-										@endforelse
-									</select>
+											@endforelse
+										</select>
+										
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class = "col-md-4">
-							<br />
-							<button class = "btn btn-success add_new_consignee">New Consignee</button>
+							<button class = "btn btn-success add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
 						</div>
 					</div>
 					<div class="col-md-12">

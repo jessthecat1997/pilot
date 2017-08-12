@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Receive Type</h3>
+		<h2>&nbsp;Maintenance | Receive Type</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#rtModal" style = "width: 100%;">New Receive Type</button>
@@ -94,13 +94,13 @@
 <style>
 	.class-receive-type
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
 	.maintenance
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -108,6 +108,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_name = "";
 	var temp_desc = "";

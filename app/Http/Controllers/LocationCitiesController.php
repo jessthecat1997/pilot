@@ -27,9 +27,10 @@ class LocationCitiesController extends Controller
 			$city->name = $request->name[$i];
 			$city->provinces_id = $request->provinces_id;
 			$city->save();
+			return $city->id;
 		}
 
-		return $city->id;
+		
 
 
 	}

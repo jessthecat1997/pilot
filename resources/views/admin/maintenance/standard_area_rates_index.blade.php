@@ -2,44 +2,44 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Standard Area Rates</h3>
-		<hr>
-		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sarModal" style = "width: 100%;">New Standard Area Rates</button>
+		<h2>&nbsp;Maintenance | Standard Area Rates</h3>
+			<hr>
+			<div class = "col-md-3 col-md-offset-9">
+				<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sarModal" style = "width: 100%;">New Standard Area Rates</button>
+			</div>
 		</div>
-	</div>
-	<h4>Default pick-up location is pier </h4>
-	<br />
+		<h4>Default pick-up location is pier </h4>
+		<br />
 
-	<div class = "row">
-		<div class = "panel-default panel">
-			<div class = "panel-body">
-				<table class = "table-responsive table" id = "sar_table">
-					<thead>
-						<tr>
-							<td>
-								Date Effective
-							</td>
-							<td>
-								Area From
-							</td>
-							<td>
-								Area To
-							</td>
-							<td>
-								Amount
-							</td>
-							
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
+		<div class = "row">
+			<div class = "panel-default panel">
+				<div class = "panel-body">
+					<table class = "table-responsive table" id = "sar_table">
+						<thead>
+							<tr>
+								<td>
+									Date Effective
+								</td>
+								<td>
+									Area From
+								</td>
+								<td>
+									Area To
+								</td>
+								<td>
+									Amount
+								</td>
+								
+								<td>
+									Actions
+								</td>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 </div>
 <section class="content">
@@ -163,7 +163,18 @@
 @endsection
 @push('styles')
 <style>
-
+	.class-area-rates
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 
 </style>
 @endpush

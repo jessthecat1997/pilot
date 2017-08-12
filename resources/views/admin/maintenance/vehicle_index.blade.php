@@ -1,7 +1,7 @@
 @extends('layouts.maintenance')
 @section('content')
 <div class = "container-fluid">
-	<h3><img src="/images/bar.png"> Maintenance | Vehicles</h3>
+	<h2>&nbsp;Maintenance | Vehicles</h2>
 	<hr>
 	<div class = "row">
 		<div class = "col-md-3 col-md-offset-9">
@@ -150,13 +150,13 @@
 	<style>
 		.class-vehicle
 		{
-			border-left: 10px solid #2ad4a5;
+			border-left: 10px solid #8ddfcc;
 			background-color:rgba(128,128,128,0.1);
 			color: #fff;
 		}
 		.maintenance
 		{
-			border-left: 10px solid #2ad4a5;
+			border-left: 10px solid #8ddfcc;
 			background-color:rgba(128,128,128,0.1);
 			color: #fff;
 		}
@@ -164,6 +164,7 @@
 	@endpush
 	@push('scripts')
 	<script type="text/javascript">
+	$('#collapse2').addClass('in');
 		var data;
 
 		var vehicle_type =[

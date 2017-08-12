@@ -4,7 +4,7 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Container Delivery System Fee</h3>
+		<h2>&nbsp;Maintenance | Container Delivery System Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#cdsModal" style = "width: 100%;">New CDS Fee</button>
@@ -105,23 +105,23 @@
 @endsection
 @push('styles')
 <style>
+	.class-cds-fee
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 	.maintenance
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
 </style>
-
-
 @endpush
 @push('scripts')
-
-
-
-
-
 <script type="text/javascript">
+$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 
@@ -140,12 +140,6 @@
 
 				],	"order": [[ 0, "desc" ]],
 			});
-
-		
-
-
-
-		
 		$("#commentForm").validate({
 			rules: 
 			{
