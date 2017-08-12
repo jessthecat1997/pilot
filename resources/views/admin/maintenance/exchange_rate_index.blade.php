@@ -129,21 +129,23 @@
 	var data;
 	$(document).ready(function(){
 		var ertable = $('#er_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/erData',
 			columns: [
 			{ data: 'id' },
-			{ data: 'rate',
+			{ data: 'rate' ,
 			"render" : function( data, type, full ) {
-				return formatNumber(data); } },
-				{ data: 'description' },
-				{ data: 'dateEffective' },
-				{ data: 'created_at'},
-				{ data: 'action', orderable: false, searchable: false }
+				return formatNumber(data); } 
+			},
+			{ data: 'description' },
+			{ data: 'dateEffective' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+			],	"order": [[ 0, "desc" ]],
+		});
 
 
 
@@ -261,7 +263,7 @@
 					},
 					success: function (data)
 					{
-						
+
 
 
 
@@ -271,7 +273,7 @@
 
 
 							$('.modal-title').text('New Exchange Rate');
-							
+
 
 							toastr.options = {
 								"closeButton": false,
@@ -301,10 +303,10 @@
 								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 							});
-							
+
 						}
 					},
-					
+
 				})
 			}
 			else
