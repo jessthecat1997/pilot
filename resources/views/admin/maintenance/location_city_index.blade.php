@@ -221,7 +221,7 @@
 	var city_id_descrp = [];
 	var arr_provinces =[
 	@forelse($provinces as $province)
-	{ id: {{ $province->id }}, text:'{{ $province->name }}' }, 
+	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
 	@empty
 	@endforelse
 	];
