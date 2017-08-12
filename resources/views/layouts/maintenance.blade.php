@@ -13,9 +13,10 @@
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
-
+    <link href= "/js/select2/select2.css" rel = "stylesheet">  
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
+    
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -191,6 +192,11 @@
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+    <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>  
+    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
+    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
+   
+
 
     <script>
         $("#menu-toggle").click(function(e) {

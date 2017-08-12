@@ -217,6 +217,8 @@ Route::get('/trucking/{trucking_id}/delivery/create', 'TruckingsController@new_d
 Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
 Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
+
+
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
 Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
@@ -230,9 +232,9 @@ Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsControll
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
 
+
+
 //Vanessa addition
-
-
 Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
 Route::resource('/admin/contract_template','ContractTemplatesController');
 

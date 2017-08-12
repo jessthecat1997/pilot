@@ -198,14 +198,17 @@
 									</tr>
 								</thead>
 								<tbody>
+									@forelse($desc_array as $desc)
 									<tr id = "term-condition-row">
 										<td>
-											<textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails"></textarea>
+											<textarea class = "form-control specificDetails"  rows = "5" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Agreements . . . " name = "specificDetails">{{ substr($desc, 3, strlen($desc)) }}</textarea>
 										</td>
 										<td style="text-align: center;">
 											<button class = "btn btn-danger btn-md delete-term-row">x</button>
 										</td>
 									</tr>
+									@empty
+									@endforelse
 								</tbody>
 							</table>
 						</div>
@@ -248,8 +251,9 @@
 	var consigneeID = null;
 	
 	$(document).ready(function(){
+
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
-		var term_condition_row = "<tr>" + $('#term-condition-row').html() + "</tr>";
+		var term_condition_row = '<tr><td><textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Agreements . . . " name = "specificDetails"></textarea></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-term-row">x</button></td></tr>';
 		$('#collapse1').addClass('in');
 		$('#contract-row').remove();
 
