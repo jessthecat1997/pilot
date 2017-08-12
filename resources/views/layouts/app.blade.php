@@ -87,41 +87,41 @@
                 </li> -->
                 <li>
                     <br>
-                    <a href="Dashboard.html">&nbsp;&nbsp;Dashboard</a>
+                    <a href="Dashboard.html"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
-                    <a data-toggle="collapse" href="#collapse1">&nbsp;&nbsp;Transactions</a>
+                    <a data-toggle="collapse" href="#collapse1"><i class="fa fa-exchange"></i>&nbsp;&nbsp;Transactions</a>
                 </li>
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                         <li>
-                            <a href = "{{ route('consignee.index') }}"  class = "consignee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consignee</a>
+                            <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Location</a>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
                         </li>
                         <li>
-                            <a href = "{{ route('quotation.index') }}"  class = "quotation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quotation</a>
+                            <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contract</a>
+                            <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
-                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table fa-lg"></i>&nbsp;Brokerage</a>
+                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck fa-lg"></i>&nbsp;Delivery</a>
+                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li id="frstgrp">
-                            <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money fa-lg"></i>&nbsp;Billing and Payment</a>
+                            <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing and Payment</a>
                         </li>
                     </ul>
                 </div>
                 <li>
-                    <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Reports</a>
+                    <a href="{{ route('shipment.index') }}"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
                 </li>
                 <li>
-                    <a data-toggle="collapse" href="#collapse2" class="maintenance">&nbsp;&nbsp;Maintenance</a>
+                    <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
                 </li>
                 <div id="collapse2" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
@@ -152,9 +152,6 @@
                         <li>
                             <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
                         </li>
- <!--                        <li>
-                            <a href = "{{ route('bank_account.index') }}"  class = "class-bank-account"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bank Account</a>
-                        </li> -->
                         <li>
                             <a href = "{{ route('receive_type.index') }}"  class = "class-receive-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Receive Type</a>
                         </li>
@@ -167,10 +164,10 @@
                     </ul>
                 </div>
                 <li>
-                    <a href="{{ route('shipment.index') }}">&nbsp;&nbsp;Queries</a>
+                <a href="{{ route('shipment.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
                 </li>
                 <li>
-                    <a href="{{ route('utilities.index') }}" class="utilities">&nbsp;&nbsp;Utilities</a>
+                    <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
                 </li>
             </ul>
         </div>
