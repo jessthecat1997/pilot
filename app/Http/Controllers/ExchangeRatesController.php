@@ -10,7 +10,7 @@ class ExchangeRatesController extends Controller
 {
     public function index()
     {
-
+        
         return view('admin/maintenance.exchange_rate_index');
     }
 
