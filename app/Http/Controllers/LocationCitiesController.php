@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\LocationCities;
+use App\LocationProvince;
 use App\Http\Requests\StoreLocationCities;
 
 class LocationCitiesController extends Controller
@@ -40,6 +41,12 @@ class LocationCitiesController extends Controller
 
         return $city;
 		
+	}
+
+	public function new_province(Request $request)
+	{
+		$lp = LocationProvince::create($request->all());
+        return $lp;
 	}
 
 

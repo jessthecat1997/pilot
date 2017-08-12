@@ -47,9 +47,14 @@
 						<div class="modal-body ">		
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Province:</label>
-								<select name = "loc_province" id="loc_province" class = "form-control required">
+								<select name = "loc_province" id="loc_province" class = "form-control required select2_province">
 								</select>     
 							</div>
+
+							<div class = "form-group">
+								<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
+								<br>
+							</div>		
 						</form>
 						<br />
 						<div class = "collapse" id = "lc_table_warning">
@@ -130,8 +135,12 @@
 					<div class="modal-body">
 						<div class="form-group required">
 							<label class="control-label " for="province">Province:</label>
-							<select name = "loc_province_update" id="loc_province_update" class = "form-control required">
+							<select name = "loc_province_update" id="loc_province_update" class = "form-control required select2_province">
 							</select>     
+						</div>
+						<div class = "form-group">
+							<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
+							<br>
 						</div>			
 						<div class="form-group required">
 							<label class = "control-label">Name:</label>
@@ -141,6 +150,32 @@
 					</div>
 					<div class="modal-footer">
 						<input id = "btnSave_update" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
+<section class="content">
+	<form role="form" method = "POST" id = "commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lpModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">New Province</h4>
+					</div>
+					<div class="modal-body">			
+						<div class="form-group required">
+							<label class = "control-label">Name:</label>
+							<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave_province" type = "submit" class="btn btn-success submit" value = "Save" />
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 					</div>
 				</div>
@@ -243,8 +278,7 @@
 			}
 		});
 
-
-		$("#loc_province").select2({
+		$(".select2_province").select2({
 			data: arr_provinces,
 			width: '100%',
 			sorter: function(data) {
@@ -259,29 +293,10 @@
 				});
 			},
 		});
-
-		$("#loc_province_update").select2({
-			data: arr_provinces,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
-		});
-
-
 
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New City');
 			$('#lcModal').modal('show');
 
 		});
@@ -356,7 +371,84 @@
 			});
 		})
 
-		
+
+
+		$(document).on('click', '#new_province', function(e){
+			resetErrors();
+			$('#name').val("");
+			$('#lpModal').modal('show');
+
+		});
+
+		$('#btnSave_province').on('click', function(e){
+			e.preventDefault();
+
+			$.ajax({
+				type: 'POST',
+				url:  '/admin/location_province',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'name' : $('input[name=name]').val(),
+				},
+				success: function (data)
+				{
+
+					var lpdata = $('.select2_province').select2('data');
+					arr_provinces.push({id:data.id,text:data.name});
+					$latest = data.name;
+					$(".select2_province").select2({
+						data: arr_provinces,
+						width: '100%',
+					});
+
+					console.log ("latest is "+$latest);
+
+					$(".select2_province").select2("val", $(".select2_province option:contains('antipolo')").val() );
+
+					if(typeof(data) === "object"){
+						$('#lpModal').modal('hide');
+						$('#name').val("");
+						$('.modal-title').text('New Province');
+
+					//Show success
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record addded successfully")
+				}
+				else{
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+	        console.log(i + " => " + v); // view in console for error messages
+	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+	    });
+					
+				}
+			},
+			
+		})
+		});
+
+
+
 
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
@@ -398,7 +490,7 @@
 			e.preventDefault();
 
 			if(finalvalidatelcRows() === true){
-				
+
 				console.log('cities: ' + city_id);
 				console.log('provinces_id: ' +  $('#loc_province').val());	
 				$.ajax({
@@ -414,7 +506,7 @@
 
 					success: function (data){
 
-						
+
 
 						lctable.ajax.reload();
 						$('#lcModal').modal('hide');
@@ -440,10 +532,10 @@
 							"hideMethod": "fadeOut"
 						}
 						toastr["success"]("Record addded successfully")
-						
+
 					}
 				})
-				
+
 			}
 		});
 
@@ -463,7 +555,7 @@
 				},
 				success: function (data){
 
-					
+
 
 					lctable.ajax.reload();
 					$('#lcModal_update').modal('hide');
@@ -488,7 +580,7 @@
 						"hideMethod": "fadeOut"
 					}
 					toastr["success"]("Record Updated successfully")
-					
+
 				}
 			})
 
