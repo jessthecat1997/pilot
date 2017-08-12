@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
     <div class = "row">
-        <h3><img src="/images/bar.png"> Maintenance |Brokerage Fee</h3>
+        <h2>&nbsp;Maintenance |Brokerage Fee</h2>
         <hr>
         <div class = "col-md-3 col-md-offset-9">
             <button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#bfModal" style = "width: 100%;">New Brokerage Fee Range</button>
@@ -177,12 +177,24 @@
 @endsection
 @push('styles')
 <style>
-
+    .class-brokerage-fee
+    {
+        border-left: 10px solid #8ddfcc;
+        background-color:rgba(128,128,128,0.1);
+        color: #fff;
+    }
+    .maintenance
+    {
+        border-left: 10px solid #8ddfcc;
+        background-color:rgba(128,128,128,0.1);
+        color: #fff;
+    }
 
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
+    $('#collapse2').addClass('in');
     var minimum_id = [];
     var maximum_id = [];
 
@@ -196,7 +208,6 @@
     var data;
     $(document).ready(function(){
         var bf_row = "<tr>" + $('#bf-row').html() + "</tr>";
-        $('#collapse1').addClass('in');
 
         
         //$(minimum).attr("disabled", true);
@@ -230,7 +241,6 @@
 
 
         });
-
 
         $("#commentForm").validate({
             rules: 
@@ -387,7 +397,7 @@
             e.preventDefault();
 
             if(finalvalidatebfRows() === true){
-                
+
                 var title = $('.modal-title').text();
                 if(title == "New Brokerage Fee Range")
                 {
@@ -408,7 +418,7 @@
 
                         success: function (data){
 
-                            
+
 
                             bftable.ajax.reload();
                             $('#bfModal').modal('hide');
@@ -520,7 +530,7 @@ function validatebfRows()
         }
 
         if(minimum[i].value>maximum[i].value){
-            
+
             maximum[i].style.borderColor = 'red';
             error += "Minimum is greater than maximum";
             $('#bf_warning').addClass('in');

@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Import Processing Fee</h3>
+		<h2>&nbsp;Maintenance | Import Processing Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = "width: 100%;">New Import Processing Fee Range</button>
@@ -41,7 +41,6 @@
 </div>
 </div>
 <section class="content">
-
 	<form role="form" method = "POST" class="commentForm">
 		<div class="modal fade" id="ipfModal" role="dialog">
 			<div class="form-group">
@@ -173,12 +172,21 @@
 	</form>
 </section>
 </div>
-
 @endsection
 @push('styles')
 <style>
-
-
+	.class-ipf-fee
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 </style>
 @endpush
 @push('scripts')
@@ -272,7 +280,7 @@
 			$('.modal-title').text('Update Import Processing Fee Range');
 			var ipf_id = $(this).val();
 
-	
+
 			
 			$('.modal-title').text('Update Import Prcessing Fee Range');
 			$('#ipfModal').modal('show');

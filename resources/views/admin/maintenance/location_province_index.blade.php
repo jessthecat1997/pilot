@@ -3,7 +3,7 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Province</h3>
+		<h2>&nbsp;Maintenance | Province</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sotModal" style = "width: 100%;">New Province</button>
@@ -87,9 +87,15 @@
 @endsection
 @push('styles')
 <style>
+	.class-province
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 	.maintenance
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -97,6 +103,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 		var lptable = $('#lp_table').DataTable({
@@ -126,8 +133,8 @@
 				},
 				onkeydown: function(element) {$(element).valid()}, 
 				submitHandler: function (form) {
-				return false;
-			}
+					return false;
+				}
 
 
 			});
