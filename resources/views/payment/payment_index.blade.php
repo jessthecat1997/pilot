@@ -42,18 +42,25 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Payments</div>
+		<div class="panel-default col-sm-8">
+			<div class="panel-heading" id="heading">List of Unpaid Bills</div>
 			<div class = "panel-body">
-				<div class="col-sm-12">
-					<form class="form-horizontal">
-						
-					</form>
-				</div>
+				<table class = "table-responsive table" id = "bill_table">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+				</table>
 				<br>
 				<div class="form-group">
-					<a class="btn btn-info finalize-payment col-sm-6">Save</a>
-					<a href="/payment/{{ $pay->id }}/show_pdf" class="btn btn-info  col-sm-6">Generate Receipt</a>
+					<a class="btn but finalize-payment col-sm-6">Save</a>
+					<a href="/payment/{{ $pay->id }}/show_pdf" class="btn but  col-sm-6">Generate Receipt</a>
 				</div>
 			</div>
 
