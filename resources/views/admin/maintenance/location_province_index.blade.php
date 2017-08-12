@@ -221,7 +221,7 @@ $('#btnSave').on('click', function(e){
 	{
 		$.ajax({
 			type: 'POST',
-			url:  '/admin/location_province',
+			url:  '/admin/location_city/new_province',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'name' : $('input[name=name]').val(),

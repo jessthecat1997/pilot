@@ -60,6 +60,10 @@ Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 
+
+//Sub maintenance
+Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
+
 //Utilities Routes
 Route::resource('/utilities/employee', 'EmployeesController');
 Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
