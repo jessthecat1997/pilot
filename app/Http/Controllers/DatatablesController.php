@@ -326,7 +326,7 @@ class DatatablesController extends Controller
 
 
 	public function lc_datatable(){
-		$lcs = DB::select("SELECT p.id,p.name , GROUP_CONCAT(c.name ORDER BY c.name ASC ) AS city FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id GROUP BY p.id");
+		$lcs = DB::select("SELECT p.id ,p.name as 'province' ,c.name AS city FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
 
 		return Datatables::of($lcs)
 		->addColumn('action', function ($lc){
