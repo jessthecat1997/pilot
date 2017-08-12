@@ -49,13 +49,10 @@
 			<table style="width: 100%; border: 1px solid black">
 				<tr>
 					<td style="border:1px solid transparent; text-align: left;" width="20%">
-						<h3>Invoice No.:</h3>
+						<h4>Invoice No.:</h4>
 					</td>
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						@forelse($bills as $bill)
-						<h3>0{{ $bill->id }}</h3>
-						@empty
-						@endforelse
+						<h3>0{{ $number }}</h3>
 					</td>
 				</tr>
 				<tr>
@@ -151,11 +148,6 @@
 						</td>
 					</tr>
 					@empty
-					<tr>
-						<td>
-							<h4 style="text-align: center;">No records available.</h4>
-						</td>
-					</tr>
 					@endforelse
 					@forelse($expenses as $exp)
 					<tr>
@@ -167,11 +159,6 @@
 						</td>
 					</tr>
 					@empty
-					<tr>
-						<td>
-							<h4 style="text-align: center;">No records available.</h4>
-						</td>
-					</tr>
 					@endforelse
 					
 				</tbody>

@@ -10,7 +10,7 @@ class Billing extends Model
 	use SoftDeletes;
 
 	protected $fillable = [
-	'name', 'description'
+	'bill_type','name','description'
 	];
 
 	protected $dates = [

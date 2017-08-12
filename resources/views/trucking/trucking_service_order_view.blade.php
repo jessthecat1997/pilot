@@ -119,19 +119,25 @@
 							<td style="width: 5%;">
 								ID
 							</td>
-							<td style="width: 30%;">
-								Address
-							</td>
-							<td style="width: 20%;">
-								Vehicle
+							<td style="width: 15%;">
+								Origin Name
 							</td>
 							<td style="width: 15%;">
-								Created At
+								Origin City
 							</td>
 							<td style="width: 10%;">
-								Status
+								Pickup Date
 							</td>
-							<td style="width: 20%;">
+							<td style="width: 15%;">
+								Destination Name
+							</td>
+							<td style="width: 15%;">
+								Destination City
+							</td>
+							<td style="width: 10%;">
+								Delivery Date
+							</td>
+							<td style="width: 15%;">
 								Actions
 							</td>
 						</tr>
@@ -459,10 +465,12 @@
 			columns: [
 
 			{ data: 'id' },
-			{ data: 'origin_name' },
-			{ data: 'origin_city' },
-			{ data: 'pick_up'}
-			{ data: 'status' },
+			{ data: 'pickup_name' },
+			{ data: 'pickup_city'},
+			{ data: 'pickupDateTime'},
+			{ data: 'deliver_name' },
+			{ data: 'deliver_city' },
+			{ data: 'deliveryDateTime'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -533,24 +541,6 @@
 		$(document).on('click', '.select-delivery', function(e){
 			e.preventDefault();
 			selected_delivery = $(this).closest("tr").find('.delivery-id').val();
-		})
-
-		$(document).on('click', '.save-delivery-information', function(e){
-
-			$.ajax({
-				type: 'PUT',
-				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : selected_delivery,
-
-					
-				},
-				success: function(data){
-					location.reload();
-				}	
-			})
 		})
 
 		// Container
@@ -671,7 +661,8 @@
 					
 				},
 				success: function(data){
-					window.location.replace('{{ route("trucking.store") }}/{{ $so_id}}/view');
+					delivery_table.ajax.reload();
+					$('#deliveryModal').modal('hide');
 				}	
 			})
 		})

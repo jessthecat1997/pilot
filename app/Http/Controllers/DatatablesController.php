@@ -227,7 +227,7 @@ class DatatablesController extends Controller
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
 			return
-			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info selectCon">Select</a>';
+			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but selectCon">Select</a>';
 		})
 		->make(true);
 	}
@@ -241,7 +241,7 @@ class DatatablesController extends Controller
 		return Datatables::of($pso_heads)
 		->addColumn('action', function ($pso_head) {
 			return
-			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md btn-info select">Select</a>';
+			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but select">Select</a>';
 		})
 		->make(true);
 	}
@@ -251,7 +251,7 @@ class DatatablesController extends Controller
 		return Datatables::of($bills)
 		->addColumn('action', function ($bil){
 			return
-			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $bil->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $bil->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -373,16 +373,29 @@ class DatatablesController extends Controller
 		->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'companyName', 'contract_headers.created_at')
 		->get();
 		return Datatables::of($contract_headers)
+		->addColumn('status', function ($contract_header){
+			$date_now = Carbon::now();
+			if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+				return 'Active';
+			}
+			else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+				return 'Expired';
+			}
+			else{
+				return 'Pending';
+			}
+			
+		})
 		->addColumn('action', function ($contract_header){
 			return
-			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-info view-contract-details">View</button>' .
+			'<button value = "'. $contract_header->id .'" class = "btn btn-md but view-contract-details">View</button>' .
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-primary amend-contract">Amend</button>' .
 			'<button value = "'. $contract_header->id .'" class = "btn btn-md btn-success print-contract-details">Print</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
 		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-		->editColumn('created_at', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->make(true);
 	}
 
@@ -394,7 +407,7 @@ class DatatablesController extends Controller
 		return Datatables::of($employees)
 		->addColumn('action', function ($employee){
 			return
-			'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn btn-info btn-md">View</a>' .
+			'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn but btn-md">View</a>' .
 			'<button value = "'. $employee->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $employee->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
@@ -435,7 +448,7 @@ class DatatablesController extends Controller
 		return Datatables::of($truckings)
 		->addColumn('action', function ($trucking){
 			return
-			'<a href = "/trucking/'. $trucking->id .'/view" class = "btn btn-md btn-info view-service-order">Manage</a>';
+			'<a href = "/trucking/'. $trucking->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
 		})
 		->editColumn('status', function($trucking){
 			switch ($trucking->status) {
@@ -463,20 +476,30 @@ class DatatablesController extends Controller
 	public function get_trucking_deliveries(Request $request)
 	{
 		$deliveries = DB::table('delivery_receipt_headers')
-		->join('locations', '')
-		->select('id', 'plateNumber', 'created_at', 'status')
-		->where('deleted_at', '=', null)
+		->join('locations as A', 'locations_id_pick', '=', 'A.id')
+		->join('locations as B', 'locations_id_del', '=', 'B.id')
+		->join('location_cities as C', 'A.cities_id', '=', 'C.id')
+		->join('location_cities as D', 'B.cities_id', '=', 'D.id')
+		->select('delivery_receipt_headers.id', 'plateNumber', 'delivery_receipt_headers.created_at', 'status', 'A.name AS pickup_name', 'B.name as deliver_name', 'C.name AS pickup_city', 'D.name AS deliver_city', 'delivery_receipt_headers.deliveryDateTime', 'pickupDateTime')
+		->where('delivery_receipt_headers.deleted_at', '=', null)
 		->where('tr_so_id','=', $request->trucking_id)
 		->get();
+
 		return Datatables::of($deliveries)
 		->addColumn('created_at_date', function($delivery){
 			return
 			Carbon::parse($delivery->created_at)->diffForHumans();
 		})
+		->editColumn('deliveryDateTime', function($deliveries){
+			return Carbon::parse($deliveries->deliveryDateTime)->format('F j, Y h:i:s A');
+		})
+		->editColumn('pickupDateTime', function($deliveries){
+			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i:s A');
+		})
 		->addColumn('action', function ($delivery){
 			return
 			"<button class = 'btn btn-primary view_delivery'>View</button>" . 
-			"<button class = 'btn btn-info select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
+			"<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
 		->editColumn('status', function($deliveries){
@@ -514,7 +537,7 @@ class DatatablesController extends Controller
 			return
 			'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
 			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' . 
-			'<button value = "'. $location->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $location->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $location->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 
 		})
@@ -547,7 +570,7 @@ class DatatablesController extends Controller
 		return Datatables::of($cdss)
 		->addColumn('action', function ($cds){
 			return
-			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -560,7 +583,7 @@ class DatatablesController extends Controller
 		return Datatables::of($vrs)
 		->addColumn('action', function ($vrs){
 			return
-			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -573,7 +596,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
 			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -587,7 +610,7 @@ class DatatablesController extends Controller
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
 			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
@@ -1683,7 +1706,7 @@ class DatatablesController extends Controller
 		return Datatables::of($brokerages)
 		->addColumn('action', function ($brokerage){
 			return
-			'<a href = "/brokerage/'. $brokerage->id .'/view" class = "btn btn-md btn-info view-service-order">Manage</a>';
+			'<a href = "/brokerage/'. $brokerage->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
 		})
 		->editColumn('statusType', function($trucking){
 			switch ($trucking->statusType) {

@@ -49,6 +49,15 @@ class ConsigneesController extends Controller
 		
 	}
 
+	public function get_detail(Request $request){
+		$consignee = DB::table('consignees')
+		->select('*')
+		->where('consignees.id', '=', $request->id)
+		->get();
+
+		return $consignee;
+	}
+
 	public function get_cities(Request $request){
 		$cities = DB::table('location_cities')
 		->select('name', 'id')

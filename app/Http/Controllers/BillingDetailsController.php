@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Yajra\Datatables\Facades\Datatables;
 use App\Billing;
-use App\BillingInvoiceDetails;
+use App\BillingRevenue;
+use App\BillingExpense;
 use App\Charge;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
@@ -44,14 +45,20 @@ class BillingDetailsController extends Controller
 	}
 	public function show_billing(Request $request, $id)
 	{
-		$billings = Billing::all();
+		$bill_revs = DB::table('billings')
+		->select('id','name')
+		->where('bill_type', '=', 'R')
+		->get();
+
+		$bill_exps = DB::table('billings')
+		->select('id', 'name')
+		->where('bill_type', '=', 'E')
+		->get();
 		// $total_bills = DB::table('billing_invoice_details')
 		// ->leftjoin('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		// ->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount - (billing_invoice_details.amount * billing_invoice_details.discount/100)),2)) as Total'))
 		// ->where('billing_invoice_headers.so_head_id','=',$request)
 		// ->get();
-
-		$charges = Charge::all();
 
 		$bills = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
@@ -63,7 +70,17 @@ class BillingDetailsController extends Controller
 
 		$so_head_id = $id;
 
-		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'total_bills', 'charges', 'delivery', 'so_head_id']));
+		// $types = $bill_E;
+		// if($bill_R == $types)
+		// {
+		// 	return 'rev';
+		// }
+		// else if($bill_E == $types)
+		// {
+		// 	return 'wow';
+		// }
+
+		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'delivery', 'so_head_id']));
 		
 	}
 	public function billing_invoice(Request $request)
@@ -76,7 +93,7 @@ class BillingDetailsController extends Controller
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv">View Invoice</a>';
+			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">View Invoice</a>';
 		})
 		->make(true);
 		return view('billing/billing_index', compact(['billings']));
@@ -85,19 +102,37 @@ class BillingDetailsController extends Controller
 	{
 		$billing_header = new BillingInvoiceHeader;
 		$billing_header->so_head_id = $request->so_head_id;
-		$billing_header->paymentAllowance = $request->paymentAllowance;
 		$billing_header->vatRate = $request->vatRate;
+		$billing_header->date_billed = $request->date_billed;
+		$billing_header->override_date = $request->override_date;
+		$billing_header->due_date = $request->due_date;
 		$billing_header->save();
 
 		$billing_header =  BillingInvoiceHeader::all()->last();
-		for($i = 0; $i<count($request->billings_id); $i++)
+
+		for($i = 0; $i<count($request->bill_id); $i++)
 		{
-			$billing_detail = new BillingInvoiceDetails;
-			$billing_detail->billings_id = $request->billings_id[$i];
-			$billing_detail->amount = $request->amount[$i];
-			$billing_detail->discount = $request->discount[$i];
-			$billing_detail->bi_head_id = $billing_header->id;
-			$billing_detail->save();
+			$bills_id = Billing::find($request->bill_id[$i]);
+			if($bills_id->bill_type == 'R')
+			{
+				$billing_revenue = new BillingRevenue;
+				$billing_revenue->bill_id = $request->bill_id[$i];
+				$billing_revenue->description = $request->description[$i];
+				$billing_revenue->amount = $request->amount[$i];
+				$billing_revenue->tax = $request->tax[$i];
+				$billing_revenue->bi_head_id = $billing_header->id;
+				$billing_revenue->save();
+			}
+			else
+			{
+				$billing_expense = new BillingExpense;
+				$billing_expense->bill_id = $request->bill_id[$i];
+				$billing_expense->description = $request->description[$i];
+				$billing_expense->amount = $request->amount[$i];
+				$billing_expense->tax = $request->tax[$i];
+				$billing_expense->bi_head_id = $billing_header->id;
+				$billing_expense->save();
+			}
 		}
 	}
 	public function bill_pdf(Request $request, $id)
@@ -113,6 +148,7 @@ class BillingDetailsController extends Controller
 
 
 		$billing_header =  BillingInvoiceHeader::all()->last();
+		$number = $billing_header->id;
 		$revenues = DB::table('billing_revenues')
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_revenues.bill_id', '=','billings.id')
@@ -125,9 +161,9 @@ class BillingDetailsController extends Controller
 		->select('billings.name', 'billing_expenses.amount')
 		->where('billing_invoice_headers.id', '=', $billing_header->id)
 		->get();
-		
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['revenues', 'expenses', 'bills', 'br_rc']));
+
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['revenues', 'expenses', 'bills', 'number']));
 		return $pdf->stream();
 	}
-	
+
 }
