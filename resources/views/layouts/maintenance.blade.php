@@ -211,6 +211,16 @@
             }, 0);
         });
 
+        $('.money_er').inputmask("numeric", { 
+            radixPoint: ".", 
+            groupSeparator: ",", 
+            digits: 7, 
+            autoGroup: true, 
+            rightAlign: true, 
+            
+            
+        }); 
+
         
         $('.money').inputmask("numeric", { 
             radixPoint: ".", 
@@ -228,7 +238,7 @@
             var currency = "$ "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
         } 
-        
+
         function format_container_maxweight(n) { 
             var unit = " kgs"; 
             return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
@@ -237,7 +247,7 @@
             var unit = "-footer"; 
             return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
         } 
-        
+
     </script>
     @stack('scripts')
 </body>
