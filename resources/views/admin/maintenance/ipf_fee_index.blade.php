@@ -313,7 +313,7 @@
 				$('#ipf_parent_table').append(ipf_row);
 
 				for(var i = 0; i < minimum.length; i++){
-					minimum[i+1].value = parseFloat(maximum[i].value) + 0.1;
+					minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
 				}
 			}
 
@@ -337,7 +337,7 @@
 					$(this).css('border-color', 'green');
 
 					for(var i = 0; i < minimum.length; i++){
-						minimum[i+1].value = parseFloat(maximum[i].value) + 0.1;
+						minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
 					}
 				}
 				else{
