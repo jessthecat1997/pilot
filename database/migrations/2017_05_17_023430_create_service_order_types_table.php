@@ -6,11 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateServiceOrderTypesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+   
     public function up()
     {
         Schema::create('service_order_types', function (Blueprint $table) {
@@ -20,13 +16,17 @@ class CreateServiceOrderTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement("
+            INSERT INTO `service_order_types` (`id`, `name`, `description`) VALUES 
+            (NULL, 'brokerage', 'A profession that involves the clearing of documents for discharge or release  of goods through  the Bureau of Customs '),
+            (NULL, 'trucking', 'A profession that  involves in the process or business of conveying goods on trucks.'),
+            (NULL, 'brokerage and trucking', 'Customs brokerage with trucking service')
+            
+            ");
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+    
     public function down()
     {
         Schema::dropIfExists('service_order_types');
