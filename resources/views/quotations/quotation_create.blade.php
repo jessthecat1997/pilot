@@ -458,6 +458,8 @@
 	var to_id_descrp = [];
 	var amount_value_descrp = [];
 
+	var consigneeID = null;
+
 	$(document).ready(function(){
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
 		var term_condition_row = '<tr><td><textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails"></textarea></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-term-row">x</button></td></tr>';
@@ -471,7 +473,9 @@
 		$("#consignee_id").select2('data', {id: 5, text: "HELLO"});   
 
 		$(document).on('change', '#consignee_id', function(e){
+			consigneeID = $('#consignee_id').val();
 			if($('#consignee_id').val() != 0){
+
 				$.ajax({
 					type: 'GET',
 					url: "{{ route('consignee.index')}}/" + $('#consignee_id').val() + "/getConsignee",
@@ -636,6 +640,7 @@
 					success: function (data) {
 						console.log(data);
 						if(typeof(data) == "object"){
+							consigneeID = data.id;
 							$('#chModal').modal('hide');
 							$('#collapse_1').removeClass('in');
 							$('#collapse_2').addClass('in');
@@ -831,7 +836,7 @@
 						'from_id_descrp' : from_id_descrp,
 						'to_id_descrp' : to_id_descrp,
 						'amount' : amount_value,
-						'consignees_id' : $('#consignee_id').val(),
+						'consignees_id' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 					},
 
@@ -1066,7 +1071,7 @@ function finalvalidateContractRows()
 	error = "";
 
 
-	if($('#consignee_id').val() == 0)
+	if(consigneeID == 0 || consigneeID == null)
 	{
 		error+= "No selected consignee";
 		$('#consignee_warning').addClass('in');
