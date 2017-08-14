@@ -10,8 +10,11 @@ class ExchangeRatesController extends Controller
 {
     public function index()
     {
-        
-        return view('admin/maintenance.exchange_rate_index');
+        $exchange_rate = \DB::table('exchange_rates')
+        ->select('rate')
+        ->where('currentRate', '=', 1)
+        ->get();
+        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate']));
     }
 
 
