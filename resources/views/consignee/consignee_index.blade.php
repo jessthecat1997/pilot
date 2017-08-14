@@ -391,13 +391,13 @@
 						'TIN' : $('#TIN').val(),
 						
 						'address' : $('#phy_address').val(),
-						'city' : $('#phy_city').text(),
-						'st_prov' : $('#phy_province').text(),
+						'city' : $('#phy_city option:selected').text(),
+						'st_prov' : $('#phy_province option:selected').text(),
 						'zip' : $('#phy_zip').val(),
 
 						'b_address' : $('#bill_address').val(),
-						'b_city' : $('#bill_city').text(),
-						'b_st_prov' : $('#bill_province').text(),
+						'b_city' : $('#bill_city option:selected').text(),
+						'b_st_prov' : $('#bill_province option:selected').text(),
 						'b_zip' : $('#bill_zip').val(),
 
 						'same_billing_address' : checked,

@@ -129,7 +129,7 @@
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
 			scrollX: true,
-			deferRender: true,
+			deferRender: true, 
 			processing: false,
 			serverSide: false,
 			ajax: 'http://localhost:8000/admin/ctData',
