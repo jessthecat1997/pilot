@@ -122,7 +122,7 @@
 				<thead>
 					<tr>
 						<th width="70%" style="text-align: center;">
-							<strong>Payment Mode</span></strong>
+							<strong>P A R T I C U L A R S</span></strong>
 						</th>
 						<th width="30%" style="text-align: center;">
 							<strong>Amount</strong>
@@ -130,13 +130,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					@forelse($payments as $pay)
+					@forelse($exp as $e)
 					<tr>
 						<td style="text-align: center;">
-							{{ $pay->description }}
+							{{ $e->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $pay->amount }}
+							Php {{ $e->amount }}
 						</td>
 					</tr>
 					@empty

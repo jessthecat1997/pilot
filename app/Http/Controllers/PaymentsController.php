@@ -74,10 +74,24 @@ class PaymentsController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
-		->where('consignee_service_order_headers.id', '=', $id)
+		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
+		->select('billing_invoice_headers.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
-		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments'));
+
+		$rev = DB::table('billing_revenues')
+		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->select('name','amount')
+		->where('billing_revenues.bi_head_id','=', $id);
+
+		$exp = DB::table('billing_expenses')
+		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->select('name','amount')
+		->where('billing_expenses.bi_head_id','=', $id)
+		->union($rev)
+		->get();
+
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments', 'exp'));
 		return $pdf->stream();
 	}
 }
