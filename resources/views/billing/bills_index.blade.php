@@ -47,10 +47,10 @@
 	<hr>
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 				<div class="form-group">
 					<label for="vat">Vat Rate:</label>
-					<input type="text" class="form-control" id="vat">
+					<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
 				</div>
 			</div>
 			<div class="col-sm-4">
@@ -59,13 +59,7 @@
 					<input type="date" class="form-control" id="date_billed">
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="form-group">
-					<label for="override_date">Override Date:</label>
-					<input type="date" class="form-control" id="override_date">
-				</div>
-			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="form-group">
 					<label for="due_date">Due Date:</label>
 					<input type="date" class="form-control" id="due_date">
@@ -85,9 +79,6 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
-								Type *
-							</td>
 							<td>
 								Name *
 							</td>
@@ -120,9 +111,6 @@
 									</select>
 								</td>
 								<td>
-									<input type = "text" name = "rev_description" class = "form-control" style="text-align: right">
-								</td>
-								<td>
 									<input type = "text" name = "rev_amount" class = "form-control" style="text-align: right">
 								</td>
 								<td>
@@ -131,6 +119,14 @@
 								<td>
 									<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
 								</td>
+								<tr id="desc_rev_row">
+									<td colspan="4">
+										<div class="form-group">
+											<label for="rev_description">Description:</label>
+											<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+										</div>
+									</td>
+								</tr>
 							</form>
 						</tr>
 					</tbody>
@@ -155,9 +151,6 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
-								Type *
-							</td>
 							<td>
 								Name *
 							</td>
@@ -190,9 +183,6 @@
 									</select>
 								</td>
 								<td>
-									<input type = "text" name = "exp_description" class = "form-control" style="text-align: right">
-								</td>
-								<td>
 									<input type = "text" name = "exp_amount" class = "form-control" style="text-align: right">
 								</td>
 								<td>
@@ -201,6 +191,14 @@
 								<td>
 									<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
 								</td>
+								<tr id="desc_exp_row">
+									<td colspan="4">
+										<div class="form-group">
+											<label for="exp_description">Description:</label>
+											<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
+										</div>
+									</td>
+								</tr>
 							</form>
 						</tr>
 					</tbody>
@@ -216,8 +214,6 @@
 	<div class="row">
 		<div class="form-group">
 			<a href='{{ route("view.index") }}/{{ $bill->id }}/show_pdf' class="btn but finalize-exp col-sm-6">Generate Invoice</a>
-		</div>
-		<div class="form-group">
 			<a href='/payment/{{ $so_head_id }}' class="btn but finalize-exp col-sm-6">Proceed to Payment</a>
 		</div>
 	</div>
@@ -250,17 +246,23 @@
 
 	var rev_row = "<tr>" + $('#revenue-row').html() + "</tr>";
 	var exp_row = "<tr>" + $('#expense-row').html() + "</tr>";
+	var desc_rev_row =  "<tr>" + $('#desc_rev_row').html() + "</tr>";
+	var desc_exp_row =  "<tr>" + $('#desc_exp_row').html() + "</tr>";
 
 	var so_type = $('#so_type').text();
+
+
 
 	$(document).on('click', '.new-rev-row', function(e){
 		e.preventDefault();
 		$('#rev_table > tbody').append(rev_row);
+		$('#rev_table > tbody').append(desc_rev_row);
 	})
 
-	$(document).on('click', '.new-charge-row', function(e){
+	$(document).on('click', '.new-exp-row', function(e){
 		e.preventDefault();
 		$('#exp_table > tbody').append(exp_row);
+		$('#exp_table > tbody').append(desc_exp_row);
 	})
 
 	$(document).on('click', '.finalize-rev', function(e){
@@ -286,6 +288,7 @@
 					'bi_head_id' : $('#soHead_id').val(),
 				},
 				success: function (data){
+					alert("Saved");
 				}
 			})
 		}
@@ -313,6 +316,7 @@
 					'bi_head_id' : $('#soHead_id').val(),
 				},
 				success: function (data){
+					alert("Saved");
 				}
 			})
 		}
@@ -344,16 +348,7 @@
 			{
 				rev_bill_id.push(rev_billID[i].value);
 			}
-			if(rev_description[i].value === "")
-			{
-				rev_description[i].style.color = 'red';
-				error += "Discount Required.";
-			}
-
-			else
-			{
-				rev_description_value.push(rev_description[i].value);
-			}
+			rev_description_value.push(rev_description[i].value);
 			if(rev_amount[i].value === "")
 			{
 				rev_amount[i].style.color = 'red';
@@ -414,16 +409,7 @@
 			{
 				exp_bill_id.push(exp_billID[i].value);
 			}
-			if(exp_description[i].value === "")
-			{
-				exp_description[i].style.color = 'red';
-				error += "Discount Required.";
-			}
-
-			else
-			{
-				exp_description_value.push(exp_description[i].value);
-			}
+			exp_description_value.push(exp_description[i].value);
 			if(exp_amount[i].value === "")
 			{
 				exp_amount[i].style.color = 'red';

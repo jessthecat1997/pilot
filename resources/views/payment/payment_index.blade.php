@@ -42,7 +42,7 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="panel-default col-sm-8">
+		<div class="panel-default col-sm-6">
 			<div class="panel-heading" id="heading">List of Unpaid Bills</div>
 			<div class = "panel-body">
 				<table class = "table-responsive table" id = "bill_table">
@@ -58,12 +58,25 @@
 					</thead>
 				</table>
 				<br>
+			</div>
+		</div>
+		<div class="panel-default col-sm-6">
+			<div class="panel-heading" id="heading">Payment details</div>
+			<div class = "panel-body">
+				<form class="form-inline">
+					<div class="form-group col-sm-10">
+						<label for="email">Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<input type="text" class="form-control" id="total" disabled>
+					</div>
+				</form>
+				<br>
+				<br>
 				<div class="form-group">
 					<a class="btn but finalize-payment col-sm-6">Save</a>
-					<a href="/payment/{{ $pay->id }}/show_pdf" class="btn but  col-sm-6">Generate Receipt</a>
+					<a href="/payment/{{ $pay->id }}/show_pdf" class="btn but col-sm-6 pull-right">Generate Receipt</a>
 				</div>
+				
 			</div>
-
 		</div>
 	</div>
 </div>
@@ -82,35 +95,21 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	var so_head_id = $('#so_head_id').text();
-	var bfee = $('#bfee');
-	var bfee_val = bfee.text();
-	var totalbills = $('#totalbills');
-	var bills = totalbills.text();
-	var totrc = $('#totrc');
-	var rc_val = totrc.text();
-	var delfees = $('#delfee');
-	var del_val = delfees.text();
-	var totalamt = $('#totalamt');
-	var total_val = totalamt.text();
-	var pmid = document.getElementsByName('pm_id');
-
+	
 	$(document).ready(function(){
-		var totals = 0;
-		totals = +bfee_val + +bills + +rc_val + +del_val;
-		totalamt.text(totals);
-		console.log(so_head_id);
-		console.log(totals);
+		var b_table = $('#bill_table').DataTable({
+			processing: false,
+			serverSide: true,
+			ajax: "{{ route('payments.data', $so_head_id) }}",
+			columns: [
+			{ data: 'name' },
+			{ data: 'amount' }
+			]
+		})
 	})
 
 	$(document).on('click', '.finalize-payment', function(e){
-		var totals = 0;
-		totals = +bfee_val + +bills + +rc_val + +del_val;
-		totalamt.text(totals);
-		console.log(so_head_id);
-		console.log(totals);
-		var pm_val = document.getElementsByName('pm_id');
-		console.log(pm_val);
+		
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
@@ -118,7 +117,6 @@
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : so_head_id,
 				'amount' : totals,
-				'payment_mode_id' : '1',
 			},
 			success: function (data){
 				toastr.options = {

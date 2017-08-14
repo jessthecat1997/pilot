@@ -64,7 +64,11 @@ class BillingDetailsController extends Controller
 
 		$so_head_id = $id;
 
-		return view('billing/bills_index', compact(['bill_invoice', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'delivery', 'so_head_id']));
+		$vat = DB::table('vat_rates')
+		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
+		->get();
+
+		return view('billing/bills_index', compact(['vat', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'delivery', 'so_head_id']));
 		
 	}
 	public function billing_invoice(Request $request)

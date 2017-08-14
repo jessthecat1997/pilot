@@ -17,7 +17,7 @@ class CreateBillingInvoiceHeadersTable extends Migration
             $table->increments('id');
             $table->decimal('vatRate',4,3);
             $table->date('date_billed');
-            $table->date('override_date');
+            $table->date('override_date')->nullable();
             $table->date('due_date');
             $table->integer('so_head_id')->unsigned();
             $table->timestamps();

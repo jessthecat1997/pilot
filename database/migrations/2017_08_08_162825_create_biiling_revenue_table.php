@@ -15,7 +15,7 @@ class CreateBiilingRevenueTable extends Migration
     {
         Schema::create('billing_revenues', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 200);
+            $table->string('description', 200)->nullable();
             $table->decimal('amount',10,2);
             $table->decimal('tax', 2,2);
             $table->integer('bill_id')->unsigned();

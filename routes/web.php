@@ -175,6 +175,7 @@ Route::get('billing', 'BillingDetailsController@index')->name('view.index');
 Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
 Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
 Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
+Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
 
 
 //Maintenance data

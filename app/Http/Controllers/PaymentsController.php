@@ -27,11 +27,25 @@ class PaymentsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
-		
+		$so_head_id = $id;
+		return view('payment/payment_index', compact(['pays', 'so_head_id']));
 
+	}
+	public function payments_table(Request $request, $id)
+	{
+		$rev = DB::table('billing_revenues')
+		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->select('name','amount')
+		->where('billing_revenues.bi_head_id','=', $id);
 
-		return view('payment/payment_index', compact(['pays']));
-
+		$exp = DB::table('billing_expenses')
+		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->select('name','amount')
+		->where('billing_expenses.bi_head_id','=', $id)
+		->union($rev)
+		->get();
+		return Datatables::of($exp)
+		->make(true);
 	}
 	public function store(StorePayment $request)
 	{

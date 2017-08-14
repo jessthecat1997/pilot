@@ -259,7 +259,7 @@ $('#btnSave').on('click', function(e){
 	{
 		$.ajax({
 			type: 'POST',
-			url:  '/admin/vr_rate',
+			url:  '{{ route("vat_rate.store") }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'rate' : rate_nocomma,
