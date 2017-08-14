@@ -15,9 +15,6 @@
 				<table class = "table-responsive table" id = "sotype_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
-								No.
-							</td>
 							<td style="width: 25%;">
 								Name
 							</td>
@@ -81,7 +78,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -107,7 +104,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-$('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
@@ -119,12 +116,12 @@ $('#collapse2').addClass('in');
 			deferRender: true,
 			ajax: 'http://localhost:8000/admin/sotData',
 			columns: [
-			{ data: 'id' },
 			{ data: 'name' },
 			{ data: 'description' },
+
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 0, "asc" ]],
 		});
 
 
@@ -136,6 +133,12 @@ $('#collapse2').addClass('in');
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z ]+$/,
+
 				},
 
 				description:
@@ -144,6 +147,7 @@ $('#collapse2').addClass('in');
 				},
 
 			},
+			onkeyup: function(element) {$(element).valid()}, 
 
 		});
 

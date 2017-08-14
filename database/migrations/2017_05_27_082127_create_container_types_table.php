@@ -6,11 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateContainerTypesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+    
     public function up()
     {
         Schema::create('container_types', function (Blueprint $table) {
@@ -21,13 +17,16 @@ class CreateContainerTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        DB::statement("
+            INSERT INTO `container_types` (`id`, `name`, `maxWeight`) VALUES
+             (NULL, '10-footer', '11300'),
+             (NULL, '20-footer', '30480'),
+             (NULL, '40-footer', '30400')
+            ");
+
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+   
     public function down()
     {
         Schema::dropIfExists('container_types');
