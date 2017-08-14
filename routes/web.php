@@ -186,7 +186,9 @@ Route::resource('/admin/billing', 'BillingsController');
 
 //Reports
 Route::resource('/reports/shipment', 'ShipmentReportsController');
+Route::resource('/reports/delivery', 'DeliveryReportsController');
 Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
+Route::get('/reports/deliveryData', 'DatatablesController@delivery_datatable')->name('delivery.data');
 
 //vanessa addition
 Route::get('/trial_report','TrialController@index');
