@@ -264,18 +264,25 @@
 				loc_province:
 				{
 					required: true,
+					
 				},
 				city:
 				{
 					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z ]+$/,
+
 				}
 
 				
 			},
-			onkeyup: false, 
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()}, 
+			
 		});
 
 		$(".select2_province").select2({
