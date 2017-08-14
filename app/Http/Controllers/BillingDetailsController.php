@@ -50,10 +50,13 @@ class BillingDetailsController extends Controller
 		->where('bill_type', '=', 'R')
 		->get();
 
+
 		$bill_exps = DB::table('billings')
 		->select('id', 'name')
 		->where('bill_type', '=', 'E')
 		->get();
+
+
 		$bills = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')

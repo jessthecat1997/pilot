@@ -5,7 +5,7 @@
 		<div class = "col-md-10 col-md-offset-1">
 			<div class = "panel-default panel">
 				<div class = "panel-heading">
-					<h2 id = "page_title">Quotation</h2>
+					<h2 id = "page_title">&nbsp;Quotation</h2>
 				</div>
 				<div class = "panel-body">
 					<div class = "col-md-12">
@@ -636,14 +636,12 @@
 					success: function (data) {
 						console.log(data);
 						if(typeof(data) == "object"){
+							$('#chModal').modal('hide');
 							$('#collapse_1').removeClass('in');
 							$('#collapse_2').addClass('in');
 							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
 							$('#_companyName').val($('#companyName').val());
 							
-							cs_id = data.id;
-							
-					
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
@@ -658,6 +656,16 @@
 							$('#contactNumber').val("");
 							$('#TIN').val("");
 							$('#businessStyle').val("");
+
+
+							$('#_cfirstName').val(data.firstName);
+							$('#_cmidddleName').val(data.middleName);
+							$('#_clastName').val(data.lastName);
+							$('#_ccontactNumber').val(data.contactNumber);
+							$('#_cemail').val(data.email);
+							$('#_ccompanyName').val(data.companyName);
+							$('#_cbusinessStyle').val(data.businessStyle);
+							$('#_cTIN').val(data.TIN);
 						}	
 					}
 				})
