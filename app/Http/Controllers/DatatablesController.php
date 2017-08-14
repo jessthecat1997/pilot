@@ -300,14 +300,34 @@ class DatatablesController extends Controller
 		$shipments = DB::table('brokerage_service_orders')
 		->leftjoin('consignee_service_order_headers', 'brokerage_service_orders.consigneeSODetails_id','=', 'consignee_service_order_headers.id')
 		->leftjoin('employees','consignee_service_order_headers.employees_id','=','employees.id')
-		->leftjoin('container_types','brokerage_service_orders.containerType_id', '=','container_types.id')
 		->leftjoin('consignees','consignee_service_order_headers.consignees_id','=','consignees.id')
-		->select('brokerage_service_orders.created_at','consignee_service_order_headers.id',DB::raw('CONCAT(employees.firstName, employees.lastName) as Employee'), 'companyName', 'supplier', DB::raw('CONCAT(container_types.description,  containerNumber) as CONTRS'), 'docking', 'awb', 'deposit')
+		->select('brokerage_service_orders.created_at','consignee_service_order_headers.id',DB::raw('CONCAT(employees.firstName, employees.lastName) as Employee'), 'companyName', 'arrivalArea', 'shipper','deposit')
 		->orderBy('brokerage_service_orders.created_at')
 		->groupBy(DB::raw('MONTH(brokerage_service_orders.created_at)'))
 		->get();
 		return Datatables::of($shipments)
 		->make(true);
+	}
+	public function delivery_datatable()
+	{
+		$deliveries = DB::table('delivery_containers')
+		->join('delivery_receipt_headers', 'delivery_containers.del_head_id', '=', 'delivery_receipt_headers.id')
+		->join('delivery_non_container_details', 'delivery_non_container_details.del_head_id', '=', 'delivery_receipt_headers.id')
+		->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
+		->join('consignee_service_order_details', 'trucking_service_orders.so_details_id', '=', 'consignee_service_order_details.id')
+		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('companyName', 'shippingLine', 'portOfCfsLocation', 'containerVolume', 'containerNumber', 'delivery_receipt_headers.created_at', 'delivery_non_container_details.grossWeight', 'delivery_receipt_headers.deliveryDateTime', 'delivery_containers.remarks')
+		->get();
+		return Datatables::of($deliveries)
+		->make(true);
+		// // select c.companyName, dc.shippingLine, dc.portOfCfsLocation, dc.containerVolume, dc.containerNumber, dnc.grossWeight, dh.deliveryDateTime, dc.remarks from delivery_containers as dc 
+		// join delivery_receipt_headers as dh on dc.del_head_id = dh.id 
+		// join delivery_non_container_details as dnc on dnc.del_head_id = dh.id 
+		// join trucking_service_orders as tr on dh.tr_so_id = tr.id 
+		// join consignee_service_order_details as cd on tr.so_details_id = cd.id 
+		// join consignee_service_order_headers as ch on cd.so_headers_id = ch.id 
+		// join consignees as c on ch.consignees_id = c.id
 	}
 
 	public function ar_datatable(){

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<h3><img src="/images/bar.png"> Reports | Shipment</h3>
+<h2>&nbsp;Reports | Shipment</h2>
 <hr>
 <div class = "container-fluid">
 	<div class="row">
@@ -23,12 +23,6 @@
 								Consignee
 							</td>
 							<td>
-								Supplier
-							</td>
-							<td>
-								No. of CONTRS
-							</td>
-							<td>
 								Port
 							</td>
 							<td>
@@ -45,8 +39,19 @@
 	</div>
 </div>
 @endsection
+@push('styles')
+<style>
+	.class-shipment
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse3').addClass('in');
 	var data;
 	$(document).ready(function(){
 		var shiptable = $('#shipment_table').DataTable({
@@ -58,10 +63,8 @@
 			{ data: 'id'},
 			{ data: 'Employee' },
 			{ data: 'companyName' },
-			{ data: 'supplier' },
-			{ data: 'CONTRS' },
-			{ data: 'docking' },
-			{ data: 'awb' },
+			{ data: 'arrivalArea'},
+			{ data: 'shipper'},
 			{ data: 'deposit' },
 			]
 		})
