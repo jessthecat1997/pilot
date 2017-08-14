@@ -14,8 +14,7 @@ class ExchangeRatesController extends Controller
         ->select('rate')
         ->where('currentRate', '=', 1)
         ->get();
-        return $exchange_rate;
-        return view('admin/maintenance.exchange_rate_index');
+        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate']));
     }
 
 

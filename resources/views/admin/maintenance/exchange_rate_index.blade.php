@@ -4,7 +4,13 @@
 	<div class = "row">
 		<h2>&nbsp;Maintenance | Exchange Rate</h2>
 		<hr>
-		<h5>Current Exchange Rate: Php</h5>
+		<h5>Current Exchange Rate: Php 
+			@if($exchange_rate != null)
+			{{ number_format((float)$exchange_rate[0]->rate, 5) }}
+			@else
+			0.000000
+			@endif
+		</h5>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#erModal" style = "width: 100%;">New Exchange Rate</button>
 		</div>
@@ -55,7 +61,13 @@
 							<div class="form-group">
 								<label>Current Rate: </label>
 								<input type="hidden" name = "currentRate" value = "0" />
-								<input type = "text" class = "form-control money" value = "P 0.00" style = "text-align: right" readonly = "true" />
+								<input type = "text" class = "form-control" value = 
+								@if($exchange_rate != null)
+								"{{ number_format((float)$exchange_rate[0]->rate, 5) }}"
+								@else
+								"0.0000000"
+								@endif
+								style = "text-align: right" readonly = "true" />
 							</div>
 							<div class="form-group  required">
 								<label class ="control-label">1 US Dollar equals</label>
