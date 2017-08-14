@@ -181,6 +181,179 @@
 			</div>
 		</div>
 	</div>
+	<div id="chModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Consignee Information</h4>
+				</div>
+				<div class="modal-body">	
+					<div class = "panel-default">
+						<div id="con_collapse" class="collapse in">
+							<ul class="nav nav-tabs">
+								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
+								<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="physical_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_province">Province:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_province" id="phy_province" class = "form-control">
+													<option value="0"></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}" >
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>     
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_city" id="phy_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+											<div class="col-md-8">          
+												<label class="switch">
+													<input type="checkbox" class = "checkbox same_billing_address">
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="billing_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_province">Province:</label>
+											<div class="col-sm-8">
+												<select name = "bill_province" id="bill_province"  class = "form-control">
+													<option value = '0'></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}">
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>          
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "bill_city" id="bill_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="new_con" class="tab-pane fade in active">
+									<br />
+									<form class="form-horizontal" role="form">
+										{{ csrf_field() }}
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="firstName">First Name:</label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="email">Email</label>
+											<div class="col-sm-6">          
+												<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="TIN">TIN:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+											</div>
+										</div>
+
+									</form>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
+				</div>
+			</div>
+		</div>
+	</div>
 </div> 
 @endsection
 @push('styles')
@@ -224,10 +397,10 @@
 
 		});
 
-		$('#consignee_id').select2();
-		$("#consignee_id").select2('data', {id: 5, text: "HELLO"});   
+		$('#consignee_id').select2(); 
 
 		$(document).on('change', '#consignee_id', function(e){
+			consigneeID = $('#consignee_id').val();
 			if($('#consignee_id').val() != 0){
 				$.ajax({
 					type: 'GET',
@@ -393,13 +566,13 @@
 					success: function (data) {
 						console.log(data);
 						if(typeof(data) == "object"){
+							consigneeID = data.id;
+							$('#chModal').modal('hide');
 							$('#collapse_1').removeClass('in');
 							$('#collapse_2').addClass('in');
 							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
 							$('#_companyName').val($('#companyName').val());
 							
-							cs_id = data.id;
-						
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
@@ -414,6 +587,16 @@
 							$('#contactNumber').val("");
 							$('#TIN').val("");
 							$('#businessStyle').val("");
+
+
+							$('#_cfirstName').val(data.firstName);
+							$('#_cmidddleName').val(data.middleName);
+							$('#_clastName').val(data.lastName);
+							$('#_ccontactNumber').val(data.contactNumber);
+							$('#_cemail').val(data.email);
+							$('#_ccompanyName').val(data.companyName);
+							$('#_cbusinessStyle').val(data.businessStyle);
+							$('#_cTIN').val(data.TIN);
 						}	
 					}
 				})
@@ -476,7 +659,7 @@
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
 						
-						'consigneeID' : $('#consignee_id').val(),
+						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 					},
 
@@ -610,7 +793,7 @@ function finalvalidateContractRows()
 		location.href = "#contract_duration_title";
 	}
 
-	if($('#consignee_id').val() == 0)
+	if(consigneeID == 0 || consigneeID == null)
 	{
 		error+= "No selected consignee";
 		$('#consignee_warning').addClass('in');
@@ -619,7 +802,6 @@ function finalvalidateContractRows()
 	else{
 		$('#consignee_warning').removeClass('in');
 	}
-
 	
 	
 	for (var i = 0; i < terms.length; i++){

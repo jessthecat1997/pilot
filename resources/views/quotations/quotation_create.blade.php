@@ -470,7 +470,6 @@
 		$.fn.dataTable.ext.errMode = 'throw';
 
 		$('#consignee_id').select2();
-		$("#consignee_id").select2('data', {id: 5, text: "HELLO"});   
 
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();
