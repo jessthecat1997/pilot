@@ -64,8 +64,9 @@
 			<div class="panel-heading" id="heading">Payment details</div>
 			<div class = "panel-body">
 				<form class="form-inline">
+					{{ csrf_field() }}
 					<div class="form-group col-sm-10">
-						<label for="email">Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<label for="total">Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 						<input type="text" class="form-control" id="total" disabled>
 					</div>
 				</form>
@@ -75,12 +76,20 @@
 					<a class="btn but finalize-payment col-sm-6">Save</a>
 					<a href="/payment/{{ $pay->id }}/show_pdf" class="btn but col-sm-6 pull-right">Generate Receipt</a>
 				</div>
-				
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		@forelse($rev as $r)
+		<input type="text" value="{{ $r->Total }}" id="rev" hidden/>
+		@empty
+		@endforelse
+		@forelse($exp as $e)
+		<input type="text" value="{{ $e->Total }}" id="exp" hidden/>
+		@empty
+		@endforelse
+	</div>
 </div>
-
 @endsection
 @push('styles')
 <style>
@@ -95,7 +104,14 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	
+	var rev = $('#rev').val();
+	var exp = $('#exp').val();
+	var totalamt = $('#total');
+	var totals = 0;
+	totals = +rev + +exp;
+	totalamt.val(totals);
+
+	var tot = $('#total').val();
 	$(document).ready(function(){
 		var b_table = $('#bill_table').DataTable({
 			processing: false,
@@ -107,40 +123,21 @@
 			]
 		})
 	})
-
 	$(document).on('click', '.finalize-payment', function(e){
-		
+		console.log(tot);
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : so_head_id,
-				'amount' : totals,
+				'amount' : tot,
 			},
 			success: function (data){
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]("Payment Added successfully")
-				location.reload();
+				alert("saved");
 			}
 		})
 	})
+
 </script>
 @endpush
