@@ -1,19 +1,21 @@
 @extends('layouts.app')
 @section('content')
-
-<div>
-<h3><img src="/images/bar.png"> Brokerage</h3>
+<h2>&nbsp;Brokerage</h2>
+<div class="pull-right">
+  <a href = "{{ route('newserviceorder.create') }}" class = "btn but btn-md pull-right">New Brokerage Service Order</a>
+</div>
+<br/>
 <hr>
-<a href = "{{ route('newserviceorder.create') }}" class = "btn btn-success btn-md pull-right">New Brokerage Service Order</a>
-<div class = "panel-body">
-  <h4>Brokerage Service Orders</h4>
-  <div class = "panel-default panel">
-    <div class = "panel-body">
-      <table class="table table-responsive" id = "cs_table">
+<div class="container-fluid">
+  <div class="row">
+    <div class = "panel-default panel">
+      <div class="panel-heading" id="heading">Select Service Order</div>
+      <div class="panel-body">
+       <table class="table table-responsive" id = "cs_table">
         <thead>
           <tr>
             <td width="20%">
-              id
+              No.
             </td>
             <td>
               Company Name
@@ -36,15 +38,13 @@
     </div>
   </div>
 </div>
-
 </div>
-
 @endsection
 @push('styles')
 <style>
 	.brokerage
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -75,5 +75,5 @@
 
     });
   })
-  </script>
+</script>
 @endpush
