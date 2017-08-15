@@ -47,18 +47,28 @@ class ContractsController extends Controller
 
     public function create()
     {
+        $consignees = \App\Consignee::all();
+
+        $provinces = \App\LocationProvince::all();
+
+        $desc_array = [];
         $description = ContractTemplate::all()->last();
+        if($description == null){
 
-        $desc_array = explode("<br/>", $description->description);
-        array_pop($desc_array);
+        }
+        else{
+            $desc_array = explode("<br/>", $description->description);
+            array_pop($desc_array);
+        }
 
-        return view('trucking.contract_create', compact(['desc_array']));
+
+        return view('trucking.contract_create', compact(['desc_array', 'consignees', 'provinces']));
     }
     public function create_contract(Request $request){
         $file = fopen('contract.txt', 'r');
         $fileContent = fread($file, filesize('contract.txt'));
         fclose($file);
-        
+
         $newContent = str_replace("!-_Date_-!", "Date: ", $fileContent);
         $newContent = str_replace("!-_Consignee_-!", "Consignee: " .$request->consigneeName, $newContent);
         $newContent = str_replace("!-_Date_Effective_-!", "Date Effective : " . $request->dateEffective, $newContent);
@@ -122,123 +132,123 @@ class ContractsController extends Controller
     public function agreement_pdf(Request $request)
     {
        try
-        {
-            $contract = DB::table('contract_headers')
-            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
-            ->join('consignees', 'consignees_id', '=', 'consignees.id')
-            ->where('contract_headers.id', '=', $request->contract_id)
-            ->get();
+       {
+        $contract = DB::table('contract_headers')
+        ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
+        ->join('consignees', 'consignees_id', '=', 'consignees.id')
+        ->where('contract_headers.id', '=', $request->contract_id)
+        ->get();
 
-            $contract_details = DB::table('contract_details')
-            ->select('A.description AS from', 'B.description AS to', 'amount')
-            ->join('areas AS A', 'areas_id_from', '=', 'A.id')
-            ->join('areas AS B', 'areas_id_to', '=', 'B.id')
-            ->where('contract_headers_id', '=', $request->contract_id)
-            ->get();
+        $contract_details = DB::table('contract_details')
+        ->select('A.description AS from', 'B.description AS to', 'amount')
+        ->join('areas AS A', 'areas_id_from', '=', 'A.id')
+        ->join('areas AS B', 'areas_id_to', '=', 'B.id')
+        ->where('contract_headers_id', '=', $request->contract_id)
+        ->get();
 
-            $pdf = PDF::loadView('pdf_layouts.agreement_pdf', compact(['contract', 'contract_details']));
-            return $pdf->stream();
-        }
-        catch(Exception $e){
-            return redirect('/trucking/contracts');
-        }
+        $pdf = PDF::loadView('pdf_layouts.agreement_pdf', compact(['contract', 'contract_details']));
+        return $pdf->stream();
     }
-    public function amend_contract(Request $request)
-    {
-       try
-        {
-            $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
-            ->join('consignees AS B', 'consignees_id', '=', 'B.id')
-            ->where('contract_headers.id', '=', $request->contract_id)
-            ->get();
-
-            $contract_details = DB::table('contract_details')
-            ->select('A.description AS from', 'B.description AS to', 'amount', 'contract_details.id', 'A.id as area_from_id', 'B.id as area_to_id')
-            ->join('areas AS A', 'areas_id_from', '=', 'A.id')
-            ->join('areas AS B', 'areas_id_to', '=', 'B.id')
-            ->where('contract_headers_id', '=', $request->contract_id)
-            ->get();
-
-            $areas = Area::all();
-
-            $amendments = DB::table('contract_amendments')
-            ->select('created_at', 'amendment')
-            ->where('contract_headers_id', '=', $request->contract_id)
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-            $terms = explode('<br />', $contract[0]->specificDetails);
-            array_pop($terms);
-         
-
-            return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas', 'amendments', 'terms']));
-
-        }
-        catch(Exception $e){
-            return redirect('/trucking/contracts');
-        }
+    catch(Exception $e){
+        return redirect('/trucking/contracts');
     }
+}
+public function amend_contract(Request $request)
+{
+   try
+   {
+    $contract = DB::table('contract_headers')
+    ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+    ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+    ->where('contract_headers.id', '=', $request->contract_id)
+    ->get();
 
-    public function update(Request $request, $id){
+    $contract_details = DB::table('contract_details')
+    ->select('A.description AS from', 'B.description AS to', 'amount', 'contract_details.id', 'A.id as area_from_id', 'B.id as area_to_id')
+    ->join('areas AS A', 'areas_id_from', '=', 'A.id')
+    ->join('areas AS B', 'areas_id_to', '=', 'B.id')
+    ->where('contract_headers_id', '=', $request->contract_id)
+    ->get();
 
-        switch ($request->update_type) {
-            case '1':
-                $contract = ContractHeader::findOrFail($request->contract_id);
-                $contract->dateEffective = $request->dateEffective;
-                $contract->dateExpiration = $request->dateExpiration;
+    $areas = Area::all();
 
-                $contract->save();
+    $amendments = DB::table('contract_amendments')
+    ->select('created_at', 'amendment')
+    ->where('contract_headers_id', '=', $request->contract_id)
+    ->orderBy('created_at', 'DESC')
+    ->get();
 
-                return $contract;
+    $terms = explode('<br />', $contract[0]->specificDetails);
+    array_pop($terms);
 
-                break;
-            
-            case '2':
-                $contract_detail = ContractDetail::findOrFail($request->contract_detail_id);
-                $contract_detail->areas_id_from = $request->areas_id_from;
-                $contract_detail->areas_id_to = $request->areas_id_to;
-                $contract_detail->amount = $request->amount;
-                
-                $contract_detail->save();
 
-                return $contract_detail;
+    return view('/trucking.contract_amend', compact(['contract', 'contract_details', 'areas', 'amendments', 'terms']));
 
-                break;
+}
+catch(Exception $e){
+    return redirect('/trucking/contracts');
+}
+}
 
-             case '3':
-                $contract = ContractHeader::findOrFail($request->contract_id);
-                $contract->specificDetails = $request->specificDetails;
+public function update(Request $request, $id){
 
-                $contract->save();
+    switch ($request->update_type) {
+        case '1':
+        $contract = ContractHeader::findOrFail($request->contract_id);
+        $contract->dateEffective = $request->dateEffective;
+        $contract->dateExpiration = $request->dateExpiration;
 
-                return $contract;
+        $contract->save();
 
-                break;
+        return $contract;
 
-            default:
-                
-                break;
-        }
+        break;
+
+        case '2':
+        $contract_detail = ContractDetail::findOrFail($request->contract_detail_id);
+        $contract_detail->areas_id_from = $request->areas_id_from;
+        $contract_detail->areas_id_to = $request->areas_id_to;
+        $contract_detail->amount = $request->amount;
+
+        $contract_detail->save();
+
+        return $contract_detail;
+
+        break;
+
+        case '3':
+        $contract = ContractHeader::findOrFail($request->contract_id);
+        $contract->specificDetails = $request->specificDetails;
+
+        $contract->save();
+
+        return $contract;
+
+        break;
+
+        default:
+
+        break;
     }
-    public function store_contract_rates(Request $request)
-    {
-       
-            $contract_detail = new ContractDetail;
-            $contract_detail->areas_id_from = $request->areas_id_from;
-            $contract_detail->areas_id_to = $request->areas_id_to;
-            $contract_detail->amount = $request->amount;
-            $contract_detail->contract_headers_id = $request->contract_id;
+}
+public function store_contract_rates(Request $request)
+{
 
-            $contract_detail->save();
+    $contract_detail = new ContractDetail;
+    $contract_detail->areas_id_from = $request->areas_id_from;
+    $contract_detail->areas_id_to = $request->areas_id_to;
+    $contract_detail->amount = $request->amount;
+    $contract_detail->contract_headers_id = $request->contract_id;
 
-            $contract_amendment = new ContractAmendment;
-            $contract_amendment->amendment = "Added new rate: " . $request->from_descrp . " to " . $request->to_descrp . ": Php " 
-            . $contract_detail->amount;
-            $contract_amendment->contract_headers_id = $request->contract_id;
+    $contract_detail->save();
 
-            $contract_amendment->save();
-            
-            return Response::make(array($contract_detail, $contract_amendment));
-    }
+    $contract_amendment = new ContractAmendment;
+    $contract_amendment->amendment = "Added new rate: " . $request->from_descrp . " to " . $request->to_descrp . ": Php " 
+    . $contract_detail->amount;
+    $contract_amendment->contract_headers_id = $request->contract_id;
+
+    $contract_amendment->save();
+
+    return Response::make(array($contract_detail, $contract_amendment));
+}
 }

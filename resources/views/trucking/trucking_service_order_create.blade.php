@@ -306,15 +306,19 @@
 @push('scripts')
 <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 <script type="text/javascript">
+
 	$('#collapse1').addClass('in');
+	
 	var data;
 	var cs_id;
+	var consigneeID = null;
+
 	$(document).ready(function(){
 
-		$('#consignee_id').select2();
-		$("#consignee_id").select2('data', {id: 5, text: "HELLO"});   
+		$('#consignee_id').select2(); 
 
 		$(document).on('change', '#consignee_id', function(e){
+			consigneeID = $('#consignee_id').val();
 			if($('#consignee_id').val() != 0){
 				$.ajax({
 					type: 'GET',
@@ -480,20 +484,13 @@
 					success: function (data) {
 						console.log(data);
 						if(typeof(data) == "object"){
+							consigneeID = data.id;
+							$('#chModal').modal('hide');
 							$('#collapse_1').removeClass('in');
 							$('#collapse_2').addClass('in');
 							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
 							$('#_companyName').val($('#companyName').val());
 							
-							cs_id = data.id;
-							
-							switch ($('#consigneeType').val()){
-								case "0":
-								$('#_consigneeType').val("Walk-in");
-								break;
-								case "1":
-								$('#_consigneeType').val("Regular");
-							}
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
@@ -508,6 +505,16 @@
 							$('#contactNumber').val("");
 							$('#TIN').val("");
 							$('#businessStyle').val("");
+
+
+							$('#_cfirstName').val(data.firstName);
+							$('#_cmidddleName').val(data.middleName);
+							$('#_clastName').val(data.lastName);
+							$('#_ccontactNumber').val(data.contactNumber);
+							$('#_cemail').val(data.email);
+							$('#_ccompanyName').val(data.companyName);
+							$('#_cbusinessStyle').val(data.businessStyle);
+							$('#_cTIN').val(data.TIN);
 						}	
 					}
 				})
@@ -521,7 +528,7 @@
 				url: '{{ route("trucking.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'consignees_id' : $('#consignee_id').val(),
+					'consignees_id' : consigneeID,
 					'shippingLine' : $('#shippingLine').val(),
 					'destination' : $('#destination').val(),
 					'portOfCfsLocation' : $('#portOfCfsLocation').val(),

@@ -27,7 +27,8 @@ class ConsigneesController extends Controller
 			$consignee->lastName = $request->lastName;
 			$consignee->companyName = $request->companyName;
 			$consignee->email = $request->email;
-			$consignee->contactNumber = $request->businessStyle;
+			$consignee->contactNumber = $request->contactNumber;
+			$consignee->businessStyle = $request->businessStyle;
 			$consignee->TIN = $request->TIN;
 			$consignee->address = $request->address;
 			$consignee->city = $request->city;

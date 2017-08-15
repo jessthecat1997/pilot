@@ -11,12 +11,17 @@ class QuotationsController extends Controller
 
     public function index()
     {
+        
         return view('quotations.quotation_index');
     }
 
     
     public function create()
     {
+        $consignees = \App\Consignee::all();
+
+        $provinces = \App\LocationProvince::all();
+
         $terms = \App\QuotationTerm::all()->last();
         
         $term_array = explode("<br/>", $terms->terms);
@@ -27,7 +32,7 @@ class QuotationsController extends Controller
         ->where('deleted_at', '=', null)
         ->get();
 
-        return view('quotations.quotation_create', compact(['term_array', 'locations']));
+        return view('quotations.quotation_create', compact(['term_array', 'locations', 'provinces', 'consignees']));
     }
 
 

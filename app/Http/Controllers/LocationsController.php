@@ -50,11 +50,19 @@ class LocationsController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $location = Location::findOrFail($id);
+        $location->name = $request->name;
+        $location->address = $request->address;
+        $location->cities_id = $request->cities_id;
+        $location->zipCode = $request->zip;
+
+        $location->save();
+        return $location;
     }
 
     public function destroy($id)
     {
-        //
+        $location = Location::findOrFail($id);
+        $location->delete();
     }
 }
