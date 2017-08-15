@@ -265,5 +265,6 @@ Route::resource('/admin/settings', 'BusinessSettingsController');
 
 //Query
 # Active Contracts
+Route::get('queries', 'QueriesController@index')->name('queries.index');
 Route::get('queries/get_active_contract', 'DatatablesController@get_active_contract')->name('get_active_contract');
 Route::get('queries/get_pending_deliveries', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');

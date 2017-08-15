@@ -103,7 +103,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
-		->editColumn('id', '{{ $id }}')
+		->editColumn('rate', 'Php {{ $rate }}')
 		->make(true);
 	}
 
@@ -600,6 +600,8 @@ class DatatablesController extends Controller
 			'<button value = "'. $quotation->id .'" class = "btn btn-md btn-success print">Print</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+
+		
 		->make(true);
 	}
 
@@ -617,10 +619,21 @@ class DatatablesController extends Controller
 
 	public function get_pending_deliveries(){
 		$deliveries = DB::table('delivery_receipt_headers')
-		->where('status', '=', 'P')
+		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime')
+		->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
+		->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
+		->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
+		->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
+		->join('locations AS E', 'delivery_receipt_headers', 'E.')
+		->where('delivery_receipt_headers.status', '=', 'P')
 		->get();
 
 		return Datatables::of($deliveries)
+		->addColumn('action', function ($delivery){
+			return
+			'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
+		})
+
 		->make(true);
 	}
 

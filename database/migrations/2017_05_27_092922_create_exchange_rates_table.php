@@ -23,6 +23,8 @@ class CreateExchangeRatesTable extends Migration
             $table->softDeletes();
 
         });
+
+        DB::statement('INSERT INTO exchange_rates (`rate`, `currentRate`, `dateEffective`, `created_at`, `updated_at`) VALUES (0.0, 1, NOW(), NOW(), NOW())');
     }
 
     /**
