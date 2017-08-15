@@ -55,20 +55,25 @@
 					<br />
 					<table class = "table table-responsive" id = "delivery_table">
 						<thead>
-							<tr>
-								<td style="width: 5%;">
-									ID
-								</td>
-								<td style="width: 15%;">
-									Origin Name
-								</td>
-								<td style="width: 15%;">
-									Origin City
-								</td>
-								<td style="width: 15%;">
-									Origin City
-								</td>
-							</tr>
+							<td style="width: 5%;">
+								Consignee
+							</td>
+							<td style="width: 15%;">
+								Origin City
+							</td>
+							<td style="width: 10%;">
+								Pickup Date
+							</td>
+							<td style="width: 15%;">
+								Destination City
+							</td>
+							<td style="width: 15%;">
+								Delivery Date
+							</td>
+							<td>
+								Action
+							</td>
+							
 						</thead>
 					</table> 
 				</div>
@@ -114,6 +119,7 @@
 				$('#delivery').addClass('in');
 				$('#contracts').removeClass('in');
 
+				
 				var drtable = $('#delivery_table').DataTable({
 					processing: false,
 					deferRender: true,
@@ -121,8 +127,10 @@
 					serverSide: false,
 					ajax: "{{ route('get_pending_deliveries') }}",
 					columns: [
-					{ data: 'id' },
 					{ data: 'name' },
+					{ data: 'city_name' },
+					{ data: 'pickupDateTime' },
+					{ data: 'dcity_name' },
 					{ data: 'deliveryDateTime' },
 					{ data: 'action', orderable: false, searchable: false }
 					]

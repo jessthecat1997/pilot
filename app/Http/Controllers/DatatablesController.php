@@ -626,12 +626,17 @@ class DatatablesController extends Controller
 
 	public function get_pending_deliveries(){
 		$deliveries = DB::table('delivery_receipt_headers')
-		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime')
+		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name')
 		->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
 		->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
 		->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
 		->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
-		->join('locations AS E', 'delivery_receipt_headers', 'E.')
+		->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', 'E.id')
+		->join('locations AS F', 'delivery_receipt_headers.locations_id_del', 'F.id')
+		->join('location_cities as G', 'E.cities_id', 'G.id')
+		->join('location_provinces AS H', 'G.provinces_id', 'H.id')
+		->join('location_cities as I', 'F.cities_id', 'I.id')
+		->join('location_cities as J', 'I.provinces_id', 'J.id')
 		->where('delivery_receipt_headers.status', '=', 'P')
 		->get();
 
