@@ -170,7 +170,8 @@ class DatatablesController extends Controller
 	}
 
 	public function consignee_datatable_main(){
-		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'address', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
+		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'address','city', 'st_prov', 'zip', 'b_address', 'b_city', 
+			'b_st_prov', 'b_zip', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
 
 		return Datatables::of($consignees)
 
@@ -178,12 +179,20 @@ class DatatablesController extends Controller
 		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($consignee){
 			return
-			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">View</button>'.
+			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary but edit">Update</button>
+			<button value = "'. $consignee->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
 			'<input type = "hidden" value = "'. $consignee->firstName .'" class = "firstName" />
 			<input type = "hidden" value = "'. $consignee->middleName .'" class = "middleName" />
 			<input type = "hidden" value = "'. $consignee->lastName .'" class = "lastName" />
 			<input type = "hidden" value = "'. $consignee->companyName .'" class = "companyName" />
 			<input type = "hidden" value = "'. $consignee->address .'" class = "address" />
+			<input type = "hidden" value = "'. $consignee->city .'" class = "city" />
+			<input type = "hidden" value = "'. $consignee->st_prov .'" class = "st_prov" />
+			<input type = "hidden" value = "'. $consignee->zip .'" class = "zip" />
+			<input type = "hidden" value = "'. $consignee->b_address .'" class = "b_address" />
+			<input type = "hidden" value = "'. $consignee->b_city .'" class = "b_city" />
+			<input type = "hidden" value = "'. $consignee->b_st_prov .'" class = "b_st_prov" />
+			<input type = "hidden" value = "'. $consignee->b_zip .'" class = "b_zip" />
 			<input type = "hidden" value = "'. $consignee->email .'" class = "email" />
 			<input type = "hidden" value = "'. $consignee->contactNumber .'" class = "contactNumber" />
 			<input type = "hidden" value = "'. $consignee->businessStyle .'" class = "businessStyle" />
@@ -594,7 +603,26 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	//Utility Deactivate
+
+	public function get_active_contract(){
+		$contracts = DB::table('contract_headers')
+		->join('consignees AS A', 'consignees_id', '=', 'A.id')
+		->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'))
+		->get();
+
+		return Datatables::of($contracts)
+		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+		->make(true);
+	}
+
+	public function get_pending_deliveries(){
+		$deliveries = DB::table('delivery_receipt_headers')
+		->where('status', '=', 'P')
+		->get();
+
+		return Datatables::of($deliveries)
+		->make(true);
+	}
 
 	public function cds_datatable(){
 		$cdss = CdsFee::select(['id',  'fee', 'dateEffective', 'created_at']);

@@ -261,3 +261,9 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 //Utilities home route
 Route::resource('/admin/utilities', 'UtilitiesController');
 Route::resource('/admin/settings', 'BusinessSettingsController');
+
+
+//Query
+# Active Contracts
+Route::get('queries/get_active_contract', 'DatatablesController@get_active_contract')->name('get_active_contract');
+Route::get('queries/get_pending_deliveries', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
