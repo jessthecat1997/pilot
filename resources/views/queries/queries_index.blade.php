@@ -55,7 +55,7 @@
 					<br />
 					<table class = "table table-responsive" id = "delivery_table">
 						<thead>
-							<td style="width: 5%;">
+							<td style="width: 15%;">
 								Consignee
 							</td>
 							<td style="width: 15%;">
@@ -97,44 +97,91 @@
 				$('#contracts').addClass('in');
 				$('#delivery').removeClass('in');
 
-				var chtable = $('#contracts_table').DataTable({
-					processing: false,
-					deferRender: true,
-					scrollX: true,
-					serverSide: false,
-					ajax: "{{ route('contract.data') }}",
-					columns: [
-					{ data: 'id' },
-					{ data: 'companyName' },
-					{ data: 'dateEffective' },
-					{ data: 'dateExpiration' },
-					{ data: 'status' },
-					{ data: 'created_at' },
-					{ data: 'action', orderable: false, searchable: false }
-					]
-				});
+				var chtable;
+				if ( ! $.fn.DataTable.isDataTable( '#contracts_table') ) {
+					chtable = $('#contracts_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('contract.data') }}",
+						columns: [
+						{ data: 'id' },
+						{ data: 'companyName' },
+						{ data: 'dateEffective' },
+						{ data: 'dateExpiration' },
+						{ data: 'status' },
+						{ data: 'created_at' },
+						{ data: 'action', orderable: false, searchable: false }
+						]
+					});
+				}
+				else{
+					chtable.destroy();
+
+					chtable = $('#contracts_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('contract.data') }}",
+						columns: [
+						{ data: 'id' },
+						{ data: 'companyName' },
+						{ data: 'dateEffective' },
+						{ data: 'dateExpiration' },
+						{ data: 'status' },
+						{ data: 'created_at' },
+						{ data: 'action', orderable: false, searchable: false }
+						]
+					});
+				}
+
+				
 				break;
 
 				case "2" : 
 				$('#delivery').addClass('in');
 				$('#contracts').removeClass('in');
+				var drtable;
+				if ( ! $.fn.DataTable.isDataTable( '#delivery_table') ) {
+					drtable = $('#delivery_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_pending_deliveries') }}",
+						columns: [
+						{ data: 'name' },
+						{ data: 'city_name' },
+						{ data: 'pickupDateTime' },
+						{ data: 'dcity_name' },
+						{ data: 'deliveryDateTime' },
+						{ data: 'action', orderable: false, searchable: false }
+						]
+					});
+				}
+				else{
+					drtable.destroy();
+
+					drtable = $('#delivery_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_pending_deliveries') }}",
+						columns: [
+						{ data: 'name' },
+						{ data: 'city_name' },
+						{ data: 'pickupDateTime' },
+						{ data: 'dcity_name' },
+						{ data: 'deliveryDateTime' },
+						{ data: 'action', orderable: false, searchable: false }
+						]
+					});
+				}
 
 				
-				var drtable = $('#delivery_table').DataTable({
-					processing: false,
-					deferRender: true,
-					scrollX: true,
-					serverSide: false,
-					ajax: "{{ route('get_pending_deliveries') }}",
-					columns: [
-					{ data: 'name' },
-					{ data: 'city_name' },
-					{ data: 'pickupDateTime' },
-					{ data: 'dcity_name' },
-					{ data: 'deliveryDateTime' },
-					{ data: 'action', orderable: false, searchable: false }
-					]
-				});
 				break;
 			}
 		})
