@@ -124,17 +124,27 @@
 		})
 	})
 	$(document).on('click', '.finalize-payment', function(e){
-		console.log(tot);
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'so_head_id' : so_head_id,
-				'amount' : tot,
+				'so_head_id' : {{ $so_head_id }},
+				'amount' : totals
 			},
 			success: function (data){
-				alert("saved");
+				var val = 'P';
+				$.ajax({
+					type: 'PUT',
+					url:  "{{ route('payment.update', $so_head_id) }}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'paymentStatus' : val
+					},
+					success: function (data){
+						location.reload();
+					}
+				})
 			}
 		})
 	})
