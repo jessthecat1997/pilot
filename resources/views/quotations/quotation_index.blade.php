@@ -61,6 +61,16 @@
 
 			],	"order": [[ 0, "desc" ]],
 		});
+
+		$(document).on('click', '.view', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('quotation.index') }}/" + $(this).val();
+		})
+
+		$(document).on('click', '.print', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val() + "/print");
+		})
 	})
 </script>
 @endpush

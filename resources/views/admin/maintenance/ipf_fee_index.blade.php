@@ -312,8 +312,11 @@
 
 				$('#ipf_parent_table').append(ipf_row);
 
-				for(var i = 0; i < minimum.length; i++){
+				for(var i = 0; i <= minimum.length; i++){
+					console.log("unmasked is "+minimum[i].inputmask("unmaskedvalue"));
 					minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
+					maximum[i+1].value = parseFloat(minimum[i+1].value) + 1;
+
 				}
 			}
 
@@ -335,10 +338,6 @@
 			$(".ipf_minimum_valid").each(function(){
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
-
-					for(var i = 0; i < minimum.length; i++){
-						minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
-					}
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -414,17 +413,23 @@
 				if(title == "New Import Processing Fee Range")
 				{
 					console.log('min' + minimum_id);	
-					console.log(maximum_id);	
+					console.log('max' + maximum_id);
+					minimum_unmask = [];
+
+					for($i = 0; $i < minimum_id; $i++){
+						
+						minimum_unmask[$i] = minimum_id[$i].inputmask('unmaskedvalue');
+						console.log("unmasked is " + minimum_unmask[$i]);
+
+					}	
 					$.ajax({
 						type: 'POST',
 						url:  '/admin/ipf_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'dateEffective' : $('#dateEffective').val(),
-							'minimum' : minimum_id,
+							'minimum' : minimum_unmask,
 							'maximum' :maximum_id,
-							'minimum_id_descrp' : minimum_id_descrp,
-							'maximum_id_descrp' : maximum_id_descrp,
 							'amount' : amount_value,
 						},
 

@@ -134,7 +134,7 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+	var location_id = null;
 	var arr_provinces =[
 	@forelse($provinces as $province)
 	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
@@ -196,6 +196,7 @@
 
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
+			$('.modal-title').text("New Location");
 			$('#name').val("");
 			$('#address').val("");
 			$('#loc_province').val("0");
@@ -206,32 +207,61 @@
 		})
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			console.log('aw');
-			$.ajax({
-				type: 'POST',
-				url: "{{ route('location.index')}}",
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'address' : $('#address').val(),
-					'cities_id' : $('#loc_city').val(),
-					'zipCode' : $('#zip').val(),
-				},
-				success: function(data){
-					$('#chModal').modal('hide');
-					chtable.ajax.reload();
-					
-				},
-				error: function(data) {
-					if(data.status == 400){
-						alert("Nothing found");
+			if($('#modal-title').text() == "New Location"){
+
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('location.index')}}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'address' : $('#address').val(),
+						'cities_id' : $('#loc_city').val(),
+						'zipCode' : $('#zip').val(),
+					},
+					success: function(data){
+						$('#chModal').modal('hide');
+						chtable.ajax.reload();
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
 					}
-				}
-			})
+				})
+			}
+			else{
+				$.ajax({
+					type: 'PUT',
+					url: "{{ route('location.index')}}/" + location_id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'address' : $('#address').val(),
+						'cities_id' : $('#loc_city').val(),
+						'zipCode' : $('#zip').val(),
+					},
+					success: function(data){
+						$('#chModal').modal('hide');
+						chtable.ajax.reload();
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+
+			}
 		})
 
 		$(document).on('click', '.edit', function(e){
 			e.preventDefault();
+			location_id = $(this).closest('tr').find('.location_id').val();
+			console.log(location_id);
+			$('.modal-title').text("Update Location");
 			var data = chtable.row($(this).parents()).data();
 			$('#name').val(data.location_name);
 			$('#address').val(data.location_address);
@@ -240,6 +270,33 @@
 			fill_cities($(this).closest('tr').find('.city_id').val());
 			
 			$('#chModal').modal('show');
+		})
+
+		$(document).on('click', '.deactivate', function(e){
+			e.preventDefault();
+			location_id = $(this).closest('tr').find('.location_id').val();
+			$('#confirm-delete').modal('show');
+		})
+
+		$(document).on('click', '#btnDelete', function(e){
+			e.preventDefault();
+			$.ajax({
+					type: 'DELETE',
+					url: "{{ route('location.index')}}/" + location_id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						$('#confirm-delete').modal('hide');
+						chtable.ajax.reload();
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
 		})
 
 		$(document).on('change', '#loc_province', function(e){

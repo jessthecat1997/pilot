@@ -355,7 +355,7 @@
 
 		})
 
-		$(document).on('click', '.selectConsignee', function(e){
+		$(document).on('click', '.edit', function(e){
 			e.preventDefault();
 			console.log($(this).closest('tr').find('.businessStyle').val());
 			$('#chModal').modal('show');
@@ -368,6 +368,12 @@
 			$('#contactNumber').val($(this).closest('tr').find('.contactNumber').val());
 			$('#businessStyle').val($(this).closest('tr').find('.businessStyle').val());
 			$('#TIN').val($(this).closest('tr').find('.TIN').val());
+
+			$('#phy_address').val($(this).closest('tr').find('.address').val());
+			$('#phy_zip').val($(this).closest('tr').find('.zip').val());
+			$('#bill_address').val($(this).closest('tr').find('.b_address').val());
+			$('#bill_zip').val($(this).closest('tr').find('.b_zip').val());
+			
 		})
 
 		$(document).on('click', '.save-consignee-information', function(e){
@@ -391,13 +397,13 @@
 						'TIN' : $('#TIN').val(),
 						
 						'address' : $('#phy_address').val(),
-						'city' : $('#phy_city').text(),
-						'st_prov' : $('#phy_province').text(),
+						'city' : $('#phy_city option:selected').text(),
+						'st_prov' : $('#phy_province option:selected').text(),
 						'zip' : $('#phy_zip').val(),
 
 						'b_address' : $('#bill_address').val(),
-						'b_city' : $('#bill_city').text(),
-						'b_st_prov' : $('#bill_province').text(),
+						'b_city' : $('#bill_city option:selected').text(),
+						'b_st_prov' : $('#bill_province option:selected').text(),
 						'b_zip' : $('#bill_zip').val(),
 
 						'same_billing_address' : checked,

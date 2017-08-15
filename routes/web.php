@@ -53,7 +53,7 @@ Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
-Route::resource('/admin/ipf_fee','IpfFeesController');
+Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
@@ -261,3 +261,10 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 //Utilities home route
 Route::resource('/admin/utilities', 'UtilitiesController');
 Route::resource('/admin/settings', 'BusinessSettingsController');
+
+
+//Query
+# Active Contracts
+Route::get('queries', 'QueriesController@index')->name('queries.index');
+Route::get('queries/get_active_contract', 'DatatablesController@get_active_contract')->name('get_active_contract');
+Route::get('queries/get_pending_deliveries', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');

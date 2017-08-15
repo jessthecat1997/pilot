@@ -10,7 +10,7 @@ class VehicleType extends Model
 	use SoftDeletes; 
 	
     protected $fillable = [
-    	'name', 'description',
+    	'name', 'description','withContainer'
     ];
 
     protected $dates = [

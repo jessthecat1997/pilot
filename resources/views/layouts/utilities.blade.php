@@ -112,7 +112,7 @@
                     <a href="{{ route('service_ordertype.index') }}" class = "maintenance"><img src="/images/maintenance.png">&nbsp;&nbsp;Maintenance</a>
                 </li>
                 <li>
-                    <a href="{{ route('shipment.index') }}"><img src="/images/reports.png">&nbsp;&nbsp;Queries</a>
+                    <a href="{{ route('queries.index') }}"><img src="/images/reports.png">&nbsp;&nbsp;Queries</a>
                 </li>
                 <li>
                     <a href="{{ route('utilities.index') }}" class="utilities"><img src="/images/utilities.png">&nbsp;&nbsp;Utilities</a>

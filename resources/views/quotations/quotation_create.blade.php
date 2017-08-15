@@ -5,145 +5,96 @@
 		<div class = "col-md-10 col-md-offset-1">
 			<div class = "panel-default panel">
 				<div class = "panel-heading">
-					<h2 id = "page_title">Quotation</h2>
+					<h2 id = "page_title">&nbsp;Quotation</h2>
 				</div>
 				<div class = "panel-body">
 					<div class = "col-md-12">
 						<h3 id = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>
+
 						<div class = "collapse" id = "consignee_warning">
 							<div class="alert alert-danger">
 								<strong>Warning!</strong> No selected consignee.
 							</div>
 						</div>
 						<div class = "panel-default">
-							<div id="con_collapse" class="collapse in">
-								<ul class="nav nav-tabs">
-									<li><a data-toggle="tab" href="#new_con">New</a></li>
-									<li class = "active"><a data-toggle="tab" href="#old_con">Old</a></li>
-								</ul>
+							<div class = "col-md-12">
+								<div class = "col-md-6 col-md-offset-2">
+									<div class = "form-horizontal">
+										<div class = "form-group">
+											<label class = "control-label col-md-3">Consignee: </label>
+											<div class = "input-group col-md-9">
+												<select id = "consignee_id" class = "form-control select2-allow-clear select2">
+													<option value = "0">Select Consignee</option>
+													@forelse($consignees as $consignee)
+													<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
 
-								<div class="tab-content">
-									<div id="old_con" class="tab-pane fade in active">
-										<br />
+													@empty
 
-										<table class="table table-responsive" id = "cs_table">
-											<thead>
-												<tr>
-													<td width="25%">
-														Full Name
-													</td>
-													<td width="25%">
-														Company Name
-													</td>
-													<td width="25%">
-														Email
-													</td>
-													<td width="10%">
-														Action
-													</td>
-												</tr>
-											</thead>
-										</table>
+													@endforelse
+												</select>
 
+											</div>
+										</div>
 									</div>
-									<div id="new_con" class="tab-pane fade">
-										<br />
-										<form class="form-horizontal" role="form">
-											{{ csrf_field() }}
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="firstName">First Name:</label>
-												<div class="col-sm-6">
-													<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
-												</div>
+								</div>
+								<div class = "col-md-4">
+									<button class = "btn btn-success add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class = "form-horizontal">
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Name: </label>
+										<div class = "col-md-9">
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
 											</div>
-											<div class="form-group">
-												<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-												</div>
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-												</div>
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-												</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Contact Number: </label>
+										<div class = "col-md-3">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
-												</div>
+										</div>
+										<label class = "control-label col-md-2">Email: </label>
+										<div class = "col-md-4">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="TIN">TIN:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
-												</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Company Name</label>
+										<div class = "col-md-9">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="email">Email</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-												</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Business Style: </label>
+										<div class = "col-md-3">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="address">Address:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
-												</div>
+										</div>
+										<label class = "control-label col-md-2">TIN: </label>
+										<div class = "col-md-4">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
 											</div>
-											<div class="form-group required">
-												<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-												<div class="col-sm-6">          
-													<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-												</div>
-											</div>
-											<div class="form-group">        
-												<div class="col-sm-offset-5 col-sm-10">
-													<button class = "btn btn-info btn-md" id = "btnConsigneeSave" >Save Consignee</button>
-													<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
-												</div>
-											</div>
-										</form>	
+										</div>
 									</div>
 								</div>
 							</div>
-							<div id ="detail_collapse" class = "collapse">
-								<form class="form-horizontal" role="form">
-									{{ csrf_field() }}
-									<div class="form-group">
-										<label class="control-label col-sm-3" for="pwd">Full Name:</label>
-										<div class="col-sm-8">          
-											<input type="text" disabled class="form-control" name = "_lastName" id="_lastName" placeholder="Enter Last Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-3" for="companyName">Company Name:</label>
-										<div class="col-sm-8">          
-											<input type="text" disabled class="form-control" name = "_companyName" id="_companyName" placeholder="Enter Company Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-3" for="email">Email</label>
-										<div class="col-sm-8">          
-											<input type="text" disabled class="form-control" name = "_email" id="_email" placeholder="Enter Email Address">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-3" for="contactNumber">Contact Number:</label>
-										<div class="col-sm-8">          
-											<input type="text" disabled class="form-control" name = "_contactNumber" id="_contactNumber" placeholder="Enter Contact Number">
-										</div>
-									</div>
-								</form>	
-							</div>
-							
 						</div>
 						<br />
 					</div>
@@ -309,6 +260,179 @@
 			</div>
 		</form>
 	</section>
+	<div id="chModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Consignee Information</h4>
+				</div>
+				<div class="modal-body">	
+					<div class = "panel-default">
+						<div id="con_collapse" class="collapse in">
+							<ul class="nav nav-tabs">
+								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
+								<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
+							</ul>
+
+							<div class="tab-content">
+								<div id="physical_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_province">Province:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_province" id="phy_province" class = "form-control">
+													<option value="0"></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}" >
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>     
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "phy_city" id="phy_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+											<div class="col-md-8">          
+												<label class="switch">
+													<input type="checkbox" class = "checkbox same_billing_address">
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="billing_address" class="tab-pane fade in ">
+									<br />
+									<div class = "form-horizontal">
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_address">Address:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_province">Province:</label>
+											<div class="col-sm-8">
+												<select name = "bill_province" id="bill_province"  class = "form-control">
+													<option value = '0'></option>
+													@forelse($provinces as $province)
+													<option value="{{ $province->id }}">
+														{{ $province->name }}
+													</option>
+													@empty
+
+													@endforelse
+												</select>          
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_city">City:</label>
+											<div class="col-sm-8">          
+												<select name = "bill_city" id="bill_city" class = "form-control">
+													<option value="0"></option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+											<div class="col-sm-8">          
+												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="new_con" class="tab-pane fade in active">
+									<br />
+									<form class="form-horizontal" role="form">
+										{{ csrf_field() }}
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="firstName">First Name:</label>
+											<div class="col-sm-6">
+												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="email">Email</label>
+											<div class="col-sm-6">          
+												<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+											</div>
+										</div>
+										<div class="form-group required">
+											<label class="control-label col-sm-4" for="TIN">TIN:</label>
+											<div class="col-sm-6">          
+												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+											</div>
+										</div>
+
+									</form>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 
@@ -334,30 +458,226 @@
 	var to_id_descrp = [];
 	var amount_value_descrp = [];
 
+	var consigneeID = null;
+
 	$(document).ready(function(){
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
 		var term_condition_row = '<tr><td><textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails"></textarea></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-term-row">x</button></td></tr>';
 		$('#collapse1').addClass('in');
 		$('#contract-row').remove();
 
-		var cstable = $('#cs_table').DataTable({			
-			responsive: true,
-			"scrollX": true,
-			deferRender: true,
-			processing: false,
-			serverSide: false,
-			ajax: 'http://localhost:8000/admin/csData',
-			columns: [
-
-			{ data: 'firstName' },
-			{ data: 'companyName' },
-			{ data: 'email' },
-			{ data: 'action', orderable: false, searchable: false }
-
-			],
-
-		});
+		
 		$.fn.dataTable.ext.errMode = 'throw';
+
+		$('#consignee_id').select2();
+
+		$(document).on('change', '#consignee_id', function(e){
+			consigneeID = $('#consignee_id').val();
+			if($('#consignee_id').val() != 0){
+
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('consignee.index')}}/" + $('#consignee_id').val() + "/getConsignee",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data);
+							$('#_cfirstName').val(data[0].firstName);
+							$('#_cmidddleName').val(data[0].middleName);
+							$('#_clastName').val(data[0].lastName);
+							$('#_ccontactNumber').val(data[0].contactNumber);
+							$('#_cemail').val(data[0].email);
+							$('#_ccompanyName').val(data[0].companyName);
+							$('#_cbusinessStyle').val(data[0].businessStyle);
+							$('#_cTIN').val(data[0].TIN);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else
+			{
+				$('#_cfirstName').val("");
+				$('#_cmidddleName').val("");
+				$('#_clastName').val("");
+				$('#_ccontactNumber').val("");
+				$('#_cemail').val("");
+				$('#_ccompanyName').val("");
+				$('#_cbusinessStyle').val("");
+				$('#_cTIN').val("");
+			}
+		})
+
+		$(document).on('click', '.add_new_consignee', function(e){
+			e.preventDefault();
+			$('#chModal').modal('show');
+		})
+
+		$(document).on('change', '#phy_province', function(e){
+
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#phy_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#phy_city').find('option').not(':first').remove();
+						$('#phy_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '#bill_province', function(e){
+
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#bill_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#bill_city').find('option').not(':first').remove();
+						$('#bill_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '.same_billing_address', function(e){
+			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
+			if(checked == true){
+				$('#bill_address').attr('disabled', 'true');
+				$('#bill_address').val("");
+				$('#bill_zip').val("");
+				$('#bill_zip').attr('disabled', 'true');
+				$('#bill_city').attr('disabled', 'true');
+				$('#bill_province').attr('disabled', 'true');
+			}
+			else{
+				$('#bill_province').val("");
+				$('#bill_city').val("");
+				$('#bill_address').removeAttr('disabled');
+				$('#bill_province').removeAttr('disabled');
+				$('#bill_city').removeAttr('disabled');
+				$('#bill_zip').removeAttr('disabled');
+			}
+			
+		})
+
+		$(document).on('click', '.new-consignee', function(e){
+			e.preventDefault();
+			$('#chModal').modal('show');
+
+		})
+
+		$(document).on('click', '.save-consignee-information', function(e){
+			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
+
+			if(validateConsignee() == true){
+
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("consignee.index") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'firstName' : $('#firstName').val(),
+						'middleName' : $('#middleName').val(),
+						'lastName' : $('#lastName').val(),
+						'companyName' : $('#companyName').val(),
+						'email' : $('#email').val(),
+						'contactNumber' : $('#contactNumber').val(),
+						'businessStyle' : $('#businessStyle').val(),
+						'TIN' : $('#TIN').val(),
+						
+						'address' : $('#phy_address').val(),
+						'city' : $('#phy_city option:selected').text(),
+						'st_prov' : $('#phy_province option:selected').text(),
+						'zip' : $('#phy_zip').val(),
+
+						'b_address' : $('#bill_address').val(),
+						'b_city' : $('#bill_city option:selected').text(),
+						'b_st_prov' : $('#bill_province option:selected').text(),
+						'b_zip' : $('#bill_zip').val(),
+
+						'same_billing_address' : checked,
+
+
+
+					},
+					success: function (data) {
+						console.log(data);
+						if(typeof(data) == "object"){
+							consigneeID = data.id;
+							$('#chModal').modal('hide');
+							$('#collapse_1').removeClass('in');
+							$('#collapse_2').addClass('in');
+							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
+							$('#_companyName').val($('#companyName').val());
+							
+							$('#_email').val($('#email').val());
+							$('#_contactNumber').val($('#contactNumber').val());
+
+							$("#basic-information-heading").html('<h5 id = "basic-information-heading">Basic Information <button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h5>');
+
+							$('#firstName').val("");
+							$('#middleName').val("");
+							$('#lastName').val("");
+							$('#companyName').val("");
+							$('#email').val("");
+							$('#address').val("");
+							$('#contactNumber').val("");
+							$('#TIN').val("");
+							$('#businessStyle').val("");
+
+
+							$('#_cfirstName').val(data.firstName);
+							$('#_cmidddleName').val(data.middleName);
+							$('#_clastName').val(data.lastName);
+							$('#_ccontactNumber').val(data.contactNumber);
+							$('#_cemail').val(data.email);
+							$('#_ccompanyName').val(data.companyName);
+							$('#_cbusinessStyle').val(data.businessStyle);
+							$('#_cTIN').val(data.TIN);
+						}	
+					}
+				})
+			}
+		})
+
+
+
 
 		$("#commentForm").validate({
 			rules: 
@@ -428,109 +748,6 @@
 					},
 
 				})
-			}
-		})
-
-		$(document).on('click', '.changeConsignee', function(e){
-			$('#con_collapse').addClass('in');
-			$('#detail_collapse').removeClass('in');
-			$('#firstName').val("");
-			$('#companyName').val("");
-			$('#email').val("");
-			$('#contactNumber').val("");
-			$('#businessStyle').val("");
-			$('#TIN').val("");
-			$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>');
-			consigneeID = null;
-		})
-
-
-		$('#btnConsigneeSave').on('click', function(e){
-			e.preventDefault();
-
-			if(validateConsignee() == true){
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("consignee.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'firstName' : $('#firstName').val(),
-						'middleName' : $('#middleName').val(),
-						'lastName' : $('#lastName').val(),
-						'companyName' : $('#companyName').val(),
-						'email' : $('#email').val(),
-						'address' : $('#contactNumber').val(),
-						'contactNumber' : $('#contactNumber').val(),
-						'businessStyle' : $('#businessStyle').val(),
-						'TIN' : $('#TIN').val(),
-
-					},
-					success: function (data) {
-						if(typeof(data) == "object"){
-							$('#collapse_1').removeClass('in');
-							$('#collapse_2').addClass('in');
-							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
-							$('#_companyName').val($('#companyName').val());
-
-							cs_id = data.id;
-
-							switch ($('#consigneeType').val()){
-								case "0":
-								$('#_consigneeType').val("Walk-in");
-								break;
-								case "1":
-								$('#_consigneeType').val("Regular");
-							}
-							$('#_email').val($('#email').val());
-							$('#_contactNumber').val($('#contactNumber').val());
-
-							$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information<button class="btn btn-info pull-right changeConsignee">Change Consignee</button></h3>');
-
-							cstable.ajax.reload();
-							$('#firstName').val("");
-							$('#middleName').val("");
-							$('#lastName').val("");
-							$('#companyName').val("");
-							$('#email').val("");
-							$('#address').val("");
-							$('#contactNumber').val("");
-							$('#detail_collapse').addClass('in');
-							$('#con_collapse').removeClass('in');
-
-							$('#_lastName').val(data.firstName + ' ' + data.middleName + ' ' + data.lastName);
-							consigneeID = data.id;
-							$('#consignee_warning').removeClass('in');
-						}	
-					}
-				})
-			}
-		});
-
-		$(document).on('click', '.selectConsignee' ,function(e){
-			consigneeID = $(this).val();
-			$('#con_collapse').removeClass('in');
-			$('#detail_collapse').addClass('in');
-			var cs_id = $(this).val();
-			data = cstable.row($(this).parents()).data();
-			$('#_lastName').val(data.firstName);
-			$('#consigneeName').val(data.firstName);
-			$('#_companyName').val(data.companyName);
-			$('#_email').val(data.email);
-			$('#_contactNumber').val(data.contactNumber);
-
-			$("#con-info-header").html('<h3 class = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information<button class="btn btn-info pull-right changeConsignee">Change Consignee</button></h3>');
-			$('#consignee_warning').removeClass('in');
-		})
-
-		$(document).on('click', '.delete-contract-row', function(e){
-			e.preventDefault();
-			$('#contract_rates_warning').removeClass('in');
-			if($('#contract_parent_table > tbody > tr').length == 1){
-				$(this).closest('tr').remove();
-				$('#contract_table_warning').addClass('fade in');
-			}
-			else{
-				$(this).closest('tr').remove();
 			}
 		})
 
@@ -853,7 +1070,7 @@ function finalvalidateContractRows()
 	error = "";
 
 
-	if(consigneeID === null)
+	if(consigneeID == 0 || consigneeID == null)
 	{
 		error+= "No selected consignee";
 		$('#consignee_warning').addClass('in');

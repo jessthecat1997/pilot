@@ -17,7 +17,7 @@ class StoreExchangeRate extends FormRequest
         return [
 
         'rate'          => 'required',
-        'dateEffective' => 'required|unique:exchange_rates|date|before:tomorrow|',
+        'dateEffective' => 'required|unique:exchange_rates|date',
 
 
         ];

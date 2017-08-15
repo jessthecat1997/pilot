@@ -165,7 +165,7 @@
                     </ul>
                 </div>
                 <li>
-                    <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
+                    <a href="{{ route('shipment.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
                 </li>
                 <li>
                     <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>

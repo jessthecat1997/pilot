@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Exchange Rate</h2>
 		<hr>
 		<h5>Current Exchange Rate: Php 
-			@if($exchange_rate != null)
+			@if($exchange_rate[0]->rate != null)
 			{{ number_format((float)$exchange_rate[0]->rate, 5) }}
 			@else
 			0.000000
@@ -147,10 +147,7 @@
 			ajax: 'http://localhost:8000/admin/erData',
 			columns: [
 			{ data: 'id' },
-			{ data: 'rate' ,
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } 
-			},
+			{ data: 'rate' },
 			{ data: 'description' },
 			{ data: 'dateEffective' },
 			{ data: 'created_at'},
