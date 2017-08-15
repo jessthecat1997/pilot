@@ -54,7 +54,7 @@ class LocationsController extends Controller
         $location->name = $request->name;
         $location->address = $request->address;
         $location->cities_id = $request->cities_id;
-        $location->zipCode = $request->zip;
+        $location->zipCode = $request->zipCode;
 
         $location->save();
         return $location;
