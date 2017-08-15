@@ -164,7 +164,7 @@
 	@endpush
 	@push('scripts')
 	<script type="text/javascript">
-	$('#collapse2').addClass('in');
+		$('#collapse2').addClass('in');
 		var data;
 
 		var vehicle_type =[
@@ -269,6 +269,7 @@
 
 			$(document).on('click', '.new', function(e){
 				resetErrors();
+				e.preventDefault();
 				$('#vModal-title').text('New Vehicle');
 				$('#model').val("");
 				$('#bodyType').val("");
@@ -293,6 +294,7 @@
 
 			$(document).on('click', '.new_vehicle_type', function(e){
 				resetErrors();
+				e.preventDefault();
 				$('vtModal-title').text('New Vehicle Type');
 				$('#name').val("");
 				$('#vtModal').modal('show');
