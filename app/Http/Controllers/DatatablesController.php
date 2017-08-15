@@ -260,14 +260,17 @@ class DatatablesController extends Controller
 	public function expenses_datatable(Request $request)
 	{
 		$billing_header =  BillingInvoiceHeader::all()->last();
-		$exps = DB::table('billing_expenses')
-		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		$exp = DB::table('billing_expenses')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
-		->where('billing_invoice_headers.so_head_id', '=', $request->id)
+		->where([
+			['billing_invoice_headers.so_head_id', '=', $request->id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			])
 		->get();
-
-		return Datatables::of($exps)
+		return Datatables::of($exp)
 		->make(true);
 
 		// select b.name, be.description, be.amount from billing_expenses as be left join billing_invoice_headers as bh on be.bi_head_id = bh.id LEFT JOIN billings as b on be.bill_id = b.id where be.bi_head_id = 1
@@ -275,13 +278,17 @@ class DatatablesController extends Controller
 	public function revenue_datatable(Request $request)
 	{
 		$billing_header =  BillingInvoiceHeader::all()->last();
-		$exps = DB::table('billing_revenues')
-		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		$rev = DB::table('billing_revenues')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
-		->where('billing_invoice_headers.so_head_id', '=', $request->id)
+		->where([
+			['billing_invoice_headers.so_head_id', '=', $request->id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			])
 		->get();
-		return Datatables::of($exps)
+		return Datatables::of($rev)
 		->make(true);
 	}
 

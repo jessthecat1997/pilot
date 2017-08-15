@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaymentMode;
 use App\Payment;
+use App\ConsigneeServiceOrderHeader;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,14 +30,25 @@ class PaymentsController extends Controller
 
 		$rev = DB::table('billing_revenues')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where('billing_revenues.bi_head_id','=', $id)
+		->where([
+			['billing_revenues.bi_head_id', '=', $id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			])
 		->get();
+
 
 		$exp = DB::table('billing_expenses')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where('billing_expenses.bi_head_id','=', $id)
+		->where([
+			['billing_expenses.bi_head_id', '=', $id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			])
 		->get();
 
 
@@ -48,13 +60,23 @@ class PaymentsController extends Controller
 	{
 		$rev = DB::table('billing_revenues')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('name','amount')
-		->where('billing_revenues.bi_head_id','=', $id);
+		->where([
+			['billing_revenues.bi_head_id', '=', $id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			]);
 
 		$exp = DB::table('billing_expenses')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
+		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('name','amount')
-		->where('billing_expenses.bi_head_id','=', $id)
+		->where([
+			['billing_expenses.bi_head_id', '=', $id],
+			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			])
 		->union($rev)
 		->get();
 		return Datatables::of($exp)
@@ -67,6 +89,14 @@ class PaymentsController extends Controller
 		$new_payment->amount = $request->amount;
 		$new_payment->so_head_id = $request->so_head_id;
 		$new_payment->save();
+	}
+	public function update(Request $request, $id)
+	{
+		$csh = ConsigneeServiceOrderHeader::findOrFail($id);
+		$csh->paymentStatus = $request->paymentStatus;
+		$csh->save();
+
+		return $csh;
 	}
 	public function payment_pdf(Request $request, $id)
 	{
