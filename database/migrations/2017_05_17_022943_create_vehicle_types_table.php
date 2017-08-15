@@ -17,9 +17,17 @@ class CreateVehicleTypesTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->string('description', 150)->nullable();
+            $table->boolean('withContainer');
             $table->timestamps();
             $table->softDeletes();
         });
+
+         DB::statement("
+            INSERT INTO `vehicle_types` (`id`, `name`, `description`,`withContainer`) VALUES 
+            (NULL, 'truck', 'Usually truck head with chassis', 0),
+            (NULL, 'van', 'Used for delivery of small packages',1)
+           
+            ");
     }
 
     /**

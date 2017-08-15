@@ -29,6 +29,7 @@ class VehicleTypesController extends Controller
         $vehicle_type = VehicleType::findOrFail($id);
         $vehicle_type->name = $request->name;
         $vehicle_type->description = $request->description;
+        $vehicle_type->withContainer = $request->withContainer;
         $vehicle_type->save();
 
         return $vehicle_type;

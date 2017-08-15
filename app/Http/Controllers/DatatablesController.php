@@ -31,7 +31,7 @@ use Carbon\Carbon;
 class DatatablesController extends Controller
 {
 	public function vt_datatable(){
-		$vtypes = VehicleType::select(['id', 'name','description', 'created_at']);
+		$vtypes = VehicleType::select(['id', 'name','description', 'withContainer', 'created_at']);
 
 		return Datatables::of($vtypes)
 		->addColumn('action', function ($vtype) {
