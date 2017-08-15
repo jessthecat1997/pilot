@@ -51,17 +51,19 @@
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>	
-							<div class="form-group">
+							<div class="form-group required">
 								<label class = "control-label">With Container: </label>
-								<input type="radio" name="withContainer" value="0"> With
+								<input type="radio" name="withContainer" value="0" > With
 								<input type="radio" name="withContainer" value="1"> Without
 							</div>	
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
+
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
@@ -152,18 +154,22 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z ]+$/,
 				},
 
 				description:
 				{
 					maxlength: 50,
+					regex: /^[A-Za-z0-9-',. ]+$/,
+
 				},
 
 			},
-			onkeyup: false, 
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()}, 
 		});
 		$(document).on('click', '.new', function(e){
 			resetErrors();
@@ -180,6 +186,7 @@
 
 			$('#description').val(data.description);
 			$('#name').val(data.name);
+			$('[name=withContainer].checked').val(data.withContainer);
 
 			temp_name = data.name;
 			temp_desc = data.description;

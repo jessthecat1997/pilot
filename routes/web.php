@@ -53,7 +53,7 @@ Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
-Route::resource('/admin/ipf_fee','IpfFeesController');
+Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
