@@ -35,9 +35,9 @@
 							<span class="control-label col-sm-7 pull-right" id="status">
 								@php
 								switch($delivery[0]->status){
-								case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
 								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+								case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
 								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
 								@endphp
 							</span>

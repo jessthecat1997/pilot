@@ -18,8 +18,8 @@
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel-heading">
-			<h3>Manage Trucking</h3>
-			<hr />	
+			<h2>&nbsp;Manage Trucking</h2>
+			<hr/>
 		</div>
 		<div class = "panel-body panel">
 			<div class="col-md-12">
@@ -29,76 +29,63 @@
 				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
 				@endif
 				<br />
-				<div>
-					<div class = "col-md-8">
-						<form class="form-horizontal" role="form">
-							{{ csrf_field() }}
-							<div class="form-group">
-								<strong><label class="control-label col-md-5 pull-left" for="deliveryID">Trucking Service Order #:</label></strong>
-								<div class = "col-md-7">
-									<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $service_order->id }}</span>
-								</div>
-							</div>
-							
-						</form>
+				<table class="table">
+					<tbody>
+						<tr>
+							<td class="active"><strong>Trucking Service Order #: </strong></td>
 
-						<form class="form-horizontal" role="form">
-							{{ csrf_field() }}
-							<div class = "form-group">
-								<div class = "col-md-4" style="text-align: right;">
-									
-								</div>
-								<div class = "col-md-8">
-									<span class="control-label" id = "tr_address"></span>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class = "col-md-4" style="text-align: right;">
-									<strong>Consignee:</strong>
-								</div>
-								<div class = "col-md-8">
-									<span class="control-label pull-right" id = "tr_address">{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</span>
-								</div>
-							</div>
-							<div class = "form-group">
-								<div class = "col-md-4" style="text-align: right;">
-									<strong>Company Name:</strong>
-								</div>
-								<div class = "col-md-8">
-									<span class="control-label pull-right" id = "tr_address">{{ $service_order_details[0]->companyName }}</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class = "col-md-4" style="text-align: right;">
-									<strong>Status:</strong>
-								</div>
-								<div class = "col-md-8">
-									<span class="control-label" id="tr_status">
-										@php
-										switch($service_order->status){
-										case 'C': echo "<span class = 'label label-default pull-right'>Cancelled</span>"; break;
-										case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-										case 'P': echo "<span class = 'label label-warning pull-right'>Pending</span>"; break;
-										default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-										@endphp
-									</span>
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class = "col-md-4">
-						<h4 style="text-align: center;">Delivery Status</h4>
-						<div class = "col-md-12">
-							<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
-							<br />
-							<br />
-							<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
-							<br />
-							<br />
-							<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
-						</div>
-					</div>
-				</div>
+							<td class = "success" id="consignee"><strong>{{ $service_order->id }}</strong></td>
+							<td class="success">
+
+							</td>
+						</tr>
+						<tr>
+							<td class="active"><strong>Consignee: </strong></td>
+							<td class="success" id="address"><strong>{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</strong></td>
+							<td class="success">
+
+							</td>
+						</tr>
+						<tr>
+							<td class="active"><strong>Company Name: </strong></td>
+
+							<td class="success" id="sotype"><strong>{{ $service_order_details[0]->companyName }}</strong></td>
+							<td class="success">
+
+							</td>
+						</tr>
+						<tr>
+							<td class="active"><strong>Status: </strong></td>
+							<td class="success">
+								@php
+								switch($service_order->status){
+								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+								@endphp
+							</td>
+							<td class="success">
+							</td>
+						</tr>
+						<tr>
+							<td class="active">
+							</td>
+							<td class="success">
+								<strong>Delivery Status: </strong><br><br>
+								<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
+								<br />
+								<br />
+								<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
+								<br />
+								<br />
+								<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
+							</td>
+							<td class="success">
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
