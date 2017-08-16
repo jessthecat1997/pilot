@@ -266,6 +266,9 @@
 	})
 
 	$(document).on('click', '.finalize-rev', function(e){
+		
+	})
+	$(document).on('click', '.finalize-exp', function(e){
 		if(validateRevenueRows() === true){
 			console.log(rev_bill_id);
 			console.log(rev_amount_value);
@@ -292,9 +295,7 @@
 				}
 			})
 		}
-	})
-	$(document).on('click', '.finalize-exp', function(e){
-		if(validateExpenseRows() === true){
+		else if(validateExpenseRows() === true){
 			console.log(exp_bill_id);
 			console.log(exp_amount_value);
 			console.log(exp_description_value);
