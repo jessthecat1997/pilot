@@ -644,7 +644,7 @@
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' : $('#deliveryID').text(),
+					'delivery_head_id' : selected_delivery,
 					
 				},
 				success: function(data){

@@ -405,7 +405,7 @@
 								<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
 								<div class="col-sm-8"> 
 									<select class="form-control" id = "vehicle">
-										<option></option>
+										<option value="0"></option>
 									</select>
 								</div>
 							</div>
@@ -422,7 +422,7 @@
 								<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
 								<div class="col-sm-8">
 									<select class="form-control" id = "driver">
-										<option></option>
+										<option value = "0"></option>
 										@forelse($employees as $employee)
 										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
 										@empty
@@ -434,7 +434,7 @@
 								<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
 								<div class="col-sm-8">
 									<select class="form-control" id = "helper">
-										<option></option>
+										<option value = "0"></option>
 										@forelse($employees as $employee)
 										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
 										@empty
@@ -611,7 +611,7 @@
 			selected_location = 1;
 		})
 
-			$(document).on('change', '#loc_province', function(e){
+		$(document).on('change', '#loc_province', function(e){
 			fill_cities(0);
 		})
 
@@ -800,56 +800,62 @@
 		$(document).on('click', '.save-delivery', function(e){
 			if($("#choices li.active").text() === "Without Container"){
 				if(validateDetail() === true){
-					$.ajax({
-						type: 'POST',
-						url: '{{route("trucking.index")}}/{{ $so_id }}/store_delivery',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'plateNumber' : $('#vehicle').val(),
-							'descrp_goods' : descrp_goods,
-							'gross_weights' : gross_weights,
-							'suppliers' : suppliers,
-							'emp_id_driver' : $('#driver').val(),
-							'emp_id_helper' : $('#helper').val(),
-							'locations_id_pick' : $('#pickup_id').val(),
-							'locations_id_del' : $('#deliver_id').val(),
-							'deliveryDate' : $('#deldatecon').val(),
-							'pickupDate' : $('#pickdatecon').val(),
-						},
-						success: function(data){
-							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
-						}
-					})
+					if(validateOrder() == true){
+
+						$.ajax({
+							type: 'POST',
+							url: '{{route("trucking.index")}}/{{ $so_id }}/store_delivery',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'plateNumber' : $('#vehicle').val(),
+								'descrp_goods' : descrp_goods,
+								'gross_weights' : gross_weights,
+								'suppliers' : suppliers,
+								'emp_id_driver' : $('#driver').val(),
+								'emp_id_helper' : $('#helper').val(),
+								'locations_id_pick' : $('#pickup_id').val(),
+								'locations_id_del' : $('#deliver_id').val(),
+								'deliveryDate' : $('#deldatecon').val(),
+								'pickupDate' : $('#pickdatecon').val(),
+							},
+							success: function(data){
+								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
+							}
+						})
+					}
 				}
 			}
 			else{
 				if(validateContainer() == true){
-					validateContainerDetail();
-					$.ajax({
-						type: 'POST',
-						url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'plateNumber' : $('#vehicle').val(),
-							'emp_id_driver' : $('#driver').val(),
-							'emp_id_helper' : $('#helper').val(),
-							'locations_id_pick' : $('#pickup_id').val(),
-							'locations_id_del' : $('#deliver_id').val(),
-							'deliveryDate' : $('#deldatecon').val(),
-							'pickupDate' : $('#pickdatecon').val(),
-							'containerNumber' : con_Number,
-							'containerVolume' : con_Volume,
-							'containerReturnTo' : con_ReturnTo,
-							'containerReturnAddress' : con_ReturnAddress,
-							'containerReturnDate' : con_ReturnDate,
-							'shippingLine' : con_ShippingLine,
-							'portOfCfsLocation' : con_PortOfCfsLocation,
-							'container_data' : results,
-						},
-						success: function(data){
-							window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
-						}
-					})
+					if(validateOrder() == true){
+
+						validateContainerDetail();
+						$.ajax({
+							type: 'POST',
+							url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'plateNumber' : $('#vehicle').val(),
+								'emp_id_driver' : $('#driver').val(),
+								'emp_id_helper' : $('#helper').val(),
+								'locations_id_pick' : $('#pickup_id').val(),
+								'locations_id_del' : $('#deliver_id').val(),
+								'deliveryDate' : $('#deldatecon').val(),
+								'pickupDate' : $('#pickdatecon').val(),
+								'containerNumber' : con_Number,
+								'containerVolume' : con_Volume,
+								'containerReturnTo' : con_ReturnTo,
+								'containerReturnAddress' : con_ReturnAddress,
+								'containerReturnDate' : con_ReturnDate,
+								'shippingLine' : con_ShippingLine,
+								'portOfCfsLocation' : con_PortOfCfsLocation,
+								'container_data' : results,
+							},
+							success: function(data){
+								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
+							}
+						})
+					}
 				}
 			}
 		})
@@ -1025,6 +1031,73 @@
 
 
 		}
+		function validateOrder(){
+			var error = "";
+			if($('#deldatecon').val() === ""){
+				$('#deldatecon').css("border-color", 'red');
+				error += "Delivery Date";
+			}
+			else{
+				$('#deldatecon').css("border-color", 'green');
+			}
+			if($('#pickdatecon').val() === ""){
+				$('#pickdatecon').css("border-color", 'red');
+				error += "Pickup Date";
+			}
+			else{
+				$('#pickdatecon').css("border-color", 'green');
+			}
+			if($('#vehicle_type').val() == "0"){
+				$('#vehicle_type').css("border-color", 'red');
+				error += "Delivery Date";
+			}
+			else{
+				$('#vehicle_type').css("border-color", 'green');
+			}
+			if($('#vehicle').val() == "0"){
+				$('#vehicle').css("border-color", 'red');
+				error += "Delivery Date";
+			}
+			else{
+				$('#vehicle').css("border-color", 'green');
+			}
+			if($('#driver').val() == "0"){
+				$('#driver').css("border-color", 'red');
+				error += "No driver";
+			}
+			else{
+				$('#driver').css("border-color", 'green');
+			}
+			if($('#helper').val() == "0"){
+				$('#helper').css('border-color', 'red');
+				error += "No helper";
+			}
+			else{
+				$('#helper').css('border-color', 'green');
+			}
+			if($('#pickup_id').val() == "0"){
+				$('#pickup_id').css('border-color', 'red');
+				error += "No pickup location";
+			}
+			else{
+				$('#pickup_id').css('border-color', 'green');
+			}
+			if($('#deliver_id').val() == "0"){
+				$('#deliver_id').css('border-color', 'red');
+				error += "No delivery location";
+			}
+			else{
+				$('#deliver_id').css('border-color', 'green');
+			}
+			if(error.length == 0){
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
 		function validateContainer(){
 			con_Number = [];
 			con_Volume = [];
@@ -1100,6 +1173,7 @@
 					con_ShippingLine.push(con_ship[i].value);
 					con_ship[i].style.borderColor = 'green';
 				}
+
 			}
 			console.log(error);
 			if(error.length === 0){
@@ -1144,7 +1218,7 @@
 				}
 			}
 			if(error.length === 0){
-				error = "";
+
 				return true;
 			}
 			else{

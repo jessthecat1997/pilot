@@ -70,10 +70,10 @@
 			{ data: 'portOfCfsLocation' },
 			{ data: 'containerVolume' },
 			{ data: 'containerNumber'},
-			{ data: 'delivery_receipt_headers.created_at'},
-			{ data: 'delivery_non_container_details.grossWeight' },
-			{ data: 'delivery_receipt_headers.deliveryDateTime' },
-			{ data: 'delivery_containers.remarks', processing:false },
+			{ data: 'created_at'},
+			{ data: 'grossWeight' },
+			{ data: 'deliveryDateTime' },
+			{ data: 'remarks', processing:false },
 			]
 		})
 	})
