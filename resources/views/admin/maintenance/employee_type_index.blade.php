@@ -15,9 +15,6 @@
 				<table class = "table-responsive table" id = "ch_table">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
-								No.
-							</td>
 							<td style="width: 30%;">
 								Name
 							</td>
@@ -112,16 +109,16 @@
 
 	$(document).ready(function(){
 		var ettable = $('#ch_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/etData',
 			columns: [
-			{ data: 'id' },
 			{ data: 'name'},
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 0, "asc" ]],
 		});
 
 		$("#commentForm").validate({

@@ -16,9 +16,6 @@
 				<table class = "table-responsive table" id = "bill_table">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
-								No.
-							</td>
 							<td style="width: 25%;">
 								Name
 							</td>
@@ -124,17 +121,17 @@
 
 	$(document).ready(function(){
 		var billtable = $('#bill_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender:true,
 			ajax: '{{ route("bill.data") }}',
 			columns: [
-			{ data: 'id' },
 			{ data: 'name'},
 			{ data: 'bill_type' },
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 0, "asc" ]],
 		});
 
 		$(document).ready(function() {

@@ -93,7 +93,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -129,9 +129,9 @@
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
 			scrollX: true,
-			deferRender: true, 
 			processing: false,
 			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/ctData',
 			columns: [
 			{ data: 'name',
@@ -143,7 +143,7 @@
 					{ data: 'description' },
 					{ data: 'action', orderable: false, searchable: false }
 
-					],	"order": [[ 0, "desc" ]],
+					],	"order": [[ 0, "asc" ]],
 				});
 
 		$("#commentForm").validate({

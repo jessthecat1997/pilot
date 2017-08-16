@@ -105,12 +105,18 @@
 @endsection
 @push('styles')
 <style>
-	.maintenance
-	{
-		border-left: 10px solid #2ad4a5;
+	.class-charges{
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+
 </style>
 @endpush
 @push('scripts')
@@ -120,9 +126,9 @@
 	var temp_desc = null;
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
-			processing: true,
+			processing: false,
+			serverSide: false,
 			deferRender: true,
-			serverSide: true,
 			ajax: 'http://localhost:8000/admin/chData',
 			columns: [
 			

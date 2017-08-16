@@ -101,16 +101,16 @@
 
 													<div class = "form-group input-group" >
 														<span class = "input-group-addon">$</span>
-														<input type = "text" class = "form-control money ipf_minimum_valid"  
-														value ="0.00" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  />
+														<input type = "text" class = "form-control ipf_minimum_valid"  
+														value ="0.00" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" />
 													</div>
 
 												</td>
 												<td>
 													<div class = "form-group input-group">
 														<span class = "input-group-addon">$</span>
-														<input type = "text" class = "form-control money ipf_maximum_valid"  
-														value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" />
+														<input type = "text" class = "form-control  ipf_maximum_valid"  
+														value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" />
 													</div>
 												</td>
 
@@ -210,8 +210,9 @@
 		//$(minimum).attr("disabled", true);
 
 		var ipftable = $('#ipf_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			'scrollx': true,
 			ajax: 'http://localhost:8000/admin/ipfData',
 			columns: [
@@ -313,7 +314,6 @@
 				$('#ipf_parent_table').append(ipf_row);
 
 				for(var i = 0; i <= minimum.length; i++){
-					console.log("unmasked is "+minimum[i].inputmask("unmaskedvalue"));
 					minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
 					maximum[i+1].value = parseFloat(minimum[i+1].value) + 1;
 
@@ -416,19 +416,14 @@
 					console.log('max' + maximum_id);
 					minimum_unmask = [];
 
-					for($i = 0; $i < minimum_id; $i++){
-						
-						minimum_unmask[$i] = minimum_id[$i].inputmask('unmaskedvalue');
-						console.log("unmasked is " + minimum_unmask[$i]);
 
-					}	
 					$.ajax({
 						type: 'POST',
 						url:  '/admin/ipf_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'dateEffective' : $('#dateEffective').val(),
-							'minimum' : minimum_unmask,
+							'minimum' : minimum_id,
 							'maximum' :maximum_id,
 							'amount' : amount_value,
 						},
