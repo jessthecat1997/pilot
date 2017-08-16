@@ -50,7 +50,7 @@
 			<div class="col-sm-3">
 				<div class="form-group">
 					<label for="vat">Vat Rate:</label>
-					<input type="text" class="form-control" id="vat" value="">
+					<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
 				</div>
 			</div>
 			<div class="col-sm-4">
