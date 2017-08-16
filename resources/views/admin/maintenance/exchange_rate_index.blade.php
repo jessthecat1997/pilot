@@ -23,9 +23,6 @@
 					<thead>
 						<tr>
 							<td>
-								No.
-							</td>
-							<td>
 								Rate
 							</td>
 							<td>
@@ -146,14 +143,13 @@
 			deferRender: true,
 			ajax: 'http://localhost:8000/admin/erData',
 			columns: [
-			{ data: 'id' },
 			{ data: 'rate' },
 			{ data: 'description' },
 			{ data: 'dateEffective' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 2, "desc" ]],
 		});
 
 

@@ -125,14 +125,18 @@
 					name:
 					{
 						required: true,
-						alphanumeric: true,
 						minlength: 2,
 						maxlength: 50,
+						normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z ]+$/,
 
 					},
 
 				},
-				onkeydown: function(element) {$(element).valid()}, 
+				onkeyup: function(element) {$(element).valid()}, 
 				submitHandler: function (form) {
 					return false;
 				}

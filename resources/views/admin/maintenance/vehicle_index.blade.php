@@ -1,4 +1,20 @@
 @extends('layouts.maintenance')
+@push('styles')
+<style>
+	.class-vehicle
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @section('content')
 <div class = "container-fluid">
 	<h2>&nbsp;Maintenance | Vehicles</h2>
@@ -53,6 +69,11 @@
 							<div class="form-group required">
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
+							</div>
+							<div class="form-group required">
+								<label class = "control-label">With Container: </label>
+								<input type="radio" name="withContainer" value="0" > With
+								<input type="radio" name="withContainer" value="1"> Without
 							</div>		
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
@@ -146,22 +167,6 @@
 		</section>
 	</div>
 	@endsection
-	@push('styles')
-	<style>
-		.class-vehicle
-		{
-			border-left: 10px solid #8ddfcc;
-			background-color:rgba(128,128,128,0.1);
-			color: #fff;
-		}
-		.maintenance
-		{
-			border-left: 10px solid #8ddfcc;
-			background-color:rgba(128,128,128,0.1);
-			color: #fff;
-		}
-	</style>
-	@endpush
 	@push('scripts')
 	<script type="text/javascript">
 		$('#collapse2').addClass('in');
@@ -188,7 +193,7 @@
 				{ data: 'dateRegistered' },
 				{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
+				],	"order": [[ 0, "asc" ]],
 			});
 
 			$.validator.addMethod("valueNotEquals", function(value, element, arg){
@@ -197,18 +202,6 @@
 
 
 			Inputmask("A{3} 9{4}").mask($("#plateNumber"));
-
-
-			var now = new Date();
-
-			var day = ("0" + now.getDate()).slice(-2);
-			var month = ("0" + (now.getMonth() + 1)).slice(-2);
-
-			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-
-
-			$('#dateRegistered').val(today);
-			
 
 			$("#vehicle_types_id").select2({
 				data: vehicle_type,
@@ -273,7 +266,11 @@
 				$('#vModal-title').text('New Vehicle');
 				$('#model').val("");
 				$('#bodyType').val("");
-				$('#dateRegistered').val("");
+				var now = new Date();
+				var day = ("0" + now.getDate()).slice(-2);
+				var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				$('#dateRegistered').val(today);
 				$('#vModal').modal('show');
 
 			});
@@ -411,6 +408,7 @@ $('#btnSave_sub').on('click', function(e){
 					'_token' : $('input[name=_token]').val(),
 					'name' : $('#name').val(),
 					'description' : $('#description').val(),
+					'withContainer':$('input[name=withContainer]:checked').val(),
 				},
 				success: function (data)
 				{

@@ -211,7 +211,18 @@
 @endsection
 @push('styles')
 <style>
-
+	.class-city
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 
 </style>
 @endpush
@@ -231,13 +242,11 @@
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
 		$('#collapse1').addClass('in');
-
-		
 		//$(city).attr("disabled", true);
-
 		var lctable = $('#lc_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			'scrollx': true,
 			ajax: 'http://localhost:8000/admin/lcData',
 			columns: [
@@ -310,7 +319,7 @@
 
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			
+			e.preventDefault();
 			var lc_id = $(this).val();
 			data = lctable.row($(this).parents()).data();
 
@@ -382,6 +391,7 @@
 
 		$(document).on('click', '#new_province', function(e){
 			resetErrors();
+			e.preventDefault();
 			$('#name').val("");
 			$('#lpModal').modal('show');
 

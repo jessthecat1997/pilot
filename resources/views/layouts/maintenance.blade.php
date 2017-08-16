@@ -145,22 +145,25 @@
                             <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a>
                         </li>
                         <li>
-                            <a href = "{{ route('area.index') }}"  class = "class-area"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area</a>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a>
                         </li>
                         <li>
-                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates</a>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                         </li>
                         <li>
                             <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
                         </li>
                         <li>
-                            <a href = "{{ route('receive_type.index') }}"  class = "class-receive-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Receive Type</a>
+                            <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a>
                         </li>
                         <li>
                             <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a>
                         </li>
                         <li>
                             <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
                         </li>
                     </ul>
                 </div>

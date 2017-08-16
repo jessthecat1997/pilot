@@ -1,4 +1,20 @@
 @extends('layouts.maintenance')
+@push('styles')
+<style>
+	.class-area
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @section('content')
 
 <div class = "container-fluid">
@@ -92,30 +108,15 @@
 	</section>
 </div>
 @endsection
-@push('styles')
-<style>
-	.class-area
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 		var artable = $('#bst_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender:true,
 			ajax: 'http://localhost:8000/admin/arData',
 			columns: [
 			{ data: 'id' },

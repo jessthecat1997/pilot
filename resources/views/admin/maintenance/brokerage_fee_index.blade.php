@@ -213,8 +213,9 @@
         //$(minimum).attr("disabled", true);
 
         var bftable = $('#bf_table').DataTable({
-            processing: true,
-            serverSide: true,
+            processing: false,
+            serverSide: false,
+            deferRender:true,
             'scrollx': true,
             ajax: 'http://localhost:8000/admin/bfData',
             columns: [
@@ -411,8 +412,6 @@
                             'dateEffective' : $('#dateEffective').val(),
                             'minimum' : minimum_id,
                             'maximum' :maximum_id,
-                            'minimum_id_descrp' : minimum_id_descrp,
-                            'maximum_id_descrp' : maximum_id_descrp,
                             'amount' : amount_value,
                         },
 

@@ -38,7 +38,7 @@
             <nav class="navbar navbar-default navbar-fixed-top" id="navtop">
                 <div class="navbar-header">
                     <!-- Branding Image -->
-                    <a class="navbar-brand" id="menu-toggle" href="#menu-toggle">
+                    <a class="navbar-brand toggled" id="menu-toggle" href="#menu-toggle">
                         <img src="/images/burger.png">
                     </a>
                     <a class="navbar-brand" style="color: #fff;"><img src="/images/pilotlogo.png" id="logo"></a>
@@ -135,6 +135,7 @@
                 </li>
                 <div id="collapse2" class="panel-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
+                        <ul class="list-group" style="list-style-type: circle;">
                         <li>
                             <a href = "{{ route('service_ordertype.index') }}"  class = "class-service-order"><i class="fa fa-circle"></i>&nbsp;&nbsp;Service Order Type</a>
                         </li>
@@ -154,16 +155,16 @@
                             <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a>
                         </li>
                         <li>
-                            <a href = "{{ route('area.index') }}"  class = "class-area"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area</a>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a>
                         </li>
                         <li>
-                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates</a>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                         </li>
                         <li>
                             <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
                         </li>
                         <li>
-                            <a href = "{{ route('receive_type.index') }}"  class = "class-receive-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Receive Type</a>
+                            <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a>
                         </li>
                         <li>
                             <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a>
@@ -171,6 +172,10 @@
                         <li>
                             <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
                         </li>
+                        <li>
+                            <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
+                        </li>
+                    </ul>
                     </ul>
                 </div>
                 <li>
@@ -208,10 +213,7 @@
 
 
     <script>
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
+        
         $(document).on('show.bs.modal', '.modal', function () {
             var zIndex = 1040 + (10 * $('.modal:visible').length);
             $(this).css('z-index', zIndex);

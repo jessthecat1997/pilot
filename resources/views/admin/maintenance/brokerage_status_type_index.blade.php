@@ -21,9 +21,6 @@
 							<thead>
 								<tr>
 									<td>
-										No.
-									</td>
-									<td>
 										Description
 									</td>
 									<td>
@@ -106,11 +103,11 @@
 	var data;
 	$(document).ready(function(){
 		var bsttable = $('#bst_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender:true,
 			ajax: 'http://localhost:8000/admin/bstData',
 			columns: [
-			{ data: 'id' },
 			{ data: 'description' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }

@@ -16,9 +16,6 @@
 					<table class = "table-responsive table" id = "rt_table">
 						<thead>
 							<tr>
-								<td style="width: 5%;">
-									No.
-								</td>
 								<td style="width: 30%;">
 									Name
 								</td>
@@ -119,12 +116,12 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/rtData',
 			columns: [
-			{ data: 'id' },
+			
 			{ data: 'name'},
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+			],	"order": [[ 0, "asc" ]],
 		});
 
 		$("#commentForm").validate({

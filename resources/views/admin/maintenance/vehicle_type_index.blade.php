@@ -101,13 +101,13 @@
 @push('styles')
 <style>
 	.class-vehicle-type{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
 	.maintenance
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}

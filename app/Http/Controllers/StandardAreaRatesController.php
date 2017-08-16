@@ -10,9 +10,14 @@ use App\StandardAreaRateDetail;
 
 class StandardAreaRatesController extends Controller
 {
-    public function index()
+	public function index()
 	{
-		return view('admin/maintenance.standard_area_rates_index');
+
+		$provinces = DB::table('location_provinces')
+		->select('name', 'id')
+		->where('deleted_at', '=', null)
+		->get();
+		return view('admin/maintenance.standard_area_rates_index', compact(['provinces']));
 	}
 
 	public function store(Request $request)

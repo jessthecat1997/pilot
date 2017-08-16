@@ -18,9 +18,6 @@
 					<thead>
 						<tr>
 							<td>
-								No.
-							</td>
-							<td>
 								Fee
 							</td>
 							<td>
@@ -55,7 +52,7 @@
 								<label class = "control-label">Fee</label>
 								<div class = "form-group input-group " >
 									<span class = "input-group-addon">Php</span>
-									<input type = "text" class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" value="0.00" />
+									<input type = "text" vx  class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" value="0.00" />
 								</div>
 								
 
@@ -93,7 +90,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							
 						</div>
 					</div>
@@ -126,11 +123,11 @@ $('#collapse2').addClass('in');
 	$(document).ready(function(){
 
 		var cdstable = $('#cds_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender:true,
 			ajax: 'http://localhost:8000/admin/cdsData',
 			columns: [
-			{ data: 'id'},
 			{ data: 'fee',
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },                              
@@ -165,8 +162,7 @@ $('#collapse2').addClass('in');
 			resetErrors();
 			$('.modal-title').text('New CDS Fee');
 			$('#cdsModal').modal('show');
-			$('#fee').val("");
-			$('#dateEffective').val("");
+			$('#fee').val("0.00");
 			var now = new Date();
 			var day = ("0" + now.getDate()).slice(-2);
 			var month = ("0" + (now.getMonth() + 1)).slice(-2);
