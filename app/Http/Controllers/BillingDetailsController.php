@@ -111,7 +111,7 @@ class BillingDetailsController extends Controller
 				$billing_revenue->description = $request->description[$i];
 				$billing_revenue->amount = $request->amount[$i];
 				$billing_revenue->tax = $request->tax[$i];
-				$billing_revenue->bi_head_id = $billing_header->id;
+				$billing_revenue->bi_head_id = $request->bi_head_id;
 				$billing_revenue->save();
 			}
 			else
@@ -121,7 +121,7 @@ class BillingDetailsController extends Controller
 				$billing_expense->description = $request->description[$i];
 				$billing_expense->amount = $request->amount[$i];
 				$billing_expense->tax = $request->tax[$i];
-				$billing_expense->bi_head_id = $billing_header->id;
+				$billing_expense->bi_head_id = $request->bi_head_id;
 				$billing_expense->save();
 			}
 		}

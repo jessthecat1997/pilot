@@ -707,13 +707,14 @@ class DatatablesController extends Controller
 
 
 	public function sar_datatable(){
-		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
+		$sars = DB::select("SELECT h.id as 'id' , h.dateEffective as'dateEffective' , d.areaFrom as 'areaFrom' , d.areaTo as 'areaTo' , 
+			d.amount as 'amount'  FROM standard_area_rate_headers h INNER JOIN standard_area_rate_details d ON h.id = d.standard_area_rate_headers_id ");
 
-		return Datatables::of($ipfs)
-		->addColumn('action', function ($ipf){
+		return Datatables::of($sars)
+		->addColumn('action', function ($sar){
 			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $sar->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

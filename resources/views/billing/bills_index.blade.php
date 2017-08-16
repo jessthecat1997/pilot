@@ -285,7 +285,7 @@
 					'description' : rev_description_value,
 					'amount' : rev_amount_value,
 					'tax' : rev_tax_value,
-					'bi_head_id' : $('#soHead_id').val(),
+					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
 					alert("Saved");
@@ -313,7 +313,7 @@
 					'description' : exp_description_value,
 					'amount' : exp_amount_value,
 					'tax' : exp_tax_value,
-					'bi_head_id' : $('#soHead_id').val(),
+					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
 					alert("Saved");
