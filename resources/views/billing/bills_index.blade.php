@@ -266,9 +266,6 @@
 	})
 
 	$(document).on('click', '.finalize-rev', function(e){
-		
-	})
-	$(document).on('click', '.finalize-exp', function(e){
 		if(validateRevenueRows() === true){
 			console.log(rev_bill_id);
 			console.log(rev_amount_value);
@@ -288,14 +285,16 @@
 					'description' : rev_description_value,
 					'amount' : rev_amount_value,
 					'tax' : rev_tax_value,
-					'bi_head_id' : $('#soHead_id').val(),
+					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
 					alert("Saved");
 				}
 			})
 		}
-		else if(validateExpenseRows() === true){
+	})
+	$(document).on('click', '.finalize-exp', function(e){
+		if(validateExpenseRows() === true){
 			console.log(exp_bill_id);
 			console.log(exp_amount_value);
 			console.log(exp_description_value);
@@ -314,7 +313,7 @@
 					'description' : exp_description_value,
 					'amount' : exp_amount_value,
 					'tax' : exp_tax_value,
-					'bi_head_id' : $('#soHead_id').val(),
+					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
 					alert("Saved");
