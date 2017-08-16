@@ -9,7 +9,7 @@
 			<div class = "panel-heading">
 				<div class = "form-horizontal">
 					<div class = "form-group">
-						<label class = "control-label col-md-3">Choose: </label>
+						<label class = "control-label col-md-3">Choose Query: </label>
 						<div class = "col-md-6 col-md-offset-1">
 							<select class = "form-control" id = "query_select">
 								<option value = "0"></option>
@@ -43,9 +43,6 @@
 								</td>
 								<td>
 									Created At
-								</td>
-								<td>
-									Action
 								</td>
 							</tr>
 						</thead>
@@ -90,7 +87,10 @@
 			e.preventDefault();
 			console.log($('#query_select').val())
 			switch($('#query_select').val()){
-				case "0" : 
+				case "0" :
+				$('#contracts').removeClass('in');
+				$('#delivery').removeClass('in');
+
 				break;
 
 				case "1" : 
@@ -104,15 +104,14 @@
 						deferRender: true,
 						scrollX: true,
 						serverSide: false,
-						ajax: "{{ route('contract.data') }}",
+						ajax: "{{ route('get_active_contract') }}",
 						columns: [
 						{ data: 'id' },
-						{ data: 'companyName' },
+						{ data: 'name' },
 						{ data: 'dateEffective' },
 						{ data: 'dateExpiration' },
 						{ data: 'status' },
-						{ data: 'created_at' },
-						{ data: 'action', orderable: false, searchable: false }
+						{ data: 'created_at' }
 						]
 					});
 				}
@@ -184,6 +183,10 @@
 				
 				break;
 			}
+		})
+
+		$(document).on('click', '.view', function(e){
+			e.preventDefault();
 		})
 	})
 </script>

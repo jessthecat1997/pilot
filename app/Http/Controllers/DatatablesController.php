@@ -616,11 +616,26 @@ class DatatablesController extends Controller
 	public function get_active_contract(){
 		$contracts = DB::table('contract_headers')
 		->join('consignees AS A', 'consignees_id', '=', 'A.id')
-		->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'))
+		->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'), 'contract_headers.id', 'contract_headers.created_at')
 		->get();
 
 		return Datatables::of($contracts)
+		->addColumn('status', function ($contract_header){
+			$date_now = Carbon::now();
+			if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+				return 'Active';
+			}
+			else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+				return 'Expired';
+			}
+			else{
+				return 'Pending';
+			}
+			
+		})
+		
 		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
 		->make(true);
 	}
 
@@ -645,6 +660,8 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
 		})
+		->editColumn('deliveryDateTime', '{{ Carbon\Carbon::parse($deliveryDateTime)->toFormattedDateString() }}')
+		->editColumn('pickupDateTime', '{{ Carbon\Carbon::parse($pickupDateTime)->toFormattedDateString() }}')
 
 		->make(true);
 	}
