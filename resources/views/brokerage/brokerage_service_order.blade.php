@@ -4,7 +4,7 @@
 	<div class = "col-md-8 col-md-offset-2">
 		<div class = "panel panel-default">
 			<div class = "panel-heading">
-				<h3>New Brokerage Service Order</h3>
+				<h2>&nbsp;New Brokerage Service Order</h2>
 			</div>
 			<div class = "panel-body">
 				<div class="panel-group" id="accordion">

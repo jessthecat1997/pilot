@@ -2,10 +2,10 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Consignee</h3>
+		<h2>&nbsp;Consignee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new-consignee" style = "width: 100%;">New Consignee</button>
+			<button  class="btn but btn-md new-consignee" style = "width: 100%;">New Consignee</button>
 		</div>
 	</div>
 	<br />
@@ -242,7 +242,7 @@
 <style>
 	.consignee
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ffdcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -251,6 +251,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse1').addClass('in');
 	$(document).ready(function(){
 		var cstable = $('#cs_table').DataTable({			
 			responsive: true,

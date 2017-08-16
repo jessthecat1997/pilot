@@ -319,7 +319,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<input  type="submit" class="btn btn-success" value = "Create">
+								<input  type="submit" class="btn but" value = "Create">
 								<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 								<button type="button" class="btn btn-default" onclick = "$('#ConsigneeModal').modal('hide');">Close</button>
 							</form>

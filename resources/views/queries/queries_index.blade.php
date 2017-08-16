@@ -2,7 +2,7 @@
 
 @section('content')
 <div class = "col-md-12">
-	<h3>Queries</h3>
+	<h2>&nbsp;Queries</h2>
 	<hr>
 	<div class = "col-md-12">
 		<div class = "panel panel-default">
