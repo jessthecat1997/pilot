@@ -9,7 +9,7 @@ class StandardAreaRateDetails extends Model
    use SoftDeletes;
 
     protected $fillable = [
-	 'amount',  'standard_area_rate_headers_id', 
+	 'amount',  'standard_area_rate_headers_id', 'areaTo','areaFrom'
 	];
 
 	protected $dates = [

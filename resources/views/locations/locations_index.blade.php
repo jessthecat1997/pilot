@@ -207,7 +207,7 @@
 		})
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			if($('#modal-title').text() == "New Location"){
+			if($('.modal-title').text() == "New Location"){
 
 				$.ajax({
 					type: 'POST',

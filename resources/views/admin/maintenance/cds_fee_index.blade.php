@@ -52,7 +52,7 @@
 								<label class = "control-label">Fee</label>
 								<div class = "form-group input-group " >
 									<span class = "input-group-addon">Php</span>
-									<input type = "text" vx  class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" value="0.00" />
+									<input type = "text"   class = "form-control money" name = "fee" id = "fee"  data-rule-required="true" value="0.00" />
 								</div>
 								
 

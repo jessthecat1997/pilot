@@ -8,9 +8,7 @@
 				<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sarModal" style = "width: 100%;">New Standard Area Rates</button>
 			</div>
 		</div>
-		<h4>Default pick-up location is pier </h4>
 		<br />
-
 		<div class = "row">
 			<div class = "panel-default panel">
 				<div class = "panel-body">
@@ -27,7 +25,7 @@
 									Area To
 								</td>
 								<td>
-									Amount
+									Standard Rate
 								</td>
 								
 								<td>
@@ -54,86 +52,166 @@
 							<h4 class="modal-title">New Standard Area Rate</h4>
 						</div>
 						<div class="modal-body ">		
-							<div class="form-group required">
-								<label class="control-label " for="dateEffective">Date Effective:</label>
-								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
+							<div class = "panel-heading">
+								Pickup Location
 							</div>
-						</form>
-						<br />
-						<div class = "collapse" id = "sar_table_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one import processing fee rate.
-							</div>
-						</div>
-						<div class = "collapse" id = "sar_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the range.
-							</div>
-						</div>
-						<div class = "panel panel-default">
-							<div  style="overflow-x: auto;">
-								<div class = "panel-default">
-									{{ csrf_field() }}
-									<form id = "sar_form" class = "commentForm">
-										<table class="table responsive table-hover" width="100%" id= "sar_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
-											<thead>
-												<tr id = "contract-row">
-													<td>
-														<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
-															<option></option>
-															@forelse($areas as $area)
-															<option value = "{{ $area->id }}">
-																{{ $area->description }}
-															</option>
-															@empty
-
-															@endforelse
-														</select>
-													</td>
-													<td>
-														<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
-															<option>
-
-															</option>
-															@forelse($areas as $area)
-															<option value = "{{ $area->id }}">
-																{{ $area->description }}
-															</option>
-															@empty
-
-															@endforelse
-														</select>
-													</td>
-
-													<td>
-														<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
-
-													</td>
-													<td style="text-align: center;">
-														<button class = "btn btn-danger btn-md delete-contract-row">x</button>
-													</td>
-												</tr>
-											</table>
-											<div class = "form-group" style = "margin-left:10px">
-												<button    class = "btn btn-primary btn-md new-sar-row pull-left">New Standard Rate</button>
-												<br /><br />
+							<div class="panel-body">
+								<div class = "row">
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											{{ csrf_field() }}	
+											<div class="form-group required">
+												<label class = "control-label ">Location Name: </label>
+												<div class="input-group">
+													<select class = "form-control" id = "pickup_id">
+														<option value = "0"></option>
+														@forelse($locations as $location)
+														<option value = "{{ $location->id }}">{{ $location->name }}</option>
+														@empty
+														@endforelse
+													</select>
+													<span class="input-group-btn">
+														<button class="btn btn-primary pick_add_new_location" type="button">+</button>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-12">
+											
+										</div>
+									</div>
+									<div class = "col-md-8">
+										{{ csrf_field() }}
+										<div class = "col-md-12">
+											<div class = "col-md-12">
+												<div class = "col-md-12">
+													<div class="form-group required">
+														<label class = "control-label">Address: </label>
+														<textarea class = "form-control" disabled  id = "_address"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-12">
+											<div class = "col-md-4">
+												<div class =  "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">City</label>
+														<input type = "text" class = "form-control" disabled id = "_city" />
+													</div>
+												</div>
+											</div>
+											<div class = "col-md-4">
+												<div class = "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">Province</label>
+														<input type = "text" class = "form-control"  disabled id = "_province" />
+													</div>
+												</div>
+											</div>
+											<div class = "col-md-4">
+												<div class = "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">ZIP</label>
+														<input type = "text" class = "form-control" disabled id = "_zip" />
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+							</div>	
 
+
+							<div class = "panel-heading">
+								Destination Location
 							</div>
-							<div class="modal-footer">
-								<button id = "btnSave" type = "submit" class="btn btn-success finalize-sar">Save</button>
-								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
+							<div class="panel-body">
+								<div class = "row">
+									<div class = "col-md-4">
+										<div class = "col-md-12">
+											{{ csrf_field() }}	
+											<div class="form-group required">
+												<label class = "control-label ">Location Name: </label>
+												<div class="input-group">
+													<select class = "form-control" id = "deliver_id">
+														<option value = "0"></option>
+														@forelse($locations as $location)
+														<option value = "{{ $location->id }}">{{ $location->name }}</option>
+														@empty
+														@endforelse
+													</select>
+													<span class="input-group-btn">
+														<button class="btn btn-primary del_add_new_location" type="button">+</button>
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-12">
+
+										</div>
+									</div>
+									<div class = "col-md-8">
+										{{ csrf_field() }}
+										<div class = "col-md-12">
+											<div class = "col-md-12">
+												<div class = "col-md-12">
+													<div class="form-group required">
+														<label class = "control-label">Address: </label>
+														<textarea class = "form-control" disabled  id = "_daddress"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-12">
+											<div class = "col-md-4">
+												<div class =  "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">City</label>
+														<input type = "text" class = "form-control" disabled id = "_dcity" />
+													</div>
+												</div>
+											</div>
+											<div class = "col-md-4">
+												<div class = "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">Province</label>
+														<input type = "text" class = "form-control"  disabled id = "_dprovince" />
+													</div>
+												</div>
+											</div>
+											<div class = "col-md-4">
+												<div class = "col-md-12">
+													<div class = "form-group">
+														<label class = "control-label">ZIP</label>
+														<input type = "text" class = "form-control" disabled id = "_dzip" />
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
+							<div class="form-group required">
+								<br/>
+								<label class = "control-label col-md-3">Standard Rate: </label>
+								<div class = "form-group input-group " >
+									<span class = "input-group-addon">Php</span>
+									<input type = "text"  class = "form-control money" name = "amount" id = "amount"  data-rule-required="true" value="0.00" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button id = "btnSave" type = "submit" class="btn btn-success finalize-sar">Save</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
 						</div>
 					</div>
 				</div>
-			</form>
-			<br />
-		</div>
+			</div>
+		</form>
+		<br />
 	</div>
+</div>
 </section>
 <section class="content">
 	<form role = "form" method = "POST">
@@ -157,6 +235,70 @@
 			</div>
 		</div>
 	</form>
+</section>
+
+
+<section class="content">
+	<div class="modal fade" id="chModal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">New Location</h4>
+				</div>
+				<div class="modal-body">
+					<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+						{{ csrf_field() }}	
+						<div class="form-group required">
+							<label class = "control-label col-md-3">Name: </label>
+							<div class = "col-md-9">
+								<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+							</div>
+						</div>
+						<div class="form-group required">
+							<label class = "control-label col-md-3">Address: </label>
+							<div class = "col-md-9">
+								<textarea class = "form-control" id = "address" name = "address"></textarea>
+							</div>
+						</div>
+						<div class="form-group required">
+							<label class = "control-label col-md-3">Province: </label>
+							<div class = "col-md-9">
+								<select name = "loc_province" id="loc_province" class = "form-control">
+									<option value = '0'></option>
+									@forelse($provinces as $province)
+									<option value="{{ $province->id }}" >
+										{{ $province->name }}
+									</option>
+									@empty
+
+									@endforelse
+								</select>     
+							</div>
+						</div>
+						<div class="form-group required">
+							<label class = "control-label col-md-3">City: </label>
+							<div class = "col-md-9">
+								<select name = "loc_city" id="loc_city" class = "form-control">
+									<option value="0"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group required">
+							<label class = "control-label col-md-3">ZIP: </label>
+							<div class = "col-md-9">
+								<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type = "submit" class="btn btn-success btnSave" >Save</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 </div>
 
@@ -193,7 +335,7 @@
 		var sar_row = "<tr>" + $('#sar-row').html() + "</tr>";
 		$('#collapse1').addClass('in');
 
-		
+
 		//$(location).attr("disabled", true);
 
 		var sartable = $('#sar_table').DataTable({
@@ -206,7 +348,6 @@
 			{ data: 'dateEffective' },
 			{ data: 'areaFrom'},
 			{ data: 'areaTo'},
-			{ data: 'location'},
 			{ data: 'amount',
 			"render": function(data, type, row){
 				return data.split(",").join("<br/>");}
@@ -228,9 +369,8 @@
 				{
 					required: true,
 				},
-				areaTo
-
 				
+
 			},
 			onkeyup: false, 
 			submitHandler: function (form) {
@@ -238,7 +378,233 @@
 			}
 		});
 
+		function fill_cities(num)
+		{
+			console.log(num);
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#loc_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#loc_city').find('option').not(':first').remove();
+						$('#loc_city').html(new_rows);
+						
+						$('#loc_city').val(num);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		}
 
+		$(document).on('change', '#loc_province', function(e){
+			fill_cities(0);
+		})
+
+		$(document).on('click', '.pick_add_new_location', function(e){
+			e.preventDefault();
+			$('.modal-title').text("New Location");
+			$('#chModal').modal('show');
+			selected_location = 0;
+		})
+
+		$(document).on('click', '.del_add_new_location', function(e){
+			e.preventDefault();
+			$('.modal-title').text("New Location");
+			$('#chModal').modal('show');
+			selected_location = 1;
+		})
+
+
+
+
+		$(document).on('change', '#pickup_id', function(e){
+			pickup_id = $(this).val();
+			if(pickup_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + pickup_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_address').val(data[0].address);
+							$('#_city').val(data[0].city_name);
+							$('#_province').val(data[0].province_name);
+							$('#_zip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_address').val("");
+				$('#_city').val("");
+				$('#_province').val("");
+				$('#_zip').val("");
+			}
+			
+		})
+
+		$(document).on('change', '#deliver_id', function(e){
+			deliver_id = $(this).val();
+			if(deliver_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_daddress').val(data[0].address);
+							$('#_dcity').val(data[0].city_name);
+							$('#_dprovince').val(data[0].province_name);
+							$('#_dzip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_daddress').val("");
+				$('#_dcity').val("");
+				$('#_dprovince').val("");
+				$('#_dzip').val("");
+			}
+			
+		})
+
+		$(document).on('click', '.btnSave', function(e){
+			e.preventDefault();
+			console.log('aw');
+			$.ajax({
+				type: 'POST',
+				url: "{{ route('location.index')}}",
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'name' : $('#name').val(),
+					'address' : $('#address').val(),
+					'cities_id' : $('#loc_city').val(),
+					'zipCode' : $('#zip').val(),
+				},
+				success: function(data){
+					if(selected_location == 0){	
+						
+						$('#_address').val($('#address').val());
+						$('#_city').val($('#loc_city option:selected').text());
+						$('#_province').val($('#loc_province option:selected').text().trim());
+						$('#_zip').val($('#zip').val());
+						$('#chModal').modal('hide');
+					}
+					else{
+						$('#_daddress').val($('#address').val());
+						$('#_dcity').val($('#loc_city option:selected').text());
+						$('#_dprovince').val($('#loc_province option:selected').text().trim());
+						$('#_dzip').val($('#zip').val());
+						$('#chModal').modal('hide');
+
+					}
+					
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+
+		$(document).on('click', '.finalize-sar', function(e){
+			e.preventDefault();
+
+			//if(finalvalidatesarRows() === true){
+				
+				var title = $('.modal-title').text();
+				if(title === "New Standard Area Rate")
+				{
+					console.log("new new new");
+					
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/sar_fee',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'areaFrom' : $('#pickup_id').val(),
+							'areaTo' : $('#deliver_id').val(),
+							'amount' : $('#amount').inputmask('unmaskedvalue'),
+						},
+
+						success: function (data){
+
+							
+
+							sartable.ajax.reload();
+							$('#sarModal').modal('hide');
+							$('.modal-title').text('New Standard Area Rate');
+							$('#amount').val("0.00");
+
+
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record addded successfully")
+							
+						}
+					})
+				}
+			//}
+		});
+
+
+
+
+
+
+	});
+
+
+		/*
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Standard Area Rate');
@@ -683,6 +1049,9 @@ function validatesarRows()
 			return false;
 		}
 	}
+
+	*/
+
 	function resetErrors() {
 		$('form input, form select').removeClass('inputTxtError');
 		$('label.error').remove();
