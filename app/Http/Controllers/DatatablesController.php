@@ -619,6 +619,7 @@ class DatatablesController extends Controller
 		$quotations = DB::table('quotation_headers')
 		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->where('quotation_headers.deleted_at', '=', null)
 		->get();
 
 		return Datatables::of($quotations)

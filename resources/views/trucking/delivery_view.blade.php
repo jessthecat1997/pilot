@@ -167,22 +167,22 @@
 							<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
 							<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: left;"></span>
 						</div>
-					</div>
-					<table class = "table table-responsive" id = "container_detail">
-						<thead>
-							<tr>
-								<td>
-									Description Of Good
-								</td>
-								<td>
-									Gross Weight
-								</td>
-								<td>
-									Supplier/s
-								</td>
-							</tr>
-						</thead>
-						<tbody>
+
+						<table class = "table table-responsive" id = "container_detail">
+							<thead>
+								<tr>
+									<td>
+										Description Of Goods
+									</td>
+									<td>
+										Gross Weight(kg)
+									</td>
+									<td>
+										Supplier/s
+									</td>
+								</tr>
+							</thead>
+							<tbody>
 
 							</tbody>
 						</table>
@@ -290,6 +290,9 @@
 									<td style="width: 20%;">
 										Container Return Date
 									</td>
+									<td style="width: 20%;">
+										Date Returned
+									</td>
 									<td style="width: 10%;">
 										Action
 									</td>
@@ -337,6 +340,15 @@
 									<td>
 										<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
 									</td>
+									@if($delivery_container->dateReturned != null)
+									<td>
+										<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}</span>
+									</td>
+									@else
+									<td>
+										<span class = "containerReturnDate">Unreturned</span>
+									</td>
+									@endif
 
 									<td>
 										<button class = "btn btn-sm btn-primary view-container-detail" value = "{{ $delivery_container->id }}">View</button>
@@ -370,7 +382,7 @@
 							<thead>	
 								<tr>
 									<td>
-										Description of Good
+										Description of Goods
 									</td>
 									<td>
 										Gross Weight(kg)
