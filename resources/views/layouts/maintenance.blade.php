@@ -42,7 +42,7 @@
                     <a class="navbar-brand" id="menu-toggle" href="#menu-toggle">
                         <img src="/images/burger.png">
                     </a>
-                    <a class="navbar-brand" style="color: #fff;"><img src="/images/pilotlogo.png" id="logo"></a>
+                    <!-- <a class="navbar-brand" style="color: #fff;"><img src="/images/pilotlogo.png" id="logo"></a> -->
                     <a class="navbar-brand" style="color: #fff;" id="vert">Hauling Services Management System</a>
                 </div>
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -119,9 +119,6 @@
                     </ul>
                 </div>
                 <li>
-                    <a href="{{ route('shipment.index') }}"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
-                </li>
-                <li>
                     <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
                 </li>
                 <div id="collapse2" class="pane;-collapse collapse">
@@ -170,6 +167,19 @@
                 <li>
                     <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
                 </li>
+                <li>
+                    <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
+                </li>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <ul class="list-group" style="list-style-type: circle;">
+                        <li>
+                            <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                        </li>
+                    </ul>
+                </div>
                 <li>
                     <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
                 </li>
@@ -233,10 +243,13 @@
             rightAlign: true, 
             removeMaskOnSubmit:true, 
         });
+
+
         function formatNumber(n) { 
             var currency = "Php "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-        } 
+        }
+         
         function formatNumber_s(n) { 
             var currency = "$ "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 

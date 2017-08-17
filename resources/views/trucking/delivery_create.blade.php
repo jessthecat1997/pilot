@@ -48,7 +48,7 @@
 																		</div>
 																		<div class = "form-horizontal">
 																			<div class="form-group required">
-																				<label class="control-label col-sm-4" for="contactNumber">Container Volume:</label>
+																				<label class="control-label col-sm-4" for="contactNumber">Container Size:</label>
 																				<div class="col-sm-8">
 																					<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
 																						<option></option>

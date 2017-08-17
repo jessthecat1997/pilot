@@ -288,7 +288,6 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
-					alert("Saved");
 				}
 			})
 		}
@@ -316,7 +315,7 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
-					alert("Saved");
+					
 				}
 			})
 		}

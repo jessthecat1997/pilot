@@ -158,6 +158,9 @@ Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data'
 Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
+//Orders
+Route::resource('/orders', 'OrdersController');
+
 //Payments
 Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
@@ -172,7 +175,8 @@ Route::get('admin/invoice/{so_head_id}', 'BillingDetailsController@billing_invoi
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
-Route::get('admin/so_head', 'DatatablesController@so_head_datatable')->name('so_head.data');
+Route::get('admin/brso_head', 'DatatablesController@brso_head_datatable')->name('brso_head.data');
+Route::get('admin/trso_head', 'DatatablesController@trso_head_datatable')->name('trso_head.data');
 Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
 Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
 Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');

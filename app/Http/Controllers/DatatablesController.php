@@ -226,12 +226,34 @@ class DatatablesController extends Controller
 		})
 		->make(true);
 	}
-	public function so_head_datatable(){
+	public function brso_head_datatable(){
 		$so_heads = DB::table('consignee_service_order_headers')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->where([
+			['service_order_types.name', '=', 'brokerage'],
+			['paymentStatus', '=', 'U']
+			])
+		->get();
+		return Datatables::of($so_heads)
+		->addColumn('action', function ($so_head) {
+			return
+			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but selectCon">Select</a>';
+		})
+		->make(true);
+	}
+	public function trso_head_datatable(){
+		$so_heads = DB::table('consignee_service_order_headers')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->where([
+			['service_order_types.name', '=', 'trucking'],
+			['paymentStatus', '=', 'U']
+			])
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -707,14 +729,15 @@ class DatatablesController extends Controller
 
 
 	public function sar_datatable(){
-		$sars = DB::select("SELECT h.id as 'id' , h.dateEffective as'dateEffective' , d.areaFrom as 'areaFrom' , d.areaTo as 'areaTo' , 
-			d.amount as 'amount'  FROM standard_area_rate_headers h INNER JOIN standard_area_rate_details d ON h.id = d.standard_area_rate_headers_id ");
+		$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
 
 		return Datatables::of($sars)
 		->addColumn('action', function ($sar){
 			return
 			'<button value = "'. $sar->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" value = "'. $sar->pickup_id .'" class = "pickup_id"/>
+			<input type = "hidden" value = "'. $sar->deliver_id .'"class = "deliver_id"/>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
