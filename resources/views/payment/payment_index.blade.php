@@ -143,6 +143,7 @@
 					},
 					success: function (data){
 						location.reload();
+						window.location("{{ route('view.index') }}");
 					}
 				})
 			}

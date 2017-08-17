@@ -107,6 +107,9 @@
                             <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
+                            <a href="{{ route('orders.index') }}" class = "orders"><i class="fa fa-id-card-o"></i>&nbsp;&nbsp;Orders</a>
+                        </li>
+                        <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
@@ -210,16 +213,23 @@
     <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
     <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
+    <script src="/js/app.js"></script>
+    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 
     <script>
-        
+
         $(document).on('show.bs.modal', '.modal', function () {
             var zIndex = 1040 + (10 * $('.modal:visible').length);
             $(this).css('z-index', zIndex);
             setTimeout(function() {
                 $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
             }, 0);
+        });
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
         });
     </script>
     @stack('scripts')

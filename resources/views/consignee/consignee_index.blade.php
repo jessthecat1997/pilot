@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
+<h2>&nbsp;Consignee</h2>
+<hr>
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Consignee</h2>
-		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn but btn-md new-consignee" style = "width: 100%;">New Consignee</button>
 		</div>

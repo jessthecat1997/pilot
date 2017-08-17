@@ -226,12 +226,34 @@ class DatatablesController extends Controller
 		})
 		->make(true);
 	}
-	public function so_head_datatable(){
+	public function brso_head_datatable(){
 		$so_heads = DB::table('consignee_service_order_headers')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->where([
+			['service_order_types.name', '=', 'brokerage'],
+			['paymentStatus', '=', 'U']
+			])
+		->get();
+		return Datatables::of($so_heads)
+		->addColumn('action', function ($so_head) {
+			return
+			'<a href = "/billing/' . $so_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but selectCon">Select</a>';
+		})
+		->make(true);
+	}
+	public function trso_head_datatable(){
+		$so_heads = DB::table('consignee_service_order_headers')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->where([
+			['service_order_types.name', '=', 'trucking'],
+			['paymentStatus', '=', 'U']
+			])
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {

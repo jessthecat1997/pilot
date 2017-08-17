@@ -1,42 +1,42 @@
 @extends('layouts.app')
 @section('content')
+<h2>&nbsp;Contracts</h2>
+<div class="pull-right">
+	<a href="{{route('contracts.create')}}" role = "button" class = "btn but pull-right">Create New Contract</a>
+</div>
+<br/>
+<hr>
 <div class = "container-fluid">
 	<div  class = "row">
-		<div class = "col-md-10 col-md-offset-1">
-			<div class = "panel default-panel">
-				<div class  = "panel-heading">
-					<h3>Contracts<a href="{{route('contracts.create')}}" role = "button" class = "btn btn-success pull-right">Create New Contract</a></h3>
-					<hr />
-				</div>
-				<div class = "panel-body">
-					<table class = "table table-responsive" id = "contracts_table">
-						<thead>
-							<tr>
-								<td>
-									Contract No.
-								</td>
-								<td>
-									Consignee
-								</td>
-								<td>
-									Date Effective
-								</td>
-								<td>
-									Termination Date
-								</td>
-								<td>
-									Status
-								</td>
-								<td>
-									Created At
-								</td>
-								<td>
-									Action
-								</td>
-							</tr>
-						</thead>
-					</table>
-				</div>
+		<div class = "panel default-panel">
+			<div class = "panel-body">
+				<table class = "table table-responsive" id = "contracts_table">
+					<thead>
+						<tr>
+							<td>
+								Contract No.
+							</td>
+							<td>
+								Consignee
+							</td>
+							<td>
+								Date Effective
+							</td>
+							<td>
+								Termination Date
+							</td>
+							<td>
+								Status
+							</td>
+							<td>
+								Created At
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -44,9 +44,9 @@
 @endsection
 @push('styles')
 <style>
-.contracts
+	.contracts
 	{
-		border-left: 10px solid #2ad4a5;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -54,7 +54,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-$('#collapse1').addClass('in');
+	$('#collapse1').addClass('in');
 	$(document).ready(function(){
 		var chtable = $('#contracts_table').DataTable({
 			processing: false,

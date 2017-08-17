@@ -5,35 +5,68 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class = "panel-default panel" id="so_collapse">
-				<div>
-					<div class="panel-heading" id="heading">Select Service Order</div>
-					<div class="panel-body">
-						<table class = "table-responsive table" id = "so_head_table">
-							<thead>
-								<tr>
-									<td>
-										ID
-									</td>
-									<td>
-										Consignee
-									</td>
-									<td>
-										Service Order Type
-									</td>
-									<td>
-										Status
-									</td>
-									<td>
-										Date Created
-									</td>
-									<td>
-										Actions
-									</td>
-								</tr>
-							</thead>
-						</table>
-					</div>
+			<div>
+				<div class="panel-heading" id="heading">Select Brokerage Service Order</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id = "brso_head_table">
+						<thead>
+							<tr>
+								<td>
+									ID
+								</td>
+								<td>
+									Consignee
+								</td>
+								<td>
+									Service Order Type
+								</td>
+								<td>
+									Status
+								</td>
+								<td>
+									Date Created
+								</td>
+								<td>
+									Actions
+								</td>
+							</tr>
+						</thead>
+					</table>
 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class = "panel-default panel" id="so_collapse">
+			<div>
+				<div class="panel-heading" id="heading">Select Trucking Service Order</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id = "trso_head_table">
+						<thead>
+							<tr>
+								<td>
+									ID
+								</td>
+								<td>
+									Consignee
+								</td>
+								<td>
+									Service Order Type
+								</td>
+								<td>
+									Status
+								</td>
+								<td>
+									Date Created
+								</td>
+								<td>
+									Actions
+								</td>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -42,7 +75,7 @@
 <style>
 	.class-billing
 	{
-	border-left: 10px solid #8ddfcc;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
@@ -56,10 +89,23 @@
 
 
 	$(document).ready(function(){
-		var vtable = $('#so_head_table').DataTable({
+		var vtable = $('#brso_head_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: '{{ route("so_head.data") }}',
+			ajax: '{{ route("brso_head.data") }}',
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'name' },
+			{ data: 'paymentStatus' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false, processing:false }
+			]
+		})
+		var trtable = $('#trso_head_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: '{{ route("trso_head.data") }}',
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },

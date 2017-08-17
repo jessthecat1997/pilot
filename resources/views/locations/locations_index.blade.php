@@ -5,7 +5,7 @@
 		<h2>&nbsp; Locations</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new"  style = "width: 100%;">New Location</button>
+			<button  class="btn but btn-md new"  style = "width: 100%;">New Location</button>
 		</div>
 	</div>
 	<br />
@@ -19,7 +19,7 @@
 								Name
 							</td>
 							<td style="width: 30%;">
-								Address
+								Block No./Lot No./Street
 							</td>
 							<td style="width: 15%;">
 								City
@@ -58,7 +58,7 @@
 								</div>
 							</div>
 							<div class="form-group required">
-								<label class = "control-label col-md-3">Address: </label>
+								<label class = "control-label col-md-3">Block No./Lot No./Street: </label>
 								<div class = "col-md-9">
 									<textarea class = "form-control" id = "address" name = "address"></textarea>
 								</div>
@@ -131,7 +131,6 @@
 	}
 </style>
 @endpush
-
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
