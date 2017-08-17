@@ -144,7 +144,7 @@
 							{{ $rev->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $rev->amount }}
+							Php {{ $rev->Total }}
 						</td>
 					</tr>
 					@empty
@@ -155,7 +155,7 @@
 							{{ $exp->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $exp->amount }}
+							Php {{ $exp->Total }}
 						</td>
 					</tr>
 					@empty
