@@ -10,82 +10,100 @@
 		</div>
 	</div>
 	<br />
-	<div class = "container-fluid">
-		<div class = "row">
-			<div class = "panel-default panel">
+	<div class = "row">
+		<div class  = "col-md-10 col-md-offset-1">
+			<div class = "panel default-panel">
 				<div class = "panel-body">
-					<table class = "table-responsive table" id = "ctemp_table">
-						<thead>
-							<tr>
-								<td style="width: 20%;">
-									Section Name
-								</td>
-								<td style="width: 40%;">
-									Section Description
-								</td>
-								<td style="width: 25%;">
-									Actions
-								</td>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div> 
-		</div>
+					<br />
+					<hr />
+					<h3>Agreements  <button  type = "submit" style="" class = "btn btn-primary btn-sm update_term_condition pull-right">Update Agreements</button></h3>
+					<br />
+					<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
 
-		<section class="content">
-			<form role="form" method = "POST"  id = "commentForm">
-				{{ csrf_field() }}
-				<div class="modal fade" id="ctempModal" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">New Section</h4>
-							</div>
-							<div class="modal-body">
-								<div class="form-group required">
-									<label class = "control-label">Section Name: </label>
-									<input type = "text" class = "form-control" name = "name" id = "name" required />
-								</div>			
-								<div class="form-group">
-									<label class = "control-label">Section Description: </label>
-									<textarea  rows= "10" class = "form-control" name = "description" id = "description"></textarea>
+						@if($contract[0]->description == null)
+						<h5 style="text-align: center;">No specified agreement details</h5>
+						@else
+						<p>
+							<pre class = "actualspecificDetails">{!! $contract[0]->description !!}</pre>
+							<input type = "hidden" class = "specificDetails" value="{{ $contract[0]->description }}" />
+						</p>
+
+						@endif
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<section class="content">
+		<form role="form" method = "POST" id = "commentForm">
+			{{ csrf_field() }}
+			<div class="modal fade" id="tcModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Update Term &amp; Condition</h4>
+						</div>
+						<div class="modal-body">			
+
+							<table class="table table-striped" id = "term_table" style="width: 100%;">
+								<thead>
+									<tr>
+										<td style="width: 95%;">
+											<strong>Description</strong>
+										</td>
+										<td style="width: 5%;">
+											<strong>Action</strong>
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class = "col-md-4">
+									<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new_term_rate pull-left">New Term and Condition</button>
+								</div>
+								<div class = "col-md-8">
+
 								</div>
 							</div>
-							<div class="modal-footer">
-								<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-							</div>
+							<br />
+						</div>
+						<div class="modal-footer">
+							<input id = "btnSave" type = "submit" class="btn btn-success update_contract_term_save" value = "Save" />
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
-			</form>
-		</section>
-		<section class="content">
-			<form role = "form" method = "POST">
-				{{ csrf_field() }}
-				{{ method_field('DELETE') }}
-				<div class="modal fade" id="confirm-delete" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								Deactivate record
-							</div>
-							<div class="modal-body">
-								Confirm Deactivating
-							</div>
-							<div class="modal-footer">
+			</div>
+		</form>
+	</section>
+	<section class="content">
+		<form role = "form" method = "POST">
+			{{ csrf_field() }}
+			{{ method_field('DELETE') }}
+			<div class="modal fade" id="confirm-delete" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Deactivate record
+						</div>
+						<div class="modal-body">
+							Confirm Deactivating
+						</div>
+						<div class="modal-footer">
 
-								<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-							</div>
+							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
-			</form>
-		</section>
-	</div>
+			</div>
+		</form>
+	</section>
+</div>
 </div>
 @endsection
 @push('styles')
@@ -133,32 +151,33 @@
 				return false;
 			}
 		});
-		$(document).on('click', '.new', function(e){
-			resetErrors();
-			$('.modal-title').text('New Section');
-			$('#description').val("");
-			$('#name').val("");
-			$('#ctempModal').modal('show');
+		$(document).on('click', '.new_term_rate', function(e){
+			e.preventDefault();
+			if(validate() === true){
+				$('#term_table > tbody').append(term_row);
+			}
+		})
 
-		});
-		$(document).on('click', '.edit',function(e){
-			resetErrors();
-			var ch_id = $(this).val();
-			data = ctemptable.row($(this).parents()).data();
-			$('#description').val(data.description);
-			$('#name').val(data.name);
+		$(document).on('click', '.update_term_condition', function(e){
+			e.preventDefault();
+			$('#term_table > tbody').html("");
+			var unsplit = $('.specificDetails').val();
+			var details = unsplit.split('<br />');
+			details.pop();
+			var detail_html = "";
+			for(var i = 0; i < details.length; i++)
+			{
+				detail_html += "<tr><td><textarea style= 'border-color: green;' name = 'specificDetails' class = 'form-control'>"+ details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
+			}
+			$('#term_table > tbody').append(detail_html);
+			console.log(details);
+			$('#tcModal').modal('show');
+		})
 
-			temp_name = data.name;
-			temp_desc = data.description;
-
-			$('.modal-title').text('Update Section');
-			$('#ctempModal').modal('show');
-		});
-		$(document).on('click', '.deactivate', function(e){
-			var ch_id = $(this).val();
-			data = ctemptable.row($(this).parents()).data();
-			$('#confirm-delete').modal('show');
-		});
+		$(document).on('click', '.remove_term_row', function(e){
+			e.preventDefault();
+			$(this).closest('tr').remove();
+		})
 
 
 

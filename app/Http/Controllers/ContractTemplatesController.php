@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ContractTemplate;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreContractTemplate;
 class ContractTemplatesController extends Controller
 {
 	public function index()
 	{
-		return view('admin/maintenance.contract_templates_index');
+		$contract = DB::table('contract_templates')
+		->select('description', 'id')
+		->where('deleted_at', '=', null)
+		->get();
+		return view('admin/maintenance.contract_templates_index', compact(['contract']));
 	}
-	
 
 
 	public function store(StoreContractTemplate $request)
