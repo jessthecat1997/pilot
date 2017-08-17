@@ -294,6 +294,13 @@ class TruckingsController extends Controller
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
         ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
+        ->join('location_cities AS F', 'E.cities_id', '=','F.id')
+        ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
+        ->join('locations AS H', 'delivery_receipt_headers.locations_id_del', '=','H.id')
+        ->join('location_cities AS I', 'H.cities_id', '=', 'I.id')
+        ->join('location_provinces AS J', 'I.provinces_id', '=', 'J.id')
+        ->join('vehicle_types AS K', 'B.vehicle_types_id', '=', 'K.id')
         ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
         ->select(
             'delivery_receipt_headers.id',
@@ -301,11 +308,21 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.status',
             DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
             DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
-            'delivery_receipt_headers.withContainer'
+            'delivery_receipt_headers.withContainer',
+            'E.address as pick_up_address',
+            'F.name as pick_up_city',
+            'G.name as pick_up_province',
+            'H.address as del_address',
+            'I.name as del_city',
+            'J.name as del_province',
+            'delivery_receipt_headers.deliveryDateTime',
+            'delivery_receipt_headers.pickupDateTime',
+            'delivery_receipt_headers.remarks',
+            DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
             )
 
         ->get();
-
+        
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')
             ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')

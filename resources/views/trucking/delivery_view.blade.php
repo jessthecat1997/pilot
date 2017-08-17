@@ -12,37 +12,74 @@
 				@endif
 			</div>
 			<div class = "panel-body">
-				<h4>Basic Information:</h4>
-				<hr />
-				<div class = "col-md-10">
-					<form class="form-horizontal" role="form">
-						{{ csrf_field() }}
-						<div class="form-group">
-							<label class="control-label col-md-5 pull-left" for="deliveryID">Delivery #:</label>
-							<span class="control-label col-md-7 pull-right" id = "deliveryID">{{ $delivery[0]->id }}</span>
-						</div>
-						<div class="form-group">         
-							<label class="control-label col-md-5 pull-left" for="deliveryDriver">Driver:</label>
-							<span class="control-label col-md-7 pull-right" id ="deliveryDriver" style = "text-align: right;">{{ $delivery[0]->driverName }}</span>
-						</div>
-						<div class="form-group">         
-							<label class="control-label col-md-5 pull-left" for="deliveryHelper">Helper:</label>
-							<span class="control-label col-md-7 pull-right" id ="deliveryHelper" style = "text-align: right;">{{ $delivery[0]->helperName }}</span>
-						</div>
+				<div class = "col-md-6">
+					<h4>Basic Information:</h4>
+					<div class = "col-md-10 col-md-offset-1">
+						<form class="form-horizontal" role="form">
+							{{ csrf_field() }}
+							<div class = "col-md-12">
+								<div class="form-group">        
+									<label class="control-label col-md-5" for="status">Delivery ID: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->id }}</span>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-5" for="status">Driver: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->driverName }}</span>
+									<label class="control-label col-md-5" for="status">Helper: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->helperName }}</span>
+									<label class="control-label col-md-5" for="status">Vehicle: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->plateNumber }}</span>
+								</div>
+								<div class="form-group">        
+									<label class="control-label col-md-5" for="status">Pick-up Date: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('F j, Y h:i:s A') }}</span>
+									<label class="control-label col-md-5" for="status">Delivery Date: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('F j, Y h:i:s A') }}</span>
+									<label class="control-label col-md-5" for="status">Status: </label>
+									<span class="control-label col-sm-7" style="text-align: left;" id="status">
+										@php
+										switch($delivery[0]->status){
+										case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+										case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+										case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
+										default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+										@endphp
+									</span>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 
-						<div class="form-group">        
-							<label class="control-label col-md-5 pull-left" for="status">Status: </label>
-							<span class="control-label col-sm-7 pull-right" id="status">
-								@php
-								switch($delivery[0]->status){
-								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-								case 'C': echo "<span class = 'label label-danger'>Cancelled</span>"; break;
-								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-								@endphp
-							</span>
-						</div>
-					</form>
+
+				<div class = "col-md-6">
+					<h4>Delivery Information:</h4>
+					<div class = "col-md-12">
+						<label class="control-label">Pick-up Location</label>
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-md-5">Block/Lot/St : </label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->pick_up_address }}</span>
+								<label class="control-label col-md-5">City :</label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->pick_up_city }}</span>
+								<label class="control-label col-md-5">Province: </label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->pick_up_province }}</span>
+							</div>
+						</form>
+					</div>
+					<div class = "col-md-12">
+						<label class="control-label">Delivery Location</label>
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-md-5">Block/Lot/St : </label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->del_address }}</span>
+								<label class="control-label col-md-5">City :</label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->del_city }}</span>
+								<label class="control-label col-md-5">Province: </label>
+								<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->del_province }}</span>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -417,7 +454,7 @@
 				$('#remarks').val($(this).closest('tr').find(".remarks").val());
 				if($(this).closest('tr').find(".containerReturnStatus").text().trim() === "Pending"){
 					$('#no').attr('checked', true);
-					
+
 				}
 				else{
 					console.log(container_status);
@@ -433,7 +470,7 @@
 				$('#remarks').val($(this).closest('tr').find(".remarks").val());
 				$('#view_return_date').text($(this).closest('tr').find(".dateReturned").val());
 			}
-			
+
 		})
 		$(document).on('click', '.save-delivery-information', function(e){
 
@@ -445,7 +482,7 @@
 					'status' : $('#deliveryStatus').val(),
 					'delivery_head_id' :  {{ $delivery[0]->id }},
 
-					
+
 				},
 				success: function(data){
 					location.reload();
@@ -520,7 +557,7 @@
 			$('#deliveryModal').modal('show');
 		})
 
-		
+
 
 		$(document).on('click', '.generate_delivery_receipt', function(e){
 			window.open("{{ route('trucking.index') }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/show_pdf");

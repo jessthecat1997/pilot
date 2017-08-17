@@ -4,7 +4,7 @@
 	<div class = "row">
 			<div class = "panel default-panel">
 				<div class = "panel-heading">
-					<h3><img src="/images/bar.png"> Brokerage | Duties And Taxes</h3>
+					<h2>&nbsp;Brokerage | Duties And Taxes</h2>
 					<hr />
 
 
@@ -69,7 +69,7 @@
 
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn btn-primary" id = "btnSave">
+	      <button type="button" class="btn but" id = "btnSave">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
@@ -510,6 +510,7 @@
 					StoredInsurance : jsonInsurance,
 				},
 				success: function (data) {
+					alert('Saved');
 				}
 			})
 

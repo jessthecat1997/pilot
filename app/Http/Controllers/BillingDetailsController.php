@@ -99,8 +99,6 @@ class BillingDetailsController extends Controller
 		$billing_header->due_date = $request->due_date;
 		$billing_header->save();
 
-		$billing_header =  BillingInvoiceHeader::all()->last();
-
 		for($i = 0; $i<count($request->bill_id); $i++)
 		{
 			$bills_id = Billing::find($request->bill_id[$i]);
