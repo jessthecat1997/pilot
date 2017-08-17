@@ -233,10 +233,13 @@
             rightAlign: true, 
             removeMaskOnSubmit:true, 
         });
+
+
         function formatNumber(n) { 
             var currency = "Php "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-        } 
+        }
+         
         function formatNumber_s(n) { 
             var currency = "$ "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 

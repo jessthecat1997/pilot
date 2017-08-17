@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStandardAreaRateHeaders extends Migration
+class CreateStandardAreaRates extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,17 @@ class CreateStandardAreaRateHeaders extends Migration
      */
     public function up()
     {
-        Schema::create('standard_area_rate_headers', function (Blueprint $table) {
+        Schema::create('standard_area_rates', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('dateEffective');
+            $table->integer('areaTo')->unsigned();
+            $table->integer('areaFrom')->unsigned();
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('areaTo')->references('id')->on('locations');
+            $table->foreign('areaFrom')->references('id')->on('locations');
+
         });
     }
 
