@@ -33,10 +33,7 @@ class PaymentsController extends Controller
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where([
-			['billing_revenues.bi_head_id', '=', $id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
-			])
+		->where('billing_revenues.bi_head_id', '=', $id)
 		->get();
 
 
@@ -45,10 +42,7 @@ class PaymentsController extends Controller
 		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where([
-			['billing_expenses.bi_head_id', '=', $id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
-			])
+		->where('billing_expenses.bi_head_id', '=', $id)
 		->get();
 
 
@@ -58,25 +52,20 @@ class PaymentsController extends Controller
 	}
 	public function payments_table(Request $request, $id)
 	{
+
 		$rev = DB::table('billing_revenues')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('name','amount')
-		->where([
-			['billing_revenues.bi_head_id', '=', $id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
-			]);
+		->where('billing_revenues.bi_head_id', '=', $id);
 
 		$exp = DB::table('billing_expenses')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
 		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('name','amount')
-		->where([
-			['billing_expenses.bi_head_id', '=', $id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
-			])
+		->where('billing_expenses.bi_head_id', '=', $id)
 		->union($rev)
 		->get();
 		return Datatables::of($exp)

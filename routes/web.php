@@ -180,6 +180,8 @@ Route::get('admin/trso_head', 'DatatablesController@trso_head_datatable')->name(
 Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
 Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
 Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
+Route::resource('/billingrevenue', 'BillingRevenuesController');
+Route::resource('/billingexpense', 'BillingExpensesController');
 
 
 //Maintenance data

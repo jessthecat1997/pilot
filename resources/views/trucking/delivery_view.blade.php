@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('content')
-
-<div class = "row">
-	<div class="col-md-10 col-md-offset-1">
+<h2>&nbsp;Delivery</h2>
+<hr>
+<div class="container-fluid">
+	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
 				@if($delivery[0]->status == 'F' || $delivery[0]->status == 'C')
@@ -47,125 +48,123 @@
 			</div>
 		</div>
 	</div>
-</div>
-<div id="deliveryModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Delivery Information</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal" role="form">
-					{{ csrf_field() }}
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
-						<div class="col-sm-8"> 
-							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
-								<option value = "P">Pending</option>
-								<option value = "C">Cancelled</option>
-								<option value = "F">Finished</option>
-							</select>
-						</div>
-					</div>
-				</form>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
-				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="drModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Container Information</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal" role="form">
-					{{ csrf_field() }}
-					<div class="form-group">
-						<input type = "hidden" id = "containerID" name = "containerID" />
-						<label class="control-label col-md-5 pull-left" for="containerNumber">Container Number:</label>
-						<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: left;"></span></strong>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-md-5 pull-left" for="shippingLine">Shipping Line:</label>
-						<strong><span class="control-label col-md-7" id = "shippingLine" style = "text-align: left;"></span></strong>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-md-5 pull-left" for="portOfCfsLocation">Port of Cfs Location:</label>
-						<strong><span class="control-label col-md-7" id = "portOfCfsLocation" style = "text-align: left;"></span></strong>
-					</div>
-					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="containerReturnTo">Container Return To:</label>
-						<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: left;"></span>
-					</div>
-					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="containerReturnAddress">Container Return Address:</label>
-						<span class="control-label col-md-7 " id ="containerReturnAddress"  style = "text-align: left;"></span>
-					</div>
-					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="status">Container Returned:</label>
-						<div class = "col-md-7" style="text-align: left;">
-							<div class="radio">
-								<label class="radio-inline"><input type = "radio" name = "status" id = "yes" value = "Y" class = "col-md-3 pull-right checkradio"/>Yes</label>
-								<label class="radio-inline"><input checked type = "radio" name = "status" id = "no" value = "N" class = "col-md-3 pull-right checkradio" />No</label>
+	<div id="deliveryModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Delivery Information</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
+							<div class="col-sm-8"> 
+								<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
+									<option value = "P">Pending</option>
+									<option value = "C">Cancelled</option>
+									<option value = "F">Finished</option>
+								</select>
 							</div>
 						</div>
-					</div>
-					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
-						<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: left;"></span>
-					</div>
-					<div class="form-group">         
-						<label class="control-label col-md-5 pull-left" for="containerReturnDate">Date Returned: </label>
-						<div class = "col-md-7 dateReturned_view pull-left" style="text-align: left;">
-							<input type = "date" name = "actutaldateReturned" id = "actutaldateReturned"  class = "form-control" disabled  required />
-						</div>
-					</div>
-					<table class = "table table-responsive" id = "container_detail">
-						<thead>
-							<tr>
-								<td>
-									Description Of Good
-								</td>
-								<td>
-									Gross Weight
-								</td>
-								<td>
-									Supplier
-								</td>
-							</tr>
-						</thead>
-						<tbody>
+					</form>
+				</div>
 
-						</tbody>
-					</table>
-					<div class="form-group">         
-						<label class="control-label col-md-5" style="text-align: left;" for="remarks">Remarks: </label>
-						<br />
-						<div class = "col-md-12">
-							<textarea name = "remarks" id = "remarks"  class = "form-control" placeholder=""></textarea>
-						</div>
-					</div>
-				</form>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-container-information" >Save</button>
-				<button type="button" class="btn btn-danger close-container-information" >Close</button>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success save-delivery-information" >Save</button>
+					<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-@if($delivery[0]->withContainer == 0)
-<div class = "row">
-	<div class="col-md-10 col-md-offset-1">
+	<div id="drModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Container Information</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<input type = "hidden" id = "containerID" name = "containerID" />
+							<label class="control-label col-md-5 pull-left" for="containerNumber">Container Number:</label>
+							<strong><span class="control-label col-md-7" id = "containerNumber" style = "text-align: left;"></span></strong>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-5 pull-left" for="shippingLine">Shipping Line:</label>
+							<strong><span class="control-label col-md-7" id = "shippingLine" style = "text-align: left;"></span></strong>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-5 pull-left" for="portOfCfsLocation">Port of Cfs Location:</label>
+							<strong><span class="control-label col-md-7" id = "portOfCfsLocation" style = "text-align: left;"></span></strong>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="containerReturnTo">Container Return To:</label>
+							<span class="control-label col-md-7 " id ="containerReturnTo"  style = "text-align: left;"></span>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="containerReturnAddress">Container Return Address:</label>
+							<span class="control-label col-md-7 " id ="containerReturnAddress"  style = "text-align: left;"></span>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="status">Container Returned:</label>
+							<div class = "col-md-7" style="text-align: left;">
+								<div class="radio">
+									<label class="radio-inline"><input type = "radio" name = "status" id = "yes" value = "Y" class = "col-md-3 pull-right checkradio"/>Yes</label>
+									<label class="radio-inline"><input checked type = "radio" name = "status" id = "no" value = "N" class = "col-md-3 pull-right checkradio" />No</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
+							<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: left;"></span>
+						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="containerReturnDate">Date Returned: </label>
+							<div class = "col-md-7 dateReturned_view pull-left" style="text-align: left;">
+								<input type = "date" name = "actutaldateReturned" id = "actutaldateReturned"  class = "form-control" disabled  required />
+							</div>
+						</div>
+						<table class = "table table-responsive" id = "container_detail">
+							<thead>
+								<tr>
+									<td>
+										Description Of Good
+									</td>
+									<td>
+										Gross Weight
+									</td>
+									<td>
+										Supplier
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+
+							</tbody>
+						</table>
+						<div class="form-group">         
+							<label class="control-label col-md-5" style="text-align: left;" for="remarks">Remarks: </label>
+							<br />
+							<div class = "col-md-12">
+								<textarea name = "remarks" id = "remarks"  class = "form-control" placeholder=""></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success save-container-information" >Save</button>
+					<button type="button" class="btn btn-danger close-container-information" >Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	@if($delivery[0]->withContainer == 0)
+	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
 				<h3>Delivery Details: </h3>
@@ -223,11 +222,9 @@
 			</div>
 		</div>
 	</div>
-</div>
-@endif
-@if($delivery[0]->withContainer == 1)
-<div class = "row">
-	<div class="col-md-10 col-md-offset-1">
+	@endif
+	@if($delivery[0]->withContainer == 1)
+	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
 				<h3>List Of Containers: </h3>
@@ -319,9 +316,7 @@
 			</div>
 		</div>
 	</div>
-</div>
-<div class = "row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-heading">
 				<h3>Container Contents: </h3>
@@ -374,22 +369,32 @@
 			</div>
 		</div>
 	</div>
-</div>
-@endif
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "col-md-8">
+	@endif
+	<div class = "row">
+		<div class = "col-md-10 col-md-offset-1">
+			<div class = "col-md-8">
 
-		</div>
-		<div class = "col-md-4">
-			<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Generate Delivery Receipt</button>
+			</div>
+			<div class = "col-md-4">
+				<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Generate Delivery Receipt</button>
+			</div>
 		</div>
 	</div>
 </div>
 @endsection
-
+@push('styles')
+<style>
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse1').addClass('in');
 	$(document).ready(function(){
 		var container_status;
 		var reset_container_table = $('#drModal').html();

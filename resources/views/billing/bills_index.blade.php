@@ -273,7 +273,7 @@
 			console.log(rev_tax_value);
 			$.ajax({
 				method: 'POST',
-				url: '{{ route("billing.store") }}',
+				url: '{{ route("billingrevenue.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'so_head_id' : so_head_id,
@@ -288,6 +288,7 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
+					location.reload();
 				}
 			})
 		}
@@ -300,7 +301,7 @@
 			console.log(exp_tax_value);
 			$.ajax({
 				method: 'POST',
-				url: '{{ route("billing.store") }}',
+				url: '{{ route("billingexpense.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'so_head_id' : so_head_id,
@@ -315,7 +316,7 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
-					
+					location.reload();
 				}
 			})
 		}
