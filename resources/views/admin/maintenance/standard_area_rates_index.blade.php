@@ -16,9 +16,6 @@
 						<thead>
 							<tr>
 								<td>
-									Date Effective
-								</td>
-								<td>
 									Area From
 								</td>
 								<td>
@@ -41,15 +38,15 @@
 </div>
 </div>
 <section class="content">
-
 	<form role="form" method = "POST" class="commentForm">
+		{{ csrf_field() }}
 		<div class="modal fade" id="sarModal" role="dialog">
 			<div class="form-group">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Standard Area Rate</h4>
+							<h4 class="sarModal-title">New Standard Area Rate</h4>
 						</div>
 						<div class="modal-body ">		
 							<div class = "panel-heading">
@@ -248,7 +245,7 @@
 				</div>
 				<div class="modal-body">
 					<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-						{{ csrf_field() }}	
+						{{ csrf_field() }}
 						<div class="form-group required">
 							<label class = "control-label col-md-3">Name: </label>
 							<div class = "col-md-9">
@@ -322,14 +319,9 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	var from_id = [];
-	var to_id = [];
-	var amount_value = [];
-	var amount_value_descrp = [];
-	var from_id_descrp = [];
-	var to_id_descrp = [];
-
-
+	var temp_deliver_id = null;
+	var temp_pickup_id = null;
+	var temp_amount = null;
 	var data;
 	$(document).ready(function(){
 		var sar_row = "<tr>" + $('#sar-row').html() + "</tr>";
@@ -345,20 +337,18 @@
 			ajax: 'http://localhost:8000/admin/sarData',
 			columns: [
 
-			{ data: 'dateEffective' },
 			{ data: 'areaFrom'},
 			{ data: 'areaTo'},
 			{ data: 'amount',
-			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
-			},
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },      
 
-			{ data: 'action', orderable: false, searchable: false }
+				{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+				],	"order": [[ 0, "desc" ]],
 
 
-		});
+			});
 
 
 
@@ -461,8 +451,13 @@
 				$('#_province').val("");
 				$('#_zip').val("");
 			}
+
+
+
 			
 		})
+
+
 
 		$(document).on('change', '#deliver_id', function(e){
 			deliver_id = $(this).val();
@@ -540,19 +535,149 @@
 		})
 
 
+
+		$(document).on('click', '.edit',function(e){
+			resetErrors();
+			var sar_id = $(this).val();
+			data = sartable.row($(this).parents()).data();
+
+			$('#pickup_id').val($(this).closest('tr').find('.pickup_id').val());
+			$('#deliver_id').val($(this).closest('tr').find('.deliver_id').val());
+			
+			$('#amount').val(data.amount);
+
+			var pickup_id = $('#pickup_id').val();
+
+			if(pickup_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + pickup_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_address').val(data[0].address);
+							$('#_city').val(data[0].city_name);
+							$('#_province').val(data[0].province_name);
+							$('#_zip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_address').val("");
+				$('#_city').val("");
+				$('#_province').val("");
+				$('#_zip').val("");
+			}
+
+			deliver_id = $('#deliver_id').val();
+			if(deliver_id != 0)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+
+						if(typeof(data) == "object"){
+							$('#_daddress').val(data[0].address);
+							$('#_dcity').val(data[0].city_name);
+							$('#_dprovince').val(data[0].province_name);
+							$('#_dzip').val(data[0].zipCode);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else{
+				$('#_daddress').val("");
+				$('#_dcity').val("");
+				$('#_dprovince').val("");
+				$('#_dzip').val("");
+			}
+
+
+			$('.sarModal-title').text('Update Standard Area Rate');
+			$('#sarModal').modal('show');
+		});
+		$(document).on('click', '.deactivate', function(e){
+			var sar_id = $(this).val();
+			data = sartable.row($(this).parents()).data();
+			$('#confirm-delete').modal('show');
+		});
+
+
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/standard_arearates/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					sartable.ajax.reload();
+					$('#confirm-delete').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record deactivated successfully")
+				}
+			})
+		});
+
+
+
+
+
 		$(document).on('click', '.finalize-sar', function(e){
 			e.preventDefault();
 
 			//if(finalvalidatesarRows() === true){
-				
-				var title = $('.modal-title').text();
-				if(title === "New Standard Area Rate")
+				$('#pickup_id').valid();
+				$('#deliver_id').valid();
+				$('#amount').valid();
+				var title = $('.sarModal-title').text();
+				console.log("hihiho" + title);
+				if(title == "New Standard Area Rate")
 				{
 					console.log("new new new");
 					
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/sar_fee',
+						url:  '/admin/standard_arearates',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'areaFrom' : $('#pickup_id').val(),
@@ -592,9 +717,86 @@
 							
 						}
 					})
+			//	}
+		}
+		else
+		{
+			if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+			{
+
+				if($('#pickup_id').val() === temp_pickup_id &&
+					$('#deliver_id').val() === temp_deliver_id && 
+					$('#amount').inputmask("unmaskedvalue") === temp_amount  )
+				{
+					$('#amount').val("0.00");
+					$('#btnSave').removeAttr('disabled');
+					$('#sarModal').modal('hide');
 				}
-			//}
-		});
+				else
+				{
+					$('#btnSave').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/standard_arearates/' + data.id,
+						data: {
+							'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
+							'areaTo' : $('#deliver_id').val(),
+							'amount' : $('#amount').inputmask('unmaskedvalue'),
+						},
+
+						success: function (data){
+
+							if(typeof(data) === "object"){
+								sartable.ajax.reload();
+								$('#sarModal').modal('hide');
+								$('.modal-title').text('New Standard Area Rate');
+								$('#amount').val("0.00");
+
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+
+
+								$('#btnSave').removeAttr('disabled');
+
+
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+								$('#btnSave').removeAttr('disabled');
+
+							}
+						}
+					})
+				}
+			}
+		}
+	});
 
 
 

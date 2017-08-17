@@ -663,7 +663,7 @@ class DatatablesController extends Controller
 
 	public function get_pending_deliveries(){
 		$deliveries = DB::table('delivery_receipt_headers')
-		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name')
+		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
 		->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
 		->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
 		->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
@@ -729,14 +729,15 @@ class DatatablesController extends Controller
 
 
 	public function sar_datatable(){
-		$sars = DB::select("SELECT h.id as 'id' , h.dateEffective as'dateEffective' , d.areaFrom as 'areaFrom' , d.areaTo as 'areaTo' , 
-			d.amount as 'amount'  FROM standard_area_rate_headers h INNER JOIN standard_area_rate_details d ON h.id = d.standard_area_rate_headers_id ");
+		$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
 
 		return Datatables::of($sars)
 		->addColumn('action', function ($sar){
 			return
 			'<button value = "'. $sar->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" value = "'. $sar->pickup_id .'" class = "pickup_id"/>
+			<input type = "hidden" value = "'. $sar->deliver_id .'"class = "deliver_id"/>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

@@ -4,16 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-class StandardAreaRateHeader extends Model
+class StandardAreaRate extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
 
 	protected $fillable = [
-	'dateEffective',
+		'areaTo', 'areaFrom', 'amount',
 	];
 
 	protected $dates = [
-	'deleted_at',
-	];
+		'deleted_at',
+	];  
 }

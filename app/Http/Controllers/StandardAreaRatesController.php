@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\StandardAreaRateHeader;
-use App\StandardAreaRateDetail;
-
+use App\StandardAreaRate;
+use App\Http\Requests\StoreStandardAreaRate;
 
 class StandardAreaRatesController extends Controller
 {
@@ -21,22 +20,20 @@ class StandardAreaRatesController extends Controller
 
 	public function store(Request $request)
 	{
-		$new_sar = new StandardAreaRateHeader;
-		$new_sar->dateEffective = date_create($request->dateEffective);
-		$new_sar->save();
-
-
-		for($i = 0; $i < count($request->location); $i++){
-			$sar_detail = new StandardAreaRateDetail;
-			$sar_detail->areaFrom = $request->areaFrom[$i];
-			$sar_detail->areaTo = $request->areaTo[$i];
-			$sar_detail->amount = $request->amount[$i];
-			$sar_detail->standard_area_rate_headers_id = $new_sar->id;
-			$sar_detail->save();
-		}
-
-		return $new_sar->id;
+		 $sar = StandardAreaRate::create($request->all());
+        return $sar;
 	}
+
+	public function update(StoreStandardAreaRate $request, $id)
+    {
+        $sar = StandardAreaRate::findOrFail($id);
+        $sar->areaFrom = $request->areaFrom;
+        $sar->areaTo = $request->areaTo;
+        $sar->amount = $request->amount;
+        $sar->save();
+
+        return $area;
+    }
 
 	
 
@@ -44,7 +41,7 @@ class StandardAreaRatesController extends Controller
 	public function destroy($id)
 	{
 
-		$new_ipf = ImportProcessingFeeHeader::findOrFail($id);
-		$new_ipf->delete();
+		$sar = StandardAreaRate::findOrFail($id);
+        $sar->delete();
 	}
 }
