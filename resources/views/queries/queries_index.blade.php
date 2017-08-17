@@ -52,8 +52,14 @@
 					<br />
 					<table class = "table table-responsive" id = "delivery_table">
 						<thead>
-							<td style="width: 15%;">
+							<td style="width: 10%;">
+								Del No.
+							</td>
+							<td style="width: 10%;">
 								Consignee
+							</td>
+							<td style="width: 13%;">
+								Plate Number
 							</td>
 							<td style="width: 15%;">
 								Origin City
@@ -67,10 +73,6 @@
 							<td style="width: 15%;">
 								Delivery Date
 							</td>
-							<td>
-								Action
-							</td>
-							
 						</thead>
 					</table> 
 				</div>
@@ -151,12 +153,14 @@
 						serverSide: false,
 						ajax: "{{ route('get_pending_deliveries') }}",
 						columns: [
+						{ data: 'id' },
 						{ data: 'name' },
+						{ data: 'plateNumber' },
 						{ data: 'city_name' },
 						{ data: 'pickupDateTime' },
 						{ data: 'dcity_name' },
 						{ data: 'deliveryDateTime' },
-						{ data: 'action', orderable: false, searchable: false }
+						
 						]
 					});
 				}
@@ -170,12 +174,13 @@
 						serverSide: false,
 						ajax: "{{ route('get_pending_deliveries') }}",
 						columns: [
+						{ data: 'id' },
 						{ data: 'name' },
+						{ data: 'plateNumber' },
 						{ data: 'city_name' },
 						{ data: 'pickupDateTime' },
 						{ data: 'dcity_name' },
 						{ data: 'deliveryDateTime' },
-						{ data: 'action', orderable: false, searchable: false }
 						]
 					});
 				}

@@ -641,7 +641,7 @@ class DatatablesController extends Controller
 
 	public function get_pending_deliveries(){
 		$deliveries = DB::table('delivery_receipt_headers')
-		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name')
+		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
 		->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
 		->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
 		->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
