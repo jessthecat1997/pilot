@@ -148,7 +148,7 @@
 							<tbody>
 								@forelse($desc_array as $desc)
 
-								<tr id = "term-condition-row">
+								<tr>
 									<td>
 										<textarea class = "form-control specificDetails"  rows = "5" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Agreements . . . " name = "specificDetails">{{ substr($desc, 3, strlen($desc)) }}</textarea>
 									</td>

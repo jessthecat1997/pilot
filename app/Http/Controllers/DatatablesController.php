@@ -625,8 +625,9 @@ class DatatablesController extends Controller
 		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($quotation){
 			return
-			'<button value = "'. $quotation->id .'" class = "btn btn-md but view">View</button>'.
-			'<button value = "'. $quotation->id .'" class = "btn btn-md btn-success print">Print</button>';
+			'<button value = "'. $quotation->id .'" class = "btn btn-md but view">View</button>
+			 <button value = "'. $quotation->id .'" class = "btn btn-md btn-success print">Print</button>
+			 <button value = "'. $quotation->id .'" class = "btn btn-md btn-danger archive">Archive</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 

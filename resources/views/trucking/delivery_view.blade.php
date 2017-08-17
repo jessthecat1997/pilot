@@ -50,8 +50,6 @@
 						</form>
 					</div>
 				</div>
-
-
 				<div class = "col-md-6">
 					<h4>Delivery Information:</h4>
 					<div class = "col-md-12">
@@ -80,6 +78,16 @@
 							</div>
 						</form>
 					</div>
+					@if($delivery[0]->remarks != null)
+					<div class = "col-md-12">
+						<label class="control-label">Remarks</label>
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<span class="control-label col-md-12" style="text-align: left;">{{ $delivery[0]->remarks }}</span>
+							</div>
+						</form>
+					</div>
+					@endif
 				</div>
 			</div>
 		</div>
@@ -175,7 +183,7 @@
 									Gross Weight
 								</td>
 								<td>
-									Supplier
+									Supplier/s
 								</td>
 							</tr>
 						</thead>
@@ -223,7 +231,7 @@
 										Gross Weight(kg)
 									</td>
 									<td>
-										Supplier
+										Supplier/s
 									</td>
 								</tr>
 							</thead>
@@ -378,7 +386,7 @@
 										Gross Weight(kg)
 									</td>
 									<td>
-										Supplier
+										Supplier/s
 									</td>
 								</tr>
 							</thead>
