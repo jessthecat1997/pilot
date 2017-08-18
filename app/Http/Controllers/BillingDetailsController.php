@@ -71,7 +71,7 @@ class BillingDetailsController extends Controller
 		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
 		->get();
 
-		return view('billing/bills_index', compact(['vat', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'delivery', 'so_head_id']));
+		return view('billing/bills_index', compact(['vat', 'bills', 'billings','bill_counts', 'bill_revs','bill_exps', 'so_head_id']));
 		
 	}
 	public function billing_invoice(Request $request)
@@ -91,19 +91,19 @@ class BillingDetailsController extends Controller
 	}
 	public function store(Request $request)
 	{
-		$billing_header = new BillingInvoiceHeader;
-		$billing_header->so_head_id = $request->so_head_id;
-		$billing_header->vatRate = $request->vatRate;
-		$billing_header->date_billed = $request->date_billed;
-		$billing_header->override_date = $request->override_date;
-		$billing_header->due_date = $request->due_date;
-		$billing_header->save();
 
 		for($i = 0; $i<count($request->bill_id); $i++)
 		{
 			$bills_id = Billing::find($request->bill_id[$i]);
 			if($bills_id->bill_type == 'R')
 			{
+				$billing_header = new BillingInvoiceHeader;
+				$billing_header->so_head_id = $request->so_head_id;
+				$billing_header->vatRate = $request->vatRate;
+				$billing_header->date_billed = $request->date_billed;
+				$billing_header->override_date = $request->override_date;
+				$billing_header->due_date = $request->due_date;
+				$billing_header->save();
 				$billing_revenue = new BillingRevenue;
 				$billing_revenue->bill_id = $request->bill_id[$i];
 				$billing_revenue->description = $request->description[$i];
@@ -114,6 +114,13 @@ class BillingDetailsController extends Controller
 			}
 			else
 			{
+				$billing_header = new BillingInvoiceHeader;
+				$billing_header->so_head_id = $request->so_head_id;
+				$billing_header->vatRate = $request->vatRate;
+				$billing_header->date_billed = $request->date_billed;
+				$billing_header->override_date = $request->override_date;
+				$billing_header->due_date = $request->due_date;
+				$billing_header->save();
 				$billing_expense = new BillingExpense;
 				$billing_expense->bill_id = $request->bill_id[$i];
 				$billing_expense->description = $request->description[$i];
@@ -135,20 +142,20 @@ class BillingDetailsController extends Controller
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
-
 		$billing_header =  BillingInvoiceHeader::all()->last();
 		$number = $billing_header->id;
 		$revenues = DB::table('billing_revenues')
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_revenues.bill_id', '=','billings.id')
-		->select('billings.name', 'billing_revenues.amount')
-		->where('billing_invoice_headers.id', '=', $billing_header->id)
+		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_revenues.amount - (billing_revenues.amount * billing_revenues.tax/100),2)) as Total'))
+		->where('billing_revenues.bi_head_id', '=', $id)
 		->get();
+
 		$expenses = DB::table('billing_expenses')
 		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('billings', 'billing_expenses.bill_id', '=','billings.id')
-		->select('billings.name', 'billing_expenses.amount')
-		->where('billing_invoice_headers.id', '=', $billing_header->id)
+		->select('billings.name', DB::raw('CONCAT(TRUNCATE(billing_expenses.amount - (billing_expenses.amount * billing_expenses.tax/100),2)) as Total'))
+		->where('billing_expenses.bi_head_id', '=', $id)
 		->get();
 
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['revenues', 'expenses', 'bills', 'number']));

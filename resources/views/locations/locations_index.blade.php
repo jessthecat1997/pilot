@@ -2,11 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-<<<<<<< HEAD
 		<h2>&nbsp; Locations</h2>
-=======
-		<h3><img src="/images/bar.png">Locations</h3>
->>>>>>> master
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn but btn-md new"  style = "width: 100%;">New Location</button>

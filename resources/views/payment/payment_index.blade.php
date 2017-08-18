@@ -142,8 +142,7 @@
 						'paymentStatus' : val
 					},
 					success: function (data){
-						location.reload();
-						window.location("{{ route('view.index') }}");
+						window.location.href = "{{ route('view.index') }}";
 					}
 				})
 			}

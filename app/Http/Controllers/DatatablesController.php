@@ -568,8 +568,9 @@ class DatatablesController extends Controller
 		})
 		->addColumn('action', function ($delivery){
 			return
-			"<button class = 'btn btn-primary view_delivery'>View</button>" . 
-			"<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
+			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+			 <button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
+			 <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
 		->editColumn('status', function($deliveries){
@@ -619,14 +620,16 @@ class DatatablesController extends Controller
 		$quotations = DB::table('quotation_headers')
 		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->where('quotation_headers.deleted_at', '=', null)
 		->get();
 
 		return Datatables::of($quotations)
 		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
 		->addColumn('action', function ($quotation){
 			return
-			'<button value = "'. $quotation->id .'" class = "btn btn-md but view">View</button>'.
-			'<button value = "'. $quotation->id .'" class = "btn btn-md btn-success print">Print</button>';
+			'<button value = "'. $quotation->id .'" class = "btn btn-md but view">View</button>
+			 <button value = "'. $quotation->id .'" class = "btn btn-md btn-success print">Print</button>
+			 <button value = "'. $quotation->id .'" class = "btn btn-md btn-danger archive">Archive</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 

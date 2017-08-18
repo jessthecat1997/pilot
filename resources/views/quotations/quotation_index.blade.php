@@ -33,6 +33,23 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="confirm-delete" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Deactivate record
+			</div>
+			<div class="modal-body">
+				Confirm Archiving this quotation
+			</div>
+			<div class="modal-footer">
+			{{ csrf_field() }}
+				<button class = "btn btn-danger	" id = "btnDelete" >Archive</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 @push('styles')
 <style>
@@ -48,6 +65,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
+	var selected_id = 0;
 	$(document).ready(function(){
 		var chtable = $('#quotation_table').DataTable({
 			processing: false,
@@ -72,6 +90,49 @@
 		$(document).on('click', '.print', function(e){
 			e.preventDefault();
 			window.open("{{ route('quotation.index') }}/" + $(this).val() + "/print");
+		})
+
+		$(document).on('click', '.archive', function(e){
+			$('#confirm-delete').modal('show');	
+			selected_id = $(this).val();
+		})
+
+		$(document).on('click', '#btnDelete', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '{{ route("quotation.index")}}/' + selected_id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					chtable.ajax.reload();
+					$('#confirm-delete').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record deactivated successfully")
+				}
+			})
+
+			chtable.ajax.reload();
 		})
 	})
 </script>

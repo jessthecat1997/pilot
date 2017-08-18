@@ -118,6 +118,7 @@ class QuotationsController extends Controller
     
     public function destroy($id)
     {
-        //
+        $quotation = \App\QuotationHeader::findOrFail($id);
+        $quotation->delete();
     }
 }
