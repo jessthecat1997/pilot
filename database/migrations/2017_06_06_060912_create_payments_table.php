@@ -17,10 +17,12 @@ class CreatePaymentsTable extends Migration
             $table->increments('id');
             $table->decimal('amount',19,2);
             $table->integer('so_head_id')->unsigned();
+            $table->integer('bi_head_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('so_head_id')->references('id')->on('consignee_service_order_headers');
+            $table->foreign('bi_head_id')->references('id')->on('billing_invoice_headers');
         });
     }
 

@@ -45,9 +45,18 @@ class PaymentsController extends Controller
 		->where('billing_expenses.bi_head_id', '=', $id)
 		->get();
 
+		$bill_revs = DB::table('billings')
+		->select('id','name')
+		->where('bill_type', '=', 'R')
+		->get();
 
+
+		$bill_exps = DB::table('billings')
+		->select('id', 'name')
+		->where('bill_type', '=', 'E')
+		->get();
 		$so_head_id = $id;
-		return view('payment/payment_index', compact(['pays', 'so_head_id', 'exp', 'rev']));
+		return view('payment/payment_index', compact(['pays', 'so_head_id', 'exp', 'rev', 'bill_revs', 'bill_exps']));
 
 	}
 	public function payments_table(Request $request, $id)
@@ -57,18 +66,22 @@ class PaymentsController extends Controller
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('name','amount')
+		->select('billings.id','name','amount')
 		->where('billing_revenues.bi_head_id', '=', $id);
 
 		$exp = DB::table('billing_expenses')
 		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
 		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('name','amount')
+		->select('billing_invoice_headers.id','name','amount')
 		->where('billing_expenses.bi_head_id', '=', $id)
 		->union($rev)
 		->get();
 		return Datatables::of($exp)
+		->addColumn('action', function ($exp){
+			return
+			'<button value = "'. $exp->amount .'" class = "btn but makePayment">Select</button>';
+		})
 		->make(true);
 	}
 	public function store(StorePayment $request)
