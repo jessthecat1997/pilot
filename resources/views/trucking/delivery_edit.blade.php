@@ -907,13 +907,14 @@
 		})
 		
 		$(document).on('click', '.save-delivery', function(e){
-			if($("#choices li.active").text() === "Without Container"){
+			var checkWithoutContainer = "{{ $delivery[0]->withContainer }}";
+			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
 
 						$.ajax({
-							type: 'POST',
-							url: '{{route("trucking.index")}}/{{ $so_id }}/store_delivery',
+							type: 'PUT',
+							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
@@ -926,6 +927,8 @@
 								'locations_id_del' : $('#deliver_id').val(),
 								'deliveryDate' : $('#deldatecon').val(),
 								'pickupDate' : $('#pickdatecon').val(),
+								'withContainer' : checkWithoutContainer,
+								'del_head_id' : {{ $delivery[0]->id}},
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";

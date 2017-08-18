@@ -35,7 +35,7 @@ class TruckingsController extends Controller
 
     public function create()
     {
-       
+
 
         $employees = Employee::all();
 
@@ -270,7 +270,7 @@ class TruckingsController extends Controller
 
             $new_delivery_head->locations_id_pick = $request->locations_id_pick;
             $new_delivery_head->locations_id_del = $request->locations_id_del;
-          
+
             $new_delivery_head->plateNumber = $request->plateNumber;
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 0;
@@ -297,7 +297,7 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;
-        
+
             $new_delivery_head->locations_id_pick = $request->locations_id_pick;
             $new_delivery_head->locations_id_del = $request->locations_id_del;
 
@@ -378,6 +378,42 @@ class TruckingsController extends Controller
         ->get();
 
         return Response::make(array($container_details, $container_information));;
+    }
+
+    public function update_delivery_record(Request $request)
+    {
+        if($request->withContainer == "0"){
+            \DB::table('delivery_non_container_details')
+            ->where('del_head_id', '=', $request->del_head_id)
+            ->delete();
+
+            $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
+            $delivery->emp_id_driver = $request->emp_id_driver;
+            $delivery->emp_id_helper = $request->emp_id_helper;
+
+            $delivery->locations_id_pick = $request->locations_id_pick;
+            $delivery->locations_id_del = $request->locations_id_del;
+
+            $delivery->deliveryDateTime = $request->deliveryDate;
+            $delivery->pickupDateTime = $request->pickupDate;
+
+            $delivery->plateNumber = $request->plateNumber;
+
+            $delivery->save();
+
+            for($i = 0; $i < count($request->descrp_goods); $i++)
+            {
+                $new_noncon_detail = new DeliveryNonContainerDetail;
+                $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
+                $new_noncon_detail->grossWeight = $request->gross_weights[$i];
+                $new_noncon_detail->supplier = $request->suppliers[$i];
+                $new_noncon_detail->del_head_id =  $request->del_head_id;
+                $new_noncon_detail->save();
+            }
+
+            return $delivery;
+        }
+
     }
 
     public function view_delivery(Request $request){
@@ -650,18 +686,18 @@ class TruckingsController extends Controller
         return $pdf->stream();
     }
 
-   
-    public function show_calendar(){
-     $events = [];
 
-     $events[] = \Calendar::event(
+    public function show_calendar(){
+       $events = [];
+
+       $events[] = \Calendar::event(
         'Event One', 
         false, 
         '2017-02-11T0800', 
         '2017-02-13T0800',
         0
         );
-     $calendar = \Calendar::addEvents($events)
+       $calendar = \Calendar::addEvents($events)
        ->setOptions([ //set fullcalendar options
         'firstDay' => 1
         ]); 
