@@ -34,7 +34,7 @@
 					<h5 style="text-align: center;">No specified agreement details</h5>
 					@else
 					<p>
-						<pre class = "actualdescription">{!! $contract[0]->description !!}</pre>
+						<pre wrap="off" class = "actualdescription">{!! $contract[0]->description !!}</pre>
 						<input type = "hidden" class = "description" value="{{ $contract[0]->description }}" />
 					</p>
 
@@ -85,7 +85,7 @@
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success update_contract_term_save" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 					</div>
 				</div>
@@ -112,16 +112,15 @@
 		var detail = "";
 		var error = "";
 		var temp_crModal = null;
-		var term_row = "<tr><td><textarea class = 'form-control' name = 'description'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
+		var term_row = "<tr><td><textarea class = 'form-control' name = 'description' onkeyup='textAreaAdjust(this)' style='overflow:hidden'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
 
 		$(document).ready(function(){
-			
 
 			$(document).on('click', '.update_term_condition', function(e){
 				e.preventDefault();
 				$('#term_table > tbody').html("");
 				var unsplit = $('.description').val();
-				var details = unsplit.split('<br />');
+				var details = unsplit.split('<br /><br />');
 
 				details.pop();
 				
@@ -129,11 +128,11 @@
 				for(var i = 0; i < details.length; i++)
 				{
 
-					detail_html += "<tr><td><textarea rows = '4' style= 'border-color: green;' name = 'description' class = 'form-control'>"+ details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
+					detail_html += "<tr><td><textarea rows = '4' style= 'border-color: green;' name = 'description' class = 'form-control' onkeyup='textAreaAdjust(this)' style='overflow:hidden'>"+ 
+					details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
 					
 				}
 				$('#term_table > tbody').append(detail_html);
-				console.log("  "+details);
 				$('#tcModal').modal('show');
 			})
 
@@ -154,7 +153,7 @@
 			$(document).on('click', '.update_contract_term_save', function(e){
 				e.preventDefault();
 				if(validate() ===  true){
-
+					console.log(detail);
 					$.ajax({
 						type: 'PUT',
 						url:  '/admin/contract_template/'+ 1,
@@ -194,6 +193,11 @@
 			})
 		});
 
+		function textAreaAdjust(o) {
+				o.style.height = "1px";
+				o.style.height = (25+o.scrollHeight)+"px";
+			}
+
 		function validate(){
 			var term = [];
 			error = "";
@@ -209,7 +213,7 @@
 				else
 				{
 					term.push(term_descrp[i].value);
-					detail += (i + 1) + ". " + term_descrp[i].value + "<br />";
+					detail += (i + 1) + ". " + term_descrp[i].value + "<br /><br />";
 					term_descrp[i].style.borderColor = 'green';
 				}
 			}
@@ -217,6 +221,7 @@
 			if(error.length == 0)
 			{
 				return true;
+				console.log(detail);
 			}
 			else
 			{

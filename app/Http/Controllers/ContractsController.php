@@ -57,7 +57,7 @@ class ContractsController extends Controller
 
         }
         else{
-            $desc_array = explode("<br/>", $description->description);
+            $desc_array = explode("<br /><br />", $description->description);
             array_pop($desc_array);
         }
 
@@ -178,7 +178,7 @@ public function amend_contract(Request $request)
     ->orderBy('created_at', 'DESC')
     ->get();
 
-    $terms = explode('<br />', $contract[0]->specificDetails);
+    $terms = explode('<br /><br />', $contract[0]->specificDetails);
     array_pop($terms);
 
 

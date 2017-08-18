@@ -379,7 +379,7 @@
 			e.preventDefault();
 			$('#term_table > tbody').html("");
 			var unsplit = $('.specificDetails').val();
-			var details = unsplit.split('<br />');
+			var details = unsplit.split('<br /><br />');
 			details.pop();
 			var detail_html = "";
 			for(var i = 0; i < details.length; i++)
@@ -529,7 +529,7 @@ function validate(){
 		else
 		{
 			term.push(term_descrp[i].value);
-			detail += (i + 1) + ". " + term_descrp[i].value + "<br />";
+			detail += (i + 1) + ". " + term_descrp[i].value + "<br /><br />";
 			term_descrp[i].style.borderColor = 'green';
 		}
 	}

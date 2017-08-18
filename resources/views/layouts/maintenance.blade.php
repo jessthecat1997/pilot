@@ -229,6 +229,8 @@
             }, 0);
         });
 
+        
+
         $('.money_er').inputmask("numeric", { 
             radixPoint: ".", 
             groupSeparator: ",", 
