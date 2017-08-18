@@ -222,6 +222,8 @@ Route::get('admin/{trucking_id}/deliveryData', 'DatatablesController@trucking_de
 Route::get('admin/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
 Route::post('/trucking/{trucking_id}/store_delivery', 'TruckingsController@store_delivery');
 Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@update_delivery');
+Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
+Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery', 'TruckingsController@update_delivery_record');
 Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
 //Delivery Receipt Routes
 Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');

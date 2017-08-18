@@ -564,8 +564,9 @@ class DatatablesController extends Controller
 		})
 		->addColumn('action', function ($delivery){
 			return
-			"<button class = 'btn btn-primary view_delivery'>View</button>" . 
-			"<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal'>Status</button>" . 
+			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+			 <button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
+			 <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 		})
 		->editColumn('status', function($deliveries){
