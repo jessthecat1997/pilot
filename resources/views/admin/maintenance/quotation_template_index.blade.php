@@ -108,16 +108,19 @@
 	<script type="text/javascript">
 		var detail = "";
 		var error = "";
-		var temp_crModal = null;
-		var term_row = "<tr><td><textarea class = 'form-control' name = 'terms'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
+		var temp_terms = null;
+		var term_row = "<tr><td><textarea class = 'form-control' name = 'terms' onkeyup='textAreaAdjust(this)' style='overflow:hidden'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
 
 		$(document).ready(function(){
 			
 
 			$(document).on('click', '.update_term_condition', function(e){
 				e.preventDefault();
+
 				$('#term_table > tbody').html("");
+
 				var unsplit = $('.terms').val();
+				temp_terms = unsplit;
 				var details = unsplit.split('<br />');
 
 				details.pop();
@@ -126,11 +129,11 @@
 				for(var i = 0; i < details.length; i++)
 				{
 
-					detail_html += "<tr><td><textarea rows = '2' style= 'border-color: green;' name = 'terms' class = 'form-control'>"+ details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
+					detail_html += "<tr><td><textarea onkeyup='textAreaAdjust(this)' style='overflow:hidden' rows = '2' style= 'border-color: green;' name = 'terms' class = 'form-control'>"+ details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
 					
 				}
 				$('#term_table > tbody').append(detail_html);
-				console.log("  "+details);
+				
 				$('#tcModal').modal('show');
 			})
 
@@ -150,46 +153,58 @@
 
 			$(document).on('click', '.update_contract_term_save', function(e){
 				e.preventDefault();
+					console.log(temp_terms);
 				if(validate() ===  true){
+					if(detail == temp_terms  )
+					{
+						$('#tcModal').modal('hide');
+					}else{
 
-					$.ajax({
-						type: 'PUT',
-						url:  '/admin/quotation_template/'+ 1,
-						data: {
-							'_token' : $('input[name=_token').val(),
-							'terms' : detail,
-						},
-						success: function (data)
-						{
-							$('.terms').val(data.terms);
-							$('.actualterms').html(data.terms);
-							
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/quotation_template/'+ 1,
+							data: {
+								'_token' : $('input[name=_token').val(),
+								'terms' : detail,
+							},
+							success: function (data)
+							{
+								$('.terms').val(data.terms);
+								$('.actualterms').html(data.terms);
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+
+								$('#tcModal').modal('hide');
 							}
-							toastr["success"]("Record updated successfully")
+						});
 
-							$('#tcModal').modal('hide');
-						}
-					});
-				}
+					}
+					
+				} //if validate
 			})
 		});
+		function textAreaAdjust(o) {
+			o.style.height = "1px";
+			o.style.height = (25+o.scrollHeight)+"px";
+		}
 
 		function validate(){
 			var term = [];
@@ -214,8 +229,8 @@
 			if(error.length == 0)
 			{
 				return true;
-			}
-			else
+				
+			}else
 			{
 				return false;
 			}
