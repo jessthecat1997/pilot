@@ -2,37 +2,32 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-
-		<h3><img src="/images/bar.png">Maintenance|Contract Agreements Template</h3>
+		<h2>&nbsp;Maintenance | Contract Agreement Template</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  type = "submit" style="" class = "btn btn-primary btn-sm update_term_condition pull-right">Update Agreements</button>
+			<button  type = "submit" style="" class = "btn btn-primary  btn-md update_term_condition ">Update Agreements</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
-		<div class  = "col-md-10 col-md-offset-1">
-			<div class = "panel default-panel">
-				<div class = "panel-body">
-					<br />
-					<hr />
-					<br />
-					<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
+		<div class = "panel default-panel">
+			<div class = "panel-body">
+				<div style = "overflow-y: scroll; overflow-wrap: none; height:100%;" class="panel-default panel">
 
-						@if($contract[0]->description == null)
-						<h5 style="text-align: center;">No specified agreement details</h5>
-						@else
-						<p>
-							<pre class = "actualdescription">{!! $contract[0]->description !!}</pre>
-							<input type = "hidden" class = "description" value="{{ $contract[0]->description }}" />
-						</p>
+					@if($contract[0]->description == null)
+					<h5 style="text-align: center;">No specified agreement details</h5>
+					@else
+					<p>
+						<pre class = "actualdescription">{!! $contract[0]->description !!}</pre>
+						<input type = "hidden" class = "description" value="{{ $contract[0]->description }}" />
+					</p>
 
-						@endif
-					</div>
+					@endif
 				</div>
 			</div>
 		</div>
 	</div>
+
 
 
 
@@ -110,7 +105,8 @@
 				e.preventDefault();
 				$('#term_table > tbody').html("");
 				var unsplit = $('.description').val();
-				var details = unsplit.split('<br/>');
+				var details = unsplit.split('<br />');
+
 				details.pop();
 				
 				var detail_html = "";
@@ -121,7 +117,7 @@
 					
 				}
 				$('#term_table > tbody').append(detail_html);
-
+				console.log("  "+details);
 				$('#tcModal').modal('show');
 			})
 
@@ -145,7 +141,7 @@
 
 					$.ajax({
 						type: 'PUT',
-						url:  '/admin/contract_template'+ 1,
+						url:  '/admin/contract_template/'+ 1,
 						data: {
 							'_token' : $('input[name=_token').val(),
 							'description' : detail,
