@@ -172,7 +172,7 @@ class TruckingsController extends Controller
             return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
         }
         else{
-            return 'Cannot create new deliveries';
+            return 'Cannot edit finished deliveries';
         }
     }
 

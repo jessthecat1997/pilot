@@ -444,6 +444,10 @@
 			e.preventDefault();
 			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/" + $(this).closest("tr").find('.delivery-id').val() + "/view";
 		})
+		$(document).on('click', '.edit_delivery', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/" + $(this).closest("tr").find('.delivery-id').val() + "/edit";
+		})
 		var delivery_table = $('#delivery_table').DataTable({
 			processing: false,
 			deferRender: true,
