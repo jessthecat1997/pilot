@@ -73,7 +73,7 @@
 										<label class = "control-label">Rate: </label>
 										<div class = "form-group input-group " >
 
-											<input type = "text" class = "form-control" name = "amount_rate" id = "amount_rate" data-rule-required="true" value= "0" style="text-align: right"/>
+											<input type = "text" value= "0" class = "form-control" name = "amount_rate" id = "amount_rate" data-rule-required="true"  style="text-align: right"/>
 											<span class = "input-group-addon">%</span>
 										</div>
 									</div>
@@ -171,9 +171,13 @@
 		} 
 
 		$('#amount_rate').inputmask(
-		
-			'Regex', { regex: "^[1-9][0-9]?$|^100$" 
+
+			'Regex', { regex: "^[0-9][0-9]?$|^100$" 
 		});
+
+		jQuery.validator.addMethod("notEqual", function(value, element, param) {
+			return this.optional(element) || value != param;
+		}, "This field is required");
 
 		$("#commentForm").validate({
 			rules: 
@@ -183,18 +187,35 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z'-.,  ]+$/,
 				},
 
 				description:
 				{
 					maxlength: 150,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9'-.,  ]+$/,
+				},
+
+				amount_fixed:
+				{
+					notEqual:"0.00",
+
+				},
+				amount_rate:
+				{
+					notEqual: "0"
 				},
 
 			},
-			onkeyup: false, 
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()}, 
 		});
 
 
@@ -303,6 +324,8 @@
 
 			$('#name').valid();
 			$('#description').valid();
+			$('#amount_rate').valid();
+			$('#amount_fixed').valid();
 
 			var final_amount;
 			if(  $('input[name=chargeType]:checked').val() == 0){
