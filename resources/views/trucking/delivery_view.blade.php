@@ -270,7 +270,7 @@
 				<h3>List Of Containers: </h3>
 			</div>
 			<div class = "panel-body">
-				<div class = "col-md-10">
+				<div class = "col-md-12">
 					<form class="form-horizontal" role="form">
 						<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
 							<thead>
@@ -374,7 +374,7 @@
 				<h3>Container Contents: </h3>
 			</div>
 			<div class = "panel-body">
-				<div class = "col-md-10">
+				<div class = "col-md-10 col-md-offset-1">
 					<form class="form-horizontal" role="form">				
 						@forelse($container_with_detail as $container)
 						<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
