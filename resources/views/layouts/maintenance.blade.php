@@ -16,7 +16,6 @@
     <link href= "/js/select2/select2.css" rel = "stylesheet">  
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
-    
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
