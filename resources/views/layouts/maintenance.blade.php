@@ -132,7 +132,7 @@
                             <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;IPF Fee</a>
+                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;IPF </a>
                         </li>
                         <li>
                             <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container</a>
@@ -160,6 +160,12 @@
                         </li>
                         <li>
                             <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
+                        </li>
+                         <li>
+                            <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>
+                        </li>
+                         <li>
+                            <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Template</a>
                         </li>
                     </ul>
                 </div>

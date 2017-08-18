@@ -1,5 +1,21 @@
 @extends('layouts.maintenance')
 @section('content')
+@push('styles')
+<style>
+	.class-quotation-template
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 <div class = "container-fluid">
 	<div class = "row">
 		<h2>&nbsp;Maintenance | Quotation Terms and Condition Template</h2>
@@ -27,9 +43,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
 
 	<section class="content">
 		<form role="form" method = "POST" id = "commentForm">

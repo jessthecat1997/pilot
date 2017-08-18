@@ -1,4 +1,20 @@
 @extends('layouts.maintenance')
+@push('styles')
+<style>
+	.class-contract-template
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
