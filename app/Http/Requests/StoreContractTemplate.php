@@ -17,27 +17,8 @@ class StoreContractTemplate extends FormRequest
     {
 
 
-        switch ($this->method()) {
-            case 'POST':
-
-            return [
-            'name' => 'required|unique:contract_templates,name',
-            'description' => 'max:1000|required|unique:contract_templates,description'
-            ];
-
-            break;
-            
-            case 'PUT':
-
-            return [
-            'name' => 'required| unique:contract_templates,name,'. $this->segment(3) ,
-            'description' => 'max:1000|required|unique:contract_templates,description,'. $this->segment(3),
-            ];
-
-            break;
-            
-            default: break;
-        }
+        return[
+        ];
 
     }
 
