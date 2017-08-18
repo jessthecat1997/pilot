@@ -212,6 +212,8 @@ Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->na
 Route::resource('/quotation', 'QuotationsController');
 Route::get('/quotation/{id}/print', 'QuotationsController@print');
 Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
+//vanessa addition
+Route::resource('admin/quotation_template','QuotationTemplateController');
 
 // Trucking Route
 Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');
