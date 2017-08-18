@@ -100,7 +100,7 @@
 			</div>
 		</div>
 		<div class="panel-default col-sm-6">
-			<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#myModal">New Expense</button>
+			<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#expModal">New Expense</button>
 			<br/>
 			<br/>
 			<div class="panel-heading" id="heading">List of Expenses</div>
@@ -224,6 +224,82 @@
 				</div>
 				<div class="modal-footer">
 					<a class="btn but finalize-rev">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="expModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">New Expense</h4>
+				</div>
+				<div class="modal-body">
+					<table class = "table-responsive table" id = "exp_table">
+					<thead>
+						<tr>
+							<td colspan="5">
+								<button class = "btn but btn-md new-exp-row pull-right">Add Expense</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Amount *
+							</td>
+							<td>
+								Tax *
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id = "expense-row" name="expense-row">
+							<form class="form-horizontal">
+								{{ csrf_field() }}
+								<td>
+									<select name = "exp_bill_id" class = "form-control ">
+										<option>
+
+										</option>
+										@forelse($bill_exps as $exp)
+										<option value = "{{ $exp->id }}">
+											{{ $exp->name }}
+										</option>
+										@empty
+										@endforelse
+									</select>
+								</td>
+								<td>
+									<input type = "text" name = "exp_amount" class = "form-control" style="text-align: right">
+								</td>
+								<td>
+									<input type = "text" name = "exp_tax" class = "form-control" style="text-align: right">
+								</td>
+								<td>
+									<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
+								</td>
+								<tr id="desc_exp_row">
+									<td colspan="4">
+										<div class="form-group">
+											<label for="exp_description">Description:</label>
+											<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
+										</div>
+									</td>
+								</tr>
+							</form>
+						</tr>
+					</tbody>
+				</table>
+				<strong>Note:</strong> All fields with * are required.
+				</div>
+				<div class="modal-footer">
+					<a class="btn but finalize-exp">Save</a>
 				</div>
 			</div>
 		</div>
