@@ -51,8 +51,32 @@
 		</div>
 	</div>
 	<hr>
+
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<p>Some text in the modal.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 	<div class="row collapse in" id="bill_collapse">
 		<div class="panel-default col-sm-6">
+			<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#myModal">New Revenue</button>
+			<br/>
+			<br/>
 			<div class="panel-heading" id="heading">List of Revenues</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "rev_table">
@@ -73,6 +97,9 @@
 			</div>
 		</div>
 		<div class="panel-default col-sm-6">
+		<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#myModal">New Revenue</button>
+			<br/>
+			<br/>
 			<div class="panel-heading" id="heading">List of Expenses</div>
 			<div class="panel-body">
 				<table class = "table-responsive table" id = "exp_table">
