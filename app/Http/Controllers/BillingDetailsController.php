@@ -38,9 +38,22 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$so_head_id = $id;
-		
+		$bill_revs = DB::table('billings')
+		->select('id','name')
+		->where('bill_type', '=', 'R')
+		->get();
 
-		return view('billing/billing_index', compact(['bills', 'delivery', 'so_head_id']));
+
+		$bill_exps = DB::table('billings')
+		->select('id', 'name')
+		->where('bill_type', '=', 'E')
+		->get();
+
+		$vat = DB::table('vat_rates')
+		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
+		->get();
+
+		return view('billing/billing_index', compact(['bills', 'delivery', 'so_head_id', 'bill_revs', 'bill_exps', 'vat']));
 
 	}
 	public function show_billing(Request $request, $id)

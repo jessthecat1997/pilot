@@ -233,7 +233,7 @@ class DatatablesController extends Controller
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
 		->where([
-			['service_order_types.name', '=', 'brokerage'],
+			['service_order_types.name', '=', 'Brokerage'],
 			['paymentStatus', '=', 'U']
 			])
 		->get();
@@ -251,7 +251,7 @@ class DatatablesController extends Controller
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
 		->where([
-			['service_order_types.name', '=', 'trucking'],
+			['service_order_types.name', '=', 'Trucking'],
 			['paymentStatus', '=', 'U']
 			])
 		->get();
@@ -308,16 +308,12 @@ class DatatablesController extends Controller
 	}
 	public function revenue_datatable(Request $request)
 	{
-		$billing_header =  BillingInvoiceHeader::all()->last();
 		$rev = DB::table('billing_revenues')
 		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
 		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
-		->where([
-			['billing_invoice_headers.so_head_id', '=', $request->id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
-			])
+		->where('billing_revenues.bi_head_id', '=', $request->id)
 		->get();
 		return Datatables::of($rev)
 		->make(true);

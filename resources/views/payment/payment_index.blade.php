@@ -42,6 +42,30 @@
 	</div>
 	<hr>
 	<div class="row">
+		<h1 class="pull-left col-sm-3">Total: </h1>
+		<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Payment</button>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<div class="panel-heading" id="heading">Payment</div>
+		<div class="panel-body">
+			<table class = "table-responsive table" id = "revTable">
+				<thead>
+					<tr>
+						<td>
+							Name
+						</td>
+						<td>
+							Amount
+						</td>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<hr>
+	<!-- <div class="row">
 		<div class="panel-default col-sm-6">
 			<div class="panel-heading" id="heading">List of Unpaid Bills</div>
 			<div class = "panel-body">
@@ -53,6 +77,9 @@
 							</td>
 							<td>
 								Amount
+							</td>
+							<td>
+								Action
 							</td>
 						</tr>
 					</thead>
@@ -88,6 +115,68 @@
 		<input type="text" value="{{ $e->Total }}" id="exp" hidden/>
 		@empty
 		@endforelse
+	</div> -->
+	<div id="revModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">New Payment</h4>
+				</div>
+				<div class="modal-body">
+					<table class = "table-responsive table" id = "rev_table">
+						<thead>
+							<tr>
+								<td colspan="5">
+									<button class = "btn but btn-md new-rev-row pull-right">Add Payment</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Name *
+								</td>
+								<td>
+									Amount *
+								</td>
+								<td>
+									Action
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id = "revenue-row" name="revenue-row">
+								<form class="form-horizontal">
+									{{ csrf_field() }}
+									<td>
+										<select name = "rev_bill_id" class = "form-control ">
+											<option>
+
+											</option>
+											@forelse($bill_revs as $rev)
+											<option value = "{{ $rev->id }}">
+												{{ $rev->name }}
+											</option>
+											@empty
+											@endforelse
+										</select>
+									</td>
+									<td>
+										<input type = "text" name = "rev_amount" class = "form-control" style="text-align: right">
+									</td>
+									<td>
+										<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
+									</td>
+								</form>
+							</tr>
+						</tbody>
+					</table>
+					<strong>Note:</strong> All fields with * are required.
+				</div>
+				<div class="modal-footer">
+					<a class="btn but finalize-rev">Save</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
@@ -119,9 +208,15 @@
 			ajax: "{{ route('payments.data', $so_head_id) }}",
 			columns: [
 			{ data: 'name' },
-			{ data: 'amount' }
+			{ data: 'amount' },
+			{ data: 'action'}
 			]
 		})
+	})
+	$(document).on('click', '.makePayment', function(e){
+		var amount = $(this).val();
+		console.log(amount);
+		totalamt.val(amount);
 	})
 	$(document).on('click', '.finalize-payment', function(e){
 		$.ajax({
@@ -130,7 +225,8 @@
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $so_head_id }},
-				'amount' : totals
+				'amount' : totals,
+				'bi_head_id' : {{ $so_head_id }}
 			},
 			success: function (data){
 				var val = 'P';
