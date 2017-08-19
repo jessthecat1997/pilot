@@ -111,15 +111,17 @@
 	<script type="text/javascript">
 		var detail = "";
 		var error = "";
-		var temp_crModal = null;
+		var temp_terms = null;
 		var term_row = "<tr><td><textarea class = 'form-control' name = 'description' onkeyup='textAreaAdjust(this)' style='overflow:hidden'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
 
 		$(document).ready(function(){
 
 			$(document).on('click', '.update_term_condition', function(e){
 				e.preventDefault();
+
 				$('#term_table > tbody').html("");
 				var unsplit = $('.description').val();
+				temp_terms = unsplit;
 				var details = unsplit.split('<br /><br />');
 
 				details.pop();
@@ -154,49 +156,55 @@
 				e.preventDefault();
 				if(validate() ===  true){
 					console.log(detail);
-					$.ajax({
-						type: 'PUT',
-						url:  '/admin/contract_template/'+ 1,
-						data: {
-							'_token' : $('input[name=_token').val(),
-							'description' : detail,
-						},
-						success: function (data)
-						{
-							$('.description').val(data.description);
-							$('.actualdescription').html(data.description);
-							
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-							toastr["success"]("Record updated successfully")
+					if(temp_terms ==detail  )
+					{
+						$('#tcModal').modal('hide');
 
-							$('#tcModal').modal('hide');
-						}
-					});
+					}else{
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/contract_template/'+ 1,
+							data: {
+								'_token' : $('input[name=_token').val(),
+								'description' : detail,
+							},
+							success: function (data)
+							{
+								$('.description').val(data.description);
+								$('.actualdescription').html(data.description);
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+
+								$('#tcModal').modal('hide');
+							}
+						});
+					}
 				}
 			})
 		});
 
 		function textAreaAdjust(o) {
-				o.style.height = "1px";
-				o.style.height = (25+o.scrollHeight)+"px";
-			}
+			o.style.height = "1px";
+			o.style.height = (25+o.scrollHeight)+"px";
+		}
 
 		function validate(){
 			var term = [];
