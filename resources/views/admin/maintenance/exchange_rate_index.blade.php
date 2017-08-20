@@ -180,9 +180,7 @@
 			$('.modal-title').text('New Exchange Rate');
 			$('#description').val("");
 			$('rate').val("");
-			$('dateEffective').val("");
 			var now = new Date();
-
 			var day = ("0" + now.getDate()).slice(-2);
 			var month = ("0" + (now.getMonth() + 1)).slice(-2);
 			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
@@ -193,11 +191,11 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
+			var er_id = $(this).val();
 			data = ertable.row($(this).parents()).data();
+			$('#dateEffective').val(data.dateEffective);
 			$('#description').val(data.description);
 			$('#rate').val(data.rate);
-			$('#dateEffective').val(data.dateEffective);
 			$('.modal-title').text('Edit Exchange Rate');
 			$('#erModal').modal('show');
 		});
@@ -352,7 +350,6 @@
 						$('#erModal').modal('hide');
 						$('#description').val("");
 						$('rate').val("");
-						$('dateEffective').val("");
 						$('.modal-title').text('New Exchange Rate');
 					}
 				})

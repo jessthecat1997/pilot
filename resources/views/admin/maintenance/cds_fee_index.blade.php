@@ -1,11 +1,34 @@
 
 @extends('layouts.maintenance')
+@push('styles')
+<style>
+	.class-cds-fee
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @section('content')
 
 <div class = "container-fluid">
 	<div class = "row">
 		<h2>&nbsp;Maintenance | Container Delivery System Fee</h2>
 		<hr>
+		<h5>Current CDS Fee: Php 
+			@if($cds_fee[0]->fee != null)
+			{{ number_format((float)$cds_fee[0]->fee, 2) }}
+			@else
+			0.000000
+			@endif
+		</h5>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#cdsModal" style = "width: 100%;">New CDS Fee</button>
 		</div>
@@ -22,9 +45,6 @@
 							</td>
 							<td>
 								Date Effective
-							</td>
-							<td>
-								Created at
 							</td>
 							<td>
 								Actions
@@ -100,22 +120,7 @@
 	</section>
 </div>
 @endsection
-@push('styles')
-<style>
-	.class-cds-fee
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
+
 @push('scripts')
 <script type="text/javascript">
 $('#collapse2').addClass('in');
@@ -132,7 +137,6 @@ $('#collapse2').addClass('in');
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },                              
 				{ data: 'dateEffective' },
-				{ data: 'created_at'},
 				{ data: 'action', orderable: false, searchable: false }
 
 				],	"order": [[ 0, "desc" ]],

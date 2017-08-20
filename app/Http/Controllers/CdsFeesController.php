@@ -11,7 +11,23 @@ class CdsFeesController extends Controller
    
     public function index()
     {
-       return view('admin/maintenance.cds_fee_index');
+
+        $cdss = \DB::select("SELECT * FROM cds_fees WHERE dateEffective < NOW() ORDER BY dateEffective");
+        $current = $cdss[count($cdss) -1 ];
+      
+        \DB::update('UPDATE cds_fees SET currentFee = 0 WHERE id != ' . $current->id);
+        \DB::update('UPDATE cds_fees SET currentFee = 1 WHERE id = ' . $current->id);
+
+        $cds_fee = \DB::table('cds_fees')
+        ->select('fee')
+        ->where('currentFee', '=', 1)
+        ->get();
+
+        if(count($cds_fee) == 0){
+            $cds_fee[0]->fee = 0;
+        }
+
+       return view('admin/maintenance.cds_fee_index', compact(['cds_fee']));
     }
 
   
