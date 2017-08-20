@@ -151,6 +151,7 @@ class TruckingsController extends Controller
                 $new_row['container'] = $container;
                 $new_row['details'] = $container_details;
                 array_push($container_with_detail, $new_row);
+
             }
 
         }
