@@ -58,16 +58,31 @@
 							</div>
 							<div class="form-group">
 								<label class = "control-label">Charge Type: </label>
-								<input type="radio" name="chargeType" value="0"> Fixed
+								<input type="radio" name="chargeType" value="0"  checked = "checked"> Fixed
 								<input type="radio" name="chargeType" value="1">Rate
-							</div>
-							<div class="form-group">
-								<label class = "control-label">Amount: </label>
-								<div class = "form-group input-group " >
-									<span class = "input-group-addon">Php</span>
-									<input type = "text" class = "form-control money" name = "amount" id = "amount" data-rule-required="true" value= "0.00"/>
+								<div class="form-group">
+									<div id = "type0" class = "chargeValue">
+										<label class = "control-label">Amount: </label>
+										<div class = "form-group input-group " >
+											<span class = "input-group-addon">Php</span>
+											<input type = "text" class = "form-control money" name = "amount_fixed" id = "amount_fixed" data-rule-required="true" value= "0.00"/>
+										</div>
+									</div>
+
+									<div id = "type1" class = "chargeValue">
+										<label class = "control-label">Rate: </label>
+										<div class = "form-group input-group " >
+
+											<input type = "text" value= "0" class = "form-control" name = "amount_rate" id = "amount_rate" data-rule-required="true"  style="text-align: right"/>
+											<span class = "input-group-addon">%</span>
+										</div>
+									</div>
+
 								</div>
+
 							</div>
+
+
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
@@ -124,6 +139,8 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
+	var temp_amount = null;
+	var temp_chargeType = null;
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
 			processing: false,
@@ -134,12 +151,33 @@
 			
 			{ data: 'name' },
 			{ data: 'description' },
-			{ data: 'chargeType' },
-			{ data: 'amount' },
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'chargeType',
+			"render" : function( data, type, full ) {
+				return formatWithChargeType(data); }},
+				{ data: 'amount' },
+				{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "desc" ]],
+				],	"order": [[ 0, "desc" ]],
+			});
+
+		function formatWithChargeType(n) { 
+
+			if (n == 1){
+				return "Rate";
+			}else{
+				return "Fixed";
+			}
+
+		} 
+
+		$('#amount_rate').inputmask(
+
+			'Regex', { regex: "^[0-9][0-9]?$|^100$" 
 		});
+
+		jQuery.validator.addMethod("notEqual", function(value, element, param) {
+			return this.optional(element) || value != param;
+		}, "This field is required");
 
 		$("#commentForm").validate({
 			rules: 
@@ -149,27 +187,64 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z'-.,  ]+$/,
 				},
 
 				description:
 				{
 					maxlength: 150,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9'-.,  ]+$/,
+				},
+
+				amount_fixed:
+				{
+					notEqual:"0.00",
+
+				},
+				amount_rate:
+				{
+					notEqual: "0"
 				},
 
 			},
-			onkeyup: false, 
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()}, 
+		});
+
+
+
+
+		$("input[name$='chargeType']").click(function() {
+			var choice = $(this).val();
+			$("div.chargeValue").hide();
+			$("#type" + choice).show();
 		});
 
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Charge');
+			if(  $('input[name=chargeType]:checked').val() == 0){
+				$('#type1').hide();
+				$('#type0').show();
+				$('#amount_fixed').val("0.00");
+
+			}else{
+				$('#type0').hide();
+				$('#type1').show();
+				$('#amount_rate').val("0");
+			}
 			$('#name').val("");
 			$('#description').val("");
-			$('#amount').val("");
+			
+			
 			$('#chModal').modal('show');
 
 		});
@@ -177,15 +252,24 @@
 			resetErrors();
 			var ch_id = $(this).val();
 			data = chtable.row($(this).parents()).data();
-			
 			$('#description').val(data.description);
 			$('#name').val(data.name);
 			$("[name=chargeType]").val([data.chargeType]);
-			$('#amount').val(data.amount);
 
 
+			if(  $('input[name=chargeType]:checked').val() == 0){
+				$('#type1').hide();
+				$('#type0').show();
+				$('#amount_fixed').val(data.amount);
+			}else{
+				$('#type0').hide();
+				$('#type1').show();
+				$('#amount_rate').val(data.amount);
+			}
+			temp_chargeType = data.chargeType;
 			temp_name = data.name;
 			temp_desc = data.description;
+			temp_amount = data.amount;
 
 			$('.modal-title').text('Update Charge');
 			$('#chModal').modal('show');
@@ -240,6 +324,15 @@
 
 			$('#name').valid();
 			$('#description').valid();
+			$('#amount_rate').valid();
+			$('#amount_fixed').valid();
+
+			var final_amount;
+			if(  $('input[name=chargeType]:checked').val() == 0){
+				final_amount = $('#amount_fixed').inputmask('unmaskedvalue');
+			}else{
+				final_amount = $('#amount_rate').inputmask('unmaskedvalue');
+			}
 
 			if(title == "New Charge")
 			{
@@ -254,7 +347,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
-							'amount':$('#amount').inputmask('unmaskedvalue'),
+							'amount':final_amount,
 							'chargeType': $('input[name=chargeType]:checked').val(),
 						},
 						success: function (data)
@@ -314,10 +407,13 @@
 
 				if($('#name').valid() && $('#description').valid())
 				{
-					if($('#name').val() === temp_name && $('#description').val() === temp_desc)
+					if($('#name').val() == temp_name && $('#description').val() == temp_desc && final_amount == temp_amount  )
 					{
+						console.log("yey");
 						$('#name').val("");
 						$('#description').val("");
+						$('#amount_rate').val("0");
+						$('#amount_fixed').val("0.00");
 						$('#btnSave').removeAttr('disabled');
 						$('#chModal').modal('hide');
 					}
@@ -332,7 +428,7 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
-								'amount':$('#amount').inputmask('unmaskedvalue'),
+								'amount':final_amount,
 								'chargeType': $('input[name=chargeType]:checked').val(),
 							},
 							success: function (data)
@@ -365,7 +461,7 @@
 										"showMethod": "fadeIn",
 										"hideMethod": "fadeOut"
 									}
-									toastr["success"]("Record addded successfully");
+									toastr["success"]("Record updated successfully");
 
 									$('#btnSave').removeAttr('disabled');
 
@@ -389,7 +485,7 @@
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

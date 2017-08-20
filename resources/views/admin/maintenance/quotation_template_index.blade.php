@@ -1,7 +1,8 @@
 @extends('layouts.maintenance')
+@section('content')
 @push('styles')
 <style>
-	.class-contract-template
+	.class-quotation-template
 	{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
@@ -15,13 +16,12 @@
 	}
 </style>
 @endpush
-@section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Contract Agreement Template</h2>
+		<h2>&nbsp;Maintenance | Quotation Terms and Condition Template</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  type = "submit" style="" class = "btn btn-primary  btn-md update_term_condition ">Update Agreements</button>
+			<button  type = "submit" style="" class = "btn btn-primary  btn-md update_term_condition ">Update Terms and Condition</button>
 		</div>
 	</div>
 	<br />
@@ -30,12 +30,12 @@
 			<div class = "panel-body">
 				<div style = "overflow-y: scroll; overflow-wrap: none; height:100%;" class="panel-default panel">
 
-					@if($contract[0]->description == null)
-					<h5 style="text-align: center;">No specified agreement details</h5>
+					@if($quotation[0]->terms == null)
+					<h5 style="text-align: center;">No specified terms and condition details</h5>
 					@else
 					<p>
-						<pre wrap="off" class = "actualdescription">{!! $contract[0]->description !!}</pre>
-						<input type = "hidden" class = "description" value="{{ $contract[0]->description }}" />
+						<pre class = "actualterms">{!! $quotation[0]->terms !!}</pre>
+						<input type = "hidden" class = "terms" value="{{ $quotation[0]->terms }}" />
 					</p>
 
 					@endif
@@ -43,9 +43,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
 
 	<section class="content">
 		<form role="form" method = "POST" id = "commentForm">
@@ -63,7 +60,7 @@
 								<thead>
 									<tr>
 										<td style="width: 95%;">
-											<strong>Description</strong>
+											<strong>terms</strong>
 										</td>
 										<td style="width: 5%;">
 											<strong>Action</strong>
@@ -112,17 +109,19 @@
 		var detail = "";
 		var error = "";
 		var temp_terms = null;
-		var term_row = "<tr><td><textarea class = 'form-control' name = 'description' onkeyup='textAreaAdjust(this)' style='overflow:hidden'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
+		var term_row = "<tr><td><textarea class = 'form-control' name = 'terms' onkeyup='textAreaAdjust(this)' style='overflow:hidden'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
 
 		$(document).ready(function(){
+			
 
 			$(document).on('click', '.update_term_condition', function(e){
 				e.preventDefault();
 
 				$('#term_table > tbody').html("");
-				var unsplit = $('.description').val();
+
+				var unsplit = $('.terms').val();
 				temp_terms = unsplit;
-				var details = unsplit.split('<br /><br />');
+				var details = unsplit.split('<br />');
 
 				details.pop();
 				
@@ -130,11 +129,11 @@
 				for(var i = 0; i < details.length; i++)
 				{
 
-					detail_html += "<tr><td><textarea rows = '4' style= 'border-color: green;' name = 'description' class = 'form-control' onkeyup='textAreaAdjust(this)' style='overflow:hidden'>"+ 
-					details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
+					detail_html += "<tr><td><textarea onkeyup='textAreaAdjust(this)' style='overflow:hidden' rows = '2' style= 'border-color: green;' name = 'terms' class = 'form-control'>"+ details[i].substring(3, details[i].length) +"</textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>"
 					
 				}
 				$('#term_table > tbody').append(detail_html);
+				
 				$('#tcModal').modal('show');
 			})
 
@@ -154,24 +153,24 @@
 
 			$(document).on('click', '.update_contract_term_save', function(e){
 				e.preventDefault();
+					console.log(temp_terms);
 				if(validate() ===  true){
-					console.log(detail);
-					if(temp_terms ==detail  )
+					if(detail == temp_terms  )
 					{
 						$('#tcModal').modal('hide');
-
 					}else{
+
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/contract_template/'+ 1,
+							url:  '/admin/quotation_template/'+ 1,
 							data: {
 								'_token' : $('input[name=_token').val(),
-								'description' : detail,
+								'terms' : detail,
 							},
 							success: function (data)
 							{
-								$('.description').val(data.description);
-								$('.actualdescription').html(data.description);
+								$('.terms').val(data.terms);
+								$('.actualterms').html(data.terms);
 
 								toastr.options = {
 									"closeButton": false,
@@ -196,11 +195,12 @@
 								$('#tcModal').modal('hide');
 							}
 						});
+
 					}
-				}
+					
+				} //if validate
 			})
 		});
-
 		function textAreaAdjust(o) {
 			o.style.height = "1px";
 			o.style.height = (25+o.scrollHeight)+"px";
@@ -210,7 +210,7 @@
 			var term = [];
 			error = "";
 			detail = "";
-			term_descrp = document.getElementsByName('description');
+			term_descrp = document.getElementsByName('terms');
 			for(var i = 0; i < term_descrp.length; i++)
 			{
 				if(term_descrp[i].value === "")
@@ -221,7 +221,7 @@
 				else
 				{
 					term.push(term_descrp[i].value);
-					detail += (i + 1) + ". " + term_descrp[i].value + "<br /><br />";
+					detail += (i + 1) + ". " + term_descrp[i].value + "<br />";
 					term_descrp[i].style.borderColor = 'green';
 				}
 			}
@@ -229,9 +229,8 @@
 			if(error.length == 0)
 			{
 				return true;
-				console.log(detail);
-			}
-			else
+				
+			}else
 			{
 				return false;
 			}

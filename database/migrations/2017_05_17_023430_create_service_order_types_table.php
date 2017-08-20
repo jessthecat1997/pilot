@@ -19,9 +19,9 @@ class CreateServiceOrderTypesTable extends Migration
 
         DB::statement("
             INSERT INTO `service_order_types` (`id`, `name`, `description`) VALUES 
-            (NULL, 'brokerage', 'A profession that involves the clearing of documents for discharge or release  of goods through  the Bureau of Customs '),
-            (NULL, 'trucking', 'A profession that  involves in the process or business of conveying goods on trucks.'),
-            (NULL, 'brokerage and trucking', 'Customs brokerage with trucking service')
+            (NULL, 'Brokerage', 'A profession that involves the clearing of documents for discharge or release  of goods through  the Bureau of Customs '),
+            (NULL, 'Brucking', 'A profession that  involves in the process or business of conveying goods on trucks.'),
+            (NULL, 'Brokerage and Trucking', 'Customs brokerage with trucking service')
             
             ");
     }

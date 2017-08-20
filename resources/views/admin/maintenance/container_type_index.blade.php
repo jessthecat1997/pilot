@@ -171,10 +171,7 @@
 
 
 			},
-			onkeyup: function(element) {$(element).valid()}, 
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()},
 		});
 
 

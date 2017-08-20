@@ -15,7 +15,7 @@ class CreateDeliveryContainers extends Migration
     {
         Schema::create('delivery_containers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('containerNumber', 11);
+            $table->string('containerNumber', 15);
             $table->string('containerVolume', 4);
             $table->string('shippingLine', 100)->nullable();
             $table->string('portOfCfsLocation', 100)->nullable();

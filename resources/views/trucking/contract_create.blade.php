@@ -809,7 +809,7 @@ function finalvalidateContractRows()
 		}
 		else{
 			terms[i].style.borderColor = "green";
-			terms_and_condition_string += (i + 1) + ". " + terms[i].value + "<br />";
+			terms_and_condition_string += (i + 1) + ". " + terms[i].value + "<br /><br />";
 		}
 	}
 	console.log(terms_and_condition_string);

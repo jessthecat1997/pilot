@@ -42,7 +42,7 @@
 																			<div class="form-group required">
 																				<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
 																				<div class="col-sm-8">
-																					<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
+																					<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" placeholder="CSQU3054383" />
 																				</div>
 																			</div>
 																		</div>
@@ -545,6 +545,13 @@
 		var container_array = [0];
 		var selected_container = 0;
 		var selected_location = 0;
+
+		//containerNumber
+		Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
+
+
+
+
 		// Trucking
 		$(document).on('click', '.edit-trucking-information', function(e){
 			$('#_destination').val($('#tr_destination').text().trim());
