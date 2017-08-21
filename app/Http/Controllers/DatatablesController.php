@@ -32,7 +32,6 @@ class DatatablesController extends Controller
 {
 	public function vt_datatable(){
 		$vtypes = VehicleType::select(['id', 'name','description', 'withContainer', 'created_at']);
-
 		return Datatables::of($vtypes)
 		->addColumn('action', function ($vtype) {
 			return
@@ -580,17 +579,17 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($delivery){
 			if($delivery->status == 'P' || $delivery->status == 'C'){
 				return
-			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
-			<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
-			<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
-			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
+				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
+				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
+				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
 			if($delivery->status == 'F'){
 				return
-			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
-			 <button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
-			 <button disabled class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
-			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
+				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+				<button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
+				<button disabled class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
+				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
 		})
 		->editColumn('status', function($deliveries){
@@ -855,9 +854,8 @@ class DatatablesController extends Controller
 	public function bf_deactivated(Request $request){
 		$bfs;
 		if ($request->filter == 0){
-			$bfs = DB::table('brokerage_fees')
-			->select('id', 'minimum', 'maximum', 'amount', 'created_at', 'deleted_at')
-			->get();
+			$bfs = DB::select("SELECT h.id, h.dateEffective AS dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id GROUP BY h.id");
+
 
 			return Datatables::of($bfs)
 			->addColumn('action', function ($bfs){
@@ -883,10 +881,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			$bfs = DB::table('brokerage_fees')
-			->select('id', 'minimum', 'maximum', 'amount', 'created_at', 'deleted_at')
-			->where('deleted_at','=',null)
-			->get();
+			$bfs = DB::select("SELECT h.id, h.dateEffective AS dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id  WHERE h.deleted_at IS NULL GROUP BY h.id");
 
 			return Datatables::of($bfs)
 			->addColumn('action', function ($bfs){
@@ -907,10 +902,8 @@ class DatatablesController extends Controller
 
 
 		}else if ($request->filter == 2){
-			$bfs = DB::table('brokerage_fees')
-			->select('id', 'minimum', 'maximum', 'amount', 'created_at', 'deleted_at')
-			->where('deleted_at','!=',null)
-			->get();
+			$bfs = DB::select("SELECT h.id, h.dateEffective AS dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id  WHERE h.deleted_at IS NOT NULL GROUP BY h.id");
+
 
 			return Datatables::of($bfs)
 			->addColumn('status', function ($bfs){
@@ -938,7 +931,7 @@ class DatatablesController extends Controller
 		$chs;
 		if ($request->filter == 0){
 			$chs = DB::table('charges')
-			->select('id', 'description','created_at', 'deleted_at')
+			->select('id', 'name','description', 'chargeType','amount','created_at', 'deleted_at')
 			->get();
 
 			return Datatables::of($chs)
@@ -966,7 +959,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$chs = DB::table('charges')
-			->select('id', 'description','created_at', 'deleted_at')
+			->select('id', 'name','description', 'chargeType','amount','created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -990,7 +983,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$chs = DB::table('charges')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name','description', 'chargeType','amount', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 
@@ -1020,7 +1013,7 @@ class DatatablesController extends Controller
 		$cts;
 		if ($request->filter == 0){
 			$cts = DB::table('container_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description','maxWeight', 'created_at', 'deleted_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1049,7 +1042,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$cts = DB::table('container_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name', 'description','maxWeight', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -1073,7 +1066,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$cts = DB::table('container_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description','maxWeight', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 
@@ -1321,7 +1314,7 @@ class DatatablesController extends Controller
 
 
 		}else if ($request->filter == 2){
-			$ers = DB::table('employee_types')
+			$ers = DB::table('exchange_rates')
 			->select('id', 'description', 'rate', 'dateEffective', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -1352,10 +1345,9 @@ class DatatablesController extends Controller
 	public function ipf_deactivated(Request $request){
 		$ipfs;
 		if ($request->filter == 0){
-			$ipfs = DB::table('ipf_fees')
-			->select('id',  'minimum', 'maximum','amount', 'created_at', 'deleted_at')
-			->orderBy('deleted_at', 'desc')
-			->get();
+
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
+			
 
 			return Datatables::of($ipfs)
 			->addColumn('action', function ($ipfs){
@@ -1381,10 +1373,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			$ipfs = DB::table('ipf_fees')
-			->select('id',  'minimum', 'maximum','amount', 'created_at', 'deleted_at')
-			->where('deleted_at','=',null)
-			->get();
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id");
 
 			return Datatables::of($ipfs)
 			->addColumn('action', function ($ipfs){
@@ -1405,10 +1394,7 @@ class DatatablesController extends Controller
 
 
 		}else if ($request->filter == 2){
-			$ipfs = DB::table('ipf_fees')
-			->select('id',  'minimum', 'maximum','amount', 'created_at', 'deleted_at')
-			->where('deleted_at','!=',null)
-			->get();
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULLGROUP BY h.id");
 
 			return Datatables::of($ipfs)
 			->addColumn('status', function ($ipfs){
@@ -1598,7 +1584,7 @@ class DatatablesController extends Controller
 		$vts;
 		if ($request->filter == 0){
 			$vts = DB::table('vehicle_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name','withContainer', 'description', 'created_at', 'deleted_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1627,7 +1613,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$vts = DB::table('vehicle_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name','withContainer','description', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -1651,7 +1637,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$vts = DB::table('vehicle_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name','withContainer', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 
@@ -1681,7 +1667,8 @@ class DatatablesController extends Controller
 		$vs;
 		if ($request->filter == 0){
 			$vs = DB::table('vehicles')
-			->select('vehicle_types_id', 'plateNumber', 'model','dateRegistered', 'created_at', 'deleted_at')
+			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1710,8 +1697,10 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$vs = DB::table('vehicles')
-			->select('vehicle_types_id', 'plateNumber', 'model','dateRegistered', 'created_at', 'deleted_at')
-			->where('deleted_at','=',null)
+			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+			->where('vehicles.deleted_at', '=', null)
+			->orderBy('deleted_at', 'desc')
 			->get();
 
 			return Datatables::of($vs)
@@ -1734,8 +1723,10 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$vs = DB::table('vehicles')
-			->select('vehicle_types_id', 'plateNumber', 'model','dateRegistered', 'created_at', 'deleted_at')
-			->where('deleted_at','!=',null)
+			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+			->where('vehicles.deleted_at', '!=', null)
+			->orderBy('deleted_at', 'desc')
 			->get();
 
 			return Datatables::of($vs)

@@ -18,16 +18,10 @@
 					<thead>
 						<tr>
 							<td>
-								No.
-							</td>
-							<td>
 								Rate
 							</td>
 							<td>
 								Date Effective
-							</td>
-							<td>
-								Created at
 							</td>
 							<td>
 								Actions
@@ -130,12 +124,12 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
-			{ data: 'id'},
+		
 			{ data: 'rate',
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },                              
 				{ data: 'dateEffective' },
-				{ data: 'created_at'},
+				
 				{ data: 'action', orderable: false, searchable: false }
 
 				],	"order": [[ 0, "desc" ]],

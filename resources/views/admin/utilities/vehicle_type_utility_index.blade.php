@@ -23,13 +23,13 @@
 					<thead>
 						<tr>
 							<td>
-								No.
+								Name
 							</td>
 							<td>
 								Description
 							</td>
 							<td>
-								Created at
+								With Container 
 							</td>
 							<td>
 								Status
@@ -90,15 +90,15 @@
 	</section>
 	@endsection
 	@push('styles')
-<style>
-	.utilities
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
+	<style>
+		.utilities
+		{
+			border-left: 10px solid #2ad4a5;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
+		}
+	</style>
+	@endpush
 	@push('scripts')
 	<script type="text/javascript">
 		var data;
@@ -109,15 +109,33 @@
 				serverSide: true,
 				ajax: 'http://localhost:8000/utilities/vehicle_type_deactivated/' + filter,
 				columns: [
-				{ data: 'id' },
+				{ data: 'name' },
 				{ data: 'description' },
-				{ data: 'created_at'},
-				{ data: 'status'},
-				{ data: 'action', orderable: false, searchable: false }
+				{ data: 'withContainer',
+				"render" : function( data, type, full ) {
+					return formatWithContainer(data); }},
+					{ data: 'status'},
+					{ data: 'action', orderable: false, searchable: false }
 
-				],
-				"order": [[ 4 , "desc"]],
-			});
+					],
+					"order": [[ 4 , "desc"]],
+				});
+
+
+
+
+			function formatWithContainer(n) { 
+
+				if (n === 0){
+					return "with ";
+				}else{
+					return "without ";
+				}
+				
+			} 
+
+
+
 			
 			$(document).on('click', '.deactivate', function(e){
 				var vt_id = $(this).val();
@@ -131,6 +149,8 @@
 				data = vtable.row($(this).parents()).data();
 				$('#confirm-activate').modal('show');
 			});
+
+
 
 
 
@@ -212,22 +232,23 @@ $('#btnActivate').on('click', function(e){
 $(document).on('change', '.change-filter', function(e)
 {
 	filter = $(this).val();
-	$('#cds_table').dataTable().fnDestroy();
+	$('#vtype_table').dataTable().fnDestroy();
 	var vtable = $('#vtype_table').DataTable({
 		processing: true,
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/vehicle_type_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
+		{ data: 'name' },
 		{ data: 'description' },
-		{ data: 'created_at'},
-		{ data: 'status'},
-		{ data: 'action', orderable: false, searchable: false }
+		{ data: 'withContainer',
+		"render" : function( data, type, full ) {
+			return formatWithContainer(data); }},
+			{ data: 'status'},
+			{ data: 'action', orderable: false, searchable: false }
 
-		],
-		"order": [[ 4 , "desc"]],
-
-	});
+			],
+			"order": [[ 4 , "desc"]],
+		});
 })
 
 });
