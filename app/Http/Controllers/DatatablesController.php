@@ -573,14 +573,14 @@ class DatatablesController extends Controller
 			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i:s A');
 		})
 		->addColumn('action', function ($delivery){
-			if($delivery->status == 'P' || $delivery->status == 'C'){
+			if($delivery->status == 'P'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
 				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
 				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
-			if($delivery->status == 'F'){
+			if($delivery->status == 'F' || $delivery->status == 'C'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 				<button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 

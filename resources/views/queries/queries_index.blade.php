@@ -23,6 +23,7 @@
 								<option value = "8">List of Near Due Date Bills</option>
 								<option value = "9">List of Overdue Bills</option>
 								<option value = "10">Expiring Vehicle Registrations</option>
+								<option value = "11">Finished Trucking Orders</option>
 							</select>
 						</div>
 					</div>

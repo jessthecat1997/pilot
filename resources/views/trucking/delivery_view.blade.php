@@ -107,7 +107,7 @@
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
 						{{ csrf_field() }}
-						<div class="form-group">
+						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
 							<div class="col-sm-8"> 
 								<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
@@ -115,6 +115,20 @@
 									<option value = "C">Cancelled</option>
 									<option value = "F">Finished</option>
 								</select>
+							</div>
+						</div>
+						<div class = "collapse delivery_remarks_collapse fade">
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="deliveryCancel">Date Cancelled</label>
+								<div class="col-sm-8"> 
+									<input type = "date" class = "form-control" name = "deliveryCancel" id = "deliveryCancel" />
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
+								<div class="col-sm-8"> 
+									<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
+								</div>
 							</div>
 						</div>
 					</form>
@@ -505,20 +519,39 @@
 			}
 
 		})
-		$(document).on('click', '.save-delivery-information', function(e){
+		$(document).on('change', '#deliveryStatus', function(e){
+			e.preventDefault();
+			if($('#deliveryStatus').val() == "C"){
+				console.log('aa');
+				$('.delivery_remarks_collapse').addClass('in');
+				var now = new Date();
+				var day = ("0" + now.getDate()).slice(-2);
+				var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				$('#deliveryCancel').val(today);
+			}
+			else
+			{
+				$('.delivery_remarks_collapse').removeClass('in');
+			}
 
+		})
+
+		$(document).on('click', '.save-delivery-information', function(e){
 			$.ajax({
 				type: 'PUT',
 				url: '{{ route("trucking.store") }}/{{ $so_id }}/update_delivery',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
-					'delivery_head_id' :  {{ $delivery[0]->id }},
-
-
+					'remarks' : $('#deliveryRemarks').val(),
+					'cancelDateTime' : $('#deliveryCancel').val(),
+					'delivery_head_id' : {{ $delivery[0]->id }},
+					
 				},
 				success: function(data){
-					location.reload();
+					$('#deliveryModal').modal('hide');
+					window.location.reload();
 				}	
 			})
 		})
