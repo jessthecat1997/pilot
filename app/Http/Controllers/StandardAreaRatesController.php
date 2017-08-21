@@ -35,8 +35,6 @@ class StandardAreaRatesController extends Controller
         return $area;
     }
 
-	
-
 
 	public function destroy($id)
 	{
@@ -44,4 +42,17 @@ class StandardAreaRatesController extends Controller
 		$sar = StandardAreaRate::findOrFail($id);
         $sar->delete();
 	}
+
+	public function reactivate(Request $request)
+    {
+        $sar = StandardAreaRate::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function sar_utilities(){
+
+        return view('admin/utilities.standard_area_rate_utility_index');
+    }
 }
