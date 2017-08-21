@@ -246,7 +246,7 @@ Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'Trucking
 Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
 Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
-//Route::get('/trucking/contracts/{contract_id}/update_draft', 'ContractsController@updateDraft');
+Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
 
 
@@ -275,5 +275,6 @@ Route::resource('/admin/settings', 'BusinessSettingsController');
 //Query
 # Active Contracts
 Route::get('queries', 'QueriesController@index')->name('queries.index');
-Route::get('queries/get_active_contract', 'DatatablesController@get_active_contract')->name('get_active_contract');
-Route::get('queries/get_pending_deliveries', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
+Route::get('queries/get_pending_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');

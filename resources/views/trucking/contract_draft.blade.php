@@ -105,13 +105,13 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 							<div class="col-sm-8">
-								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date">
+								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" value="{{ $contract[0]->dateEffective }}">
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="dateExpiration">Date Expiration:</label>
 							<div class="col-sm-8">
-								<input type="date" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date">
+								<input type="date" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date" value="{{ $contract[0]->dateExpiration }}">
 							</div>
 						</div>
 					</form>
@@ -383,6 +383,7 @@
 
 		$.fn.dataTable.ext.errMode = 'throw';
 
+
 		$("#commentForm").validate({
 			rules: 
 			{
@@ -399,6 +400,35 @@
 		});
 
 		$('#consignee_id').select2(); 
+
+		consigneeID = {{ $contract[0]->consignees_id}};
+		$.ajax({
+			type: 'GET',
+			url: "{{ route('consignee.index')}}/" +consigneeID+ "/getConsignee",
+			data: {
+				'_token' : $('input[name=_token]').val(),
+			},
+			success: function(data){
+				if(typeof(data) == "object"){
+					console.log(data);
+					$('#_cfirstName').val(data[0].firstName);
+					$('#_cmidddleName').val(data[0].middleName);
+					$('#_clastName').val(data[0].lastName);
+					$('#_ccontactNumber').val(data[0].contactNumber);
+					$('#_cemail').val(data[0].email);
+					$('#_ccompanyName').val(data[0].companyName);
+					$('#_cbusinessStyle').val(data[0].businessStyle);
+					$('#_cTIN').val(data[0].TIN);
+				}
+			},
+			error: function(data) {
+				if(data.status == 400){
+					alert("Nothing found");
+				}
+			}
+		})
+
+
 
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();
@@ -653,10 +683,11 @@
 		
 
 		$(document).on('click', '.finalize-contract', function(e){
+			e.preventDefault();
 			if(finalvalidateContractRows() === true){
 				$.ajax({
-					method: 'POST',
-					url: '{{ route("create_contract") }}',
+					method: 'PUT',
+					url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'consigneeName' : $('#consigneeName').val(),
@@ -665,6 +696,8 @@
 						'isFinalize' : 1,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'update_type' : 4,
+						'contract_id' : {{ $contract[0]->id }},
 					},
 
 					success: function (data){
@@ -678,18 +711,23 @@
 
 
 		$(document).on('click', '.draft-contract', function(e){
+			e.preventDefault();
+
+			console.log(" this is "+$(this).val());
 			if(validateDraft() === true){
 				$.ajax({
-					method: 'POST',
-					url: '{{ route("create_contract") }}',
+					method: 'PUT',
+					url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
 					data: {
-						'_token' : $('input[name=_token]').val(),
+						'_token' : $('input[name=_token').val(),
 						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						'isFinalize':0,
+						'isFinalize': 0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'update_type' : 4,
+						'contract_id' : {{ $contract[0]->id }},
 					},
 
 					success: function (data){

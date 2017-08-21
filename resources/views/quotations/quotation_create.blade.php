@@ -271,7 +271,7 @@
 						<div id="con_collapse" class="collapse in">
 							<ul class="nav nav-tabs">
 								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
-								<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+								<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
 								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
 							</ul>
 
@@ -317,9 +317,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
 											<div class="col-md-8">          
-												<label class="switch">
-													<input type="checkbox" class = "checkbox same_billing_address">
-												</label>
+												<input type="checkbox" class = "checkbox same_billing_address">
 											</div>
 										</div>
 									</div>

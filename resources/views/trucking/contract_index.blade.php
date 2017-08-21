@@ -75,7 +75,7 @@
 
 		$(document).on('click', '.update-draft', function(e){
 			var contract_id = $(this).val();
-			window.location.replace("{{ route('contracts.index')}}/" + $(this).val() + "/amend");
+			window.location.replace("{{ route('contracts.index')}}/" + $(this).val() + "/draft");
 		})
 
 		$(document).on('click', '.view-contract-details', function(e){

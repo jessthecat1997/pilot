@@ -130,21 +130,21 @@
 			{ data: 'withContainer',
 			"render" : function( data, type, full ) {
 				return formatWithContainer(data); }},
-			{ data: 'description' },
-			{ data: 'action', orderable: false, searchable: false }
+				{ data: 'description' },
+				{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
-		});
+				],	"order": [[ 0, "asc" ]],
+			});
 
 		function formatWithContainer(n) { 
 
-            if (n === 0){
-            	return "with ";
-            }else{
-            	return "without ";
-            }
-             
-        } 
+			if (n === 0){
+				return "with ";
+			}else{
+				return "without ";
+			}
+
+		} 
 
 		$("#commentForm").validate({
 			rules: 
@@ -239,7 +239,7 @@
 			})
 		});
 
-
+		
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
@@ -270,49 +270,48 @@
 								$('#description').val("");
 								$('.modal-title').text('New Vehicle Type');
 
-					//Show success
 
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record addded successfully");
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully");
 
-					$('#name').val("");
-					$('#description').val("");
-					$('#btnSave').removeAttr('disabled');
-					
-				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-						console.log(i + " => " + v);
-						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								$('#name').val("");
+								$('#description').val("");
+								$('#btnSave').removeAttr('disabled');
+
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
 
-					});
-					$('#btnSave').removeAttr('disabled');
-					
-				}
-			},
-			
-		})
+								});
+								$('#btnSave').removeAttr('disabled');
+
+							}
+						},
+
+					})
 				}
 			}
 			else
@@ -344,55 +343,53 @@
 									$('#description').val("");
 									$('.modal-title').text('New Vehicle Type');
 
-					//Show success
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully");
 
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record updated successfully");
-
-					$('#name').val("");
-					$('#description').val("");
-					$('#btnSave').removeAttr('disabled');
-					
-				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-						console.log(i + " => " + v);
-						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									$('#name').val("");
+									$('#description').val("");
+									$('#btnSave').removeAttr('disabled');
+									
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v);
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
 
-					});
-					$('#btnSave').removeAttr('disabled');
-					
-				}
-			},
-			
-		})
+									});
+									$('#btnSave').removeAttr('disabled');
+									
+								}
+							},
+							
+						})
 					}
 				}
 			}
 		});
 
-	});
+});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

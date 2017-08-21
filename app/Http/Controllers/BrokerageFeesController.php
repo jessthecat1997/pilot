@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\BrokerageFeeHeader;
 use App\BrokerageFeeDetail;
 use App\Http\Requests\StoreBrokerageFee;
-
+use Illuminate\Support\Facades\DB;
 
 class BrokerageFeesController extends Controller
 {

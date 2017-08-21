@@ -131,8 +131,8 @@ class ContractsController extends Controller
 
     public function agreement_pdf(Request $request)
     {
-     try
-     {
+       try
+       {
         $contract = DB::table('contract_headers')
         ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
         ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -159,18 +159,22 @@ public function draft_contract(Request $request)
 
     try
     {
+
+
+        $consignees = \App\Consignee::all();
+        $provinces = \App\LocationProvince::all();
+
         $contract = DB::table('contract_headers')
-        ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+        ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails','isFinalize', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
         ->join('consignees AS B', 'consignees_id', '=', 'B.id')
         ->where('contract_headers.id', '=', $request->contract_id)
         ->get();
-      
 
-        $terms = explode('<br /><br />', $contract[0]->specificDetails);
-        array_pop($terms);
+        $desc_array = explode('<br /><br />', $contract[0]->specificDetails);
+        array_pop($desc_array);
 
 
-        return view('/trucking.contract_draft', compact(['contract', 'terms']));
+        return view('/trucking.contract_draft', compact(['contract','desc_array','consignees','provinces']));
 
     }
     catch(Exception $e){
@@ -181,8 +185,8 @@ public function draft_contract(Request $request)
 
 public function amend_contract(Request $request)
 {
- try
- {
+   try
+   {
     $contract = DB::table('contract_headers')
     ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
     ->join('consignees AS B', 'consignees_id', '=', 'B.id')
@@ -247,6 +251,17 @@ public function update(Request $request, $id){
         $contract->specificDetails = $request->specificDetails;
 
         $contract->save();
+
+        return $contract;
+
+        break;
+
+        case '4':
+        $contract = ContractHeader::findOrFail($request->contract_id);
+        $contract->dateEffective = $request->dateEffective;
+        $contract->dateExpiration = $request->dateExpiration;
+        $contract->specificDetails = $request->specificDetails;
+        $contract->isFinalize = $request->isFinalize;
 
         return $contract;
 
