@@ -22,16 +22,10 @@
 				<thead>
 					<tr>
 						<td>
-							No.
-						</td>
-						<td>
 							Fee
 						</td>
 						<td>
 							Date Effective
-						</td>
-						<td>
-							Created at
 						</td>
 						<td>
 							Status
@@ -119,16 +113,14 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/utilities/cds_fee_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
 			{ data: 'fee' },
 			{ data: 'dateEffective' },
-			{ data: 'created_at'},
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false },
 			
 
 			],
-			"order": [[ 5, "desc" ]],
+			"order": [[ 1, "desc" ]],
 		});
 		
 		
@@ -231,15 +223,13 @@ $(document).on('change', '.change-filter', function(e)
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/cds_fee_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
 		{ data: 'fee' },
 		{ data: 'dateEffective' },
-		{ data: 'created_at'},
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 
 		],
-		"order": [[ 5, "desc" ]],
+		"order": [[ 1, "desc" ]],
 
 	});
 })

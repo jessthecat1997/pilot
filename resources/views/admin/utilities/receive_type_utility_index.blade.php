@@ -23,9 +23,6 @@
 						<thead>
 							<tr>
 								<td>
-									No.
-								</td>
-								<td>
 									Description
 								</td>
 								<td>
@@ -33,9 +30,6 @@
 								</td>
 								<td>
 									Status
-								</td>
-								<td>
-									Actions
 								</td>
 							</tr>
 						</thead>
@@ -216,9 +210,8 @@ $(document).on('change', '.change-filter', function(e)
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/receive_type_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
+		
 		{ data: 'description' },
-		{ data: 'created_at'},
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 

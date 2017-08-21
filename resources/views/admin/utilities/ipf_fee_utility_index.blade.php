@@ -22,7 +22,7 @@
 					<thead>
 						<tr>
 							<td>
-								No.
+								Date Effective
 							</td>
 							<td>
 								Dutiable Value Minimum
@@ -116,7 +116,7 @@
 			'scrollx': true,
 			ajax: 'http://localhost:8000/utilities/ipf_fee_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
+			{ data: 'dateEffective' },
 			{ data: 'minimum' },
 			{ data: 'maximum' },
 			{ data: 'amount' },
@@ -232,7 +232,7 @@ $(document).on('change', '.change-filter', function(e)
 			'scrollx': true,
 			ajax: 'http://localhost:8000/utilities/ipf_fee_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
+			{ data: 'dateEffective' },
 			{ data: 'minimum' },
 			{ data: 'maximum' },
 			{ data: 'amount' },
