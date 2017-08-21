@@ -1818,8 +1818,8 @@ class DatatablesController extends Controller
 		if ($request->filter == 0){
 			$vs = DB::table('vehicles')
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
-			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
-			->orderBy('deleted_at', 'desc')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at', 'vehicles.deleted_at')
+			->where('vehicles.deleted_at', '=', null)
 			->get();
 
 			return Datatables::of($vs)
@@ -1848,7 +1848,7 @@ class DatatablesController extends Controller
 		}else if ($request->filter == 1){
 			$vs = DB::table('vehicles')
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
-			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at','vehicles.deleted_at')
 			->where('vehicles.deleted_at', '=', null)
 			->orderBy('deleted_at', 'desc')
 			->get();
@@ -1874,7 +1874,7 @@ class DatatablesController extends Controller
 		}else if ($request->filter == 2){
 			$vs = DB::table('vehicles')
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
-			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at','vehicles.deleted_at')
 			->where('vehicles.deleted_at', '!=', null)
 			->orderBy('deleted_at', 'desc')
 			->get();
@@ -1898,6 +1898,195 @@ class DatatablesController extends Controller
 			->make(true);
 		}
 	}//function
+
+	public function lp_deactivated(Request $request){
+		$lps;
+		if ($request->filter == 0){
+			$lps = DB::table('location_provinces')
+			->select('id', 'name', 'created_at', 'deleted_at')
+			->get();
+
+			return Datatables::of($lps)
+
+			->addColumn('action', function ($lps){
+				if ($lps->deleted_at == null){
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lps){
+				if ($lps->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			
+			$lps = DB::table('location_provinces')
+			->select('id', 'name', 'created_at', 'deleted_at')
+			->where('deleted_at','=',null)
+			->get();
+
+			return Datatables::of($lps)
+
+			->addColumn('action', function ($lps){
+				if ($lps->deleted_at == null){
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lps){
+				if ($lps->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 2){
+			$lps = DB::table('location_provinces')
+			->select('id', 'name', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($lps)
+			->addColumn('action', function ($lps){
+				if ($lps->deleted_at == null){
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lps){
+				if ($lps->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
+
+	public function lc_deactivated(Request $request){
+		$lcs;
+		if ($request->filter == 0){
+			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id' ,c.deleted_at as'deleted_at',c.created_at  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where  p.deleted_at is null  order by p.name");
+
+			return Datatables::of($lcs)
+
+			->addColumn('action', function ($lcs){
+				if ($lcs->deleted_at == null){
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lcs){
+				if ($lcs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			
+			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id',c.deleted_at as 'deleted_at'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
+
+			return Datatables::of($lcs)
+
+			->addColumn('action', function ($lcs){
+				if ($lcs->deleted_at == null){
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lcs){
+				if ($lcs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 2){
+			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id',c.deleted_at as 'deleted_at'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is not null  and p.deleted_at is null order by p.name");
+
+			return Datatables::of($lcs)
+			->addColumn('action', function ($lcs){
+				if ($lcs->deleted_at == null){
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lcs){
+				if ($lcs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
+
+
+
+
+
+
+
+
+
 
 	public function get_contracts(Request $request)
 	{

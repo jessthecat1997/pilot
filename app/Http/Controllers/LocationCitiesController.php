@@ -57,5 +57,18 @@ class LocationCitiesController extends Controller
 		$city->delete();
 	}
 
+	public function reactivate(Request $request)
+    {
+        $city = LocationCities::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function lc_utilities(){
+
+        return view('admin/utilities.location_city_utility_index');
+    }
+
 
 }

@@ -143,7 +143,7 @@
 
 				description:
 				{
-					maxlength: 50,
+					maxlength: 150,
 				},
 
 			},

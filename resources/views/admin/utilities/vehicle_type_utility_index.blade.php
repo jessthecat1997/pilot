@@ -244,13 +244,13 @@ $(document).on('change', '.change-filter', function(e)
 		"render" : function( data, type, full ) {
 			return formatWithContainer(data); }},
 			{ data: 'status'},
+
 			{ data: 'action', orderable: false, searchable: false }
 
 			],
 			"order": [[ 4 , "desc"]],
 		});
 })
-
 });
 
 		function resetErrors() {
