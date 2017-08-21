@@ -21,6 +21,8 @@ class CreateCdsFeesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement('INSERT INTO cds_fees (`fee`, `currentFee`, `dateEffective`, `created_at`, `updated_at`) VALUES (0.0, 1, NOW(), NOW(), NOW())');
     }
 
     /**

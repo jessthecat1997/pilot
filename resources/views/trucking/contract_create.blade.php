@@ -170,11 +170,14 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12">
+				<div class="col-md-12 ">
 					<h3><small>5</small>&nbsp;&nbsp;Finalize</h3>
-					<div style=" text-align: center;">
-						<button class = "btn btn-md but finalize-contract" style = "width: 100%;">Create Contract</button>
+					<div style=" text-align: center;" class="pull-right">
+						<button class = "btn btn-md btn-success finalize-contract " >&nbsp;&nbsp;&nbsp;&nbsp;Create Contract&nbsp;&nbsp;&nbsp;&nbsp;</button>
+
+						<button class = "btn btn-md btn but  draft-contract" ">Save as Draft</button>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -633,7 +636,10 @@
 		$(document).on('click', '.new-term-row', function(e){
 			e.preventDefault();
 			$('#term_condition_count_warning').removeClass('in');
-			$('#term_table > tbody').append(term_condition_row);
+			if(validate() === true){
+				$('#term_table > tbody').append(term_condition_row);
+			}
+
 		})
 
 		$(document).on('click', '.new-contract-row', function(e){
@@ -668,6 +674,51 @@
 				})
 			}
 		})
+
+
+
+		$(document).on('click', '.draft-contract', function(e){
+			if(validateDraft() === true){
+				$.ajax({
+					method: 'POST',
+					url: '{{ route("create_contract") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'consigneeName' : $('#consigneeName').val(),
+						'dateEffective' : $('#dateEffective').val(),
+						'dateExpiration' : $('#dateExpiration').val(),
+						
+						'consigneeID' : consigneeID,
+						'specificDetails' : terms_and_condition_string,
+					},
+
+					success: function (data){
+						toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Contract save as draft successfully")
+					}
+
+				})
+			}
+		})
+
+
 
 
 	})
@@ -827,6 +878,93 @@ function finalvalidateContractRows()
 	}
 
 }
+
+
+function validateDraft()
+{
+	
+
+
+	terms_and_condition_string = "";
+
+	terms = document.getElementsByName('specificDetails');
+	error = "";
+
+
+	if(consigneeID == 0 || consigneeID == null)
+	{
+		error+= "No selected consignee";
+		$('#consignee_warning').addClass('in');
+		location.href='#page_title';
+	}
+	else{
+		$('#consignee_warning').removeClass('in');
+	}
+	
+	
+	for (var i = 0; i < terms.length; i++){
+		if(terms[i].value === ""){
+			terms[i].style.borderColor = 'red';
+			error += "Terms and Condition is required";
+		}
+		else{
+			terms[i].style.borderColor = "green";
+			terms_and_condition_string += (i + 1) + ". " + terms[i].value + "<br /><br />";
+		}
+	}
+	console.log(terms_and_condition_string);
+
+	
+	console.log(error);
+	if(error.length == 0){
+		return true;
+
+	}
+
+	else
+	{
+		return false;
+	}
+
+}
+
+
+
+function validate(){
+	var term = [];
+	error = "";
+	detail = "";
+	term_descrp = document.getElementsByName('specificDetails');
+	for(var i = 0; i < term_descrp.length; i++)
+	{
+		if(term_descrp[i].value === "")
+		{
+			term_descrp[i].style.borderColor = 'red';
+			error += "Agreements is required";
+		}
+		else
+		{
+			term.push(term_descrp[i].value);
+			detail += (i + 1) + ". " + term_descrp[i].value + "<br /><br />";
+			term_descrp[i].style.borderColor = 'green';
+		}
+	}
+
+	if(error.length == 0)
+	{
+		return true;
+		console.log(detail);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+
+
+
 
 </script>
 @endpush
