@@ -42,7 +42,6 @@ Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
 
 Route::resource('/admin/vehicletype', 'VehicleTypesController');
 Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
-Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
@@ -51,6 +50,7 @@ Route::resource('/admin/employee_type', 'EmployeeTypesController');
 Route::resource('/admin/vehicle','VehiclesController');
 Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
+Route::resource('/admin/charge','ChargesController'); 
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
@@ -82,10 +82,9 @@ Route::get('/utilities/brokerage_fee_data','BrokerageFeesController@bf_utilities
 Route::put('/utilities/brokerage_fee_reactivate/{id}','BrokerageFeesController@reactivate');
 
 
-
-Route::get('/utilities/charge_deactivated/{filter}',
-	'DatatablesController@ch_deactivated');
-Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index');
+Route::get('/utilities/charge_deactivated/{filter}', 
+	'DatatablesController@ch_deactivated'); 
+Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index'); 
 Route::put('/utilities/charge_reactivate/{id}','ChargesController@reactivate');
 
 

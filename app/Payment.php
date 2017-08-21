@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['amount','so_head_id','payment_mode_id'];
+    protected $fillable = ['amount','so_head_id'];
 
     protected $dates = [
     'deleted_at',
