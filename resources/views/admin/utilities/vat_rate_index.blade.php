@@ -1,10 +1,9 @@
-
-@extends('layouts.utilities')
+@extends('layouts.maintenance')
 @section('content')
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities |Vat Rate</h3>
+		<h3><img src="/images/bar.png"> Utilities | Vat Rate</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#vrModal" style = "width: 100%;">New Vate Rate </button>
@@ -124,16 +123,14 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
-		
-			{ data: 'rate',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },                              
-				{ data: 'dateEffective' },
-				
-				{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+			{ data: 'rate' },                              
+			{ data: 'dateEffective' },
+
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
 
 		$("#commentForm").validate({
 			rules: 
