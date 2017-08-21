@@ -163,7 +163,7 @@
                             <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
                         </li>
                         <li>
                             <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>

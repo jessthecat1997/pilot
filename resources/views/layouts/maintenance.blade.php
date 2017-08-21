@@ -98,19 +98,16 @@
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
-                        </li>
-                        <li>
                             <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
+                            <a href = "{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
+                            <a href = "{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li id="frstgrp">
                             <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing and Payment</a>
@@ -162,7 +159,7 @@
                             <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
                         </li>
                         <li>
                             <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>
@@ -259,7 +256,7 @@
             var currency = "Php "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
         }
-        
+
         function formatNumber_s(n) { 
             var currency = "$ "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
