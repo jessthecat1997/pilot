@@ -259,6 +259,21 @@
             }
         });
 
+        $(document).on('click', '.new', function(e){
+            resetErrors();
+            $('.modal-title').text('New Brokerage Fee Range');
+            
+            $('#dateEffective').val("");
+            var now = new Date();
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+            $('#dateEffective').val(today);
+
+            $('#bfModal').modal('show');
+
+        });
+
 
         $(document).on('click', '.edit',function(e){
             resetErrors();
@@ -425,7 +440,7 @@
                             $('#minimum').val("0.00");
                             $('#maximum').val("0.00"); 
                             $('#amount').val("0.00");
-                            $('#dateEffective').val("");
+
 
 
                             toastr.options = {
