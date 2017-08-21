@@ -167,6 +167,15 @@
 							<label class="control-label col-md-5 pull-left" for="containerReturnDate">Declared Return Date:</label>
 							<span class="control-label col-md-7" id ="containerReturnDate"  style = "text-align: left;"></span>
 						</div>
+						<div class="form-group">         
+							<label class="control-label col-md-5 pull-left" for="actutaldateReturned">Date Returned:</label>
+							<div class = "collapse" id = "returned_date">
+								<input type="date" id = "actutaldateReturned" class="form-control" />
+							</div>
+							<div class = "collapse" id = "unreturned_date">
+								<span class="control-label col-md-7" id ="ac_returned"  style = "text-align: left;"></span>
+							</div>
+						</div>
 
 						<table class = "table table-responsive" id = "container_detail">
 							<thead>
