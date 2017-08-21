@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Charges</h3>
+		<h2>&nbsp;Maintenance | Charges</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#chModal" style = "width: 100%;">New Charge</button>
@@ -136,6 +136,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
