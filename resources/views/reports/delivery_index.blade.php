@@ -61,17 +61,17 @@
 	var data;
 	$(document).ready(function(){
 		var shiptable = $('#delivery_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: '{{ route("delivery.data") }}',
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'name' },
 			{ data: 'shippingLine'},
 			{ data: 'portOfCfsLocation' },
 			{ data: 'containerVolume' },
 			{ data: 'containerNumber'},
 			{ data: 'created_at'},
-			{ data: 'grossWeight' },
 			{ data: 'deliveryDateTime' },
 			{ data: 'remarks', processing:false },
 			]

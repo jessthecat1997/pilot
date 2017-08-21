@@ -60,7 +60,7 @@
 							{{ $quotation_detail->to }} 
 						</td> 
 						<td> 
-							{{ $quotation_detail->amount }} 
+							Php {{ $quotation_detail->amount }} 
 						</td> 
 						
 					</tr> 

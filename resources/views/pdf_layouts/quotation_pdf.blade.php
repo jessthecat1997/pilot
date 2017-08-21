@@ -54,8 +54,6 @@
 				Mr./Mrs. <span><strong>{{ $quotation[0]->name }}</strong></span>
 				<br />
 				<br />
-				<br />
-				<br />
 				We are pleased to submit our proposal for your import and Export requirements to and from the following destinations;
 				
 			</div>
@@ -88,7 +86,7 @@
 								{{ $quotation_detail->to }}
 							</td>
 							<td style="text-align: right;">
-								{{ $quotation_detail->amount }}
+								Php {{ $quotation_detail->amount }}
 							</td>
 						</tr>
 						@empty
@@ -112,13 +110,9 @@
 			<p>{!! $quotation[0]->specificDetails !!}</p>
 			@endif
 			
-			<br />
 			<p>Looking forward to do business with you and your company.</p>
-			<br />
-			<br />
+			
 			<p>Thank you very much.</p>
-
-			<br />
 			<br />
 			<table style="width: 100%;">
 				<tr>
