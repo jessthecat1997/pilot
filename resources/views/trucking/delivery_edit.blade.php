@@ -101,7 +101,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
 																			<div class="col-sm-8">
-																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress" value = "{{ $container['container']->containerReturnAddress }}"></textarea>
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress">{{ $container['container']->containerReturnAddress }}</textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -967,8 +967,8 @@
 
 						validateContainerDetail();
 						$.ajax({
-							type: 'POST',
-							url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',
+							type: 'PUT',
+							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
@@ -986,6 +986,7 @@
 								'shippingLine' : con_ShippingLine,
 								'portOfCfsLocation' : con_PortOfCfsLocation,
 								'container_data' : results,
+								'del_head_id' : {{ $delivery[0]->id}},
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
