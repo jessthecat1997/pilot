@@ -36,4 +36,18 @@ public function index()
         $province->delete();
 
     }
+
+
+    public function reactivate(Request $request)
+    {
+        $province = LocationProvince::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function lp_utilities(){
+
+        return view('admin/utilities.location_province_utility_index');
+    }
 }

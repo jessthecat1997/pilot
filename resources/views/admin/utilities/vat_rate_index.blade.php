@@ -1,13 +1,18 @@
-
-@extends('layouts.utilities')
+@extends('layouts.maintenance')
 @section('content')
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities |Vat Rate</h3>
+		<h3><img src="/images/bar.png"> Utilities | Vat Rate</h3>
 		<hr>
+		Current Vat Rate: 
+		@if($vat_rate[0]->rate != null)
+		{{ number_format((float)$vat_rate[0]->rate, 3) }}%
+		@else
+		0.00 %
+		@endif
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#vrModal" style = "width: 100%;">New Vate Rate </button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#vrModal" style = "width: 100%;">New Vat Rate</button>
 		</div>
 	</div>
 	<br />
@@ -41,7 +46,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New vr rate</h4>
+							<h4 class="modal-title">New VAT Rate</h4>
 						</div>
 						<div class="modal-body">			
 
@@ -124,16 +129,14 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
-		
-			{ data: 'rate',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },                              
-				{ data: 'dateEffective' },
-				
-				{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+			{ data: 'rate' },                              
+			{ data: 'dateEffective' },
+
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
 
 		$("#commentForm").validate({
 			rules: 
@@ -158,7 +161,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New vr rate');
+			$('.modal-title').text('New VAT Rate');
 			$('#vrModal').modal('show');
 			$('#rate').val("");
 			$('#dateEffective').val("");
@@ -175,7 +178,7 @@
 			data = vrtable.row($(this).parents()).data();
 			$('#rate').val(data.rate);
 			$('#dateEffective').val(data.dateEffective);
-			$('.modal-title').text('Update vr rate');
+			$('.modal-title').text('Update VAT Rate');
 			$('#vrModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -224,8 +227,6 @@
 
 		$('#btnSave').on('click', function(e){
 
-
-
 			var rate_nocomma = $('#rate').inputmask('unmaskedvalue');
 			if (rate_nocomma == "0.00"){
 				rate_nocomma = "";
@@ -234,7 +235,7 @@
 			e.preventDefault();
 			var title = $('.modal-title').text();
 
-			if(title == "New vr rate")
+			if(title == "New VAT Rate")
 			{
 				$.ajax({
 					type: 'POST',
@@ -242,8 +243,10 @@
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'rate' : rate_nocomma,
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'currentrate' : 0,
+						'dateEffective' : $('#dateEffective').val(),
+						'currentRate' : 0,
+						'description' : '',
+						
 					},
 					success: function (data)
 					{
@@ -251,7 +254,7 @@
 						if(typeof(data) === "object"){
 							vrtable.ajax.reload();
 							$('#vrModal').modal('hide');
-							$('.modal-title').text('New vr rate');
+							$('.modal-title').text('New VAT Rate');
 							$('#rate').val('');
 							$('#dateEffective').val('');
 
@@ -297,7 +300,7 @@
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/vr_rate/' + data.id,
+					url:  '{{ route("vat_rate.index") }}/' + data.id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'rate' : rate_nocomma,

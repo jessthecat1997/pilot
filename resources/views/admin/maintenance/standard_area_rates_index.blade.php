@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Standard Area Rates</h3>
 			<hr>
 			<div class = "col-md-3 col-md-offset-9">
-				<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sarModal" style = "width: 100%;">New Standard Area Rates</button>
+				<button  class="btn btn-info btn-md new" style = "width: 100%;">New Standard Area Rates</button>
 			</div>
 		</div>
 		<br />
@@ -328,7 +328,6 @@
 		$('#collapse1').addClass('in');
 
 
-		//$(location).attr("disabled", true);
 
 		var sartable = $('#sar_table').DataTable({
 			processing: true,
@@ -350,7 +349,23 @@
 
 			});
 
+		$(document).on('click', '.new', function(e){
+			e.preventDefault();
+			$('#sarModal').modal('show');
+			$('#amount').val("0.00");
+			$('#_address').val("");
+			$('#_city').val("");
+			$('#_province').val("");
+			$('#_zip').val("");
 
+			$('#_daddress').val("");
+			$('#_dcity').val("");
+			$('#_dprovince').val("");
+			$('#_dzip').val("");
+			$('#pickup_id').val("0");
+			$('#deliver_id').val("0");
+
+		})
 
 		$("#commentForm").validate({
 			rules: 
@@ -421,6 +436,7 @@
 
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
+			temp_pickup_id = $(this).val();
 			if(pickup_id != 0)
 			{
 				$.ajax({
@@ -461,6 +477,7 @@
 
 		$(document).on('change', '#deliver_id', function(e){
 			deliver_id = $(this).val();
+			temp_deliver_id = $(this).val();
 			if(deliver_id != 0)
 			{
 				$.ajax({
@@ -509,7 +526,7 @@
 				},
 				success: function(data){
 					if(selected_location == 0){	
-						
+						temp_deliver_id  = data.id;
 						$('#_address').val($('#address').val());
 						$('#_city').val($('#loc_city option:selected').text());
 						$('#_province').val($('#loc_province option:selected').text().trim());
@@ -517,6 +534,7 @@
 						$('#chModal').modal('hide');
 					}
 					else{
+						temp_pickup_id = data.id;
 						$('#_daddress').val($('#address').val());
 						$('#_dcity').val($('#loc_city option:selected').text());
 						$('#_dprovince').val($('#loc_province option:selected').text().trim());
@@ -665,598 +683,154 @@
 		$(document).on('click', '.finalize-sar', function(e){
 			e.preventDefault();
 
-			//if(finalvalidatesarRows() === true){
-				$('#pickup_id').valid();
-				$('#deliver_id').valid();
-				$('#amount').valid();
-				var title = $('.sarModal-title').text();
-				console.log("hihiho" + title);
-				if(title == "New Standard Area Rate")
-				{
-					console.log("new new new");
-					
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/standard_arearates',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'areaFrom' : $('#pickup_id').val(),
-							'areaTo' : $('#deliver_id').val(),
-							'amount' : $('#amount').inputmask('unmaskedvalue'),
-						},
-
-						success: function (data){
-
-							
-
-							sartable.ajax.reload();
-							$('#sarModal').modal('hide');
-							$('.modal-title').text('New Standard Area Rate');
-							$('#amount').val("0.00");
-
-
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-							toastr["success"]("Record addded successfully")
-							
-						}
-					})
-			//	}
-		}
-		else
-		{
-			if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+			$('#amount').valid();
+			var title = $('.sarModal-title').text();
+			console.log("hihiho" + title);
+			if(title == "New Standard Area Rate")
 			{
+				console.log("new new new");
 
-				if($('#pickup_id').val() === temp_pickup_id &&
-					$('#deliver_id').val() === temp_deliver_id && 
-					$('#amount').inputmask("unmaskedvalue") === temp_amount  )
-				{
-					$('#amount').val("0.00");
-					$('#btnSave').removeAttr('disabled');
-					$('#sarModal').modal('hide');
-				}
-				else
-				{
-					$('#btnSave').attr('disabled', 'true');
+				$.ajax({
+					type: 'POST',
+					url:  '/admin/standard_arearates',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'areaFrom' : temp_pickup_id,
+						'areaTo' : temp_deliver_id,
+						'amount' : $('#amount').inputmask('unmaskedvalue'),
+					},
 
-					$.ajax({
-						type: 'PUT',
-						url:  '/admin/standard_arearates/' + data.id,
-						data: {
-							'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
-							'areaTo' : $('#deliver_id').val(),
-							'amount' : $('#amount').inputmask('unmaskedvalue'),
-						},
+					success: function (data){
 
-						success: function (data){
+						sartable.ajax.reload();
+						$('#sarModal').modal('hide');
+						$('.modal-title').text('New Standard Area Rate');
+						$('#amount').val("0.00");
+						$('#_address').val("");
+						$('#_city').val("");
+						$('#_province').val("");
+						$('#_zip').val("");
 
-							if(typeof(data) === "object"){
-								sartable.ajax.reload();
-								$('#sarModal').modal('hide');
-								$('.modal-title').text('New Standard Area Rate');
-								$('#amount').val("0.00");
+						$('#_daddress').val("");
+						$('#_dcity').val("");
+						$('#_dprovince').val("");
+						$('#_dzip').val("");
 
-
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]("Record updated successfully")
-
-
-								$('#btnSave').removeAttr('disabled');
-
-
-							}
-							else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-								});
-
-								$('#btnSave').removeAttr('disabled');
-
-							}
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
 						}
-					})
-				}
-			}
-		}
-	});
+						toastr["success"]("Record addded successfully")
 
-
-
-
-
-
-	});
-
-
-		/*
-		$(document).on('click', '.new', function(e){
-			resetErrors();
-			$('.modal-title').text('New Standard Area Rate');
-			$('#dateEffective').val("");
-			var now = new Date();
-			var day = ("0" + now.getDate()).slice(-2);
-			var month = ("0" + (now.getMonth() + 1)).slice(-2);
-			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-			$('#dateEffective').val(today);
-
-			$('#sarModal').modal('show');
-
-		});
-
-		$(document).on('click', '.edit',function(e){
-			resetErrors();
-			
-			var sar_id = $(this).val();
-			
-			$('.modal-title').text('New Standard Area Rate');
-			$('#sarModal').modal('show');
-		});
-
-		$(document).on('click', '.deactivate', function(e){
-			var sar_id = $(this).val();
-			data = sartable.row($(this).parents()).data();
-			$('#confirm-delete').modal('show');
-		});
-
-
-		$(document).on('click', '.delete-sar-row', function(e){
-			e.preventDefault();
-			$('#sar_warning').removeClass('in');
-			if($('#sar_parent_table > tbody > tr').length == 1){
-				$(this).closest('tr').remove();
-				$('#sar_table_warning').addClass('fade in');
-			}
-			else{
-				$(this).closest('tr').remove();
-			}
-		})
-
-		$(document).on('click', '.new-sar-row', function(e){
-			e.preventDefault();
-			$('#sar_table_warning').removeClass('fade in');
-			if(validatesarRows() === true){
-
-				$('#sar_parent_table').append(sar_row);
-
-				
-			}
-
-		})
-
-		$(document).on('change', '.sar_location_valid', function(e){
-			$(".sar_location_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-		$(document).on('change', '.sar_location_valid', function(e){
-			$(".sar_location_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-
-
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-
-				}
-				if(typeof(amount) === "string"){
-
-				}
-				else{
-
-				}
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-		$('#btnDelete').on('click', function(e){
-			e.preventDefault();
-			$.ajax({
-				type: 'DELETE',
-				url:  '/admin/sar_fee/' + data.id,
-				data: {
-					'_token' : $('input[name=_token').val()
-				},
-				success: function (data)
-				{
-					sartable.ajax.reload();
-					$('#confirm-delete').modal('hide');
-
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record deactivated successfully")
-				}
-			})
-		});
-
-		$(document).on('click', '.finalize-sar', function(e){
-			e.preventDefault();
-
-			if(finalvalidatesarRows() === true){
-				
-				var title = $('.modal-title').text();
-				if(title == "New Standard Area Rate")
+				})
+			}
+			else
+			{
+				if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
 				{
-					
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/sar_fee',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'dateEffective' : $('#dateEffective').val(),
-							'location' : location_id,
-							'location_id_descrp' : location_id_descrp,
 
-							'amount' : amount_value,
-						},
+					if($('#pickup_id').val() === temp_pickup_id &&
+						$('#deliver_id').val() === temp_deliver_id && 
+						$('#amount').inputmask("unmaskedvalue") === temp_amount  )
+					{
+						$('#amount').val("0.00");
+						$('#btnSave').removeAttr('disabled');
+						$('#sarModal').modal('hide');
+					}
+					else
+					{
+						$('#btnSave').attr('disabled', 'true');
 
-						success: function (data){
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/standard_arearates/' + data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
+								'areaTo' : $('#deliver_id').val(),
+								'amount' : $('#amount').inputmask('unmaskedvalue'),
+							},
 
-							
+							success: function (data){
 
-							sartable.ajax.reload();
-							$('#sarModal').modal('hide');
-							$('.modal-title').text('New Standard Area Rate');
-							$('#location').val("0.00");
-							$('#maximum').val("0.00"); 
-							$('#amount').val("0.00");
-							$('#dateEffective').val("");
+								if(typeof(data) === "object"){
+									sartable.ajax.reload();
+									$('#sarModal').modal('hide');
+									$('.modal-title').text('New Standard Area Rate');
+									$('#amount').val("0.00");
+									$('#_address').val("");
+									$('#_city').val("");
+									$('#_province').val("");
+									$('#_zip').val("");
+
+									$('#_daddress').val("");
+									$('#_dcity').val("");
+									$('#_dprovince').val("");
+									$('#_dzip').val("");
+
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully")
 
 
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+									$('#btnSave').removeAttr('disabled');
+
+
+								}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
 							}
-							toastr["success"]("Record addded successfully")
-							
-						}
-					})
+						})
+					}
 				}
 			}
 		});
-	});
 
 
-
-
-
-function validatesarRows()
-{
-
-	location_id = [];
-	maximum_id = [];
-	amount_value = [];
-
-	location_id_descrp = [];
-	maximum_id_descrp = [];
-	amount_value_descrp = [];
-
-	range_pairs = [];
-	dateEffective = document.getElementsByName('dateEffective');
-	location =  document.getElementsByName('location');
-	maximum =   document.getElementsByName('maximum');
-	amount =  document.getElementsByName('amount');
-	error = "";
-
-	if(dateEffective === ""){
-
-		dateEffective.style.borderColor = 'red';	
-		error += "Date Effective Required.";
-
-	} 
-
-
-	for(var i = 0; i < location.length; i++){
-		var temp;
-
-
-
-
-		if(maximum[i].value === "")
-		{
-			maximum[i].style.borderColor = 'red';
-			error += "Maximum Required.";
+		function resetErrors() {
+			$('form input, form select').removeClass('inputTxtError');
+			$('label.error').remove();
 		}
-
-		else
-		{
-			maximum[i].style.borderColor = 'green';
-			maximum_id_descrp.push(maximum[i].value);
-			maximum_id.push(maximum[i].value);
-		}
-
-		if(amount[i].value === "")
-		{
-			amount[i].style.borderColor = 'red';
-			error += "Amount Required.";
-		}
-
-		else
-		{
-			if(amount[i].value < 1){
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-			}
-			else{
-				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
-			}
-		}
-
-		if(location[i].value === maximum[i].value){
-
-			maximum[i].style.borderColor = 'red';
-			error += "Same.";
-		}
-
-		if(location[i].value>maximum[i].value){
-			
-			maximum[i].style.borderColor = 'red';
-			error += "location is greater than maximum";
-			$('#sar_warning').addClass('in');
-		}	
-
-		pair = {
-			location: location[i].value,
-			maximum : maximum[i].value
-		};
-		range_pairs.push(pair);
-	}
-	var i, j, n;
-	found= false;
-	n=range_pairs.length;
-
-	for (i=0; i<n; i++) {                        
-		for (j=i+1; j<n; j++)
-		{              
-			if (range_pairs[i].location === range_pairs[j].maximum && range_pairs[i].maximum === range_pairs[j].maximum){
-				found = true;
-				
-				maximum[i].style.borderColor = 'red';
-
-				location[j].style.borderColor = 'red';
-				maximum[j].style.borderColor = 'red';
-			}
-		}	
-	}
-	if(found == true){
-		error+= "Existing rate.";
-	}
-
-		//Final validation
-		if(error.length == 0){
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
-
-	}
-
-	function finalvalidatesarRows()
-	{
-		location_id = [];
-		maximum_id = [];
-		amount_value = [];
-
-		location_id_descrp = [];
-		maximum_id_descrp = [];
-		amount_value_descrp = [];
-
-		range_pairs = [];
-
-		location = document.getElementsByName('location');
-		maximum = document.getElementsByName('maximum');
-		amount = document.getElementsByName('amount');
-		
-		error = "";
-
-		if($('#dateEffective').val() == ""){
-
-			document.getElementById("dateEffective").style.borderColor = "red";
-			error += "Date Effective Required.";
-
-		}else{
-			document.getElementById("dateEffective").style.borderColor = "black";
-
-		}
-
-		for(var i = 0; i < location.length; i++){
-
-
-			if(location[i].value === "")
-			{
-
-				error += "location Required.";
-				$('#sar_warning').addClass('in');
-			}
-
-			else
-			{
-
-				location_id_descrp.push(location[i].value);
-				var min = location[i].value
-				location_id.push(location[i].value);
-			}
-			if(maximum[i].value === ""||maximum[i].value === "0.00"||maximum[i].value === "0")
-			{
-				maximum[i].style.borderColor = 'red';
-				error += "Maximum Required.";
-				$('#sar_warning').addClass('in');
-			}
-
-			else
-			{
-				maximum[i].style.borderColor = 'green';
-				maximum_id_descrp.push(maximum[i].value);
-				maximum_id.push(maximum[i].value);
-			}
-
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-				$('#contract_rates_warning').addClass('in');
-			}
-
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					amount_value.push(amount[i].value);
-				}
-			}
-
-			if(location[i].value === maximum[i].value){
-
-				maximum[i].style.borderColor = 'red';
-				error += "Same.";
-				$('#sar_warning').addClass('in');
-			}
-
-			if(location[i].value>maximum[i].value){
-
-				maximum[i].style.borderColor = 'red';
-				error += "location is greater than maximum";
-				$('#sar_warning').addClass('in');
-			}	
-			pair = {
-				location: location[i].value,
-				maximum: maximum[i].value
-			};
-			range_pairs.push(pair);
-		}
-		var i, j, n;
-		found= false;
-		n=range_pairs.length;
-		for (i=0; i<n; i++) {                        
-			for (j=i+1; j<n; j++)
-			{              
-				if (range_pairs[i].location === range_pairs[j].location && range_pairs[i].maximum === range_pairs[j].maximum){
-					found = true;
-					
-					maximum[i].style.borderColor = 'red';
-
-
-					maximum[j].style.borderColor = 'red';
-				}
-			}	
-		}
-		if(found == true){
-			error+= "Existing rate.";
-			$('#sar_warning').addClass('in');
-		}
-
-		if(error.length == 0){
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	*/
-
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+	})
 </script>
 @endpush

@@ -129,10 +129,18 @@ Route::get('/utilities/vehicle_type_data','VehicleTypesController@vt_utilities')
 Route::put('/utilities/vehicle_type_reactivate/{id}','VehicleTypesController@reactivate');
 
 
-
 Route::get('/utilities/vehicle_deactivated/{filter}','DatatablesController@v_deactivated');
 Route::get('/utilities/vehicle_data','VehiclesController@v_utilities')->name('vehicle.utilities_index');
 Route::put('/utilities/vehicle_reactivate/{id}','VehiclesController@reactivate');
+
+
+Route::get('/utilities/location_province_deactivated/{filter}','DatatablesController@lp_deactivated');
+Route::get('/utilities/location_province_data','LocationProvincesController@lp_utilities')->name('location_province.utilities_index');
+Route::put('/utilities/location_province_reactivate/{id}','LocationProvincesController@reactivate');
+
+Route::get('/utilities/location_city_deactivated/{filter}','DatatablesController@lc_deactivated');
+Route::get('/utilities/location_city_data','LocationCitiesController@lc_utilities')->name('location_city.utilities_index');
+Route::put('/utilities/location_city_reactivate/{id}','LocationCitiesController@reactivate');
 
 //Maintenance Datas
 
