@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                             <td>
-                                No.
+                                Date Effective
                             </td>
                             <td>
                                 Dutiable Value Minimum
@@ -113,12 +113,13 @@
     var filter = 0;
     $(document).ready(function(){
         var bftable = $('#bf_table').DataTable({
-            processing: true,
-            serverSide: true,
+            processing: false,
+            serverSide: false,
+            deferRender:true,
             'scrollx': true,
             ajax: 'http://localhost:8000/utilities/brokerage_fee_deactivated/' + filter,
             columns: [
-            { data: 'id' },
+            { data: 'dateEffective' },
             { data: 'minimum' },
             { data: 'maximum' },
             { data: 'amount' },
@@ -230,7 +231,7 @@ $(document).on('change', '.change-filter', function(e)
         serverSide: true,
         ajax: 'http://localhost:8000/utilities/brokerage_fee_deactivated/' + filter,
         columns: [
-        { data: 'id' },
+        { data: 'dateEffective' },
         { data: 'minimum' },
         { data: 'maximum' },
         { data: 'amount' },

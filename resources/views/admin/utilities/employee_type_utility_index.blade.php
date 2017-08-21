@@ -21,15 +21,11 @@
 				<table class = "table-responsive table" id = "et_table">
 					<thead>
 						<tr>
-							<td>
-								No.
-							</td>
+						
 							<td>
 								Description
 							</td>
-							<td>
-								Created at
-							</td>
+				
 							<td>
 								Status
 							</td>
@@ -111,9 +107,8 @@
 			serverSide: true,
 			ajax: '/utilities/employee_type_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
+			
 			{ data: 'description' },
-			{ data: 'created_at'},
 			{ data: 'status'},
 			{ data: 'action', orderable: false, searchable: false }
 

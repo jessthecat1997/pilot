@@ -24,16 +24,11 @@
 							<thead>
 								<tr>
 									<td>
-										No.
+										Status
 									</td>
+
 									<td>
 										Description
-									</td>
-									<td>
-										Created at
-									</td>
-									<td>
-										Status
 									</td>
 									<td>
 										Actions
@@ -114,10 +109,8 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000//utilities/brokerage_status_type_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
-			{ data: 'description' },
-			{ data: 'created_at'},
 			{ data: 'status'},
+			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],

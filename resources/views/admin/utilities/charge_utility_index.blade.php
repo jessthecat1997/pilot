@@ -22,13 +22,16 @@
 					<thead>
 						<tr>
 							<td>
-								No.
+								Name
 							</td>
 							<td>
 								Description
 							</td>
 							<td>
-								Created at
+								Charge Type
+							</td>
+							<td>
+								Amount/Rate
 							</td>
 							<td>
 								Status
@@ -110,14 +113,15 @@
 			'scrollx': true,
 			ajax: 'http://localhost:8000/utilities/charge_deactivated/' + filter ,
 			columns: [
-			{ data: 'id' },
+			{ data: 'name' },
 			{ data: 'description' },
-			{ data: 'created_at'},
+			{ data: 'chargeType'},
+			{ data: 'amount'},
 			{ data: 'status'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],
-			"order": [[ 4, "desc" ]],
+			"order": [[ 5 , "desc" ]],
 
 		});
 		
@@ -219,14 +223,15 @@ $(document).on('change', '.change-filter', function(e)
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/charge_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
+		{ data: 'name' },
 		{ data: 'description' },
-		{ data: 'created_at'},
+		{ data: 'chargeType' },
+		{ data: 'amount' },
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 
 		],
-		"order": [[ 4, "desc" ]],
+		"order": [[ 5 , "desc" ]],
 
 	});
 })

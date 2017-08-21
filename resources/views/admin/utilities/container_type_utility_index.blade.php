@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Container Type</h3>
+		<h3><img src="/images/bar.png"> Utilities | Container Size</h3>
 		<hr>
 	</div>
 	<div class="form-group col-md-3 col-md-offset-9">
@@ -23,13 +23,13 @@
 				<thead>
 					<tr>
 						<td>
-							No.
+							Size
 						</td>
 						<td>
 							Description
 						</td>
 						<td>
-							Created at
+							Maximum Weight (Kgs)
 						</td>
 						<td>
 							Status
@@ -111,9 +111,9 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/utilities/container_type_deactivated/' + filter,
 			columns: [
-			{ data: 'id' },
+			{ data: 'name' },
 			{ data: 'description' },
-			{ data: 'created_at'},
+			{ data: 'maxWeight'},
 			{ data: 'status'},
 			{ data: 'action', orderable: false, searchable: false }
 
@@ -221,9 +221,9 @@ $(document).on('change', '.change-filter', function(e)
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/container_type_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
+		{ data: 'name' },
 		{ data: 'description' },
-		{ data: 'created_at'},
+		{ data: 'maxWeight'},
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 
