@@ -16,7 +16,7 @@
 						<div class = "col-md-6 col-md-offset-2">
 							<div class = "form-horizontal">
 								<div class = "form-group">
-								<label class = "control-label col-md-3">Consignee: </label>
+									<label class = "control-label col-md-3">Consignee: </label>
 									<div class = "input-group col-md-9">
 										<select id = "consignee_id" class = "form-control select2-allow-clear select2">
 											<option value = "0">Select Consignee</option>
@@ -100,7 +100,7 @@
 						<label class="control-label col-sm-4" for="noOfDeliveries">Processed by:</label>
 						<div class="col-sm-6">          
 							<select name = "processedBy" id = "processedBy" class = "form-control">
-								<option></option>
+								<option value = "0"></option>
 								@forelse($employees as $employee)
 								<option value = "{{ $employee->id }}">
 									{{ $employee->lastName . ", " . $employee->firstName }}
@@ -133,7 +133,7 @@
 					<div id="con_collapse" class="collapse in">
 						<ul class="nav nav-tabs">
 							<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
-							<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+							<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
 							<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
 						</ul>
 
@@ -142,7 +142,7 @@
 								<br />
 								<div class = "form-horizontal">
 									<div class="form-group required">
-										<label class="control-label col-sm-3" for="phy_address">Address:</label>
+										<label class="control-label col-sm-3" for="phy_address">Blk/Lot/Street:</label>
 										<div class="col-sm-8">          
 											<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
 										</div>
@@ -178,10 +178,8 @@
 									</div>
 									<div class="form-group required">
 										<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
-										<div class="col-md-8">          
-											<label class="switch">
-												<input type="checkbox" class = "checkbox same_billing_address">
-											</label>
+										<div class="col-md-8">											
+											<input type="checkbox" class = "checkbox same_billing_address">
 										</div>
 									</div>
 								</div>
@@ -521,26 +519,54 @@
 			}
 		})
 
+		function validateOrder()
+		{
+			error = "";
+			if(consigneeID == null || consigneeID == 0){
+				error += "No selected consignee";
+				$('#consignee_id').css('border-color', 'red');
+			}
+			else{
+				$('#consignee_id').css('border-color', 'green');
+			}
+			if($('#processedBy').val() == "0"){
+				error += "No processedBy";
+				$('#processedBy').css('border-color', 'red');
+			}
+			else{
+				$('#processedBy').css('border-color', 'green');
+			}
+			if(error.length == 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
 		
 		$(document).on('click', '.create-trucking-so', function(e){
-			$.ajax({
-				type: 'POST',
-				url: '{{ route("trucking.store") }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'consignees_id' : consigneeID,
-					'shippingLine' : $('#shippingLine').val(),
-					'destination' : $('#destination').val(),
-					'portOfCfsLocation' : $('#portOfCfsLocation').val(),
-					'processedBy' : $('#processedBy').val(),
-					
-				},
-				success: function(data){
-					if(typeof(data) == "object"){
-						window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
+			if(validateOrder() == true){
+
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("trucking.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'consignees_id' : consigneeID,
+						'shippingLine' : $('#shippingLine').val(),
+						'destination' : $('#destination').val(),
+						'portOfCfsLocation' : $('#portOfCfsLocation').val(),
+						'processedBy' : $('#processedBy').val(),
+
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
+						}
 					}
-				}
-			})
+				})
+			}
 		})
 		function validateConsignee()
 		{

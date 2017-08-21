@@ -98,9 +98,6 @@
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
-                        </li>
-                        <li>
                             <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
                         </li>
                         <li>
@@ -126,7 +123,7 @@
                 <div id="collapse2" class="panel-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                         <ul class="list-group" style="list-style-type: circle;">
-                                                   <li>
+                         <li>
                             <a href = "{{ route('service_ordertype.index') }}"  class = "class-service-order"><i class="fa fa-circle"></i>&nbsp;&nbsp;Service Order Type</a>
                         </li>
                         <li>
@@ -165,77 +162,80 @@
                         <li>
                             <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
                         </li>
-                         <li>
+                        <li>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
+                        </li>
+                        <li>
                             <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>
                         </li>
-                         <li>
+                        <li>
                             <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Template</a>
                         </li>
-                        </ul>
                     </ul>
-                </div>
-                <li>
-                    <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
-                </li>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <ul class="list-group" style="list-style-type: circle;">
-                        <li>
-                            <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
-                        </li>
-                    </ul>
-                </div>
-                <li>
-                    <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    @yield('content')
-                </div>
+                </ul>
             </div>
-        </div>
-        <!-- /#page-content-wrapper -->
+            <li>
+                <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
+            </li>
+            <li>
+                <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
+            </li>
+            <div id="collapse3" class="panel-collapse collapse">
+                <ul class="list-group" style="list-style-type: circle;">
+                    <li>
+                        <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                    </li>
+                </ul>
+            </div>
+            <li>
+                <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
+            </li>
+        </ul>
     </div>
 
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                @yield('content')
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
 
 
-    <!-- Scripts -->
-    <script src="/js/app.js"></script>
-    <script type="text/javascript" src = "/js/jquery.validate.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
-    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
-    <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script type="text/javascript" src = "/js/jquery.validate.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
+<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
-    <script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
-        $(document).on('show.bs.modal', '.modal', function () {
-            var zIndex = 1040 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-            setTimeout(function() {
-                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-            }, 0);
-        });
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-    </script>
-    @stack('scripts')
+<script>
+
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+@stack('scripts')
 </body>
 </html>
