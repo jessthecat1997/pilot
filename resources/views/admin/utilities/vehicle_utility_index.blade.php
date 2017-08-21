@@ -28,13 +28,13 @@
 								Plate Number
 							</td>
 							<td>
-								Model
+								Make
 							</td>
 							<td>
-								Date Registered
+								Body Type
 							</td>
 							<td>
-								Created at
+								LTO Date Registered
 							</td>
 							<td>
 								Status
@@ -52,18 +52,41 @@
 		<form role = "form" method = "POST">
 			{{ csrf_field() }}
 			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
+			<div class="modal fade" id="confirm-deactivate" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							<button class = "btn btn-danger	" id = "btnDelete" >Delete</button>
+							<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+
+	<section class="content">
+		<form role = "form" method = "POST">
+			{{ csrf_field() }}
+			{{ method_field('DELETE') }}
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Activating
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button class = "btn btn-danger	" id = "btnActivate" >Activate</button>
 						</div>
 					</div>
 				</div>
@@ -84,45 +107,41 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+    var filter = 0;
 	var data;
+	
 	$(document).ready(function(){
 		var vtable = $('#v_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: 'http://localhost:8000/admin/vData',
+			ajax: 'http://localhost:8000/utilities/vehicle_deactivated/' + filter,
 			columns: [
 			{ data: 'vehicle_types_id' },
 			{ data: 'plateNumber' },
 			{ data: 'model' },
+			{ data: 'bodyType' },
 			{ data: 'dateRegistered' },
-			{ data: 'created_at'},
+			{ data: 'status'},
 			{ data: 'action', orderable: false, searchable: false }
 
-			]
+			],
+			"order": [[ 6 , "desc"]],
 		});
-		$(document).on('click', '.new', function(e){
-			resetErrors();
-			$('.modal-title').text('New Vehicle');
-			$('#model').val("");
-			$('#vModal').modal('show');
-
-		});
-		$(document).on('click', '.edit',function(e){
-			resetErrors();
-			data = vtable.row($(this).parents()).data();
-			$('#model').val(data.model);
-			$('.modal-title').text('Update Vehicle');
-			$('#vModal').modal('show');
-		});
+		
 		$(document).on('click', '.deactivate', function(e){
 			data = vtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
+		$(document).on('click', '.activate', function(e){
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+
 
 
 // Confirm Delete Button
-$('#btnDelete').on('click', function(e){
+$('#btnDeactivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
@@ -138,70 +157,46 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
+$('#btnActivate').on('click', function(e){
 	e.preventDefault();
-
-	var title = $('.modal-title').text();
-	var vt_id = $('#vehicle_types_id').val();
-	if(title == "New Vehicle")
-	{
-		$.ajax({
-			type: 'POST',
-			url:  '/admin/vehicle',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'vehicle_types_id' : vt_id,
-				'plateNumber' : $('input[name=plateNumber]').val(),
-				'model' : $('input[name=model]').val(),
-				'dateRegistered' : $('input[name=dateRegistered]').val(),
-			},
-			success: function (data)
-			{
-				if(typeof(data) === "object"){
-					vtable.ajax.reload();
-					$('#vModal').modal('hide');
-					$('#model').val("");
-					$('.modal-title').text('New Vehicle');
-				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
-				}
-			},
-			
-		})
-	}
-	else
-	{
-		var vt_id = $('#vehicle_types_id').val();
-		
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/vehicle/' + data.plateNumber,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'vehicle_types_id' : vt_id,
-				'plateNumber' : $('input[name=plateNumber]').val(),
-				'model' : $('input[name=model]').val(),
-				'dateRegistered' : $('input[name=dateRegistered]').val(),
-			},
-			success: function (data)
-			{
-				vtable.ajax.reload();
-				$('#vModal').modal('hide');
-				$('#model').val("");
-				$('.modal-title').text('New Vehicle');
-			}
-		})
-	}
+	$.ajax({
+		type: 'DELETE',
+		url:  '/utilities/vehicle_reactivate/' + data.plateNumber,
+		data: {
+			'_token' : $('input[name=_token').val()
+		},
+		success: function (data)
+		{
+			vtable.ajax.reload();
+			$('#confirm-delete').modal('hide');
+		}
+	})
 });
+
+
+$(document).on('change', '.change-filter', function(e)
+{
+	filter = $(this).val();
+	$('#v_table').dataTable().fnDestroy();
+	var vtable = $('#v_table').DataTable({
+		processing: true,
+		serverSide: true,
+		ajax: 'http://localhost:8000/utilities/vehicle_deactivated/' + filter,
+		columns: [
+		{ data: 'vehicle_types_id' },
+		{ data: 'plateNumber' },
+		{ data: 'model' },
+		{ data: 'bodyType' },
+		{ data: 'dateRegistered' },
+		{ data: 'status'},
+		{ data: 'action', orderable: false, searchable: false }
+
+		],
+		"order": [[ 6 , "desc"]],
+	});
+})
+
+
 
 });
 

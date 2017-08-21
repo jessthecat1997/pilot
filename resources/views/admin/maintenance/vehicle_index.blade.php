@@ -146,7 +146,7 @@
 		<form role = "form" method = "POST">
 			{{ csrf_field() }}
 			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
+			<div class="modal fade" id="confirm-deactivate" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -157,7 +157,31 @@
 						</div>
 						<div class="modal-footer">
 
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+</div>
+<section class="content">
+		<form role = "form" method = "POST">
+			{{ csrf_field() }}
+			{{ method_field('DELETE') }}
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Activating
+						</div>
+						<div class="modal-footer">
+
+							<button class = "btn btn-danger	" id = "btnActivate" >Activate</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
