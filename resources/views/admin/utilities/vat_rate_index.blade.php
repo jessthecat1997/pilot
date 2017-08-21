@@ -1,10 +1,9 @@
-
-@extends('layouts.utilities')
+@extends('layouts.maintenance')
 @section('content')
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities |Vat Rate</h3>
+		<h3><img src="/images/bar.png"> Utilities | Vat Rate</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#vrModal" style = "width: 100%;">New Vate Rate </button>
@@ -124,22 +123,15 @@
 			serverSide: true,
 			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
-		
-			{ data: 'rate',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },                              
-				{ data: 'dateEffective' },
-				
-				{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+			{ data: 'rate' },                              
+			{ data: 'dateEffective' },
 
-		
+			{ data: 'action', orderable: false, searchable: false }
 
+			],	"order": [[ 0, "desc" ]],
+		});
 
-
-		
 		$("#commentForm").validate({
 			rules: 
 			{
@@ -154,11 +146,11 @@
 					date: true,
 				}
 			},
-        onkeyup: false, //turn off auto validate whilst typing
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
+			onkeyup: false, 
+			submitHandler: function (form) {
+				return false;
+			}
+		});
 		
 
 		$(document).on('click', '.new', function(e){
@@ -190,88 +182,18 @@
 		});
 
 
-		
-
-
-
-
-
-// Confirm Delete Button
-$('#btnDelete').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '/admin/vr_rate/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			vrtable.ajax.reload();
-			$('#confirm-delete').modal('hide');
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
-
-
-
-
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-
-
-
-	var rate_nocomma = $('#rate').inputmask('unmaskedvalue');
-	if (rate_nocomma == "0.00"){
-		rate_nocomma = "";
-	}
-
-	e.preventDefault();
-	var title = $('.modal-title').text();
-
-	if(title == "New vr rate")
-	{
-		$.ajax({
-			type: 'POST',
-			url:  '{{ route("vat_rate.store") }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'rate' : rate_nocomma,
-				'dateEffective' : $('input[name=dateEffective]').val(),
-				'currentrate' : $('input[name=currentrate]').val(),
-			},
-			success: function (data)
-			{
-				
-				if(typeof(data) === "object"){
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/vr_rate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
 					vrtable.ajax.reload();
-					$('#vrModal').modal('hide');
-					$('.modal-title').text('New vr rate');
-					$('#rate').val('');
-					$('#dateEffective').val('');
-
-
-					//Show success
+					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
 						"closeButton": false,
@@ -291,70 +213,129 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record added successfully")
-				}else{
-
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
+					toastr["success"]("Record deactivated successfully")
 				}
-			},
-			
-		})
-	}
-	else
-	{
+			})
+		});
 
 
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/vr_rate/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'rate' : rate_nocomma,
-				'dateEffective' : $('input[name=dateEffective]').val(),
-				'currentrate' : $('input[name=currentrate]').val(),
-			},
-			success: function (data)
-			{
-				
+		$('#btnSave').on('click', function(e){
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]("Record updated successfully")
 
-				vrtable.ajax.reload();
-				$('#vrModal').modal('hide');
-				$('#rate').val("");
-				$('#dateEffective').val("");
-				$('.modal-title').text('New vr rate');
+
+			var rate_nocomma = $('#rate').inputmask('unmaskedvalue');
+			if (rate_nocomma == "0.00"){
+				rate_nocomma = "";
 			}
-		})
-	}
-});
 
-});
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			if(title == "New vr rate")
+			{
+				$.ajax({
+					type: 'POST',
+					url:  '{{ route("vat_rate.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'rate' : rate_nocomma,
+						'dateEffective' : $('input[name=dateEffective]').val(),
+						'currentrate' : 0,
+					},
+					success: function (data)
+					{
+
+						if(typeof(data) === "object"){
+							vrtable.ajax.reload();
+							$('#vrModal').modal('hide');
+							$('.modal-title').text('New vr rate');
+							$('#rate').val('');
+							$('#dateEffective').val('');
+
+
+
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record added successfully")
+						}else{
+
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v); 
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+							});
+
+						}
+					},
+
+				})
+			}
+			else
+			{
+
+
+				$.ajax({
+					type: 'PUT',
+					url:  '/admin/vr_rate/' + data.id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'rate' : rate_nocomma,
+						'dateEffective' : $('input[name=dateEffective]').val(),
+						'currentrate' : $('input[name=currentrate]').val(),
+					},
+					success: function (data)
+					{
+
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Record updated successfully")
+
+						vrtable.ajax.reload();
+						$('#vrModal').modal('hide');
+						$('#rate').val("");
+						$('#dateEffective').val("");
+						$('.modal-title').text('New vr rate');
+					}
+				})
+			}
+		});
+
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

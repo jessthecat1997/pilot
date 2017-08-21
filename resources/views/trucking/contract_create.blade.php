@@ -122,7 +122,7 @@
 
 				<div class="col-md-12">
 					<hr />
-					<h3><small>4</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
+					<h3><small>3</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
 					<div class = "collapse" id = "term_condition_warning">
 						<div class="alert alert-danger">
 							<strong>Warning!</strong> Terms and Condition(s) is required.
@@ -171,7 +171,7 @@
 					</div>
 				</div>
 				<div class="col-md-12 ">
-					<h3><small>5</small>&nbsp;&nbsp;Finalize</h3>
+					<h3><small>4</small>&nbsp;&nbsp;Finalize</h3>
 					<div style=" text-align: center;" class="pull-right">
 						<button class = "btn btn-md btn-success finalize-contract " >&nbsp;&nbsp;&nbsp;&nbsp;Create Contract&nbsp;&nbsp;&nbsp;&nbsp;</button>
 
