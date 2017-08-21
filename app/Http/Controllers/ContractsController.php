@@ -131,8 +131,8 @@ class ContractsController extends Controller
 
     public function agreement_pdf(Request $request)
     {
-       try
-       {
+     try
+     {
         $contract = DB::table('contract_headers')
         ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
         ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -153,10 +153,36 @@ class ContractsController extends Controller
         return redirect('/trucking/contracts');
     }
 }
+
+public function draft_contract(Request $request)
+{
+
+    try
+    {
+        $contract = DB::table('contract_headers')
+        ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+        ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+        ->where('contract_headers.id', '=', $request->contract_id)
+        ->get();
+      
+
+        $terms = explode('<br /><br />', $contract[0]->specificDetails);
+        array_pop($terms);
+
+
+        return view('/trucking.contract_draft', compact(['contract', 'terms']));
+
+    }
+    catch(Exception $e){
+        return redirect('/trucking/contracts');
+    }
+
+}
+
 public function amend_contract(Request $request)
 {
-   try
-   {
+ try
+ {
     $contract = DB::table('contract_headers')
     ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
     ->join('consignees AS B', 'consignees_id', '=', 'B.id')

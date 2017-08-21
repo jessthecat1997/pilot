@@ -15,10 +15,11 @@ class CreateContractHeadersTable extends Migration
     {
         Schema::create('contract_headers', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('dateEffective');
-            $table->date('dateExpiration');
+            $table->date('dateEffective')->nullable();
+            $table->date('dateExpiration')->nullable();
             $table->text('specificDetails')->nullable();
             $table->integer('consignees_id')->unsigned();
+            $table->boolean('isFinalize');
             $table->timestamps();
             $table->softDeletes();
 
