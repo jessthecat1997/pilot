@@ -77,54 +77,6 @@
 		</div>
 	</div>
 </div>
-<div class = "row">
-	<div class  = "col-md-10 col-md-offset-1">
-		<div class = "">
-			<div class = "panel-body">
-				<hr />
-				<h3>Contract Rates</h3>
-				
-				<div class = "col-md-12	">
-					<br />
-					<table class = "table table-striped table-responsive" id = "contract_rates_table" style="width: 100%;">
-						<thead>
-							<tr>
-								<td>
-									<strong>Area From</strong>
-								</td>
-								<td>
-									<strong>Area To</strong>
-								</td>
-								<td>
-									<strong style="text-align: center;">Amount</strong>
-								</td>
-								<td>
-									<strong style="text-align: center;">Action</strong>
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							
-						</tbody>
-					</table>
-					<br />
-					<div class="row">
-						<div class = "col-md-4">
-							<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new_delivery_rate pull-left">New Rate</button>
-						</div>
-						<div class = "col-md-4">
-
-						</div>
-						<div class = "col-md-4">
-							<a class = "btn pull-left" data-target="#arModal" data-toggle = "modal">+ New Area</a>
-						</div>
-					</div>
-					<br />
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <div class = "row">
 	<div class  = "col-md-10 col-md-offset-1">
@@ -132,7 +84,7 @@
 			<div class = "panel-body">
 				<br />
 				<hr />
-				<h3>Terms &amp; Conditions <button  type = "submit" style="" class = "btn btn-primary btn-sm update_term_condition pull-right">Update Term and Condition</button></h3>
+				<h3> Agreements <button  type = "submit" style="" class = "btn btn-primary btn-sm update_term_condition pull-right">Update Term and Condition</button></h3>
 				<br />
 				<div style = "overflow-y: scroll; overflow-wrap: none; height: 300px;" class="panel-default panel">
 
