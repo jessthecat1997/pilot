@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaymentMode;
 use App\Payment;
+use App\PaymentHistory;
 use App\ConsigneeServiceOrderHeader;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
@@ -56,32 +57,22 @@ class PaymentsController extends Controller
 		->where('bill_type', '=', 'E')
 		->get();
 		$so_head_id = $id;
-		return view('payment/payment_index', compact(['pays', 'so_head_id', 'exp', 'rev', 'bill_revs', 'bill_exps']));
+
+		$paid = DB::table('payments')
+		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
+		->orderBy('id', 'desc')
+		->where('so_head_id', '=', $id)
+		->get();
+		return view('payment/payment_index', compact(['pays', 'so_head_id', 'exp', 'rev', 'bill_revs', 'bill_exps','paid']));
 
 	}
 	public function payments_table(Request $request, $id)
 	{
-
-		$rev = DB::table('billing_revenues')
-		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.id','name','amount')
-		->where('billing_revenues.bi_head_id', '=', $id);
-
-		$exp = DB::table('billing_expenses')
-		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billing_invoice_headers.id','name','amount')
-		->where('billing_expenses.bi_head_id', '=', $id)
-		->union($rev)
+		$history = DB::table('payments')
+		->select('id', 'amount', 'created_at', 'description')
+		->orderBy('id', 'desc')
 		->get();
-		return Datatables::of($exp)
-		->addColumn('action', function ($exp){
-			return
-			'<button value = "'. $exp->amount .'" class = "btn but makePayment">Select</button>';
-		})
+		return Datatables::of($history)
 		->make(true);
 	}
 	public function store(StorePayment $request)
