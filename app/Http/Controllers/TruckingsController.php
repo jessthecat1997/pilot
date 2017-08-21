@@ -151,6 +151,7 @@ class TruckingsController extends Controller
                 $new_row['container'] = $container;
                 $new_row['details'] = $container_details;
                 array_push($container_with_detail, $new_row);
+
             }
 
         }
@@ -412,6 +413,77 @@ class TruckingsController extends Controller
             }
 
             return $delivery;
+        }
+        else
+        {
+            $response = "";
+            $containers = \DB::table('delivery_containers')
+            ->where('del_head_id', '=', $request->del_head_id)
+            ->get();
+
+
+            for($i = 0; $i< count($containers); $i++){
+                \DB::table('delivery_container_details')
+                ->where('container_id', '=', $containers[$i]->id)
+                ->delete();
+
+                \DB::table('delivery_containers')
+                ->where('id', '=', $containers[$i]->id)
+                ->delete();
+            }
+
+            $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
+            $delivery->emp_id_driver = $request->emp_id_driver;
+            $delivery->emp_id_helper = $request->emp_id_helper;
+
+            $delivery->locations_id_pick = $request->locations_id_pick;
+            $delivery->locations_id_del = $request->locations_id_del;
+
+            $delivery->deliveryDateTime = $request->deliveryDate;
+            $delivery->pickupDateTime = $request->pickupDate;
+
+            $delivery->plateNumber = $request->plateNumber;
+
+            $delivery->save();
+
+            $data = json_decode($request->container_data);
+            foreach ($data as $container => $value)
+            {
+                $container = json_decode((string)json_encode($value));
+                foreach ($container as $key => $container_detail)
+                {
+                    $new_delivery_container = new DeliveryContainer;
+
+                    $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
+                    $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
+                    $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
+                    $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
+                    $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
+                    $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
+                    $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
+                    $new_delivery_container->containerReturnStatus = "N";
+                    $new_delivery_container->dateReturned = null;
+                    $new_delivery_container->remarks = "";
+                    $new_delivery_container->del_head_id = $request->del_head_id;
+
+                    $new_delivery_container->save();
+
+
+                    foreach ($container_detail->details as $key => $container_detail_data){
+
+                        $new_delivery_container_detail = new DeliveryContainerDetail;
+                        $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
+                        $new_delivery_container_detail->grossWeight = $container_detail_data->grossWeight;
+                        $new_delivery_container_detail->supplier = $container_detail_data->supplier;
+                        $new_delivery_container_detail->container_id = $new_delivery_container->id;
+
+                        $new_delivery_container_detail->save();
+                        $response .= $container_detail_data->descriptionOfGood;
+                    }
+
+                }
+            }
+
         }
 
     }

@@ -19,17 +19,24 @@
 										<h4>&nbsp;Container Information</h4>
 										<div id = "containers">
 											<div class="panel-group" id = "container_copy">
-												<div class="panel panel-default" id = "0_panel">
+												@php
+												$ctr = 0;
+												@endphp
+
+												@forelse($container_with_detail as $container)
+
+												
+												<div class="panel panel-default" id = "{{ $ctr }}_panel">
 													<div class="panel-heading">
 														<h4 class="panel-title">
-															<a data-toggle="collapse" href="#0_container ">Container</a>
+															<a data-toggle="collapse" href="#{{ $ctr }}_container ">Container</a>
 															<div class="pull-right">
-																<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
-																<button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button>
+																<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#{{ $ctr }}_container">_</button>
+																<button class="remove-container-row btn btn-xs btn-danger" value = "{{ $ctr }}_panel">&times;</button>
 															</div>
 														</h4>
 													</div>
-													<div id="0_container" class="panel-collapse collapse in">
+													<div id="{{ $ctr }}_container" class="panel-collapse collapse in">
 														<div class="panel-body">
 															<div class = "row">
 																<div class = "col-md-6">
@@ -37,7 +44,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
+																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}"/>
 																			</div>
 																		</div>
 																	</div>
@@ -60,7 +67,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" />
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}"/>
 																			</div>
 																		</div>
 																	</div>
@@ -68,7 +75,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" />
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}"/>
 																			</div>
 																		</div>
 																	</div>
@@ -78,7 +85,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																			<div class="col-sm-8">
-																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
+																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}"/>
 																			</div>
 																		</div>
 																	</div>
@@ -86,7 +93,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
+																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}"/>
 																			</div>
 																		</div>
 																	</div>
@@ -94,14 +101,14 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
 																			<div class="col-sm-8">
-																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea>
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress">{{ $container['container']->containerReturnAddress }}</textarea>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 															</div>
 															<div class = "col-md-12">
-																<table class="table table-responsive table-striped" id = "0_details">
+																<table class="table table-responsive table-striped" id = "{{ $ctr }}_details">
 																	<thead>
 																		<tr>
 																			<td>
@@ -119,22 +126,25 @@
 																		</tr>
 																	</thead>
 																	<tbody>
+																		@forelse($container['details'] as $detail)
 																		<tr>
 																			<td width="35%">
-																				<input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
+																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}"/>
 																			</td>
 																			<td width="20%">
-																				<input type = "number" name = "0_grossWeight" class = "form-control"/>
+																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}"/>
 																			</td>
 																			<td width="30%">
-																				<input type = "text" name = "0_supplier"  class = "form-control" />
+																				<input type = "text" name = "{{ $ctr }}_supplier"  class = "form-control" value="{{ $detail->supplier }}" />
 																			</td>
 																			<td width="15%">
-																				<button class = "btn btn-md btn-danger remove-container-detail" value = "0">
+																				<button class = "btn btn-md btn-danger remove-container-detail" value = "{{ $ctr }}">
 																					x
 																				</button>
 																			</td>
 																		</tr>
+																		@empty
+																		@endforelse
 																	</tbody>
 																</table>
 															</div>
@@ -143,13 +153,21 @@
 
 																</div>
 																<div class= "col-md-3" style="text-align: center;">
-																	<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
+																	<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "{{ $ctr }}">New Good</button>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
+											
+											@php
+											$ctr = $ctr + 1;
+											@endphp
+
+											@empty
+
+											@endforelse
 										</div>
 									</div>
 									<div class="row">
@@ -219,8 +237,8 @@
 								</form>
 							</div>
 						</div>
-						@endif
 					</div>
+					@endif
 				</div>
 			</div>
 			<!-- Separator between details -->
@@ -537,8 +555,8 @@
 		var wodetail_row = '<tr id = "wodescription_row"><td width="35%"><input type = "text" name = "wodescriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "wogrossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "wosupplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
-		var container_copy = "<div class='panel-group'>" + $('#container_copy').html() + "</div>";
-		var container_ctr = 1;
+		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button><button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate"/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>;';
+		@if($delivery[0]->withContainer == 1)var container_ctr = {{ count($container_with_detail) }} @endif;
 		var container_array = [0];
 		var selected_container = 0;
 		var selected_location = 0;
@@ -617,7 +635,6 @@
 			}
 		}
 		function fill_pickup(){
-			console.log('aw');
 			pickup_id = "{{ $delivery[0]->locations_id_pick }}";
 			if(pickup_id != 0)
 			{
@@ -799,6 +816,8 @@
 		// Container
 		$(document).on('click', '.add-new-container', function(e){
 			e.preventDefault();
+			console.log(container_ctr);
+			console.log('ano ba');
 			new_container = container_copy.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
@@ -809,9 +828,14 @@
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0_', container_ctr + "_");
+			new_container = new_container.replace('0', container_ctr + "_");
+			new_container = new_container.replace('value = "0"', "value = '" + container_ctr + "'");
+			new_container = new_container.replace('value = "0"', "value = '" + container_ctr + "'");
 			container_array.push(container_ctr);
 			container_ctr++;
-			$('#container_copy:last-child').append(new_container);
+			$('#container_copy').append(new_container);
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
@@ -837,12 +861,12 @@
 		$(document).on('click', '.new-container-detail', function(e){
 			e.preventDefault();
 			var id = $(this).val();
-			selected_container = id[0];
+			selected_container = id;
 			if(validateCurrentContainerDetail() == true){
 				
 				console.log(id);
-				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
-				$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ selected_container + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ selected_container +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+ selected_container +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ selected_container + '">x</button></td></tr>';
+				$('#'+ selected_container + '_details' + ":last-child").append(detail_row);
 			}
 
 		})
@@ -943,8 +967,8 @@
 
 						validateContainerDetail();
 						$.ajax({
-							type: 'POST',
-							url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',
+							type: 'PUT',
+							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
@@ -962,6 +986,7 @@
 								'shippingLine' : con_ShippingLine,
 								'portOfCfsLocation' : con_PortOfCfsLocation,
 								'container_data' : results,
+								'del_head_id' : {{ $delivery[0]->id}},
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";

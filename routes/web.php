@@ -246,8 +246,8 @@ Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'Trucking
 Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
 Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
+//Route::get('/trucking/contracts/{contract_id}/update_draft', 'ContractsController@updateDraft');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
-
 
 
 //Vanessa addition
