@@ -36,6 +36,10 @@
 									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('F j, Y h:i:s A') }}</span>
 									<label class="control-label col-md-5" for="status">Delivery Date: </label>
 									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('F j, Y h:i:s A') }}</span>
+									@if($delivery[0]->status == 'C')
+									<label class="control-label col-md-5" for="status">Date Cancelled: </label>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->cancelDateTime)->format('F j, Y h:i:s A') }}</span>
+									@endif
 									<label class="control-label col-md-5" for="status">Status: </label>
 									<span class="control-label col-sm-7" style="text-align: left;" id="status">
 										@php

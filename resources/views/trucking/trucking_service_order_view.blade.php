@@ -157,6 +157,12 @@
 					</div>
 					<div class = "collapse delivery_remarks_collapse fade">
 						<div class="form-group required">
+							<label class="control-label col-sm-3" for="deliveryCancel">Date Cancelled</label>
+							<div class="col-sm-8"> 
+								<input type = "date" class = "form-control" name = "deliveryCancel" id = "deliveryCancel" />
+							</div>
+						</div>
+						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
 							<div class="col-sm-8"> 
 								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
@@ -473,6 +479,11 @@
 			if($('#deliveryStatus').val() == "C"){
 				console.log('aa');
 				$('.delivery_remarks_collapse').addClass('in');
+				var now = new Date();
+				var day = ("0" + now.getDate()).slice(-2);
+				var month = ("0" + (now.getMonth() + 1)).slice(-2);
+				var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+				$('#deliveryCancel').val(today);
 			}
 			else
 			{
@@ -649,12 +660,15 @@
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
+					'remarks' : $('#deliveryRemarks').val(),
+					'cancelDateTime' : $('#deliveryCancel').val(),
 					'delivery_head_id' : selected_delivery,
 					
 				},
 				success: function(data){
 					delivery_table.ajax.reload();
 					$('#deliveryModal').modal('hide');
+					window.location.reload();
 				}	
 			})
 		})

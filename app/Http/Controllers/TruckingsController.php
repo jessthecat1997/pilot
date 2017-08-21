@@ -355,6 +355,8 @@ class TruckingsController extends Controller
     public function update_delivery(Request $request){
         $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
         $delivery->status = $request->status;
+        $delivery->remarks = $request->remarks;
+        $delivery->cancelDateTime = $request->cancelDateTime;
         $delivery->save();
         return $delivery;
     }
@@ -519,6 +521,7 @@ class TruckingsController extends Controller
             'J.name as del_province',
             'delivery_receipt_headers.deliveryDateTime',
             'delivery_receipt_headers.pickupDateTime',
+            'delivery_receipt_headers.cancelDateTime',
             'delivery_receipt_headers.remarks',
             DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
             )
