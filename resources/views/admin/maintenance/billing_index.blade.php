@@ -238,12 +238,16 @@
 			{
 				var ele = document.getElementsByName('b_type');
 				var i = ele.length;
-				for (var j = 0; j < i; j++) {
-					if (ele[j].checked) {
-						if (document.getElementById('b_type1').checked) {
+				for (var j = 0; j < i; j++) 
+				{
+					if (ele[j].checked) 
+					{
+						if (document.getElementById('b_type1').checked) 
+						{
 							var val = document.getElementById('b_type1').value;
 							console.log(val);
-							if($('#name').valid() && $('#description').valid()){
+							if($('#name').valid() && $('#description').valid())
+							{
 
 								$('#btnSave').attr('disabled', 'true');
 
@@ -443,8 +447,6 @@
 				}
 			}
 		});
-
-});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

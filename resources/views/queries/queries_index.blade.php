@@ -23,6 +23,7 @@
 								<option value = "8">List of Near Due Date Bills</option>
 								<option value = "9">List of Overdue Bills</option>
 								<option value = "10">Expiring Vehicle Registrations</option>
+								<option value = "11">Finished Trucking Orders</option>
 							</select>
 						</div>
 					</div>
@@ -297,6 +298,23 @@
 							</td>
 							<td style="width: 15%;">
 								Delivery Date
+							</td>
+						</thead>
+					</table> 
+				</div>
+
+				<div class = "collapse" id = "finished_truckings">
+					<br />
+					<table class = "table table-responsive" id = "finished_truckings_table">
+						<thead>
+							<td style="width: 20%;">
+								ID
+							</td>
+							<td style="width: 20%;">
+								Consignee
+							</td>
+							<td style="width: 20%;">
+								Action
 							</td>
 						</thead>
 					</table> 
@@ -616,6 +634,44 @@
 						ajax: "{{ route('get_query_bills') }}/N",
 						columns: [
 						{ data: 'wow' },
+						
+						
+						]
+					});
+				}
+				else{
+
+				}
+
+				
+				break;
+
+
+				case '11' : 
+				$('#contracts_active').removeClass('in');
+				$('#contracts_expired').removeClass('in');
+				$('#contracts_draft').removeClass('in');
+				$('#exp_registrations').removeClass('in');
+				$('#overdue_bills').removeClass('in');
+				$('#near_bills').removeClass('in');
+				$('#unreturned_containers').removeClass('in');
+				$('#today_delivery').removeClass('in');
+				$('#cancelled_delivery').removeClass('in');
+				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').addClass('in');
+
+				var drtable;
+				if ( ! $.fn.DataTable.isDataTable( '#finished_truckings_table') ) {
+					drtable = $('#finished_truckings_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_finished_trucking_orders') }}",
+						columns: [
+						{ data: 'id' },
+						{ data: 'consignee' },
+						{ data: 'action' },
 						
 						
 						]

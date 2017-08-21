@@ -55,7 +55,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ch_datatable(){
-		$charges = Charge::select(['id', 'name', 'description','chargeType','amount','created_at']);
+		$charges = Charge::select(['id', 'name', 'description','bill_type','chargeType','amount','created_at']);
 
 		return Datatables::of($charges)
 		->addColumn('action', function ($ch){
@@ -230,7 +230,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at')
 		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
@@ -245,7 +245,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','consignee_service_order_details.created_at')
 		->where('consignee_service_order_details.service_order_types_id', '=', 2)
 		->get();
 		return Datatables::of($so_heads)
@@ -260,7 +260,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.description','paymentStatus', 'consignee_service_order_headers.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_headers.created_at')
 		->get();
 		return Datatables::of($pso_heads)
 		->addColumn('action', function ($pso_head) {
@@ -283,15 +283,14 @@ class DatatablesController extends Controller
 	}
 	public function expenses_datatable(Request $request)
 	{
-		$billing_header =  BillingInvoiceHeader::all()->last();
-		$exp = DB::table('billing_expenses')
-		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		$exp = DB::table('billing_invoice_details')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
 		->where([
-			['billing_invoice_headers.so_head_id', '=', $request->id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			['billing_invoice_details.bi_head_id', '=', $request->id],
+			['charges.bill_type', '=', 'E']
 			])
 		->get();
 		return Datatables::of($exp)
@@ -301,12 +300,15 @@ class DatatablesController extends Controller
 	}
 	public function revenue_datatable(Request $request)
 	{
-		$rev = DB::table('billing_revenues')
-		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		$rev = DB::table('billing_invoice_details')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
-		->where('billing_revenues.bi_head_id', '=', $request->id)
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $request->id],
+			['charges.bill_type', '=', 'R']
+			])
 		->get();
 		return Datatables::of($rev)
 		->make(true);
@@ -571,14 +573,14 @@ class DatatablesController extends Controller
 			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i:s A');
 		})
 		->addColumn('action', function ($delivery){
-			if($delivery->status == 'P' || $delivery->status == 'C'){
+			if($delivery->status == 'P'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
 				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
 				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
-			if($delivery->status == 'F'){
+			if($delivery->status == 'F' || $delivery->status == 'C'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 				<button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
@@ -910,6 +912,23 @@ class DatatablesController extends Controller
 			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
 			'<input type = "hidden" value = "'. $sar->pickup_id .'" class = "pickup_id"/>
 			<input type = "hidden" value = "'. $sar->deliver_id .'"class = "deliver_id"/>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function get_finished_trucking_orders(Request $request){
+		$truckings = DB::table('trucking_service_orders')
+		->join('consignee_service_order_details as A', 'trucking_service_orders.so_details_id', '=', 'A.id')
+		->join('consignee_service_order_headers as B', 'A.so_headers_id', '=', 'B.id')
+		->join('consignees as C', 'B.consignees_id', '=', 'C.id')
+		->select('trucking_service_orders.id', DB::raw('CONCAT(firstName, " ", lastName) as consignee'))
+		->get();
+
+		return Datatables::of($truckings)
+		->addColumn('action', function ($trucking){
+			return
+			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

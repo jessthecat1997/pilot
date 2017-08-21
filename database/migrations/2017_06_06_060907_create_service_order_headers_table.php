@@ -17,7 +17,6 @@ class CreateServiceOrderHeadersTable extends Migration
             $table->increments('id');
             $table->integer('consignees_id')->unsigned();
             $table->integer('employees_id')->unsigned();
-            $table->char('paymentStatus', 1);
             $table->timestamps();
             $table->softDeletes();
 

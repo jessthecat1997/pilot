@@ -22,6 +22,8 @@ class CreateVatRates extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement('INSERT INTO vat_rates (`rate`, `currentRate`, `dateEffective`, `created_at`, `updated_at`) VALUES (12.0, 1, NOW(), NOW(), NOW())');
     }
 
     /**

@@ -16,6 +16,7 @@ class CreateBillingInvoiceHeadersTable extends Migration
         Schema::create('billing_invoice_headers', function (Blueprint $table) {
             $table->increments('id');
             $table->decimal('vatRate',4,3);
+            $table->char('status', 1);
             $table->date('date_billed');
             $table->date('override_date')->nullable();
             $table->date('due_date');

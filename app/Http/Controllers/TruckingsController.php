@@ -52,7 +52,6 @@ class TruckingsController extends Controller
         $new_so_head = new ConsigneeServiceOrderHeader;
         $new_so_head->consignees_id = $request->consignees_id;
         $new_so_head->employees_id = $request->processedBy;
-        $new_so_head->paymentStatus = "U";
         $new_so_head->save();
 
 
@@ -355,6 +354,8 @@ class TruckingsController extends Controller
     public function update_delivery(Request $request){
         $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
         $delivery->status = $request->status;
+        $delivery->remarks = $request->remarks;
+        $delivery->cancelDateTime = $request->cancelDateTime;
         $delivery->save();
         return $delivery;
     }
@@ -519,6 +520,7 @@ class TruckingsController extends Controller
             'J.name as del_province',
             'delivery_receipt_headers.deliveryDateTime',
             'delivery_receipt_headers.pickupDateTime',
+            'delivery_receipt_headers.cancelDateTime',
             'delivery_receipt_headers.remarks',
             DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
             )

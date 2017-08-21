@@ -17,6 +17,7 @@ class CreateChargesTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->string('description', 150)->nullable();
+            $table->char('bill_type',1);
             $table->boolean('chargeType');
             $table->decimal('amount', 10, 2);
             $table->timestamps();
