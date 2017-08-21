@@ -355,13 +355,7 @@ class DatatablesController extends Controller
 		->get();
 		return Datatables::of($deliveries)
 		->make(true);
-		// // select c.companyName, dc.shippingLine, dc.portOfCfsLocation, dc.containerVolume, dc.containerNumber, dnc.grossWeight, dh.deliveryDateTime, dc.remarks from delivery_containers as dc 
-		// join delivery_receipt_headers as dh on dc.del_head_id = dh.id 
-		// join delivery_non_container_details as dnc on dnc.del_head_id = dh.id 
-		// join trucking_service_orders as tr on dh.tr_so_id = tr.id 
-		// join consignee_service_order_details as cd on tr.so_details_id = cd.id 
-		// join consignee_service_order_headers as ch on cd.so_headers_id = ch.id 
-		// join consignees as c on ch.consignees_id = c.id
+
 	}
 
 	public function ar_datatable(){
@@ -563,11 +557,20 @@ class DatatablesController extends Controller
 			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i:s A');
 		})
 		->addColumn('action', function ($delivery){
-			return
+			if($delivery->status == 'P' || $delivery->status == 'C'){
+				return
 			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 			 <button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
 			 <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
 			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
+			}
+			if($delivery->status == 'F'){
+				return
+			"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+			 <button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
+			 <button disabled class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
+			"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
+			}
 		})
 		->editColumn('status', function($deliveries){
 			switch ($deliveries->status) {
