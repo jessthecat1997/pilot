@@ -36,7 +36,7 @@ class VatRatesController extends Controller
 		return $vr;
 	}
 
-	public function update(StoreVatRate $request, $id)
+	public function update(Request $request, $id)
 	{
 		$vat_rate = VatRate::findOrFail($id);
 		$vat_rate ->rate = $request->rate;

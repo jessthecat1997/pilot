@@ -300,7 +300,7 @@
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/vr_rate/' + data.id,
+					url:  '{{ route("vat_rate.index") }}/' + data.id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'rate' : rate_nocomma,
