@@ -54,7 +54,7 @@
 						<div id="con_collapse" class="collapse in">
 							<ul class="nav nav-tabs">
 								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
-								<li><a data-toggle="tab" href="#physical_address">Physical Address</a></li>
+								<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
 								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
 							</ul>
 
@@ -63,7 +63,7 @@
 									<br />
 									<div class = "form-horizontal">
 										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_address">Address:</label>
+											<label class="control-label col-sm-3" for="phy_address">Block/Lot/Street:</label>
 											<div class="col-sm-8">          
 												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
 											</div>
