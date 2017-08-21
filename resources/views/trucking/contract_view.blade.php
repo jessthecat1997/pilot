@@ -56,7 +56,7 @@
 
 					
 				</div>
-				<button class="btn btn-md btn-primary pull-right generate_pdf print-contract-details">Generate Contract</button>
+				<button class="btn btn-md btn-primary pull-right generate_pdf print-contract-details">Print Contract</button>
 			</div>
 		</div>
 	</div>

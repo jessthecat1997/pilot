@@ -452,6 +452,7 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
+			scrollX: true,
 			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
 			columns: [
 

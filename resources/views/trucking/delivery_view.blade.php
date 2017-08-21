@@ -437,7 +437,7 @@
 
 			</div>
 			<div class = "col-md-4">
-				<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Generate Delivery Receipt</button>
+				<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Print Delivery Receipt</button>
 			</div>
 		</div>
 	</div>

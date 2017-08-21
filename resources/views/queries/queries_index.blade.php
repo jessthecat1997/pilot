@@ -198,27 +198,22 @@
 					<br />
 					<table class = "table table-responsive" id = "unreturned_containers_table">
 						<thead>
-							<td style="width: 10%;">
-								Del No.
-							</td>
-							<td style="width: 10%;">
-								Consignee
-							</td>
-							<td style="width: 13%;">
-								Plate Number
-							</td>
 							<td style="width: 15%;">
-								Origin City
+								Container Number
 							</td>
-							<td style="width: 10%;">
-								Pickup Date
+							<td style="width: 20%;">
+								Container Volumes
 							</td>
-							<td style="width: 15%;">
-								Destination City
+							<td style="width: 20%;">
+								Return To
 							</td>
-							<td style="width: 15%;">
-								Delivery Date
+							<td style="width: 20%;">
+								Return Date
 							</td>
+							<td style="width: 20%;">
+								Return Address
+							</td>
+
 						</thead>
 					</table> 
 				</div>
@@ -365,7 +360,7 @@
 				}
 				else
 				{
-			
+
 				}
 
 				break;
@@ -402,7 +397,7 @@
 				}
 				else
 				{
-			
+
 				}
 
 				break;
@@ -439,7 +434,7 @@
 				}
 				else
 				{
-			
+
 				}
 
 				break;
@@ -477,7 +472,7 @@
 					});
 				}
 				else{
-				
+
 				}
 
 				
@@ -516,7 +511,7 @@
 					});
 				}
 				else{
-				
+
 				}
 
 				
@@ -555,7 +550,79 @@
 					});
 				}
 				else{
+
+				}
+
 				
+				break;
+
+				case "7" : 
+				$('#contracts_active').removeClass('in');
+				$('#contracts_expired').removeClass('in');
+				$('#contracts_draft').removeClass('in');
+				$('#exp_registrations').removeClass('in');
+				$('#overdue_bills').removeClass('in');
+				$('#near_bills').removeClass('in');
+				$('#unreturned_containers').addClass('in');
+				$('#today_delivery').removeClass('in');
+				$('#cancelled_delivery').removeClass('in');
+				$('#pending_delivery').removeClass('in');
+
+				var drtable;
+				if ( ! $.fn.DataTable.isDataTable( '#unreturned_containers_table') ) {
+					drtable = $('#unreturned_containers_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_unreturned_containers') }}",
+						columns: [
+						{ data: 'containerNumber' },
+						{ data: 'containerVolume'},
+						{ data: 'containerReturnTo' },
+						{ data: 'containerReturnAddress' },
+						{ data: 'containerReturnDate' },
+						
+						
+						]
+					});
+				}
+				else{
+
+				}
+
+				
+				break;
+
+				case "8" : 
+				$('#contracts_active').removeClass('in');
+				$('#contracts_expired').removeClass('in');
+				$('#contracts_draft').removeClass('in');
+				$('#exp_registrations').removeClass('in');
+				$('#overdue_bills').removeClass('in');
+				$('#near_bills').addClass('in');
+				$('#unreturned_containers').removeClass('in');
+				$('#today_delivery').removeClass('in');
+				$('#cancelled_delivery').removeClass('in');
+				$('#pending_delivery').removeClass('in');
+
+				var drtable;
+				if ( ! $.fn.DataTable.isDataTable( '#near_bills_table') ) {
+					drtable = $('#near_bills_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_query_bills') }}/N",
+						columns: [
+						{ data: 'wow' },
+						
+						
+						]
+					});
+				}
+				else{
+
 				}
 
 				
@@ -563,9 +630,9 @@
 			}
 		})
 
-		$(document).on('click', '.view', function(e){
-			e.preventDefault();
-		})
-	})
+$(document).on('click', '.view', function(e){
+	e.preventDefault();
+})
+})
 </script>
 @endpush

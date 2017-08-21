@@ -232,10 +232,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
-		->where([
-			['service_order_types.name', '=', 'Brokerage'],
-			['paymentStatus', '=', 'U']
-			])
+		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -250,10 +247,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
-		->where([
-			['service_order_types.name', '=', 'Trucking'],
-			['paymentStatus', '=', 'U']
-			])
+		->where('consignee_service_order_details.service_order_types_id', '=', 2)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -840,9 +834,31 @@ class DatatablesController extends Controller
 
 	public function get_unreturned_containers(Request $request){
 		$containers = DB::table('delivery_containers')
-		->select('containerNumber')
+		->select('containerNumber', 'containerReturnDate', 'containerVolume', 'containerReturnAddress', 'containerReturnTo')
 		->where('containerReturnStatus', '=', 'N')
 		->get();
+
+		return Datatables::of($containers)
+		->editColumn('containerReturnDate', function($container){
+			return Carbon::parse($container->containerReturnDate)->toFormattedDateString();
+		})
+		->make(true);
+
+	}
+
+	public function get_query_bills(Request $request)
+	{
+		switch ($request->status) {
+			case 'N' : 
+			$bills = DB::table('billing_invoice_headers')
+			->select('id', DB::raw('CONCAT(firstName , " ", lastName) as name'))
+			->join
+			->whereRaw('NOW() > due_date')
+			->get();
+			break;
+
+			return $bills;
+		}
 	}
 
 	public function cds_datatable(){

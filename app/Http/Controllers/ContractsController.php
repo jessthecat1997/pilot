@@ -30,13 +30,7 @@ class ContractsController extends Controller
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
-
-            $contract_details = DB::table('contract_details')
-            ->select('A.description AS from', 'B.description AS to', 'amount')
-            ->join('areas AS A', 'areas_id_from', '=', 'A.id')
-            ->join('areas AS B', 'areas_id_to', '=', 'B.id')
-            ->where('contract_headers_id', '=', $request->contract_id)
-            ->get();
+            
             return view('/trucking.contract_view', compact(['contract', 'contract_details']));
 
         }
@@ -89,16 +83,6 @@ class ContractsController extends Controller
 
         $new_contract =  ContractHeader::all()->last();
 
-        for($i = 0; $i < count($request->areas_from); $i++){
-            $contract_detail = new ContractDetail;
-            $contract_detail->areas_id_from = $request->areas_from[$i];
-            $contract_detail->areas_id_to = $request->areas_to[$i];
-
-            $contract_detail->amount = $request->amount[$i];
-            $contract_detail->currentRate = 1;
-            $contract_detail->contract_headers_id = $new_contract->id;
-            $contract_detail->save();
-        }
         Storage::disk('local')->put($request->consigneeID ."_". str_replace(" ", "_", $request->consigneeName).".txt", $newContent);
 
         return $new_contract->id;
