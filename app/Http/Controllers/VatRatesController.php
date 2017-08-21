@@ -10,11 +10,26 @@ class VatRatesController extends Controller
 {
 	public function index()
 	{
-		return view('admin/utilities.vat_rate_index');
+		$vrs = \DB::select("SELECT * FROM vat_rates WHERE dateEffective < NOW() ORDER BY dateEffective");
+		$current = $vrs[count($vrs) -1 ];
+
+		\DB::update('UPDATE vat_rates SET currentRate = 0 WHERE id != ' . $current->id);
+		\DB::update('UPDATE vat_rates SET currentRate = 1 WHERE id = ' . $current->id);
+
+		$vat_rate = \DB::table('vat_rates')
+		->select('rate')
+		->where('currentRate', '=', 1)
+		->get();
+
+		if(count($vat_rate) == 0){
+			$vat_rate[0]->rate = 0;
+		}
+
+		return view('admin/utilities.vat_rate_index', compact(['vat_rate']));
 	}
 
 
-	public function store( $request)
+	public function store(Request $request)
 	{
 
 		$vr = VatRate::create($request->all());
