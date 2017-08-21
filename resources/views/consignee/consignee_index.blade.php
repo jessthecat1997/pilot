@@ -100,9 +100,9 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
 											<div class="col-md-8">          
-												<label class="switch">
+												
 													<input type="checkbox" class = "checkbox same_billing_address">
-												</label>
+												
 											</div>
 										</div>
 									</div>
@@ -435,6 +435,7 @@
 							$("#basic-information-heading").html('<h5 id = "basic-information-heading">Basic Information <button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h5>');
 
 							cstable.ajax.reload();
+							$('#chModal').modal('hide');
 							$('#firstName').val("");
 							$('#middleName').val("");
 							$('#lastName').val("");
