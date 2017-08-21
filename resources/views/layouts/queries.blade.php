@@ -16,7 +16,6 @@
     <link href= "/js/select2/select2.css" rel = "stylesheet">  
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
-    
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -99,19 +98,16 @@
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-map-marker"></i>&nbsp;&nbsp;Location</a>
-                        </li>
-                        <li>
                             <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
+                            <a href = "{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
+                            <a href = "{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
                         </li>
                         <li id="frstgrp">
                             <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing and Payment</a>
@@ -133,7 +129,7 @@
                             <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a>
                         </li>
                         <li>
-                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;IPF Fee</a>
+                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;IPF </a>
                         </li>
                         <li>
                             <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container</a>
@@ -142,22 +138,34 @@
                             <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a>
                         </li>
                         <li>
-                            <a href = "{{ route('area.index') }}"  class = "class-area"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area</a>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a>
                         </li>
                         <li>
-                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates</a>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                         </li>
                         <li>
                             <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
                         </li>
                         <li>
-                            <a href = "{{ route('receive_type.index') }}"  class = "class-receive-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Receive Type</a>
+                            <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a>
                         </li>
                         <li>
                             <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a>
                         </li>
                         <li>
                             <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Template</a>
                         </li>
                     </ul>
                 </div>
@@ -221,6 +229,8 @@
             }, 0);
         });
 
+        
+
         $('.money_er').inputmask("numeric", { 
             radixPoint: ".", 
             groupSeparator: ",", 
@@ -240,10 +250,13 @@
             rightAlign: true, 
             removeMaskOnSubmit:true, 
         });
+
+
         function formatNumber(n) { 
             var currency = "Php "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-        } 
+        }
+
         function formatNumber_s(n) { 
             var currency = "$ "; 
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
