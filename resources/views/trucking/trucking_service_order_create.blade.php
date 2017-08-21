@@ -100,7 +100,7 @@
 						<label class="control-label col-sm-4" for="noOfDeliveries">Processed by:</label>
 						<div class="col-sm-6">          
 							<select name = "processedBy" id = "processedBy" class = "form-control">
-								<option></option>
+								<option value = "0"></option>
 								@forelse($employees as $employee)
 								<option value = "{{ $employee->id }}">
 									{{ $employee->lastName . ", " . $employee->firstName }}
@@ -519,26 +519,54 @@
 			}
 		})
 
+		function validateOrder()
+		{
+			error = "";
+			if(consigneeID == null || consigneeID == 0){
+				error += "No selected consignee";
+				$('#consignee_id').css('border-color', 'red');
+			}
+			else{
+				$('#consignee_id').css('border-color', 'green');
+			}
+			if($('#processedBy').val() == "0"){
+				error += "No processedBy";
+				$('#processedBy').css('border-color', 'red');
+			}
+			else{
+				$('#processedBy').css('border-color', 'green');
+			}
+			if(error.length == 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
 		
 		$(document).on('click', '.create-trucking-so', function(e){
-			$.ajax({
-				type: 'POST',
-				url: '{{ route("trucking.store") }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'consignees_id' : consigneeID,
-					'shippingLine' : $('#shippingLine').val(),
-					'destination' : $('#destination').val(),
-					'portOfCfsLocation' : $('#portOfCfsLocation').val(),
-					'processedBy' : $('#processedBy').val(),
-					
-				},
-				success: function(data){
-					if(typeof(data) == "object"){
-						window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
+			if(validateOrder() == true){
+
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("trucking.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'consignees_id' : consigneeID,
+						'shippingLine' : $('#shippingLine').val(),
+						'destination' : $('#destination').val(),
+						'portOfCfsLocation' : $('#portOfCfsLocation').val(),
+						'processedBy' : $('#processedBy').val(),
+
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
+						}
 					}
-				}
-			})
+				})
+			}
 		})
 		function validateConsignee()
 		{
