@@ -6,6 +6,7 @@ use App\PaymentMode;
 use App\Payment;
 use App\PaymentHistory;
 use App\ConsigneeServiceOrderHeader;
+use App\BillingInvoiceHeader;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class PaymentsController extends Controller
 {
 	public function index()
 	{
-		return view('payment/payment_so');
+		return view('payment/payment_index');
 	}
 	public function show(Request $request, $id)
 	{
@@ -29,41 +30,20 @@ class PaymentsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
-		$rev = DB::table('billing_revenues')
-		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where('billing_revenues.bi_head_id', '=', $id)
-		->get();
-
-
-		$exp = DB::table('billing_expenses')
-		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->where('billing_expenses.bi_head_id', '=', $id)
-		->get();
-
-		$bill_revs = DB::table('billings')
-		->select('id','name')
-		->where('bill_type', '=', 'R')
-		->get();
-
-
-		$bill_exps = DB::table('billings')
-		->select('id', 'name')
-		->where('bill_type', '=', 'E')
-		->get();
 		$so_head_id = $id;
 
 		$paid = DB::table('payments')
+		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
 		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
-		->orderBy('id', 'desc')
-		->where('so_head_id', '=', $id)
+		->orderBy('payments.id', 'desc')
+		->where('billing_invoice_headers.so_head_id', '=', $id)
 		->get();
-		return view('payment/payment_index', compact(['pays', 'so_head_id', 'exp', 'rev', 'bill_revs', 'bill_exps','paid']));
+
+		$total = DB::table('billing_invoice_details')
+		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
+		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->get();
+		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total']));
 
 	}
 	public function payments_table(Request $request, $id)
@@ -80,13 +60,14 @@ class PaymentsController extends Controller
 		$new_payment = new Payment;
 
 		$new_payment->amount = $request->amount;
-		$new_payment->so_head_id = $request->so_head_id;
+		$new_payment->description = $request->description;
+		$new_payment->bi_head_id = $request->bi_head_id;
 		$new_payment->save();
 	}
 	public function update(Request $request, $id)
 	{
-		$csh = ConsigneeServiceOrderHeader::findOrFail($id);
-		$csh->paymentStatus = $request->paymentStatus;
+		$csh = BillingInvoiceHeader::findOrFail($id);
+		$csh->status = $request->status;
 		$csh->save();
 
 		return $csh;

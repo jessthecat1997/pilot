@@ -52,7 +52,6 @@ class TruckingsController extends Controller
         $new_so_head = new ConsigneeServiceOrderHeader;
         $new_so_head->consignees_id = $request->consignees_id;
         $new_so_head->employees_id = $request->processedBy;
-        $new_so_head->paymentStatus = "U";
         $new_so_head->save();
 
 

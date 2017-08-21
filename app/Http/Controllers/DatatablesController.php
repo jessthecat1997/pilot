@@ -56,7 +56,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ch_datatable(){
-		$charges = Charge::select(['id', 'name', 'description','chargeType','amount','created_at']);
+		$charges = Charge::select(['id', 'name', 'description','bill_type','chargeType','amount','created_at']);
 
 		return Datatables::of($charges)
 		->addColumn('action', function ($ch){
@@ -231,7 +231,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at')
 		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
@@ -246,7 +246,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','consignee_service_order_details.created_at')
 		->where('consignee_service_order_details.service_order_types_id', '=', 2)
 		->get();
 		return Datatables::of($so_heads)
@@ -261,7 +261,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.description','paymentStatus', 'consignee_service_order_headers.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_headers.created_at')
 		->get();
 		return Datatables::of($pso_heads)
 		->addColumn('action', function ($pso_head) {
@@ -284,15 +284,14 @@ class DatatablesController extends Controller
 	}
 	public function expenses_datatable(Request $request)
 	{
-		$billing_header =  BillingInvoiceHeader::all()->last();
-		$exp = DB::table('billing_expenses')
-		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_expenses.bi_head_id', '=', 'billing_invoice_headers.id')
+		$exp = DB::table('billing_invoice_details')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', 'billing_expenses.description', 'billing_expenses.amount')
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
 		->where([
-			['billing_invoice_headers.so_head_id', '=', $request->id],
-			['consignee_service_order_headers.paymentStatus', '=', 'U']
+			['billing_invoice_details.bi_head_id', '=', $request->id],
+			['charges.bill_type', '=', 'E']
 			])
 		->get();
 		return Datatables::of($exp)
@@ -302,12 +301,15 @@ class DatatablesController extends Controller
 	}
 	public function revenue_datatable(Request $request)
 	{
-		$rev = DB::table('billing_revenues')
-		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
-		->join('billing_invoice_headers', 'billing_revenues.bi_head_id', '=', 'billing_invoice_headers.id')
+		$rev = DB::table('billing_invoice_details')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billings.name', 'billing_revenues.description', 'billing_revenues.amount')
-		->where('billing_revenues.bi_head_id', '=', $request->id)
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $request->id],
+			['charges.bill_type', '=', 'R']
+			])
 		->get();
 		return Datatables::of($rev)
 		->make(true);

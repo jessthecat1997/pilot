@@ -15,19 +15,22 @@
 				<table class = "table-responsive table" id = "ch_table">
 					<thead>
 						<tr>
-							<td style="width: 30%;">
+							<td>
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td>
 								Description
 							</td>
-							<td style="width: 40%;">
+							<td>
+								Bill Type
+							</td>
+							<td>
 								Charge Type
 							</td>
-							<td style="width: 40%;">
+							<td>
 								Amount
 							</td>
-							<td style="width: 25%;">
+							<td>
 								Actions
 							</td>
 						</tr>
@@ -56,10 +59,16 @@
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
+							<div class="form-group required">
+								<label class = "control-label" >Bill Type: &nbsp;</label>
+								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" value="R">Revenue</label>
+								<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Expense</label>
+							</div>
 							<div class="form-group">
-								<label class = "control-label">Charge Type: </label>
+								<label class = "control-label">Charge Type: &nbsp;</label>
 								<input type="radio" name="chargeType" value="0"  checked = "checked"> Fixed
 								<input type="radio" name="chargeType" value="1">Rate
+								<br/>
 								<div class="form-group">
 									<div id = "type0" class = "chargeValue">
 										<label class = "control-label">Amount: </label>
@@ -68,7 +77,6 @@
 											<input type = "text" class = "form-control money" name = "amount_fixed" id = "amount_fixed" data-rule-required="true" value= "0.00"/>
 										</div>
 									</div>
-
 									<div id = "type1" class = "chargeValue">
 										<label class = "control-label">Rate: </label>
 										<div class = "form-group input-group " >
@@ -77,12 +85,8 @@
 											<span class = "input-group-addon">%</span>
 										</div>
 									</div>
-
 								</div>
-
 							</div>
-
-
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
@@ -149,17 +153,19 @@
 			deferRender: true,
 			ajax: 'http://localhost:8000/admin/chData',
 			columns: [
-			
 			{ data: 'name' },
 			{ data: 'description' },
-			{ data: 'chargeType',
+			{ data: 'bill_type',
 			"render" : function( data, type, full ) {
-				return formatWithChargeType(data); }},
-				{ data: 'amount' },
-				{ data: 'action', orderable: false, searchable: false }
+				return formatWithBillType(data); }},
+				{ data: 'chargeType',
+				"render" : function( data, type, full ) {
+					return formatWithChargeType(data); }},
+					{ data: 'amount' },
+					{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
-			});
+					],	"order": [[ 0, "desc" ]],
+				});
 
 		function formatWithChargeType(n) { 
 
@@ -167,6 +173,15 @@
 				return "Rate";
 			}else{
 				return "Fixed";
+			}
+
+		} 
+		function formatWithBillType(e) { 
+
+			if (e == 'R'){
+				return "Revenue";
+			}else{
+				return "Expense";
 			}
 
 		} 
@@ -318,11 +333,11 @@
 				}
 			})
 		});
-
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
-
+			var rev = "R";
+			var exp = "E";
 			$('#name').valid();
 			$('#description').valid();
 			$('#amount_rate').valid();
@@ -335,77 +350,162 @@
 				final_amount = $('#amount_rate').inputmask('unmaskedvalue');
 			}
 
-			if(title == "New Charge")
+			if(title == "New Billing")
 			{
-				if($('#name').valid() && $('#description').valid()){
-
-					$('#btnSave').attr('disabled', 'true');
-
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/charge',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'name' : $('#name').val(),
-							'description' : $('#description').val(),
-							'amount':final_amount,
-							'chargeType': $('input[name=chargeType]:checked').val(),
-						},
-						success: function (data)
+				var ele = document.getElementsByName('b_type');
+				var i = ele.length;
+				for (var j = 0; j < i; j++) 
+				{
+					if (ele[j].checked) 
+					{
+						if (document.getElementById('b_type1').checked) 
 						{
-							if(typeof(data) === "object"){
-								chtable.ajax.reload();
-								$('#chModal').modal('hide');
-								$('#name').val("");
-								$('#description').val("");
-								$('#amount').val("");
-								$('.modal-title').text('New Charge');
+							var val = document.getElementById('b_type1').value;
+							console.log(val);
+							if($('#name').valid() && $('#description').valid())
+							{
+
+								$('#btnSave').attr('disabled', 'true');
+
+								$.ajax({
+									type: 'POST',
+									url:  '/admin/charge',
+									data: {
+										'_token' : $('input[name=_token]').val(),
+										'name' : $('#name').val(),
+										'description' : $('#description').val(),
+										'amount':final_amount,
+										'bill_type' : val,
+										'chargeType': $('input[name=chargeType]:checked').val(),
+									},
+									success: function (data)
+									{
+										if(typeof(data) === "object"){
+											chtable.ajax.reload();
+											$('#chModal').modal('hide');
+											$('#name').val("");
+											$('#description').val("");
+											$('#amount').val("");
+											$('.modal-title').text('New Charge');
 
 
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]("Record addded successfully");
+											toastr.options = {
+												"closeButton": false,
+												"debug": false,
+												"newestOnTop": false,
+												"progressBar": false,
+												"rtl": false,
+												"positionClass": "toast-bottom-right",
+												"preventDuplicates": false,
+												"onclick": null,
+												"showDuration": 300,
+												"hideDuration": 1000,
+												"timeOut": 2000,
+												"extendedTimeOut": 1000,
+												"showEasing": "swing",
+												"hideEasing": "linear",
+												"showMethod": "fadeIn",
+												"hideMethod": "fadeOut"
+											}
+											toastr["success"]("Record addded successfully");
 
-								$('#btnSave').removeAttr('disabled');
+											$('#btnSave').removeAttr('disabled');
 
+										}
+										else{
+											resetErrors();
+											var invdata = JSON.parse(data);
+											$.each(invdata, function(i, v) {
+												console.log(i + " => " + v); 
+												var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+												$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+												$('#btnSave').removeAttr('disabled');
+											});
+
+										}
+									},
+
+								})
 							}
-							else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+						}
+						else if (document.getElementById('b_type2').checked) {
+							var val = document.getElementById('b_type2').value;
+							console.log(val);
+							if($('#name').valid() && $('#description').valid()){
 
-									$('#btnSave').removeAttr('disabled');
-								});
+								$('#btnSave').attr('disabled', 'true');
 
+								$.ajax({
+									type: 'POST',
+									url:  '/admin/charge',
+									data: {
+										'_token' : $('input[name=_token]').val(),
+										'name' : $('#name').val(),
+										'description' : $('#description').val(),
+										'amount':final_amount,
+										'bill_type' : val,
+										'chargeType': $('input[name=chargeType]:checked').val(),
+									},
+									success: function (data)
+									{
+										if(typeof(data) === "object"){
+											chtable.ajax.reload();
+											$('#chModal').modal('hide');
+											$('#name').val("");
+											$('#description').val("");
+											$('#amount').val("");
+											$('.modal-title').text('New Charge');
+
+
+
+											toastr.options = {
+												"closeButton": false,
+												"debug": false,
+												"newestOnTop": false,
+												"progressBar": false,
+												"rtl": false,
+												"positionClass": "toast-bottom-right",
+												"preventDuplicates": false,
+												"onclick": null,
+												"showDuration": 300,
+												"hideDuration": 1000,
+												"timeOut": 2000,
+												"extendedTimeOut": 1000,
+												"showEasing": "swing",
+												"hideEasing": "linear",
+												"showMethod": "fadeIn",
+												"hideMethod": "fadeOut"
+											}
+											toastr["success"]("Record addded successfully");
+
+											$('#btnSave').removeAttr('disabled');
+
+										}
+										else{
+											resetErrors();
+											var invdata = JSON.parse(data);
+											$.each(invdata, function(i, v) {
+												console.log(i + " => " + v); 
+												var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+												$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+												$('#btnSave').removeAttr('disabled');
+											});
+
+										}
+									},
+
+								})
 							}
-						},
 
-					})
+						}
+					}
 				}
 			}
 			else
 			{
-
 				if($('#name').valid() && $('#description').valid())
 				{
 					if($('#name').val() == temp_name && $('#description').val() == temp_desc && final_amount == temp_amount  )
@@ -485,7 +585,6 @@
 				}
 			}
 		});
-
 });
 
 function resetErrors() {

@@ -181,6 +181,7 @@ Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name
 Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
 Route::resource('/billingrevenue', 'BillingRevenuesController');
 Route::resource('/billingexpense', 'BillingExpensesController');
+Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 
 
 //Maintenance data

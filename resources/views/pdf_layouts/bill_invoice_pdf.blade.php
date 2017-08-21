@@ -138,29 +138,25 @@
 					</tr>
 				</thead>
 				<tbody>
-					@forelse($revenues as $rev)
+					@forelse($parts as $pt)
 					<tr>
 						<td style="text-align: center;">
-							{{ $rev->name }}
+							{{ $pt->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $rev->Total }}
+							Php {{ $pt->amount }}
 						</td>
 					</tr>
 					@empty
 					@endforelse
-					@forelse($expenses as $exp)
 					<tr>
-						<td style="text-align: center;">
-							{{ $exp->name }}
+						<td style="text-align: right">
+							<strong>TOTAL</strong>
 						</td>
 						<td style="text-align: right;">
-							Php {{ $exp->Total }}
+							Php {{ $total[0]->Total }}
 						</td>
 					</tr>
-					@empty
-					@endforelse
-					
 				</tbody>
 			</table>
 			<br />

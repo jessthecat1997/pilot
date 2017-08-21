@@ -27,6 +27,7 @@ class ChargesController extends Controller
         $charge = Charge::findOrFail($id);
         $charge->name = $request->name;
         $charge->description = $request->description;
+        $charge->bill_type = $request->bill_typeP;
         $charge->chargeType = $request->chargeType;
         $charge->amount = $request->amount;
         $charge->save();
@@ -47,7 +48,7 @@ class ChargesController extends Controller
         $charge = Charge::withTrashed()
         ->where('id',$request->id)
         ->restore();
-  
+        
     }
 
     public function ch_utilities(){
