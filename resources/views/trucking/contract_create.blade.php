@@ -662,7 +662,7 @@
 						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						
+						'isFinalize' : 1,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 					},
@@ -687,31 +687,31 @@
 						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						
+						'isFinalize':0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 					},
 
 					success: function (data){
 						toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]("Contract save as draft successfully")
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Contract save as draft successfully")
 					}
 
 				})
@@ -899,6 +899,15 @@ function validateDraft()
 	}
 	else{
 		$('#consignee_warning').removeClass('in');
+	}
+
+	if($('#dateExpiration').val() < $('#dateEffective').val()){
+		error += "Invalid duration";
+		$('#contract_duration_warning').addClass('in');
+		location.href = "#contract_duration_title";
+	}
+	else{
+		$('#contract_duration_warning').removeClass('in');
 	}
 	
 	
