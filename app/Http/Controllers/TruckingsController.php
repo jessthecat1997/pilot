@@ -356,6 +356,7 @@ class TruckingsController extends Controller
         $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
         $delivery->status = $request->status;
         $delivery->save();
+        return $delivery;
     }
 
     public function getVehicles(Request $request){

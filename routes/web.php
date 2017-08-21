@@ -42,7 +42,6 @@ Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
 
 Route::resource('/admin/vehicletype', 'VehicleTypesController');
 Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
-Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
@@ -51,6 +50,7 @@ Route::resource('/admin/employee_type', 'EmployeeTypesController');
 Route::resource('/admin/vehicle','VehiclesController');
 Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
+Route::resource('/admin/charge','ChargesController'); 
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
@@ -82,10 +82,9 @@ Route::get('/utilities/brokerage_fee_data','BrokerageFeesController@bf_utilities
 Route::put('/utilities/brokerage_fee_reactivate/{id}','BrokerageFeesController@reactivate');
 
 
-
-Route::get('/utilities/charge_deactivated/{filter}',
-	'DatatablesController@ch_deactivated');
-Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index');
+Route::get('/utilities/charge_deactivated/{filter}', 
+	'DatatablesController@ch_deactivated'); 
+Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index'); 
 Route::put('/utilities/charge_reactivate/{id}','ChargesController@reactivate');
 
 
@@ -276,5 +275,8 @@ Route::resource('/admin/settings', 'BusinessSettingsController');
 //Query
 # Active Contracts
 Route::get('queries', 'QueriesController@index')->name('queries.index');
-Route::get('queries/get_active_contract', 'DatatablesController@get_active_contract')->name('get_active_contract');
-Route::get('queries/get_pending_deliveries', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
+Route::get('queries/get_pending_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
+Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
+Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');

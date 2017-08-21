@@ -438,7 +438,7 @@
 				url: '{{ route("billingexpense.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'so_head_id' : so_head_id,
+					'so_head_id' : {{ $bills[0]->id }},
 					'vatRate' : $('#vat').val(),
 					'date_billed' : $('#date_billed').val(),
 					'override_date' : $('#override_date').val(),
@@ -450,7 +450,7 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
-
+					location.reload();
 				}
 			})
 		}

@@ -141,7 +141,7 @@
                             <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a>
                         </li>
                         <li>
-                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges </a>
                         </li>
                         <li>
                             <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>

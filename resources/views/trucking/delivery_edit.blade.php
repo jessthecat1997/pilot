@@ -989,7 +989,7 @@
 								'del_head_id' : {{ $delivery[0]->id}},
 							},
 							success: function(data){
-								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
+								 window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
 							}
 						})
 					}

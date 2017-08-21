@@ -231,10 +231,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
-		->where([
-			['service_order_types.name', '=', 'Brokerage'],
-			['paymentStatus', '=', 'U']
-			])
+		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -249,10 +246,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name','paymentStatus', 'consignee_service_order_details.created_at')
-		->where([
-			['service_order_types.name', '=', 'Trucking'],
-			['paymentStatus', '=', 'U']
-			])
+		->where('consignee_service_order_details.service_order_types_id', '=', 2)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -657,57 +651,213 @@ class DatatablesController extends Controller
 	}
 
 
-	public function get_active_contract(){
-		$contracts = DB::table('contract_headers')
-		->join('consignees AS A', 'consignees_id', '=', 'A.id')
-		->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'), 'contract_headers.id', 'contract_headers.created_at')
-		->get();
+	public function get_active_contract(Request $request){
+		switch ($request->status) {
+			case "A" :
+			$contracts = DB::table('contract_headers')
+			->join('consignees AS A', 'consignees_id', '=', 'A.id')
+			->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'), 'contract_headers.id', 'contract_headers.created_at')
+			->whereRaw('NOW() BETWEEN dateEffective AND dateExpiration')
+			->get();
 
-		return Datatables::of($contracts)
-		->addColumn('status', function ($contract_header){
-			$date_now = Carbon::now();
-			if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
-				return 'Active';
-			}
-			else if(Carbon::parse($contract_header->dateEffective)->isPast()){
-				return 'Expired';
-			}
-			else{
-				return 'Pending';
-			}
-			
-		})
+			return Datatables::of($contracts)
+			->addColumn('status', function ($contract_header){
+				$date_now = Carbon::now();
+				if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+					return 'Active';
+				}
+				else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+					return 'Expired';
+				}
+				else{
+					return 'Pending';
+				}
+
+			})
+
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+			->make(true);
+			break;
+
+			case "E" :
+			$contracts = DB::table('contract_headers')
+			->join('consignees AS A', 'consignees_id', '=', 'A.id')
+			->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'), 'contract_headers.id', 'contract_headers.created_at')
+			->whereRaw('NOW() > dateExpiration')
+			->get();
+
+			return Datatables::of($contracts)
+			->addColumn('status', function ($contract_header){
+				$date_now = Carbon::now();
+				if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+					return 'Active';
+				}
+				else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+					return 'Expired';
+				}
+				else{
+					return 'Pending';
+				}
+
+			})
+
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+			->make(true);
+			break;
+
+			case "D" :
+			$contracts = DB::table('contract_headers')
+			->join('consignees AS A', 'consignees_id', '=', 'A.id')
+			->select('dateEffective', 'dateExpiration', DB::raw('CONCAT(firstName , " " , lastName) as name'), 'contract_headers.id', 'contract_headers.created_at')
+			->where('isFinalize', '=', 1)
+			->get();
+
+			return Datatables::of($contracts)
+			->addColumn('status', function ($contract_header){
+				$date_now = Carbon::now();
+				if($date_now->between(Carbon::parse($contract_header->dateEffective), Carbon::parse($contract_header->dateExpiration))){
+					return 'Active';
+				}
+				else if(Carbon::parse($contract_header->dateEffective)->isPast()){
+					return 'Expired';
+				}
+				else{
+					return 'Pending';
+				}
+
+			})
+
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+			->make(true);
+			break;
+
+		}
 		
-		->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
-		->make(true);
 	}
 
-	public function get_pending_deliveries(){
-		$deliveries = DB::table('delivery_receipt_headers')
-		->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
-		->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
-		->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
-		->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
-		->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
-		->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', 'E.id')
-		->join('locations AS F', 'delivery_receipt_headers.locations_id_del', 'F.id')
-		->join('location_cities as G', 'E.cities_id', 'G.id')
-		->join('location_provinces AS H', 'G.provinces_id', 'H.id')
-		->join('location_cities as I', 'F.cities_id', 'I.id')
-		->join('location_cities as J', 'I.provinces_id', 'J.id')
-		->where('delivery_receipt_headers.status', '=', 'P')
+	public function get_pending_deliveries(Request $request){
+		switch($request->status)
+		{
+			case 'P' :
+			$deliveries = DB::table('delivery_receipt_headers')
+			->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
+			->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
+			->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
+			->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
+			->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
+			->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', 'E.id')
+			->join('locations AS F', 'delivery_receipt_headers.locations_id_del', 'F.id')
+			->join('location_cities as G', 'E.cities_id', 'G.id')
+			->join('location_provinces AS H', 'G.provinces_id', 'H.id')
+			->join('location_cities as I', 'F.cities_id', 'I.id')
+			->join('location_cities as J', 'I.provinces_id', 'J.id')
+			->where('delivery_receipt_headers.status', '=', 'P')
+			->get();
+
+			return Datatables::of($deliveries)
+			->addColumn('action', function ($delivery){
+				return
+				'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
+			})
+			->editColumn('deliveryDateTime', '{{ Carbon\Carbon::parse($deliveryDateTime)->toFormattedDateString() }}')
+			->editColumn('pickupDateTime', '{{ Carbon\Carbon::parse($pickupDateTime)->toFormattedDateString() }}')
+
+			->make(true);
+
+			break;
+
+			case 'C' :
+
+			$deliveries = DB::table('delivery_receipt_headers')
+			->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
+			->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
+			->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
+			->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
+			->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
+			->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', 'E.id')
+			->join('locations AS F', 'delivery_receipt_headers.locations_id_del', 'F.id')
+			->join('location_cities as G', 'E.cities_id', 'G.id')
+			->join('location_provinces AS H', 'G.provinces_id', 'H.id')
+			->join('location_cities as I', 'F.cities_id', 'I.id')
+			->join('location_cities as J', 'I.provinces_id', 'J.id')
+			->where('delivery_receipt_headers.status', '=', 'C')
+			->get();
+
+			return Datatables::of($deliveries)
+			->addColumn('action', function ($delivery){
+				return
+				'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
+			})
+			->editColumn('deliveryDateTime', '{{ Carbon\Carbon::parse($deliveryDateTime)->toFormattedDateString() }}')
+			->editColumn('pickupDateTime', '{{ Carbon\Carbon::parse($pickupDateTime)->toFormattedDateString() }}')
+
+			->make(true);
+
+			break;
+
+			case 'T' :
+
+			$deliveries = DB::table('delivery_receipt_headers')
+			->select('delivery_receipt_headers.id', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'pickupDateTime', 'deliveryDateTime', 'G.name as city_name', 'H.name as province_name', 'I.name as dcity_name', 'J.name as dprovince_name', 'plateNumber')
+			->join('trucking_service_orders AS A', 'delivery_receipt_headers.tr_so_id', '=', 'A.id')
+			->join('consignee_service_order_details AS B', 'A.so_details_id', '=', 'B.id')
+			->join('consignee_service_order_headers AS C', 'B.so_headers_id', '=', 'C.id')
+			->join('consignees AS D', 'C.consignees_id', '=', 'D.id')
+			->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', 'E.id')
+			->join('locations AS F', 'delivery_receipt_headers.locations_id_del', 'F.id')
+			->join('location_cities as G', 'E.cities_id', 'G.id')
+			->join('location_provinces AS H', 'G.provinces_id', 'H.id')
+			->join('location_cities as I', 'F.cities_id', 'I.id')
+			->join('location_cities as J', 'I.provinces_id', 'J.id')
+			->where('delivery_receipt_headers.status', '=', 'P')
+			->whereRaw('DATE("deliveryDateTime") = DATE("CURDATE()")')
+			->get();
+
+			return Datatables::of($deliveries)
+			->addColumn('action', function ($delivery){
+				return
+				'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
+			})
+			->editColumn('deliveryDateTime', '{{ Carbon\Carbon::parse($deliveryDateTime)->toFormattedDateString() }}')
+			->editColumn('pickupDateTime', '{{ Carbon\Carbon::parse($pickupDateTime)->toFormattedDateString() }}')
+
+			->make(true);
+
+			break;
+		}
+		
+	}
+
+	public function get_unreturned_containers(Request $request){
+		$containers = DB::table('delivery_containers')
+		->select('containerNumber', 'containerReturnDate', 'containerVolume', 'containerReturnAddress', 'containerReturnTo')
+		->where('containerReturnStatus', '=', 'N')
 		->get();
 
-		return Datatables::of($deliveries)
-		->addColumn('action', function ($delivery){
-			return
-			'<button value = "'. $delivery->id .'" class = "btn btn-md but view">View</button>';
+		return Datatables::of($containers)
+		->editColumn('containerReturnDate', function($container){
+			return Carbon::parse($container->containerReturnDate)->toFormattedDateString();
 		})
-		->editColumn('deliveryDateTime', '{{ Carbon\Carbon::parse($deliveryDateTime)->toFormattedDateString() }}')
-		->editColumn('pickupDateTime', '{{ Carbon\Carbon::parse($pickupDateTime)->toFormattedDateString() }}')
-
 		->make(true);
+
+	}
+
+	public function get_query_bills(Request $request)
+	{
+		switch ($request->status) {
+			case 'N' : 
+			$bills = DB::table('billing_invoice_headers')
+			->select('id', DB::raw('CONCAT(firstName , " ", lastName) as name'))
+			->join
+			->whereRaw('NOW() > due_date')
+			->get();
+			break;
+
+			return $bills;
+		}
 	}
 
 	public function cds_datatable(){
