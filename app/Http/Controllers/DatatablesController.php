@@ -917,6 +917,23 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+	public function get_finished_trucking_orders(Request $request){
+		$truckings = DB::table('trucking_service_orders')
+		->join('consignee_service_order_details as A', 'trucking_service_orders.so_details_id', '=', 'A.id')
+		->join('consignee_service_order_headers as B', 'A.so_headers_id', '=', 'B.id')
+		->join('consignees as C', 'B.consignees_id', '=', 'C.id')
+		->select('trucking_service_orders.id', DB::raw('CONCAT(firstName, " ", lastName) as consignee'))
+		->get();
+
+		return Datatables::of($truckings)
+		->addColumn('action', function ($trucking){
+			return
+			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
 
 
 

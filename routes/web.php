@@ -288,4 +288,5 @@ Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_ac
 Route::get('queries/get_pending_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
 Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
 Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
+Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
 Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
