@@ -21,9 +21,6 @@
 									Service Order Type
 								</td>
 								<td>
-									Status
-								</td>
-								<td>
 									Date Created
 								</td>
 								<td>
@@ -52,9 +49,6 @@
 								</td>
 								<td>
 									Service Order Type
-								</td>
-								<td>
-									Status
 								</td>
 								<td>
 									Date Created
@@ -97,7 +91,6 @@
 			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'name' },
-			{ data: 'paymentStatus' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
@@ -110,7 +103,6 @@
 			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'name' },
-			{ data: 'paymentStatus' },
 			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
