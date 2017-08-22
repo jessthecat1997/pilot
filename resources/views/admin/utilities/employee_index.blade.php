@@ -77,10 +77,10 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate record
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivate
 						</div>
 						<div class="modal-footer">
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>

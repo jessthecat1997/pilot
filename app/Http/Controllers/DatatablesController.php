@@ -2288,6 +2288,101 @@ class DatatablesController extends Controller
 		}
 	}//function
 
+	public function employees_deactivated(Request $request){
+		$employees;
+		if ($request->filter == 0){
+			$employees = DB::table('employees')
+			->select('id', 'firstName', 'middleName', 'lastName','created_at' ,'deleted_at')
+			->get();
+
+			return Datatables::of($employees)
+
+			->addColumn('action', function ($employees){
+				if ($employees->deleted_at == null){
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($employees){
+				if ($employees->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			
+			$employees = DB::table('employees')
+			->select('id', 'firstName', 'middleName', 'lastName','created_at','deleted_at')
+			->where('deleted_at', '=', null)
+			->get();
+
+
+			return Datatables::of($employees)
+
+			->addColumn('action', function ($employees){
+				if ($employees->deleted_at == null){
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($employees){
+				if ($employees->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 2){
+			$employees = DB::table('employees')
+			->select('id', 'firstName', 'middleName', 'lastName','created_at','deleted_at')
+			->where('deleted_at', '!=', null)
+			->get();
+
+
+			return Datatables::of($employees)
+			->addColumn('action', function ($employees){
+				if ($employees->deleted_at == null){
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($employees){
+				if ($employees->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
 
 
 

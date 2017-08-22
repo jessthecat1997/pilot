@@ -42,4 +42,20 @@ class EmployeesController extends Controller
 
     }
 
+    public function reactivate(Request $request)
+    {
+        $employee = Employee::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function employee_utilities(){
+
+        return view('admin/utilities.employee_utility_index');
+    }
+
+
+
+
 }

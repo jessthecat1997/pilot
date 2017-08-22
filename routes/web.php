@@ -154,6 +154,10 @@ Route::get('/utilities/locations_data','LocationsController@location_utilities')
 Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivate');
 
 
+Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@employees_deactivated');
+Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
+Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
+
 
 //Maintenance Datas
 
