@@ -122,8 +122,9 @@
 	$(document).ready(function(){
 		var vtable = $('#vtype_table').DataTable({
 			scrollX: true,
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: '{{ route("vt.data") }}',
 			columns: [
 			{ data: 'name' },

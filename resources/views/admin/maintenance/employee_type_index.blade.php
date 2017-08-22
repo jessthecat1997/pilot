@@ -1,8 +1,8 @@
-@extends('layouts.maintenance')
+@extends('layouts.utilities')
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Employee Type</h3>
+		<h3><img src="/images/bar.png"> Utilities | Employee Type</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#etModal" style = "width: 100%;">New Employee Type</button>
