@@ -149,6 +149,11 @@ Route::get('/utilities/standard_arearates_data','StandardAreaRatesController@sar
 Route::put('/utilities/standard_arearates_reactivate/{id}','StandardAreaRatesController@reactivate');
 
 
+Route::get('/utilities/locations_deactivated/{filter}','DatatablesController@location_deactivated');
+Route::get('/utilities/locations_data','LocationsController@location_utilities')->name('location.utilities_index');
+Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivate');
+
+
 
 //Maintenance Datas
 

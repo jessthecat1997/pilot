@@ -2097,6 +2097,112 @@ class DatatablesController extends Controller
 		}
 	}//function
 
+	public function location_deactivated(Request $request){
+		$locations;
+		if ($request->filter == 0){
+			$locations = DB::table('locations')
+			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+			->select('locations.id as id','locations.deleted_at AS deleted_at', 'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+			->orderBy('location_name')
+			->get();
+
+			return Datatables::of($locations)
+
+			->addColumn('action', function ($locations){
+				if ($locations->deleted_at == null){
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($locations){
+				if ($locations->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			
+			$locations = DB::table('locations')
+			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+			->select('locations.id as id','locations.deleted_at AS deleted_at', 
+				'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+			->where('locations.deleted_at', '=', null)
+			->orderBy('location_name')
+			->get();
+
+
+			return Datatables::of($locations)
+
+			->addColumn('action', function ($locations){
+				if ($locations->deleted_at == null){
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($locations){
+				if ($locations->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 2){
+			$locations = DB::table('locations')
+			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+			->select('locations.id as id','locations.deleted_at AS deleted_at', 
+				'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+			->where('locations.deleted_at', '!=', null)
+			->orderBy('location_name')
+			->get();
+
+
+			return Datatables::of($locations)
+			->addColumn('action', function ($locations){
+				if ($locations->deleted_at == null){
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($locations){
+				if ($locations->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
 
 	public function sar_deactivated(Request $request){
 		$sars;
