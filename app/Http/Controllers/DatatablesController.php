@@ -1586,7 +1586,7 @@ class DatatablesController extends Controller
 		$rts;
 		if ($request->filter == 0){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name','description', 'created_at', 'deleted_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1615,7 +1615,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -1639,7 +1639,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 

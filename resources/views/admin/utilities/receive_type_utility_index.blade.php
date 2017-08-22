@@ -23,13 +23,16 @@
 						<thead>
 							<tr>
 								<td>
+									Name
+								</td>
+								<td>
 									Description
 								</td>
 								<td>
-									Created at
+									Status
 								</td>
 								<td>
-									Status
+									Action
 								</td>
 							</tr>
 						</thead>
@@ -51,8 +54,9 @@
 								Confirm Deactivating
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 								<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+								
 							</div>
 						</div>
 					</div>
@@ -73,8 +77,9 @@
 								Confirm Activating
 							</div>
 							<div class="modal-footer">
+							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-								<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+								
 							</div>
 						</div>
 					</div>
@@ -103,13 +108,12 @@
 				serverSide: true,
 				ajax: 'http://localhost:8000/utilities/receive_type_deactivated/' + filter,
 				columns: [
-				{ data: 'id' },
+				{ data: 'name' },
 				{ data: 'description' },
-				{ data: 'created_at'},
 				{ data: 'status'},
 				{ data: 'action', orderable: false, searchable: false }
 
-				], "order": [[ 4, "desc" ]],
+				], "order": [[ 2, "desc" ]],
 
 			});
 			
@@ -169,7 +173,7 @@ $('#btnDeactivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/receive_type/' + data.id,
+		url:  '/utilities/receive_type/' + data.id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
@@ -204,18 +208,18 @@ $('#btnDeactivate').on('click', function(e){
 $(document).on('change', '.change-filter', function(e)
 {
 	filter = $(this).val();
-	$('#cds_table').dataTable().fnDestroy();
+	$('#rt_table').dataTable().fnDestroy();
 	var rttable = $('#rt_table').DataTable({
 		processing: true,
 		serverSide: true,
 		ajax: 'http://localhost:8000/utilities/receive_type_deactivated/' + filter,
 		columns: [
-		
+		{ data: 'name' },
 		{ data: 'description' },
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 
-		], "order": [[ 4, "desc" ]],
+		], "order": [[ 2, "desc" ]],
 
 
 	});
