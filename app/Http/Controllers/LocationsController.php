@@ -34,20 +34,6 @@ class LocationsController extends Controller
         return $location;
     }
 
-
-
-    public function show($id)
-    {
-        //
-    }
-
-
-    public function edit($id)
-    {
-        //
-    }
-
-
     public function update(Request $request, $id)
     {
         $location = Location::findOrFail($id);
@@ -65,4 +51,19 @@ class LocationsController extends Controller
         $location = Location::findOrFail($id);
         $location->delete();
     }
+
+    public function reactivate(Request $request)
+    {
+        $location = Location::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function location_utilities(){
+
+        return view('admin/utilities.location_utility_index');
+    }
+
+
 }

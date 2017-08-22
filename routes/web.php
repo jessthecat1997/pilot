@@ -45,8 +45,6 @@ Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
 Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
-Route::resource('/admin/receive_type', 'ReceiveTypesController');
-Route::resource('/admin/employee_type', 'EmployeeTypesController');
 Route::resource('/admin/vehicle','VehiclesController');
 Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
@@ -55,7 +53,6 @@ Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
@@ -98,9 +95,9 @@ Route::get('/utilities/brokerage_status_type_deactivated/{filter}','DatatablesCo
 Route::get('/utilities/brokerage_status_type_data','BrokerageStatusTypesController@bst_utilities')->name('brokerage_status_type.utilities_index');
 Route::put('/utilities/brokerage_status_type_reactivate/{id}','BrokerageStatusTypesController@reactivate');
 
-
+Route::resource('/utilities/employee_type', 'EmployeeTypesController');
 Route::get('/utilities/employee_type_deactivated/{filter}','DatatablesController@et_deactivated');
-Route::get('/utilities/employee_type_data','EmployeeTypesController@et_utilities')->name('employee_type.utilities_index');
+Route::get('/utilities/employee_type_data','EmployeeTypesController@employee_type_utilities')->name('employee_type.utilities_index');
 Route::put('/utilities/employee_type_reactivate/{id}','EmployeeTypesController@reactivate');
 
 
@@ -113,7 +110,7 @@ Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_d
 Route::get('/utilities/ipf_fee_data','IpfFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
 Route::put('/utilities/ipf_fee_reactivate/{id}','IpfFeesController@reactivate');
 
-
+Route::resource('/utilities/receive_type', 'ReceiveTypesController');
 Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
 Route::get('/utilities/receive_type_data','ReceiveTypesController@rt_utilities')->name('receive_type.utilities_index');
 Route::put('/utilities/receive_type_reactivate/{id}','ReceiveTypesController@reactivate');
@@ -147,6 +144,19 @@ Route::put('/utilities/location_city_reactivate/{id}','LocationCitiesController@
 Route::get('/utilities/standard_arearates_deactivated/{filter}','DatatablesController@sar_deactivated');
 Route::get('/utilities/standard_arearates_data','StandardAreaRatesController@sar_utilities')->name('standard_area_rate.utilities_index');
 Route::put('/utilities/standard_arearates_reactivate/{id}','StandardAreaRatesController@reactivate');
+
+
+Route::get('/utilities/locations_deactivated/{filter}','DatatablesController@location_deactivated');
+Route::get('/utilities/locations_data','LocationsController@location_utilities')->name('location.utilities_index');
+Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivate');
+
+
+Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@employees_deactivated');
+Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
+Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
+
+Route::resource('/admin/vat_rate','VatRatesController');
+
 
 
 

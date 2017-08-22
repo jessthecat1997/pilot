@@ -10,7 +10,7 @@ class ReceiveTypesController extends Controller
 {
   public function index()
     {
-        return view('admin/maintenance.receive_type_index');
+        return view('admin/utilities.receive_type_index');
     }
 
 
@@ -37,5 +37,19 @@ class ReceiveTypesController extends Controller
         $receive_type = ReceiveType::findOrFail($id);
         $receive_type->delete();
 
+    }
+
+
+    public function reactivate(Request $request)
+    {
+        $receive_type = ReceiveType::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+  
+    }
+
+    public function rt_utilities(){
+
+        return view('admin/utilities.receive_type_utility_index');
     }
 }

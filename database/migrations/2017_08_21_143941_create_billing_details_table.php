@@ -16,8 +16,8 @@ class CreateBillingDetailsTable extends Migration
         Schema::create('billing_invoice_details', function (Blueprint $table) {
             $table->increments('id');
             $table->string('description', 200)->nullable();
-            $table->decimal('amount',10,2);
-            $table->decimal('tax', 2,2);
+            $table->decimal('amount', 10, 2);
+            $table->decimal('tax', 2, 2);
             $table->integer('charge_id')->unsigned();
             $table->integer('bi_head_id')->unsigned();
             $table->timestamps();

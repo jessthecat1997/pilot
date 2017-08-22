@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Charges</h3>
+		<h3><img src="/images/bar.png"> Utilities | Archive | Charges</h3>
 		<hr>
 		<div class="form-group col-md-3 col-md-offset-9">
 			<label>Filter</label>

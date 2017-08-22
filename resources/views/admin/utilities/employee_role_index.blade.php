@@ -6,8 +6,8 @@
 		<hr>
 	</div>
 	<div class = "row">
-		<div class = "col-md-2 col-md-offset-9">
-			<button  class="btn btn-success btn-md new" data-toggle="modal" data-target="#roleModal" style = "width: 100%;">New Role</button>
+		<div class = "col-md-3 col-md-offset-9">
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#roleModal" style = "width: 100%;">New Role</button>
 		</div>
 	</div>
 	<br />
@@ -24,14 +24,9 @@
 							<thead>
 								<tr>
 									<td>
-										ID
-									</td>
-									<td>
 										Role
 									</td>
-									<td>
-										Created at
-									</td>
+									
 									<td>
 										Actions
 									</td>
@@ -52,11 +47,11 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Role</h4>
+							<h4 class="roleModal-title">New Role</h4>
 						</div>
 						<div class="modal-body">			
-							<div class="form-group">
-								<label>Role :</label>
+							<div class="form-group required">
+								<label class = "control-label">Role</label>
 								<select name =  "employee_types_id" id = "employee_types_id" class = "form-control">
 									<option>
 										
@@ -69,12 +64,45 @@
 									@endforelse
 								</select>
 							</div>
+							<div class = "form-group">
+								<button  id = "new_et" class = " new_et btn btn-md btn-info pull-right" data-toggle = 'modal' data-target = "#etModal"  >New employee type </button>
+								<br>
+							</div>	
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
 
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<section class="content">
+		<form role="form" method = "POST" id="commentForm">
+			{{ csrf_field() }}
+			<div class="modal fade" id="etModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">New Employee Type</h4>
+						</div>
+						<div class="modal-body">			
+							<div class="form-group required">
+								<label class = "control-label">Name: </label>
+								<input type = "text" class = "form-control" name = "name" id = "name"  required />
+							</div>
+							<div class="form-group">
+								<label class = "control-label">Description: </label>
+								<textarea class = "form-control" name = "description" id = "description"></textarea>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input id = "btnSave_et" type = "submit" class="btn btn-success" value = "Save" />
+							<button class = "btn btn-danger	" data-dismiss= "modal">Close</button>				
+						</div>
 					</div>
 				</div>
 			</div>
@@ -88,14 +116,14 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							Delete record
+							Deactivate
 						</div>
 						<div class="modal-body">
-							Confirm Deleting
+							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -123,31 +151,154 @@
 			serverSide: true,
 			ajax: '/admin/emp_roleData/{{ $employee_id }}/data',
 			columns: [
-			{ data: 'id' },
+
 			{ data: 'name' },
-			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			]
 		});
-		$(document).on('click', '.new', function(e){
+
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9  ]+$/,
+				},
+
+				description:
+				{
+					maxlength: 150,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9.,  ]+$/,
+				},
+
+			},
+			onkeyup: function(element) {$(element).valid()}, 
+		});
+
+
+		$(document).on('click', '.new_et', function(e){
+			e.preventDefault();
 			resetErrors();
-			$('.modal-title').text('New Role');
+			$('#etModal').modal('show');
+
+		});
+
+
+		$(document).on('click', '.new', function(e){
+			e.preventDefault();
+			resetErrors();
+			$('.roleModal-title').text('New Role');
 			$('#roleModal').modal('show');
 
 		});
 		$(document).on('click', '.edit',function(e){
+			e.preventDefault();
 			resetErrors();
 			var ch_id = $(this).val();
 			data = emtable.row($(this).parents()).data();
-			$('.modal-title').text('Edit Employee Details');
+			$('.roleModal-title').text('Edit Employee Details');
 			$('#roleModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
+			e.preventDefault();
 			var ch_id = $(this).val();
 			data = emtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
+
+
+		$('#btnSave_et').on('click', function(e){
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			$('#name').valid();
+			$('#description').valid();
+
+			if(title == "New Employee Type")
+			{
+				if($('#name').valid() && $('#description').valid()){
+
+					$('#btnSave').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'POST',
+						url:  '/utilities/employee_type',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'description' : $('#description').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								$('#employee_types_id').append($('<option>', {
+									value: data.id,
+									text: data.name
+								}));
+								$('#employee_types_id').val(data.id);
+								$('#etModal').modal('hide');
+								$('#description').val("");
+								$('#name').val("");
+								$('.modal-title').text('New Employee Type');
+
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully");
+
+								$('#btnSave').removeAttr('disabled');
+
+
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+								$('#btnSave').removeAttr('disabled');
+
+							}
+						},
+
+					})
+				}
+			}
+		});
+
+
 
 
 
@@ -188,10 +339,15 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
+
+
+
+
+
 // Confirm Save Button
 $('#btnSave').on('click', function(e){
 	e.preventDefault();
-	var title = $('.modal-title').text();
+	var title = $('.roleModal-title').text();
 	if(title == "New Role")
 	{
 		$.ajax({
@@ -208,7 +364,7 @@ $('#btnSave').on('click', function(e){
 					emtable.ajax.reload();
 					$('#roleModal').modal('hide');
 					$('#description').val("");
-					$('.modal-title').text('New Role');
+					$('.roleModal-title').text('New Role');
 
 					//Show success
 
@@ -283,7 +439,7 @@ $('#btnSave').on('click', function(e){
 				emtable.ajax.reload();
 				$('#roleModal').modal('hide');
 				$('#description').val("");
-				$('.modal-title').text('New Role');
+				$('.roleModal-title').text('New Role');
 			}
 		})
 	}
