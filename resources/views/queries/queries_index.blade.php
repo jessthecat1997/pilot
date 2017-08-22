@@ -305,13 +305,16 @@
 
 				<div class = "collapse" id = "finished_truckings">
 					<br />
-					<table class = "table table-responsive" id = "finished_truckings_table">
+					<table class = "table table-responsive" id = "finished_truckings_table" style="width: 100%;">
 						<thead>
 							<td style="width: 20%;">
 								ID
 							</td>
 							<td style="width: 20%;">
 								Consignee
+							</td>
+							<td style="width: 20%;">
+								Employee
 							</td>
 							<td style="width: 20%;">
 								Action
@@ -329,6 +332,10 @@
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
+		$(document).on('click', '.view-finish', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('trucking.index') }}/" + $(this).val() + "/view";
+		})
 		$(document).on('change', '#query_select', function(e){
 			e.preventDefault();
 			console.log($('#query_select').val())
@@ -671,6 +678,7 @@
 						columns: [
 						{ data: 'id' },
 						{ data: 'consignee' },
+						{ data: 'employee' },
 						{ data: 'action' },
 						
 						
