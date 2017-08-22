@@ -7,7 +7,7 @@ use Response;
 
 class StoreCDSFee extends FormRequest
 {
-    
+
     public function authorize()
     {
         return true;
@@ -16,12 +16,31 @@ class StoreCDSFee extends FormRequest
     
     public function rules()
     {
-        return [
+        switch ($this->method()) {
+            case 'POST':
 
-        'fee' => 'required|numeric',
-        'dateEffective' => 'required|unique:cds_fees',
-      
-        ];
+            return [
+
+            'fee' => 'required|numeric',
+            'dateEffective' => 'required|unique:cds_fees,dateEffective',
+
+            ];
+            break;
+            
+            case 'PUT':
+
+            return [
+
+            'fee' => 'required|numeric',
+            'dateEffective' => 'required|unique:cds_fees,dateEffective,' . $this->segment(3),
+
+            ];
+
+            break;
+            
+            default: break;
+        }
+        
     }
 
 
