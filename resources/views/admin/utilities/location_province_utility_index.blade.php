@@ -18,7 +18,7 @@
 @endpush
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Utilities | Locations</h2>
+		<h2>&nbsp;Utilities | Archive | Province</h2>
 		<hr>
 		<div class="form-group col-md-3 col-md-offset-9">
 			<label>Filter</label>

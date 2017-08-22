@@ -192,7 +192,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/vr_rate/' + data.id,
+				url:  '/utilities/vr_rate/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},

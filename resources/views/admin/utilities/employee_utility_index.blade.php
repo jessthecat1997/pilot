@@ -12,7 +12,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Employee</h3>
+		<h3><img src="/images/bar.png"> Utilities | Archive | Employee</h3>
 		<hr>
 		<div class = "row" >
 			<div class="form-group col-md-3 col-md-offset-9">

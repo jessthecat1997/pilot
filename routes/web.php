@@ -53,7 +53,6 @@ Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
@@ -156,7 +155,7 @@ Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@emp
 Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
 Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
 
-
+Route::resource('/admin/vat_rate','VatRatesController');
 
 
 
