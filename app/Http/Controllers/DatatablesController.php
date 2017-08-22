@@ -2095,6 +2095,94 @@ class DatatablesController extends Controller
 	}//function
 
 
+	public function sar_deactivated(Request $request){
+		$sars;
+		if ($request->filter == 0){
+			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount, s.deleted_at as 'deleted_at' from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where l.deleted_at is null");
+
+			return Datatables::of($sars)
+
+			->addColumn('action', function ($sars){
+				if ($sars->deleted_at == null){
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($sars){
+				if ($sars->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			
+			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount, s.deleted_at as 'deleted_at' from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
+
+
+			return Datatables::of($sars)
+
+			->addColumn('action', function ($sars){
+				if ($sars->deleted_at == null){
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($sars){
+				if ($sars->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 2){
+			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount, s.deleted_at as 'deleted_at' from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is not null and l.deleted_at is null");
+
+
+			return Datatables::of($sars)
+			->addColumn('action', function ($sars){
+				if ($sars->deleted_at == null){
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($sars){
+				if ($sars->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
+
 
 
 
