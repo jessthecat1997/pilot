@@ -26,10 +26,7 @@
 								Container Number
 							</td>
 							<td>
-								Date
-							</td>
-							<td>
-								Weight
+								Pickup Date
 							</td>
 							<td>
 								Date of Delivery
@@ -37,6 +34,7 @@
 							<td>
 								Remarks
 							</td>
+							
 						</tr>
 					</thead>
 				</table>
@@ -61,17 +59,18 @@
 	var data;
 	$(document).ready(function(){
 		var shiptable = $('#delivery_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
+			scrollX: true,
 			ajax: '{{ route("delivery.data") }}',
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'name' },
 			{ data: 'shippingLine'},
 			{ data: 'portOfCfsLocation' },
 			{ data: 'containerVolume' },
 			{ data: 'containerNumber'},
-			{ data: 'created_at'},
-			{ data: 'grossWeight' },
+			{ data: 'pickupDateTime'},
 			{ data: 'deliveryDateTime' },
 			{ data: 'remarks', processing:false },
 			]
