@@ -177,18 +177,9 @@
 
 
 
-     $('.percentage').inputmask("numeric", {
-        radixPoint: ".",
-        groupSeparator: ",",
-        digits: 2,
-        max:100,
-        autoGroup: true,
-        rightAlign: true,
-        removeMaskOnSubmit:true,
-
-
-
-    });
+     $('.percentage').inputmask("numeric", 
+        { mask: "(99)|(99.9{1,2})"}
+        );
 </script>
 @stack('scripts')
 </body>

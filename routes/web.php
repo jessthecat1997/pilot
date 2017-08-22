@@ -155,7 +155,11 @@ Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@emp
 Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
 Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
 
+
 Route::resource('/admin/vat_rate','VatRatesController');
+Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
+Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
+Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
 
 
 

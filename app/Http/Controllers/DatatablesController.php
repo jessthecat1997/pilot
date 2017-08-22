@@ -1829,6 +1829,8 @@ class DatatablesController extends Controller
 
 
 
+
+
 	public function v_deactivated(Request $request){
 		$vs;
 		if ($request->filter == 0){
@@ -2378,6 +2380,88 @@ class DatatablesController extends Controller
 				}
 
 			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
+	public function vr_deactivated(Request $request){
+		$vrs;
+		if ($request->filter == 0){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->orderBy('deleted_at', 'desc')
+			->get();
+
+
+			return Datatables::of($vrs)
+			->addColumn('action', function ($vrs){
+				if ($vrs->deleted_at == null){
+					return
+					'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $vrs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->where('deleted_at','=',null)
+			->get();
+
+			return Datatables::of($vrs)
+			->addColumn('action', function ($vrs){
+				return
+				'<button value = "'. $vrs->id.'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}else if ($request->filter == 2){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($vrs)
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($vrs){
+				return
+				'<button value = "'. $vrs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}
