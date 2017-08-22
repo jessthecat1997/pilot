@@ -26,10 +26,7 @@
 								Container Number
 							</td>
 							<td>
-								Date
-							</td>
-							<td>
-								Weight
+								Pickup Date
 							</td>
 							<td>
 								Date of Delivery
@@ -37,6 +34,7 @@
 							<td>
 								Remarks
 							</td>
+							
 						</tr>
 					</thead>
 				</table>
@@ -64,6 +62,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
+			scrollX: true,
 			ajax: '{{ route("delivery.data") }}',
 			columns: [
 			{ data: 'name' },
@@ -71,7 +70,7 @@
 			{ data: 'portOfCfsLocation' },
 			{ data: 'containerVolume' },
 			{ data: 'containerNumber'},
-			{ data: 'created_at'},
+			{ data: 'pickupDateTime'},
 			{ data: 'deliveryDateTime' },
 			{ data: 'remarks', processing:false },
 			]

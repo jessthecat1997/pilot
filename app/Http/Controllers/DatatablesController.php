@@ -341,6 +341,12 @@ class DatatablesController extends Controller
 	{
 		$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber, pickupDateTime, deliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
 		return Datatables::of($deliveries)
+		->editColumn('deliveryDateTime', function($delivery){
+			return Carbon::parse($delivery->deliveryDateTime)->format('F j, Y h:i:s A');
+		})
+		->editColumn('pickupDateTime', function($delivery){
+			return Carbon::parse($delivery->pickupDateTime)->format('F j, Y h:i:s A');
+		})
 		->make(true);
 
 	}
@@ -454,7 +460,6 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', function($contract_header){
 			return $contract_header->dateEffective ? with(new Carbon ($contract_header->dateEffective))->toFormattedDateString() : 'Pending';
-//'{{ Carbon\Carbon::parse($dateExpiration)->toFormattedDateString() }} - {{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}'
 		})
 		->editColumn('dateExpiration', function($contract_header){
 
