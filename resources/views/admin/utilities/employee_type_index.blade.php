@@ -129,18 +129,25 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9  ]+$/,
 				},
 
 				description:
 				{
-					maxlength: 50,
+					maxlength: 150,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9.,  ]+$/,
 				},
 
 			},
-			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup: function(element) {$(element).valid()}, 
 		});
 
 
@@ -177,7 +184,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/employee_type/' + data.id,
+				url:  '/utilities/employee_type/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -224,7 +231,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/employee_type',
+						url:  '/utilities/employee_type',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
@@ -297,7 +304,7 @@
 
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/employee_type/' + data.id,
+							url:  '/utilities/employee_type/' + data.id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),

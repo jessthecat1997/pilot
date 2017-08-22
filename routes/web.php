@@ -46,7 +46,6 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/receive_type', 'ReceiveTypesController');
-Route::resource('/admin/employee_type', 'EmployeeTypesController');
 Route::resource('/admin/vehicle','VehiclesController');
 Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
@@ -98,9 +97,9 @@ Route::get('/utilities/brokerage_status_type_deactivated/{filter}','DatatablesCo
 Route::get('/utilities/brokerage_status_type_data','BrokerageStatusTypesController@bst_utilities')->name('brokerage_status_type.utilities_index');
 Route::put('/utilities/brokerage_status_type_reactivate/{id}','BrokerageStatusTypesController@reactivate');
 
-
+Route::resource('/utilities/employee_type', 'EmployeeTypesController');
 Route::get('/utilities/employee_type_deactivated/{filter}','DatatablesController@et_deactivated');
-Route::get('/utilities/employee_type_data','EmployeeTypesController@et_utilities')->name('employee_type.utilities_index');
+Route::get('/utilities/employee_type_data','EmployeeTypesController@employee_type_utilities')->name('employee_type.utilities_index');
 Route::put('/utilities/employee_type_reactivate/{id}','EmployeeTypesController@reactivate');
 
 
@@ -157,6 +156,9 @@ Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivat
 Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@employees_deactivated');
 Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
 Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
+
+
+
 
 
 //Maintenance Datas

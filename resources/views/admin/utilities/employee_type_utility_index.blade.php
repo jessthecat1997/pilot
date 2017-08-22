@@ -21,11 +21,14 @@
 				<table class = "table-responsive table" id = "et_table">
 					<thead>
 						<tr>
-						
+							<td>
+								Name
+							</td>
+							
 							<td>
 								Description
 							</td>
-				
+							
 							<td>
 								Status
 							</td>
@@ -54,8 +57,8 @@
 							Confirm Deactivating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -77,8 +80,9 @@
 							Confirm Activating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							
 						</div>
 					</div>
 				</div>
@@ -107,14 +111,14 @@
 			serverSide: true,
 			ajax: '/utilities/employee_type_deactivated/' + filter,
 			columns: [
-			
+			{ data: 'name' },
 			{ data: 'description' },
 			{ data: 'status'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],
 
-			"order": [[ 4, "desc" ]],
+			"order": [[ 3, "desc" ]],
 
 		});
 
@@ -141,7 +145,7 @@ $('#btnDeactivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/employee_type/' + data.id,
+		url:  '/utilities/employee_type/' + data.id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
@@ -224,14 +228,13 @@ $(document).on('change', '.change-filter', function(e)
 		serverSide: true,
 		ajax: '/utilities/employee_type_deactivated/' + filter,
 		columns: [
-		{ data: 'id' },
+		{ data: 'name' },
 		{ data: 'description' },
-		{ data: 'created_at'},
 		{ data: 'status'},
 		{ data: 'action', orderable: false, searchable: false }
 
 		],
-		"order": [[ 4, "desc" ]],
+		"order": [[ 3, "desc" ]],
 
 	});
 })

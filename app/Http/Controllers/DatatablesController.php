@@ -1343,7 +1343,7 @@ class DatatablesController extends Controller
 		$ets;
 		if ($request->filter == 0){
 			$ets = DB::table('employee_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name', 'description', 'created_at', 'deleted_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1372,7 +1372,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$ets = DB::table('employee_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -1396,7 +1396,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$ets = DB::table('employee_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 

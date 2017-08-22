@@ -10,7 +10,7 @@ class EmployeeTypesController extends Controller
 {
     public function index()
     {
-        return view('admin/maintenance.employee_type_index');
+        return view('admin/utilities.employee_type_index');
     }
 
 
@@ -37,5 +37,19 @@ class EmployeeTypesController extends Controller
         $employee_type = EmployeeType::findOrFail($id);
         $employee_type->delete();
 
+    }
+
+
+    public function reactivate(Request $request)
+    {
+        $employee_type = EmployeeType::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function employee_type_utilities(){
+
+        return view('admin/utilities.employee_type_utility_index');
     }
 }
