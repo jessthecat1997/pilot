@@ -18,7 +18,7 @@
 @endpush
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Quotation Terms and Condition Template</h2>
+		<h2>&nbsp;Maintenance |Template | Quotation Terms and Condition </h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  type = "submit" style="" class = "btn btn-primary  btn-md update_term_condition ">Update Terms and Condition</button>

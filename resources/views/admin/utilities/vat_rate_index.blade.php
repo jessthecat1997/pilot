@@ -53,7 +53,7 @@
 							<div class="form-group required">
 								<label class = "control-label">rate</label>
 								<div class = "form-group input-group " >
-									<input type = "number" class = "form-control percentage" name = "rate" id = "rate"  data-rule-required="true" max="100" value="0.00" />
+									<input type = "number" class = "form-control percentage" name = "rate" id = "rate"  data-rule-required="true" max="100" value="0.00" style="text-align: right" />
 									<span class = "input-group-addon">%</span>
 								</div>
 								
@@ -92,7 +92,7 @@
 						</div>
 						<div class="modal-footer">
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							
 						</div>
 					</div>
@@ -163,8 +163,7 @@
 			resetErrors();
 			$('.modal-title').text('New VAT Rate');
 			$('#vrModal').modal('show');
-			$('#rate').val("");
-			$('#dateEffective').val("");
+			$('#rate').val("0.00");
 			var now = new Date();
 			var day = ("0" + now.getDate()).slice(-2);
 			var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -192,7 +191,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/vr_rate/' + data.id,
+				url:  '/admin/vat_rate/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -227,75 +226,77 @@
 
 		$('#btnSave').on('click', function(e){
 
-			var rate_nocomma = $('#rate').inputmask('unmaskedvalue');
-			if (rate_nocomma == "0.00"){
-				rate_nocomma = "";
-			}
-
 			e.preventDefault();
 			var title = $('.modal-title').text();
 
+
 			if(title == "New VAT Rate")
 			{
-				$.ajax({
-					type: 'POST',
-					url:  '{{ route("vat_rate.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'rate' : rate_nocomma,
-						'dateEffective' : $('#dateEffective').val(),
-						'currentRate' : 0,
-						'description' : '',
-						
-					},
-					success: function (data)
-					{
+				if($('#rate').valid() && $('#dateEffective').valid()){
+					$.ajax({
+						type: 'POST',
+						url:  '{{ route("vat_rate.store") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'rate' : $('#rate').val(),
+							'dateEffective' : $('#dateEffective').val(),
+							'currentRate' : 0,
+							'description' : '',
 
-						if(typeof(data) === "object"){
-							vrtable.ajax.reload();
-							$('#vrModal').modal('hide');
-							$('.modal-title').text('New VAT Rate');
-							$('#rate').val('');
-							$('#dateEffective').val('');
+						},
+						success: function (data)
+						{
+
+							if(typeof(data) === "object"){
+								vrtable.ajax.reload();
+								$('#vrModal').modal('hide');
+								$('.modal-title').text('New VAT Rate');
+								$('#rate').val('0.00');
+								
 
 
 
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+							}else{
+
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
 							}
-							toastr["success"]("Record added successfully")
-						}else{
+						},
 
-							resetErrors();
-							var invdata = JSON.parse(data);
-							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v); 
-								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-							});
+					})
 
-						}
-					},
 
-				})
+				}
+				
 			}
 			else
 			{
+				if($('#rate').valid() && $('#dateEffective').valid()){
 
 
 				$.ajax({
@@ -303,7 +304,7 @@
 					url:  '{{ route("vat_rate.index") }}/' + data.id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
-						'rate' : rate_nocomma,
+						'rate' : $('#rate').val(),
 						'dateEffective' : $('input[name=dateEffective]').val(),
 						'currentrate' : $('input[name=currentrate]').val(),
 					},
@@ -338,6 +339,9 @@
 						$('.modal-title').text('New vr rate');
 					}
 				})
+				}
+
+
 			}
 		});
 

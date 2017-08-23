@@ -19,7 +19,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Utilites | Standard Area Rates</h3>
+		<h2>&nbsp;Utilites | Archive | Standard Area Rates</h3>
 			<hr>
 			<div class="form-group col-md-3 col-md-offset-9">
 				<label>Filter</label>

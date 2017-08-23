@@ -1,8 +1,24 @@
-@extends('layouts.maintenance')
+@extends('layouts.utilities')
+@push('styles')
+<style>
+	.class-receive-type
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.utilities
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Receive Type</h2>
+		<h2>&nbsp;Utilities | Receive Type</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#rtModal" style = "width: 100%;">New Receive Type</button>
@@ -44,17 +60,17 @@
 							</div>
 							<div class="modal-body">
 								<div class="form-group required">
-									<label class = "control-label">Name: </label>
+									<label class = "control-label">Name</label>
 									<input type = "text" class = "form-control" name = "name" id = "name" required />
 								</div>			
 								<div class="form-group">
-									<label class = "control-label">Description: </label>
+									<label class = "control-label">Description</label>
 									<textarea class = "form-control" name = "description" id = "description"></textarea>
 								</div>
 							</div>
 							<div class="modal-footer">
 								<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 							</div>
 						</div>
 					</div>
@@ -87,22 +103,7 @@
 	</div>
 </div>
 @endsection
-@push('styles')
-<style>
-	.class-receive-type
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
+
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
@@ -132,19 +133,26 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z  ]+$/,
 				},
 
 				description:
 				{
-					maxlength: 50,
+					maxlength: 150,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+					regex: /^[A-Za-z0-9,.  ]+$/,
 				},
 
 			},
-			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
-		});
+			onkeyup: function(element) {$(element).valid()},
+ 		});
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Receive Type');
@@ -179,7 +187,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/receive_type/' + data.id,
+				url:  '/utilities/receive_type/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -225,7 +233,7 @@
 					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/receive_type',
+						url:  '/utilities/receive_type',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
@@ -295,7 +303,7 @@
 					{
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/receive_type/' + data.id,
+							url:  '/utilities/receive_type/' + data.id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),

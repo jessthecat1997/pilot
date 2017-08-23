@@ -919,13 +919,14 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details as A', 'trucking_service_orders.so_details_id', '=', 'A.id')
 		->join('consignee_service_order_headers as B', 'A.so_headers_id', '=', 'B.id')
 		->join('consignees as C', 'B.consignees_id', '=', 'C.id')
-		->select('trucking_service_orders.id', DB::raw('CONCAT(firstName, " ", lastName) as consignee'))
+		->join('employees as D', 'B.employees_id', '=', 'D.id')
+		->select('trucking_service_orders.id', DB::raw('CONCAT(C.firstName, " ", C.lastName) as consignee'), DB::raw('CONCAT(D.firstName, " ", D.lastName) as employee'))
 		->get();
 
 		return Datatables::of($truckings)
 		->addColumn('action', function ($trucking){
 			return
-			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
+			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but view-finish">View</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
@@ -1586,7 +1587,7 @@ class DatatablesController extends Controller
 		$rts;
 		if ($request->filter == 0){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id', 'name','description', 'created_at', 'deleted_at')
 			->orderBy('deleted_at', 'desc')
 			->get();
 
@@ -1615,7 +1616,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 1){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
 			->get();
 
@@ -1639,7 +1640,7 @@ class DatatablesController extends Controller
 
 		}else if ($request->filter == 2){
 			$rts = DB::table('receive_types')
-			->select('id', 'description', 'created_at', 'deleted_at')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
 
@@ -1826,6 +1827,8 @@ class DatatablesController extends Controller
 			->make(true);
 		}
 	}//function
+
+
 
 
 
@@ -2378,6 +2381,88 @@ class DatatablesController extends Controller
 				}
 
 			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+	}//function
+
+	public function vr_deactivated(Request $request){
+		$vrs;
+		if ($request->filter == 0){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->orderBy('deleted_at', 'desc')
+			->get();
+
+
+			return Datatables::of($vrs)
+			->addColumn('action', function ($vrs){
+				if ($vrs->deleted_at == null){
+					return
+					'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $vrs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else if ($request->filter == 1){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->where('deleted_at','=',null)
+			->get();
+
+			return Datatables::of($vrs)
+			->addColumn('action', function ($vrs){
+				return
+				'<button value = "'. $vrs->id.'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}else if ($request->filter == 2){
+			$vrs = DB::table('vat_rates')
+			->select('id',  'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($vrs)
+			->addColumn('status', function ($vrs){
+				if ($vrs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($vrs){
+				return
+				'<button value = "'. $vrs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}

@@ -45,7 +45,6 @@ Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
 Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
-Route::resource('/admin/receive_type', 'ReceiveTypesController');
 Route::resource('/admin/vehicle','VehiclesController');
 Route::resource('/admin/area', 'AreasController');
 Route::resource('/admin/billing', 'BillingsController');
@@ -54,7 +53,6 @@ Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-Route::resource('/admin/vat_rate','VatRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
@@ -112,7 +110,7 @@ Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_d
 Route::get('/utilities/ipf_fee_data','IpfFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
 Route::put('/utilities/ipf_fee_reactivate/{id}','IpfFeesController@reactivate');
 
-
+Route::resource('/utilities/receive_type', 'ReceiveTypesController');
 Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
 Route::get('/utilities/receive_type_data','ReceiveTypesController@rt_utilities')->name('receive_type.utilities_index');
 Route::put('/utilities/receive_type_reactivate/{id}','ReceiveTypesController@reactivate');
@@ -157,6 +155,11 @@ Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@emp
 Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
 Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
 
+
+Route::resource('/admin/vat_rate','VatRatesController');
+Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
+Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
+Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
 
 
 

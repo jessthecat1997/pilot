@@ -213,10 +213,12 @@ class ContractsController extends Controller
 
             case '4':
             $contract = ContractHeader::findOrFail($request->contract_id);
+           // $contract->consignees_id = $request->consignees_id;
             $contract->dateEffective = $request->dateEffective;
             $contract->dateExpiration = $request->dateExpiration;
             $contract->specificDetails = $request->specificDetails;
             $contract->isFinalize = $request->isFinalize;
+            $contract->save();
 
             return $contract;
 

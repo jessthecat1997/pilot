@@ -55,4 +55,17 @@ class VatRatesController extends Controller
 		$vat_rate->delete();
 
 	}
+
+	public function reactivate(Request $request)
+    {
+        $vat_rate = VatRate::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+        
+    }
+
+    public function vr_utilities(){
+
+        return view('admin/utilities.vat_rate_utility_index');
+    }
 }

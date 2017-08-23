@@ -687,21 +687,20 @@
 			if(finalvalidateContractRows() === true){
 				$.ajax({
 					method: 'PUT',
-					url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
+					url:  '{{ route("trucking.index")}}/contracts/' + {{ $contract[0]->id }},
 					data: {
-						'_token' : $('input[name=_token]').val(),
-						'consigneeName' : $('#consigneeName').val(),
+						'_token' : $('input[name=_token').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						'isFinalize' : 1,
-						'consigneeID' : consigneeID,
+						'isFinalize': 1,
+						//'consignees_ID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 						'update_type' : 4,
 						'contract_id' : {{ $contract[0]->id }},
 					},
 
 					success: function (data){
-						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
+						window.location.replace("{{route('contracts.index')}}"+ "/" + {{ $contract[0]->id }} + "/view");
 					}
 
 				})
@@ -713,18 +712,17 @@
 		$(document).on('click', '.draft-contract', function(e){
 			e.preventDefault();
 
-			console.log(" this is "+$(this).val());
+			console.log(" this is "+consigneeID);
 			if(validateDraft() === true){
 				$.ajax({
 					method: 'PUT',
-					url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
+					url:  '{{ route("trucking.index")}}/contracts/' + {{ $contract[0]->id }},
 					data: {
 						'_token' : $('input[name=_token').val(),
-						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
 						'isFinalize': 0,
-						'consigneeID' : consigneeID,
+						//'consignees_ID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 						'update_type' : 4,
 						'contract_id' : {{ $contract[0]->id }},
