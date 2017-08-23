@@ -452,5 +452,6 @@ function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
 	$('label.error').remove();
 }
+})
 </script>
 @endpush
