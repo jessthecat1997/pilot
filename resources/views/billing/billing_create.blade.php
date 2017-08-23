@@ -287,6 +287,7 @@
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
+					location.reload();
 					var rc_table = $('#revTable').DataTable({
 						processing: false,
 						serverSide: true,

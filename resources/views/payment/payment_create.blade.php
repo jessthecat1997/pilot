@@ -345,7 +345,7 @@
 			}
 
 		}
-		else if(amt>=totalamt)
+		else if(amt>totalamt)
 		{
 			toastr.options = {
 				"closeButton": false,
