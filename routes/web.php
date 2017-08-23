@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'ConsigneesController@home');
+Route::get('/', 'ConsigneesController@dashboard');
 
 Auth::routes();
 

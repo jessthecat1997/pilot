@@ -222,26 +222,20 @@
 					<br />
 					<table class = "table table-responsive" id = "near_bills_table">
 						<thead>
-							<td style="width: 10%;">
-								Del No.
+							<td style="width: 13s%;">
+								ID
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 20%;">
 								Consignee
 							</td>
-							<td style="width: 13%;">
-								Plate Number
+							<td style="width: 20%;">
+								Due Date
 							</td>
-							<td style="width: 15%;">
-								Origin City
+							<td style="width: 20%;">
+								Status
 							</td>
-							<td style="width: 10%;">
-								Pickup Date
-							</td>
-							<td style="width: 15%;">
-								Destination City
-							</td>
-							<td style="width: 15%;">
-								Delivery Date
+							<td style="width: 20%;">
+								Actions
 							</td>
 						</thead>
 					</table> 
@@ -250,30 +244,25 @@
 					<br />
 					<table class = "table table-responsive" id = "overdue_bills_table">
 						<thead>
-							<td style="width: 10%;">
-								Del No.
+							<td style="width: 13s%;">
+								ID
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 20%;">
 								Consignee
 							</td>
-							<td style="width: 13%;">
-								Plate Number
+							<td style="width: 20%;">
+								Due Date
 							</td>
-							<td style="width: 15%;">
-								Origin City
+							<td style="width: 20%;">
+								Status
 							</td>
-							<td style="width: 10%;">
-								Pickup Date
-							</td>
-							<td style="width: 15%;">
-								Destination City
-							</td>
-							<td style="width: 15%;">
-								Delivery Date
+							<td style="width: 20%;">
+								Actions
 							</td>
 						</thead>
 					</table> 
 				</div>
+
 				<div class = "collapse" id = "exp_registrations">
 					<br />
 					<table class = "table table-responsive" id = "exp_registrations_table">
@@ -351,6 +340,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 				break;
 
 				case "1" : 
@@ -364,6 +354,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var chtable;
 				if ( ! $.fn.DataTable.isDataTable( '#active_contracts_table') ) {
@@ -401,6 +392,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var chtable;
 				if ( ! $.fn.DataTable.isDataTable( '#expired_contracts_table') ) {
@@ -438,6 +430,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var chtable;
 				if ( ! $.fn.DataTable.isDataTable( '#draft_contracts_table') ) {
@@ -475,6 +468,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').addClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var drtable;
 				if ( ! $.fn.DataTable.isDataTable( '#pending_delivery_table') ) {
@@ -514,6 +508,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').addClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var drtable;
 				if ( ! $.fn.DataTable.isDataTable( '#cancellled_delivery_table') ) {
@@ -553,6 +548,7 @@
 				$('#today_delivery').addClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var drtable;
 				if ( ! $.fn.DataTable.isDataTable( '#today_delivery_table') ) {
@@ -592,6 +588,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
 
 				var drtable;
 				if ( ! $.fn.DataTable.isDataTable( '#unreturned_containers_table') ) {
@@ -630,7 +627,7 @@
 				$('#today_delivery').removeClass('in');
 				$('#cancelled_delivery').removeClass('in');
 				$('#pending_delivery').removeClass('in');
-
+				$('#finished_truckings').removeClass('in');
 				var drtable;
 				if ( ! $.fn.DataTable.isDataTable( '#near_bills_table') ) {
 					drtable = $('#near_bills_table').DataTable({
@@ -640,8 +637,48 @@
 						serverSide: false,
 						ajax: "{{ route('get_query_bills') }}/N",
 						columns: [
-						{ data: 'wow' },
+						{ data: 'id' },
+						{ data: 'name' },
+						{ data: 'due_date'},
+						{ data: 'status'},	
+						{ data: 'action' },
 						
+						]
+					});
+				}
+				else{
+
+				}
+
+				
+				break;
+
+				case "9" : 
+				$('#contracts_active').removeClass('in');
+				$('#contracts_expired').removeClass('in');
+				$('#contracts_draft').removeClass('in');
+				$('#exp_registrations').removeClass('in');
+				$('#overdue_bills').addClass('in');
+				$('#near_bills').removeClass('in');
+				$('#unreturned_containers').removeClass('in');
+				$('#today_delivery').removeClass('in');
+				$('#cancelled_delivery').removeClass('in');
+				$('#pending_delivery').removeClass('in');
+				$('#finished_truckings').removeClass('in');
+				var drtable;
+				if ( ! $.fn.DataTable.isDataTable( '#overdue_bills_table') ) {
+					drtable = $('#overdue_bills_table').DataTable({
+						processing: false,
+						deferRender: true,
+						scrollX: true,
+						serverSide: false,
+						ajax: "{{ route('get_query_bills') }}/O",
+						columns: [
+						{ data: 'id' },
+						{ data: 'name' },
+						{ data: 'due_date'},
+						{ data: 'status'},	
+						{ data: 'action' },
 						
 						]
 					});
