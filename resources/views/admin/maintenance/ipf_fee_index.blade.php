@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Import Processing Fee</h2>
+		<h2>&nbsp;Maintenance | Brokerage | Import Processing Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = "width: 100%;">New Import Processing Fee Range</button>

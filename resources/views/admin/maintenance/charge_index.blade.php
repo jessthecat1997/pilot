@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Charges</h2>
+		<h2>&nbsp;Maintenance | Billing | Charges</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#chModal" style = "width: 100%;">New Charge</button>

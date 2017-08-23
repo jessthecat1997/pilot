@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Exchange Rate</h2>
+		<h2>&nbsp;Maintenance | Brokerage | Exchange Rate</h2>
 		<hr>
 		<h5>Current Exchange Rate: Php 
 			@if($exchange_rate[0]->rate != null)

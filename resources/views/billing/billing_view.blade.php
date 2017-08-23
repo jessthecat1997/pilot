@@ -112,12 +112,23 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'vatRate' },
-			{ data: 'status' },
-			{ data: 'amount' },
-			{ data: 'due_date' },
-			{ data: 'action', orderable: false, searchable: false }
-			]
-		})
+			{ data: 'status',
+			"render" : function( data, type, full ) {
+				return formatWithStatus(data); }},
+				{ data: 'amount' },
+				{ data: 'due_date' },
+				{ data: 'action', orderable: false, searchable: false }
+				]
+			})
+		function formatWithStatus(n) { 
+
+			if (n == 'P'){
+				return "Paid";
+			}else{
+				return "Fixed";
+			}
+
+		} 
 		
 	})
 </script>

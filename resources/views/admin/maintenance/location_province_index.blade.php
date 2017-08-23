@@ -3,7 +3,7 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Province</h2>
+		<h2>&nbsp;Maintenance | Delivery | Province</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sotModal" style = "width: 100%;">New Province</button>

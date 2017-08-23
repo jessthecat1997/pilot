@@ -91,7 +91,8 @@ class BillingDetailsController extends Controller
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Print</a>';
+			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
+			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
 		return view('billing/billing_index', compact(['billings']));
@@ -138,9 +139,11 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$total = DB::table('billing_invoice_details')
-		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * tax/100)),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
+
+		return $total;
 
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['parts', 'bills', 'number', 'total']));
 		return $pdf->stream();
