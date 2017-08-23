@@ -18,7 +18,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Contract Agreement Template</h2>
+		<h2>&nbsp;Maintenance | Templates | Contract Agreements</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  type = "submit" style="" class = "btn btn-primary  btn-md update_term_condition ">Update Agreements</button>

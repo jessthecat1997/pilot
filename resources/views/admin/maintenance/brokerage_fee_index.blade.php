@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
     <div class = "row">
-        <h2>&nbsp;Maintenance |Brokerage Fee</h2>
+        <h2>&nbsp;Maintenance | Brokerage | Brokerage Fee</h2>
         <hr>
         <div class = "col-md-3 col-md-offset-9">
             <button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#bfModal" style = "width: 100%;">New Brokerage Fee Range</button>

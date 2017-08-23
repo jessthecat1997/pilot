@@ -17,7 +17,7 @@
 @endpush
 @section('content')
 <div class = "container-fluid">
-	<h2>&nbsp;Maintenance | Vehicles</h2>
+	<h2>&nbsp;Maintenance | Delivery | Vehicles</h2>
 	<hr>
 	<div class = "row">
 		<div class = "col-md-3 col-md-offset-9">

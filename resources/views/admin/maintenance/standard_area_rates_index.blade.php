@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Standard Area Rates</h3>
+		<h2>&nbsp;Maintenance |Delivery | Standard Area Rates</h3>
 			<hr>
 			<div class = "col-md-3 col-md-offset-9">
 				<button  class="btn btn-info btn-md new" style = "width: 100%;">New Standard Area Rates</button>
@@ -16,10 +16,10 @@
 						<thead>
 							<tr>
 								<td>
-									Area From
+									Location From
 								</td>
 								<td>
-									Area To
+									Location To
 								</td>
 								<td>
 									Standard Rate

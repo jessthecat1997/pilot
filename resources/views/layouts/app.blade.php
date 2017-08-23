@@ -185,10 +185,10 @@
                         </li>
                         <div id="templatescollapse" class="pane;-collapse collapse">
                             <li>
-                                <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Template</a>
+                                <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Agreements</a>
                             </li>
                             <li>
-                                <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Template</a>
+                                <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Terms</a>
                             </li>
                         </div>
                     </ul>
