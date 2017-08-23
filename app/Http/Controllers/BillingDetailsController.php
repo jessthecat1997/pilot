@@ -84,14 +84,13 @@ class BillingDetailsController extends Controller
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select('billing_invoice_headers.id', 'vatRate','status','amount', 'due_date')
+		->select('billing_invoice_headers.id', 'vatRate','billing_invoice_headers.status','amount', 'due_date')
 		->where('so_head_id', '=', $request->so_head_id)
 		->get();
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
@@ -139,11 +138,10 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$total = DB::table('billing_invoice_details')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * tax/100)),2)) as Total'))
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
-
-		return $total;
 
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['parts', 'bills', 'number', 'total']));
 		return $pdf->stream();

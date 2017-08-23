@@ -134,7 +134,6 @@
 						</tr>
 					</tbody>
 				</table>
-				<button type="button" class="btn but pull-left" id="check">Check</button>
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">

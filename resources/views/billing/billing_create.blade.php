@@ -133,9 +133,6 @@
 									Amount *
 								</td>
 								<td>
-									Tax *
-								</td>
-								<td>
 									Action
 								</td>
 							</tr>
