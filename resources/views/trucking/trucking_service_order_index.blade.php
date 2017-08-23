@@ -4,7 +4,7 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "default panel panel">
 			<div class = "panel-heading">
-				<h2>Trucking Service Orders</h2>
+				<h2>&nbsp;Trucking Service Orders</h2>
 				<hr />
 			</div>
 			<a href = "{{ route('trucking.create') }}" class = "btn btn-success btn-md pull-right">New Trucking Service Order</a>

@@ -350,7 +350,7 @@
 				final_amount = $('#amount_rate').inputmask('unmaskedvalue');
 			}
 
-			if(title == "New Billing")
+			if(title == "New Charge")
 			{
 				var ele = document.getElementsByName('b_type');
 				var i = ele.length;
