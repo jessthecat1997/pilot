@@ -133,13 +133,13 @@ class BillingDetailsController extends Controller
 		$number = $billing_header->id;
 		$parts = DB::table('billing_invoice_details')
 		->join('charges','billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('name', 'billing_invoice_details.amount')
+		->select('name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * tax/100),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
 		$total = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * tax/100)),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
