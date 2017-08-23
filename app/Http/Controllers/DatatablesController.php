@@ -919,13 +919,14 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details as A', 'trucking_service_orders.so_details_id', '=', 'A.id')
 		->join('consignee_service_order_headers as B', 'A.so_headers_id', '=', 'B.id')
 		->join('consignees as C', 'B.consignees_id', '=', 'C.id')
-		->select('trucking_service_orders.id', DB::raw('CONCAT(firstName, " ", lastName) as consignee'))
+		->join('employees as D', 'B.employees_id', '=', 'D.id')
+		->select('trucking_service_orders.id', DB::raw('CONCAT(C.firstName, " ", C.lastName) as consignee'), DB::raw('CONCAT(D.firstName, " ", D.lastName) as employee'))
 		->get();
 
 		return Datatables::of($truckings)
 		->addColumn('action', function ($trucking){
 			return
-			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
+			'<button value = "'. $trucking->id .'" style="margin-right:10px;" class = "btn btn-md but view-finish">View</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
