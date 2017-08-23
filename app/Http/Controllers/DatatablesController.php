@@ -921,6 +921,7 @@ class DatatablesController extends Controller
 		->join('consignees as C', 'B.consignees_id', '=', 'C.id')
 		->join('employees as D', 'B.employees_id', '=', 'D.id')
 		->select('trucking_service_orders.id', DB::raw('CONCAT(C.firstName, " ", C.lastName) as consignee'), DB::raw('CONCAT(D.firstName, " ", D.lastName) as employee'))
+		->where('trucking_service_orders.status', '=', 'F')
 		->get();
 
 		return Datatables::of($truckings)

@@ -187,11 +187,13 @@
 						</div>
 						<div class="form-group">         
 							<label class="control-label col-md-5 pull-left" for="actutaldateReturned">Date Returned:</label>
-							<div class = "collapse" id = "returned_date">
-								<input type="date" id = "actutaldateReturned" class="form-control" />
-							</div>
-							<div class = "collapse" id = "unreturned_date">
-								<span class="control-label col-md-7" id ="ac_returned"  style = "text-align: left;"></span>
+							<div class ="col-md-7">
+								<div class = "collapse" id = "returned_date">
+									<input type="date" id = "actutaldateReturned" class="form-control" required />
+								</div>
+								<div class = "collapse" id = "unreturned_date">
+									<span class="control-label" id ="ac_returned"  style = "text-align: left;"></span>
+								</div>
 							</div>
 						</div>
 
@@ -507,6 +509,7 @@
 					console.log(container_status);
 					$('#yes').attr('checked', true);
 					$('#actutaldateReturned').removeAttr('disabled');
+
 				}
 			}
 			else{
@@ -516,6 +519,8 @@
 				$('.dateReturned_view').html(return_date_html);
 				$('#remarks').val($(this).closest('tr').find(".remarks").val());
 				$('#view_return_date').text($(this).closest('tr').find(".dateReturned").val());
+				$('#unreturned_date').addClass('in');
+				$('#ac_returned').html($(this).closest('tr').find(".dateReturned").val().trim());
 			}
 
 		})
@@ -565,7 +570,7 @@
 			e.preventDefault();
 			if(con_status == "Y"){
 				$('#actutaldateReturned').valid();
-				if($('#actutaldateReturned').valid()){-
+				if($('#actutaldateReturned').valid()){
 					$.ajax({
 						type: 'PUT',
 						url:  '{{ route("trucking.store") }}/{{ $so_id }}/update_container/' + $('#containerID').val(),
@@ -609,10 +614,12 @@
 		})
 
 		$(document).on('change', '#yes', function(e){
-			$('#actutaldateReturned').removeAttr('disabled');
+			$('#actutaldateReturned').removeAttr('disabled', true);
+			$('#returned_date').addClass('in');
 			con_status = "Y";
 		})
 		$(document).on('change', '#no', function(e){
+			$('#returned_date').addClass('in');
 			$('#actutaldateReturned').attr('disabled', true);
 			$('#actutaldateReturned').val('');
 			con_status = "N";

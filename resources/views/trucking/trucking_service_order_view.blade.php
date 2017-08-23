@@ -106,23 +106,26 @@
 							<td style="width: 5%;">
 								ID
 							</td>
-							<td style="width: 15%;">
+							<td style="width: 10%;">
 								Origin Name
 							</td>
-							<td style="width: 15%;">
+							<td style="width: 10%;">
 								Origin City
 							</td>
 							<td style="width: 10%;">
 								Pickup Date
 							</td>
-							<td style="width: 15%;">
+							<td style="width: 10%;">
 								Destination Name
 							</td>
-							<td style="width: 15%;">
+							<td style="width: 10%;">
 								Destination City
 							</td>
 							<td style="width: 10%;">
 								Delivery Date
+							</td>
+							<td style="width: 5%;">
+								Status
 							</td>
 							<td style="width: 15%;">
 								Actions
@@ -469,6 +472,7 @@
 			{ data: 'deliver_name' },
 			{ data: 'deliver_city' },
 			{ data: 'deliveryDateTime'},
+			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
