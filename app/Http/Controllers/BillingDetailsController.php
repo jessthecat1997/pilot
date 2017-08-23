@@ -77,14 +77,14 @@ class BillingDetailsController extends Controller
 		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills', 'billings','bill_counts', 'bill_revs','so_head_id']));
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id']));
 		
 	}
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select('billing_invoice_headers.id', 'vatRate','billing_invoice_headers.status','amount', 'due_date')
+		->select('billing_invoice_headers.id', 'date_billed','billing_invoice_headers.status',DB::raw('CONCAT(TRUNCATE(amount - (amount * tax/100),2)) as Total'), 'due_date')
 		->where('so_head_id', '=', $request->so_head_id)
 		->get();
 

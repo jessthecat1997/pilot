@@ -63,7 +63,7 @@
 								ID
 							</td>
 							<td>
-								Vat Rate
+								Date Billed
 							</td>
 							<td>
 								Status
@@ -111,11 +111,11 @@
 			ajax: "{{ route('invoice.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
-			{ data: 'vatRate' },
+			{ data: 'date_billed' },
 			{ data: 'status',
 			"render" : function( data, type, full ) {
 				return formatWithStatus(data); }},
-				{ data: 'amount' },
+				{ data: 'Total' },
 				{ data: 'due_date' },
 				{ data: 'action', orderable: false, searchable: false }
 				]

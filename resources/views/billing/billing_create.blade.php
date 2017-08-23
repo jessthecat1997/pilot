@@ -122,7 +122,7 @@
 						<thead>
 							<tr>
 								<td colspan="5">
-									<button class = "btn but btn-md new-rev-row pull-right">Add Revenue</button>
+									<button class = "btn but btn-md new-rev-row pull-right">Add Bill</button>
 								</td>
 							</tr>
 							<tr>
@@ -131,6 +131,9 @@
 								</td>
 								<td>
 									Amount *
+								</td>
+								<td>
+									Tax *
 								</td>
 								<td>
 									Action
