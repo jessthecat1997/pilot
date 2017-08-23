@@ -167,14 +167,14 @@
                         </li>
                     </div>
                     <li>
-                        <a data-toggle="collapse" class="maintenance-group" href = "#billinggecollapse"><i></i>&nbsp;&nbsp;Billing</a>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
                     </li>
                     <div id="billingcollapse" class="pane;-collapse collapse">
                         <li>
                             <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
                         </li>
                         <li>
-                            <a href = "{{ route('billing.index') }}"  class = "class-billing"><i class="fa fa-circle"></i>&nbsp;&nbsp;Bills</a>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                         </li>
                     </div>
                     <li>
