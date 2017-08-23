@@ -56,7 +56,6 @@
 			<br />
 			<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
 		</div>
-		<br />
 		<table style="width: 100%;" id = "header" >
 			<tr>
 				<td style="width: 80%;">
@@ -327,8 +326,6 @@
 		<p><small>THIS WILL CERTIFY THAT ABOVE DESCRIBED GOODS WAS DELIVERED IN GOOD ORDER &amp; CONDITION.</small></p>
 	</div>
 	<br />
-	<br />
-
 	<div style="display: block; clear: right;">
 		<div style="width: 100%;">
 			<div style="width: 50%;display: inline-block; float: left; ">
@@ -354,7 +351,6 @@
 	<br />
 	<br />
 	<br />
-	<hr />
-	<p><small><small>NOTE: Responsibility of PILOT CARGO CHAIN SOLUTIONS INC., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small></p>
+	<small><small>NOTE: Responsibility of PILOT CARGO CHAIN SOLUTIONS INC., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small>
 </body>
 </html>

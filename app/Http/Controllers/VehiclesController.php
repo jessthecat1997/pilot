@@ -13,7 +13,7 @@ class VehiclesController extends Controller
     {
         $vts = VehicleType::with('vehicle')->get();
 
-        return view('admin/maintenance/vehicle_index', compact("vts"));
+        return view('admin/maintenance/vehicle_index', compact(["vts"]));
     }
 
 
@@ -23,13 +23,14 @@ class VehiclesController extends Controller
         return $v;
     }
 
-    public function update(StoreVehicle $request, $id)
+    public function update(Request $request)
     {
-        $vehicle = Vehicle::findOrFail($id);
-        $vehicle->model = $request->model;
-        $vehicle->dateRegistered = $request->dateRegistered;
-        $vehicle->bodyType = $request->bodyType;
-        $vehicle->save();
+        $vehicle = \DB::table('vehicles')
+        ->where('plateNumber', $request->plateNumber)
+        ->update([
+            'model' => $request->model,
+            'bodyType' => $request->bodyType
+            ]);
         return $vehicle;
     }
 
@@ -46,7 +47,7 @@ class VehiclesController extends Controller
         $vehicle = Vehicle::withTrashed()
         ->where('id',$request->id)
         ->restore();
-  
+
     }
 
     public function v_utilities(){

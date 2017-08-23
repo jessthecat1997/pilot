@@ -167,28 +167,28 @@
 	</section>
 </div>
 <section class="content">
-		<form role = "form" method = "POST">
-			{{ csrf_field() }}
-			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-activate" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Activate record
-						</div>
-						<div class="modal-body">
-							Confirm Activating
-						</div>
-						<div class="modal-footer">
+	<form role = "form" method = "POST">
+		{{ csrf_field() }}
+		{{ method_field('DELETE') }}
+		<div class="modal fade" id="confirm-activate" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Activate record
+					</div>
+					<div class="modal-body">
+						Confirm Activating
+					</div>
+					<div class="modal-footer">
 
-							<button class = "btn btn-danger	" id = "btnActivate" >Activate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-						</div>
+						<button class = "btn btn-danger	" id = "btnActivate" >Activate</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
-		</form>
-	</section>
+		</div>
+	</form>
+</section>
 </div>
 @endsection
 @push('scripts')
@@ -210,8 +210,9 @@
 	{
 
 		var vtable = $('#v_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/vData',
 			columns: [
 			{ data: 'name' },
@@ -341,219 +342,214 @@
 		});
 
 
+		$('#btnSave').on('click', function(e){
+
+			e.preventDefault();
 
 
+			var title = $('#vModal-title').text();
+			var vt_id = $('#vehicle_types_id').val();
+			if(title == 'New Vehicle')
+			{
+				if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid()){
+					$('#btnSave').attr('disabled', 'true');
 
 
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-	
-	e.preventDefault();
-	
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/vehicle',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'vehicle_types_id' : vt_id,
+							'plateNumber' : $('input[name=plateNumber]').val(),
+							'model' : $('input[name=model]').val(),
+							'dateRegistered' : $('input[name=dateRegistered]').val(),
+							'bodyType': $('input[name=bodyType]').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								vtable.ajax.reload();
+								$('#vModal').modal('hide');
+								$('#model').val("");
+								$('#dateRegistered').val("");
+								$('#bodyType').val("");
+								$('.modal-title').text('New Vehicle');
 
-	var title = $('#vModal-title').text();
-	var vt_id = $('#vehicle_types_id').val();
-	if(title == 'New Vehicle')
-	{
-		if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid()){
-			$('#btnSave').attr('disabled', 'true');
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully");
 
+								$('#btnSave').removeAttr('disabled');
+							}else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
 
-			$.ajax({
-				type: 'POST',
-				url:  '/admin/vehicle',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'vehicle_types_id' : vt_id,
-					'plateNumber' : $('input[name=plateNumber]').val(),
-					'model' : $('input[name=model]').val(),
-					'dateRegistered' : $('input[name=dateRegistered]').val(),
-					'bodyType': $('input[name=bodyType]').val(),
-				},
-				success: function (data)
-				{
-					if(typeof(data) === "object"){
-						vtable.ajax.reload();
-						$('#vModal').modal('hide');
-						$('#model').val("");
-						$('#dateRegistered').val("");
-						$('#bodyType').val("");
-						$('.modal-title').text('New Vehicle');
+								$('#btnSave').removeAttr('disabled');
 
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record addded successfully");
+							}
+						},
+					})
 
-						$('#btnSave').removeAttr('disabled');
-					}else{
-						resetErrors();
-						var invdata = JSON.parse(data);
-						$.each(invdata, function(i, v) {
-							console.log(i + " => " + v); 
-							var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-							$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-						});
-
-						$('#btnSave').removeAttr('disabled');
-
-					}
-				},
-			})
-
-		}
-		
-		
-	}else{
+				}
 
 
-		if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid()){
-			if ($('#plateNumber').val() === temp_plateNumber && $('#model').val() === temp_model && $('#dateRegistered').val() === temp_dateRegistered && $('#bodyType').val() === temp_bodyType){
-				$("model").val("");
-				$("#bodyType").val("");
-				$('#plateNumber').val("");
-				$('#btnSave').removeAttr('disabled');
-				$('#vModal').modal("hide");
 			}else{
 
 
-				var vt_id = $('#vehicle_types_id').val();
-				console.log(title);
-				$.ajax({
-					type: 'PUT',
-					url:  '/admin/vehicle/' + data.plateNumber,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'vehicle_types_id' : vt_id,
-						'plateNumber' : $('input[name=plateNumber]').val(),
-						'model' : $('input[name=model]').val(),
-						'dateRegistered' : $('input[name=dateRegistered]').val(),
-						'bodyType' :$('input[name=bodyType]').val(),
-					},
-					success: function (data)
-					{
-						vtable.ajax.reload();
-						$('#vModal').modal('hide');
-						$('#model').val("");
-						$('.modal-title').text('New Vehicle');
-
-
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record updated successfully");
-					}
-				})
-
-
-			}
-		}
-
-
-
-
-	}
-
-});
-
-
-
-
-$('#btnSave_sub').on('click', function(e){
-	e.preventDefault();
-
-	var title = $('#vtModal-title').text();
-
-	$('#name').valid();
-	$('#description').valid();
-
-	if(title == "New Vehicle Type")
-		
-		if($('#name').valid() && $('#description').valid()){
-
-			$('#btnSave_sub').attr('disabled', 'true');
-
-			$.ajax({
-				type: 'POST',
-				url:  '{{route("vehicletype.store")}}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'description' : $('#description').val(),
-					'withContainer':$('input[name=withContainer]:checked').val(),
-				},
-				success: function (data)
-				{
-					if(typeof(data) === "object"){
-						var vtdata = $('#vehicle_types_id').select2('data');
-
-
-						vehicle_type.push({id:data.id,text:data.name});
-
-						$("#vehicle_types_id").select2({
-							data: vehicle_type,
-						});
-
-						$('#vtModal').modal('hide');
-						$('#description').val("");
-						$('.modal-title').text('New Vehicle Type');
-						$('#name').val("");
-						$('#description').val("");
+				if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid()){
+					if ($('#plateNumber').val() === temp_plateNumber && $('#model').val() === temp_model && $('#dateRegistered').val() === temp_dateRegistered && $('#bodyType').val() === temp_bodyType){
+						$("model").val("");
+						$("#bodyType").val("");
+						$('#plateNumber').val("");
 						$('#btnSave').removeAttr('disabled');
-
-
-
-
+						$('#vModal').modal("hide");
 					}else{
-						resetErrors();
-						var invdata = JSON.parse(data);
-						$.each(invdata, function(i, v) {
-							console.log(i + " => " + v);
-							var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-							$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
-						});
-						$('#btnSave_sub').removeAttr('disabled');
+
+						var vt_id = $('#vehicle_types_id').val();
+						console.log(data.plateNumber);
+						$.ajax({
+							type: 'PUT',
+							url:  '{{ route("vehicle.index") }}/' + data.plateNumber,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'vehicle_types_id' : vt_id,
+								'plateNumber' : $('input[name=plateNumber]').val(),
+								'model' : $('input[name=model]').val(),
+								'dateRegistered' : $('input[name=dateRegistered]').val(),
+								'bodyType' : $('input[name=bodyType]').val(),
+							},
+							success: function (data)
+							{
+								vtable.ajax.reload();
+								$('#vModal').modal('hide');
+								$('#model').val("");
+								$('.modal-title').text('New Vehicle');
+
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully");
+							}
+						})
+
 
 					}
 				}
 
-			})
-		}
+
+
+
+			}
+
+		});
+
+
+
+
+		$('#btnSave_sub').on('click', function(e){
+			e.preventDefault();
+
+			var title = $('#vtModal-title').text();
+
+			$('#name').valid();
+			$('#description').valid();
+
+			if(title == "New Vehicle Type")
+
+				if($('#name').valid() && $('#description').valid()){
+
+					$('#btnSave_sub').attr('disabled', 'true');
+
+					$.ajax({
+						type: 'POST',
+						url:  '{{route("vehicletype.store")}}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'description' : $('#description').val(),
+							'withContainer':$('input[name=withContainer]:checked').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								var vtdata = $('#vehicle_types_id').select2('data');
+
+
+								vehicle_type.push({id:data.id,text:data.name});
+
+								$("#vehicle_types_id").select2({
+									data: vehicle_type,
+								});
+
+								$('#vtModal').modal('hide');
+								$('#description').val("");
+								$('.modal-title').text('New Vehicle Type');
+								$('#name').val("");
+								$('#description').val("");
+								$('#btnSave').removeAttr('disabled');
+
+
+
+
+							}else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+								});
+								$('#btnSave_sub').removeAttr('disabled');
+
+							}
+						}
+
+					})
+				}
+			});
+
+
 	});
-
-
-});
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
 	$('label.error').remove();

@@ -330,8 +330,9 @@
 
 
 		var sartable = $('#sar_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			deferRender: true,
+			serverSide: false,
 			'scrollx': true,
 			ajax: 'http://localhost:8000/admin/sarData',
 			columns: [

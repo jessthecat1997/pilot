@@ -205,7 +205,7 @@
 									<br />
 									<div class = "form-horizontal">
 										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_address">Address:</label>
+											<label class="control-label col-sm-3" for="phy_address">Blk/ Lot/ Street:</label>
 											<div class="col-sm-8">          
 												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
 											</div>
@@ -251,7 +251,7 @@
 									<br />
 									<div class = "form-horizontal">
 										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_address">Address:</label>
+											<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
 											<div class="col-sm-8">          
 												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
 											</div>
