@@ -53,15 +53,15 @@
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
-						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
+						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled>
 					</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
 						@forelse($paid as $pd)
-						<input type="text" class="txt" id="paid" value="{{ $pd->Total }}" disabled hidden>
+						<input type="text" class="txt" id="paid" value="{{ $pd->amount }}" disabled>
 						@empty
-						<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
+						<input type="text" class="txt" id="paid" value="0.00" disabled>
 						@endforelse
 					</div>
 				</div>
@@ -108,6 +108,7 @@
 			</div>
 			<div class="modal-body">
 				<table class="table">
+					{{ csrf_field() }}
 					<thead>
 						<tr>
 							<td>
@@ -118,7 +119,6 @@
 					<tbody>
 						<tr>
 							<form class="form-horizontal">
-								{{ csrf_field() }}
 								<td>
 									<input type = "text" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
 								</td>
@@ -146,7 +146,7 @@
 @endsection
 @push('styles')
 <style>
-	.class-billing
+	.class-payment
 	{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
@@ -157,11 +157,11 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	var totalamt = $('#total').val();
-	var balance = $('#bal');
+	var totalamt = parseInt($('#total').val());
+	var balance = parseInt($('#bal').val());
 	var paid = $('#paid').val();
 	bals = totalamt - paid;
-	balance.val(bals);
+	document.getElementById('bal').Value = bals;
 
 	$(document).ready(function(){
 		console.log(bals);
@@ -207,6 +207,7 @@
 				"hideMethod": "fadeOut"
 			}
 			toastr["warning"]("The amount must not be higher than the total");
+			location.reload();
 		}
 		else if(amt==bals)
 		{
@@ -229,6 +230,7 @@
 				"hideMethod": "fadeOut"
 			}
 			toastr["warning"]("Paid");
+			location.reload();
 		}
 	})
 	$(document).on('click', '.finalize-payment', function(e){
@@ -294,6 +296,7 @@
 					"hideMethod": "fadeOut"
 				}
 				toastr["warning"]("The amount must not be higher than the balance");
+				location.reload();
 			}
 			else if(amt==bals)
 			{
@@ -365,6 +368,7 @@
 				"hideMethod": "fadeOut"
 			}
 			toastr["warning"]("The amount must not be higher than the total");
+			location.reload();
 		}
 		else if(amt==totalamt)
 		{
