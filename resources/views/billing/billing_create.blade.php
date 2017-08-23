@@ -185,11 +185,6 @@
 		</div>
 	</div>
 	<br>
-	<div class="row">
-		<div class="form-group">
-			<a href='{{ route("view.index") }}/{{ $bill->id }}/show_pdf' class="btn but finalize-exp col-sm-6">Generate Invoice</a>
-		</div>
-	</div>
 </div>
 @endsection
 @push('styles')
