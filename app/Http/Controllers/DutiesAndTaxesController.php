@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\ConsigneeServiceOrderHeader;
 use App\ConsigneeServiceOrderDetail;
 use App\BrokerageServiceOrder;
@@ -43,7 +44,6 @@ class DutiesAndTaxesController extends Controller
     $new_so_head = new ConsigneeServiceOrderHeader;
     $new_so_head->consignees_id = $request->cs_id;
     $new_so_head->employees_id = "1";
-    $new_so_head->paymentStatus = "U";
     $new_so_head->save();
 
     $new_so_detail = new ConsigneeServiceOrderDetail;
@@ -62,7 +62,14 @@ class DutiesAndTaxesController extends Controller
     $new_brokerage_so->save();
 
     $new_dutiesandtaxes = new DutiesAndTaxesHeader;
-    $new_dutiesandtaxes->exchangeRate = $request->exchangeRate;
+    $new_dutiesandtaxes->exchangeRate_id = $request->ExchangeRateId;
+    $new_dutiesandtaxes->cdsFee_id = $request->CDSId;
+    $new_dutiesandtaxes->ipfFee_id = $request->IPFId;
+    $new_dutiesandtaxes->brokerageFee = $request->brokerageFee;
+    $new_dutiesandtaxes->arrastre = $request->arrastre;
+    $new_dutiesandtaxes->wharfage = $request->wharfage;
+      $new_dutiesandtaxes->bankCharges = $request->bankCharges;
+
     $new_dutiesandtaxes->brokerageServiceOrders_id = $new_brokerage_so->id;
     $new_dutiesandtaxes->employees_id_broker = 1;
     $new_dutiesandtaxes->save();
@@ -70,34 +77,23 @@ class DutiesAndTaxesController extends Controller
     $_ItemName = json_decode(stripslashes($request->StoredItemName), true);
     $itemName = array();
 
-
     $_HSCode = json_decode(stripslashes($request->StoredHSCode), true);
     $HSCode;
-
-
 
     $_RateOfDuty = json_decode(stripslashes($request->StoredRateOfDuty), true);
     $RateOfDuty;
 
-
-
     $_Value = json_decode(stripslashes($request->StoredValue), true);
     $Value;
-
-
 
     $_Freight = json_decode(stripslashes($request->StoredFreight), true);
     $Freight;
 
-
-
     $_Insurance = json_decode(stripslashes($request->StoredInsurance), true);
     $Insurance;
 
-
-
     $tblRowLength = $request->tblRowLength;
-    for ($x = 0; $x <= $tblRowLength; $x++) {
+    for ($x = 0; $x < $tblRowLength; $x++) {
       $new_dutiesandtaxes_details = new DutiesAndTaxesDetails;
       $new_dutiesandtaxes_details->dutiesAndTaxesHeaders_id = $new_dutiesandtaxes->id;
       $new_dutiesandtaxes_details->descriptionOfGoods = (string)$_ItemName[$x];
@@ -109,8 +105,9 @@ class DutiesAndTaxesController extends Controller
       $new_dutiesandtaxes_details->save();
     }
 
-    return view('brokerage.brokerage_index');
-      //
+    $brokerage_id = $new_brokerage_so->id;
+    return $brokerage_id;
+    //
   }
 
   /**

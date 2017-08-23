@@ -144,7 +144,7 @@
 							{{ $pt->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $pt->amount }}
+							Php {{ $pt->Total }}
 						</td>
 					</tr>
 					@empty
