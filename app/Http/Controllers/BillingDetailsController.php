@@ -15,9 +15,14 @@ use PDF;
 
 class BillingDetailsController extends Controller
 {
-	public function index()
+	public function index(Request $request)
 	{
 		return view('billing/billing_index');
+	}
+	public function show_index(Request $request, $id)
+	{
+		$so_head_id = $id;
+		return view('billing/billing_index', compact('so_head_id'));
 	}
 	public function show(Request $request, $id)
 	{
@@ -99,12 +104,13 @@ class BillingDetailsController extends Controller
 		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id', 'vatrate', 'total', 'billings']));
 		
 	}
-	public function billing_invoice(Request $request, $id)
+	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select('billing_invoice_headers.id', 'date_billed','billing_invoice_headers.status',DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
-		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('billing_invoice_headers.id', 'companyName','isRevenue',DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
 		->get();
 
 		return Datatables::of($bill_hists)

@@ -55,6 +55,29 @@
 
 
 	$(document).ready(function(){
+
+		var vtable = $('#bill_hist_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: "{{ route('invoice.data') }}",
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'isRevenue' },
+			{ data: 'Total' },
+			{ data: 'due_date' },
+			{ data: 'action', orderable: false, searchable: false }
+			]
+		})
+		function formatWithStatus(n) { 
+
+			if (n == 'P'){
+				return "Paid";
+			}else{
+				return "Unpaid";
+			}
+
+		} 
 		// var vtable = $('#brso_head_table').DataTable({
 		// 	processing: true,
 		// 	serverSide: true,
