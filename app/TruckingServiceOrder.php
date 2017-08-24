@@ -8,7 +8,7 @@ class TruckingServiceOrder extends Model
 {
 
 	protected $fillable = [
-	'deliveryDate', 'status', 'so_details_id',
+	'deliveryDate', 'status', 'so_details_id', 'bi_head_id_rev', 'bi_head_id_exp'
 	];
 
 	protected $dates = [
