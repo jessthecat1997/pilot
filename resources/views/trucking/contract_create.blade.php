@@ -575,8 +575,6 @@
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
-							$("#basic-information-heading").html('<h5 id = "basic-information-heading">Basic Information <button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h5>');
-
 							$('#firstName').val("");
 							$('#middleName').val("");
 							$('#lastName').val("");

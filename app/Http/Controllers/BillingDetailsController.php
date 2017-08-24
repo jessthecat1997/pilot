@@ -172,7 +172,8 @@ class BillingDetailsController extends Controller
 				WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,	
 			CONCAT("Php ", p.total) as Total,
-			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
+			t.status
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -190,6 +191,20 @@ class BillingDetailsController extends Controller
 		->addColumn('action', function ($hist) {
 			return
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
+		})
+		->addColumn('status', function ($hist) {
+			switch ($hist->status) {
+				case 'U':
+					return 'Not paid';
+					break;
+				case 'P':
+					return 'Paid';
+					break;
+				
+				default:
+					# code...
+					break;
+			}
 		})
 		->make(true);
 		return view('billing/billing_index', compact(['billings']));
