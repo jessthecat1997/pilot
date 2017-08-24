@@ -27,7 +27,7 @@ class ChargesController extends Controller
         $charge = Charge::findOrFail($id);
         $charge->name = $request->name;
         $charge->description = $request->description;
-        $charge->bill_type = $request->bill_typeP;
+        $charge->bill_type = $request->bill_type;
         $charge->chargeType = $request->chargeType;
         $charge->amount = $request->amount;
         $charge->save();

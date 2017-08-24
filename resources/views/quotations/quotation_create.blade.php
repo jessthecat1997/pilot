@@ -689,64 +689,6 @@
 
 
 		});
-		$(document).on('click', '#btnSave', function(e){
-			e.preventDefault();
-			$('#description').valid();
-
-			if($('#description').valid()){
-				$('#btnSave').attr('disabled', 'true');
-				$.ajax({
-					type: 'POST',
-					url:  "{{ route('area.store') }}",
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'description' : $('input[name=description]').val(),
-					},
-					success: function (data)
-					{
-						if(typeof(data) === "object"){
-							$('#description').val("");
-
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-							toastr["success"]("Record addded successfully");
-
-							$('#btnSave').removeAttr('disabled');
-							$('#arModal').modal('hide');
-						}
-						else{
-							var invdata = JSON.parse(data);
-							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v); 
-								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-
-								$('#btnSave').removeAttr('disabled');
-							});
-
-						}
-					},
-
-				})
-			}
-		})
-
 		$(document).on('click', '.delete-term-row', function(e){
 			e.preventDefault();
 			$('#term_condition_count_warning').removeClass('in');

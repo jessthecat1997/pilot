@@ -159,9 +159,14 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
+				@if($service_order->bi_head_id_rev != null)
+				<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				@else
 				<h4>List of Revenues</h4>
-				@if($service_order->bill_head_id_rev != null)
-				<table class="table table-responsive" style="width: 100%;">
+				@endif
+				<br />
+				@if($service_order->bi_head_id_rev != null)
+				<table class="table table-responsive" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -208,9 +213,14 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
+				@if($service_order->bi_head_id_exp != null)
+				<h4>List of Expenses <button class = "btn but new_revenue pull-right">New Expense</button></h4>
+				@else
 				<h4>List of Expenses</h4>
-				@if($service_order->bill_head_id_exp != null)
-				<table class="table table-responsive" style="width: 100%;">
+				@endif
+				<br />
+				@if($service_order->bi_head_id_exp != null)
+				<table class="table table-responsive" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -248,6 +258,64 @@
 					</div>
 				</div>
 				@endif
+			</div>
+		</div>
+	</div>
+</div>
+<div id="revModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Payable</h4>
+			</div>
+			<div class = "modal-body">
+				<table class = "table-responsive table" id = "rev_table">
+					<thead>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Amount *
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id = "revenue-row" name="revenue-row">
+							<form class="form-horizontal">
+								{{ csrf_field() }}
+								<td>
+									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
+										<option value = "0">Select Charges</option>
+										@forelse($bill_revs as $rev)
+										<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
+
+										@empty
+
+										@endforelse
+									</select>
+								</td>
+								<td>
+									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
+								</td>
+								
+								<tr id="desc_rev_row">
+									<td colspan="4">
+										<div class="form-group">
+											<label for="rev_description">Description:</label>
+											<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+										</div>
+									</td>
+								</tr>
+							</form>
+						</tr>
+					</tbody>
+				</table>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but finalize-rev">Save</a>
 			</div>
 		</div>
 	</div>
@@ -363,6 +431,39 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
+		
+		$(document).on('change', '#rev_bill_id', function(e){
+			revID = $('#rev_bill_id').val();
+			if($('#rev_bill_id').val() != 0){
+				$.ajax({
+					type: 'GET',
+					url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data[0].amount);
+							$('#rev_amount').val(data[0].amount);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else
+			{
+				$('amount').val("");
+			}
+		})
+
+		$(document).on('click', '.new_revenue', function(e){
+			e.preventDefault();
+			$('#revModal').modal('show');
+		})
 
 		$(document).on('click', '.new_revenue_bill', function(e){
 			e.preventDefault();
@@ -374,6 +475,40 @@
 			$('#confirm-create').modal('show');
 			create_bill = 0;
 		})
+
+		@if($service_order->bi_head_id_rev != null)
+		var delivery_table = $('#revenues_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			scrollX: true,
+			ajax: '{{ route("getBillingDetails") }}/' + {{  $service_order->bi_head_id_rev }},
+			columns: [
+
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'amount'},
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
+
+		@if($service_order->bi_head_id_exp != null)
+		var delivery_table = $('#expense_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			scrollX: true,
+			ajax: '{{ route("getBillingDetails") }}/' + {{ $service_order->bi_head_id_exp }},
+			columns: [
+
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'amount'},
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
 
 		$(document).on('click', '.confirm-create-bill', function(e){
 			e.preventDefault();
