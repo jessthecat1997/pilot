@@ -521,7 +521,13 @@
 					else
 					{
 						$('#btnSave').attr('disabled', 'true');
-
+						type_bill = null;
+						if(document.getElementById('b_type2').checked){
+							type_bill = 'E';
+						}
+						else{
+							type_bill = 'R';
+						}
 						$.ajax({
 							type: 'PUT',
 							url:  '/admin/charge/' + data.id,
@@ -530,6 +536,7 @@
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
 								'amount':final_amount,
+								'bill_type' : type_bill,
 								'chargeType': $('input[name=chargeType]:checked').val(),
 							},
 							success: function (data)

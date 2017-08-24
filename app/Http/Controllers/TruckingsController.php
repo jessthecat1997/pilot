@@ -199,16 +199,16 @@ class TruckingsController extends Controller
         $consignee_header = \App\TruckingServiceOrder::findOrFail($consignee_order[0]->id);
         switch ($request->isRevenue) {
             case 0:
-                $consignee_header->bi_head_id_exp = $billing_header->id;
-                break;
+            $consignee_header->bi_head_id_exp = $billing_header->id;
+            break;
             
             case 1:
-                $consignee_header->bi_head_id_rev = $billing_header->id;
-                break;
+            $consignee_header->bi_head_id_rev = $billing_header->id;
+            break;
             
             default:
                 # code...
-                break;
+            break;
         }
         $consignee_header->save();
         return $consignee_header;
@@ -217,6 +217,9 @@ class TruckingsController extends Controller
     public function view_trucking(Request $request){
         try
         {
+            $bill_revs = DB::table('charges')
+            ->select('id','name', 'amount')
+            ->get();
             $so_id = $request->trucking_id;
             $service_order = TruckingServiceOrder::findOrFail($so_id);
             $service_order_details = DB::table('trucking_service_orders')
@@ -265,7 +268,7 @@ class TruckingsController extends Controller
 
 
 
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs']));   
         }
         catch(ModelNotFoundException $e)
         {
@@ -289,7 +292,7 @@ class TruckingsController extends Controller
 
         if($delivery->status == 'P')
         {
-            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces']));
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces',]));
         }
         else{
             return 'Cannot create new deliveries';
@@ -801,16 +804,16 @@ class TruckingsController extends Controller
 
 
     public function show_calendar(){
-       $events = [];
+     $events = [];
 
-       $events[] = \Calendar::event(
+     $events[] = \Calendar::event(
         'Event One', 
         false, 
         '2017-02-11T0800', 
         '2017-02-13T0800',
         0
         );
-       $calendar = \Calendar::addEvents($events)
+     $calendar = \Calendar::addEvents($events)
        ->setOptions([ //set fullcalendar options
         'firstDay' => 1
         ]); 

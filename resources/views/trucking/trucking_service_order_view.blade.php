@@ -160,9 +160,9 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_rev != null)
-					<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
 				@else
-					<h4>List of Revenues</h4>
+				<h4>List of Revenues</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
@@ -214,9 +214,9 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_exp != null)
-					<h4>List of Expenses <button class = "btn but new_revenue pull-right">New Expense</button></h4>
+				<h4>List of Expenses <button class = "btn but new_revenue pull-right">New Expense</button></h4>
 				@else
-					<h4>List of Expenses</h4>
+				<h4>List of Expenses</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
@@ -258,6 +258,64 @@
 					</div>
 				</div>
 				@endif
+			</div>
+		</div>
+	</div>
+</div>
+<div id="revModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Payable</h4>
+			</div>
+			<div class = "modal-body">
+				<table class = "table-responsive table" id = "rev_table">
+					<thead>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Amount *
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id = "revenue-row" name="revenue-row">
+							<form class="form-horizontal">
+								{{ csrf_field() }}
+								<td>
+									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
+										<option value = "0">Select Charges</option>
+										@forelse($bill_revs as $rev)
+										<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
+
+										@empty
+
+										@endforelse
+									</select>
+								</td>
+								<td>
+									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
+								</td>
+								
+								<tr id="desc_rev_row">
+									<td colspan="4">
+										<div class="form-group">
+											<label for="rev_description">Description:</label>
+											<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+										</div>
+									</td>
+								</tr>
+							</form>
+						</tr>
+					</tbody>
+				</table>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but finalize-rev">Save</a>
 			</div>
 		</div>
 	</div>
@@ -376,6 +434,7 @@
 
 		$(document).on('click', '.new_revenue', function(e){
 			e.preventDefault();
+			$('#revModal').modal('show');
 		})
 
 		$(document).on('click', '.new_revenue_bill', function(e){
