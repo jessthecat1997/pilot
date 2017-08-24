@@ -17,9 +17,13 @@ class CreateTruckingServiceOrdersTable extends Migration
             $table->increments('id');
             $table->char('status', 1);
             $table->integer('so_details_id')->unsigned();
+            $table->integer('bi_head_id_rev')->unsigned()->nullable();
+            $table->integer('bi_head_id_exp')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('so_details_id')->references('id')->on('consignee_service_order_details');
+            $table->foreign('bi_head_id_rev')->references('id')->on('billing_invoice_headers');
+            $table->foreign('bi_head_id_exp')->references('id')->on('billing_invoice_headers');
         });
     }
 
