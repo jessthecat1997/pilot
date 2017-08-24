@@ -573,6 +573,7 @@
 				},
 				success: function (data) {
 
+	
 					window.location.replace("brokerage/"+data+"/view");
 				}
 			})

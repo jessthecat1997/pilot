@@ -225,7 +225,8 @@ class BillingDetailsController extends Controller
 			WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,	
 			CONCAT("Php ", p.total) as Total,
-			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
+			t.status
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -244,8 +245,34 @@ class BillingDetailsController extends Controller
 			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
+		->addColumn('status', function ($hist) {
+			switch ($hist->status) {
+				case 'U':
+					return 'Not paid';
+					break;
+				case 'P':
+					return 'Paid';
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+		})
 		->make(true);
 	}
+
+	public function getDeliveryFees(Request $request)
+	{
+		$deliveries = DB::table('delivery_receipt_headers')
+		->select('amount', 'id')
+		->where('tr_so_id', '=', $request->tr_so_id)
+		->whereRaw('status IN ("C", "F")')
+		->get();
+
+		return $deliveries;
+	}
+
 	public function billing_history(Request $request)
 	{
 		$bill_history = DB::table('billing_invoice_headers')

@@ -27,10 +27,13 @@
 								Type
 							</td>
 							<td>
-								Amount
+								Total Amount
 							</td>
 							<td>
 								Due Date
+							</td>
+							<td>
+								Status
 							</td>
 							<td>
 								Actions
@@ -124,6 +127,7 @@
 			{ data: 'isRevenue' },
 			{ data: 'Total' },
 			{ data: 'due_date' },
+			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})

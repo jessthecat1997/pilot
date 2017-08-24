@@ -219,6 +219,7 @@ class TruckingsController extends Controller
         {
             $bill_revs = DB::table('charges')
             ->select('id','name', 'amount')
+            ->where('bill_type', '=', 'R')
             ->get();
             $so_id = $request->trucking_id;
             $service_order = TruckingServiceOrder::findOrFail($so_id);
