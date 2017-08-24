@@ -215,6 +215,10 @@ Route::resource('/billingexpense', 'BillingExpensesController');
 Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 
 
+//Trucking Bills
+Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
+
+
 //Maintenance data
 Route::get('/admin/billData', 'DatatablesController@bill_datatable')->name('bill.data');
 
