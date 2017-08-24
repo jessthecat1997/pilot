@@ -196,7 +196,22 @@ class TruckingsController extends Controller
         $billing_header->due_date = null;
         $billing_header->save();
 
-        return $billing_header;
+        $consignee_header = \App\TruckingServiceOrder::findOrFail($consignee_order[0]->id);
+        switch ($request->isRevenue) {
+            case 0:
+                $consignee_header->bi_head_id_exp = $billing_header->id;
+                break;
+            
+            case 1:
+                $consignee_header->bi_head_id_rev = $billing_header->id;
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        $consignee_header->save();
+        return $consignee_header;
         
     }
     public function view_trucking(Request $request){

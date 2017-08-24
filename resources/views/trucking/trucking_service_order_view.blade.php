@@ -161,7 +161,7 @@
 			<div class = "panel-body">
 				<h4>List of Revenues</h4>
 				@if($service_order->bill_head_id_rev != null)
-				<table class="table table-responsive" style="width: 100%;">
+				<table class="table table-responsive" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -210,7 +210,7 @@
 			<div class = "panel-body">
 				<h4>List of Expenses</h4>
 				@if($service_order->bill_head_id_exp != null)
-				<table class="table table-responsive" style="width: 100%;">
+				<table class="table table-responsive" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -374,6 +374,40 @@
 			$('#confirm-create').modal('show');
 			create_bill = 0;
 		})
+
+		@if($service_order->bill_head_id_rev != null)
+		var delivery_table = $('#revenues_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			scrollX: true,
+			ajax: '{{ route("revenue.data") }}/' + $service_order->bill_head_id_rev,
+			columns: [
+
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'amount'},
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
+
+		@if($service_order->bill_head_id_rev != null)
+		var delivery_table = $('#revenues_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			scrollX: true,
+			ajax: '{{ route("revenue.data") }}/' + $service_order->bill_head_id_rev,
+			columns: [
+
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'amount'},
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
 
 		$(document).on('click', '.confirm-create-bill', function(e){
 			e.preventDefault();
