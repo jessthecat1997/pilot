@@ -159,8 +159,8 @@ class BillingDetailsController extends Controller
 		$bill_hists = DB::select('SELECT t.id, 
 			C.companyName,
 			(CASE t.isRevenue
-				WHEN t.isRevenue = 1 THEN "Revenue"
-				WHEN t.isRevenue = 0 THEN "Expense"
+			WHEN t.isRevenue = 1 THEN "Revenue"
+			WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,	
 			CONCAT("Php ", p.total) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
@@ -171,14 +171,15 @@ class BillingDetailsController extends Controller
 			SELECT bi_head_id, SUM(amount) total
 			FROM billing_invoice_details
 			GROUP BY bi_head_id
-		) p
-		ON t.id = p.bi_head_id
-		JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
-		JOIN consignees AS C on B.consignees_id = C.id');
+			) p
+			ON t.id = p.bi_head_id
+			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
+			JOIN consignees AS C on B.consignees_id = C.id');
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
+			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
