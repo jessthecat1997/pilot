@@ -34,13 +34,14 @@ class PaymentsController extends Controller
 
 		$paid = DB::table('payments')
 		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
+		->select(DB::raw('amount'))
 		->orderBy('payments.id', 'desc')
-		->where('billing_invoice_headers.so_head_id', '=', $id)
+		->where('payments.bi_head_id', '=', $id)
 		->get();
-
+		
 		$total = DB::table('billing_invoice_details')
-		->select(DB::raw('CONCAT(SUM(amount)) as Total'))
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total']));
@@ -49,7 +50,8 @@ class PaymentsController extends Controller
 	public function payments_table(Request $request, $id)
 	{
 		$history = DB::table('payments')
-		->select('id', 'amount', 'created_at', 'description')
+		->select('payments.id', 'amount', 'payments.created_at', 'description')
+		->where('payments.bi_head_id', '=', $id)
 		->orderBy('id', 'desc')
 		->get();
 		return Datatables::of($history)

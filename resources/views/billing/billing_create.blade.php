@@ -133,9 +133,6 @@
 									Amount *
 								</td>
 								<td>
-									Tax *
-								</td>
-								<td>
 									Action
 								</td>
 							</tr>
@@ -158,9 +155,9 @@
 									<td>
 										<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
 									</td>
-									<td>
+					<!-- 				<td>
 										<input type = "text" name = "rev_tax" class = "form-control" style="text-align: right">
-									</td>
+									</td> -->
 									<td>
 										<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
 									</td>
@@ -250,6 +247,29 @@
 				$('amount').val("");
 			}
 		})
+
+		var rc_table = $('#revTable').DataTable({
+			processing: false,
+			serverSide: true,
+			ajax: "{{ route('revenue.data',$so_head_id) }}",
+			columns: [
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'Total' }
+			]
+		})
+		var br_table = $('#expTable').DataTable({
+			processing: false,
+			serverSide: true,
+			ajax: "{{ route('expenses.data', $so_head_id) }}",
+			columns: [
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'Total' }
+			]
+		})
+
+
 	})
 	$(document).on('click', '.new-rev-row', function(e){
 		e.preventDefault();
@@ -283,31 +303,11 @@
 					'charge_id' : rev_bill_id,
 					'description' : rev_description_value,
 					'amount' : rev_amount_value,
-					'tax' : rev_tax_value,
+					'tax' : 0,
 					'bi_head_id' : {{ $bills[0]->id }},
 				},
 				success: function (data){
 					location.reload();
-					var rc_table = $('#revTable').DataTable({
-						processing: false,
-						serverSide: true,
-						ajax: "{{ route('revenue.data',$so_head_id) }}",
-						columns: [
-						{ data: 'name' },
-						{ data: 'description' },
-						{ data: 'amount' }
-						]
-					})
-					var br_table = $('#expTable').DataTable({
-						processing: false,
-						serverSide: true,
-						ajax: "{{ route('expenses.data', $so_head_id) }}",
-						columns: [
-						{ data: 'name' },
-						{ data: 'description' },
-						{ data: 'amount' }
-						]
-					})
 				}
 			})
 		}
@@ -317,12 +317,12 @@
 		rev_bill_id = [];
 		rev_description_value = [];
 		rev_amount_value = [];
-		rev_tax_value = [];
+		// rev_tax_value = [];
 
 		rev_billID = document.getElementsByName('rev_bill_id');
 		rev_description = document.getElementsByName('rev_description');
 		rev_amount = document.getElementsByName('rev_amount');
-		rev_tax = document.getElementsByName('rev_tax');
+		// rev_tax = document.getElementsByName('rev_tax');
 
 
 		error = "";
@@ -350,16 +350,16 @@
 			{
 				rev_amount_value.push(rev_amount[i].value);
 			}
-			if(rev_tax[i].value === "")
-			{
-				rev_tax[i].style.color = 'red';
-				error += "Tax Required.";
-			}
+			// if(rev_tax[i].value === "")
+			// {
+			// 	rev_tax[i].style.color = 'red';
+			// 	error += "Tax Required.";
+			// }
 
-			else
-			{
-				rev_tax_value.push(rev_tax[i].value);
-			}
+			// else
+			// {
+			// 	rev_tax_value.push(rev_tax[i].value);
+			// }
 
 		}
 

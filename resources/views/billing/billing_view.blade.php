@@ -125,7 +125,7 @@
 			if (n == 'P'){
 				return "Paid";
 			}else{
-				return "Fixed";
+				return "Unpaid";
 			}
 
 		} 

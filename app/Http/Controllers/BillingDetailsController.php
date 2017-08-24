@@ -80,12 +80,12 @@ class BillingDetailsController extends Controller
 		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id']));
 		
 	}
-	public function billing_invoice(Request $request)
+	public function billing_invoice(Request $request, $id)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->select('billing_invoice_headers.id', 'date_billed','billing_invoice_headers.status',DB::raw('CONCAT(TRUNCATE(amount - (amount * tax/100),2)) as Total'), 'due_date')
-		->where('so_head_id', '=', $request->so_head_id)
+		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
 		return Datatables::of($bill_hists)
@@ -113,7 +113,7 @@ class BillingDetailsController extends Controller
 			$billing_revenue->charge_id = $request->charge_id[$i];
 			$billing_revenue->description = $request->description[$i];
 			$billing_revenue->amount = $request->amount[$i];
-			$billing_revenue->tax = $request->tax[$i];
+			$billing_revenue->tax = $request->tax;
 			$billing_revenue->bi_head_id = $request->bi_head_id;
 			$billing_revenue->save();
 		}
@@ -137,13 +137,17 @@ class BillingDetailsController extends Controller
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
+		$vat = DB::table('vat_rates')
+		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
+		->get();
+
 		$total = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * tax/100)),2)) as Total'))
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['parts', 'bills', 'number', 'total']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['parts', 'bills', 'number', 'total','vat']));
 		return $pdf->stream();
 	}
 

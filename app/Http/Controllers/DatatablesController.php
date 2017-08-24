@@ -287,7 +287,7 @@ class DatatablesController extends Controller
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->select('charges.name', 'billing_invoice_details.description', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * tax/100),2)) as Total'))
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'E']
@@ -304,7 +304,7 @@ class DatatablesController extends Controller
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->select('charges.name', 'billing_invoice_details.description', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * tax/100),2)) as Total'))
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'R']
