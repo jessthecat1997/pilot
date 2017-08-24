@@ -155,12 +155,7 @@ class BillingDetailsController extends Controller
 	}
 	public function billing_invoice(Request $request)
 	{
-<<<<<<< HEAD
-		$bill_hist = DB::table('billing_invoice_headers')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->select('billing_invoice_headers.id', 'isRevenue', 'due_date')
-		->get();
-=======
+
 		$bill_hists = DB::select('SELECT t.id, 
 			C.companyName,
 			(CASE t.isRevenue
@@ -181,12 +176,10 @@ class BillingDetailsController extends Controller
 		JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
 		JOIN consignees AS C on B.consignees_id = C.id');
 
->>>>>>> master
-
-		return Datatables::of($bill_hist)
+		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
 	}

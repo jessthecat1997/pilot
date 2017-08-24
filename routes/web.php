@@ -202,6 +202,7 @@ Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
 Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
+Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 Route::get('admin/bill_history', 'BillingDetailsController@billing_history')->name('history.data');
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
