@@ -169,7 +169,7 @@ class BillingDetailsController extends Controller
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('billing_invoice_headers.id', 'companyName','isRevenue',DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
+		->select('billing_invoice_headers.id', 'companyName','isRevenue', DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
 		->get();
 
 		return Datatables::of($bill_hists)
