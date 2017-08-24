@@ -36,23 +36,13 @@ class BillingDetailsController extends Controller
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
-		$delivery = DB::table('delivery_billings')
-		->leftjoin('charges', 'delivery_billings.charges_id', '=', 'charges.id')
-		->select('charges.description', 'delivery_billings.amount')
-		->where('del_head_id', '=', $id)
-		->get();
-
 		$so_head_id = $id;
-		$bill_revs = DB::table('charges')
-		->select('id','name', 'amount')
-		->get();
-
 
 		$vat = DB::table('vat_rates')
 		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
 		->get();
 
-		return view('billing/billing_view', compact(['bills', 'delivery', 'so_head_id', 'bill_revs', 'vat']));
+		return view('billing/billing_view', compact(['bills', 'so_head_id', 'vat']));
 
 	}
 	public function get_detail(Request $request){
@@ -90,7 +80,7 @@ class BillingDetailsController extends Controller
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status')
-		->where('consignee_service_order_headers.id', '=', $id)
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
 
@@ -160,11 +150,12 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill']));
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill']));
 		
 	}
 	public function billing_invoice(Request $request)
 	{
+
 		$bill_hists = DB::select('SELECT t.id, 
 			C.companyName,
 			(CASE t.isRevenue
@@ -186,11 +177,10 @@ class BillingDetailsController extends Controller
 		JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
 		JOIN consignees AS C on B.consignees_id = C.id');
 
-
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
+			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->addColumn('status', function ($hist) {
 			switch ($hist->status) {
@@ -207,27 +197,31 @@ class BillingDetailsController extends Controller
 			}
 		})
 		->make(true);
-		return view('billing/billing_index', compact(['billings']));
+	}
+	public function billing_history(Request $request)
+	{
+		$bill_history = DB::table('billing_invoice_headers')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->select('billing_invoice_headers.id', 'isRevenue', 'due_date')
+		->get();
+
+		return Datatables::of($bill_history)
+		->addColumn('action', function ($history) {
+			return
+			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+		})
+		->make(true);
 	}
 	public function store(Request $request)
 	{
-
 		for($i = 0; $i<count($request->charge_id); $i++)
 		{
-			$billing_header = new BillingInvoiceHeader;
-			$billing_header->so_head_id = $request->so_head_id;
-			$billing_header->vatRate = $request->vatRate;
-			$billing_header->status = $request->status;
-			$billing_header->date_billed = $request->date_billed;
-			$billing_header->override_date = $request->override_date;
-			$billing_header->due_date = $request->due_date;
-			$billing_header->save();
 			$billing_revenue = new BillingInvoiceDetails;
 			$billing_revenue->charge_id = $request->charge_id[$i];
 			$billing_revenue->description = $request->description[$i];
 			$billing_revenue->amount = $request->amount[$i];
 			$billing_revenue->tax = $request->tax;
-			$billing_revenue->bi_head_id = $request->so_head_id;
+			$billing_revenue->bi_head_id = $request->bi_head_id;
 			$billing_revenue->save();
 		}
 	}

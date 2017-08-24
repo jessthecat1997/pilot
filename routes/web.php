@@ -199,9 +199,11 @@ Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('
 
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
+Route::resource('/billing_header', 'BillingInvoiceHeadersController');
 Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
-Route::get('admin/invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
+Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
+Route::get('admin/bill_history', 'BillingDetailsController@billing_history')->name('history.data');
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
@@ -210,9 +212,8 @@ Route::get('admin/trso_head', 'DatatablesController@trso_head_datatable')->name(
 Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
 Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
 Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
-Route::resource('/billingrevenue', 'BillingRevenuesController');
-Route::resource('/billingexpense', 'BillingExpensesController');
 Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
+Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 
 
 //Trucking Bills

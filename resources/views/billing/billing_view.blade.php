@@ -47,24 +47,24 @@
 						</div>
 					</div>
 				</div>
-				<a href="/billing/{{ $bills[0]->id }}/create" class="btn but col-sm-4 pull-right">Create Bill</a>
+				<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
 			</div>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Billing History</div>
+			<div class="panel-heading" id="heading">Unpaid Invoice</div>
 			<div class = "panel-body">
 				<br>
-				<table class = "table-responsive table" id = "bill_hist_table">
+				<table class = "table-responsive table" id = "hist_table">
 					<thead>
 						<tr>
 							<td>
 								No.
 							</td>
 							<td>
-								Amount
+								isRevenue
 							</td>
 							<td>
 								Due Date
@@ -79,6 +79,45 @@
 		</div>
 	</div>
 	<hr>	
+</div>
+<div id="billModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Billing Invoice</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-sm-12">
+					<form class="form-inline">
+						{{ csrf_field() }}
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="vat">Vat Rate:*</label>
+								<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="date_billed">Date Billed:*</label>
+								<input type="date" class="form-control" id="date_billed">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="due_date">Due Date:*</label>
+								<input type="date" class="form-control" id="due_date">
+							</div>
+						</div>
+					</form>
+				</div>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but save-header">Save</a>
+			</div>
+		</div>
+	</div>
 </div>
 
 @endsection
@@ -96,31 +135,40 @@
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
 	console.log('{{ $so_head_id }}')
-	console.log('{{ route('invoice.data',$so_head_id) }}/{{ $so_head_id }}');
+	console.log('{{ route('history.data',$so_head_id) }}/{{ $so_head_id }}');
 	var data;
 	$(document).ready(function(){
-		
-		var vtable = $('#bill_hist_table').DataTable({
+		console.log($('input[name=_token]').val());
+
+		var hist_table = $('#hist_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: "{{ route('invoice.data',$so_head_id) }}",
+			ajax: "{{ route('history.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
-			{ data: 'Total' },
+			{ data: 'isRevenue' },
 			{ data: 'due_date' },
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})
-		function formatWithStatus(n) { 
 
-			if (n == 'P'){
-				return "Paid";
-			}else{
-				return "Unpaid";
+	})
+	$(document).on('click', '.save-header', function(e){
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("billing_header.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'so_head_id' : {{ $bills[0]->id }},
+				'vatRate' : $('#vat').val(),
+				'status' : 'U',
+				'date_billed' : $('#date_billed').val(),
+				'due_date' : $('#due_date').val()
+			},
+			success: function (data){
+				location.reload();
 			}
-
-		} 
-		
+		})
 	})
 </script>
 @endpush
