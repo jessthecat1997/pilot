@@ -137,6 +137,121 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="confirm-create" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Create Bill
+			</div>
+			<div class="modal-body">
+				Confirm Creating new Bill
+			</div>
+			<div class="modal-footer">
+
+				<button class = "btn btn-success confirm-create-bill">Confirm</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<div class = "panel">
+			<div class = "panel-body">
+				<h4>List of Revenues</h4>
+				@if($service_order->bill_head_id_rev != null)
+				<table class="table table-responsive" style="width: 100%;">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Description
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				@else
+				<div class = "form-horizontal">
+					<div class = "col-md-10">
+						Create Billing First to Add Payables.
+					</div>
+					<div class="col-md-2">
+						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
+					</div>
+				</div>
+				@endif
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<div class = "panel">
+			<div class = "panel-body">
+				<h4>List of Expenses</h4>
+				@if($service_order->bill_head_id_exp != null)
+				<table class="table table-responsive" style="width: 100%;">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Description
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				@else
+				<div class = "form-horizontal">
+					<div class = "col-md-10">
+						Create Billing First to Add Payables.
+					</div>
+					<div class="col-md-2">
+						<button class = "btn but new_expense_bill btn-sm">New Bill</button>
+					</div>
+				</div>
+				@endif
+			</div>
+		</div>
+	</div>
+</div>
 
 <div id="deliveryModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -217,211 +332,9 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Delivery</h4>
-			</div>
-			<div class="modal-body">
-				<ul class="nav nav-pills nav-justified" id = "choices">
-					<li class="active"><a data-toggle="pill" href="#wcontainer">Container</a></li>
-					<li><a data-toggle="pill" href="#wocontainer">Non Container</a></li>
-				</ul>
-				<div class="tab-content">
-					<div id="wcontainer" class="tab-pane fade in active">
-						<div class = "panel">
-							<div class = "panel-body">
-								<form class="form-horizontal" role="form">
-									<h4>&nbsp;Container Information<button class = "btn btn-primary btn-sm pull-right add-new-container">New Container</button></h4>
-									<hr />
-									<table class = "table table-responsive" id = "container_table">
-										<thead>
-											<tr>
-												<td width = "20%">
-													Container No.
-												</td>
-												<td width = "15%">
-													Volume
-												</td>
-												<td width = "20%">
-													Return To
-												</td>
-												<td width = "20%">
-													Return Address
-												</td>
-												<td width = "5%">
-													Return Date
-												</td>
-												<td width="20%">
-													Action
-												</td>
-											</tr>
-										</thead>
-										<tbody>
-											<tr id = "container_row">
-												<td>
-													<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber"/>
-												</td>
-												<td>
-													<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
-														<option></option>
-														@forelse($container_volumes as $container_volume)
-														<option value = "{{ $container_volume->id }}">{{ $container_volume->description }}</option>
-														@empty
 
-														@endforelse
-													</select>
-												</td>
-												<td>
-													<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" />
-												</td>
-												<td>
-													<input type = "text" name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress" />
-												</td>
-												<td>
-													<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
-												</td>
-												<td>
-													<button class = "btn btn-sm btn-success save-container-row">Add</button>
-													<button class = "btn btn-sm btn-danger remove-container-row">Delete</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
 
-									<h4>&nbsp;Delivery Information</h4>
-									<hr />
-									<div class="form-group">
-										<label class="control-label" for = "deladdcon">Delivery Address:</label>
-										<input type = "text" name = "deladdcon" id = "deladdcon" class = "form-control deladdcon" />
-									</div>
-									<div class="form-group">
-										<label class="control-label" for="wodetail_table">Delivery Content:</label>
-									</div>
-									<div id = "cargo_delivery_details">
 
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					<div id="wocontainer" class="tab-pane fade">
-						<div class = "panel">
-							<div class = "panel-body">
-								<form class="form-horizontal" role="form">
-									<h4>&nbsp;Delivery Information</h4>
-									<hr />
-									<div class="form-group">
-										<label class="control-label" for = "deladd">Delivery Address:</label>
-										<input type = "text" name = "deladd" id = "deladd" class = "form-control deladd" />
-									</div>
-									<div class="form-group">
-										<label class="control-label" for="wodetail_table">Delivery Content:</label>
-										<table class = "table-responsive table" id = "wodetail_table">
-											<thead>
-												<tr>
-													<td>
-														Description of Goods
-													</td>
-													<td>
-														Gross Weight(kg)
-													</td>
-													<td>
-														Supplier
-													</td>
-													<td>
-														Action
-													</td>
-												</tr>
-											</thead>
-											<tbody>
-												<tr id = "wodescription_row">
-													<td width="35%">
-														<input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
-													</td>
-													<td width="20%">
-														<input type = "text" name = "wogrossWeight" class = "form-control"/>
-													</td>
-													<td width="30%">
-														<input type = "text" name = "wosupplier"  class = "form-control" />
-													</td>
-													<td width="15%">
-														<button class = "btn btn-md btn-primary woadd-new-detail">+</button>
-														<button class = "btn btn-md btn-danger woremove-current-detail">x</button>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<hr />
-				<form class = "form-horizontal">
-
-					<h4>&nbsp;Vehicle Assignment</h4>
-					
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
-						<div class="col-sm-8"> 
-							<select class="form-control" id = "vehicle_type">
-								<option value = "0"></option>
-								@forelse($vehicle_types as $vehicle_type)
-								<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->description  }}</option>
-								@empty
-								@endforelse
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
-						<div class="col-sm-8"> 
-							<select class="form-control" id = "vehicle">
-								<option></option>
-							</select>
-						</div>
-					</div>
-					<hr />
-					<h4>&nbsp;Driver Assignment</h4>
-					
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
-						<div class="col-sm-8">
-							<select class="form-control" id = "driver">
-								<option></option>
-								@forelse($employees as $employee)
-								<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-								@empty
-								@endforelse
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
-						<div class="col-sm-8">
-							<select class="form-control" id = "helper">
-								<option></option>
-								@forelse($employees as $employee)
-								<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-								@empty
-								@endforelse
-							</select>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-md btn-success save-delivery">Save</button>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
 @endsection
 
 
@@ -447,7 +360,58 @@
 		var wodetail_row = "<tr>" + $('#wodescription_row').html() + "</tr>";
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
+		var create_bill = null;
+
 		var selected_delivery = null;
+
+		$(document).on('click', '.new_revenue_bill', function(e){
+			e.preventDefault();
+			$('#confirm-create').modal('show');
+			create_bill = 1;
+		})
+		$(document).on('click', '.new_expense_bill', function(e){
+			e.preventDefault();
+			$('#confirm-create').modal('show');
+			create_bill = 0;
+		})
+
+		$(document).on('click', '.confirm-create-bill', function(e){
+			e.preventDefault();
+
+			switch(create_bill){
+				case 0 : 
+				$.ajax({
+
+					type: 'POST',
+					url: '{{ route("create_tr_billing_header") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'isRevenue' : create_bill,
+						'tr_so_id' : {{ $service_order->id }},
+					},
+					success: function(data){
+						console.log(data);
+					}
+				})
+				break;
+
+				case 1 :
+				$.ajax({
+
+					type: 'POST',
+					url: '{{ route("create_tr_billing_header") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'isRevenue' : create_bill,
+						'tr_so_id' : {{ $service_order->id }},
+					},
+					success: function(data){
+						window.location.reload();
+					}
+				})
+				break
+			}
+		})
 
 		$(document).on('click', '.view_delivery', function(e){
 			e.preventDefault();

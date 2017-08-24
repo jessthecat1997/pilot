@@ -178,6 +178,27 @@ class TruckingsController extends Controller
         }
     }
 
+    public function create_tr_billing_header(Request $request){
+        $consignee_order = \DB::table('consignee_service_order_headers')
+        ->join('consignee_service_order_details AS A', 'A.so_headers_id', '=', 'consignee_service_order_headers.id')
+        ->join('trucking_service_orders AS B', 'B.so_details_id', '=', 'A.id')
+        ->select('consignee_service_order_headers.id')
+        ->where('B.id', '=', $request->tr_so_id)
+        ->get();
+
+        $billing_header = new \App\BillingInvoiceHeader;
+        $billing_header->so_head_id = $consignee_order[0]->id;
+        $billing_header->isRevenue = $request->isRevenue;
+        $billing_header->vatRate = null;
+        $billing_header->status = 'U';
+        $billing_header->date_billed = null;
+        $billing_header->override_date = null;
+        $billing_header->due_date = null;
+        $billing_header->save();
+
+        return $billing_header;
+        
+    }
     public function view_trucking(Request $request){
         try
         {
