@@ -1,125 +1,135 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Billing</h2>
-<div class="pull-left">
-	<a href="/billing" class="btn but">Back</a>
-</div>
-<br/>
 <hr>
-<div class = "container-fluid">
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="panel-heading" id="heading">Consignee Details</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="consignee">Company:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="consignee">{{ $bills[0]->companyName }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="address">Address:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="address">{{ $bills[0]->address }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="sotype">Service Order:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="sotype">{{ $bills[0]->name }}</label>
-						</div>
-					</div>
-				</div>
-				<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
-			</div>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Unpaid Invoice</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "hist_table">
+<div class="row col-md-5">
+	<label>Invoice No.:</label>
+	<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
+</div>
+<div class="row col-md-7">
+	<div class="panel-default panel">
+		<div class="panel-heading" id="heading">List of Revenues</div>
+		<div class = "panel-body">
+			<form class="form-inline">
+				{{ csrf_field() }}
+				<table class="table" id="revenue_table">
 					<thead>
 						<tr>
-							<td>
-								No.
+							<td style="text-align: center;">
+								NAME
 							</td>
-							<td>
-								isRevenue
-							</td>
-							<td>
-								Due Date
-							</td>
-							<td>
-								Actions
+							<td style="text-align: center;">
+								AMOUNT
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($rev_bill as $bill)
+						<tr>
+							<td style="text-align: center;">{{ $bill->name }}</td>
+							<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2" style="text-align: center;"><strong>No records available.</strong></td>
+						</tr>
+						@endforelse
+						<tr>
+							<td colspan="2">&nbsp;</td>
+						</tr>
+						@forelse($rev_vat as $vr)
+						<tr>
+							<td style="text-align: center;"><strong>{{ $vr->rates }}% VAT</strong></td>
+							<td style="text-align: center;">Php&nbsp;{{ $vr->Total }}</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2">No records available.</td>
+						</tr>
+						@endforelse
+						@forelse($rev_total as $rt)
+						<tr>
+							<td style="text-align: right;">
+								<label for="bal"><strong>TOTAL: &nbsp;</strong></label>
+							</td>
+							<td style="text-align: center;">
+								<h3>Php&nbsp;&nbsp;{{ $rt->Total }}</h3>
+							</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2">No records available.</td>
+						</tr>
+						@endforelse
+					</tbody>
 				</table>
-			</div>
-		</div>
-	</div>
-	<hr>	
-</div>
-<div id="billModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Billing Invoice</h4>
-			</div>
-			<div class="modal-body">
-				<div class="col-sm-12">
-					<form class="form-inline">
-						{{ csrf_field() }}
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="vat">Vat Rate:*</label>
-								<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="date_billed">Date Billed:*</label>
-								<input type="date" class="form-control" id="date_billed">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="due_date">Due Date:*</label>
-								<input type="date" class="form-control" id="due_date">
-							</div>
-						</div>
-					</form>
-				</div>
-				<strong>Note:</strong> All fields with * are required.
-			</div>
-			<div class="modal-footer">
-				<a class="btn but save-header">Save</a>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
-
+<div class="row col-md-5">
+</div>
+<div class="row col-md-7">
+	<div class="panel-default panel">
+		<div class="panel-heading" id="heading">List of Expenses</div>
+		<div class = "panel-body">
+			<form class="form-inline">
+				{{ csrf_field() }}
+				<table class="table" id="expense_table">
+					<thead>
+						<tr>
+							<td style="text-align: center;">
+								NAME
+							</td>
+							<td style="text-align: center;">
+								AMOUNT
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($exp_bill as $bill)
+						<tr>
+							<td style="text-align: center;">{{ $bill->name }}</td>
+							<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2" style="text-align: center;"><strong>No records available.</strong></td>
+						</tr>
+						@endforelse
+						<tr>
+							<td colspan="2">&nbsp;</td>
+						</tr>
+						@forelse($exp_vat as $vr)
+						<tr>
+							<td style="text-align: center;"><strong>{{ $vr->rates }}% VAT</strong></td>
+							<td style="text-align: center;">Php&nbsp;{{ $vr->Total }}</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2">No records available.</td>
+						</tr>
+						@endforelse
+						@forelse($exp_total as $rt)
+						<tr>
+							<td style="text-align: right;">
+								<label for="bal"><strong>TOTAL: &nbsp;</strong></label>
+							</td>
+							<td style="text-align: center;">
+								<h3>Php&nbsp;&nbsp;{{ $rt->Total }}</h3>
+							</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="2">No records available.</td>
+						</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
 @endsection
 @push('styles')
 <style>
@@ -130,45 +140,15 @@
 		color: #fff;
 	}
 </style>
-@endpush
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	console.log('{{ $so_head_id }}')
-	console.log('{{ route('history.data',$so_head_id) }}/{{ $so_head_id }}');
-	var data;
+
+
 	$(document).ready(function(){
-		console.log($('input[name=_token]').val());
+		var bi_id = document.getElementById("so_head_id").value;
+		console.log(bi_id);
 
-		var hist_table = $('#hist_table').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: "{{ route('history.data',$so_head_id) }}",
-			columns: [
-			{ data: 'id' },
-			{ data: 'isRevenue' },
-			{ data: 'due_date' },
-			{ data: 'action', orderable: false, searchable: false }
-			]
-		})
-
-	})
-	$(document).on('click', '.save-header', function(e){
-		$.ajax({
-			method: 'POST',
-			url: '{{ route("billing_header.store") }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'so_head_id' : {{ $bills[0]->id }},
-				'vatRate' : $('#vat').val(),
-				'status' : 'U',
-				'date_billed' : $('#date_billed').val(),
-				'due_date' : $('#due_date').val()
-			},
-			success: function (data){
-				location.reload();
-			}
-		})
 	})
 </script>
 @endpush

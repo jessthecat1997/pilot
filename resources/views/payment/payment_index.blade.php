@@ -3,7 +3,39 @@
 <h2>&nbsp;Payment</h2>
 <hr>
 <div class="container-fluid">
-	<div class="row">
+	<div class="row collapse in" id="history_collapse">
+		<div class="panel-default panel">
+			<div class="panel-heading" id="heading">List of Invoice</div>
+			<div class = "panel-body">
+				<br>
+				<table class = "table-responsive table" id = "bill_hist_table">
+					<thead>
+						<tr>
+							<td>
+								No.
+							</td>
+							<td>
+								Consignee
+							</td>
+							<td>
+								Type
+							</td>
+							<td>
+								Amount
+							</td>
+							<td>
+								Due Date
+							</td>
+							<td>
+								Actions
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row">
 		<div class = "panel-default panel c" id="so_collapse">
 			<div class = "panel-body">
 				<div>
@@ -33,7 +65,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>
 @endsection
 @push('styles')
@@ -54,15 +86,17 @@
 
 
 	$(document).ready(function(){
-		var vtable = $('#so_head_table').DataTable({
-			processing: true,
-			serverSide: true,
-			ajax: '{{ route("pso_head.data") }}',
+		var vtable = $('#bill_hist_table').DataTable({
+			processing: false,
+			serverSide: false,
+			deferRender: true,
+			ajax: "{{ route('pso_head.data') }}",
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
-			{ data: 'name' },
-			{ data: 'created_at'},
+			{ data: 'isRevenue' },
+			{ data: 'Total' },
+			{ data: 'due_date' },
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})

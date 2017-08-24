@@ -25,9 +25,10 @@ class PaymentsController extends Controller
 		$pays = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
+		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'))
-		->where('consignee_service_order_headers.id', '=', $id)
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
 		$so_head_id = $id;
@@ -42,7 +43,7 @@ class PaymentsController extends Controller
 		$total = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'))
-		->where('billing_invoice_headers.so_head_id', '=', $id)
+		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
 		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total']));
@@ -64,7 +65,7 @@ class PaymentsController extends Controller
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
 		->select('charges.name', 'billing_invoice_details.amount')
-		->where('billing_invoice_headers.so_head_id', '=', $id)
+		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 		return Datatables::of($billings)
 		->addColumn('action', function ($b) {

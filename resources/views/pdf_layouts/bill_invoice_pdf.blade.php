@@ -123,13 +123,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					@forelse($parts as $pt)
+					@forelse($rev_bill as $pt)
 					<tr>
 						<td style="text-align: center;">
 							{{ $pt->name }}
 						</td>
 						<td style="text-align: right;">
-							Php {{ $pt->Total }}
+							Php {{ $pt->amount }}
 						</td>
 					</tr>
 					@empty
@@ -144,10 +144,10 @@
 					</tr>
 					<tr>
 						<td style="text-align: right">
-							<strong>VAT</strong>
+							<strong>{{ $rev_vat[0]->rates }}%&nbsp;VAT</strong>
 						</td>
 						<td style="text-align: right;">
-							{{ $vat[0]->rates }}% = {{ $vat[0]->Total }}
+							Php&nbsp;{{ $rev_vat[0]->Total }}
 						</td>
 					</tr>
 					<tr>
@@ -155,7 +155,7 @@
 							<strong>TOTAL</strong>
 						</td>
 						<td style="text-align: right;">
-							Php {{ $total[0]->Total }}
+							<h3>Php {{ $rev_total[0]->Total }}</h3>
 						</td>
 					</tr>
 				</tbody>

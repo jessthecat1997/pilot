@@ -1,10 +1,6 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Billing</h2>
-<div class="pull-left">
-	<a href="/billing/{{ $so_head_id }}" class="btn but">Back</a>
-</div>
-<br/>
 <hr>
 <div class="row col-md-5">
 	<label>Invoice No.:</label>

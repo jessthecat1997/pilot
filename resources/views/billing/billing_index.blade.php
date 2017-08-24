@@ -3,7 +3,7 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="pull-right">
-	<a class="btn but" id="btn_newBill">Create New Bill</a>
+	<a class="btn but collapse in" id="btn_newBill">Select Service Order</a>
 </div>
 <br/>
 <br/>
@@ -141,6 +141,7 @@
 	$(document).on('click', '#btn_newBill', function(e){
 		$('#history_collapse').removeClass('in');
 		$('#so_collapse').addClass('in');
+		$('#btn_newBill').removeClass('in');
 		var vtable = $('#brso_head_table').DataTable({
 			processing: true,
 			serverSide: true,
