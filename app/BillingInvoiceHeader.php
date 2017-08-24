@@ -9,7 +9,7 @@ class BillingInvoiceHeader extends Model
 	use SoftDeletes;
 	
 	
-	protected $fillable = ['vatRate','status', 'so_head_id'];
+	protected $fillable = ['isRevenue','vatRate','status', 'so_head_id'];
 	protected $dates = [
     	'deleted_at',
     ];
