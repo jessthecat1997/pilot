@@ -147,3 +147,10 @@ h2
 {
 	border-bottom: 1px solid #23375b;
 }
+.vat
+{
+	border-style: none;
+	background-color: #fff;
+	font-size: 20px;
+	width: 180px;
+}

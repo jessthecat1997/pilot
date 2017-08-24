@@ -53,15 +53,15 @@
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
-						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled>
+						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
 					</div>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
 						@forelse($paid as $pd)
-						<input type="text" class="txt" id="paid" value="{{ $pd->amount }}" disabled>
+						<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
 						@empty
-						<input type="text" class="txt" id="paid" value="0.00" disabled>
+						<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
 						@endforelse
 					</div>
 				</div>
@@ -71,6 +71,29 @@
 	<br/>
 	<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Payment</button>
 	<br/>
+	<br/>
+	<div class="row">
+		<div class="panel-default col-sm-12">
+			<div class="panel-heading" id="heading">List of Payable</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id = "bills_table">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Amount
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
 	<br/>
 	<div class="row">
 		<div class="panel-default col-sm-12">
@@ -142,6 +165,58 @@
 		</div>
 	</div>
 </div>
+<div id="billModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Payment</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-inline">
+					{{ csrf_field() }}
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label for="selected_bill"><h4>Amount: &nbsp;</h4></label>
+							<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt" id="selected_bill" disabled>
+						</div>
+					</div>
+				</form>
+				<table class="table">
+					{{ csrf_field() }}
+					<thead>
+						<tr>
+							<td>
+								Amount *
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<form class="form-horizontal">
+								<td>
+									<input type = "text" name="amount" id="bill_amount" class="form-control col-sm-2" style="text-align: right" required>
+								</td>
+							</form>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="form-group">
+									<label for="remarks">Remarks:</label>
+									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but finalize-payment">Save</a>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 @endsection
 @push('styles')
@@ -157,11 +232,12 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	var totalamt = parseInt($('#total').val());
-	var balance = parseInt($('#bal').val());
+	var totalamt = parseFloat($('#total').val());
+	var balance = parseFloat($('#bal').val());
 	var paid = $('#paid').val();
-	bals = totalamt - paid;
-	document.getElementById('bal').Value = bals;
+	n = totalamt - paid;
+	var bals = n.toFixed(2);
+	document.getElementById("bal").value = bals;
 
 	$(document).ready(function(){
 		console.log(bals);
@@ -176,10 +252,25 @@
 			{ data: 'description'}
 			]
 		})
+		var p_table = $('#bills_table').DataTable({
+			processing: false,
+			serverSide: true,
+			ajax: "{{ route('paybills.data', $so_head_id) }}",
+			columns: [
+			{ data: 'name' },
+			{ data: 'amount' },
+			{ data: 'action' }
+			]
+		})
 		
 	})
+	$(document).on('click', '.make_payment', function(e){
+		var amount = $(this).val(); 
+		console.log(amount); 
+		var amt = parseFloat(document.getElementById("selected_bill").value = amount);
+	})
 	$(document).on('click', '#check', function(e){
-		var amt = parseInt(document.getElementById("amount").value);
+		var amt = parseFloat(document.getElementById("amount").value);
 		console.log(bals);
 		if(amt<bals)
 		{
@@ -234,7 +325,7 @@
 		}
 	})
 	$(document).on('click', '.finalize-payment', function(e){
-		var amt = parseInt(document.getElementById("amount").value);
+		var amt = parseFloat(document.getElementById("selected_bill").value);
 		var rem = $('#remarks').val();
 		console.log(amt);
 		if(amt<totalamt)

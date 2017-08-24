@@ -26,7 +26,7 @@ class BillingDetailsController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'))
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
@@ -67,7 +67,7 @@ class BillingDetailsController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'))
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
@@ -77,14 +77,33 @@ class BillingDetailsController extends Controller
 		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id']));
+		$vatrate = DB::table('billing_invoice_headers')
+		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->select(DB::raw('CONCAT(TRUNCATE(vatRate,2)) as rates'), DB::raw('CONCAT(TRUNCATE(SUM((amount * (vatRate/100))),2)) as Total'))
+		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->get();
+
+		$total = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'))
+		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->get();
+
+		$billings = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select('charges.name', 'billing_invoice_details.amount')
+		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->get();
+
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs','so_head_id', 'vatrate', 'total', 'billings']));
 		
 	}
 	public function billing_invoice(Request $request, $id)
 	{
 		$bill_hists = DB::table('billing_invoice_headers')
 		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select('billing_invoice_headers.id', 'date_billed','billing_invoice_headers.status',DB::raw('CONCAT(TRUNCATE(amount - (amount * tax/100),2)) as Total'), 'due_date')
+		->select('billing_invoice_headers.id', 'date_billed','billing_invoice_headers.status',DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
 		->where('billing_invoice_details.bi_head_id', '=', $id)
 		->get();
 
@@ -114,7 +133,7 @@ class BillingDetailsController extends Controller
 			$billing_revenue->description = $request->description[$i];
 			$billing_revenue->amount = $request->amount[$i];
 			$billing_revenue->tax = $request->tax;
-			$billing_revenue->bi_head_id = $request->bi_head_id;
+			$billing_revenue->bi_head_id = $request->so_head_id;
 			$billing_revenue->save();
 		}
 	}
@@ -125,26 +144,29 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('billing_invoice_headers.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
-		->where('billing_invoice_headers.id', '=', $id)
+		->select('consignee_service_order_headers.id','companyName','service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'),'TIN', 'businessStyle', 'billing_invoice_headers.created_at')
+		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
 		$billing_header =  BillingInvoiceHeader::all()->last();
 		$number = $billing_header->id;
 		$parts = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges','billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount - (billing_invoice_details.amount * tax/100),2)) as Total'))
-		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->select('name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount + (billing_invoice_details.amount * tax/100),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id', '=', $id)
 		->get();
 
-		$vat = DB::table('vat_rates')
-		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
+		$vat = DB::table('billing_invoice_headers')
+		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->select(DB::raw('CONCAT(TRUNCATE(vatRate,2)) as rates'), DB::raw('CONCAT(TRUNCATE(SUM((amount * (vatRate/100))),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id', '=', $id)
 		->get();
 
 		$total = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
-		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id', '=', $id)
 		->get();
 
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['parts', 'bills', 'number', 'total','vat']));
