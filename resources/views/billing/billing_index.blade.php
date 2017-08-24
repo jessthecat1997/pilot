@@ -114,8 +114,9 @@
 	$(document).ready(function(){
 
 		var vtable = $('#bill_hist_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: "{{ route('invoice.data') }}",
 			columns: [
 			{ data: 'id' },

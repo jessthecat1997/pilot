@@ -165,12 +165,26 @@ class BillingDetailsController extends Controller
 	}
 	public function billing_invoice(Request $request)
 	{
-		$bill_hists = DB::table('billing_invoice_headers')
-		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('billing_invoice_headers.id', 'companyName','isRevenue', DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'), 'due_date')
-		->get();
+		$bill_hists = DB::select('SELECT t.id, 
+			C.companyName,
+			(CASE t.isRevenue
+				WHEN t.isRevenue = 1 THEN "Revenue"
+				WHEN t.isRevenue = 0 THEN "Expense"
+			END) as isRevenue,	
+			CONCAT("Php ", p.total) as Total,
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
+
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+		) p
+		ON t.id = p.bi_head_id
+		JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
+		JOIN consignees AS C on B.consignees_id = C.id');
+
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
