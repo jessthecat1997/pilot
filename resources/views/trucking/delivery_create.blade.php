@@ -563,7 +563,6 @@
 
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			console.log('aw');
 			$.ajax({
 				type: 'POST',
 				url: "{{ route('location.index')}}",
@@ -576,18 +575,35 @@
 				},
 				success: function(data){
 					if(selected_location == 0){	
-						
+						$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+						$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+						$('#pickup_id').val(data.id);
+
 						$('#_address').val($('#address').val());
 						$('#_city').val($('#loc_city option:selected').text());
 						$('#_province').val($('#loc_province option:selected').text().trim());
 						$('#_zip').val($('#zip').val());
+
+						$('#address').val("");
+						$('#loc_city').val("0");
+						$('#loc_province').val("0");
+						$('#zip').val("");
+						$('#chModal').modal('hide');
 					}
 					else{
+						$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+						$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+						$('#deliver_id').val(data.id);
 						$('#_daddress').val($('#address').val());
 						$('#_dcity').val($('#loc_city option:selected').text());
 						$('#_dprovince').val($('#loc_province option:selected').text().trim());
 						$('#_dzip').val($('#zip').val());
-
+						
+						$('#address').val("");
+						$('#loc_city').val("0");
+						$('#loc_province').val("0");
+						$('#zip').val("");
+						$('#chModal').modal('hide');
 					}
 					
 				},
