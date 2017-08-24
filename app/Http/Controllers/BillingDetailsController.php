@@ -54,8 +54,34 @@ class BillingDetailsController extends Controller
 		return $charge;
 	}
 
+	public function postTruckingPayable(Request $request){
+		$new_bill_detail = new \App\BillingInvoiceDetails;
+		$new_bill_detail->description = $request->description;
+		$new_bill_detail->amount = $request->amount;
+		$new_bill_detail->tax = 0;
+		$new_bill_detail->charge_id = $request->charge_id;
+		$new_bill_detail->bi_head_id = $request->bi_head_id;
+		$new_bill_detail->save();
+
+		return $new_bill_detail;
+	}
+
+	public function postTruckingExpense(Request $request){
+		$new_bill_detail = new \App\BillingInvoiceDetails;
+		$new_bill_detail->description = $request->description;
+		$new_bill_detail->amount = $request->amount;
+		$new_bill_detail->tax = 0;
+		$new_bill_detail->charge_id = $request->charge_id;
+		$new_bill_detail->bi_head_id = $request->bi_head_id;
+		$new_bill_detail->save();
+
+		return $new_bill_detail;
+	}
+
 	public function getBillingDetails(Request $request){
 		$billing_details = DB::table('billing_invoice_details')
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->join('charges', 'charge_id', '=', 'charges.id')
 		->where('bi_head_id', '=', $request->id)
 		->get();
 		return Datatables::of($billing_details)

@@ -214,7 +214,7 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_exp != null)
-				<h4>List of Expenses <button class = "btn but new_revenue pull-right">New Expense</button></h4>
+				<h4>List of Expenses <button class = "btn but new_expense pull-right">New Expense</button></h4>
 				@else
 				<h4>List of Expenses</h4>
 				@endif
@@ -262,6 +262,7 @@
 		</div>
 	</div>
 </div>
+
 <div id="revModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -270,23 +271,13 @@
 				<h4 class="modal-title">New Payable</h4>
 			</div>
 			<div class = "modal-body">
-				<table class = "table-responsive table" id = "rev_table">
-					<thead>
-						<tr>
-							<td>
-								Name *
-							</td>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr id = "revenue-row" name="revenue-row">
-							<form class="form-horizontal">
-								{{ csrf_field() }}
-								<td>
-									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
+				<div class = "col-md-12">
+					<div class="form-horizontal">
+						<div class = "col-md-6">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Name *</label>
+								<div class = "col-md-9">
+									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
 										<option value = "0">Select Charges</option>
 										@forelse($bill_revs as $rev)
 										<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
@@ -295,42 +286,110 @@
 
 										@endforelse
 									</select>
-								</td>
-								<td>
+								</div>
+							</div>
+						</div>
+						<div class = "col-md-6">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Amount *</label>
+								<div class = "col-md-9">
 									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "col-md-12 collapse">
+					<table style="width: 100%;" id = "delivery_fees_table">
+						<thead>
+							<tr style="width: 40%; text-align: center;">
+								<td>
+									Delivery No.
 								</td>
+								<td style="width: 60%; text-align: center;">
+									Amount
+								</td>
+							</tr>
+						</thead>
+						<tbody>
 
-								<table style="width: 100%;" id = "delivery_fees_table">
-									<thead>
-										<tr style="width: 40%; text-align: center;">
-											<td>
-												Delivery No.
-											</td>
-											<td style="width: 60%; text-align: center;">
-												Amount
-											</td>
-										</tr>
-									</thead>
-									<tbody>
-										
-									</tbody>
-								</table>
-								<tr id="desc_rev_row">
-									<td colspan="4">
-										<div class="form-group">
-											<label for="rev_description">Description:</label>
-											<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
-										</div>
-									</td>
-								</tr>
-							</form>
-						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
+				<div class = "col-md-12">
+					<label for="rev_description">Description:</label>
+					<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+				</div>
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
 				<a class="btn but finalize-rev">Save</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="expModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Payable</h4>
+			</div>
+			<div class = "modal-body">
+				<div class = "col-md-12">
+					<div class="form-horizontal">
+						<div class = "col-md-6">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Name *</label>
+								<div class = "col-md-9">
+									<select id = "exp_bill_id" name="exp_bill_id" class = "form-control">
+										<option value = "0">Select Charges</option>
+										@forelse($bill_exps as $exp)
+										<option value = "{{ $exp->id }}">{{ $exp->name }}</option>
+
+										@empty
+
+										@endforelse
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class = "col-md-6">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Amount *</label>
+								<div class = "col-md-9">
+									<input type = "text" name = "exp_amount" id="exp_amount" class = "form-control" style="text-align: right">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "col-md-12 collapse">
+					<table style="width: 100%;" id = "delivery_fees_table">
+						<thead>
+							<tr style="width: 40%; text-align: center;">
+								<td>
+									Delivery No.
+								</td>
+								<td style="width: 60%; text-align: center;">
+									Amount
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
+				<div class = "col-md-12">
+					<label for="rev_description">Description:</label>
+					<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
+				</div>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but finalize-exp">Save</a>
 			</div>
 		</div>
 	</div>
@@ -447,7 +506,43 @@
 
 		var selected_delivery = null;
 
+		$(document).on('click', '.new_expense ', function(e){
+			e.preventDefault();
+			$('#expModal').modal('show');
+		})
+		$(document).on('click', '.finalize-exp', function(e){
+			$.ajax({
+				method: 'POST',
+				url: "{{ route('post_trucking_expense') }}",
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'charge_id' : $('#exp_bill_id').val(),
+					'description' : $('#exp_description').val(),
+					'amount' : $('#exp_amount').val(),
+					'bi_head_id' : {{ $service_order->bi_head_id_exp }},
+				},
+				success: function (data){
+					location.reload();
+				}
+			})
+		})
 
+		$(document).on('click', '.finalize-rev', function(e){
+			$.ajax({
+				method: 'POST',
+				url: "{{ route('post_trucking_payables') }}",
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'charge_id' : $('#rev_bill_id').val(),
+					'description' : $('#rev_description').val(),
+					'amount' : $('#rev_amount').val(),
+					'bi_head_id' : {{ $service_order->bi_head_id_rev }},
+				},
+				success: function (data){
+					location.reload();
+				}
+			})
+		})
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
@@ -548,7 +643,7 @@
 						'tr_so_id' : {{ $service_order->id }},
 					},
 					success: function(data){
-						console.log(data);
+						window.location.reload();
 					}
 				})
 				break;

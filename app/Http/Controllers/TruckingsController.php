@@ -221,6 +221,12 @@ class TruckingsController extends Controller
             ->select('id','name', 'amount')
             ->where('bill_type', '=', 'R')
             ->get();
+
+            $bill_exps = DB::table('charges')
+            ->select('id','name', 'amount')
+            ->where('bill_type', '=', 'E')
+            ->get();
+
             $so_id = $request->trucking_id;
             $service_order = TruckingServiceOrder::findOrFail($so_id);
             $service_order_details = DB::table('trucking_service_orders')
@@ -269,7 +275,7 @@ class TruckingsController extends Controller
 
 
 
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps']));   
         }
         catch(ModelNotFoundException $e)
         {

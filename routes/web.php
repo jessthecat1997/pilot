@@ -229,7 +229,8 @@ Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
 Route::get('/deliveryFees/{id?}', 'BillingDetailsController@getDeliveryFees')->name('getDeliveryFees');
-
+Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
+Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
 //Maintenance data
 Route::get('/admin/billData', 'DatatablesController@bill_datatable')->name('bill.data');
 
