@@ -25,8 +25,18 @@ Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('sto
 
 Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
-
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
+
+//Employees
+
+Route::resource('/employees', 'EmployeesController');
+Route::resource('/employees/newemployee', 'EmployeesController');
+Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
+Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
+    return $from_new;
+});
+
+Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
 
 //Consignee
 Route::resource('consignee', 'ConsigneesController');
@@ -37,8 +47,6 @@ Route::get('admin/getCities/{province_id?}', 'ConsigneesController@get_cities')-
 Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
 
 
-
-
 //Maintenance Routes
 
 Route::resource('/admin/vehicletype', 'VehicleTypesController');
@@ -47,6 +55,10 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
+<<<<<<< Updated upstream
+=======
+//Route::resource('/admin/area', 'AreasController');
+>>>>>>> Stashed changes
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');

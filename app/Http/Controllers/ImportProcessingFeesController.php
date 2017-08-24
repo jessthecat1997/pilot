@@ -14,24 +14,29 @@ class ImportProcessingFeesController extends Controller
 		return view('admin/maintenance.ipf_fee_index');
 	}
 
-	public function store(StoreIPFFee $request)
+	public function store(Request $request)
 	{
-		$new_ipf = new ImportProcessingFeeHeader;
-		$new_ipf->dateEffective = date_create($request->dateEffective);
-		$new_ipf->save();
+		$ipf_header = new ImportProcessingFeeHeader;
+		$ipf_header->dateEffective = $request->dateEffective;
+		$ipf_header->save();
 
+		$_minimum = json_decode(stripslashes($request->minimum), true);
+		$_maximum = json_decode(stripslashes($request->maximum), true);
+		$_amount = json_decode(stripslashes($request->amount), true);
 
-		for($i = 0; $i < count($request->minimum); $i++){
+		$tblRowLength = $request->tblLength;
+
+		for($x = 0; $x < $tblRowLength; $x++)
+		{
 			$ipf_detail = new ImportProcessingFeeDetail;
-			$ipf_detail->minimum = $request->minimum[$i];
-			$ipf_detail->maximum = $request->maximum[$i];
-			$ipf_detail->amount = $request->amount[$i];
-			
-			$ipf_detail->ipf_headers_id = $new_ipf->id;
+			$ipf_detail->ipf_headers_id = $ipf_header->id;
+			$ipf_detail->minimum = (string)$_minimum[$x];
+			$ipf_detail->maximum = (string)$_maximum[$x];
+			$ipf_detail->amount = (string)$_amount[$x];
 			$ipf_detail->save();
 		}
 
-		return $new_ipf->id;
+
 	}
 
 	public function update(StoreIPFFee $request, $id)

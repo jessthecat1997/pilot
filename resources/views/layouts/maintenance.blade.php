@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
-    <link href= "/js/select2/select2.css" rel = "stylesheet">  
+    <link href= "/js/select2/select2.css" rel = "stylesheet">
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
@@ -94,6 +94,9 @@
                 </li>
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
+                      <li>
+                          <a href = "{{ route('employees.index') }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
+                      </li>
                         <li>
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
@@ -231,9 +234,9 @@
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>  
-<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
-<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 
 
 
@@ -252,45 +255,45 @@
 
 
 
-    $('.money_er').inputmask("numeric", { 
-        radixPoint: ".", 
-        groupSeparator: ",", 
-        digits: 7, 
-        autoGroup: true, 
-        rightAlign: true, 
+    $('.money_er').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 7,
+        autoGroup: true,
+        rightAlign: true,
 
 
-    }); 
-
-
-    $('.money').inputmask("numeric", { 
-        radixPoint: ".", 
-        groupSeparator: ",", 
-        digits: 2, 
-        autoGroup: true, 
-        rightAlign: true, 
-        removeMaskOnSubmit:true, 
     });
 
 
-    function formatNumber(n) { 
-        var currency = "Php "; 
-        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+    $('.money').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+    });
+
+
+    function formatNumber(n) {
+        var currency = "Php ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
 
-    function formatNumber_s(n) { 
-        var currency = "$ "; 
-        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-    } 
+    function formatNumber_s(n) {
+        var currency = "$ ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
 
-    function format_container_maxweight(n) { 
-        var unit = " kgs"; 
-        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
-    } 
-    function format_container_size(n) { 
-        var unit = "-footer"; 
-        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit; 
-    } 
+    function format_container_maxweight(n) {
+        var unit = " kgs";
+        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
+    }
+    function format_container_size(n) {
+        var unit = "-footer";
+        return n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
+    }
 
 </script>
 @stack('scripts')

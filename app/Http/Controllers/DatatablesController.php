@@ -169,7 +169,7 @@ class DatatablesController extends Controller
 	}
 
 	public function consignee_datatable_main(){
-		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'address','city', 'st_prov', 'zip', 'b_address', 'b_city', 
+		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'address','city', 'st_prov', 'zip', 'b_address', 'b_city',
 			'b_st_prov', 'b_zip', 'email', 'contactNumber','created_at', 'TIN', 'businessStyle']);
 
 		return Datatables::of($consignees)
@@ -454,9 +454,9 @@ class DatatablesController extends Controller
 			}else{
 				return 'Draft';
 			}
-			
-			
-			
+
+
+
 		})
 		->addColumn('action', function ($contract_header){
 			if ($contract_header->isFinalize == 1){
@@ -587,15 +587,15 @@ class DatatablesController extends Controller
 			if($delivery->status == 'P'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
-				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
-				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
+				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" .
 				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
 			if($delivery->status == 'F' || $delivery->status == 'C'){
 				return
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
-				<button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button> 
-				<button disabled class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" . 
+				<button disabled class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+				<button disabled class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" .
 				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
 		})
@@ -610,7 +610,7 @@ class DatatablesController extends Controller
 				case 'C':
 				return 'Cancelled';
 				break;
-				
+
 				default:
 				return 'Unknown';
 				break;
@@ -634,7 +634,7 @@ class DatatablesController extends Controller
 			return
 			'<input type = "hidden" class = "location_id"  value = "' . $location->location_id . '"/>'.
 			'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
-			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' . 
+			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' .
 			'<button value = "'. $location->location_id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $location->location_id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 
@@ -659,7 +659,7 @@ class DatatablesController extends Controller
 		})
 		->editColumn('id', '{{ $id }}')
 
-		
+
 		->make(true);
 	}
 
@@ -748,7 +748,7 @@ class DatatablesController extends Controller
 			break;
 
 		}
-		
+
 	}
 
 	public function get_pending_deliveries(Request $request){
@@ -841,7 +841,7 @@ class DatatablesController extends Controller
 
 			break;
 		}
-		
+
 	}
 
 	public function get_unreturned_containers(Request $request){
@@ -861,7 +861,7 @@ class DatatablesController extends Controller
 	public function get_query_bills(Request $request)
 	{
 		switch ($request->status) {
-			case 'N' : 
+			case 'N' :
 			$bills = DB::table('billing_invoice_headers')
 			->join('consignee_service_order_headers as A', 'so_head_id', '=', 'A.id')
 			->join('consignees as B', 'A.consignees_id', '=', 'B.id')
@@ -1584,7 +1584,7 @@ class DatatablesController extends Controller
 		if ($request->filter == 0){
 
 			$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount, h.created_at, h.deleted_at FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
-			
+
 
 			return Datatables::of($ipfs)
 			->addColumn('action', function ($ipfs){
@@ -2020,7 +2020,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			
+
 			$lps = DB::table('location_provinces')
 			->select('id', 'name', 'created_at', 'deleted_at')
 			->where('deleted_at','=',null)
@@ -2112,7 +2112,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			
+
 			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id',c.deleted_at as 'deleted_at'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
 
 			return Datatables::of($lcs)
@@ -2202,11 +2202,11 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			
+
 			$locations = DB::table('locations')
 			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
 			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
-			->select('locations.id as id','locations.deleted_at AS deleted_at', 
+			->select('locations.id as id','locations.deleted_at AS deleted_at',
 				'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
 			->where('locations.deleted_at', '=', null)
 			->orderBy('location_name')
@@ -2241,7 +2241,7 @@ class DatatablesController extends Controller
 			$locations = DB::table('locations')
 			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
 			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
-			->select('locations.id as id','locations.deleted_at AS deleted_at', 
+			->select('locations.id as id','locations.deleted_at AS deleted_at',
 				'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
 			->where('locations.deleted_at', '!=', null)
 			->orderBy('location_name')
@@ -2304,7 +2304,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			
+
 			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount, s.deleted_at as 'deleted_at' from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
 
 
@@ -2393,7 +2393,7 @@ class DatatablesController extends Controller
 			->make(true);
 
 		}else if ($request->filter == 1){
-			
+
 			$employees = DB::table('employees')
 			->select('id', 'firstName', 'middleName', 'lastName','created_at','deleted_at')
 			->where('deleted_at', '=', null)
@@ -2666,4 +2666,17 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+		public function employee_datatable(){
+			$employees = DB::select("SELECT e.id, e.firstName, e.middleName, e.lastName, GROUP_CONCAT(t.name ORDER BY t.name) AS roles FROM employees e INNER JOIN employee_roles r ON e.id = r.employee_id LEFT JOIN employee_types t ON t.id = r.employee_type_id GROUP BY e.id");
+			return Datatables::of($employees)
+			->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+			->removeColumn('middleName')
+			->removeColumn('lastName')
+			->addColumn('action', function ($employee){
+				return
+				'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
 }
