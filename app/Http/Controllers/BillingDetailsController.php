@@ -61,6 +61,14 @@ class BillingDetailsController extends Controller
 
 		return $charge;
 	}
+
+	public function getBillingDetails(Request $request){
+		$billing_details = DB::table('billing_invoice_details')
+		->where('bi_head_id', '=', $request->id)
+		->get();
+		return Datatables::of($billing_details)
+		->make(true);
+	}
 	public function show_billing(Request $request, $id)
 	{
 		$bill_revs = DB::table('charges')

@@ -159,8 +159,13 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
-				<h4>List of Revenues</h4>
-				@if($service_order->bill_head_id_rev != null)
+				@if($service_order->bi_head_id_rev != null)
+					<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				@else
+					<h4>List of Revenues</h4>
+				@endif
+				<br />
+				@if($service_order->bi_head_id_rev != null)
 				<table class="table table-responsive" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
@@ -208,8 +213,13 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
-				<h4>List of Expenses</h4>
-				@if($service_order->bill_head_id_exp != null)
+				@if($service_order->bi_head_id_exp != null)
+					<h4>List of Expenses <button class = "btn but new_revenue pull-right">New Expense</button></h4>
+				@else
+					<h4>List of Expenses</h4>
+				@endif
+				<br />
+				@if($service_order->bi_head_id_exp != null)
 				<table class="table table-responsive" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
@@ -364,6 +374,10 @@
 
 		var selected_delivery = null;
 
+		$(document).on('click', '.new_revenue', function(e){
+			e.preventDefault();
+		})
+
 		$(document).on('click', '.new_revenue_bill', function(e){
 			e.preventDefault();
 			$('#confirm-create').modal('show');
@@ -375,13 +389,13 @@
 			create_bill = 0;
 		})
 
-		@if($service_order->bill_head_id_rev != null)
+		@if($service_order->bi_head_id_rev != null)
 		var delivery_table = $('#revenues_table').DataTable({
 			processing: false,
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("revenue.data") }}/' + $service_order->bill_head_id_rev,
+			ajax: '{{ route("getBillingDetails") }}/' + {{  $service_order->bi_head_id_rev }},
 			columns: [
 
 			{ data: 'name' },
@@ -392,13 +406,13 @@
 		});
 		@endif
 
-		@if($service_order->bill_head_id_rev != null)
-		var delivery_table = $('#revenues_table').DataTable({
+		@if($service_order->bi_head_id_exp != null)
+		var delivery_table = $('#expense_table').DataTable({
 			processing: false,
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("revenue.data") }}/' + $service_order->bill_head_id_rev,
+			ajax: '{{ route("getBillingDetails") }}/' + {{ $service_order->bi_head_id_exp }},
 			columns: [
 
 			{ data: 'name' },

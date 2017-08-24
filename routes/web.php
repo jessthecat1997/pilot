@@ -217,6 +217,7 @@ Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
+Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
 
 
 //Maintenance data
