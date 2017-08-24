@@ -849,13 +849,68 @@ class DatatablesController extends Controller
 		switch ($request->status) {
 			case 'N' : 
 			$bills = DB::table('billing_invoice_headers')
-			->select('id', DB::raw('CONCAT(firstName , " ", lastName) as name'))
-			->join
-			->whereRaw('NOW() > due_date')
+			->join('consignee_service_order_headers as A', 'so_head_id', '=', 'A.id')
+			->join('consignees as B', 'A.consignees_id', '=', 'B.id')
+			->select('billing_invoice_headers.id', DB::raw('CONCAT(firstName , " ", lastName) as name'), 'due_date', 'status')
+			->whereRaw('NOW() <= due_date')
 			->get();
+			return Datatables::of($bills)
+			->addColumn('action', function ($bill){
+				return
+				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';				
+			})
+			->editColumn('due_date', function($bill){
+				return Carbon::parse($bill->due_date)->toFormattedDateString();
+			})
+			->editColumn('status', function($bill){
+				switch ($bill->status) {
+					case 'U':
+					return 'Unpaid';
+					break;
+					case 'P':
+					return 'Paid';
+					break;
+
+					default:
+					return 'Unknown';
+					break;
+				}
+			})
+			->make(true);
 			break;
 
-			return $bills;
+			case 'O' : 
+			$bills = DB::table('billing_invoice_headers')
+			->join('consignee_service_order_headers as A', 'so_head_id', '=', 'A.id')
+			->join('consignees as B', 'A.consignees_id', '=', 'B.id')
+			->select('billing_invoice_headers.id', DB::raw('CONCAT(firstName , " ", lastName) as name'), 'due_date', 'status')
+			->whereRaw('NOW() > due_date')
+			->get();
+			return Datatables::of($bills)
+			->addColumn('action', function ($bill){
+				return
+				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';				
+			})
+			->editColumn('due_date', function($bill){
+				return Carbon::parse($bill->due_date)->toFormattedDateString();
+			})
+			->editColumn('status', function($bill){
+				switch ($bill->status) {
+					case 'U':
+					return 'Unpaid';
+					break;
+					case 'P':
+					return 'Paid';
+					break;
+
+					default:
+					return 'Unknown';
+					break;
+				}
+			})
+			->make(true);
+			break;
+
 		}
 	}
 

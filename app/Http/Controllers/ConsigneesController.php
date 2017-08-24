@@ -9,7 +9,9 @@ use DB;
 
 class ConsigneesController extends Controller
 {
-
+	public function dashboard(){
+		return view('dashboard');
+	}
 	public function index(){
 		$provinces = DB::table('location_provinces')
 		->select('name', 'id')
