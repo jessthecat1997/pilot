@@ -62,6 +62,8 @@ class TruckingsController extends Controller
 
         $new_trucking  = new TruckingServiceOrder;
         $new_trucking->status = "P";
+        $new_trucking->bi_head_id_rev = null;
+        $new_trucking->bi_head_id_exp = null;
         $new_trucking->so_details_id = $new_so_detail->id;
         $new_trucking->save();
 

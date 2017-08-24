@@ -59,6 +59,8 @@ class DutiesAndTaxesController extends Controller
     $new_brokerage_so->Weight = $request->weight;
     $new_brokerage_so->arrivalArea = $request->arrivalArea;
     $new_brokerage_so->freightType = $request->freightType;
+    $new_brokerage_so->bi_head_id_rev = null;
+    $new_brokerage_so->bi_head_id_exp = null;
     $new_brokerage_so->save();
 
     $new_dutiesandtaxes = new DutiesAndTaxesHeader;
