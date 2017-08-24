@@ -7,34 +7,8 @@
 <br/>
 <hr>
 <div class="row col-md-5">
-	<div class="col-sm-12">
-		<div class="panel-heading" id="heading">Consignee Details</div>
-		<div class="panel-body">
-			<form class="form-inline">
-				{{ csrf_field() }}
-				<div class="form-group">
-					<label for="so_head_id">ID: </label>
-					<input type="text" class="det" id="so_head_id" value="{{ $bills[0]->id }}" disabled>
-				</div>
-				<div class="form-group">
-					<label for="company">Company: </label>
-					<input type="text" class="det" id="company" value="{{ $bills[0]->companyName }}" disabled>
-				</div>
-				<div class="form-group">
-					<label for="address">Address: </label>
-					<input type="text" class="det" id="address" value="{{ $bills[0]->address }}" disabled>
-				</div>
-				<div class="form-group">
-					<label for="sotype">Service Order: </label>
-					<input type="text" class="det" id="sotype" value="{{ $bills[0]->name }}" disabled>
-				</div>
-				<div class="form-group">
-					<label for="sotype">Status: </label>
-					<input type="text" class="det" id="sotype" value="{{ $bills[0]->status }}" disabled>
-				</div>
-			</form>
-		</div>
-	</div>
+	<label>Invoice No.:</label>
+	<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
 </div>
 <div class="row col-md-7">
 	<div class="panel-default panel">
@@ -46,7 +20,7 @@
 					<thead>
 						<tr>
 							<td colspan="2">
-								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Payable</button>
+								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">Add Revenue</button>
 							</td>
 						</tr>
 						<tr>
@@ -113,6 +87,11 @@
 				<table class="table" id="expense_table">
 					<thead>
 						<tr>
+							<td colspan="2">
+								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#expModal">Add Expense</button>
+							</td>
+						</tr>
+						<tr>
 							<td style="text-align: center;">
 								NAME
 							</td>
@@ -170,29 +149,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Payable</h4>
+				<h4 class="modal-title">Add Revenue</h4>
 			</div>
 			<div class="modal-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="vat">Vat Rate:</label>
-							<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="date_billed">Date Billed:</label>
-							<input type="date" class="form-control" id="date_billed">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<label for="due_date">Due Date:</label>
-							<input type="date" class="form-control" id="due_date">
-						</div>
-					</div>
-				</div>
 				<table class = "table-responsive table" id = "rev_table">
 					<thead>
 						<tr>
@@ -245,7 +204,66 @@
 			</div>
 		</div>
 	</div>
-	<br>
+	<div id="expModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Revenue</h4>
+				</div>
+				<div class="modal-body">
+					<table class = "table-responsive table" id = "rev_table">
+						<thead>
+							<tr>
+								<td>
+									Name *
+								</td>
+								<td>
+									Amount *
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id = "revenue-row" name="revenue-row">
+								<form class="form-horizontal">
+									{{ csrf_field() }}
+									<td>
+										<select id = "exp_bill_id" name="exp_bill_id" class="form-control">
+											<option value = "0">Select Charges</option>
+											@forelse($bill_exps as $exp)
+											<option value = "{{ $exp->id }}">{{ $exp->name }}</option>
+
+											@empty
+
+											@endforelse
+										</select>
+									</td>
+									<td>
+										<input type = "text" name = "exp_amount" id="exp_amount" class = "form-control" style="text-align: right">
+									</td>
+					<!-- 				<td>
+										<input type = "text" name = "rev_tax" class = "form-control" style="text-align: right">
+									</td> -->
+									<tr id="desc_rev_row">
+										<td colspan="4">
+											<div class="form-group">
+												<label for="exp_description">Description:</label>
+												<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
+											</div>
+										</td>
+									</tr>
+								</form>
+							</tr>
+						</tbody>
+					</table>
+					<strong>Note:</strong> All fields with * are required.
+				</div>
+				<div class="modal-footer">
+					<a class="btn but finalize-exp">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	@endsection
 	@push('styles')
 	<style>
@@ -261,7 +279,6 @@
 	<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 	<script type="text/javascript">
 		$('#collapse1').addClass('in');
-		var so_head_id = document.getElementById ( "so_head_id" ).innerText
 		var rev_bill_id = [];
 		var rev_description_value = [];
 		var	rev_amount_value = [];
@@ -282,6 +299,9 @@
 
 
 		$(document).ready(function(){
+			var bi_id = document.getElementById("so_head_id").value;
+			console.log(bi_id);
+
 			$('#rev_bill_id').select2(); 
 			$(document).on('change', '#rev_bill_id', function(e){
 				revID = $('#rev_bill_id').val();
@@ -348,26 +368,47 @@
 
 		$(document).on('click', '.finalize-rev', function(e){
 			if(validateRevenueRows() === true){
+				var bi_id = document.getElementById("so_head_id").value;
 				console.log(rev_bill_id);
 				console.log(rev_amount_value);
 				console.log(rev_description_value);
 				console.log(rev_tax_value);
+				console.log({{ $so_head_id }});
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("billing.store") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
-						'so_head_id' : {{ $bills[0]->id }},
-						'vatRate' : $('#vat').val(),
-						'status' : 'U',
-						'date_billed' : $('#date_billed').val(),
-						'override_date' : $('#override_date').val(),
-						'due_date' : $('#due_date').val(),
 						'charge_id' : rev_bill_id,
 						'description' : rev_description_value,
 						'amount' : rev_amount_value,
 						'tax' : 0,
-						'bi_head_id' : {{ $bills[0]->id }},
+						'bi_head_id' : bi_id,
+					},
+					success: function (data){
+						location.reload();
+					}
+				})
+			}
+		})
+		$(document).on('click', '.finalize-exp', function(e){
+			if(validateExpenseRows() === true){
+				var bi_id = document.getElementById("so_head_id").value;
+				console.log(exp_bill_id);
+				console.log(exp_amount_value);
+				console.log(exp_description_value);
+				console.log(exp_tax_value);
+				console.log({{ $so_head_id }});
+				$.ajax({
+					method: 'POST',
+					url: '{{ route("billing.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'charge_id' : exp_bill_id,
+						'description' : exp_description_value,
+						'amount' : exp_amount_value,
+						'tax' : 0,
+						'bi_head_id' : bi_id,
 					},
 					success: function (data){
 						location.reload();
@@ -474,16 +515,16 @@
 			{
 				exp_amount_value.push(exp_amount[i].value);
 			}
-			if(exp_tax[i].value === "")
-			{
-				exp_tax[i].style.color = 'red';
-				error += "Tax Required.";
-			}
+			// if(exp_tax[i].value === "")
+			// {
+			// 	exp_tax[i].style.color = 'red';
+			// 	error += "Tax Required.";
+			// }
 
-			else
-			{
-				exp_tax_value.push(exp_tax[i].value);
-			}
+			// else
+			// {
+			// 	exp_tax_value.push(exp_tax[i].value);
+			// }
 
 		}
 
