@@ -196,6 +196,7 @@ Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
 Route::get('/payment/{payment_id}/show_pdf', 'PaymentsController@payment_pdf');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
+Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 
 //Billing
 Route::resource('/billing', 'BillingDetailsController');

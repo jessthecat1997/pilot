@@ -8,94 +8,140 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		<div class = "panel-default panel">
+		<div class="col-sm-12">
 			<div class="panel-heading" id="heading">Consignee Details</div>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td class="active"><strong>No.: </strong></td>
-						@forelse($bills as $bill)
-						<td class = "success" id="so_head_id"><strong>{{ $bill->id }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Consignee: </strong></td>
-						@forelse($bills as $bill)
-						<td class = "success" id="consignee"><strong>{{ $bill->companyName }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Address: </strong></td>
-						@forelse($bills as $bill)
-						<td class="success" id="address"><strong>{{ $bill->address }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Service Order: </strong></td>
-						@forelse($bills as $bill)
-						<td class="success" id="sotype"><strong>{{ $bill->name }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Bill</button>
-	<br/>
-	<br/>
-	<br/>
-	<div class="row collapse in" id="bill_collapse">
-		<div class="panel-default col-sm-6">
-			<div class="panel-heading" id="heading">List of Revenues</div>
 			<div class="panel-body">
-				<table class = "table-responsive table" id = "revTable">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Description
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-		<div class="panel-default col-sm-6">
-			<div class="panel-heading" id="heading">List of Expenses</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "expTable">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Description
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-				</table>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="consignee">ID:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="so_head_id">{{ $bills[0]->id }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="consignee">Company:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="consignee">{{ $bills[0]->companyName }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="address">Address:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="address">{{ $bills[0]->address }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="sotype">Service Order:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="sotype">{{ $bills[0]->name }}</label>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Payable</button>
 			</div>
 		</div>
 	</div>
+	<br/>
+	<div class="row">
+		<div class="panel-default panel">
+			<div class="panel-heading" id="heading">List of Payables</div>
+			<div class = "panel-body">
+				<form class="form-inline">
+					{{ csrf_field() }}
+					<table class="table">
+						<thead>
+							<tr>
+								<td>
+									NAME
+								</td>
+								<td>
+									AMOUNT
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($billings as $bill)
+							<tr>
+								<td>{{ $bill->name }}</td>
+								<td>Php&nbsp;{{ $bill->amount }}</td>
+							</tr>
+							@empty
+							<tr>
+								<td colspan="2">No records available.</td>
+							</tr>
+							@endforelse
+							<tr>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							@forelse($vatrate as $vr)
+							<tr>
+								<td style="text-align: right;"><strong>VAT</strong></td>
+								<td>{{ $vr->rates }}%   {{ $vr->Total }}</td>
+							</tr>
+							@empty
+							<tr>
+								<td colspan="2">No records available.</td>
+							</tr>
+							@endforelse
+						</tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<form class="form-inline">
+			{{ csrf_field() }}
+			<div class="form-group pull-right">
+				<label for="bal"><h5>VAT: &nbsp;</h5></label>
+				@forelse($vatrate as $vr)
+				&nbsp;&nbsp;<input type="text" class="vat" value="{{ $vr->rates }}" disabled>
+				@empty
+				@endforelse
+			</div>
+		</form>
+	</div>
+	<div class="row">
+		<form class="form-inline">
+			{{ csrf_field() }}
+			<div class="form-group pull-right">
+				<label for="bal"><h3>Total: &nbsp;</h3></label>
+				@forelse($total as $t)
+				<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt" value="{{ $t->Total }}" disabled>
+				@empty
+				@endforelse
+			</div>
+		</form>
+	</div>
+	<hr>
 	<div id="revModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">New Revenue</h4>
+					<h4 class="modal-title">New Payable</h4>
 				</div>
 				<div class="modal-body">
 					<div class="col-sm-12">
@@ -121,19 +167,11 @@
 					<table class = "table-responsive table" id = "rev_table">
 						<thead>
 							<tr>
-								<td colspan="5">
-									<button class = "btn but btn-md new-rev-row pull-right">Add Bill</button>
-								</td>
-							</tr>
-							<tr>
 								<td>
 									Name *
 								</td>
 								<td>
 									Amount *
-								</td>
-								<td>
-									Action
 								</td>
 							</tr>
 						</thead>
@@ -158,9 +196,6 @@
 					<!-- 				<td>
 										<input type = "text" name = "rev_tax" class = "form-control" style="text-align: right">
 									</td> -->
-									<td>
-										<button class = "btn btn-danger btn-md delete-billing-row">Remove</button>
-									</td>
 									<tr id="desc_rev_row">
 										<td colspan="4">
 											<div class="form-group">

@@ -8,46 +8,47 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		<div class = "panel-default panel">
+		<div class="col-sm-12">
 			<div class="panel-heading" id="heading">Consignee Details</div>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td class="active"><strong>Consignee: </strong></td>
-						
-						<td class = "success" id="consignee"><strong>{{ $bills[0]->companyName }}</strong></td>
-						<td class="success">
-							
-						</td>
-					</tr>
-					<tr>
-						<td class="active"><strong>Address: </strong></td>
-						<td class="success" id="address"><strong>{{ $bills[0]->address }}</strong></td>
-						<td class="success">
-							
-						</td>
-					</tr>
-					<tr>
-						<td class="active"><strong>Service Order: </strong></td>
-
-						<td class="success" id="sotype"><strong>{{ $bills[0]->name }}</strong></td>
-						<td class="success">
-							
-						</td>
-					</tr>
-					<tr>
-						<td>
-
-						</td>
-						<td>
-							
-						</td>
-						<td>
-							<a href="/billing/{{ $bills[0]->id }}/create" class="btn but col-sm-6 pull-right">Create Bill</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<div class="panel-body">
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="consignee">Company:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="consignee">{{ $bills[0]->companyName }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="address">Address:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="address">{{ $bills[0]->address }}</label>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="sotype">Service Order:</label>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label id="sotype">{{ $bills[0]->name }}</label>
+						</div>
+					</div>
+				</div>
+				<a href="/billing/{{ $bills[0]->id }}/create" class="btn but col-sm-4 pull-right">Create Bill</a>
+			</div>
 		</div>
 	</div>
 	<hr>
@@ -60,13 +61,10 @@
 					<thead>
 						<tr>
 							<td>
-								ID
+								No.
 							</td>
 							<td>
 								Date Billed
-							</td>
-							<td>
-								Status
 							</td>
 							<td>
 								Amount
@@ -112,14 +110,11 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'date_billed' },
-			{ data: 'status',
-			"render" : function( data, type, full ) {
-				return formatWithStatus(data); }},
-				{ data: 'Total' },
-				{ data: 'due_date' },
-				{ data: 'action', orderable: false, searchable: false }
-				]
-			})
+			{ data: 'Total' },
+			{ data: 'due_date' },
+			{ data: 'action', orderable: false, searchable: false }
+			]
+		})
 		function formatWithStatus(n) { 
 
 			if (n == 'P'){

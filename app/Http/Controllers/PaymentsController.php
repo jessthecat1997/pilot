@@ -26,7 +26,7 @@ class PaymentsController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', 'address')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'))
 		->where('consignee_service_order_headers.id', '=', $id)
 		->get();
 
@@ -34,16 +34,17 @@ class PaymentsController extends Controller
 
 		$paid = DB::table('payments')
 		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('amount'))
+		->select(DB::raw('CONCAT(SUM(amount)) as total'))
 		->orderBy('payments.id', 'desc')
 		->where('payments.bi_head_id', '=', $id)
 		->get();
 		
 		$total = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount - (amount * vatRate/100)),2)) as Total'))
-		->where('billing_invoice_details.bi_head_id', '=', $id)
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'))
+		->where('billing_invoice_headers.so_head_id', '=', $id)
 		->get();
+
 		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total']));
 
 	}
@@ -55,6 +56,21 @@ class PaymentsController extends Controller
 		->orderBy('id', 'desc')
 		->get();
 		return Datatables::of($history)
+		->make(true);
+	}
+	public function bills_table(Request $request, $id)
+	{
+		$billings = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select('charges.name', 'billing_invoice_details.amount')
+		->where('billing_invoice_headers.so_head_id', '=', $id)
+		->get();
+		return Datatables::of($billings)
+		->addColumn('action', function ($b) {
+			return
+			'<button value = "'. $b->amount .'" style="margin-right:10px; width:100;" class = "btn but make_payment" data-toggle="modal" data-target="#billModal">Make Payment</button>';
+		})
 		->make(true);
 	}
 	public function store(StorePayment $request)

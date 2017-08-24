@@ -61,10 +61,7 @@
 					</td>
 					<td style="border:1px solid transparent;  text-align: left;" width="30%">
 						<strong>
-							@forelse($bills as $bill)
-							{{ $bill->companyName }}
-							@empty
-							@endforelse
+							{{ $bills[0]->companyName }}
 						</strong>
 					</td>
 					<td style="border:1px solid transparent;" width="20%">
@@ -72,10 +69,7 @@
 					</td>
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							@forelse($bills as $bill)
-							{{ Carbon\Carbon::parse($bill->created_at)->toFormattedDateString() }}
-							@empty
-							@endforelse
+							{{ Carbon\Carbon::parse($bills[0]->created_at)->toFormattedDateString() }}
 						</strong>
 					</td>
 				</tr>
@@ -85,10 +79,7 @@
 					</td>
 					<td style="border:1px solid transparent;  text-align: left;" width="30%">
 						<strong>
-							@forelse($bills as $bill)
-							{{ $bill->address }}
-							@empty
-							@endforelse
+							{{ $bills[0]->address }}
 						</strong>
 					</td>
 					<td style="border:1px solid transparent;" width="20%">
@@ -106,10 +97,7 @@
 					</td>
 					<td style="border:1px solid transparent;  text-align: left;" width="30%">
 						<strong>
-							@forelse($bills as $bill)
-							{{ $bill->businessStyle }}
-							@empty
-							@endforelse
+							{{ $bills[0]->businessStyle }}
 						</strong>
 					</td>
 					<td style="border:1px solid transparent;" width="20%">
@@ -117,10 +105,7 @@
 					</td>
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							@forelse($bills as $bill)
-							{{ $bill->TIN }}
-							@empty
-							@endforelse
+							{{ $bills[0]->TIN }}
 						</strong>
 					</td>
 				</tr>
@@ -149,6 +134,22 @@
 					</tr>
 					@empty
 					@endforelse
+					<tr>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: right">
+							<strong>VAT</strong>
+						</td>
+						<td style="text-align: right;">
+							{{ $vat[0]->rates }}% = {{ $vat[0]->Total }}
+						</td>
+					</tr>
 					<tr>
 						<td style="text-align: right">
 							<strong>TOTAL</strong>
