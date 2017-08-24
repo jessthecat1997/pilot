@@ -8,80 +8,10 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		<div class="col-sm-12">
-			<div class="panel-heading" id="heading">Consignee Details</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="consignee">Company:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="consignee">{{ $bills[0]->companyName }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="address">Address:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="address">{{ $bills[0]->address }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="sotype">Service Order:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="sotype">{{ $bills[0]->name }}</label>
-						</div>
-					</div>
-				</div>
-				<a href="/billing/{{ $bills[0]->id }}/create" class="btn but col-sm-4 pull-right">Create Bill</a>
-			</div>
-		</div>
+		
 	</div>
 	<hr>
-	<div class="row">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Billing History</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "bill_hist_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Date Billed
-							</td>
-							<td>
-								Amount
-							</td>
-							<td>
-								Due Date
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
-	<hr>	
+	
 </div>
 
 @endsection
@@ -98,32 +28,31 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	console.log('{{ $so_head_id }}')
-	console.log('{{ route('invoice.data',$so_head_id) }}/{{ $so_head_id }}');
 	var data;
 	$(document).ready(function(){
 		
-		var vtable = $('#bill_hist_table').DataTable({
+		var vtable = $('#brso_head_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: "{{ route('invoice.data',$so_head_id) }}",
+			ajax: '{{ route("brso_head.data") }}',
 			columns: [
 			{ data: 'id' },
-			{ data: 'date_billed' },
-			{ data: 'Total' },
-			{ data: 'due_date' },
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'companyName' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
 		})
-		function formatWithStatus(n) { 
-
-			if (n == 'P'){
-				return "Paid";
-			}else{
-				return "Unpaid";
-			}
-
-		} 
+		var trtable = $('#trso_head_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: '{{ route("trso_head.data") }}',
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false, processing:false }
+			]
+		})
 		
 	})
 </script>
