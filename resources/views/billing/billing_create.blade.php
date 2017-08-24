@@ -222,7 +222,7 @@
 								<td>
 									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
 								</td>
-								
+
 								<tr id="desc_rev_row">
 									<td colspan="4">
 										<div class="form-group">
@@ -411,16 +411,6 @@
 			{
 				rev_amount_value.push(rev_amount[i].value);
 			}
-			// if(rev_tax[i].value === "")
-			// {
-			// 	rev_tax[i].style.color = 'red';
-			// 	error += "Tax Required.";
-			// }
-
-			// else
-			// {
-			// 	rev_tax_value.push(rev_tax[i].value);
-			// }
 
 		}
 

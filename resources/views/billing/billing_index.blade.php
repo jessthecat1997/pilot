@@ -41,57 +41,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="row collapse" id="so_collapse">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Brokerage Service Order</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "brso_head_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Consignee
-							</td>
-							<td>
-								Date
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-		<hr>	
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Trucking Service Order</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "trso_head_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Consignee
-							</td>
-							<td>
-								Date
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
 </div>
 @endsection
 @push('styles')

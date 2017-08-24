@@ -431,6 +431,34 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
+		
+		$(document).on('change', '#rev_bill_id', function(e){
+			revID = $('#rev_bill_id').val();
+			if($('#rev_bill_id').val() != 0){
+				$.ajax({
+					type: 'GET',
+					url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data[0].amount);
+							$('#rev_amount').val(data[0].amount);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else
+			{
+				$('amount').val("");
+			}
+		})
 
 		$(document).on('click', '.new_revenue', function(e){
 			e.preventDefault();
