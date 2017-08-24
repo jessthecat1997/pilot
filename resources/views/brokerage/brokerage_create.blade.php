@@ -127,6 +127,9 @@
 										</div>
 									</div>
 								</div>
+								<div id="new_con" class="tab-pane fade">
+									<br />
+								</div>
 							</div>
 							<div class = "form-group">
 								<label class="col-md-2 control-label">Expected Date Of Arrival</label>
@@ -466,6 +469,13 @@
 								</form>	
 							</div>
 						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" id = "addItem" >Add</button>
+						<input type = "reset" class = "btn btn-danger btn-md" value = "Clear" />
+						<button type="button" class="btn btn-default" onclick="$('#ItemModal').modal('hide');">Close</button>
+							</form>
 					</div>
 				</div>
 			</div>
@@ -544,7 +554,157 @@
 				</form>
 			</div>
 		</div>
-	</div>
+
+
+		<!-- Custom CDS Fee-->
+		<div class="modal fade" id="CdsFeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" onclick="$('#CdsFeeModal').modal('hide');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Select Custom CDS Fee </h4>
+					</div>
+					<div class="modal-body">
+						<table id = "cdsTable" class = "table table-hover table-responsive">
+							<tr  class="info">
+								<td>Fee</td>
+								<td>Date Effective</td>
+								<td>Actions</td>
+							</tr>
+							@php
+								$cdsFee_ctr = 0;
+							@endphp
+							@forelse($cds_fee as $cds_fees)
+							<tr>
+
+								<td>
+									{{ $cds_fees->fee }}
+								</td>
+								<td>
+									{{ date_format(date_create($cds_fees->dateEffective), "Y-m-d")}}
+								</td>
+								<td>
+									@php
+										$cdsFee_ctr++;
+									@endphp
+									<button type="button" class="btn btn-success" onclick = "$('#CdsFeeModal').modal('hide');
+									currentCds_id = <?php echo $cdsFee_ctr; ?>;
+
+									if(currentCds_id == <?php echo $currentCds_id?>)
+									{
+										$('#cdsFee_toggle').bootstrapToggle('on')
+										document.getElementById('CDSFee').value =  '{{ number_format((float)$cds_fees->fee, 3, '.', '') }}';
+
+									}
+									else{
+										document.getElementById('CDSFee').value =  '{{ number_format((float)$cds_fees->fee, 3, '.', '') }}';
+									}"
+									> Select </button>
+								</td>
+							</tr>
+								@empty
+								@endforelse
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="$('#CdsFeeModal').modal('hide'); ">Close</button>
+							</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Custom IPF Fee-->
+		<div class="modal fade" id="IPFModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" onclick="$('#IPFModal').modal('hide');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Select Custom Import Processing Fee </h4>
+					</div>
+					<div class="modal-body">
+						<table id = "cdsTable" class = "table table-hover table-responsive">
+							<tr  class="info">
+								<td>Minimum Dutiable Value</td>
+								<td>Maximum Dutiable Value</td>
+								<td>IPF Amount</td>
+								<td>Date Effective</td>
+								<td>Actions</td>
+							</tr>
+							@php
+								$Ipf_ctr = 0;
+							@endphp
+							@forelse($ipf_fee_header as $ipf_fee_headers)
+							<tr>
+								<td>
+									@forelse($ipf_fee_detail as $ipf_fee_details)
+									@if($ipf_fee_details->ipf_headers_id == $ipf_fee_headers->id)
+									{{
+										$ipf_fee_details->minimum
+									}}
+									@endif
+									</br>
+									@empty
+									@endforelse
+								</td>
+
+								<td>
+									@forelse($ipf_fee_detail as $ipf_fee_details)
+									@if($ipf_fee_details->ipf_headers_id == $ipf_fee_headers->id)
+									{{
+										$ipf_fee_details->maximum
+									}}
+									@endif
+									</br>
+									@empty
+									@endforelse
+								</td>
+
+								<td>
+									@forelse($ipf_fee_detail as $ipf_fee_details)
+									@if($ipf_fee_details->ipf_headers_id == $ipf_fee_headers->id)
+									{{
+										$ipf_fee_details->amount
+									}}
+									@endif
+									</br>
+									@empty
+									@endforelse
+								</td>
+
+								<td>
+									{{ date_format(date_create($cds_fees->dateEffective), "Y-m-d")}}
+								</td>
+								<td>
+									@php
+										$Ipf_ctr++;
+									@endphp
+									<button type="button" class="btn btn-success" onclick = "$('#IPFModal').modal('hide');
+									currentIpf_id = <?php echo $Ipf_ctr; ?>;
+
+									if(currentIpf_id == <?php echo $currentIpf_id?>)
+									{
+										$('#ipfFee_toggle').bootstrapToggle('on')
+									}
+									else{
+
+									}"
+									> Select </button>
+								</td>
+							</tr>
+								@empty
+								@endforelse
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="$('#IPFModal').modal('hide'); ">Close</button>
+							</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+  </div>
 </div>
 
 
