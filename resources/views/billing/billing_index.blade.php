@@ -3,13 +3,13 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="pull-right">
-	<a href="" class="btn but">Create New Bill</a>
+	<a class="btn but" id="btn_newBill">Create New Bill</a>
 </div>
 <br/>
 <br/>
 <br/>
 <div class="container-fluid">
-	<div class="row collapse">
+	<div class="row collapse in" id="history_collapse">
 		<div class="panel-default panel">
 			<div class="panel-heading" id="heading">List of Invoice</div>
 			<div class = "panel-body">
@@ -41,7 +41,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row collapse" id="so_collapse">
 		<div class="panel-default panel">
 			<div class="panel-heading" id="heading">Brokerage Service Order</div>
 			<div class = "panel-body">
@@ -66,9 +66,7 @@
 				</table>
 			</div>
 		</div>
-	</div>
-	<hr>	
-	<div class="row">
+		<hr>	
 		<div class="panel-default panel">
 			<div class="panel-heading" id="heading">Trucking Service Order</div>
 			<div class = "panel-body">
@@ -128,6 +126,7 @@
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})
+
 		function formatWithStatus(n) { 
 
 			if (n == 'P'){
@@ -135,8 +134,35 @@
 			}else{
 				return "Unpaid";
 			}
-
 		} 
 	})
+
+	$(document).on('click', '#btn_newBill', function(e){
+		$('#history_collapse').removeClass('in');
+		$('#so_collapse').addClass('in');
+		var vtable = $('#brso_head_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: '{{ route("brso_head.data") }}',
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false, processing:false }
+			]
+		})
+		var trtable = $('#trso_head_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: '{{ route("trso_head.data") }}',
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'created_at'},
+			{ data: 'action', orderable: false, searchable: false, processing:false }
+			]
+		})
+	})
+
 </script>
 @endpush
