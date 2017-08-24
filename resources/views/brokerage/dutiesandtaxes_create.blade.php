@@ -4,7 +4,7 @@
 	<div class = "row">
 			<div class = "panel default-panel">
 				<div class = "panel-heading">
-					<h2>&nbsp;Brokerage | Duties And Taxes</h2>
+					<h3><img src="/images/bar.png"> Brokerage | Duties And Taxes</h3>
 					<hr />
 
 
@@ -69,7 +69,7 @@
 
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn but" id = "btnSave">
+	      <button type="button" class="btn btn-primary" id = "btnSave">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
@@ -94,20 +94,20 @@
 	          <td>Brokerage Fee</td>
 	        </tr>
 
-					<tr class = "active">
+					<tr class = "active" id = "BankCharges">
 						<td>Bank Charges</td>
-						<td>0.00</td>
+
 					</tr>
 
-	        <tr class = "active">
+	        <tr class = "active" id = "Arrastre">
 	          <td>Arrastre</td>
-						<td>3,043.00</td>
+
 	        </tr>
 
-	        <tr class = "active">
+	        <tr class = "active" id = "Wharfage">
 	          <td>Wharfage</td>
-						<td>519.35</td>
 	        </tr>
+
 	        <tr class = "active" id = "CDSFee">
 	          <td>CDS</td>
 
@@ -211,6 +211,14 @@
 			var tblRowLength = localStorage.getItem("tblRowLength")-2;
 			var ExchangeRate = localStorage.getItem("exchangeRate");
 
+
+			var currentExchange_id = localStorage.getItem("currentExchange_id");
+			var currentCds_id = localStorage.getItem("currentCds_id");
+			var currentIpf_id = localStorage.getItem("currentIpf_id");
+			var ipfFeeHeader = JSON.parse(localStorage.getItem("ipfFeeHeader"));
+			var ipfFeeDetail = JSON.parse(localStorage.getItem("ipfFeeDetail"));
+			var ipfFee;
+
 			var table = document.getElementById('itemTable');
 	    var ctr = 7;
 
@@ -305,8 +313,7 @@
 					StrTotalFreight = TotalFreight.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 					StrTotal = _Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 					StrTotalDutiableValue = TotalDutiableValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-					StrTotalCustomDuty = TotalCustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-
+					StrTotalCustomsDuty = TotalCustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 			}
 
 
@@ -321,7 +328,7 @@
 			cols += '<td> Php '  + StrTotalDutiableValue + '</td>';
 			cols += '<td>  </td>';
 			cols += '<td>  </td>';
-			cols += '<td> Php ' + StrTotalCustomDuty + '</td></tr>';
+			cols += '<td> Php ' + StrTotalCustomsDuty + '</td></tr>';
 
 			newRow.append(cols);
 			$("table.item-table").append(newRow);
@@ -330,23 +337,66 @@
 			var BrokerageFee, TotalLandedCost, TotalVat, GrandTotal;
 			var StrTotalLandedCost, StrTotalVat, StrGrandTotal;
 
-
 			var row = document.getElementById("DutiableValue");
     	var x = row.insertCell(1);
     	x.innerHTML = StrTotalDutiableValue;
 
 			row = document.getElementById("CustomsDuty");
 		  x = row.insertCell(1);
-		 	x.innerHTML = StrTotalCustomDuty;
+		 	x.innerHTML = StrTotalCustomsDuty;
+
+			row = document.getElementById("Arrastre");
+			x = row.insertCell(1);
+			x.innerHTML = localStorage.getItem("arrastre");
+
+			row = document.getElementById("Wharfage");
+			x = row.insertCell(1);
+			x.innerHTML = localStorage.getItem("wharfage");
+
+
+			if(localStorage.getItem("BankCharges") == "" || localStorage.getItem("BankCharges") == null)
+			{
+				localStorage.setItem("BankCharges", "0.00");
+			}
+			row = document.getElementById("BankCharges");
+			x = row.insertCell(1);
+			x.innerHTML = localStorage.getItem("BankCharges");
 
 			row = document.getElementById("CDSFee");
 			x = row.insertCell(1);
-			x.innerHTML = localStorage.getItem("CDSFee");;
+			x.innerHTML = localStorage.getItem("CDSFee");
 
-			row = document.getElementById("IPFFee");
-			x = row.insertCell(1);
-			x.innerHTML = localStorage.getItem("IPFFee");
 
+
+			//set IPF Fee
+			var minimum, maximum, amount;
+			for(var x = 0, n = ipfFeeDetail.length; x < n; x++)
+			{
+				if(ipfFeeDetail[x].ipf_headers_id == currentIpf_id)
+				{
+					minimum = ipfFeeDetail[x].minimum;
+					maximum = ipfFeeDetail[x].maximum;
+					amount = ipfFeeDetail[x].amount;
+
+					if(TotalDutiableValue >= minimum && TotalDutiableValue <= maximum)
+					{
+						row = document.getElementById("IPFFee");
+						x = row.insertCell(1);
+						x.innerHTML = amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
+						localStorage.setItem("IpfFee", amount);
+					}
+					if(TotalDutiableValue > maximum)
+					{
+						row = document.getElementById("IPFFee");
+						x = row.insertCell(1);
+						x.innerHTML = "1,000.00";
+						localStorage.setItem("IpfFee", 1000.00);
+					}
+
+				}
+			}
+
+			//set Brokerage Fee
 			if(TotalDutiableValue < 10000)
 			{
 				BrokerageFee = 1300.00;
@@ -437,19 +487,18 @@
 
 			row = document.getElementById("SummCustomsDuty");
 			x = row.insertCell(1);
-			x.innerHTML = StrTotalCustomDuty;
-
-
+			x.innerHTML = StrTotalCustomsDuty;
 
 			row = document.getElementById("SummIPF");
 			x = row.insertCell(1);
-			x.innerHTML = localStorage.getItem("IPFFee");
+			x.innerHTML = parseFloat(localStorage.getItem("IpfFee")).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
 
 			row = document.getElementById("SummaryVAT");
 			x = row.insertCell(1);
 			x.innerHTML = StrTotalVat;
 
-			GrandTotal =  +parseFloat(TotalCustomsDuty).toFixed(2) + +parseFloat(TotalVat).toFixed(2) + +parseFloat(localStorage.getItem("IPFFee")).toFixed(2);
+			GrandTotal =  +parseFloat(TotalCustomsDuty).toFixed(2) + +parseFloat(TotalVat).toFixed(2) + +parseFloat(localStorage.getItem("IpfFee")).toFixed(2);
 			StrGrandTotal = parseFloat(GrandTotal).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
 			row = document.getElementById("GrandTotal");
@@ -462,12 +511,16 @@
 			localStorage.setItem("jsonValue",	JSON.stringify(StoredValue));
 			localStorage.setItem("jsonFreight",	JSON.stringify(StoredFreight));
 			localStorage.setItem("jsonInsurance",	JSON.stringify(StoredInsurance));
-
-
+			localStorage.setItem("brokerageFee", BrokerageFee);
 		}
 
 		var CompanyName = localStorage.getItem("companyName");
-		var ExchangeRate = localStorage.getItem("exchangeRate");
+		var ExchangeRateId = localStorage.getItem("currentExchange_id");
+		var CDSId = localStorage.getItem("currentCds_id");
+		var IPFId = localStorage.getItem("currentIpf_id");
+		var Arrastre =  localStorage.getItem("arrastre");
+		var Wharfage = localStorage.getItem("wharfage")
+		var BankCharges = localStorage.getItem("BankCharges")
 		var tblRowLength = localStorage.getItem("tblRowLength")-2;
 		var cs_id = localStorage.getItem("cs_id");
 		var shipper = localStorage.getItem("shipper");
@@ -476,7 +529,7 @@
 		var Weight = localStorage.getItem("weight");
 		var Port = localStorage.getItem("port");
 		var FreightType = localStorage.getItem("freightType");
-
+		var BrokerageFee = localStorage.getItem("brokerageFee");
 
 		var jsonItemName = localStorage.getItem("jsonItemName");
 		var jsonHSCode = localStorage.getItem("jsonHSCode");
@@ -486,6 +539,8 @@
 		var jsonInsurance = localStorage.getItem("jsonInsurance");
 
 		$('#btnSave').on('click', function(e){
+
+
 			e.preventDefault();
 			$.ajax({
 				type: 'POST',
@@ -495,7 +550,14 @@
 					'shipper' : shipper,
 					'companyName' : CompanyName,
 					'freightType' : FreightType,
-					'exchangeRate' : ExchangeRate,
+					'exchangeRateId' : ExchangeRateId,
+					'brokerageFee' : BrokerageFee,
+					'ExchangeRateId' : ExchangeRateId,
+					'CDSId' : CDSId,
+					'IPFId': IPFId,
+					'arrastre' : Arrastre,
+					'wharfage' : Wharfage,
+					'bankCharges' : BankCharges,
 					'arrivalDate' : arrivalDate,
 					'arrivalArea' : Port,
 					'freightNumber' : freightNumber,
@@ -510,7 +572,8 @@
 					StoredInsurance : jsonInsurance,
 				},
 				success: function (data) {
-					alert('Saved');
+
+					window.location.replace("brokerage/"+data+"/view");
 				}
 			})
 
