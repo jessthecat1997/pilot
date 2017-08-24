@@ -299,7 +299,22 @@
 								<td>
 									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
 								</td>
-								
+
+								<table style="width: 100%;" id = "delivery_fees_table">
+									<thead>
+										<tr style="width: 40%; text-align: center;">
+											<td>
+												Delivery No.
+											</td>
+											<td style="width: 60%; text-align: center;">
+												Amount
+											</td>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
 								<tr id="desc_rev_row">
 									<td colspan="4">
 										<div class="form-group">
@@ -431,32 +446,40 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
-		
+
+
+
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
 			if($('#rev_bill_id').val() != 0){
-				$.ajax({
-					type: 'GET',
-					url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
-					data: {
-						'_token' : $('input[name=_token]').val(),
-					},
-					success: function(data){
-						if(typeof(data) == "object"){
-							console.log(data[0].amount);
-							$('#rev_amount').val(data[0].amount);
+				switch($('#rev_bill_id').val()){
+					case '1':
+					$.ajax({
+
+						type: 'GET',
+						url: '{{ route("getDeliveryFees") }}/{{ $service_order->id }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'tr_so_id' : {{ $service_order->id }},
+						},
+						success: function(data){
+							var delivery_fees_rows = "";
+							console.log(data);
+							for(var i = 0; i < data.length; i++){
+								delivery_fees_rows += "<tr><td style = 'text-align: center;	'>"  + data[i].id + "</td><td>" +
+								"<input type = 'number' style = 'text-align: right;' class = 'form-control' value = '" + data[i].amount + "' /></td></tr>";
+							}
+							$('#delivery_fees_table > tbody').html("");
+							$('#delivery_fees_table > tbody').append(delivery_fees_rows);
 						}
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
+					})
+
+					break;					
+				}
 			}
 			else
 			{
-				$('amount').val("");
+				
 			}
 		})
 

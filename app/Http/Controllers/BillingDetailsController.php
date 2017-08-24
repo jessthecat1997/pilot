@@ -199,6 +199,18 @@ class BillingDetailsController extends Controller
 		})
 		->make(true);
 	}
+
+	public function getDeliveryFees(Request $request)
+	{
+		$deliveries = DB::table('delivery_receipt_headers')
+		->select('amount', 'id')
+		->where('tr_so_id', '=', $request->tr_so_id)
+		->whereRaw('status IN ("C", "F")')
+		->get();
+
+		return $deliveries;
+	}
+
 	public function billing_history(Request $request)
 	{
 		$bill_history = DB::table('billing_invoice_headers')
