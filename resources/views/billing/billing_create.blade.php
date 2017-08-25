@@ -102,7 +102,7 @@
 						@endforelse
 						<tr>
 							<td colspan="2">
-								<a class="btn but pull-right finalize-bill col-sm-6">Finalize</a>
+								<a class="btn but pull-right finalize-bill col-sm-6 collapse in">Finalize</a>
 							</td>
 						</tr>
 					</tbody>
@@ -250,6 +250,7 @@
 		if(stat == "Finalized")
 		{
 			$('.addBill').removeClass('in');
+			$('.finalize-bill').removeClass('in');
 		}
 		var bi_id = document.getElementById("so_head_id").value;
 		console.log(bi_id);
@@ -317,15 +318,11 @@
 	})
 	$(document).on('click', '.finalize-bill', function(e){
 		$.ajax({
-			method: 'POST',
-			url: '{{ route("billing.store") }}',
+			method: 'PUT',
+			url: '/billing/{{ $so_head_id }}/finalize',
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'charge_id' : rev_bill_id,
-				'description' : rev_description_value,
-				'amount' : rev_amount_value,
-				'tax' : 0,
-				'bi_head_id' : bi_id,
+				'isFinalize' : 1
 			},
 			success: function (data){
 				location.reload();

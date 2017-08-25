@@ -55,13 +55,10 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
-<<<<<<< HEAD
 
 //Route::resource('/admin/area', 'AreasController');
-=======
 //Route::resource('/admin/area', 'AreasController');
 
->>>>>>> master
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
@@ -231,6 +228,7 @@ Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('pa
 Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
+Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
 
 
 //Trucking Bills

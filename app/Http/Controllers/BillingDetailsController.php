@@ -326,6 +326,14 @@ class BillingDetailsController extends Controller
 		})
 		->make(true);
 	}
+	public function finalize_bill(Request $request, $id)
+	{
+		$finalize = BillingInvoiceHeader::findOrFail($id);
+		$finalize->isFinalize = 1;
+		$finalize->save();
+
+		return $finalize;	
+	}
 	public function store(Request $request)
 	{
 		for($i = 0; $i<count($request->charge_id); $i++)
@@ -344,6 +352,7 @@ class BillingDetailsController extends Controller
 		$csh = BillingInvoiceHeader::findOrFail($id);
 		$csh->vatRate = $request->vatRate;
 		$csh->date_billed = $request->date_billed;
+		$csh->
 		$csh->due_date = $request->due_date;
 		$csh->save();
 
