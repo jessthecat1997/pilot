@@ -79,7 +79,7 @@ class BillingDetailsController extends Controller
 		return Datatables::of($billing_details)
 		->make(true);
 	}
-	
+
 	public function show_billing(Request $request, $id)
 	{
 		$bill_revs = DB::table('charges')
@@ -252,14 +252,13 @@ class BillingDetailsController extends Controller
 	}
 	public function billing_invoice(Request $request)
 	{
-
 		$bill_hists = DB::select('SELECT t.id, 
 			C.companyName,
 			(CASE t.isRevenue
 			WHEN t.isRevenue = 1 THEN "Revenue"
 			WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,	
-			CONCAT("Php ", p.total) as Total,
+			CONCAT("Php ",(ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status
 
@@ -270,6 +269,7 @@ class BillingDetailsController extends Controller
 			FROM billing_invoice_details
 			GROUP BY bi_head_id
 			) p
+
 			ON t.id = p.bi_head_id
 			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
 			JOIN consignees AS C on B.consignees_id = C.id');

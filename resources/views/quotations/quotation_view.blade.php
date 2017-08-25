@@ -5,7 +5,7 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-heading">
-				<h2>View Quotation</h2>
+				<h2>&nbsp;View Quotation <button class="btn btn-md btn-primary pull-right generate_pdf print-quotation-details">Print Quotation</button></h2>
 				<hr />
 			</div>
 			<div class = "panel-body">
@@ -88,11 +88,8 @@
 					@else
 					<p><pre class = "">{!! $quotation[0]->specificDetails !!}</pre></p>
 
-					@endif
-
-					
+					@endif	
 				</div>
-				<button class="btn btn-md btn-primary pull-right generate_pdf print-quotation-details">Print Quotation</button>
 			</div>
 		</div>
 	</div>
@@ -100,7 +97,7 @@
 @endsection
 @push('styles')
 <style>
-	.contracts
+	.quotation
 	{
 		border-left: 10px solid #2ad4a5;
 		background-color:rgba(128,128,128,0.1);

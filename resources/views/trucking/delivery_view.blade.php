@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<h2>&nbsp;Delivery</h2>
+<h2>&nbsp;Delivery<button class="btn btn-md btn-primary generate_delivery_receipt pull-right" >Print Delivery Receipt</button></h2>
 <hr>
 <div class="container-fluid">
 	<div class = "row">
@@ -451,16 +451,6 @@
 		</div>
 	</div>
 	@endif
-	<div class = "row">
-		<div class = "col-md-10 col-md-offset-1">
-			<div class = "col-md-8">
-
-			</div>
-			<div class = "col-md-4">
-				<button class="btn btn-md btn-primary generate_delivery_receipt" style="width: 90%;">Print Delivery Receipt</button>
-			</div>
-		</div>
-	</div>
 </div>
 @endsection
 @push('styles')
@@ -552,7 +542,7 @@
 					'remarks' : $('#deliveryRemarks').val(),
 					'cancelDateTime' : $('#deliveryCancel').val(),
 					'delivery_head_id' : {{ $delivery[0]->id }},
-					
+
 				},
 				success: function(data){
 					$('#deliveryModal').modal('hide');
