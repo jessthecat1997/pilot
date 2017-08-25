@@ -41,7 +41,7 @@
 	</div>
 </div><div class="row col-md-7">
 	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Revenues</div>
+		<div class="panel-heading" id="heading">List of Bills</div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
@@ -104,7 +104,7 @@
 </div>
 <div class="row col-md-7">
 	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Expenses</div>
+		<div class="panel-heading" id="heading">List of Refundable Charges</div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
