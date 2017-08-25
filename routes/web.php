@@ -55,7 +55,11 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
+<<<<<<< HEAD
 
+=======
+//Route::resource('/admin/area', 'AreasController');
+>>>>>>> master
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
@@ -210,9 +214,10 @@ Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('
 Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
 Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
+Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
 Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
-Route::get('admin/bill_history', 'BillingDetailsController@billing_history')->name('history.data');
+Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');

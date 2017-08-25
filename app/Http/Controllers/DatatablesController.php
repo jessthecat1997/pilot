@@ -256,16 +256,30 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function pso_head_datatable(){
-		$pso_heads = DB::table('consignee_service_order_headers')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
-		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_headers.created_at')
-		->get();
-		return Datatables::of($pso_heads)
-		->addColumn('action', function ($pso_head) {
+		$bill_hists = DB::select('SELECT t.id, 
+			C.companyName,
+			(CASE t.isRevenue
+			WHEN t.isRevenue = 1 THEN "Revenue"
+			WHEN t.isRevenue = 0 THEN "Expense"
+			END) as isRevenue,	
+			CONCAT("Php ", p.total) as Total,
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
+
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p
+			ON t.id = p.bi_head_id
+			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
+			JOIN consignees AS C on B.consignees_id = C.id');
+
+		return Datatables::of($bill_hists)
+		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/payment/' . $pso_head->id . '" style="margin-right:10px; width:100;" class = "btn btn-md but select">Select</a>';
+			'<a href = "/payment/'. $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
 		})
 		->make(true);
 	}
