@@ -30,10 +30,10 @@
 				</div>
 				<div class="form-group">
 					<label>Status:</label>
-					@if($bills[0]->status = 'U')
-					<h5>Unpaid</h5>
+					@if($bills[0]->isFinalize == 1)
+					<label class="label label-success" id="status">Finalized</label>
 					@else
-					<h5>Paid</h5>
+					<label class="label label-warning" id="status">Not Finalize</label>
 					@endif
 				</div>
 			</form>
@@ -50,7 +50,7 @@
 					<thead>
 						<tr>
 							<td colspan="2">
-								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">Add Bills</button>
+								<button type="button" class="btn but pull-right collapse in addBill" data-toggle="modal" data-target="#revModal">Add Bills</button>
 							</td>
 						</tr>
 						<tr>
@@ -100,6 +100,11 @@
 							<td colspan="2">No records available.</td>
 						</tr>
 						@endforelse
+						<tr>
+							<td colspan="2">
+								<a class="btn but pull-right finalize-bill col-sm-6">Finalize</a>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</form>
@@ -240,6 +245,12 @@
 
 
 	$(document).ready(function(){
+		var stat = document.getElementById("status").innerText;
+		console.log(stat);
+		if(stat == "Finalized")
+		{
+			$('.addBill').removeClass('in');
+		}
 		var bi_id = document.getElementById("so_head_id").value;
 		console.log(bi_id);
 
@@ -303,6 +314,23 @@
 		e.preventDefault();
 		$('#exp_table > tbody').append(exp_row);
 		$('#exp_table > tbody').append(desc_exp_row);
+	})
+	$(document).on('click', '.finalize-bill', function(e){
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("billing.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'charge_id' : rev_bill_id,
+				'description' : rev_description_value,
+				'amount' : rev_amount_value,
+				'tax' : 0,
+				'bi_head_id' : bi_id,
+			},
+			success: function (data){
+				location.reload();
+			}
+		})
 	})
 
 	$(document).on('click', '.finalize-rev', function(e){

@@ -8,6 +8,7 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
+		{{ csrf_field() }}
 		<div class="col-sm-12">
 			<div class="panel-heading" id="heading">Consignee Details</div>
 			<div class="panel-body">
@@ -166,7 +167,7 @@
 				'due_date' : $('#due_date').val()
 			},
 			success: function (data){
-				console.log({{ $billing_header->id }});
+				location.reload();
 			}
 		})
 	})

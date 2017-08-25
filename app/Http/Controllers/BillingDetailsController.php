@@ -98,7 +98,7 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status','due_date')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status','due_date', 'isFinalize')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 		
