@@ -39,7 +39,7 @@
 												<td width="10%">
 													Created At
 												</td>
-												<td width="10%">
+												<td width="10%">gf
 													Actions
 												</td>
 											</tr>
@@ -273,7 +273,7 @@
 	                          </div>
 	                        </div>
 
-	                        <button  type="reset" class="btn btn-default" onclick="$('#ItemModal').modal('show');">
+	                        <button  type="reset" class="btn btn-default" onclick="$('#Itemf').modal('show');">
 	                          Add Item  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	                        </button >
 	                      </div>
@@ -974,7 +974,7 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
           }
           $('#_email').val($('#email').val());
           $('#_contactNumber').val($('#contactNumber').val());
-
+          
           $("#basic-information-heading").html('<h5 id = "basic-information-heading">Basic Information <button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h5>');
 
           cstable.ajax.reload();
