@@ -30,12 +30,13 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$so_head_id = $id;
+		$billing_header =  BillingInvoiceHeader::all('id')->last();
 
 		$vat = DB::table('vat_rates')
 		->select(DB::raw('CONCAT(TRUNCATE(rate,2)) as rates'))
 		->get();
 
-		return view('billing/billing_select', compact(['bills', 'so_head_id', 'vat']));
+		return view('billing/billing_select', compact(['bills', 'so_head_id', 'vat', 'billing_header']));
 	}
 	public function get_detail(Request $request){
 		$charge = DB::table('charges')

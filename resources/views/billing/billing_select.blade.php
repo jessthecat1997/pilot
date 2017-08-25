@@ -80,12 +80,12 @@
 	</div>
 	<hr>	
 </div>
-<div id="updateModal" class="modal fade" role="dialog">
+<div id="billModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Update Billing Invoice</h4>
+				<h4 class="modal-title">New Billing Invoice</h4>
 			</div>
 			<div class="modal-body">
 				<div class="col-sm-12">
@@ -114,7 +114,7 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but update-header">Save</a>
+				<a class="btn but save-header">Save</a>
 			</div>
 		</div>
 	</div>
@@ -153,26 +153,6 @@
 		})
 
 	})
-	$(document).on('click', '.updateBill', function(e){
-		var amount = $(this).val(); 
-		console.log(amount); 
-	})
-	$(document).on('click', '.update-header', function(e){
-		$.ajax({
-			method: 'PUT',
-			url: "{{ route('billing.update',$so_head_id) }}",
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'vatRate' : $('#vat').val(),
-				'date_billed' : $('#date_billed').val(),
-				'due_date' : $('#due_date').val()
-			},
-			success: function (data){
-				location.reload();
-			}
-		})
-		
-	})
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
@@ -186,7 +166,7 @@
 				'due_date' : $('#due_date').val()
 			},
 			success: function (data){
-				location.reload();
+				console.log({{ $billing_header->id }});
 			}
 		})
 	})
