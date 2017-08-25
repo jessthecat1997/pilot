@@ -510,6 +510,7 @@
 			e.preventDefault();
 			$('#expModal').modal('show');
 		})
+		@if($service_order->bi_head_id_exp != null)
 		$(document).on('click', '.finalize-exp', function(e){
 			$.ajax({
 				method: 'POST',
@@ -526,7 +527,9 @@
 				}
 			})
 		})
+		@endif
 
+		@if($service_order->bi_head_id_rev != null)
 		$(document).on('click', '.finalize-rev', function(e){
 			$.ajax({
 				method: 'POST',
@@ -543,6 +546,7 @@
 				}
 			})
 		})
+		@endif
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();

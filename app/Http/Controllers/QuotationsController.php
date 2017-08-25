@@ -24,7 +24,7 @@ class QuotationsController extends Controller
 
         $terms = \App\QuotationTerm::all()->last();
         
-        $term_array = explode("<br/>", $terms->terms);
+        $term_array = explode("<br />", $terms->terms);
         array_pop($term_array);
 
         $locations = DB::table('locations')

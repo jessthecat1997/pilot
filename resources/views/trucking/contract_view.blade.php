@@ -5,7 +5,7 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-heading">
-				<h2>View Contract</h2>
+				<h2>&nbsp;View Contract<button class="btn btn-md btn-primary pull-right generate_pdf print-contract-details">Print Contract</button></h2>
 				<hr />
 			</div>
 			<div class = "panel-body">
@@ -53,10 +53,7 @@
 					<p><pre class = "">{!! $contract[0]->specificDetails !!}</pre></p>
 
 					@endif
-
-					
 				</div>
-				<button class="btn btn-md btn-primary pull-right generate_pdf print-contract-details">Print Contract</button>
 			</div>
 		</div>
 	</div>
