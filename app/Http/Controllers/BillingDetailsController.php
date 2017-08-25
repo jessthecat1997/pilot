@@ -46,16 +46,6 @@ class BillingDetailsController extends Controller
 
 		return $charge;
 	}
-<<<<<<< HEAD
-	public function getBillingDetails(Request $request){ 
-		$billing_details = DB::table('billing_invoice_details') 
-		->where('bi_head_id', '=', $request->id) 
-		->get(); 
-		return Datatables::of($billing_details) 
-		->make(true); 
-	}
-=======
-<<<<<<< HEAD
 
 	public function postTruckingPayable(Request $request){
 		$new_bill_detail = new \App\BillingInvoiceDetails;
@@ -90,9 +80,7 @@ class BillingDetailsController extends Controller
 		return Datatables::of($billing_details)
 		->make(true);
 	}
-=======
->>>>>>> master
->>>>>>> master
+
 	public function show_billing(Request $request, $id)
 	{
 		$bill_revs = DB::table('charges')

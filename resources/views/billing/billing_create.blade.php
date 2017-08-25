@@ -42,7 +42,7 @@
 </div>
 <div class="row col-md-7">
 	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Revenues</div>
+		<div class="panel-heading" id="heading">List of Bills</div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
@@ -50,7 +50,7 @@
 					<thead>
 						<tr>
 							<td colspan="2">
-								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">Add Revenue</button>
+								<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">Add Bills</button>
 							</td>
 						</tr>
 						<tr>
@@ -113,7 +113,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Add Revenue</h4>
+				<h4 class="modal-title">Add Bills</h4>
 			</div>
 			<div class="modal-body">
 				<table class = "table-responsive table" id = "rev_table">
