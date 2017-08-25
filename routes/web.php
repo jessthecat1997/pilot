@@ -55,11 +55,8 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
-<<<<<<< HEAD
-
-=======
 //Route::resource('/admin/area', 'AreasController');
->>>>>>> master
+
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
