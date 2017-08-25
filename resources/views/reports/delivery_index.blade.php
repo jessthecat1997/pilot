@@ -276,7 +276,7 @@
 									],
 									order: [[5, 'asc']],
 									rowGroup: {
-										startRender: null,
+										startRender: null,   
 										endRender: function ( rows, group ) {
 											
 											var ageAvg = rows
@@ -397,11 +397,20 @@
 			e.preventDefault();
 			var selected = $(this).val();
 			switch (selected) {
+				case "0" :
+				$('#yearly_collapse').removeClass('in');
+				$('#monthly_collapse').removeClass('in');
+				$('#daily_collapse').removeClass('in');
+				$('#custom_collapse').removeClass('in');
+				$('#customed_collapse').removeClass('in');
+				break;
+
 				case "1" : 
 				$('#yearly_collapse').removeClass('in');
 				$('#monthly_collapse').removeClass('in');
 				$('#daily_collapse').addClass('in');
 				$('#custom_collapse').removeClass('in');
+				$('#customed_collapse').removeClass('in');
 				var shiptable;
 				if ( ! $.fn.DataTable.isDataTable( '#daily_table') ) 
 				{
@@ -490,6 +499,7 @@
 				$('#monthly_collapse').addClass('in');
 				$('#daily_collapse').removeClass('in');
 				$('#custom_collapse').removeClass('in');
+				$('#customed_collapse').removeClass('in');
 				var shiptable;
 				if ( ! $.fn.DataTable.isDataTable( '#monthly_table') ) 
 				{
@@ -581,6 +591,7 @@
 				$('#monthly_collapse').removeClass('in');
 				$('#daily_collapse').removeClass('in');
 				$('#custom_collapse').removeClass('in');
+				$('#customed_collapse').removeClass('in');
 				var shiptable;
 				if ( ! $.fn.DataTable.isDataTable( '#yearly_table') ) 
 				{

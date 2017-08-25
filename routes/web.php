@@ -55,7 +55,11 @@ Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController'
 Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
+<<<<<<< HEAD
+
+=======
 //Route::resource('/admin/area', 'AreasController');
+>>>>>>> master
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
@@ -231,7 +235,8 @@ Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
 Route::get('/deliveryFees/{id?}', 'BillingDetailsController@getDeliveryFees')->name('getDeliveryFees');
-
+Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
+Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
 //Maintenance data
 Route::get('/admin/billData', 'DatatablesController@bill_datatable')->name('bill.data');
 
@@ -325,7 +330,7 @@ Route::resource('/admin/settings', 'BusinessSettingsController');
 # Active Contracts
 Route::get('queries', 'QueriesController@index')->name('queries.index');
 Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
-Route::get('queries/get_pending_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+Route::get('queries/get_peMM<nding_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
 Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
 Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
 Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
