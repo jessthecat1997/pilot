@@ -40,11 +40,39 @@ class PaymentsController extends Controller
 		->where('payments.bi_head_id', '=', $id)
 		->get();
 		
-		$total = DB::table('billing_invoice_details')
-		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(TRUNCATE(SUM(amount + (amount * vatRate/100)),2)) as Total'))
-		->where('billing_invoice_details.bi_head_id', '=', $id)
-		->get();
+		$total = DB::select('SELECT t.id, 
+			
+			(CASE t.isRevenue
+			WHEN t.isRevenue = 1 THEN "Revenue"
+			WHEN t.isRevenue = 0 THEN "Expense"
+			END) as isRevenue,	
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+            pay.totpay,
+            (ROUND(((p.total * t.vatRate)/100), 2) + p.total) - pay.totpay AS balance,
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
+			t.status
+
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+            
+            LEFT JOIN
+            
+            (
+            	SELECT bi_head_id, SUM(amount) totpay
+                FROM payments
+                GROUP BY bi_head_id
+            ) pay
+            
+            ON t.id = pay.bi_head_id
+			WHERE t.id = ?
+			', [$id]);
 
 		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total']));
 

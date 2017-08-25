@@ -69,7 +69,8 @@
 		</div>
 	</div>
 	<br/>
-	<button type="button" class="btn but pull-right" data-toggle="modal" data-target="#revModal">New Payment</button>
+
+	<button type="button" class="btn but pull-right" data-toggle="modal" @if($total[0]->balance == 0) disabled @endif data-target="#revModal">New Payment</button>
 	<br/>
 	<br/>
 	<div class="row">
@@ -160,7 +161,7 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but finalize-payment">Save</a>
+				<a class="btn but finalize-payment-rev">Save</a>
 			</div>
 		</div>
 	</div>
@@ -203,7 +204,7 @@
 							<td colspan="2">
 								<div class="form-group">
 									<label for="remarks">Remarks:</label>
-									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
+									<textarea class="form-control" rows="3" id="b_remarks" name="b_remarks"></textarea>
 								</div>
 							</td>
 						</tr>
@@ -232,9 +233,9 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	var totalamt = parseFloat($('#total').val());
-	var balance = parseFloat($('#bal').val());
-	var paid = $('#paid').val();
+	var totalamt = {{ $total[0]->totall }};
+	var balance = {{ $total[0]->balance }};
+	var paid =  {{ $total[0]->totpay }};
 	n = totalamt - paid;
 	var bals = n.toFixed(2);
 	document.getElementById("bal").value = bals;
@@ -324,9 +325,55 @@
 			location.reload();
 		}
 	})
-	$(document).on('click', '.finalize-payment', function(e){
-		var amt = parseFloat(document.getElementById("selected_bill").value);
+
+	$(document).on('click', '.finalize-payment-rev', function(e){
+		e.preventDefault();
+		var amt = $('#amount').val();
 		var rem = $('#remarks').val();
+
+		if(amt > totalamt){
+
+		}
+		else{
+			$.ajax({
+					method: 'POST',
+					url: '{{ route("payment.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'bi_head_id' : {{ $so_head_id }},
+						'amount' : amt,
+						'description' : rem
+					},
+					success: function (data){
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]('Successfully saved');
+						location.reload();
+					}
+				})
+		}
+
+	})
+	$(document).on('click', '.finalize-payment', function(e){
+
+		var amt = $('#bill_amount').val();
+		var rem = $('#b_remarks').val();
 		console.log(amt);
 		if(amt<totalamt)
 		{
