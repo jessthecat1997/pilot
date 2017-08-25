@@ -45,6 +45,13 @@ class BillingDetailsController extends Controller
 
 		return $charge;
 	}
+	public function getBillingDetails(Request $request){ 
+		$billing_details = DB::table('billing_invoice_details') 
+		->where('bi_head_id', '=', $request->id) 
+		->get(); 
+		return Datatables::of($billing_details) 
+		->make(true); 
+	}
 	public function show_billing(Request $request, $id)
 	{
 		$bill_revs = DB::table('charges')
@@ -62,7 +69,7 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status','due_date')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 		
@@ -142,7 +149,7 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status')
+		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status','due_date')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
@@ -243,20 +250,21 @@ class BillingDetailsController extends Controller
 		->addColumn('action', function ($hist) {
 			return
 			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
+			'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv"><i class="fa fa-plus"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->addColumn('status', function ($hist) {
 			switch ($hist->status) {
 				case 'U':
-					return 'Not paid';
-					break;
+				return 'Not paid';
+				break;
 				case 'P':
-					return 'Paid';
-					break;
+				return 'Paid';
+				break;
 				
 				default:
 					# code...
-					break;
+				break;
 			}
 		})
 		->make(true);
@@ -283,7 +291,9 @@ class BillingDetailsController extends Controller
 		return Datatables::of($bill_history)
 		->addColumn('action', function ($history) {
 			return
-			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal" data-target="#updateModal" value="'. $history->id .'"><i class="fa fa-edit"></i></button>'.
+			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv"><i class="fa fa-plus"></i></a>'.
+			'<a href = "/billing/'. $history->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
 	}
@@ -299,6 +309,16 @@ class BillingDetailsController extends Controller
 			$billing_revenue->bi_head_id = $request->bi_head_id;
 			$billing_revenue->save();
 		}
+	}
+	public function update(Request $request, $id)
+	{
+		$csh = BillingInvoiceHeader::findOrFail($id);
+		$csh->vatRate = $request->vatRate;
+		$csh->date_billed = $request->date_billed;
+		$csh->due_date = $request->due_date;
+		$csh->save();
+
+		return $csh;
 	}
 	public function bill_pdf(Request $request, $id)
 	{
@@ -343,6 +363,12 @@ class BillingDetailsController extends Controller
 		->get();
 
 		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat']));
+		return $pdf->stream();
+	}
+	public function ref_pdf(Request $request, $id)
+	{
+
+		$pdf = PDF::loadView('pdf_layouts.refundable_charges_pdf');
 		return $pdf->stream();
 	}
 

@@ -224,6 +224,7 @@ Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name
 Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
 Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
+Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 
 
 //Trucking Bills

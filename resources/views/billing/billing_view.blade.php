@@ -3,10 +3,43 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="row col-md-5">
-	<label>Invoice No.:</label>
-	<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
-</div>
-<div class="row col-md-7">
+	<div class="panel-default panel">
+		<div class="panel-heading" id="heading">Consignee Details</div>
+		<div class="panel-body">
+			<form class="inline">
+				<div class="form-group">
+					<label>Invoice No.:</label>
+					<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
+				</div>
+				<div class="form-group">
+					<label>Due Date:</label>
+					<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date">
+				</div>
+				<hr>
+				<div class="form-group">
+					<label>Consignee:</label>
+					<h5>{{ $bills[0]->companyName }}</h5>
+				</div>
+				<div class="form-group">
+					<label>Address:</label>
+					<h5>{{ $bills[0]->address }}</h5>
+				</div>
+				<div class="form-group">
+					<label>Service Order:</label>
+					<h5>{{ $bills[0]->name }}</h5>
+				</div>
+				<div class="form-group">
+					<label>Status:</label>
+					@if($bills[0]->status = 'U')
+					<h5>Unpaid</h5>
+					@else
+					<h5>Paid</h5>
+					@endif
+				</div>
+			</form>
+		</div>
+	</div>
+</div><div class="row col-md-7">
 	<div class="panel-default panel">
 		<div class="panel-heading" id="heading">List of Revenues</div>
 		<div class = "panel-body">
