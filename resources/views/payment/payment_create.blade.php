@@ -70,7 +70,7 @@
 	</div>
 	<br/>
 
-	<button type="button" class="btn but pull-right" data-toggle="modal" @if($total[0]->balance == 0) disabled @endif data-target="#revModal">New Payment</button>
+	<button type="button" class="btn but pull-right" data-toggle="modal" @if($total[0]->totpay == $total[0]->totall) disabled @endif data-target="#revModal">New Payment</button>
 	<br/>
 	<br/>
 	<div class="row">
@@ -144,7 +144,7 @@
 						<tr>
 							<form class="form-horizontal">
 								<td>
-									<input type = "text" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
 								</td>
 							</form>
 						</tr>
@@ -161,7 +161,7 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but finalize-payment-rev">Save</a>
+				<button class="btn but finalize-payment-rev">Save</button>
 			</div>
 		</div>
 	</div>
@@ -196,7 +196,7 @@
 						<tr>
 							<form class="form-horizontal">
 								<td>
-									<input type = "text" name="amount" id="bill_amount" class="form-control col-sm-2" style="text-align: right" required>
+									<input type = "number" name="amount" id="bill_amount" class="form-control col-sm-2" style="text-align: right" required>
 								</td>
 							</form>
 						</tr>
@@ -213,7 +213,7 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but finalize-payment">Save</a>
+				<button  class="btn but finalize-payment">Save</button>
 			</div>
 		</div>
 	</div>
@@ -234,8 +234,8 @@
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
 	var totalamt = {{ $total[0]->totall }};
-	var balance = {{ $total[0]->balance }};
-	var paid =  {{ $total[0]->totpay }};
+	var balance = @if( $total[0]->balance == null) {{ $total[0]->totall }} @else {{ $total[0]->balance }} @endif ;
+	var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay }} @endif ;
 	n = totalamt - paid;
 	var bals = n.toFixed(2);
 	document.getElementById("bal").value = bals;
@@ -331,89 +331,124 @@
 		var amt = $('#amount').val();
 		var rem = $('#remarks').val();
 
-		if(amt > totalamt){
-
-		}
-		else{
-			$.ajax({
-					method: 'POST',
-					url: '{{ route("payment.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'bi_head_id' : {{ $so_head_id }},
-						'amount' : amt,
-						'description' : rem
-					},
-					success: function (data){
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]('Successfully saved');
-						location.reload();
-					}
-				})
-		}
-
-	})
-	$(document).on('click', '.finalize-payment', function(e){
-
-		var amt = $('#bill_amount').val();
-		var rem = $('#b_remarks').val();
 		console.log(amt);
-		if(amt<totalamt)
-		{
-			if(amt<bals)
+		if( amt > 0 ){
+
+			if(amt < totalamt)
 			{
-				var tot = totalamt - amt;
-				$.ajax({
-					method: 'POST',
-					url: '{{ route("payment.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'bi_head_id' : {{ $so_head_id }},
-						'amount' : amt,
-						'description' : rem
-					},
-					success: function (data){
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
+				if(amt<bals)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-payment-rev').attr('disabled', 'true');
+					$.ajax({
+						method: 'POST',
+						url: '{{ route("payment.store") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'bi_head_id' : {{ $so_head_id }},
+							'amount' : amt,
+							'description' : rem
+						},
+						success: function (data){
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]('Successfully saved');
+							location.reload();
 						}
-						toastr["success"]('Successfully saved');
-						location.reload();
+					})
+				}
+				else if(amt>bals)
+				{
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
 					}
-				})
+					toastr["warning"]("The amount must not be higher than the balance");
+					$('.finalize-payment-rev').removeAttr('disabled');
+
+	
+				}
+				else if(amt==bals)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-payment-rev').attr('disabled', 'true');
+					$.ajax({
+						method: 'POST',
+						url: '{{ route("payment.store") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'bi_head_id' : {{ $so_head_id }},
+							'amount' : amt,
+							'description' : rem
+						},
+						success: function (data){
+							var val = 'P';
+							$.ajax({
+								type: 'PUT',
+								url:  "{{ route('payment.update', $so_head_id) }}",
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'status' : val
+								},
+								success: function (data){
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]('Successfully saved');
+									window.location.href = "{{ route('view.index') }}";
+								}
+							})
+						}
+					})
+				}
+
 			}
-			else if(amt>bals)
+			else if(amt>totalamt)
 			{
 				toastr.options = {
 					"closeButton": false,
@@ -433,12 +468,13 @@
 					"showMethod": "fadeIn",
 					"hideMethod": "fadeOut"
 				}
-				toastr["warning"]("The amount must not be higher than the balance");
-				location.reload();
+				toastr["warning"]("The amount must not be higher than the total");
+				$('.finalize-payment-rev').removeAttr('disabled');
 			}
-			else if(amt==bals)
+			else if(amt==totalamt)
 			{
 				var tot = totalamt - amt;
+				$('.finalize-payment-rev').attr('disabled', 'true');
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("payment.store") }}',
@@ -455,7 +491,7 @@
 							url:  "{{ route('payment.update', $so_head_id) }}",
 							data: {
 								'_token' : $('input[name=_token]').val(),
-								'status' : val
+								'paymentStatus' : val
 							},
 							success: function (data){
 								toastr.options = {
@@ -483,9 +519,8 @@
 					}
 				})
 			}
-
 		}
-		else if(amt>totalamt)
+		else
 		{
 			toastr.options = {
 				"closeButton": false,
@@ -505,29 +540,31 @@
 				"showMethod": "fadeIn",
 				"hideMethod": "fadeOut"
 			}
-			toastr["warning"]("The amount must not be higher than the total");
-			location.reload();
+			toastr["warning"]('Invalid payment');
+			$('.finalize-payment-rev').removeAttr('disabled');
 		}
-		else if(amt==totalamt)
-		{
-			var tot = totalamt - amt;
-			$.ajax({
-				method: 'POST',
-				url: '{{ route("payment.store") }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'bi_head_id' : {{ $so_head_id }},
-					'amount' : amt,
-					'description' : rem
-				},
-				success: function (data){
-					var val = 'P';
+	})
+	$(document).on('click', '.finalize-payment', function(e){
+
+		var amt = $('#bill_amount').val();
+		var rem = $('#b_remarks').val();
+		console.log(amt);
+		if( amt > 0 ){
+
+			if(amt < totalamt)
+			{
+				if(amt<bals)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-payment').attr('disabled', 'true');
 					$.ajax({
-						type: 'PUT',
-						url:  "{{ route('payment.update', $so_head_id) }}",
+						method: 'POST',
+						url: '{{ route("payment.store") }}',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'paymentStatus' : val
+							'bi_head_id' : {{ $so_head_id }},
+							'amount' : amt,
+							'description' : rem
 						},
 						success: function (data){
 							toastr.options = {
@@ -549,11 +586,179 @@
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]('Successfully saved');
-							window.location.href = "{{ route('view.index') }}";
+							location.reload();
 						}
 					})
 				}
-			})
+				else if(amt>bals)
+				{
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["warning"]("The amount must not be higher than the balance");
+					$('.finalize-payment').removeAttr('disabled');
+
+	
+				}
+				else if(amt==bals)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-payment').attr('disabled', 'true');
+					$.ajax({
+						method: 'POST',
+						url: '{{ route("payment.store") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'bi_head_id' : {{ $so_head_id }},
+							'amount' : amt,
+							'description' : rem
+						},
+						success: function (data){
+							var val = 'P';
+							$.ajax({
+								type: 'PUT',
+								url:  "{{ route('payment.update', $so_head_id) }}",
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'status' : val
+								},
+								success: function (data){
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]('Successfully saved');
+									window.location.href = "{{ route('view.index') }}";
+								}
+							})
+						}
+					})
+				}
+
+			}
+			else if(amt>totalamt)
+			{
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["warning"]("The amount must not be higher than the total");
+				$('.finalize-payment').removeAttr('disabled');
+			}
+			else if(amt==totalamt)
+			{
+				var tot = totalamt - amt;
+				$('.finalize-payment-rev').attr('disabled', 'true');
+				$.ajax({
+					method: 'POST',
+					url: '{{ route("payment.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'bi_head_id' : {{ $so_head_id }},
+						'amount' : amt,
+						'description' : rem
+					},
+					success: function (data){
+						var val = 'P';
+						$.ajax({
+							type: 'PUT',
+							url:  "{{ route('payment.update', $so_head_id) }}",
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'paymentStatus' : val
+							},
+							success: function (data){
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]('Successfully saved');
+								window.location.href = "{{ route('view.index') }}";
+							}
+						})
+					}
+				})
+			}
+		}
+		else
+		{
+			toastr.options = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"rtl": false,
+				"positionClass": "toast-bottom-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": 300,
+				"hideDuration": 1000,
+				"timeOut": 2000,
+				"extendedTimeOut": 1000,
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+			toastr["warning"]('Invalid payment');
+			$('.finalize-payment').removeAttr('disabled');
 		}
 	})
 

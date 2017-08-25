@@ -186,12 +186,13 @@ class TruckingsController extends Controller
         ->where('B.id', '=', $request->tr_so_id)
         ->get();
 
+        $vat = DB::select('SELECT rate FROM vat_rates where currentRate = 1');
         $billing_header = new \App\BillingInvoiceHeader;
         $billing_header->so_head_id = $consignee_order[0]->id;
         $billing_header->isRevenue = $request->isRevenue;
-        $billing_header->vatRate = null;
+        $billing_header->vatRate = $vat[0]->rate;
         $billing_header->status = 'U';
-        $billing_header->date_billed = null;
+        $billing_header->date_billed = \Carbon\Carbon::now();
         $billing_header->override_date = null;
         $billing_header->due_date = null;
         $billing_header->save();
