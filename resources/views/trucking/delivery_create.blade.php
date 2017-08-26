@@ -386,18 +386,36 @@
 				<div class = "row">
 					<div class = "col-md-6">
 						<div class = "panel-default panel">
-							<div class = "panel-heading">
-								Rates
+							<div class = "panel-heading" id = "rate_header">
+								Rates for 
 							</div>
 							<div class = "panel-body">
 								<div class="form-group">
-									<label class="col-md-5">Standard Area Rate:</label>
-									<span class = "col-md-7" id = "standard_rate"></span>
+									<label class="col-md-4">Standard Area Rate:</label>
+									<span class = "col-md-8" id = "standard_rate"></span>
 								</div>
 								<div class="form-group">
-									<div class = "">
+									<label class="col-md-4">Quotation Rate/s:</label>
+									<div class = "col-md-8">
+										<div class = "collapse" id = "quotation_collapse">
+											<table id = "quotation_table" class = "table table-striped">
+												<thead>
+													<tr>
+														<td>
+															Size
+														</td>
+														<td>
+															Amount
+														</td>
+													</tr>
+												</thead>
+												<tbody>
 
+												</tbody>
+											</table>
+										</div>
 									</div>
+									<span class = "col-md-8" id = "quotation_rate"></span>
 								</div>
 							</div>
 						</div>
@@ -965,21 +983,40 @@
 			}
 
 			if(selected_from != 0 && selected_to != 0){
+				$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
 				$.ajax({
 					type: 'GET',
 					url: '{{ route("get_area_rate") }}',
 					data: {
 						'area_from' : selected_from,
 						'area_to' : selected_to,
+						'consignee_id' : {{ $consignee[0]->id }}
 					},
 					success : function(data) {
-						if(data.length == 0){
-							$('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
+						if(data[1].length == 0){
+							$('#standard_rate').html('No set standard rate.');
 							$('#deliveryFee').val("0.00");
 						}
 						else{
-							$('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
-							$('#deliveryFee').val(data[0].amount);
+							$('#standard_rate').html("Php " + data[1][0].amount);
+							$('#deliveryFee').val(data[1][0].amount);
+						}
+						if(data[0].length == 0){
+							$('#quotation_rate').html('No existing quotation rates');
+							$('#deliveryFee').val("0.00");
+							$('#quotation_collapse').removeClass('in');
+						}
+						else
+						{
+							var quotation_rows = "";
+							for(var i = 0; i < data[0].length; i++)
+							{
+								console.log(data[0][i].from);
+								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+							}
+							console.log(quotation_rows);
+							$('#quotation_collapse').addClass('in');
+							$('#quotation_table > tbody').html(quotation_rows);
 						}
 					}
 				})
@@ -1028,21 +1065,40 @@
 				$('#_dzip').val("");
 			}
 			if(selected_from != 0 && selected_to != 0){
+				$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
 				$.ajax({
 					type: 'GET',
 					url: '{{ route("get_area_rate") }}',
 					data: {
 						'area_from' : selected_from,
 						'area_to' : selected_to,
+						'consignee_id' : {{ $consignee[0]->id }}
 					},
 					success : function(data) {
-						if(data.length == 0){
-							$('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
+						if(data[1].length == 0){
+							$('#standard_rate').html('No set standard rate.');
 							$('#deliveryFee').val("0.00");
 						}
 						else{
-							$('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
-							$('#deliveryFee').val(data[0].amount);
+							$('#standard_rate').html("Php " + data[1][0].amount);
+							$('#deliveryFee').val(data[1][0].amount);
+						}
+						if(data[0].length == 0){
+							$('#quotation_rate').html('No existing quotation rates');
+							$('#deliveryFee').val("0.00");
+							$('#quotation_collapse').removeClass('in');
+						}
+						else
+						{
+							var quotation_rows = "";
+							for(var i = 0; i < data[0].length; i++)
+							{
+								console.log(data[0][i].from);
+								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+							}
+							console.log(quotation_rows);
+							$('#quotation_collapse').addClass('in');
+							$('#quotation_table > tbody').html(quotation_rows);
 						}
 					}
 				})
@@ -1051,6 +1107,7 @@
 			{
 				$('#deliveryFee').val("0.00");
 				$('#standard_rate').html("");
+				$('#quotation_rate').html("");
 			};
 			
 		})
