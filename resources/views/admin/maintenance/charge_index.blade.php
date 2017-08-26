@@ -22,9 +22,6 @@
 								Description
 							</td>
 							<td>
-								Bill Type
-							</td>
-							<td>
 								Charge Type
 							</td>
 							<td>
@@ -60,15 +57,17 @@
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
 							<div class="form-group required">
-								<label class = "control-label" >Bill Type: &nbsp;</label>
-								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" value="R">Revenue</label>
-								<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Expense</label>
+								<label class = "control-label" >Charge Type: &nbsp;</label>
+								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" value="R">Bill</label>
+								<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Refundable</label>
 							</div>
-							<div class="form-group">
-								<label class = "control-label">Charge Type: &nbsp;</label>
-								<input type="radio" name="chargeType" value="0"  checked = "checked"> Fixed
-								<input type="radio" name="chargeType" value="1">Rate
-								<br/>
+							<div class="form-group" >
+								<div style="display: none;">
+									<label class = "control-label">Charge Type: &nbsp;</label>
+									<input type="radio" name="chargeType" value="0"  checked = "checked"> Fixed
+									<input type="radio" name="chargeType" value="1">Rate
+									<br/>
+								</div>
 								<div class="form-group">
 									<div id = "type0" class = "chargeValue">
 										<label class = "control-label">Amount: </label>
@@ -158,15 +157,16 @@
 			{ data: 'bill_type',
 			"render" : function( data, type, full ) {
 				return formatWithBillType(data); }},
-				{ data: 'chargeType',
+				/*{ data: 'chargeType',
 				"render" : function( data, type, full ) {
 					return formatWithChargeType(data); }},
+					*/
 					{ data: 'amount' },
 					{ data: 'action', orderable: false, searchable: false }
 
 					],	"order": [[ 0, "desc" ]],
 				});
-
+		/*
 		function formatWithChargeType(n) { 
 
 			if (n == 1){
@@ -176,12 +176,14 @@
 			}
 
 		} 
+		*/
+
 		function formatWithBillType(e) { 
 
 			if (e == 'R'){
-				return "Revenue";
+				return "Bill";
 			}else{
-				return "Expense";
+				return "Refundable";
 			}
 
 		} 

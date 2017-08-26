@@ -446,6 +446,9 @@
 					</div>
 				</div>
 			</form>
+			<div class = "col-md-offset-2">
+
+			</div>
 		</div>
 		<div class="panel-footer">
 			<button class="btn btn-md btn-success save-delivery" style="width: 100%;">Save</button>
