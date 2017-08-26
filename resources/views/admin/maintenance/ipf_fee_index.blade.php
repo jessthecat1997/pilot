@@ -37,8 +37,6 @@
 		</div>
 	</div>
 </div>
-</div>
-</div>
 <section class="content">
 	<form role="form" method = "POST" class="commentForm">
 		<div class="modal fade" id="ipfModal" role="dialog">
@@ -129,7 +127,7 @@
 										<div class = "form-group" style = "margin-left:10px">
 											<button    class = "btn btn-primary btn-md new-ipf-row pull-left">New Range</button>
 											<br /><br/>
-                      *leaving 0.00 on the Maximum field will set the value to "indefinite"
+											*leaving 0.00 on the Maximum field will set the value to "indefinite"
 										</div>
 									</div>
 								</div>
@@ -146,9 +144,8 @@
 		</form>
 		<br/>
 	</div>
-</div>
 </section>
-<section class="content">
+<section class="content"> 
 	<form role = "form" method = "POST">
 		{{ csrf_field() }}
 		{{ method_field('DELETE') }}
@@ -199,7 +196,7 @@
 	var amount_value_descrp = [];
 
 	var data, tblLength;
-  var jsonMinimum, jsonMaximum, jsonAmount;
+	var jsonMinimum, jsonMaximum, jsonAmount;
 	$(document).ready(function(){
 		var ipf_row = "<tr>" + $('#ipf-row').html() + "</tr>";
 		$('#collapse1').addClass('in');
@@ -259,8 +256,24 @@
 			$('.modal-title').text('Update Import Processing Fee Range');
 			var ipf_id = $(this).val();
 
-			$('.modal-title').text('Update Import Prcessing Fee Range');
 			$('#ipfModal').modal('show');
+
+			$.ajax({
+				type: 'GET',
+				url:  '{{ route("ipf_maintain_data") }}',
+				data: {
+					'_token' : $('input[name=_token').val(),
+					'ipf_id' : $(this).val(),
+				},
+				success: function (data)
+				{
+					for(var i = 0; i < data.length; i++){
+						
+					}
+					var rows = '<tr id = "ipf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control ipf_minimum_valid" value ="0.00" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control  ipf_maximum_valid" value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-ipf-row">x</button></td></tr>';
+				}
+
+			})
 		});
 		$(document).on('click', '.deactivate', function(e){
 			var ipf_id = $(this).val();
@@ -285,7 +298,7 @@
 				$('#ipf_parent_table').append(ipf_row);
 				for(var i = 0; i <= minimum.length; i++){
 					minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
-					}
+				}
 			}
 		})
 		$(document).on('change', '.ipf_minimum_valid', function(e){
@@ -368,9 +381,9 @@
 				var title = $('.modal-title').text();
 				if(title == "New Import Processing Fee Range")
 				{
-          jsonMinimum = JSON.stringify(minimum_id);
-          jsonMaximum = JSON.stringify(maximum_id);
-          jsonAmount = JSON.stringify(amount_value);
+					jsonMinimum = JSON.stringify(minimum_id);
+					jsonMaximum = JSON.stringify(maximum_id);
+					jsonAmount = JSON.stringify(amount_value);
 
 					minimum_unmask = [];
 					$.ajax({
@@ -382,7 +395,7 @@
 							'minimum' : jsonMinimum,
 							'maximum' : jsonMaximum,
 							'amount' : jsonAmount,
-              'tblLength' : tblLength,
+							'tblLength' : tblLength,
 						},
 						success: function (data){
 
@@ -434,7 +447,7 @@ function validateIpfRows()
 	amount =  document.getElementsByName('amount');
 	error = "";
 
-  var min, max;
+	var min, max;
 	if(dateEffective === ""){
 		dateEffective.style.borderColor = 'red';
 		error += "Date Effective Required.";
@@ -473,12 +486,12 @@ function validateIpfRows()
 			error += "Same.";
 		}
 
-    min = parseFloat(minimum[i].value);
-    max = parseFloat(maximum[i].value);
+		min = parseFloat(minimum[i].value);
+		max = parseFloat(maximum[i].value);
 		if(min > max){
 
-      console.log(min);
-      console.log(max);
+			console.log(min);
+			console.log(max);
 			maximum[i].style.borderColor = 'red';
 			error += "Minimum is greater than maximum";
 			$('#ipf_warning').addClass('in');
@@ -534,7 +547,7 @@ function validateIpfRows()
 
 		error = "";
 
-    var min, max;
+		var min, max;
 		if($('#dateEffective').val() == ""){
 			document.getElementById("dateEffective").style.borderColor = "red";
 			error += "Date Effective Required.";
@@ -588,8 +601,8 @@ function validateIpfRows()
 				$('#ipf_warning').addClass('in');
 			}
 
-      min = parseFloat(minimum[i].value);
-      max = parseFloat(maximum[i].value);
+			min = parseFloat(minimum[i].value);
+			max = parseFloat(maximum[i].value);
 
 			if( min > max ){
 				maximum[i].style.borderColor = 'red';
@@ -621,7 +634,7 @@ function validateIpfRows()
 			$('#ipf_warning').addClass('in');
 		}
 		if(error.length == 0){
-        tblLength = minimum.length;
+			tblLength = minimum.length;
 			return true;
 		}
 		else

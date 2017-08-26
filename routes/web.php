@@ -57,9 +57,6 @@ Route::resource('/admin/container_type', 'ContainerTypesController');
 Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 Route::resource('/admin/vehicle','VehiclesController');
 
-//Route::resource('/admin/area', 'AreasController');
-//Route::resource('/admin/area', 'AreasController');
-
 Route::resource('/admin/billing', 'BillingsController');
 Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
@@ -70,6 +67,7 @@ Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 
+Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 
 
 //Sub maintenance

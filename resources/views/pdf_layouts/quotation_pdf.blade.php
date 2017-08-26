@@ -65,13 +65,16 @@
 				<table style="border: 1px solid black; width: 100%;">
 					<thead>
 						<tr>
-							<th width="30%" style="text-align: center;">
+							<th width="20%" style="text-align: center;">
 								<strong>From</span></strong>
 							</th>
-							<th width="30%" style="text-align: center;">
+							<th width="20%" style="text-align: center;">
 								<strong>To</strong>
 							</th>
-							<th width="30%" style="text-align: center;">
+							<th width="20%" style="text-align: center;">
+								<strong>Sizes</strong>
+							</th>
+							<th width="20%" style="text-align: center;">
 								<strong>Rate</strong>
 							</th>
 						</tr>
@@ -84,6 +87,9 @@
 							</td>
 							<td>
 								{{ $quotation_detail->to }}
+							</td>
+							<td style="text-align: center;">
+								{{ $quotation_detail->size }}
 							</td>
 							<td style="text-align: right;">
 								Php {{ $quotation_detail->amount }}

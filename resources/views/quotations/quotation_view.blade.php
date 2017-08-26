@@ -47,6 +47,9 @@
 								<h4>Destination</h4> 
 							</td> 
 							<td> 
+								<h4>Size</h4> 
+							</td>
+							<td> 
 								<h4>Amount</h4> 
 							</td> 
 						</tr> 
@@ -58,6 +61,9 @@
 						</td> 
 						<td> 
 							{{ $quotation_detail->to }} 
+						</td>
+						<td> 
+							{{ $quotation_detail->name }} 
 						</td> 
 						<td> 
 							Php {{ $quotation_detail->amount }} 

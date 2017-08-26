@@ -805,7 +805,7 @@
 
 					success: function (data){
 						console.log(data);
-					//	window.location.replace("{{ route('quotation.index') }}/" + data.id);
+						window.location.replace("{{ route('quotation.index') }}/" + data.id);
 					}
 
 				})

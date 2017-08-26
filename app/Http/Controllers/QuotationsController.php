@@ -82,7 +82,8 @@ class QuotationsController extends Controller
 
 
         $quotation_details = DB::table('quotation_details')
-        ->select('A.name AS from', 'B.name AS to', 'amount')
+        ->select('A.name AS from', 'B.name AS to', 'amount','C.name')
+        ->join('container_types AS C', 'container_volume', '=', 'C.id')
         ->join('locations AS A', 'locations_id_from', '=', 'A.id')
         ->join('locations AS B', 'locations_id_to', '=', 'B.id')
         ->where('quot_header_id', '=', $id)
@@ -101,9 +102,10 @@ class QuotationsController extends Controller
             ->get();
 
             $quotation_details = DB::table('quotation_details')
-            ->select('A.name AS from', 'B.name AS to', 'amount')
+            ->select('A.name AS from', 'B.name AS to', 'amount', 'C.name as size')
             ->join('locations AS A', 'locations_id_from', '=', 'A.id')
             ->join('locations AS B', 'locations_id_to', '=', 'B.id')
+            ->join('container_types AS C', 'container_volume', '=', 'C.id')
             ->where('quot_header_id', '=', $request->id)
             ->get();
 

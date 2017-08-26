@@ -63,6 +63,13 @@ class ImportProcessingFeesController extends Controller
 		$new_ipf->delete();
 	}
 
+	public function ipf_maintain_data(Request $request){
+		$rates = DB::table('import_processing_fee_details')
+		->where('ipf_headers_id', '=', $request->ipf_id)
+		->get();
+
+		return $rates;
+	}
 
 
 }
