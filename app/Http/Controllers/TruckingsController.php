@@ -177,6 +177,13 @@ class TruckingsController extends Controller
             }
 
         }
+
+        $consignee = DB::table('consignees')
+        ->select('consignees.id')
+        ->join('consignee_service_order_headers as A', 'A.consignees_id', '=', 'consignees.id')
+        ->join('consignee_service_order_details as B', 'B.so_headers_id', '=', 'A.id')
+        ->join('trucking_service_orders as C', 'C.so_details_id', '=', 'B.id')
+        ->get();
         
 
         $container_volumes = ContainerType::all();
@@ -192,7 +199,7 @@ class TruckingsController extends Controller
 
         if($delivery[0]->status == 'P')
         {
-            return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+            return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee']));
         }
         else{
             return 'Cannot edit finished deliveries';

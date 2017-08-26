@@ -29,7 +29,7 @@
 				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
 				@endif
 				<br />
-				<table class="table">
+				<table class="table table-responsive">
 					<tbody>
 						<tr>
 							<td class="active"><strong>Trucking Service Order #: </strong></td>
@@ -104,7 +104,7 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive" id = "delivery_table">
+				<table class = "table table-responsive table-striped" id = "delivery_table">
 					<thead>
 						<tr>
 							<td style="width: 5%;">
@@ -170,7 +170,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
-				<table class="table table-responsive" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -224,7 +224,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
-				<table class="table table-responsive" style="width: 100%;" id = "expense_table">
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -304,7 +304,7 @@
 					</div>
 				</div>
 				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
+					<table style="width: 100%;" id = "delivery_fees_table" class = "table table-striped">
 						<thead>
 							<tr style="width: 40%; text-align: center;">
 								<td>
@@ -370,7 +370,7 @@
 					</div>
 				</div>
 				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
+					<table style="width: 100%;" id = "delivery_fees_table" class="table table-striped table-responsive">
 						<thead>
 							<tr style="width: 40%; text-align: center;">
 								<td>
