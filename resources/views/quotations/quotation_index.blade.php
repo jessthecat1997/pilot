@@ -11,7 +11,7 @@
 	<div  class = "row">
 		<div class = "panel default-panel">
 			<div class = "panel-body">
-				<table class = "table table-responsive" id = "quotation_table">
+				<table class = "table table-responsive table-striped" id = "quotation_table">
 					<thead>
 						<tr>
 							<td>

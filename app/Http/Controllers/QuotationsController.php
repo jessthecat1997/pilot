@@ -59,7 +59,7 @@ class QuotationsController extends Controller
                     $quotation_detail->locations_id_from = $container_detail->location[0]->location_from;;
                     $quotation_detail->locations_id_to = $container_detail->location[0]->location_to;;
                     $quotation_detail->container_volume = $container_detail_data->size;
-                    $quotation_detail->amount = $request->$container_detail->location[0]->amount;
+                    $quotation_detail->amount = $container_detail->location[0]->amount;
                     $quotation_detail->quot_header_id = $new_quotation->id;
                     $quotation_detail->save();
                 }
