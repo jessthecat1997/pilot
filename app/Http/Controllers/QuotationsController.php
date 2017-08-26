@@ -11,7 +11,7 @@ class QuotationsController extends Controller
 
     public function index()
     {
-        
+
         return view('quotations.quotation_index');
     }
 
@@ -48,16 +48,26 @@ class QuotationsController extends Controller
 
         $new_quotation =  \App\QuotationHeader::all()->last();
 
-        for($i = 0; $i < count($request->areas_from); $i++){
-            $quotation_detail = new \App\QuotationDetail;
-            $quotation_detail->locations_id_from = $request->areas_from[$i];
-            $quotation_detail->locations_id_to = $request->areas_to[$i];
+        $data = json_decode($request->_data);
+        foreach ($data as $location => $value)
+        {
+            $container = json_decode((string)json_encode($value));
+            foreach ($container as $key => $container_detail)
+            {
+                foreach ($container_detail->details as $key => $container_detail_data){
+                    $quotation_detail = new \App\QuotationDetail;
+                    $quotation_detail->locations_id_from = $container_detail->location[0]->location_from;;
+                    $quotation_detail->locations_id_to = $container_detail->location[0]->location_to;;
+                    $quotation_detail->container_volume = $container_detail_data->size;
+                    $quotation_detail->amount = $request->$container_detail->location[0]->amount;
+                    $quotation_detail->quot_header_id = $new_quotation->id;
+                    $quotation_detail->save();
+                }
 
-            $quotation_detail->amount = $request->amount[$i];
-            $quotation_detail->quot_header_id = $new_quotation->id;
-            $quotation_detail->save();
+            }
         }
-       
+
+
         return $new_quotation;
     }
 
@@ -65,18 +75,18 @@ class QuotationsController extends Controller
     public function show($id)
     {
         $quotation = DB::table('quotation_headers')
-            ->select('quotation_headers.id', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
-            ->join('consignees AS B', 'consignees_id', '=', 'B.id')
-            ->where('quotation_headers.id', '=', $id)
-            ->get();
-           
+        ->select('quotation_headers.id', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+        ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+        ->where('quotation_headers.id', '=', $id)
+        ->get();
 
-            $quotation_details = DB::table('quotation_details')
-            ->select('A.name AS from', 'B.name AS to', 'amount')
-            ->join('locations AS A', 'locations_id_from', '=', 'A.id')
-            ->join('locations AS B', 'locations_id_to', '=', 'B.id')
-            ->where('quot_header_id', '=', $id)
-            ->get();
+
+        $quotation_details = DB::table('quotation_details')
+        ->select('A.name AS from', 'B.name AS to', 'amount')
+        ->join('locations AS A', 'locations_id_from', '=', 'A.id')
+        ->join('locations AS B', 'locations_id_to', '=', 'B.id')
+        ->where('quot_header_id', '=', $id)
+        ->get();
 
         return view('quotations.quotation_view', compact(['quotation', 'quotation_details']));
     }

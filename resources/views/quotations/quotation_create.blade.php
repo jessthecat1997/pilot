@@ -150,7 +150,7 @@
 											</select>
 										</td>
 										<td>
-											<select name = "volume" id = "containerVolume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
+											<select name = "volume" id = "0_volume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
 
 											</select>
 										</td>
@@ -453,7 +453,7 @@
 	$('#collapse1').addClass('in');
 	var from_id = [];
 	var to_id = [];
-
+	var row_ctr = 1;
 	var amount_value = [];
 	var consigneeID = null;
 	var from_id_descrp = [];
@@ -461,6 +461,9 @@
 	var amount_value_descrp = [];
 
 	var consigneeID = null;
+
+	var json;
+	var results;
 
 	var arr_volume = [ 
 	@forelse($volumes as $volume)
@@ -726,12 +729,14 @@
 			e.preventDefault();
 			$('#contract_rates_warning').removeClass('fade in');
 			if(validateContractRows() === true){
-				$('#contract_parent_table').append(contract_row);
+				new_contract_append = contract_row.replace('0_volume', row_ctr +'_volume');
+				$('#contract_parent_table').append(new_contract_append);
 				$('.volume').select2({
 					data: arr_volume ,
 					placeholder: "Select Sizes",
 					allowClear: true
 				});
+				row_ctr++;
 			}
 
 		})
@@ -795,10 +800,12 @@
 						'amount' : amount_value,
 						'consignees_id' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'_data' : results,
 					},
 
 					success: function (data){
-						window.location.replace("{{ route('quotation.index') }}/" + data.id);
+						console.log(data);
+					//	window.location.replace("{{ route('quotation.index') }}/" + data.id);
 					}
 
 				})
@@ -810,6 +817,7 @@
 
 function validateContractRows()
 {
+
 	from_id = [];
 	to_id = [];
 	cv_id = [];
@@ -939,44 +947,20 @@ function fillVolumes(){
 
 	json = [];
 	var linkData;
-	for (var i = 0; i < from_id.length; i++) {
+	for (var i = 0; i < from.length; i++) {
 		var child = [{ }];
 		child[0]['location'] = [{
-			location_from : from[i],
-			location_to : to[i],
+			location_from : from[i].value,
+			location_to : to[i].value,
+			amount : amount[i].value,
 		}];
-		child[0]['rates'] = [];
-		table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
+		child[0]['details'] = [];
 
-		var name = container_array[i];
-
-
-		con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
-		con_gw = document.getElementsByName(name + '_grossWeight');
-		con_supp = document.getElementsByName(name + '_supplier');
+		table_detail_row_count = $('[name="volume"]').eq(i).find('option:selected').length;
+		
 		for (var j = 0; j < table_detail_row_count; j++) {
-			if(con_descrp[j].value === "")
-			{
-				con_descrp[j].style.borderColor = "red";
-				error += "Description is required";
-			}
-			else
-			{
-				con_descrp[j].style.borderColor = 'green';
-			}
-			if(con_gw[j].value === "")
-			{
-				error+= "Weight is required";
-				con_gw[j].style.borderColor = 'red';
-			}
-			else
-			{
-				con_gw[j].style.borderColor = 'green';
-			}
 			child[0].details.push({
-				descriptionOfGood : con_descrp[j].value,
-				grossWeight : con_gw[j].value,
-				supplier : con_supp[j].value
+				size : $('[name="volume"]').eq(i).find('option:selected').eq(j).val(),
 			});
 		}
 		json.push(child);
@@ -1081,11 +1065,10 @@ function validateConsignee()
 	}
 
 }
-function getFinalRates(){
 
-}
 function finalvalidateContractRows()
 {
+	fillVolumes();
 	from_id = [];
 	to_id = [];
 	cv_id = [];
