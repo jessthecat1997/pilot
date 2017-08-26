@@ -575,6 +575,23 @@
 		</div>
 	</section>
 </div>
+<div class="modal fade" id="confirm-create" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Delivery 
+			</div>
+			<div class="modal-body">
+				Save Delivery
+			</div>
+			<div class="modal-footer">
+
+				<button class = "btn btn-success" id = "confirm-save" >Confirm</button>
+				<button class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 
 
@@ -882,12 +899,33 @@
 				}
 			})
 		})
-		
 		$(document).on('click', '.save-delivery', function(e){
+			e.preventDefault();
+
 			if($("#choices li.active").text() === "Without Container"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
 
+						$('#confirm-create').modal('show');
+					}
+				}
+			}
+			else{
+				if(validateContainer() == true){
+					if(validateOrder() == true){
+
+						validateContainerDetail();
+						$('#confirm-create').modal('show');	
+					}
+				}
+			}
+
+		})		
+		$(document).on('click', '#confirm-save', function(e){
+			if($("#choices li.active").text() === "Without Container"){
+				if(validateDetail() === true){
+					if(validateOrder() == true){
+						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
 							type: 'POST',
 							url: '{{route("trucking.index")}}/{{ $so_id }}/store_delivery',
@@ -917,6 +955,7 @@
 					if(validateOrder() == true){
 
 						validateContainerDetail();
+						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
 							type: 'POST',
 							url: '{{ route("trucking.store") }}/{{ $so_id }}/store_delivery',

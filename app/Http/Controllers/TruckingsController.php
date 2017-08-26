@@ -144,7 +144,8 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.emp_id_helper',
             'delivery_receipt_headers.locations_id_del',
             'delivery_receipt_headers.locations_id_pick',
-            'delivery_receipt_headers.withContainer'
+            'delivery_receipt_headers.withContainer',
+            'delivery_receipt_headers.amount'
             )
 
         ->get();
@@ -492,6 +493,7 @@ class TruckingsController extends Controller
             $delivery->pickupDateTime = $request->pickupDate;
 
             $delivery->plateNumber = $request->plateNumber;
+            $delivery->amount = $request->amount;
 
             $delivery->save();
 
@@ -536,6 +538,7 @@ class TruckingsController extends Controller
             $delivery->pickupDateTime = $request->pickupDate;
 
             $delivery->plateNumber = $request->plateNumber;
+            $delivery->amount = $request->amount;
 
             $delivery->save();
 
