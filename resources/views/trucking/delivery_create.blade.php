@@ -383,72 +383,111 @@
 			</div>
 
 			<form class = "form-horizontal">
-				<div class = "col-md-6">
-					<div class = "panel panel-default">
-						<div class = "panel-heading">
-							Vehicle Assignment
-						</div>
-						<div class = "panel-body">
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
-								<div class="col-sm-8"> 
-									<select class="form-control" id = "vehicle_type">
-										<option value = "0"></option>
-										@forelse($vehicle_types as $vehicle_type)
-										<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
-										@empty
-										@endforelse
-									</select>
+				<div class = "row">
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading">
+								Rates
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="col-md-5">Standard Area Rate:</label>
+									<span class = "col-md-7" id = "standard_rate"></span>
+								</div>
+								<div class="form-group">
+									<div class = "">
+
+									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
-								<div class="col-sm-8"> 
-									<select class="form-control" id = "vehicle">
-										<option value="0"></option>
-									</select>
+						</div>
+					</div>
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading">
+								Delivery Fee
+							</div>
+							<div class = "panel-body">
+								<br />
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Amount:</label>
+									<div class="col-sm-8">
+										<div class="input-group ">
+											<span class="input-group-addon" id="cdsfeeadd">Php</span>
+											<input  type="text" class=" form-control" name = "deliveryFee" id = "deliveryFee" style="text-align: right;">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class = "col-md-6">
-					<div class = "panel-default panel">
-						<div class = "panel-heading">
-							Driver Assignment
-						</div>
-						<div class = "panel-body">
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
-								<div class="col-sm-8">
-									<select class="form-control" id = "driver">
-										<option value = "0"></option>
-										@forelse($employees as $employee)
-										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-										@empty
-										@endforelse
-									</select>
+				<div class = "row">
+					<div class = "col-md-6">
+						<div class = "panel panel-default">
+							<div class = "panel-heading">
+								Vehicle Assignment
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
+									<div class="col-sm-8"> 
+										<select class="form-control" id = "vehicle_type">
+											<option value = "0"></option>
+											@forelse($vehicle_types as $vehicle_type)
+											<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
+									<div class="col-sm-8"> 
+										<select class="form-control" id = "vehicle">
+											<option value="0"></option>
+										</select>
+									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
-								<div class="col-sm-8">
-									<select class="form-control" id = "helper">
-										<option value = "0"></option>
-										@forelse($employees as $employee)
-										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-										@empty
-										@endforelse
-									</select>
+						</div>
+					</div>
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading">
+								Driver Assignment
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
+									<div class="col-sm-8">
+										<select class="form-control" id = "driver">
+											<option value = "0"></option>
+											@forelse($employees as $employee)
+											<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
+									<div class="col-sm-8">
+										<select class="form-control" id = "helper">
+											<option value = "0"></option>
+											@forelse($employees as $employee)
+											<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</form>
-			<div class = "col-md-offset-2">
 
-			</div>
 		</div>
 		<div class="panel-footer">
 			<button class="btn btn-md btn-success save-delivery" style="width: 100%;">Save</button>
@@ -548,6 +587,9 @@
 		var container_array = [0];
 		var selected_container = 0;
 		var selected_location = 0;
+
+		var selected_from = 0;
+		var selected_to = 0;
 
 		//containerNumber
 		Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
@@ -888,6 +930,7 @@
 
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
+			selected_from = $(this).val();
 			if(pickup_id != 0)
 			{
 				$.ajax({
@@ -918,11 +961,40 @@
 				$('#_province').val("");
 				$('#_zip').val("");
 			}
+
+			if(selected_from != 0 && selected_to != 0){
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("get_area_rate") }}',
+					data: {
+						'area_from' : selected_from,
+						'area_to' : selected_to,
+					},
+					success : function(data) {
+						if(data.length == 0){
+							$('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
+							$('#deliveryFee').val("0.00");
+						}
+						else{
+							$('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
+							$('#deliveryFee').val(data[0].amount);
+						}
+					}
+				})
+			}
+
+			if(selected_from == 0 || selected_to == 0)
+			{
+				$('#deliveryFee').val("0.00");
+				$('#standard_rate').html("");
+			};
+			
 			
 		})
 
 		$(document).on('change', '#deliver_id', function(e){
 			deliver_id = $(this).val();
+			selected_to = $(this).val();
 			if(deliver_id != 0)
 			{
 				$.ajax({
@@ -953,6 +1025,31 @@
 				$('#_dprovince').val("");
 				$('#_dzip').val("");
 			}
+			if(selected_from != 0 && selected_to != 0){
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("get_area_rate") }}',
+					data: {
+						'area_from' : selected_from,
+						'area_to' : selected_to,
+					},
+					success : function(data) {
+						if(data.length == 0){
+							$('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
+							$('#deliveryFee').val("0.00");
+						}
+						else{
+							$('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
+							$('#deliveryFee').val(data[0].amount);
+						}
+					}
+				})
+			}
+			if(selected_from == 0 || selected_to == 0)
+			{
+				$('#deliveryFee').val("0.00");
+				$('#standard_rate').html("");
+			};
 			
 		})
 

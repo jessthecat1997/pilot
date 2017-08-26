@@ -84,6 +84,14 @@ class TruckingsController extends Controller
         //
     }
 
+    public function get_area_rate(Request $request){
+        $location = DB::table('standard_area_rates')
+        ->where('areaFrom', '=', $request->area_from)
+        ->where('areaTo', '=', $request->area_to)
+        ->get();
+        return $location;
+    }
+
     public function edit_delivery(Request $request)
     {
         $so_id = $request->trucking_id;

@@ -287,6 +287,7 @@ Route::get('/trucking/{trucking_id}/delivery/create', 'TruckingsController@new_d
 Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
 Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
+Route::Get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
 
 
 // Contract
