@@ -266,7 +266,49 @@
 		</div>
 	</div>
 </div>
-
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<div class = "panel">
+			<div class = "panel-body">
+			
+				<h4>Consignee Deposits<button class = "btn but new_revenue pull-right">New Deposit</button></h4>
+				<br />
+			
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+					<thead>
+						<tr>
+							<td>
+								Date Added
+							</td>
+							<td>
+								Amount
+							</td>
+							<td>
+								Current Balance
+							</td>
+							<td>
+								Description
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			
+				<div class = "form-horizontal">
+					<div class = "col-md-10">
+						Create Billing First to Add Payables.
+					</div>
+					<div class="col-md-2">
+				
+						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+</div>
 <div id="revModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
