@@ -18,7 +18,7 @@ class CreateDutiesAndTaxesHeadersTable extends Migration
           $table->integer('exchangeRate_id')->unsigned();
           $table->integer('cdsFee_id')->unsigned();
           $table->integer('ipfFee_id')->unsigned();
-          $table->integer('brokerageFee');
+          $table->decimal('brokerageFee', 19, 3);
           $table->decimal('arrastre', 19, 2);
           $table->decimal('wharfage', 19, 2);
           $table->decimal('bankCharges', 19, 2);
