@@ -254,11 +254,7 @@ class BillingDetailsController extends Controller
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::select('SELECT t.id, 
-			C.companyName,
-			(CASE t.isRevenue
-			WHEN t.isRevenue = 1 THEN "Revenue"
-			WHEN t.isRevenue = 0 THEN "Expense"
-			END) as isRevenue,	
+			C.companyName, t.isRevenue,	
 			CONCAT("Php ",(ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status

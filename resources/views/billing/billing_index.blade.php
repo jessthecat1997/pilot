@@ -124,7 +124,8 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
-			{ data: 'isRevenue' },
+			{ data: 'isRevenue', 
+			"render" : function( data, type, full ) {return formatWithBillType(data); }},
 			{ data: 'Total' },
 			{ data: 'due_date' },
 			{ data: 'status' },
@@ -132,12 +133,12 @@
 			]
 		})
 
-		function formatWithStatus(n) { 
+		function formatWithBillType(n) { 
 
-			if (n == 'P'){
-				return "Paid";
+			if (n == '0'){
+				return "Refundable Charges";
 			}else{
-				return "Unpaid";
+				return "Billing";
 			}
 		} 
 	})
