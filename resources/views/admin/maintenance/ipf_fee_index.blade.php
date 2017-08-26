@@ -267,10 +267,13 @@
 				},
 				success: function (data)
 				{
+					var rows = "";
 					for(var i = 0; i < data.length; i++){
-						
+						rows += '<tr id = "ipf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control ipf_minimum_valid" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control  ipf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-ipf-row">x</button></td></tr>';
 					}
-					var rows = '<tr id = "ipf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control ipf_minimum_valid" value ="0.00" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control  ipf_maximum_valid" value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-ipf-row">x</button></td></tr>';
+					$('#ipf_parent_table > tbody').html("");
+					$('#ipf_parent_table > tbody').append(rows);
+					
 				}
 
 			})

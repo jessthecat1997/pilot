@@ -164,9 +164,9 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_rev != null)
-				<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
 				@else
-				<h4>List of Revenues</h4>
+				<h4>List of Billings</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
@@ -218,9 +218,9 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_exp != null)
-				<h4>List of Expenses <button class = "btn but new_expense pull-right">New Expense</button></h4>
+				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
 				@else
-				<h4>List of Expenses</h4>
+				<h4>List of Refundable Charges</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
