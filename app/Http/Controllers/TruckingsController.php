@@ -263,7 +263,7 @@ class TruckingsController extends Controller
             ->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
             ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
-            ->select('firstName', 'middleName', 'lastName', 'companyName')
+            ->select('firstName', 'middleName', 'lastName', 'companyName', 'consignees.id')
             ->where('trucking_service_orders.id', '=', $so_id)
             ->get();
 

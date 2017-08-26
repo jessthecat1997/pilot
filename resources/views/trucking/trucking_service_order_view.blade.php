@@ -166,25 +166,22 @@
 				New Deposit
 			</div>
 			<div class="modal-body">
-				
-					<div class = "form-horizontal">
-						<div class = "form-group">
-							<label class="col-md-12">Amount</label>
-							<div class = "col-md-12">
-								<input type="number" class = "form-control" id = "deposit" />
-							</div>
-						</div>
-						<div class = "form-group">
-							<label class= "col-md-12">Description</label>
-							<div class="col-md-12">
-								<textarea class = "form-control"></textarea>
-							</div>
+				<div class = "form-horizontal">
+					<div class = "form-group">
+						<label class="col-md-12">Amount</label>
+						<div class = "col-md-12">
+							<input type="number" class = "form-control" id = "deposit" required />
 						</div>
 					</div>
-			
+					<div class = "form-group">
+						<label class= "col-md-12">Description</label>
+						<div class="col-md-12">
+							<textarea class = "form-control" id = "description" required></textarea>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
-
 				<button class = "btn btn-success confirm-create-deposit">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
@@ -573,6 +570,23 @@
 
 		var selected_delivery = null;
 
+		$(document).on('click', '.confirm-create-deposit', function(e){
+			e.preventDefault();
+			$.ajax({
+				type : 'POST',
+				url : "{{ route('cdeposit.index') }}",
+				data : {
+					'_token' : $('input[name=_token]').val(),
+					'amount' : $('#deposit').val(),
+					'description' : $('#description').val(),
+					'consignees_id' : " {{ $service_order_details[0]->id }}",
+				},
+				success : function (data){
+					console.log(data);
+				}
+			})
+		})
+		
 		$(document).on('click', '.new_deposit', function(e){
 			e.preventDefault();
 			$('#deposit_modal').modal('show');

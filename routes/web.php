@@ -28,6 +28,7 @@ Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
 
+
 //Employees
 
 Route::resource('/employees', 'EmployeesController');
@@ -229,6 +230,8 @@ Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
 
+//Deposits
+Route::resource('cdeposit', 'ConsigneeDepositsController');
 
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
