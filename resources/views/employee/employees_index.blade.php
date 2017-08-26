@@ -14,13 +14,13 @@
        <table class="table table-responsive" id = "cs_table">
         <thead>
           <tr>
-            <td width="50%">
+            <td style = "width:50%"">
               Name
             </td>
-            <td>
+            <td style="width: 40%;">
               Roles
             </td>
-            <td width="10%">
+            <td style = "width: 10%">
               Action
             </td>
           </tr>
@@ -50,11 +50,9 @@
   var current_route = "";
   $(document).ready(function(){
     var cstable = $('#cs_table').DataTable({
-      responsive: true,
-      scrollX: true,
-      scrollX: "100%",
-      processing: true,
-      serverSide: true,
+      processing: false,
+      serverSide: false,
+      deferRender: true,
       ajax: '{{ route("employee.data") }}',
       columns: [
       { data: 'firstName' },

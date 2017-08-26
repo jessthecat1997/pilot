@@ -86,7 +86,7 @@
                 </li> -->
                 <li>
                     <br>
-                    <a href="Dashboard.html"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
+                    <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
                     <a data-toggle="collapse" href="#collapse1"><i class="fa fa-exchange"></i>&nbsp;&nbsp;Transactions</a>
