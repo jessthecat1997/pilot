@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.maintenance')
 @section('content')
 <h2>&nbsp;Quotations</h2>
 <hr>
@@ -111,14 +111,16 @@
 								<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
 									<thead>
 										<tr>
-											<th width="30%">
+											<th width="25%">
 												<strong>Pickup Point</strong>
 											</th>
-											<th width="30%">
+											<th width="25%">
 												<strong>Delivery Point</strong>
 											</th>
-
-											<th width="30%">
+											<th width="20%">
+												<strong>Size</strong>
+											</th>
+											<th width="20%">
 												<strong>Amount</strong>
 											</th>
 											<th width="10%" style="text-align: center;">
@@ -147,7 +149,11 @@
 												@endforelse
 											</select>
 										</td>
+										<td>
+											<select name = "volume" id = "containerVolume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
 
+											</select>
+										</td>
 										<td>
 											<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
 
@@ -168,7 +174,7 @@
 
 						</div>
 						<div class = "col-md-4">
-						
+
 						</div>
 					</div>
 				</div>
@@ -456,17 +462,27 @@
 
 	var consigneeID = null;
 
+	var arr_volume = [ 
+	@forelse($volumes as $volume)
+	{ id:'{{ $volume->id }}', text: '{{ $volume->name }}'},
+	@empty
+	@endforelse
+	];
+	
+
 	$(document).ready(function(){
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
 		var term_condition_row = '<tr><td><textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails"></textarea></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-term-row">x</button></td></tr>';
 		$('#collapse1').addClass('in');
-		$('#contract-row').remove();
 
-		
 		$.fn.dataTable.ext.errMode = 'throw';
 
 		$('#consignee_id').select2();
-
+		$('.volume').select2({
+			data: arr_volume ,
+			placeholder: "Select a state",
+			allowClear: true
+		});
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();
 			if($('#consignee_id').val() != 0){
@@ -588,7 +604,7 @@
 				$('#bill_city').removeAttr('disabled');
 				$('#bill_zip').removeAttr('disabled');
 			}
-			
+
 		})
 
 		$(document).on('click', '.new-consignee', function(e){
@@ -616,7 +632,7 @@
 						'contactNumber' : $('#contactNumber').val(),
 						'businessStyle' : $('#businessStyle').val(),
 						'TIN' : $('#TIN').val(),
-						
+
 						'address' : $('#phy_address').val(),
 						'city' : $('#phy_city option:selected').text(),
 						'st_prov' : $('#phy_province option:selected').text(),
@@ -641,7 +657,7 @@
 							$('#collapse_2').addClass('in');
 							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
 							$('#_companyName').val($('#companyName').val());
-							
+
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
@@ -711,7 +727,13 @@
 			$('#contract_rates_warning').removeClass('fade in');
 			if(validateContractRows() === true){
 				$('#contract_parent_table').append(contract_row);
+				$('.volume').select2({
+					data: arr_volume ,
+					placeholder: "Select Sizes",
+					allowClear: true
+				});
 			}
+
 		})
 
 		$(document).on('change', '.area_from_valid', function(e){
@@ -742,10 +764,10 @@
 					var amount = parseFloat($(this).val());
 				}
 				catch(err){
-					
+
 				}
 				if(typeof(amount) === "string"){
-					
+
 				}
 				else{
 
@@ -862,26 +884,27 @@ function validateContractRows()
 		rate_pairs.push(pair);
 	}
 
-	var i, j, n;
-	found = false;
-	n = rate_pairs.length;
+	// var i, j, n;
+	// found = false;
+	// n = rate_pairs.length;
 
-	for (i=0; i<n; i++) {                        
-		for (j=i+1; j<n; j++)
-		{              
-			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
-				found = true;
-				from[i].style.borderColor = 'red';
-				to[i].style.borderColor = 'red';
+	// for (i=0; i<n; i++) {                        
+	// 	for (j=i+1; j<n; j++)
+	// 	{
 
-				from[j].style.borderColor = 'red';
-				to[j].style.borderColor = 'red';
-			}
-		}	
-	}
-	if(found == true){
-		error+= "Existing rate.";
-	}
+	// 		if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+	// 			found = true;
+	// 			from[i].style.borderColor = 'red';
+	// 			to[i].style.borderColor = 'red';
+
+	// 			from[j].style.borderColor = 'red';
+	// 			to[j].style.borderColor = 'red';
+	// 		}
+	// 	}	
+	// }
+	// if(found == true){
+	// 	error+= "Existing rate.";
+	// }
 
 	//Final validation
 	if(error.length == 0){
@@ -893,6 +916,82 @@ function validateContractRows()
 		return false;
 	}
 
+}
+
+
+function fillVolumes(){
+	from_id = [];
+	to_id = [];
+	cv_id = [];
+	amount_value = [];
+
+	from_id_descrp = [];
+	to_id_descrp = [];
+	cv_id_descrp = [];
+	amount_value_descrp = [];
+
+	rate_pairs = [];
+
+	from = document.getElementsByName('areas_id_from');
+	to = document.getElementsByName('areas_id_to');
+	amount = document.getElementsByName('amount');
+	error = "";
+
+	json = [];
+	var linkData;
+	for (var i = 0; i < from_id.length; i++) {
+		var child = [{ }];
+		child[0]['location'] = [{
+			location_from : from[i],
+			location_to : to[i],
+		}];
+		child[0]['rates'] = [];
+		table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
+
+		var name = container_array[i];
+
+
+		con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
+		con_gw = document.getElementsByName(name + '_grossWeight');
+		con_supp = document.getElementsByName(name + '_supplier');
+		for (var j = 0; j < table_detail_row_count; j++) {
+			if(con_descrp[j].value === "")
+			{
+				con_descrp[j].style.borderColor = "red";
+				error += "Description is required";
+			}
+			else
+			{
+				con_descrp[j].style.borderColor = 'green';
+			}
+			if(con_gw[j].value === "")
+			{
+				error+= "Weight is required";
+				con_gw[j].style.borderColor = 'red';
+			}
+			else
+			{
+				con_gw[j].style.borderColor = 'green';
+			}
+			child[0].details.push({
+				descriptionOfGood : con_descrp[j].value,
+				grossWeight : con_gw[j].value,
+				supplier : con_supp[j].value
+			});
+		}
+		json.push(child);
+	}
+	results = JSON.stringify(json);
+	console.log(results);
+
+	if(error.length == 0){
+		return 0;
+	}
+	else
+	{
+		console.log(error);
+		return false;
+	}
 }
 
 function validateConsignee()
@@ -982,7 +1081,9 @@ function validateConsignee()
 	}
 
 }
+function getFinalRates(){
 
+}
 function finalvalidateContractRows()
 {
 	from_id = [];
@@ -1084,19 +1185,23 @@ function finalvalidateContractRows()
 	found= false;
 	n=rate_pairs.length;
 
-	for (i=0; i<n; i++) {                        
-		for (j=i+1; j<n; j++)
-		{              
-			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
-				found = true;
-				from[i].style.borderColor = 'red';
-				to[i].style.borderColor = 'red';
+	// for (i=0; i<n; i++) {                        
+	// 	for (j=i+1; j<n; j++)
+	// 	{              
+	// 		if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+	// 			found = true;
+	// 			from[i].style.borderColor = 'red';
+	// 			to[i].style.borderColor = 'red';
 
-				from[j].style.borderColor = 'red';
-				to[j].style.borderColor = 'red';
-			}
-		}	
-	}
+	// 			from[j].style.borderColor = 'red';
+	// 			to[j].style.borderColor = 'red';
+	// 		}
+	// 	}	
+	// }
+	// if(found == true){
+	// 	error+= "Existing rate.";
+	// 	$('#contract_rates_warning').addClass('in');
+	// }
 
 	for (var i = 0; i < terms.length; i++){
 		if(terms[i].value === ""){
@@ -1110,10 +1215,7 @@ function finalvalidateContractRows()
 	}
 	console.log(terms_and_condition_string);
 
-	if(found == true){
-		error+= "Existing rate.";
-		$('#contract_rates_warning').addClass('in');
-	}
+	
 	console.log(error);
 	if(error.length == 0){
 		return true;

@@ -21,7 +21,7 @@
 							<div class = "col-md-12">
 								<div class="form-group">        
 									<label class="control-label col-md-5" for="status">Delivery ID: </label>
-									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->id }}</span>
+									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->id }}</span>	
 								</div>
 								<div class="form-group">
 									<label class="control-label col-md-5" for="status">Driver: </label>

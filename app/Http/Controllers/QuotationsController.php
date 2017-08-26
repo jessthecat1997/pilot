@@ -18,6 +18,8 @@ class QuotationsController extends Controller
     
     public function create()
     {
+        $volumes = \App\ContainerType::all();
+
         $consignees = \App\Consignee::all();
 
         $provinces = \App\LocationProvince::all();
@@ -32,7 +34,7 @@ class QuotationsController extends Controller
         ->where('deleted_at', '=', null)
         ->get();
 
-        return view('quotations.quotation_create', compact(['term_array', 'locations', 'provinces', 'consignees']));
+        return view('quotations.quotation_create', compact(['term_array', 'locations', 'provinces', 'consignees', 'volumes']));
     }
 
 

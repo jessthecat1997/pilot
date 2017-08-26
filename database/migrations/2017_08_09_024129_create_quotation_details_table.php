@@ -17,6 +17,7 @@ class CreateQuotationDetailsTable extends Migration
             $table->increments('id');
             $table->integer('locations_id_from')->nullable()->unsigned();
             $table->integer('locations_id_to')->nullable()->unsigned();
+            $table->integer('container_volume')->unsigned();
             $table->decimal('amount', 19, 2);
             $table->integer('quot_header_id')->unsigned();
             $table->timestamps();
@@ -25,6 +26,7 @@ class CreateQuotationDetailsTable extends Migration
             $table->foreign('locations_id_from')->references('id')->on('locations');
             $table->foreign('locations_id_to')->references('id')->on('locations');
             $table->foreign('quot_header_id')->references('id')->on('quotation_headers');
+            $table->foreign('container_volume')->references('id')->on('container_types');
 
         });
     }

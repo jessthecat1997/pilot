@@ -70,18 +70,22 @@
 						</tr>
 						<tr>
 							<td class="active">
+								<strong>Estimated Delivery Fee: </strong>
 							</td>
-							<td class="success">
+							
+							<td class="success" colspan="2">
+								<strong>Php {{ number_format((float)$estimate, 3, '.', '') }}</strong>
+							</td>
+						</tr>
+						<tr>
+							<td class = "active">
 								<strong>Delivery Status: </strong><br><br>
-								<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
-								<br />
-								<br />
-								<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
-								<br />
-								<br />
-								<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
+
 							</td>
-							<td class="success">
+							<td class="success" colspan="2">
+								<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
+								<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
+								<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
 							</td>
 						</tr>
 					</tbody>

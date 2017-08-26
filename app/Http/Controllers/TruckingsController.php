@@ -259,10 +259,16 @@ class TruckingsController extends Controller
             ->get();
             
             $deliveries = DB::table('delivery_receipt_headers')
-            ->select('id', 'plateNumber', 'created_at', 'status')
+            ->select('id', 'plateNumber', 'created_at', 'status', 'amount')
             ->where('deleted_at', '=', null)
             ->where('tr_so_id','=', $so_id)
             ->get();
+
+            $estimate = 0;
+
+            foreach ($deliveries as $delivery => $delivery_value) {
+                $estimate += $delivery_value->amount;
+            }
 
             $success_trucking = DB::table('delivery_receipt_headers')
             ->select('id')
@@ -284,7 +290,7 @@ class TruckingsController extends Controller
 
 
 
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate']));   
         }
         catch(ModelNotFoundException $e)
         {
@@ -334,6 +340,7 @@ class TruckingsController extends Controller
             $new_delivery_head->deliveryDateTime = $request->deliveryDate;
             $new_delivery_head->pickupDateTime = $request->pickupDate;
             $new_delivery_head->tr_so_id = $request->trucking_id;
+            $new_delivery_head->amount = $request->amount;
 
             $new_delivery_head->save();
 
@@ -365,6 +372,8 @@ class TruckingsController extends Controller
             $new_delivery_head->status = "P";
             $new_delivery_head->withContainer = 1;
             $new_delivery_head->tr_so_id = $request->trucking_id;
+            
+            $new_delivery_head->amount = $request->amount;
 
             $new_delivery_head->save();
 

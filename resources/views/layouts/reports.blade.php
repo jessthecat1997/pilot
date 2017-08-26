@@ -79,12 +79,6 @@
     <div id="wrapper" id="sidebar">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <!-- <li class="sidebar-brand" id="sidebrand">
-                    <a href="#">
-                        <img src="/images/pilotlogo.png" id="logo">
-                    </a>
-                </li> -->
                 <li>
                     <br>
                     <a href=" {{ route('dasboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
