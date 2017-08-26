@@ -32,7 +32,7 @@ class StandardAreaRatesController extends Controller
         $sar->amount = $request->amount;
         $sar->save();
 
-        return $area;
+        return $sar;
     }
 
 
