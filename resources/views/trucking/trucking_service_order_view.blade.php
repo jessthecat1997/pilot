@@ -159,6 +159,39 @@
 	</div>
 </div>
 
+<div class="modal fade" id="deposit_modal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				New Deposit
+			</div>
+			<div class="modal-body">
+				
+					<div class = "form-horizontal">
+						<div class = "form-group">
+							<label class="col-md-12">Amount</label>
+							<div class = "col-md-12">
+								<input type="number" class = "form-control" id = "deposit" />
+							</div>
+						</div>
+						<div class = "form-group">
+							<label class= "col-md-12">Description</label>
+							<div class="col-md-12">
+								<textarea class = "form-control"></textarea>
+							</div>
+						</div>
+					</div>
+			
+			</div>
+			<div class="modal-footer">
+
+				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
@@ -270,11 +303,10 @@
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
-			
-				<h4>Consignee Deposits<button class = "btn but new_revenue pull-right">New Deposit</button></h4>
+
+				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
 				<br />
-			
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
 					<thead>
 						<tr>
 							<td>
@@ -294,17 +326,6 @@
 					<tbody>
 					</tbody>
 				</table>
-			
-				<div class = "form-horizontal">
-					<div class = "col-md-10">
-						Create Billing First to Add Payables.
-					</div>
-					<div class="col-md-2">
-				
-						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
-					</div>
-				</div>
-			
 			</div>
 		</div>
 	</div>
@@ -552,6 +573,10 @@
 
 		var selected_delivery = null;
 
+		$(document).on('click', '.new_deposit', function(e){
+			e.preventDefault();
+			$('#deposit_modal').modal('show');
+		})
 		$(document).on('click', '.new_expense ', function(e){
 			e.preventDefault();
 			$('#expModal').modal('show');
