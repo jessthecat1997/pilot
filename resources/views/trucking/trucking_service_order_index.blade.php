@@ -12,7 +12,7 @@
 				<h4>Trucking Service Orders</h4>
 				<div class = "panel-default panel">
 					<div class = "panel-body">
-						<table class = "table-responsive table" width="100%" id = "pending_trucking_so_table">
+						<table class = "table-responsive table table-striped" width="100%" id = "pending_trucking_so_table">
 							<thead>
 								<tr>
 									<td>
@@ -59,8 +59,7 @@
 		var emtable = $('#pending_trucking_so_table').DataTable({
 			processing: false,
 			deferRender: true,
-			"scrollX": true,
-			serverSide: true,
+			serverSide: false,
 			ajax: current_route,
 			columns: [
 			{ data: 'name'},

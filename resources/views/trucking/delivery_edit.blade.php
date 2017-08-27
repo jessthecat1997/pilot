@@ -399,63 +399,122 @@
 			</div>
 
 			<form class = "form-horizontal">
-				<div class = "col-md-6">
-					<div class = "panel panel-default">
-						<div class = "panel-heading">
-							Vehicle Assignment
-						</div>
-						<div class = "panel-body">
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
-								<div class="col-sm-8"> 
-									<select class="form-control" id = "vehicle_type">
-										<option value = "0"></option>
-										@forelse($vehicle_types as $vehicle_type)
-										<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
-										@empty
-										@endforelse
-									</select>
+				<div class = "row">
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading" id = "rate_header">
+								Rates for 
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="col-md-4">Standard Area Rate:</label>
+									<span class = "col-md-8" id = "standard_rate"></span>
+								</div>
+								<div class="form-group">
+									<label class="col-md-4">Quotation Rate/s:</label>
+									<div class = "col-md-8">
+										<div class = "collapse" id = "quotation_collapse">
+											<table id = "quotation_table" class = "table table-striped">
+												<thead>
+													<tr>
+														<td>
+															Size
+														</td>
+														<td>
+															Amount
+														</td>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<span class = "col-md-8" id = "quotation_rate"></span>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
-								<div class="col-sm-8"> 
-									<select class="form-control" id = "vehicle">
-										<option value="0"></option>
-									</select>
+						</div>
+					</div>
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading">
+								Delivery Fee
+							</div>
+							<div class = "panel-body">
+								<br />
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Amount:</label>
+									<div class="col-sm-8">
+										<div class="input-group ">
+											<span class="input-group-addon" id="cdsfeeadd">Php</span>
+											<input  type="text" class=" form-control" name = "deliveryFee" id = "deliveryFee" style="text-align: right;" value = "{{ $delivery[0]->amount }}">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class = "col-md-6">
-					<div class = "panel-default panel">
-						<div class = "panel-heading">
-							Driver Assignment
-						</div>
-						<div class = "panel-body">
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
-								<div class="col-sm-8">
-									<select class="form-control" id = "driver">
-										<option value = "0"></option>
-										@forelse($employees as $employee)
-										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-										@empty
-										@endforelse
-									</select>
+				<div class = "row">
+					<div class = "col-md-6">
+						<div class = "panel panel-default">
+							<div class = "panel-heading">
+								Vehicle Assignment
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
+									<div class="col-sm-8"> 
+										<select class="form-control" id = "vehicle_type">
+											<option value = "0"></option>
+											@forelse($vehicle_types as $vehicle_type)
+											<option value = "{{ $vehicle_type->id }}">{{ $vehicle_type->name  }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
+									<div class="col-sm-8"> 
+										<select class="form-control" id = "vehicle">
+											<option value="0"></option>
+										</select>
+									</div>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
-								<div class="col-sm-8">
-									<select class="form-control" id = "helper">
-										<option value = "0"></option>
-										@forelse($employees as $employee)
-										<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
-										@empty
-										@endforelse
-									</select>
+						</div>
+					</div>
+					<div class = "col-md-6">
+						<div class = "panel-default panel">
+							<div class = "panel-heading">
+								Driver Assignment
+							</div>
+							<div class = "panel-body">
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
+									<div class="col-sm-8">
+										<select class="form-control" id = "driver">
+											<option value = "0"></option>
+											@forelse($employees as $employee)
+											<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
+									<div class="col-sm-8">
+										<select class="form-control" id = "helper">
+											<option value = "0"></option>
+											@forelse($employees as $employee)
+											<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
+											@empty
+											@endforelse
+										</select>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -531,6 +590,23 @@
 		</div>
 	</section>
 </div>
+<div class="modal fade" id="confirm-create" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Delivery 
+			</div>
+			<div class="modal-body">
+				Update Delivery
+			</div>
+			<div class="modal-footer">
+
+				<button class = "btn btn-success" id = "confirm-save" >Confirm</button>
+				<button class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 
 
@@ -562,13 +638,55 @@
 		var selected_container = 0;
 		var selected_location = 0;
 
+		var selected_from = "{{ $delivery[0]->locations_id_pick }}";
+		var selected_to = "{{ $delivery[0]->locations_id_del }}";
+
 		$('#driver').val("{{ $delivery[0]->emp_id_driver }}");
 		$('#helper').val("{{ $delivery[0]->emp_id_helper }}");
 		$('#pickdatecon').val('{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format("Y-m-d") }}');
 		$('#deldatecon').val('{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format("Y-m-d") }}');
+		$('#deliver_id').val("{{ $delivery[0]->locations_id_del }}");
+		$('#pickup_id').val("{{ $delivery[0]->locations_id_pick }}");
 		fill_vehicle();
 		fill_deliver();
 		fill_pickup();
+		fill_delivery_fee();
+		function fill_delivery_fee(){
+			$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("get_area_rate") }}',
+					data: {
+						'area_from' : selected_from,
+						'area_to' : selected_to,
+						'consignee_id' : {{ $consignee[0]->id }}
+					},
+					success : function(data) {
+						if(data[1].length == 0){
+							$('#standard_rate').html('No set standard rate.');
+						}
+						else{
+							$('#standard_rate').html("Php " + data[1][0].amount);
+						}
+						if(data[0].length == 0){
+							$('#quotation_rate').html('No existing quotation rates');
+							$('#quotation_collapse').removeClass('in');
+						}
+						else
+						{
+							var quotation_rows = "";
+							for(var i = 0; i < data[0].length; i++)
+							{
+								console.log(data[0][i].from);
+								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+							}
+							console.log(quotation_rows);
+							$('#quotation_collapse').addClass('in');
+							$('#quotation_table > tbody').html(quotation_rows);
+						}
+					}
+				})
+		}
 		function fill_vehicle()
 		{
 			vehicle_type_id = "{{ $delivery[0]->vehicle_types_id }}";
@@ -930,8 +1048,30 @@
 				}
 			})
 		})
-		
 		$(document).on('click', '.save-delivery', function(e){
+			e.preventDefault();
+
+			if($("#choices li.active").text() === "Without Container"){
+				if(validateDetail() === true){
+					if(validateOrder() == true){
+
+						$('#confirm-create').modal('show');
+					}
+				}
+			}
+			else{
+				if(validateContainer() == true){
+					if(validateOrder() == true){
+
+						validateContainerDetail();
+						$('#confirm-create').modal('show');	
+					}
+				}
+			}
+
+		})
+
+		$(document).on('click', '#confirm-save', function(e){
 			var checkWithoutContainer = "{{ $delivery[0]->withContainer }}";
 			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
@@ -953,7 +1093,8 @@
 								'deliveryDate' : $('#deldatecon').val(),
 								'pickupDate' : $('#pickdatecon').val(),
 								'withContainer' : checkWithoutContainer,
-								'del_head_id' : {{ $delivery[0]->id}},
+								'del_head_id' : "{{ $delivery[0]->id }}",
+								'amount' : $('#deliveryFee').val(),
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -987,7 +1128,8 @@
 								'shippingLine' : con_ShippingLine,
 								'portOfCfsLocation' : con_PortOfCfsLocation,
 								'container_data' : results,
-								'del_head_id' : {{ $delivery[0]->id}},
+								'del_head_id' : "{{ $delivery[0]->id }}",
+								'amount' : $('#deliveryFee').val(),
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -1000,6 +1142,7 @@
 
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
+			selected_from = $(this).val();
 			if(pickup_id != 0)
 			{
 				$.ajax({
@@ -1030,11 +1173,56 @@
 				$('#_province').val("");
 				$('#_zip').val("");
 			}
+
+			if(selected_from != 0 && selected_to != 0){
+				$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("get_area_rate") }}',
+					data: {
+						'area_from' : selected_from,
+						'area_to' : selected_to,
+						'consignee_id' : {{ $consignee[0]->id }}
+					},
+					success : function(data) {
+						if(data[1].length == 0){
+							$('#standard_rate').html('No set standard rate.');
+				
+						}
+						else{
+							$('#standard_rate').html("Php " + data[1][0].amount);
+						}
+						if(data[0].length == 0){
+							$('#quotation_rate').html('No existing quotation rates');
+							$('#quotation_collapse').removeClass('in');
+						}
+						else
+						{
+							var quotation_rows = "";
+							for(var i = 0; i < data[0].length; i++)
+							{
+								console.log(data[0][i].from);
+								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+							}
+							console.log(quotation_rows);
+							$('#quotation_collapse').addClass('in');
+							$('#quotation_table > tbody').html(quotation_rows);
+						}
+					}
+				})
+			}
+
+			if(selected_from == 0 || selected_to == 0)
+			{
+				$('#standard_rate').html("");
+			};
+			
 			
 		})
 
 		$(document).on('change', '#deliver_id', function(e){
 			deliver_id = $(this).val();
+			selected_to = $(this).val();
 			if(deliver_id != 0)
 			{
 				$.ajax({
@@ -1065,6 +1253,47 @@
 				$('#_dprovince').val("");
 				$('#_dzip').val("");
 			}
+			if(selected_from != 0 && selected_to != 0){
+				$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
+				$.ajax({
+					type: 'GET',
+					url: '{{ route("get_area_rate") }}',
+					data: {
+						'area_from' : selected_from,
+						'area_to' : selected_to,
+						'consignee_id' : {{ $consignee[0]->id }}
+					},
+					success : function(data) {
+						if(data[1].length == 0){
+							$('#standard_rate').html('No set standard rate.');
+						}
+						else{
+							$('#standard_rate').html("Php " + data[1][0].amount);
+						}
+						if(data[0].length == 0){
+							$('#quotation_rate').html('No existing quotation rates');
+							$('#quotation_collapse').removeClass('in');
+						}
+						else
+						{
+							var quotation_rows = "";
+							for(var i = 0; i < data[0].length; i++)
+							{
+								console.log(data[0][i].from);
+								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+							}
+							console.log(quotation_rows);
+							$('#quotation_collapse').addClass('in');
+							$('#quotation_table > tbody').html(quotation_rows);
+						}
+					}
+				})
+			}
+			if(selected_from == 0 || selected_to == 0)
+			{
+				$('#standard_rate').html("");
+				$('#quotation_rate').html("");
+			};
 			
 		})
 

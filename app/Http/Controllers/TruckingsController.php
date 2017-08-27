@@ -85,11 +85,24 @@ class TruckingsController extends Controller
     }
 
     public function get_area_rate(Request $request){
+        $quotation = DB::table('quotation_details')
+        ->join('quotation_headers as A', 'quotation_details.quot_header_id', '=', 'A.id')
+        ->join('consignees AS B', 'A.consignees_id', '=', 'B.id')
+        ->join('locations AS C', 'quotation_details.locations_id_from', '=', 'C.id')
+        ->join('locations AS D', 'quotation_details.locations_id_to', '=', 'D.id')
+        ->join('container_types AS E', 'quotation_details.container_volume', '=','E.id')
+        ->select('C.name as from', 'D.name as to', 'E.name as volume', 'amount')
+        ->where('B.id' ,'=', $request->consignee_id)
+        ->where('quotation_details.locations_id_from', '=', $request->area_from)
+        ->where('quotation_details.locations_id_to', '=', $request->area_to)
+        ->get();
+        
         $location = DB::table('standard_area_rates')
         ->where('areaFrom', '=', $request->area_from)
         ->where('areaTo', '=', $request->area_to)
         ->get();
-        return $location;
+        
+        return Response::make(array($quotation , $location));
     }
 
     public function edit_delivery(Request $request)
@@ -131,7 +144,8 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.emp_id_helper',
             'delivery_receipt_headers.locations_id_del',
             'delivery_receipt_headers.locations_id_pick',
-            'delivery_receipt_headers.withContainer'
+            'delivery_receipt_headers.withContainer',
+            'delivery_receipt_headers.amount'
             )
 
         ->get();
@@ -164,6 +178,13 @@ class TruckingsController extends Controller
             }
 
         }
+
+        $consignee = DB::table('consignees')
+        ->select('consignees.id')
+        ->join('consignee_service_order_headers as A', 'A.consignees_id', '=', 'consignees.id')
+        ->join('consignee_service_order_details as B', 'B.so_headers_id', '=', 'A.id')
+        ->join('trucking_service_orders as C', 'C.so_details_id', '=', 'B.id')
+        ->get();
         
 
         $container_volumes = ContainerType::all();
@@ -179,7 +200,7 @@ class TruckingsController extends Controller
 
         if($delivery[0]->status == 'P')
         {
-            return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+            return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee']));
         }
         else{
             return 'Cannot edit finished deliveries';
@@ -242,7 +263,7 @@ class TruckingsController extends Controller
             ->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
             ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
-            ->select('firstName', 'middleName', 'lastName', 'companyName')
+            ->select('firstName', 'middleName', 'lastName', 'companyName', 'consignees.id')
             ->where('trucking_service_orders.id', '=', $so_id)
             ->get();
 
@@ -311,15 +332,20 @@ class TruckingsController extends Controller
 
         $delivery = TruckingServiceOrder::findOrFail($so_id);
 
+        $consignee = DB::table('consignees')
+        ->select('consignees.id')
+        ->join('consignee_service_order_headers as A', 'A.consignees_id', '=', 'consignees.id')
+        ->join('consignee_service_order_details as B', 'B.so_headers_id', '=', 'A.id')
+        ->join('trucking_service_orders as C', 'C.so_details_id', '=', 'B.id')
+        ->get();
 
         if($delivery->status == 'P')
         {
-            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces',]));
+            return view('trucking.delivery_create', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'consignee']));
         }
         else{
             return 'Cannot create new deliveries';
         }
-
 
     }
 
@@ -467,6 +493,7 @@ class TruckingsController extends Controller
             $delivery->pickupDateTime = $request->pickupDate;
 
             $delivery->plateNumber = $request->plateNumber;
+            $delivery->amount = $request->amount;
 
             $delivery->save();
 
@@ -511,6 +538,7 @@ class TruckingsController extends Controller
             $delivery->pickupDateTime = $request->pickupDate;
 
             $delivery->plateNumber = $request->plateNumber;
+            $delivery->amount = $request->amount;
 
             $delivery->save();
 

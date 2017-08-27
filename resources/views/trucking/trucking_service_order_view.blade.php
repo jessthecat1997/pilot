@@ -29,7 +29,7 @@
 				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
 				@endif
 				<br />
-				<table class="table">
+				<table class="table table-responsive">
 					<tbody>
 						<tr>
 							<td class="active"><strong>Trucking Service Order #: </strong></td>
@@ -104,7 +104,7 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive" id = "delivery_table">
+				<table class = "table table-responsive table-striped" id = "delivery_table">
 					<thead>
 						<tr>
 							<td style="width: 5%;">
@@ -159,18 +159,48 @@
 	</div>
 </div>
 
+<div class="modal fade" id="deposit_modal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				New Deposit
+			</div>
+			<div class="modal-body">
+				<div class = "form-horizontal">
+					<div class = "form-group">
+						<label class="col-md-12">Amount</label>
+						<div class = "col-md-12">
+							<input type="number" class = "form-control" id = "deposit" required />
+						</div>
+					</div>
+					<div class = "form-group">
+						<label class= "col-md-12">Description</label>
+						<div class="col-md-12">
+							<textarea class = "form-control" id = "description" required></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_rev != null)
-				<h4>List of Revenues <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
 				@else
-				<h4>List of Revenues</h4>
+				<h4>List of Billings</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
-				<table class="table table-responsive" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -218,13 +248,13 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($service_order->bi_head_id_exp != null)
-				<h4>List of Expenses <button class = "btn but new_expense pull-right">New Expense</button></h4>
+				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
 				@else
-				<h4>List of Expenses</h4>
+				<h4>List of Refundable Charges</h4>
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
-				<table class="table table-responsive" style="width: 100%;" id = "expense_table">
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -266,7 +296,37 @@
 		</div>
 	</div>
 </div>
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<div class = "panel">
+			<div class = "panel-body">
 
+				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
+				<br />
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
+					<thead>
+						<tr>
+							<td>
+								Date Added
+							</td>
+							<td>
+								Amount
+							</td>
+							<td>
+								Current Balance
+							</td>
+							<td>
+								Description
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="revModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -304,7 +364,7 @@
 					</div>
 				</div>
 				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
+					<table style="width: 100%;" id = "delivery_fees_table" class = "table table-striped">
 						<thead>
 							<tr style="width: 40%; text-align: center;">
 								<td>
@@ -370,7 +430,7 @@
 					</div>
 				</div>
 				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
+					<table style="width: 100%;" id = "delivery_fees_table" class="table table-striped table-responsive">
 						<thead>
 							<tr style="width: 40%; text-align: center;">
 								<td>
@@ -510,6 +570,27 @@
 
 		var selected_delivery = null;
 
+		$(document).on('click', '.confirm-create-deposit', function(e){
+			e.preventDefault();
+			$.ajax({
+				type : 'POST',
+				url : "{{ route('cdeposit.index') }}",
+				data : {
+					'_token' : $('input[name=_token]').val(),
+					'amount' : $('#deposit').val(),
+					'description' : $('#description').val(),
+					'consignees_id' : " {{ $service_order_details[0]->id }}",
+				},
+				success : function (data){
+					console.log(data);
+				}
+			})
+		})
+		
+		$(document).on('click', '.new_deposit', function(e){
+			e.preventDefault();
+			$('#deposit_modal').modal('show');
+		})
 		$(document).on('click', '.new_expense ', function(e){
 			e.preventDefault();
 			$('#expModal').modal('show');
