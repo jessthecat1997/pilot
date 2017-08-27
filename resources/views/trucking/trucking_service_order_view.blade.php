@@ -167,6 +167,7 @@
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
+					<form>
 					<div class = "form-group">
 						<label class="col-md-12">Amount</label>
 						<div class = "col-md-12">
@@ -179,6 +180,7 @@
 							<textarea class = "form-control" id = "description" required></textarea>
 						</div>
 					</div>
+					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -614,28 +616,31 @@
 
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
-			$('.confirm-create-deposit').attr('disabled', true);
-			$.ajax({
-				type : 'POST',
-				url : "{{ route('cdeposit.index') }}",
-				data : {
-					'_token' : $('input[name=_token]').val(),
-					'amount' : $('#deposit').val(),
-					'description' : $('#description').val(),
-					'consignees_id' : " {{ $service_order_details[0]->id }}",
-				},
-				success : function (data){
-					@if(count($deposits) == 0)
-					window.location.reload();
-					@else
-					$('#deposit_modal').modal('hide');
-					$('#deposit').val("");
-					$('#description').val("");
-					$('.confirm-create-deposit').removeAttr('disabled');
-					deposits.ajax.reload();
-					@endif
-				}
-			})
+			$('#deposit').valid()
+			if($('#deposit').valid()){
+				$('.confirm-create-deposit').attr('disabled', true);
+				$.ajax({
+					type : 'POST',
+					url : "{{ route('cdeposit.index') }}",
+					data : {
+						'_token' : $('input[name=_token]').val(),
+						'amount' : $('#deposit').val(),
+						'description' : $('#description').val(),
+						'consignees_id' : " {{ $service_order_details[0]->id }}",
+					},
+					success : function (data){
+						@if(count($deposits) == 0)
+						window.location.reload();
+						@else
+						$('#deposit_modal').modal('hide');
+						$('#deposit').val("");
+						$('#description').val("");
+						$('.confirm-create-deposit').removeAttr('disabled');
+						deposits.ajax.reload();
+						@endif
+					}
+				})
+			}
 		})
 		
 		$(document).on('click', '.new_deposit', function(e){
