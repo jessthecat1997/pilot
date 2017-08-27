@@ -605,7 +605,7 @@
 					'charge_id' : $('#exp_bill_id').val(),
 					'description' : $('#exp_description').val(),
 					'amount' : $('#exp_amount').val(),
-					'bi_head_id' : {{ $service_order->bi_head_id_exp }},
+					'bi_head_id' : '{{ $service_order->bi_head_id_exp }}',
 				},
 				success: function (data){
 					location.reload();
@@ -624,7 +624,7 @@
 					'charge_id' : $('#rev_bill_id').val(),
 					'description' : $('#rev_description').val(),
 					'amount' : $('#rev_amount').val(),
-					'bi_head_id' : {{ $service_order->bi_head_id_rev }},
+					'bi_head_id' : '{{ $service_order->bi_head_id_rev }}',
 				},
 				success: function (data){
 					location.reload();
@@ -644,7 +644,7 @@
 						url: '{{ route("getDeliveryFees") }}/{{ $service_order->id }}',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'tr_so_id' : {{ $service_order->id }},
+							'tr_so_id' : '{{ $service_order->id }}',
 						},
 						success: function(data){
 							var delivery_fees_rows = "";
@@ -689,7 +689,7 @@
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("getBillingDetails") }}/' + {{  $service_order->bi_head_id_rev }},
+			ajax: '{{ route("getBillingDetails") }}/{{  $service_order->bi_head_id_rev }}',
 			columns: [
 
 			{ data: 'name' },
@@ -706,7 +706,7 @@
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("getBillingDetails") }}/' + {{ $service_order->bi_head_id_exp }},
+			ajax: '{{ route("getBillingDetails") }}/{{ $service_order->bi_head_id_exp }}',
 			columns: [
 
 			{ data: 'name' },
@@ -729,7 +729,7 @@
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'isRevenue' : create_bill,
-						'tr_so_id' : {{ $service_order->id }},
+						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
 						window.location.reload();
@@ -745,7 +745,7 @@
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'isRevenue' : create_bill,
-						'tr_so_id' : {{ $service_order->id }},
+						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
 						window.location.reload();
