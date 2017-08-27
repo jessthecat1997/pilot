@@ -39,7 +39,7 @@
             <label class = "control-label" id = "arrivalDate"> Arrival: @php echo $brokerage_header[0]->expectedArrivalDate @endphp </label>
           </td>
           <td>
-            <label class = "control-label" id = "port"> Port: @php echo $brokerage_header[0]->arrivalArea @endphp  </label>
+            <label class = "control-label" id = "port"> Port: </label>
           </td>
           <td>
               <label class = "control-label" id = "exchangeRate">Exchange Rate: @php echo $exchangeRate[0]->rate @endphp </label>
@@ -280,7 +280,7 @@ window.onload = function(){
    cell2.innerHTML = "$ " + Insurance.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
    cell3.innerHTML = "$ " + Freight.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
-   cell4.innerHTML = "$ " + Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
+   cell4.innerHTML = "$ " + Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
    cell5.innerHTML = "Php " + DutiableValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
    cell8.innerHTML = "Php " + CustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
@@ -373,7 +373,8 @@ window.onload = function(){
      {
        row = document.getElementById("IPFFee");
        x = row.insertCell(1);
-       x.innerHTML = amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
+       amount = parseFloat(amount);
+       x.innerHTML = amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
        localStorage.setItem("IpfFee", amount);
      }
      if(TotalDutiableValue > maximum)

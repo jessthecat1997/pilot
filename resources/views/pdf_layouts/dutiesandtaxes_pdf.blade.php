@@ -132,7 +132,7 @@
             <label class = "control-label" id = "arrivalDate"> Arrival: @php echo $brokerage_header[0]->expectedArrivalDate @endphp </label>
           </td>
           <td>
-            <label class = "control-label" id = "port"> Port: @php echo $brokerage_header[0]->arrivalArea @endphp  </label>
+            <label class = "control-label" id = "port"> Port: @php echo $brokerage_header[0]->name @endphp  </label>
           </td>
           <td>
               <label class = "control-label" id = "exchangeRate">Exchange Rate: @php echo  number_format((float)$exchangeRate[0]->rate, 3, '.', '') @endphp </label>

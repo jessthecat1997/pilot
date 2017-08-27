@@ -103,13 +103,13 @@
                 <div class = "form-group">
                   <div class = "col-md-12">
                     <div class = "col-md-3">
-                      <label class= " control-label">Date Of Birth*</label>
-                        <div class = "input-group">
-                          <input type="text" class = "form-control" name="dateOfBirth" id = "dateOfBirth" disabled>
-                          <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" onclick="getData()" id = "dateOfBirthButton"><i class="fa fa-calendar "></i></button>
-                          </span>
-                        </div>
+											<label class= " control-label">Date Of Birth*</label>
+												<div class = "input-group">
+													<input type="text" class = "form-control" name="dateOfBirth" id = "dateOfBirth" disabled>
+													<span class="input-group-btn">
+															<button class="btn btn-default" type="button" onclick="getData()" id = "dateOfBirthButton"><i class="fa fa-calendar "></i></button>
+													</span>
+												</div>
                     </div>
 
                     <div class = "col-md-2">
@@ -305,7 +305,7 @@ $('#dateOfBirthButton').click(function () {
 				success: function(data){
 
 					window.location.replace(+data+"/view");
-				
+
 				},
 
 			})

@@ -19,7 +19,7 @@ class CreateBrokerageServiceOrdersTable extends Migration
         $table->string('shipper', 200);
         $table->date('expectedArrivalDate');
         $table->date('arrivalDate');
-        $table->string('arrivalArea',50);
+        $table->integer('location_id')->unsigned();
         $table->string('freightType', 30);
         $table->string('freightBillNo', 30);
         $table->decimal('Weight', 15, 2);
@@ -30,6 +30,7 @@ class CreateBrokerageServiceOrdersTable extends Migration
         $table->timestamps();
 
         $table->foreign('consigneeSODetails_id')-> references('id')->on('consignee_service_order_details');
+        $table->foreign('location_id')->references('id')->on('locations');
         $table->foreign('bi_head_id_rev')->references('id')->on('billing_invoice_headers');
         $table->foreign('bi_head_id_exp')->references('id')->on('billing_invoice_headers');
       });

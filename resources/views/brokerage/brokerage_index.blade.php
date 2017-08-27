@@ -2,7 +2,7 @@
 @section('content')
 <h2>&nbsp;Brokerage</h2>
 <div class="pull-right">
-  <a href = "{{ route('newserviceorder.create') }}" class = "btn but btn-md pull-right">New Brokerage Service Order</a>
+  <a href = "{{ route('brokerageOrder') }}" class = "btn but btn-md pull-right">New Brokerage Service Order</a>
 </div>
 <br/>
 <hr>
@@ -72,7 +72,6 @@
       { data: 'statusType'},
       { data: 'action', orderable: false, searchable: false }
       ],
-
     });
   })
 </script>

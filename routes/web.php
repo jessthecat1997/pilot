@@ -24,12 +24,19 @@ Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
 Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
 
+Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
+Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
+
+Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
+
+Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
+Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
+
 Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
 
 //Employees
-
 Route::resource('/employees', 'EmployeesController');
 Route::resource('/employees/newemployee', 'EmployeesController');
 Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');

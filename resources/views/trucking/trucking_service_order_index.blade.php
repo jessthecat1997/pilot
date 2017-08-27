@@ -7,7 +7,7 @@
 				<h2>&nbsp;Trucking Service Orders</h2>
 				<hr />
 			</div>
-			<a href = "{{ route('trucking.create') }}" class = "btn btn-success btn-md pull-right">New Trucking Service Order </a>
+				<a href = "{{ route('trucking.create') }}" class = "btn btn-success btn-md pull-right">New Trucking Service Order </a>
 			<div class = "panel-body">
 				<h4>Trucking Service Orders</h4>
 				<div class = "panel-default panel">
@@ -32,7 +32,7 @@
 						</table>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 </div>
@@ -55,7 +55,7 @@
 	var current_route = "";
 	$(document).ready(function(){
 		current_route = route.replace('//view', '/1/view');
-		
+
 		var emtable = $('#pending_trucking_so_table').DataTable({
 			processing: false,
 			deferRender: true,
@@ -67,7 +67,7 @@
 			{ data: 'companyName'},
 			{ data: 'status' },
 			{ data: 'action', orderable: false, searchable: false }
-			
+
 			],
 			"order": [[ 0, "desc" ]],
 		});

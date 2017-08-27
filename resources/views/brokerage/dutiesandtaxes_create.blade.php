@@ -6,8 +6,6 @@
 				<div class = "panel-heading">
 					<h3><img src="/images/bar.png"> Brokerage | Duties And Taxes</h3>
 					<hr />
-
-
 	  <div class = "panel-body form-horizontal">
 
 			<table class="table table-responsive table-borderless" >
@@ -69,7 +67,7 @@
 
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn btn-primary" id = "btnSave">
+	      <button type="button" class="btn btn-primary" id = "" onclick = "	$('#SaveModal').modal('show');">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
@@ -167,6 +165,41 @@
 
 	  </div>
 	  </div>
+
+<!-- Processed by modal -->
+		<div class="modal fade" id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" onclick="$('#SaveModal').modal('hide');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <h4 class="modal-title">Save Decleration</h4>
+		</div>
+		<div class="modal-body">
+			Processed By:
+				<select name = "processedBy" id = "processedBy" class = "form-control">
+					<option value = "0"></option>
+					@php
+						$employees = \App\Employee::all();
+
+					@endphp
+					@forelse($employees as $employee)
+					<option value = "{{ $employee->id }}">
+						{{ $employee->lastName . ", " . $employee->firstName }}
+					</option>
+					@empty
+					@endforelse
+				</select>
+
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
+		  <input type = "reset" class = "btn btn-danger btn-md" value = "Clear" />
+		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
+		    </form>
+		</div>
+		</div>
+		</div>
+		</div>
 	</div>
 	</div>
 
@@ -210,7 +243,7 @@
 			localStorage.getItem("tblRowLength");
 			var tblRowLength = localStorage.getItem("tblRowLength")-2;
 			var ExchangeRate = localStorage.getItem("exchangeRate");
-
+			var Employees = JSON.parse(localStorage.getItem("Employees"));
 
 			var currentExchange_id = localStorage.getItem("currentExchange_id");
 			var currentCds_id = localStorage.getItem("currentCds_id");
@@ -378,6 +411,7 @@
 					maximum = ipfFeeDetail[x].maximum;
 					amount = ipfFeeDetail[x].amount;
 
+					amount = parseFloat(amount);
 					if(TotalDutiableValue >= minimum && TotalDutiableValue <= maximum)
 					{
 						row = document.getElementById("IPFFee");
@@ -530,7 +564,7 @@
 		var Port = localStorage.getItem("port");
 		var FreightType = localStorage.getItem("freightType");
 		var BrokerageFee = localStorage.getItem("brokerageFee");
-
+		var Brokerage_id = localStorage.getItem("brokerage_id");
 		var jsonItemName = localStorage.getItem("jsonItemName");
 		var jsonHSCode = localStorage.getItem("jsonHSCode");
 		var jsonRateOfDuty = localStorage.getItem("jsonRateOfDuty");
@@ -547,6 +581,8 @@
 				url: '/storedutiesandtaxes',
 				data: {
 					'_token' : $('input[name=_token]').val(),
+					'brokerage_id' : Brokerage_id,
+					'employee_id' : $('#processedBy').val(),
 					'shipper' : shipper,
 					'companyName' : CompanyName,
 					'freightType' : FreightType,
@@ -572,9 +608,7 @@
 					StoredInsurance : jsonInsurance,
 				},
 				success: function (data) {
-
-	
-					window.location.replace("brokerage/"+data+"/view");
+				window.location.replace("brokerage/"+data+"/view");
 				}
 			})
 

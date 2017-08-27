@@ -9,6 +9,7 @@
 		<div class="panel-heading">
 			<h4 id = "basic-information-heading" ><small>1</small>Consignee Information</h4>
 		</div>
+
 		<div class="panel-body">
 			<div>
 				<div class = "collapse in" id = "collapse_1">
@@ -98,96 +99,6 @@
 		</ul>
 			<div class="panel-body">
 				<div class = "tab-content">
-						<div id="so_details" class="tab-pane fade in active">
-								<br />
-									<div class = "col-md-12">
-										<div class = "form-horizontal">
-							<div class="form-group">
-							<label class="col-md-2 control-label">Service Order Type*</label>
-							<div class = "col-md-5">
-								<div class = "input-group">
-									<input id = "ServOrdText" type="text" class="form-control" aria-label="..." name = "serviceordertype" readonly>
-									<div class="input-group-btn">
-										<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Service Order Type <span class="caret"></span></button>
-										<ul class="dropdown-menu dropdown-menu-right">
-											<li><a href="#" onclick = "document.getElementById('ServOrdText').value = 'Brokerage'">Brokerage</a></li>
-											<li class = "disabled"><a  href="#">Trucking</a></li>
-											<li><a  href="#" "document.getElementById('ServOrdText').value = 'Brokerage and Trucking'">Brokerage and Trucking</a></li>
-											</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-										<div class = "form-group">
-											<label class="col-md-2 control-label">Expected Date Of Arrival</label>
-											<div class="col-md-3">
-													<input type="date" class = "form-control" name="arrivalDate" id = "arrivalDate">
-											</div>
-										</div>
-
-										<div class = "form-group">
-											<label  class="col-md-2 control-label">Freight Type*</label>
-											<div class="col-md-5">
-												<div class="input-group">
-													<input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" readonly>
-													<div class="input-group-btn">
-														<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Freight Type <span class="caret"></span></button>
-														<ul class="dropdown-menu dropdown-menu-right">
-															<li><a href="#" onclick = "document.getElementById('FreightType').value = 'Air Freight'">Air Freight</a></li>
-															<li><a href="#" onclick = "document.getElementById('FreightType').value = 'Sea Freight'">Sea Freight</a></li>
-															<li><a href="#" onclick = "document.getElementById('FreightType').value = 'Train Freight'">Train Freight</a></li>
-
-														</ul>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-												<label for="email" class="col-md-2 control-label">BL\AWL Number*</label>
-												<div class="col-md-5">
-															<input  type="text" class="form-control" name = "freightnumber" id = "freightNumber">
-												</div>
-										</div>
-
-										<div class="form-group">
-												<label for="email" class="col-md-2 control-label">Port*</label>
-												<div class="col-md-5">
-															<input  type="text" class="form-control" name = "port" id = "port">
-												</div>
-										</div>
-
-										<div class="form-group">
-												<label  class="col-md-2 control-label">Shipper*</label>
-												<div class="col-md-5">
-															<input  type="text" class="form-control" name = "shipper" id = "shipper">
-												</div>
-										</div>
-
-										<div class = "form-group">
-											<label  class="col-md-2 control-label">Weight </label>
-											<div class="col-md-5">
-												<div class="input-group">
-													<input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight">
-													<div class="input-group-btn">
-														<button type="button" class="btn btn-default" aria-expanded="false"> kgs</label>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-												<label class="col-md-2 control-label">Description of goods</label>
-												<div class="col-md-5">
-															<textarea class="form-control" rows="3"></textarea>
-												</div>
-										</div>
-
-									</div>
-								</div>
-							</div>
-
-
 									<div id = "dutiesandtaxes_details" class="tab-pane fade in active">
 										<div class = "col-md-12">
 											<div class = "form-horizontal">
@@ -984,7 +895,6 @@ function decimalsOnly(event) {
 	}
 
 
-
-
   </script>
+
 @endpush
