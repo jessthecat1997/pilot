@@ -256,17 +256,17 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function pso_head_datatable(){
-		$bill_hists = DB::select('SELECT t.id, 
+		$bill_hists = DB::select('SELECT t.id,
 			C.companyName,
 			(CASE t.isRevenue
 			WHEN t.isRevenue = 1 THEN "Revenue"
 			WHEN t.isRevenue = 0 THEN "Expense"
-			END) as isRevenue,	
+			END) as isRevenue,
 			CONCAT("Php ", p.total) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
 
 
-			FROM billing_invoice_headers t LEFT JOIN 
+			FROM billing_invoice_headers t LEFT JOIN
 			(
 			SELECT bi_head_id, SUM(amount) total
 			FROM billing_invoice_details
@@ -375,7 +375,7 @@ class DatatablesController extends Controller
 			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE(pickupDateTime) as pickupDateTime, DATE(deliveryDateTime) as deliveryDateTime, DATE_FORMAT(pickupDateTime, "%M %d, %Y") as dpickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as ddeliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id WHERE DATE(deliveryDateTime) BETWEEN ? AND ?', [$request->date_from, $request->date_to]);
 			return json_encode($deliveries);
 		}
-		
+
 
 	}
 
@@ -885,7 +885,7 @@ class DatatablesController extends Controller
 			return Datatables::of($bills)
 			->addColumn('action', function ($bill){
 				return
-				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';				
+				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
 			})
 			->editColumn('due_date', function($bill){
 				return Carbon::parse($bill->due_date)->toFormattedDateString();
@@ -907,7 +907,7 @@ class DatatablesController extends Controller
 			->make(true);
 			break;
 
-			case 'O' : 
+			case 'O' :
 			$bills = DB::table('billing_invoice_headers')
 			->join('consignee_service_order_headers as A', 'so_head_id', '=', 'A.id')
 			->join('consignees as B', 'A.consignees_id', '=', 'B.id')
@@ -917,7 +917,7 @@ class DatatablesController extends Controller
 			return Datatables::of($bills)
 			->addColumn('action', function ($bill){
 				return
-				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';				
+				'<button value = "'. $bill->id .'" style="margin-right:10px;" class = "btn btn-md but edit">View</button>';
 			})
 			->editColumn('due_date', function($bill){
 				return Carbon::parse($bill->due_date)->toFormattedDateString();
@@ -2659,7 +2659,7 @@ class DatatablesController extends Controller
 		return Datatables::of($brokerages)
 		->addColumn('action', function ($brokerage){
 			return
-			'<a href = "/brokerage/'. $brokerage->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+			'<a href = "/brokerage/'. $brokerage->id .'/order" class = "btn btn-md but view-service-order">Manage</a>';
 		})
 		->editColumn('statusType', function($trucking){
 			switch ($trucking->statusType) {
@@ -2691,6 +2691,27 @@ class DatatablesController extends Controller
 				'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
 			})
 			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
+
+		public function get_dutiesandtaxes_table(Request $request){
+
+
+			$dutiesandtaxes = DB::table('duties_and_taxes_headers')
+			->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName')
+			->join('employees', 'employees_id_broker', '=', 'employees.id')
+			->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
+			->where('brokerageServiceOrders_id','=', $request->brokerage_id)
+			->get();
+
+
+			return Datatables::of($dutiesandtaxes)
+			->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+			->addColumn('action', function ($dutiesandtax){
+				return
+				'<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+			})
+
 			->make(true);
 		}
 }
