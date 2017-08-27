@@ -313,7 +313,7 @@
 								Amount
 							</td>
 							<td>
-								Current Balance
+								Remaining Balance
 							</td>
 							<td>
 								Description
@@ -321,6 +321,24 @@
 						</tr>
 					</thead>
 					<tbody>
+						@forelse($deposits as $deposit)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+							</td>
+							<td>
+								Php {{ $deposit->amount }}
+							</td>
+							<td>
+								Php {{ $deposit->currentBalance }}
+							</td>
+							<td>
+								{{ $deposit->description }}
+							</td>
+						</tr>
+						@empty
+
+						@endforelse
 					</tbody>
 				</table>
 			</div>
@@ -569,9 +587,34 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
+		var deposits;
+		@if(count($deposits) == 0)
+		deposits = $('#deposits_table').DataTable({
+			deferRender: true,
+			processing: false,
+			serverSide: false,
+		});
+		@else
+		deposits = $('#deposits_table').DataTable({
+			deferRender: true,
+			processing: false,
+			serverSide: false,
+			type: 'GET',
+			ajax: '{{ route("cdeposit.data") }}/{{$service_order_details[0]->id }}',
+			columns: [
+
+			{ data: 'created_at' },
+			{ data: 'amount' },
+			{ data: 'currentBalance'},
+			{ data: 'description'}
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
 
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
+			$('.confirm-create-deposit').attr('disabled', true);
 			$.ajax({
 				type : 'POST',
 				url : "{{ route('cdeposit.index') }}",
@@ -582,7 +625,15 @@
 					'consignees_id' : " {{ $service_order_details[0]->id }}",
 				},
 				success : function (data){
-					console.log(data);
+					@if(count($deposits) == 0)
+					window.location.reload();
+					@else
+					$('#deposit_modal').modal('hide');
+					$('#deposit').val("");
+					$('#description').val("");
+					$('.confirm-create-deposit').removeAttr('disabled');
+					deposits.ajax.reload();
+					@endif
 				}
 			})
 		})

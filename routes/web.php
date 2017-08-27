@@ -239,6 +239,7 @@ Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->
 
 //Deposits
 Route::resource('cdeposit', 'ConsigneeDepositsController');
+Route::get('cdepositData/{id?}', 'ConsigneeDepositsController@getConsigneeDeposits')->name('cdeposit.data');
 
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
