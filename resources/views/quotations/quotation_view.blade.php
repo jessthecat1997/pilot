@@ -37,7 +37,7 @@
 		<div class = "panel default-panel"> 
 			<div class = "panel-body"> 
 				<h3>Area Rates</h3> 
-				<table class = "table table-striped table-responsive"> 
+				<table class = "table table-striped table-responsive" id = "area_rate_table"> 
 					<thead> 
 						<tr> 
 							<td> 
@@ -72,7 +72,7 @@
 					</tr> 
 					@empty 
 					<tr> 
-						<td colspan="3"> 
+						<td colspan="4"> 
 							<h5 style="text-align: center;">No records available.</h5> 
 						</td> 
 					</tr> 
@@ -115,9 +115,17 @@
 
 @push('scripts')
 <script type="text/javascript">
-	$(document).on('click', '.print-quotation-details', function(e){
-		e.preventDefault();
-		window.open("{{ route('quotation.index') }}/" + {{ $quotation[0]->id }} + "/print");
+	$(document).ready(function(){
+		$(document).on('click', '.print-quotation-details', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + {{ $quotation[0]->id }} + "/print");
+		})
+
+		$('#area_rate_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+		});
 	})
 </script>
 @endpush

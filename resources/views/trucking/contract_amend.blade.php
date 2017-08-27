@@ -5,7 +5,7 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-heading">
-				<h2>View Contract <button class="btn btn-md btn-primary pull-right generate_pdf">Generate Quotation</button></h2>
+				<h2>&nbsp;Amend Contract</h2>
 				<hr />
 			</div>
 			<div class = "panel-body">
@@ -446,11 +446,12 @@
 						'_token' : $('input[name=_token').val(),
 						'update_type' : 3,
 						'specificDetails' : detail,
-						'contract_id' : {{ $contract[0]->id }},
+						'contract_id' : '{{ $contract[0]->id }}',
 
 					},
 					success: function (data)
 					{
+						window.location.reload();
 						$('.specificDetails').val(data.specificDetails);
 						$('.actualspecificDetails').html(data.specificDetails);
 						$('#tcModal').modal('hide');
