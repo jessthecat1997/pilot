@@ -141,7 +141,7 @@
 								<label class = "control-label">Standard Rate: </label>
 								<div class = "form-group input-group " >
 									<span class = "input-group-addon">Php</span>
-									<input type = "text"  class = "form-control money" name = "amount" id = "amount"  data-rule-required="true" value="0.00" />
+									<input type = "text"  class = "form-control" name = "amount" id = "amount"  data-rule-required="true" value="0.00" style = "text-align: right;" />
 								</div>
 								
 							</div>
@@ -639,11 +639,11 @@
 				$('#pickup_id').css('border-color', 'green');
 				$('#deliver_id').css('border-color', 'green');
 			}
-			if($('#amount').val() <= 0){
+			if($('#amount').val() < 0){
 				$('#amount').css('border-color', 'red');
 			}
 			else{
-				$('#amount').css('border-color', 'green');
+				$('#amount').css('border-color', 'red');
 			}
 
 			if($('#amount').valid() && $('#amount').val() > 0 && $('#pickup_id').val() != $('#deliver_id').val()){
