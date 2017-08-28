@@ -167,18 +167,23 @@
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
-					<div class = "form-group">
-						<label class="col-md-12">Amount</label>
-						<div class = "col-md-12">
-							<input type="number" class = "form-control" id = "deposit" required />
+					<form>
+						<div class = "form-group required">
+							<label class = "col-md-3 control-label pull-left">Amount: </label>
+							<div class= "col-md-9">
+								<div class="input-group">
+									<span class="input-group-addon" id="freightadd">Php</span>
+									<input type="number" class="form-control"  id = "deposit" style = "text-align: right" required>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class = "form-group">
-						<label class= "col-md-12">Description</label>
-						<div class="col-md-12">
-							<textarea class = "form-control" id = "description" required></textarea>
+						<div class = "form-group">
+							<label class = "col-md-3 control-label pull-left" >Description:</label>
+							<div class = "col-md-9">
+								<textarea class="form-control" id = "description"></textarea>
+							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -329,7 +334,7 @@
 							<td>
 								{{ $deposit->amount }}
 							</td>
-							<td>
+							<td style="text-align: right;">
 								Php {{ $deposit->currentBalance }}
 							</td>
 							<td>
@@ -595,21 +600,28 @@
 			serverSide: false,
 			processing: false,
 		})
+
+
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
-			$.ajax({
-				type : 'POST',
-				url : "{{ route('cdeposit.index') }}",
-				data : {
-					'_token' : $('input[name=_token]').val(),
-					'amount' : $('#deposit').val(),
-					'description' : $('#description').val(),
-					'consignees_id' : " {{ $service_order_details[0]->id }}",
-				},
-				success : function (data){
-					window.location.reload();
-				}
-			})
+			$('#deposit').valid();
+			if($('#deposit').valid() && $('#deposit').val() > 0)
+			{
+				$('.confirm-create-deposit').attr('disabled', true);
+				$.ajax({
+					type : 'POST',
+					url : "{{ route('cdeposit.index') }}",
+					data : {
+						'_token' : $('input[name=_token]').val(),
+						'amount' : $('#deposit').val(),
+						'description' : $('#description').val(),
+						'consignees_id' : " {{ $service_order_details[0]->id }}",
+					},
+					success : function (data){
+						window.location.reload();
+					}
+				})
+			}
 		})
 		
 		$(document).on('click', '.new_deposit', function(e){

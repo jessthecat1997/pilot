@@ -62,9 +62,10 @@ class PaymentsController extends Controller
 			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
 			pay.totpay,
-			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - pay.totpay AS balance,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - (pay.totpay + dpay.totdpay) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
-			t.status
+			t.status,
+            dpay.totdpay
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -84,6 +85,15 @@ class PaymentsController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
 			WHERE t.id = ?
 			', [$id]);
 
@@ -93,10 +103,10 @@ class PaymentsController extends Controller
 	public function payments_table(Request $request, $id)
 	{
 		$history = DB::select(
-			'SELECT CONCAT("Payment: ", id) as record, amount, created_at, description FROM payments as p  WHERE p.bi_head_id = ? 
+			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description FROM payments as p  WHERE p.bi_head_id = ? 
 			UNION 
 			(
-			SELECT CONCAT("Deposit Payment: ", id) as record, amount, created_at, description FROM deposit_payments as dp WHERE dp.bi_head_id = ?
+			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description FROM deposit_payments as dp WHERE dp.bi_head_id = ?
 			)
 			', [$id, $id]
 			);

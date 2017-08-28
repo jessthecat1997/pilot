@@ -103,10 +103,10 @@
 							<td>
 								Date Added
 							</td>
-							<td>
+							<td style="text-align: center;">
 								Remaining Balance
 							</td>
-							<td>
+							<td style="text-align: center;">
 								Action
 							</td>
 						</tr>
@@ -117,10 +117,10 @@
 							<td>
 								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
 							</td>
-							<td>
+							<td style="text-align: right;">
 								Php {{ $deposit->currentBalance }}
 							</td>
-							<td>
+							<td style="text-align: center;">
 								<button class="btn but deposit-payment">Make Payment</button>
 								<input type = "hidden" class = "deposit_id" value="{{ $deposit->id }}" />
 							</td>
@@ -312,7 +312,7 @@
 	$('#collapse1').addClass('in');
 	var totalamt = @if( $total[0]->totall == null) 0 @else {{ $total[0]->totall }} @endif;
 	var balance = @if( $total[0]->balance == null) 0 @else {{ $total[0]->balance }} @endif ;
-	var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay }} @endif ;
+	var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay + $total[0]->totdpay }} @endif ;
 	n = totalamt - paid;
 	var bals = n.toFixed(2);
 	document.getElementById("bal").value = bals;
@@ -346,6 +346,7 @@
 		e.preventDefault();
 		$('#depositPayment').valid();
 		if($('#depositPayment').valid()){
+			$('.finalize-deposit-payment').attr('disabled', true);
 			$.ajax({
 				type: 'POST',
 				url: '{{ route("dpayment.index") }}',
@@ -357,7 +358,7 @@
 					'amount' : $('#depositPayment').val(),
 				},
 				success: function(data){
-					console.log(data);
+					window.location.reload();
 				}
 			})
 		}
