@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 
 class ConsigneeDepositsController extends Controller
 {
-
+  
     public function index()
     {
         //
     }
 
-
+   
     public function create()
     {
         //
@@ -32,43 +32,26 @@ class ConsigneeDepositsController extends Controller
         return $new_deposit;
 
     }
-    public function getConsigneeDeposits(Request $request)
-    {
-        $deposits = \DB::table('consignee_deposits')
-        ->select(
-            'created_at',
-            \DB::raw('CONCAT("Php ", amount) as amount') ,
-            \DB::raw('CONCAT("Php ", currentBalance) as currentBalance'),
-            'description'
-            )
-        ->where('consignees_id', '=', $request->id)
-        ->get();
 
-        return \Datatables::of($deposits)
-        ->editColumn('created_at', function($deposit){
-            return \Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString();
-        })
-        ->make(true);
-    }
-
+  
     public function show($id)
     {
         //
     }
 
-
+   
     public function edit($id)
     {
         //
     }
 
-
+ 
     public function update(Request $request, $id)
     {
         //
     }
 
-
+  
     public function destroy($id)
     {
         //
