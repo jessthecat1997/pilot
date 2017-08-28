@@ -235,6 +235,7 @@
     <script src="/js/app.js"></script>
     <script type="text/javascript" src = "/js/jquery.validate.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+    <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script> 
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
     <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
