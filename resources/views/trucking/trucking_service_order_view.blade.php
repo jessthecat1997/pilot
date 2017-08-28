@@ -603,7 +603,7 @@
 					'consignees_id' : " {{ $service_order_details[0]->id }}",
 				},
 				success : function (data){
-					console.log(data);
+					window.location.reload();
 				}
 			})
 		})
