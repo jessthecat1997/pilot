@@ -196,7 +196,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-4" for="TIN">TIN:</label>
 											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="xxx-xxx-xxx-xxxxx">
+												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="XXX-XXX-XXX-XXXXXX">
 											</div>
 										</div>
 

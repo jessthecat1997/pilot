@@ -154,7 +154,7 @@
 										</select>
 									</td>
 									<td>
-										<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
+										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
 									</td>
 
 									<tr id="desc_rev_row">

@@ -328,7 +328,7 @@ class BillingDetailsController extends Controller
 	public function finalize_bill(Request $request, $id)
 	{
 		$finalize = BillingInvoiceHeader::findOrFail($id);
-		$finalize->isFinalize = 1;
+		$finalize->isFinalize = $request->isFinalize;
 		$finalize->save();
 
 		return $finalize;	
@@ -336,7 +336,7 @@ class BillingDetailsController extends Controller
 	public function void_bill(Request $request, $id)
 	{
 		$void = BillingInvoiceHeader::findOrFail($id);
-		$void->isVoid = 1;
+		$void->isVoid = $request->isVoid;
 		$void->save();
 
 		return $void;	

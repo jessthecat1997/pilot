@@ -156,18 +156,6 @@ class PaymentsController extends Controller
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
-		$rev = DB::table('billing_revenues')
-		->join('billings', 'billing_revenues.bill_id', '=', 'billings.id')
-		->select('name','amount')
-		->where('billing_revenues.bi_head_id','=', $id);
-
-		$exp = DB::table('billing_expenses')
-		->join('billings', 'billing_expenses.bill_id', '=', 'billings.id')
-		->select('name','amount')
-		->where('billing_expenses.bi_head_id','=', $id)
-		->union($rev)
-		->get();
-
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments', 'exp'));
 		return $pdf->stream();
 	}
