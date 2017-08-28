@@ -708,6 +708,8 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
     localStorage.setItem("addedItems", JSON.stringify(addedItems));
 		localStorage.setItem("itemCtr", ctr);
 
+    localStorage.setItem("arrastre",  document.getElementById('arrastre').value);
+    localStorage.setItem("wharfage",  document.getElementById('wharfage').value);
 		localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');
 		localStorage.setItem("freightNumber", <?php echo $brokerage_header[0]->freightBillNo?>);
 		localStorage.setItem("arrivalDate",  <?php echo $brokerage_header[0]->expectedArrivalDate?>);

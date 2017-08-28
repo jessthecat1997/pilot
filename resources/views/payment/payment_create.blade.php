@@ -233,8 +233,8 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
-	var totalamt = {{ $total[0]->totall }};
-	var balance = @if( $total[0]->balance == null) {{ $total[0]->totall }} @else {{ $total[0]->balance }} @endif ;
+	var totalamt = @if( $total[0]->totall == null) 0 @else {{ $total[0]->totall }} @endif;
+	var balance = @if( $total[0]->balance == null) 0 @else {{ $total[0]->balance }} @endif ;
 	var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay }} @endif ;
 	n = totalamt - paid;
 	var bals = n.toFixed(2);

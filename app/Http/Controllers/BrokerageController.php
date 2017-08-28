@@ -186,7 +186,7 @@ class BrokerageController extends Controller
           ->get();
 
           $brokerage_header = DB::table('brokerage_service_orders')
-          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight')
+          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'bi_head_id_exp', 'bi_head_id_rev')
           ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
           ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
           ->join('consignees', 'consignees_id', '=', 'consignees.id')
