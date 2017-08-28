@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class BillingInvoiceHeadersController extends Controller
 {
+	public function index(Request $request)
+	{
+		return view('billing/billing_select');
+	}
 	public function show(Request $request, $id)
 	{
 		$bills = DB::table('consignee_service_order_headers')
@@ -31,6 +35,8 @@ class BillingInvoiceHeadersController extends Controller
 		$billing_header = new BillingInvoiceHeader;
 		$billing_header->so_head_id = $request->so_head_id;
 		$billing_header->isRevenue = 1;
+		$billing_header->isVatFree = 0;
+		$billing_header->isVoid = 0;
 		$billing_header->vatRate = $request->vatRate;
 		$billing_header->status = $request->status;
 		$billing_header->date_billed = $request->date_billed;
