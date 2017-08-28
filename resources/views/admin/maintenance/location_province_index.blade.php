@@ -128,10 +128,10 @@
 						minlength: 2,
 						maxlength: 50,
 						normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-					regex: /^[A-Za-z ]+$/,
+							value = value.replace("something", "new thing");
+							return $.trim(value)
+						},
+						regex: /^[A-Za-z ]+$/,
 
 					},
 
@@ -224,7 +224,7 @@
 			{
 				$.ajax({
 					type: 'POST',
-					url:  '/admin/location_city/new_province',
+					url:  '/admin/location_province',
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('input[name=name]').val(),
@@ -269,7 +269,7 @@
 					});
 					
 				}
-			},
+			}
 			
 		})
 			}
