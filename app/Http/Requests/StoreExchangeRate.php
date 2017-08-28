@@ -14,13 +14,31 @@ class StoreExchangeRate extends FormRequest
 
     public function rules()
     {
-        return [
 
+        switch ($this->method()) {
+
+        case 'POST':
+
+        return [
         'rate'          => 'required',
         'dateEffective' => 'required|unique:exchange_rates|date',
 
-
         ];
+
+        break;
+
+        case 'PUT':
+        
+        return [
+        'rate'         => 'required',
+        'dateEffective' => 'required|date|unique:exchange_rates,dateEffective,' . $this->segment(3),
+    
+        ];
+
+        break;
+        
+        default: break;
+    }
     }
 
     //Overriding the response 422

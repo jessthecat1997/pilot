@@ -57,13 +57,13 @@
 					@forelse($quotation_details as $quotation_detail) 
 					<tr> 
 						<td> 
-							{{ $quotation_detail->from }} 
+							{{ $quotation_detail->_from }} 
 						</td> 
 						<td> 
-							{{ $quotation_detail->to }} 
+							{{ $quotation_detail->_to }} 
 						</td>
 						<td> 
-							{{ $quotation_detail->name }} 
+							{{ $quotation_detail->sizes }} 
 						</td> 
 						<td> 
 							Php {{ $quotation_detail->amount }} 

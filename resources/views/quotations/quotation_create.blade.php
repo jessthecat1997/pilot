@@ -483,7 +483,7 @@
 		$('#consignee_id').select2();
 		$('.volume').select2({
 			data: arr_volume ,
-			placeholder: "Select a state",
+			placeholder: "Select sizes",
 			allowClear: true
 		});
 		$(document).on('change', '#consignee_id', function(e){
@@ -957,6 +957,13 @@ function fillVolumes(){
 		child[0]['details'] = [];
 
 		table_detail_row_count = $('[name="volume"]').eq(i).find('option:selected').length;
+		if(table_detail_row_count == 0){
+			$('[name="volume"]').eq(i).css('border-color', 'red');
+			error += "No selected volume";
+		}
+		else{
+			$('[name="volume"]').eq(i).css('border-color', 'green');
+		}
 		
 		for (var j = 0; j < table_detail_row_count; j++) {
 			child[0].details.push({
@@ -969,7 +976,7 @@ function fillVolumes(){
 	console.log(results);
 
 	if(error.length == 0){
-		return 0;
+		return true;
 	}
 	else
 	{
@@ -1068,7 +1075,6 @@ function validateConsignee()
 
 function finalvalidateContractRows()
 {
-	fillVolumes();
 	from_id = [];
 	to_id = [];
 	cv_id = [];
@@ -1089,6 +1095,12 @@ function finalvalidateContractRows()
 	terms = document.getElementsByName('specificDetails');
 	error = "";
 
+	if(fillVolumes() == true){
+
+	}
+	else{
+		error += "Volume error";
+	}
 
 	if(consigneeID == 0 || consigneeID == null)
 	{
