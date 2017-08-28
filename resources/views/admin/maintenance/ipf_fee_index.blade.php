@@ -250,7 +250,7 @@
 			$('#dateEffective').val(today);
 			$('#ipfModal').modal('show');
 			
-			$("#ipf_parent_table > tbody").html("");
+			$("ipf_parent_table > tbody").html("");
 			$('#ipf_parent_table > tbody').html(ipf_row);
 			$('#minimum').val("0.00");
 			$('#maximum').val("0.00");
@@ -315,6 +315,7 @@
 			$(".ipf_minimum_valid").each(function(){
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -325,6 +326,7 @@
 			$(".ipf_minimum_valid").each(function(){
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -344,6 +346,7 @@
 				}
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -446,7 +449,7 @@
 					jsonMaximum = JSON.stringify(maximum_id);
 					jsonAmount = JSON.stringify(amount_value);
 
-					minimum_unmask = [];
+					
 					$.ajax({
 						type: 'PUT',
 						url:  '/admin/ipf_fee/'+ data.id,
@@ -528,6 +531,7 @@ function validateIpfRows()
 			maximum[i].style.borderColor = 'green';
 			maximum_id_descrp.push(maximum[i].value);
 			maximum_id.push(maximum[i].value);
+			$('#ipf_warning').removeClass('in');
 		}
 		if(amount[i].value === "")
 		{
@@ -543,6 +547,7 @@ function validateIpfRows()
 			else{
 				amount[i].style.borderColor = 'green';
 				amount_value.push(amount[i].value);
+				$('#ipf_warning').removeClass('in');
 			}
 		}
 		if(minimum[i].value === maximum[i].value){
@@ -641,6 +646,7 @@ function validateIpfRows()
 				maximum[i].style.borderColor = 'green';
 				maximum_id_descrp.push(maximum[i].value);
 				maximum_id.push(maximum[i].value);
+				$('#ipf_warning').removeClass('in');
 			}
 			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 			{
@@ -657,6 +663,7 @@ function validateIpfRows()
 				else{
 					amount[i].style.borderColor = 'green';
 					amount_value.push(amount[i].value);
+					$('#ipf_warning').removeClass('in');
 				}
 			}
 			if(minimum[i].value === maximum[i].value){

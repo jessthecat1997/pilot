@@ -204,6 +204,13 @@
 
 
     var data;
+
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
+
     $(document).ready(function(){
         var bf_row = "<tr>" + $('#bf-row').html() + "</tr>";
 
@@ -224,7 +231,6 @@
             "render": function(data, type, row){
                 return data.split(",").join("<br/>");}
             },
-
             { data: 'maximum',
             "render": function(data, type, row){
                 return data.split(",").join("<br/>");}
@@ -233,7 +239,6 @@
             "render": function(data, type, row){
                 return data.split(",").join("<br/>");}
             },
-
             { data: 'action', orderable: false, searchable: false }
 
             ],  "order": [[ 0, "desc" ]],
@@ -260,13 +265,17 @@
         $(document).on('click', '.new', function(e){
             resetErrors();
             $('.modal-title').text('New Brokerage Fee Range');
-            
-            $('#dateEffective').val("");
-            var now = new Date();
-            var day = ("0" + now.getDate()).slice(-2);
-            var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
             $('#dateEffective').val(today);
+
+            $("bf_parent_table > tbody").html("");
+            $('#bf_parent_table > tbody').html(bf_row);
+            $('#minimum').val("0.00");
+            $('#maximum').val("0.00");
+            $('#amount').val("0.00");
+
+
+
 
             $('#bfModal').modal('show');
 
@@ -276,16 +285,30 @@
         $(document).on('click', '.edit',function(e){
             resetErrors();
             var bf_id = $(this).val();
+            $('.modal-title').text('Update Brokerage Fee Range');
             data = bftable.row($(this).parents()).data();
             $('#dateEffective').val(data.dateEffective);
-            for(var i = 0; i < (data.minimum).length; i++){
-                $('#minimum').val(data.minimum);
-                $('#maximum').val(data.maximum);
-                $('#amount').val(data.amount); 
-            }
-            
-            $('.modal-title').text('Update Brokerage Fee Range');
             $('#bfModal').modal('show');
+
+            $.ajax({
+                type: 'GET',
+                url:  '{{ route("bf_maintain_data") }}',
+                data: {
+                    '_token' : $('input[name=_token').val(),
+                    'bf_id' : $(this).val(),
+                },
+                success: function (data)
+                {
+                    var rows = "";
+                    for(var i = 0; i < data.length; i++){
+                        rows += '<tr id = "bf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control bf_minimum_valid" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control  bf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-bf-row">x</button></td></tr>';
+                    }
+                    $('#bf_parent_table > tbody').html("");
+                    $('#bf_parent_table > tbody').append(rows);
+                    
+                }
+
+            })
         });
 
         $(document).on('click', '.deactivate', function(e){
@@ -325,6 +348,7 @@
             $(".bf_minimum_valid").each(function(){
                 if($(this).val() != ""){
                     $(this).css('border-color', 'green');
+                    $('#bf_warning').removeClass('in');
 
                 }
                 else{
@@ -337,6 +361,7 @@
             $(".bf_minimum_valid").each(function(){
                 if($(this).val() != ""){
                     $(this).css('border-color', 'green');
+                    $('#bf_warning').removeClass('in');
 
                     for(var i = 0; i < minimum.length; i++){
                         minimum[i+1].value = parseFloat(maximum[i].value) + 1;
@@ -364,6 +389,7 @@
                 }
                 if($(this).val() != ""){
                     $(this).css('border-color', 'green');
+                    $('#bf_warning').removeClass('in');
                 }
                 else{
                     $(this).css('border-color', 'red');
@@ -415,17 +441,24 @@
                 var title = $('.modal-title').text();
                 if(title == "New Brokerage Fee Range")
                 {
+
                     console.log('min' + minimum_id);    
                     console.log(maximum_id);    
+
+                    
+                    jsonMinimum = JSON.stringify(minimum_id);
+                    jsonMaximum = JSON.stringify(maximum_id);
+                    jsonAmount = JSON.stringify(amount_value);
+
                     $.ajax({
                         type: 'POST',
                         url:  '/admin/brokerage_fee',
                         data: {
                             '_token' : $('input[name=_token]').val(),
                             'dateEffective' : $('#dateEffective').val(),
-                            'minimum' : minimum_id,
-                            'maximum' :maximum_id,
-                            'amount' : amount_value,
+                            'minimum' : jsonMinimum,
+                            'maximum' :jsonMaximum,
+                            'amount' : jsonAmount,
                         },
 
                         success: function (data){
@@ -463,10 +496,64 @@
                             
                         }
                     })
+                }else{
+
+                    jsonMinimum = JSON.stringify(minimum_id);
+                    jsonMaximum = JSON.stringify(maximum_id);
+                    jsonAmount = JSON.stringify(amount_value);
+
+                    $.ajax({
+                        type: 'PUT',
+                        url:  '/admin/brokerage_fee/' + data.id,
+                        data: {
+                            '_token' : $('input[name=_token]').val(),
+                            'dateEffective' : $('#dateEffective').val(),
+                            'minimum' : jsonMinimum,
+                            'maximum' :jsonMaximum,
+                            'amount' : jsonAmount,
+                            'bf_head_id': data.id,
+                        },
+
+                        success: function (data){
+
+
+
+                            bftable.ajax.reload();
+                            $('#bfModal').modal('hide');
+                            $('.modal-title').text('New Brokerage Fee Range');
+                            $('#minimum').val("0.00");
+                            $('#maximum').val("0.00"); 
+                            $('#amount').val("0.00");
+
+
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "rtl": false,
+                                "positionClass": "toast-bottom-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": 300,
+                                "hideDuration": 1000,
+                                "timeOut": 2000,
+                                "extendedTimeOut": 1000,
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                            toastr["success"]("Record updated successfully")
+
+                        }
+                    })
                 }
+
             }
         });
-    });
+});
 
 
 
@@ -515,6 +602,7 @@ function validatebfRows()
             maximum[i].style.borderColor = 'green';
             maximum_id_descrp.push(maximum[i].value);
             maximum_id.push(maximum[i].value);
+            $('#bf_warning').removeClass('in');
         }
 
         if(amount[i].value === "")
@@ -532,6 +620,7 @@ function validatebfRows()
             else{
                 amount[i].style.borderColor = 'green';
                 amount_value.push(amount[i].value);
+                $('#bf_warning').removeClass('in');
             }
         }
 
@@ -644,6 +733,7 @@ function validatebfRows()
                 maximum[i].style.borderColor = 'green';
                 maximum_id_descrp.push(maximum[i].value);
                 maximum_id.push(maximum[i].value);
+                $('#bf_warning').removeClass('in');
             }
 
             if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
@@ -662,6 +752,7 @@ function validatebfRows()
                 else{
                     amount[i].style.borderColor = 'green';
                     amount_value.push(amount[i].value);
+                    $('#bf_warning').removeClass('in');
                 }
             }
 
