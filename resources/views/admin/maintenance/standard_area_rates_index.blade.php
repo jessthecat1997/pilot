@@ -630,7 +630,23 @@
 			e.preventDefault();
 
 			$('#amount').valid();
-			if($('#amount').valid() && $('#amount').val() > 0){
+			if($('#pickup_id').val() == $('#deliver_id').val())
+			{
+				$('#pickup_id').css('border-color', 'red');
+				$('#deliver_id').css('border-color', 'red');
+			}
+			else{
+				$('#pickup_id').css('border-color', 'green');
+				$('#deliver_id').css('border-color', 'green');
+			}
+			if($('#amount').val() <= 0){
+				$('#amount').css('border-color', 'red');
+			}
+			else{
+				$('#amount').css('border-color', 'green');
+			}
+
+			if($('#amount').valid() && $('#amount').val() > 0 && $('#pickup_id').val() != $('#deliver_id').val()){
 				var title = $('.sarModal-title').text();
 				console.log("hihiho" + title);
 				if(title == "New Standard Area Rate")
