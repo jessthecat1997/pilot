@@ -13,8 +13,7 @@
 						<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
 					</div>
 					<div class="form-group">
-						<label>Address:</label>
-						<input type="text" class="det" value="{{ $bills[0]->address }}" id="address" disabled>
+						<h5 id="address"><strong>Address:</strong> {{ $bills[0]->address }}</h5>
 					</div>
 					<div class="form-group">
 						<label>Service Order:</label>
