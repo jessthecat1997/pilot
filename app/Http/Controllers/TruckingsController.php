@@ -214,7 +214,6 @@ class TruckingsController extends Controller
         ->select('consignee_service_order_headers.id')
         ->where('B.id', '=', $request->tr_so_id)
         ->get();
-        return $consignee_order;
         $vat = DB::select('SELECT rate FROM vat_rates where currentRate = 1');
 
         $billing_header = new \App\BillingInvoiceHeader;
