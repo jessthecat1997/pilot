@@ -95,40 +95,41 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                       <li>
+                          <a href = "{{ route('employees.index' ) }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
                           <a href = "{{ route('employees.index') }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
                       </li>
-                        <li>
-                            <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
-                        </li>
-                        <li id="frstgrp">
-                            <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>
-                        </li>
-                    </ul>
-                </div>
-                <li>
-                    <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
-                </li>
-                <div id="collapse2" class="pane;-collapse collapse">
-                    <ul class="list-group" style="list-style-type: circle;">
-                        <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a>
-                        </li>
-                        <div id="brokeragecollapse" class="pane;-collapse collapse">
+                      <li>
+                        <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
+                    </li>
+                    <li id="frstgrp">
+                        <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>
+                    </li>
+                </ul>
+            </div>
+            <li>
+                <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
+            </li>
+            <div id="collapse2" class="pane;-collapse collapse">
+                <ul class="list-group" style="list-style-type: circle;">
+                    <li>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a>
+                    </li>
+                    <div id="brokeragecollapse" class="pane;-collapse collapse">
 
                         <li>
                             <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a>
@@ -234,9 +235,13 @@
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
 <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
 <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
+
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<!-- Scripts -->
 
 
 
