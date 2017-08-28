@@ -17,7 +17,7 @@
 			<div class = "col-md-10 col-md-offset-1">
 				<div class = "panel-default panel">
 					<div class = "panel-body">
-						<table class = "table-responsive table" id = "bst_table">
+						<table class = "table-responsive table  table-striped" id = "bst_table">
 							<thead>
 								<tr>
 									<td>
