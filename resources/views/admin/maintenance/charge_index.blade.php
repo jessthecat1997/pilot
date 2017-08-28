@@ -140,6 +140,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
+	$('#billingcollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;

@@ -31,9 +31,7 @@
 							<td>
 								Date Effective
 							</td>
-							<td>
-								Created at
-							</td>
+
 							<td>
 								Actions
 							</td>
@@ -134,6 +132,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
@@ -146,7 +145,6 @@
 			{ data: 'rate' },
 			{ data: 'description' },
 			{ data: 'dateEffective' },
-			{ data: 'created_at'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 2, "desc" ]],
@@ -178,13 +176,14 @@
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Exchange Rate');
-			$('#description').val("");
-			$('rate').val("");
 			var now = new Date();
 			var day = ("0" + now.getDate()).slice(-2);
 			var month = ("0" + (now.getMonth() + 1)).slice(-2);
 			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 			$('#dateEffective').val(today);
+
+			$("#rate").val("0.00");
+			$("#description").val("");
 
 			$('#erModal').modal('show');
 
@@ -272,6 +271,8 @@
 
 						if(typeof(data) === "object"){
 							ertable.ajax.reload();
+							$("#rate").val("0.00");
+							$("#description").val("");
 							$('#erModal').modal('hide');
 
 
@@ -348,8 +349,8 @@
 
 						ertable.ajax.reload();
 						$('#erModal').modal('hide');
-						$('#description').val("");
-						$('rate').val("");
+						$("#rate").val("0.00");
+						$("#description").val("");
 						$('.modal-title').text('New Exchange Rate');
 					}
 				})

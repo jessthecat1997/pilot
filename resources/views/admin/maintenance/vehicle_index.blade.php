@@ -193,7 +193,8 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	var temp_plateNumber = null;
 	var temp_model = null;

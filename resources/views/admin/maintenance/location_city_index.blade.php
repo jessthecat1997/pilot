@@ -228,6 +228,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var city_id = [];
 	var city_id_descrp = [];
 	var arr_provinces =[
@@ -241,7 +243,6 @@
 
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
-		$('#collapse1').addClass('in');
 		//$(city).attr("disabled", true);
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
