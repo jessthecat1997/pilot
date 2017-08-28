@@ -26,7 +26,7 @@ Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('sto
 
 Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
 Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
-
+Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
 Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
 
 Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
@@ -239,6 +239,7 @@ Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->
 
 //Deposits
 Route::resource('cdeposit', 'ConsigneeDepositsController');
+Route::get('cdepositData/{id?}', 'ConsigneeDepositsController@getConsigneeDeposits')->name('cdeposit.data');
 
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');

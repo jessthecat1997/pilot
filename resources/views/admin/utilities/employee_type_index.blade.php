@@ -52,7 +52,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
+							<button id = "btnSave" class="btn btn-success">Save</button>
 							<button class = "btn btn-danger	" data-dismiss= "modal">Close</button>				
 						</div>
 					</div>
@@ -107,7 +107,11 @@
 	var temp_name = null;
 	var temp_desc = null;
 
+
+
 	$(document).ready(function(){
+
+		alert('here');
 		var ettable = $('#ch_table').DataTable({
 			processing: false,
 			serverSide: false,

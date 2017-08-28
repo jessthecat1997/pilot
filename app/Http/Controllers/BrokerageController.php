@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ReceiveType;
-use App\BrokerageServiceOrder;
 use Illuminate\Support\Facades\DB;
-
+use App\Employee;
+use App\ConsigneeServiceOrderHeader;
+use App\ConsigneeServiceOrderDetail;
+use App\BrokerageServiceOrder;
+use App\DutiesAndTaxesHeader;
+use App\DutiesAndTaxesDetails;
 use PDF;
 
 class BrokerageController extends Controller
@@ -176,18 +180,18 @@ class BrokerageController extends Controller
     {
       $so_id = $request->brokerage_id;
 
-      $brokerage_header = DB::table('brokerage_service_orders')
-      ->select('brokerage_service_orders.id', 'companyName', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'arrivalArea')
-      ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
-      ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
-      ->join('consignees', 'consignees_id', '=', 'consignees.id')
-      ->where('brokerage_service_orders.id','=', $so_id)
-      ->get();
-
-
           $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
-          ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges')
-          ->where('brokerageServiceOrders_id','=', $brokerage_header[0]->id)
+          ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges', 'brokerageServiceOrders_id')
+          ->where('duties_and_taxes_headers.id','=', $so_id)
+          ->get();
+
+          $brokerage_header = DB::table('brokerage_service_orders')
+          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight')
+          ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
+          ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+          ->join('consignees', 'consignees_id', '=', 'consignees.id')
+          ->join('locations', 'location_id', '=', 'locations.id')
+          ->where('brokerage_service_orders.id','=',   $dutiesandtaxes_header[0]->brokerageServiceOrders_id)
           ->get();
 
           $exchangeRate = DB::table('exchange_rates')
@@ -228,21 +232,21 @@ class BrokerageController extends Controller
   public function print(Request $request){
       try
       {
-          $so_id = $request->brokerage_id;
+            $so_id = $request->brokerage_id;
 
-          $brokerage_header = DB::table('brokerage_service_orders')
-          ->select('brokerage_service_orders.id', 'companyName', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'arrivalArea')
-          ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
-          ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
-          ->join('consignees', 'consignees_id', '=', 'consignees.id')
-          ->where('brokerage_service_orders.id','=', $so_id)
-          ->get();
+            $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
+            ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'brokerageFee', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges', 'brokerageServiceOrders_id')
+            ->where('duties_and_taxes_headers.id','=', $so_id)
+            ->get();
 
-
-          $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
-          ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'brokerageFee', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges')
-          ->where('brokerageServiceOrders_id','=', $brokerage_header[0]->id)
-          ->get();
+            $brokerage_header = DB::table('brokerage_service_orders')
+            ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight')
+            ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
+            ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+            ->join('consignees', 'consignees_id', '=', 'consignees.id')
+            ->join('locations', 'location_id', '=', 'locations.id')
+            ->where('brokerage_service_orders.id','=',   $dutiesandtaxes_header[0]->brokerageServiceOrders_id)
+            ->get();
 
           $exchangeRate = DB::table('exchange_rates')
           ->select('exchange_rates.id', 'rate')
@@ -276,5 +280,80 @@ class BrokerageController extends Controller
       {
           return 'No service order';
       }
+  }
+
+  public function create_new()
+  {
+    $employees = Employee::all();
+
+    $consignees = \App\Consignee::all();
+
+    $provinces = \App\LocationProvince::all();
+
+    $locations = \App\Location::all();
+
+      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations']));
+  }
+
+  public function save_neworder(Request $request)
+  {
+    $new_so_head = new ConsigneeServiceOrderHeader;
+    $new_so_head->consignees_id = $request->cs_id;
+    $new_so_head->employees_id = $request->employee_id;
+    $new_so_head->save();
+
+    $new_so_detail = new ConsigneeServiceOrderDetail;
+    $new_so_detail->so_headers_id = $new_so_head->id;
+    $new_so_detail->service_order_types_id = 1;
+    $new_so_detail->save();
+
+    $date = date_format(date_create($request->arrivalDate),"Y-m-d");
+    $new_brokerage_so = new BrokerageServiceOrder;
+    $new_brokerage_so->consigneeSODetails_id = $new_so_detail->id;
+    $new_brokerage_so->shipper = $request->shipper;
+    $new_brokerage_so->expectedArrivalDate = $date;
+    $new_brokerage_so->location_id = $request->location_id;
+    $new_brokerage_so->freightBillNo = $request->freightNumber;
+    $new_brokerage_so->Weight = $request->weight;
+    $new_brokerage_so->freightType = $request->freightType;
+    $new_brokerage_so->statusType = 'P';
+    $new_brokerage_so->bi_head_id_rev = null;
+    $new_brokerage_so->bi_head_id_exp = null;
+    $new_brokerage_so->save();
+
+    $brokerage_id = $new_brokerage_so->id;
+    return $brokerage_id;
+  }
+
+  public function view_order(Request $request)
+  {
+    $brokerage_id = $request->brokerage_id;
+
+    $brokerage_header = DB::table('brokerage_service_orders')
+    ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType')
+    ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
+    ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+    ->join('consignees', 'consignees_id', '=', 'consignees.id')
+    ->join('locations', 'location_id', '=', 'locations.id')
+    ->where('brokerage_service_orders.id','=', $brokerage_id)
+    ->get();
+
+    $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
+    ->select('duties_and_taxes_headers.id', 'brokerageFee')
+    ->where('brokerageServiceOrders_id', '=', $brokerage_id)
+    ->get();
+
+
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header']));
+  }
+
+  public function update_status(Request $request)
+  {
+      $brokerage_id = $request->brokerage_id;
+      $brokerage_status_update = DB::table('brokerage_service_orders')
+      ->where('brokerage_service_orders.id', $brokerage_id)
+    ->update(['statusType' =>  $request->status]);
+
+    return $brokerage_id;
   }
 }

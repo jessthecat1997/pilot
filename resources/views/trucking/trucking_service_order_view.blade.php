@@ -167,6 +167,7 @@
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
+					<form>
 					<div class = "form-group">
 						<label class="col-md-12">Amount</label>
 						<div class = "col-md-12">
@@ -179,6 +180,7 @@
 							<textarea class = "form-control" id = "description" required></textarea>
 						</div>
 					</div>
+					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -313,7 +315,7 @@
 								Amount
 							</td>
 							<td>
-								Current Balance
+								Remaining Balance
 							</td>
 							<td>
 								Description
@@ -321,6 +323,24 @@
 						</tr>
 					</thead>
 					<tbody>
+						@forelse($deposits as $deposit)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+							</td>
+							<td>
+								Php {{ $deposit->amount }}
+							</td>
+							<td>
+								Php {{ $deposit->currentBalance }}
+							</td>
+							<td>
+								{{ $deposit->description }}
+							</td>
+						</tr>
+						@empty
+
+						@endforelse
 					</tbody>
 				</table>
 			</div>
@@ -569,22 +589,58 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
+		var deposits;
+		@if(count($deposits) == 0)
+		deposits = $('#deposits_table').DataTable({
+			deferRender: true,
+			processing: false,
+			serverSide: false,
+		});
+		@else
+		deposits = $('#deposits_table').DataTable({
+			deferRender: true,
+			processing: false,
+			serverSide: false,
+			type: 'GET',
+			ajax: '{{ route("cdeposit.data") }}/{{$service_order_details[0]->id }}',
+			columns: [
+
+			{ data: 'created_at' },
+			{ data: 'amount' },
+			{ data: 'currentBalance'},
+			{ data: 'description'}
+			
+			],	"order": [[ 0, "desc" ]],
+		});
+		@endif
 
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
-			$.ajax({
-				type : 'POST',
-				url : "{{ route('cdeposit.index') }}",
-				data : {
-					'_token' : $('input[name=_token]').val(),
-					'amount' : $('#deposit').val(),
-					'description' : $('#description').val(),
-					'consignees_id' : " {{ $service_order_details[0]->id }}",
-				},
-				success : function (data){
-					console.log(data);
-				}
-			})
+			$('#deposit').valid()
+			if($('#deposit').valid()){
+				$('.confirm-create-deposit').attr('disabled', true);
+				$.ajax({
+					type : 'POST',
+					url : "{{ route('cdeposit.index') }}",
+					data : {
+						'_token' : $('input[name=_token]').val(),
+						'amount' : $('#deposit').val(),
+						'description' : $('#description').val(),
+						'consignees_id' : " {{ $service_order_details[0]->id }}",
+					},
+					success : function (data){
+						@if(count($deposits) == 0)
+						window.location.reload();
+						@else
+						$('#deposit_modal').modal('hide');
+						$('#deposit').val("");
+						$('#description').val("");
+						$('.confirm-create-deposit').removeAttr('disabled');
+						deposits.ajax.reload();
+						@endif
+					}
+				})
+			}
 		})
 		
 		$(document).on('click', '.new_deposit', function(e){
@@ -605,7 +661,7 @@
 					'charge_id' : $('#exp_bill_id').val(),
 					'description' : $('#exp_description').val(),
 					'amount' : $('#exp_amount').val(),
-					'bi_head_id' : {{ $service_order->bi_head_id_exp }},
+					'bi_head_id' : '{{ $service_order->bi_head_id_exp }}',
 				},
 				success: function (data){
 					location.reload();
@@ -624,7 +680,7 @@
 					'charge_id' : $('#rev_bill_id').val(),
 					'description' : $('#rev_description').val(),
 					'amount' : $('#rev_amount').val(),
-					'bi_head_id' : {{ $service_order->bi_head_id_rev }},
+					'bi_head_id' : '{{ $service_order->bi_head_id_rev }}',
 				},
 				success: function (data){
 					location.reload();
@@ -644,7 +700,7 @@
 						url: '{{ route("getDeliveryFees") }}/{{ $service_order->id }}',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'tr_so_id' : {{ $service_order->id }},
+							'tr_so_id' : '{{ $service_order->id }}',
 						},
 						success: function(data){
 							var delivery_fees_rows = "";
@@ -689,7 +745,7 @@
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("getBillingDetails") }}/' + {{  $service_order->bi_head_id_rev }},
+			ajax: '{{ route("getBillingDetails") }}/{{  $service_order->bi_head_id_rev }}',
 			columns: [
 
 			{ data: 'name' },
@@ -706,7 +762,7 @@
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{ route("getBillingDetails") }}/' + {{ $service_order->bi_head_id_exp }},
+			ajax: '{{ route("getBillingDetails") }}/{{ $service_order->bi_head_id_exp }}',
 			columns: [
 
 			{ data: 'name' },
@@ -729,7 +785,7 @@
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'isRevenue' : create_bill,
-						'tr_so_id' : {{ $service_order->id }},
+						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
 						window.location.reload();
@@ -745,7 +801,7 @@
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'isRevenue' : create_bill,
-						'tr_so_id' : {{ $service_order->id }},
+						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
 						window.location.reload();

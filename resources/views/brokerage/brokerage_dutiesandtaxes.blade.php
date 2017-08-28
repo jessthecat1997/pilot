@@ -155,7 +155,7 @@
 												@endforelse
 											</select>
 											<span class="input-group-btn">
-												<button class="btn btn-primary pick_add_new_location" onclick = "	$('#ItemModal').modal('show');"type="button">+</button>
+												<button class="btn btn-primary pick_add_new_location" onclick = "	$('#LocationModal').modal('show');"type="button">+</button>
 											</span>
 										</div>
 									</div>
@@ -396,7 +396,7 @@
 		<!-- Add Item Modal -->
 
 			<section class="content">
-				<div class="modal fade" id="ItemModal" role="dialog">
+				<div class="modal fade" id="LocationModal" role="dialog">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -450,7 +450,7 @@
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type = "submit" class="btn btn-success btnSave" >Save</button>
+								<button type = "submit" class="btn btn-success btnSave"  >Save</button>
 								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 							</div>
 						</div>
@@ -878,6 +878,7 @@
 	})
 
 	$(document).on('click', '.btnSave', function(e){
+
 		e.preventDefault();
 		$.ajax({
 			type: 'POST',
@@ -890,6 +891,7 @@
 				'zipCode' : $('#zip').val(),
 			},
 			success: function(data){
+
 				if(selected_location == 0){
 					$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
 					$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
@@ -921,6 +923,8 @@
 					$('#zip').val("");
 					$('#LocationModal').modal('hide');
 				}
+
+			$('#LocationModal').modal('hide');
 
 			},
 			error: function(data) {
@@ -969,7 +973,6 @@
 
 	$('#brokerageBtn').on('click', function(e){
 
-		alert($('#processedBy').val());
 		$.ajax({
 			type: 'POST',
 			url: "{{ route('saveBrokerageOrder') }}",
@@ -997,7 +1000,7 @@
 					$('#_cbusinessStyle').val(data[0].businessStyle);
 					$('#_cTIN').val(data[0].TIN);
 				}
-				window.location.replace("/brokerage");
+				window.location.replace('/brokerage/'+data+'/order');
 			},
 			error: function(data) {
 				if(data.status == 400){

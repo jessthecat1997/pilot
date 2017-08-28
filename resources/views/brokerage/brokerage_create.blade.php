@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('content')
+<div class = "row">
 <div class = "panel default-panel">
 	<div class = "panel-heading">
-		<h3><img src="/images/bar.png"> Brokerage | Create Service Order</h3>
+		<h2>&nbsp;Brokerage / Create Service Order</h2>
 		<hr />
 	</div>
 	<div class = "panel-body">

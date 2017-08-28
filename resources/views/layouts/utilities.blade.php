@@ -336,6 +336,9 @@
             }, 0);
         });
 
+  </script>
+    @stack('scripts')
+</body>
+</html>
 
 
-    $('.percentage').inputmask("numeric",
