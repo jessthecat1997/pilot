@@ -17,6 +17,7 @@ class CreateBillingInvoiceHeadersTable extends Migration
             $table->increments('id');
             $table->boolean('isRevenue');
             $table->boolean('isFinalize');
+            $table->boolean('isVatFree');
             $table->decimal('vatRate',6,3)->nullable();
             $table->char('status', 1);
             $table->date('date_billed')->nullable();
