@@ -245,41 +245,7 @@
 			},
 		});
 
-		$("#commentForm").validate({
-			rules: 
-			{
-				plateNumber:
-				{
-					required: true,
-				},
-				bodyType:
-				{
-					required: true,
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
-					maxlength: 50,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-
-				},
-				model:
-				{
-					required: true,
-					maxlength: 50,
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-
-				},
-
-
-			},
-			onkeyup: function(element) {$(element).valid()},
-		});
-
+	
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
