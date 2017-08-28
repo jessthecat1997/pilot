@@ -3,47 +3,48 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="container-fluid">
-	<div class="row col-lg-3 col-md-6">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h4>Consignee Details</h4></div>
-			<div class="panel-body">
-				<form class="inline">
-					<div class="form-group">
-						<label>Invoice No.:</label>
-						<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
-					</div>
-					<div class="form-group">
-						<label>Due Date:</label>
-						<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date">
-					</div>
-					<hr>
-					<div class="form-group">
-						<label>Consignee:</label>
-						<h5>{{ $bills[0]->companyName }}</h5>
-					</div>
-					<div class="form-group">
-						<label>Address:</label>
-						<h5>{{ $bills[0]->address }}</h5>
-					</div>
-					<div class="form-group">
-						<label>Service Order:</label>
-						<h5>{{ $bills[0]->name }}</h5>
-					</div>
-					<div class="form-group">
-						<label>Status:</label>
-						@if($bills[0]->isFinalize == 1)
-						<label class="label label-success" id="status">Finalized</label>
-						@else
-						<label class="label label-warning" id="status">Not Finalize</label>
-						@endif
-					</div>
-				</form>
+	<div class="row col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Consignee Details</h4></div>
+		<div class="panel-body">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Consignee:</label>
+					<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
+				</div>
+				<div class="form-group">
+					<label>Address:</label>
+					<input type="text" class="det" value="{{ $bills[0]->address }}" id="address" disabled>
+				</div>
+				<div class="form-group">
+					<label>Service Order:</label>
+					<input type="text" class="det" value="{{ $bills[0]->name }}" id="sotype" disabled>
+				</div>
+				<div class="form-group">
+					<label>Status:</label>
+					@if($bills[0]->isFinalize == 1)
+					<label class="label label-success" id="status">Finalized</label>
+					@else
+					<label class="label label-danger" id="status">Not Finalize</label>
+					@endif
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Invoice No.:</label>
+					<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id" disabled>
+				</div>
+				<div class="form-group">
+					<label>Due Date:</label>
+					<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date" disabled>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row col-lg-9 col-md-6">
+</div>
+	<div class="row col-lg-12">
 		<div class="panel panel-default">
-		<div class="panel-heading"><h4>New Bills</h4></div>
+			<div class="panel-heading"><h4>New Bills</h4></div>
 			<div class = "panel-body">
 				<form class="form-inline">
 					{{ csrf_field() }}
@@ -66,7 +67,7 @@
 						<tbody>
 							@forelse($rev_bill as $bill)
 							<tr>
-								<td style="text-align: center;">{{ $bill->name }}</td>
+								<td style="text-align: center;">{{ $bill->name }} <i>{{ $bill->description }}</i></td>
 								<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
 							</tr>
 							@empty
@@ -103,7 +104,7 @@
 							@endforelse
 							<tr>
 								<td colspan="2">
-									<button class="btn but pull-right finalize-bill col-sm-6">Finalize</button>
+									<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
 								</td>
 							</tr>
 						</tbody>
@@ -113,253 +114,216 @@
 		</div>
 	</div>
 </div>
-<div id="revModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Add Bills</h4>
-			</div>
-			<div class="modal-body">
-				<table class = "table-responsive table" id = "rev_table">
-					<thead>
-						<tr>
-							<td>
-								Name *
-							</td>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr id = "revenue-row" name="revenue-row">
-							<form class="form-horizontal">
-								{{ csrf_field() }}
-								<td>
-									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
-										<option value = "0">Select Charges</option>
-										@forelse($bill_revs as $rev)
-										<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
-
-										@empty
-
-										@endforelse
-									</select>
-								</td>
-								<td>
-									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
-								</td>
-
-								<tr id="desc_rev_row">
-									<td colspan="4">
-										<div class="form-group">
-											<label for="rev_description">Description:</label>
-											<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
-										</div>
-									</td>
-								</tr>
-							</form>
-						</tr>
-					</tbody>
-				</table>
-				<strong>Note:</strong> All fields with * are required.
-			</div>
-			<div class="modal-footer">
-				<a class="btn but finalize-rev">Save</a>
-			</div>
-		</div>
-	</div>
 </div>
-<div id="updateModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Billing Invoice</h4>
-			</div>
-			<div class="modal-body">
-				<div class="col-sm-12">
-					<form class="form-inline">
-						{{ csrf_field() }}
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="vat">Vat Rate:*</label>
-								<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="date_billed">Date Billed:*</label>
-								<input type="date" class="form-control" id="date_billed">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="due_date">Due Date:*</label>
-								<input type="date" class="form-control" id="due_date">
-							</div>
-						</div>
-					</form>
+<div class="container-fluid">
+	<div id="revModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Bills</h4>
 				</div>
-				<strong>Note:</strong> All fields with * are required.
-			</div>
-			<div class="modal-footer">
-				<a class="btn but save-header">Save</a>
+				<div class="modal-body">
+					<table class = "table-responsive table" id = "rev_table">
+						<thead>
+							<tr>
+								<td>
+									Name *
+								</td>
+								<td>
+									Amount *
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id = "revenue-row" name="revenue-row">
+								<form class="form-horizontal">
+									{{ csrf_field() }}
+									<td>
+										<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
+											<option value = "0">Select Charges</option>
+											@forelse($bill_revs as $rev)
+											<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
+
+											@empty
+
+											@endforelse
+										</select>
+									</td>
+									<td>
+										<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
+									</td>
+
+									<tr id="desc_rev_row">
+										<td colspan="4">
+											<div class="form-group">
+												<label for="rev_description">Description:</label>
+												<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+											</div>
+										</td>
+									</tr>
+								</form>
+							</tr>
+						</tbody>
+					</table>
+					<strong>Note:</strong> All fields with * are required.
+				</div>
+				<div class="modal-footer">
+					<a class="btn but finalize-rev">Save</a>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-@endsection
-@push('styles')
-<style>
-	.class-billing
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-<link href= "/js/select2/select2.css" rel = "stylesheet">
-@push('scripts')
-<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
-<script type="text/javascript">
-	$('#collapse1').addClass('in');
-	var rev_bill_id = [];
-	var rev_description_value = [];
-	var	rev_amount_value = [];
-	var	rev_tax_value = [];
-
-	var exp_bill_id = [];
-	var	exp_description_value = [];
-	var	exp_amount_value = [];
-	var	exp_tax_value = [];
-
-
-	var rev_row = "<tr>" + $('#revenue-row').html() + "</tr>";
-	var exp_row = "<tr>" + $('#expense-row').html() + "</tr>";
-	var desc_rev_row =  "<tr>" + $('#desc_rev_row').html() + "</tr>";
-	var desc_exp_row =  "<tr>" + $('#desc_exp_row').html() + "</tr>";
-
-	var so_type = $('#so_type').text();
-
-
-	$(document).ready(function(){
-		var stat = document.getElementById("status").innerText;
-		console.log(stat);
-		if(stat == "Finalized")
+	@endsection
+	@push('styles')
+	<style>
+		.class-billing
 		{
-			$('.addBill').attr('disabled','disabled');
-			$('.finalize-bill').attr('disabled','disabled');
+			border-left: 10px solid #8ddfcc;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
 		}
-		var bi_id = document.getElementById("so_head_id").value;
-		console.log(bi_id);
+	</style>
+	<link href= "/js/select2/select2.css" rel = "stylesheet">
+	@push('scripts')
+	<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+	<script type="text/javascript">
+		$('#collapse1').addClass('in');
+		var rev_bill_id = [];
+		var rev_description_value = [];
+		var	rev_amount_value = [];
+		var	rev_tax_value = [];
 
-		$('#rev_bill_id').select2(); 
-		$(document).on('change', '#rev_bill_id', function(e){
-			revID = $('#rev_bill_id').val();
-			if($('#rev_bill_id').val() != 0){
-				$.ajax({
-					type: 'GET',
-					url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
-					data: {
-						'_token' : $('input[name=_token]').val(),
-					},
-					success: function(data){
-						if(typeof(data) == "object"){
-							console.log(data[0].amount);
-							$('#rev_amount').val(data[0].amount);
-						}
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
-			}
-			else
+		var exp_bill_id = [];
+		var	exp_description_value = [];
+		var	exp_amount_value = [];
+		var	exp_tax_value = [];
+
+
+		var rev_row = "<tr>" + $('#revenue-row').html() + "</tr>";
+		var exp_row = "<tr>" + $('#expense-row').html() + "</tr>";
+		var desc_rev_row =  "<tr>" + $('#desc_rev_row').html() + "</tr>";
+		var desc_exp_row =  "<tr>" + $('#desc_exp_row').html() + "</tr>";
+
+		var so_type = $('#so_type').text();
+
+
+		$(document).ready(function(){
+			var stat = document.getElementById("status").innerText;
+			console.log(stat);
+			if(stat == "Finalized")
 			{
-				$('amount').val("");
+				$('.addBill').attr('disabled','disabled');
+				$('.finalize-bill').attr('disabled','disabled');
 			}
-		})
-
-		var rc_table = $('#revTable').DataTable({
-			processing: false,
-			serverSide: true,
-			ajax: "{{ route('revenue.data',$so_head_id) }}",
-			columns: [
-			{ data: 'name' },
-			{ data: 'description' },
-			{ data: 'Total' }
-			]
-		})
-		var br_table = $('#expTable').DataTable({
-			processing: false,
-			serverSide: true,
-			ajax: "{{ route('expenses.data', $so_head_id) }}",
-			columns: [
-			{ data: 'name' },
-			{ data: 'description' },
-			{ data: 'Total' }
-			]
-		})
-	})
-	$(document).on('click', '.new-rev-row', function(e){
-		e.preventDefault();
-		$('#rev_table > tbody').append(rev_row);
-		$('#rev_table > tbody').append(desc_rev_row);
-	})
-
-	$(document).on('click', '.new-exp-row', function(e){
-		e.preventDefault();
-		$('#exp_table > tbody').append(exp_row);
-		$('#exp_table > tbody').append(desc_exp_row);
-	})
-	$(document).on('click', '.finalize-bill', function(e){
-		$.ajax({
-			method: 'PUT',
-			url: '/billing/{{ $so_head_id }}/finalize',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'isFinalize' : 1
-			},
-			success: function (data){
-				location.reload();
-			}
-		})
-	})
-
-	$(document).on('click', '.finalize-rev', function(e){
-		if(validateRevenueRows() === true){
 			var bi_id = document.getElementById("so_head_id").value;
-			console.log(rev_bill_id);
-			console.log(rev_amount_value);
-			console.log(rev_description_value);
-			console.log(rev_tax_value);
-			console.log({{ $so_head_id }});
+			console.log(bi_id);
+
+			$('#rev_bill_id').select2(); 
+			$(document).on('change', '#rev_bill_id', function(e){
+				revID = $('#rev_bill_id').val();
+				if($('#rev_bill_id').val() != 0){
+					$.ajax({
+						type: 'GET',
+						url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
+						data: {
+							'_token' : $('input[name=_token]').val(),
+						},
+						success: function(data){
+							if(typeof(data) == "object"){
+								console.log(data[0].amount);
+								$('#rev_amount').val(data[0].amount);
+							}
+						},
+						error: function(data) {
+							if(data.status == 400){
+								alert("Nothing found");
+							}
+						}
+					})
+				}
+				else
+				{
+					$('amount').val("");
+				}
+			})
+
+			var rc_table = $('#revTable').DataTable({
+				processing: false,
+				serverSide: true,
+				ajax: "{{ route('revenue.data',$so_head_id) }}",
+				columns: [
+				{ data: 'name' },
+				{ data: 'description' },
+				{ data: 'Total' }
+				]
+			})
+			var br_table = $('#expTable').DataTable({
+				processing: false,
+				serverSide: true,
+				ajax: "{{ route('expenses.data', $so_head_id) }}",
+				columns: [
+				{ data: 'name' },
+				{ data: 'description' },
+				{ data: 'Total' }
+				]
+			})
+		})
+		$(document).on('click', '.new-rev-row', function(e){
+			e.preventDefault();
+			$('#rev_table > tbody').append(rev_row);
+			$('#rev_table > tbody').append(desc_rev_row);
+		})
+
+		$(document).on('click', '.new-exp-row', function(e){
+			e.preventDefault();
+			$('#exp_table > tbody').append(exp_row);
+			$('#exp_table > tbody').append(desc_exp_row);
+		})
+		$(document).on('click', '.finalize-bill', function(e){
 			$.ajax({
-				method: 'POST',
-				url: '{{ route("billing.store") }}',
+				method: 'PUT',
+				url: '/billing/{{ $so_head_id }}/finalize',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'charge_id' : rev_bill_id,
-					'description' : rev_description_value,
-					'amount' : rev_amount_value,
-					'tax' : 0,
-					'bi_head_id' : bi_id,
+					'isFinalize' : 1
 				},
 				success: function (data){
 					location.reload();
 				}
 			})
-		}
-	})
-	function validateRevenueRows()
-	{
-		rev_bill_id = [];
-		rev_description_value = [];
-		rev_amount_value = [];
+		})
+
+		$(document).on('click', '.finalize-rev', function(e){
+			if(validateRevenueRows() === true){
+				var bi_id = document.getElementById("so_head_id").value;
+				console.log(rev_bill_id);
+				console.log(rev_amount_value);
+				console.log(rev_description_value);
+				console.log(rev_tax_value);
+				console.log({{ $so_head_id }});
+				$.ajax({
+					method: 'POST',
+					url: '{{ route("billing.store") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'charge_id' : rev_bill_id,
+						'description' : rev_description_value,
+						'amount' : rev_amount_value,
+						'tax' : 0,
+						'bi_head_id' : bi_id,
+					},
+					success: function (data){
+						location.reload();
+					}
+				})
+			}
+		})
+		function validateRevenueRows()
+		{
+			rev_bill_id = [];
+			rev_description_value = [];
+			rev_amount_value = [];
 		// rev_tax_value = [];
 
 		rev_billID = document.getElementsByName('rev_bill_id');
