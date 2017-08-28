@@ -6,77 +6,48 @@ use Illuminate\Http\Request;
 
 class DepositPaymentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $deposit_payment = new \App\DepositPayment;
+        $deposit_payment->description = $request->description;
+        $deposit_payment->deposits_id = $request->deposit_id;
+        $deposit_payment->bi_head_id = $request->bi_head_id;
+        $deposit_payment->amount = $request->amount;
+
+        $deposit_payment->save();
+
+        $deposit = \App\ConsigneeDeposit::findOrFail($request->deposit_id);
+        $deposit->currentBalance = ($deposit->currentBalance - $request->amount);
+        $deposit->save();
+
+        return $deposit_payment;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

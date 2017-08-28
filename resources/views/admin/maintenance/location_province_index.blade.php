@@ -103,7 +103,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 		var lptable = $('#lp_table').DataTable({

@@ -122,6 +122,8 @@
 
 <script type="text/javascript">
 	var data;
+	$('#collapse2').addClass('in');
+	$('#billingcollapse').addClass('in');
 	$(document).ready(function(){
 
 		var vrtable = $('#vr_table').DataTable({

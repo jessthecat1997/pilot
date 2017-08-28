@@ -133,7 +133,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse1').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var location_id = null;
 	var arr_provinces =[
 	@forelse($provinces as $province)

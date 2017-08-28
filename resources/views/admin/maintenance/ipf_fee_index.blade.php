@@ -188,6 +188,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#brokeragecollapse').addClass('in');
+	$('#collapse2').addClass('in');
 	var minimum_id = [];
 	var maximum_id = [];
 	var amount_value = [];
@@ -202,9 +204,7 @@
 	var jsonMinimum, jsonMaximum, jsonAmount;
 	$(document).ready(function(){
 		var ipf_row = "<tr>" + $('#ipf-row').html() + "</tr>";
-		$('#collapse1').addClass('in');
 
-		//$(minimum).attr("disabled", true);
 		var ipftable = $('#ipf_table').DataTable({
 			processing: false,
 			serverSide: false,

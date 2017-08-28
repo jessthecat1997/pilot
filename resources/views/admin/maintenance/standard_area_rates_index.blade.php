@@ -319,15 +319,14 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var temp_deliver_id = null;
 	var temp_pickup_id = null;
 	var temp_amount = null;
 	var data;
 	$(document).ready(function(){
 		var sar_row = "<tr>" + $('#sar-row').html() + "</tr>";
-		$('#collapse1').addClass('in');
-
-
 
 		var sartable = $('#sar_table').DataTable({
 			processing: false,

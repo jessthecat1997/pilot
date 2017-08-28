@@ -132,6 +132,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){

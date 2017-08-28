@@ -61,10 +61,6 @@ hr
 {
 	border-color:  #002B5C;
 }
-.panel-body
-{
-	background-color: #fff;
-}
 .nav-tabs > li.active > a:focus
 {
 	background-color: #2ad4a5;
@@ -100,10 +96,6 @@ hr
 {
 	background-color: #23375B;
 	color:#fff;
-}
-.panel-body
-{
-	border: 1px solid #8ddfcc;
 }
 .but
 {
