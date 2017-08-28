@@ -38,8 +38,6 @@
         </div>
     </div>
 </div>
-</div>
-</div>
 <section class="content">
 
     <form role="form" method = "POST" class="commentForm">
