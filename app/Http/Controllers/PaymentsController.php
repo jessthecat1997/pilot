@@ -92,11 +92,14 @@ class PaymentsController extends Controller
 	}
 	public function payments_table(Request $request, $id)
 	{
-		$history = DB::table('payments')
-		->select('payments.id', 'amount', 'payments.created_at', 'description')
-		->where('payments.bi_head_id', '=', $id)
-		->orderBy('id', 'desc')
-		->get();
+		$history = DB::select(
+			'SELECT CONCAT("Payment: ", id) as record, amount, created_at, description FROM payments as p  WHERE p.bi_head_id = ? 
+			UNION 
+			(
+			SELECT CONCAT("Deposit Payment: ", id) as record, amount, created_at, description FROM deposit_payments as dp WHERE dp.bi_head_id = ?
+			)
+			', [$id, $id]
+			);
 		return Datatables::of($history)
 		->make(true);
 	}

@@ -323,7 +323,7 @@
 			serverSide: true,
 			ajax: "{{ route('payments.data', $so_head_id) }}",
 			columns: [
-			{ data: 'id' },
+			{ data: 'record' },
 			{ data: 'amount' },
 			{ data: 'created_at'},
 			{ data: 'description'}

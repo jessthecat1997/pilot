@@ -155,11 +155,11 @@
 					date: true,
 				}
 			},
-        onkeyup: false, 
-        submitHandler: function (form) {
-        	return false;
-        }
-    });
+			onkeyup: false, 
+			submitHandler: function (form) {
+				return false;
+			}
+		});
 		
 
 		$(document).on('click', '.new', function(e){
@@ -189,89 +189,18 @@
 			$('#confirm-delete').modal('show');
 		});
 
-
-		
-
-
-
-
-
-// Confirm Delete Button
-$('#btnDelete').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '/admin/cds_fee/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			cdstable.ajax.reload();
-			$('#confirm-delete').modal('hide');
-
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
-
-
-
-
-// Confirm Save Button
-$('#btnSave').on('click', function(e){
-
-
-
-	var fee_nocomma = $('#fee').inputmask('unmaskedvalue');
-	if (fee_nocomma == "0.00"){
-		fee_nocomma = "";
-	}
-
-	e.preventDefault();
-	var title = $('.modal-title').text();
-
-	if(title == "New CDS Fee")
-	{
-		$.ajax({
-			type: 'POST',
-			url:  '/admin/cds_fee',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'fee' : fee_nocomma,
-				'dateEffective' : $('input[name=dateEffective]').val(),
-				'currentFee' : $('input[name=currentFee]').val(),
-			},
-			success: function (data)
-			{
-				
-				if(typeof(data) === "object"){
+		$('#btnDelete').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/cds_fee/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
 					cdstable.ajax.reload();
-					$('#cdsModal').modal('hide');
-					$('.modal-title').text('New CDS Fee');
-					$('#fee').val('');
-					$('#dateEffective').val('');
-
-
-					//Show success
+					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
 						"closeButton": false,
@@ -291,70 +220,127 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record added successfully")
-				}else{
-
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
+					toastr["success"]("Record deactivated successfully")
 				}
-			},
-			
-		})
-	}
-	else
-	{
+			})
+		});
+
+		$('#btnSave').on('click', function(e){
 
 
-		$.ajax({
-			type: 'PUT',
-			url:  '/admin/cds_fee/' + data.id,
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'fee' : fee_nocomma,
-				'dateEffective' : $('input[name=dateEffective]').val(),
-				'currentFee' : $('input[name=currentFee]').val(),
-			},
-			success: function (data)
-			{
-				
 
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]("Record updated successfully")
-
-				cdstable.ajax.reload();
-				$('#cdsModal').modal('hide');
-				$('#fee').val("");
-				$('#dateEffective').val("");
-				$('.modal-title').text('New CDS Fee');
+			var fee_nocomma = $('#fee').inputmask('unmaskedvalue');
+			if (fee_nocomma == "0.00"){
+				fee_nocomma = "";
 			}
-		})
-	}
-});
 
-});
+			e.preventDefault();
+			var title = $('.modal-title').text();
+
+			if(title == "New CDS Fee")
+			{
+				$.ajax({
+					type: 'POST',
+					url:  '/admin/cds_fee',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'fee' : fee_nocomma,
+						'dateEffective' : $('input[name=dateEffective]').val(),
+						'currentFee' : $('input[name=currentFee]').val(),
+					},
+					success: function (data)
+					{
+						window.location.reload();
+
+						if(typeof(data) === "object"){
+							cdstable.ajax.reload();
+							$('#cdsModal').modal('hide');
+							$('.modal-title').text('New CDS Fee');
+							$('#fee').val('');
+							$('#dateEffective').val('');
+
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record added successfully")
+						}else{
+
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v); 
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+							});
+
+						}
+					},
+
+				})
+			}
+			else
+			{
+
+
+				$.ajax({
+					type: 'PUT',
+					url:  '/admin/cds_fee/' + data.id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'fee' : fee_nocomma,
+						'dateEffective' : $('input[name=dateEffective]').val(),
+						'currentFee' : $('input[name=currentFee]').val(),
+					},
+					success: function (data)
+					{
+						window.location.reload();
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Record updated successfully")
+
+						cdstable.ajax.reload();
+						$('#cdsModal').modal('hide');
+						$('#fee').val("");
+						$('#dateEffective').val("");
+						$('.modal-title').text('New CDS Fee');
+					}
+				})
+			}
+		});
+
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
