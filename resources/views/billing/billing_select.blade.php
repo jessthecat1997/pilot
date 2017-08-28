@@ -221,7 +221,7 @@
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
-			url: '{{ route("billing_header.store") }}',
+			url: '/postHeader',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $bills[0]->id }},
@@ -240,6 +240,7 @@
 			method: 'PUT',
 			url: '{{ route("billing.update", $so_head_id) }}',
 			data: {
+				'_token' : $('input[name=_token]').val(),
 				'date_billed' : $('#update_billed').val(),
 				'due_date' : $('#updue_date').val(),
 			},
