@@ -630,153 +630,155 @@
 			e.preventDefault();
 
 			$('#amount').valid();
-			var title = $('.sarModal-title').text();
-			console.log("hihiho" + title);
-			if(title == "New Standard Area Rate")
-			{
-				console.log("new new new");
-
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/standard_arearates',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'areaFrom' : temp_pickup_id,
-						'areaTo' : temp_deliver_id,
-						'amount' : $('#amount').inputmask('unmaskedvalue'),
-					},
-
-					success: function (data){
-
-						sartable.ajax.reload();
-						$('#sarModal').modal('hide');
-						$('.modal-title').text('New Standard Area Rate');
-						$('#amount').val("0.00");
-						$('#_address').val("");
-						$('#_city').val("");
-						$('#_province').val("");
-						$('#_zip').val("");
-
-						$('#_daddress').val("");
-						$('#_dcity').val("");
-						$('#_dprovince').val("");
-						$('#_dzip').val("");
-
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record addded successfully")
-
-					}
-				})
-			}
-			else
-			{
-				if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+			if($('#amount').valid() && $('#amount').val() > 0){
+				var title = $('.sarModal-title').text();
+				console.log("hihiho" + title);
+				if(title == "New Standard Area Rate")
 				{
+					console.log("new new new");
 
-					if($('#pickup_id').val() === temp_pickup_id &&
-						$('#deliver_id').val() === temp_deliver_id && 
-						$('#amount').inputmask("unmaskedvalue") === temp_amount  )
-					{
-						$('#amount').val("0.00");
-						$('#btnSave').removeAttr('disabled');
-						$('#sarModal').modal('hide');
-					}
-					else
-					{
-						$('#btnSave').attr('disabled', 'true');
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/standard_arearates',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'areaFrom' : temp_pickup_id,
+							'areaTo' : temp_deliver_id,
+							'amount' : $('#amount').inputmask('unmaskedvalue'),
+						},
 
-						$.ajax({
-							type: 'PUT',
-							url:  '/admin/standard_arearates/' + data.id,
-							data: {
-								'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
-								'areaTo' : $('#deliver_id').val(),
-								'amount' : $('#amount').inputmask('unmaskedvalue'),
-							},
+						success: function (data){
 
-							success: function (data){
+							sartable.ajax.reload();
+							$('#sarModal').modal('hide');
+							$('.modal-title').text('New Standard Area Rate');
+							$('#amount').val("0.00");
+							$('#_address').val("");
+							$('#_city').val("");
+							$('#_province').val("");
+							$('#_zip').val("");
 
-								if(typeof(data) === "object"){
-									sartable.ajax.reload();
-									$('#sarModal').modal('hide');
-									$('.modal-title').text('New Standard Area Rate');
-									$('#amount').val("0.00");
-									$('#_address').val("");
-									$('#_city').val("");
-									$('#_province').val("");
-									$('#_zip').val("");
+							$('#_daddress').val("");
+							$('#_dcity').val("");
+							$('#_dprovince').val("");
+							$('#_dzip').val("");
 
-									$('#_daddress').val("");
-									$('#_dcity').val("");
-									$('#_dprovince').val("");
-									$('#_dzip').val("");
-
-									toastr.options = {
-										"closeButton": false,
-										"debug": false,
-										"newestOnTop": false,
-										"progressBar": false,
-										"rtl": false,
-										"positionClass": "toast-bottom-right",
-										"preventDuplicates": false,
-										"onclick": null,
-										"showDuration": 300,
-										"hideDuration": 1000,
-										"timeOut": 2000,
-										"extendedTimeOut": 1000,
-										"showEasing": "swing",
-										"hideEasing": "linear",
-										"showMethod": "fadeIn",
-										"hideMethod": "fadeOut"
-									}
-									toastr["success"]("Record updated successfully")
-
-
-									$('#btnSave').removeAttr('disabled');
-
-
-								}
-								else{
-									resetErrors();
-									var invdata = JSON.parse(data);
-									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
-										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-									});
-
-									$('#btnSave').removeAttr('disabled');
-
-								}
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
 							}
-						})
+							toastr["success"]("Record addded successfully")
+
+						}
+					})
+				}
+				else
+				{
+					if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+					{
+
+						if($('#pickup_id').val() === temp_pickup_id &&
+							$('#deliver_id').val() === temp_deliver_id && 
+							$('#amount').inputmask("unmaskedvalue") === temp_amount  )
+						{
+							$('#amount').val("0.00");
+							$('#btnSave').removeAttr('disabled');
+							$('#sarModal').modal('hide');
+						}
+						else
+						{
+							$('#btnSave').attr('disabled', 'true');
+
+							$.ajax({
+								type: 'PUT',
+								url:  '/admin/standard_arearates/' + data.id,
+								data: {
+									'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
+									'areaTo' : $('#deliver_id').val(),
+									'amount' : $('#amount').inputmask('unmaskedvalue'),
+								},
+
+								success: function (data){
+
+									if(typeof(data) === "object"){
+										sartable.ajax.reload();
+										$('#sarModal').modal('hide');
+										$('.modal-title').text('New Standard Area Rate');
+										$('#amount').val("0.00");
+										$('#_address').val("");
+										$('#_city').val("");
+										$('#_province').val("");
+										$('#_zip').val("");
+
+										$('#_daddress').val("");
+										$('#_dcity').val("");
+										$('#_dprovince').val("");
+										$('#_dzip').val("");
+
+										toastr.options = {
+											"closeButton": false,
+											"debug": false,
+											"newestOnTop": false,
+											"progressBar": false,
+											"rtl": false,
+											"positionClass": "toast-bottom-right",
+											"preventDuplicates": false,
+											"onclick": null,
+											"showDuration": 300,
+											"hideDuration": 1000,
+											"timeOut": 2000,
+											"extendedTimeOut": 1000,
+											"showEasing": "swing",
+											"hideEasing": "linear",
+											"showMethod": "fadeIn",
+											"hideMethod": "fadeOut"
+										}
+										toastr["success"]("Record updated successfully")
+
+
+										$('#btnSave').removeAttr('disabled');
+
+
+									}
+									else{
+										resetErrors();
+										var invdata = JSON.parse(data);
+										$.each(invdata, function(i, v) {
+											console.log(i + " => " + v); 
+											var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+											$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+										});
+
+										$('#btnSave').removeAttr('disabled');
+
+									}
+								}
+							})
+						}
 					}
 				}
 			}
 		});
 
 
-		function resetErrors() {
-			$('form input, form select').removeClass('inputTxtError');
-			$('label.error').remove();
-		}
-	})
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
+})
 </script>
 @endpush
