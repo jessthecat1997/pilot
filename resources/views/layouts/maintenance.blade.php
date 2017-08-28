@@ -97,15 +97,15 @@
                       <li>
                           <a href = "{{ route('employees.index' ) }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
                       </li>
-                        <li>
-                            <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
-                        </li>
+                      <li>
+                        <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
+                    </li>
                       <!--   <li>
                             <a href="{{ route('orders.index') }}" class = "orders"><i class="fa fa-id-card-o"></i>&nbsp;&nbsp;Orders</a>
                         </li> -->
@@ -180,7 +180,7 @@
                                 <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
                             </li>
                             <li>
-                            <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
+                                <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                             </li>
                         </div>
                         <li>
@@ -257,6 +257,36 @@
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
+
+        $('.money_er').inputmask("numeric", { 
+            radixPoint: ".", 
+            groupSeparator: ",", 
+            digits: 7, 
+            autoGroup: true, 
+            rightAlign: true, 
+
+
+        }); 
+
+         $('.money').inputmask("numeric", { 
+        radixPoint: ".", 
+        groupSeparator: ",", 
+        digits: 2, 
+        autoGroup: true, 
+        rightAlign: true, 
+        removeMaskOnSubmit:true, 
+    }); 
+ 
+ 
+    function formatNumber(n) { 
+        var currency = "Php "; 
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+    } 
+ 
+    function formatNumber_s(n) { 
+        var currency = "$ "; 
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+    } 
     </script>
     @stack('scripts')
 </body>

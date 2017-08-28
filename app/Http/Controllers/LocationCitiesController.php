@@ -22,6 +22,7 @@ class LocationCitiesController extends Controller
 
 	public function store(StoreLocationCities $request)
 	{
+		
 
 		for($i = 0; $i < count($request->name); $i++){
 			$city = new LocationCities;
