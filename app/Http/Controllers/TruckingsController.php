@@ -214,8 +214,9 @@ class TruckingsController extends Controller
         ->select('consignee_service_order_headers.id')
         ->where('B.id', '=', $request->tr_so_id)
         ->get();
-
+        return $consignee_order;
         $vat = DB::select('SELECT rate FROM vat_rates where currentRate = 1');
+
         $billing_header = new \App\BillingInvoiceHeader;
         $billing_header->so_head_id = $consignee_order[0]->id;
         $billing_header->isRevenue = $request->isRevenue;
@@ -226,7 +227,7 @@ class TruckingsController extends Controller
         $billing_header->due_date = null;
         $billing_header->save();
 
-        $consignee_header = \App\TruckingServiceOrder::findOrFail($consignee_order[0]->id);
+        $consignee_header = \App\TruckingServiceOrder::findOrFail($request->tr_so_id);
         switch ($request->isRevenue) {
             case 0:
             $consignee_header->bi_head_id_exp = $billing_header->id;
@@ -241,6 +242,7 @@ class TruckingsController extends Controller
             break;
         }
         $consignee_header->save();
+
         return $consignee_header;
         
     }
