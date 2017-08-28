@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 
 class ConsigneeDepositsController extends Controller
 {
-
+  
     public function index()
     {
         //
     }
 
-
+   
     public function create()
     {
         //
@@ -45,31 +45,25 @@ class ConsigneeDepositsController extends Controller
         ->where('consignees_id', '=', $request->id)
         ->get();
 
-        return \Datatables::of($deposits)
-        ->editColumn('created_at', function($deposit){
-            return \Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString();
-        })
-        ->make(true);
-    }
-
+  
     public function show($id)
     {
         //
     }
 
-
+   
     public function edit($id)
     {
         //
     }
 
-
+ 
     public function update(Request $request, $id)
     {
         //
     }
 
-
+  
     public function destroy($id)
     {
         //

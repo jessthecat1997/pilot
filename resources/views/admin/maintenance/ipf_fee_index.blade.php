@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Import Processing Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = "width: 100%;">New Import Processing Fee Range</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = 'width: 100%;''>New Import Processing Fee Range</button>
 		</div>
 	</div>
 	<br />
@@ -196,7 +196,10 @@
 	var minimum_id_descrp = [];
 	var maximum_id_descrp = [];
 	var amount_value_descrp = [];
-
+	var now = new Date();
+	var day = ("0" + now.getDate()).slice(-2);
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 	var data, tblLength;
 	var jsonMinimum, jsonMaximum, jsonAmount;
 	$(document).ready(function(){
@@ -240,22 +243,26 @@
 			}
 		});
 		$(document).on('click', '.new', function(e){
-			resetErrors();
+			e.preventDefault();
+			//resetErrors();
 			$('.modal-title').text('New Import Processing Fee Range');
 
-			$('#dateEffective').val("");
-			var now = new Date();
-			var day = ("0" + now.getDate()).slice(-2);
-			var month = ("0" + (now.getMonth() + 1)).slice(-2);
-			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 			$('#dateEffective').val(today);
 			$('#ipfModal').modal('show');
+			
+			$("ipf_parent_table > tbody").html("");
+			$('#ipf_parent_table > tbody').html(ipf_row);
+			$('#minimum').val("0.00");
+			$('#maximum').val("0.00");
+			$('#amount').val("0.00");
+
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			$('.modal-title').text('Update Import Processing Fee Range');
 			var ipf_id = $(this).val();
-
+			data = ipftable.row($(this).parents()).data();
+			$('#dateEffective').val(data.dateEffective);
 			$('#ipfModal').modal('show');
 
 			$.ajax({
@@ -308,6 +315,7 @@
 			$(".ipf_minimum_valid").each(function(){
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -318,6 +326,7 @@
 			$(".ipf_minimum_valid").each(function(){
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -337,6 +346,7 @@
 				}
 				if($(this).val() != ""){
 					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -431,6 +441,60 @@
 
 						}
 					})
+				}else{
+
+
+
+					jsonMinimum = JSON.stringify(minimum_id);
+					jsonMaximum = JSON.stringify(maximum_id);
+					jsonAmount = JSON.stringify(amount_value);
+
+					
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/ipf_fee/'+ data.id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'ipf_head_id': data.id,
+							'dateEffective' : $('#dateEffective').val(),
+							'minimum' : jsonMinimum,
+							'maximum' : jsonMaximum,
+							'amount' : jsonAmount,
+							'tblLength' : tblLength,
+						},
+						success: function (data){
+
+							ipftable.ajax.reload();
+							$('#ipfModal').modal('hide');
+							$('.modal-title').text('New Import Processing Fee Range');
+							$('#minimum').val("0.00");
+							$('#maximum').val("0.00");
+							$('#amount').val("0.00");
+							$('#dateEffective').val("");
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record updated successfully")
+
+						}
+					})
+
+
 				}
 			}
 		});
@@ -467,6 +531,7 @@ function validateIpfRows()
 			maximum[i].style.borderColor = 'green';
 			maximum_id_descrp.push(maximum[i].value);
 			maximum_id.push(maximum[i].value);
+			$('#ipf_warning').removeClass('in');
 		}
 		if(amount[i].value === "")
 		{
@@ -482,6 +547,7 @@ function validateIpfRows()
 			else{
 				amount[i].style.borderColor = 'green';
 				amount_value.push(amount[i].value);
+				$('#ipf_warning').removeClass('in');
 			}
 		}
 		if(minimum[i].value === maximum[i].value){
@@ -555,7 +621,7 @@ function validateIpfRows()
 			document.getElementById("dateEffective").style.borderColor = "red";
 			error += "Date Effective Required.";
 		}else{
-			document.getElementById("dateEffective").style.borderColor = "black";
+			document.getElementById("dateEffective").style.borderColor = "green";
 		}
 		for(var i = 0; i < minimum.length; i++){
 			if(minimum[i].value === "")
@@ -580,6 +646,7 @@ function validateIpfRows()
 				maximum[i].style.borderColor = 'green';
 				maximum_id_descrp.push(maximum[i].value);
 				maximum_id.push(maximum[i].value);
+				$('#ipf_warning').removeClass('in');
 			}
 			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 			{
@@ -596,6 +663,7 @@ function validateIpfRows()
 				else{
 					amount[i].style.borderColor = 'green';
 					amount_value.push(amount[i].value);
+					$('#ipf_warning').removeClass('in');
 				}
 			}
 			if(minimum[i].value === maximum[i].value){

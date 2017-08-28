@@ -22,38 +22,47 @@ class BrokerageFeesController extends Controller
         $new_bf->dateEffective = date_create($request->dateEffective);
         $new_bf->save();
 
+        $_minimum = json_decode(stripslashes($request->minimum), true);
+        $_maximum = json_decode(stripslashes($request->maximum), true);
+        $_amount = json_decode(stripslashes($request->amount), true);
 
-        for($i = 0; $i < count($request->minimum); $i++){
+
+        for($i = 0; $i < count($_minimum); $i++){
             $bf_detail = new BrokerageFeeDetail;
-            $bf_detail->minimum = $request->minimum[$i];
-            $bf_detail->maximum = $request->maximum[$i];
-            $bf_detail->amount = $request->amount[$i];
+            $bf_detail->minimum = (string)$_minimum[$i];
+            $bf_detail->maximum = (string)$_maximum[$i];
+            $bf_detail->amount = (string)$_amount[$i];
             
             $bf_detail->brokerage_fee_headers_id = $new_bf->id;
             $bf_detail->save();
         }
 
-        return $new_bf->id;
     }
 
     public function update(StoreBrokerageFee $request, $id)
     {
-        $new_bf = new BrokerageFeeHeader;
-        $new_bf->dateEffective = date_create($request->dateEffective);
+        \DB::table('brokerage_fee_details')
+        ->where('brokerage_fee_headers_id','=', $request->bf_head_id)
+        ->delete();
+
+        $new_bf= BrokerageFeeHeader::findOrFail($id);
+        $new_bf->dateEffective = $request->dateEffective;
         $new_bf->save();
 
+        $_minimum = json_decode(stripslashes($request->minimum), true);
+        $_maximum = json_decode(stripslashes($request->maximum), true);
+        $_amount = json_decode(stripslashes($request->amount), true);
 
-        for($i = 0; $i < count($request->minimum); $i++){
+
+        for($x = 0; $x < count($_minimum); $x++)
+        {
             $bf_detail = new BrokerageFeeDetail;
-            $bf_detail->minimum = $request->minimum[$i];
-            $bf_detail->maximum = $request->maximum[$i];
-            $bf_detail->amount = $request->amount[$i];
-            
-            $bf_detail->bf_headers_id = $new_bf->id;
+            $bf_detail->brokerage_fee_headers_id = $new_bf->id;
+            $bf_detail->minimum = (string)$_minimum[$x];
+            $bf_detail->maximum = (string)$_maximum[$x];
+            $bf_detail->amount = (string)$_amount[$x];
             $bf_detail->save();
         }
-
-        return $new_bf->id;
     }
 
 
@@ -74,5 +83,13 @@ class BrokerageFeesController extends Controller
     public function bf_utilities(){
 
         return view('admin/utilities.brokerage_fee_utility_index');
+    }
+
+    public function bf_maintain_data(Request $request){
+        $rates = DB::table('brokerage_fee_details')
+        ->where('brokerage_fee_headers_id', '=', $request->bf_id)
+        ->get();
+
+        return $rates;
     }
 }
