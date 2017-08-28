@@ -45,108 +45,50 @@
 				<small style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</small>
 			</div>
 			<hr />
-			<h3><center>Payment Receipt</center></h3>
-			<table style="width: 100%; border: 1px solid black">
+			<table style="width: 100%;">
 				<tr>
-					<td style="border:1px solid transparent;" width="20%">
-						BILLED TO:
-					</td>
-					<td style="border:1px solid transparent;  text-align: left;" width="30%">
-						<strong>
-							@forelse($payments as $pay)
-							{{ $pay->companyName }}
-							@empty
-							@endforelse
-						</strong>
-					</td>
-					<td style="border:1px solid transparent;" width="20%">
-						Date:
-					</td>
-					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						<strong>
-							@forelse($payments as $pay)
-							{{ Carbon\Carbon::parse($pay->created_at)->toFormattedDateString() }}
-							@empty
-							@endforelse
-						</strong>
-					</td>
+					<td style="border-style: none;" colspan="2"><strong>OFFICIAL RECEIPT</strong></td>
+					<td style="border-style: none; text-align: right;">No:</td>
+					<td style="border-style: none;">2718</td>
 				</tr>
 				<tr>
-					<td style="border:1px solid transparent;" width="20%">
-						Address:
-					</td>
-					<td style="border:1px solid transparent;  text-align: left;" width="30%">
-						<strong>
-							@forelse($payments as $pay)
-							{{ $pay->address }}
-							@empty
-							@endforelse
-						</strong>
-					</td>
-					<td style="border:1px solid transparent;" width="20%">
-						Terms:
-					</td>
-					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						<strong>
-							LOL
-						</strong>
-					</td>
+					<td style="border-style: none; text-align: right;" colspan="3">Date:</td>
+					<td style="border-style: none;">Aug 4 2017</td>
 				</tr>
 				<tr>
-					<td style="border:1px solid transparent;" width="20%">
-						Business Style:
-					</td>
-					<td style="border:1px solid transparent;  text-align: left;" width="30%">
-						<strong>
-							@forelse($payments as $pay)
-							{{ $pay->businessStyle }}
-							@empty
-							@endforelse
-						</strong>
-					</td>
-					<td style="border:1px solid transparent;" width="20%">
-						TIN:
-					</td>
-					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						<strong>
-							@forelse($payments as $pay)
-							{{ $pay->TIN }}
-							@empty
-							@endforelse
-						</strong>
-					</td>
+					<td style="border-style: none; width: 20%;"><label><strong>Received from</strong></label></td>
+					<td style="border-style: none; width: 40%;"><label>Skipper Igcasenza</label></td>
+					<td style="border-style: none; width: 20%; text-align: right:"><label><strong>with TIN</strong></label>
+					<td style="border-style: none; width: 20%;">327178888</td>
+				</tr>
+				<tr>
+					<td style="border-style: none; width: 20%;"><label><strong>and address at</strong></label></td>
+					<td style="border-style: none; width: 80%;" colspan="3"><label>55A Villa Concio St. San Joaquin, Pasig City</label></td>
+				</tr>
+				<tr>
+					<td style="border-style: none; width: 70%;"><label><strong>engaged in the business style of</strong></label></td>
+					<td style="border-style: none; width: 30%;" colspan="3"><label>Freight Forwarding</label></td>
+				</tr>
+				<tr>
+					<td style="border-style: none; width: 20%;"><label><strong>the sum of</strong></label></td>
+					<td style="border-style: none; width: 10%;"><label><strong>(P 1,279,920.00)</strong></label></td>
+					<td style="border-style: none; width: 60%;"><label><strong>in partial/full payment for</strong></label></td>
+					<td style="border-style: none; width: 10%;"><label>Trucking</label></td>
 				</tr>
 			</table>
 			<br/>
-			<table style="border: 1px solid black; width: 100%;">
-				<thead>
-					<tr>
-						<th width="70%" style="text-align: center;">
-							<strong>P A R T I C U L A R S</span></strong>
-						</th>
-						<th width="30%" style="text-align: center;">
-							<strong>Amount</strong>
-						</th>					
-					</tr>
-				</thead>
-				<tbody>
-					@forelse($exp as $e)
-					<tr>
-						<td style="text-align: center;">
-							{{ $e->name }}
-						</td>
-						<td style="text-align: right;">
-							Php {{ $e->amount }}
-						</td>
-					</tr>
-					@empty
-					<tr>
-						<td>
-							<h4 style="text-align: center;">No records available.</h4>
-						</td>
-					</tr>
-					@endforelse
-				</tbody>
+			<table>
+				<tr>
+					<td colspan="2">In settlement of the following:</td>
+				</tr>
+				<tr>
+					<td style="text-align: center;">Billing Invoice No.</td>
+					<td style="text-align: center;">Amount</td>
+				</tr>
+				<tr>
+					<td style="text-align: center;">6177</td>
+					<td style="text-align: center;">P2778.26</td>
+				</tr>
 			</table>
 			<br />
 			<br />
