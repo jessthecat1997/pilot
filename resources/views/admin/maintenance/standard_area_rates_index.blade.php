@@ -196,13 +196,13 @@
 						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
 							{{ csrf_field() }}
 							<div class="form-group required">
-								<label class = "control-label col-md-3">Name: </label>
+								<label class = "control-label col-md-3">Name</label>
 								<div class = "col-md-9">
 									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
 								</div>
 							</div>
 							<div class="form-group required">
-								<label class = "control-label col-md-3">Address: </label>
+								<label class = "control-label col-md-3">Block No./Lot No./Street: </label>
 								<div class = "col-md-9">
 									<textarea class = "form-control" id = "address" name = "address"></textarea>
 								</div>
@@ -323,6 +323,7 @@
 				{
 					required: true,
 				},
+
 				
 
 			},
@@ -364,6 +365,7 @@
 
 		$(document).on('change', '#loc_province', function(e){
 			fill_cities(0);
+
 		})
 
 		$(document).on('click', '.pick_add_new_location', function(e){
@@ -380,9 +382,7 @@
 			selected_location = 1;
 		})
 
-
-
-
+	
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
 			temp_pickup_id = $(this).val();
@@ -416,9 +416,6 @@
 				$('#_province').val("");
 				$('#_zip').val("");
 			}
-
-
-
 			
 		})
 
