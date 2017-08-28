@@ -316,6 +316,7 @@ class BrokerageController extends Controller
     $new_brokerage_so->freightBillNo = $request->freightNumber;
     $new_brokerage_so->Weight = $request->weight;
     $new_brokerage_so->freightType = $request->freightType;
+    $new_brokerage_so->statusType = 'P';
     $new_brokerage_so->bi_head_id_rev = null;
     $new_brokerage_so->bi_head_id_exp = null;
     $new_brokerage_so->save();
@@ -329,7 +330,7 @@ class BrokerageController extends Controller
     $brokerage_id = $request->brokerage_id;
 
     $brokerage_header = DB::table('brokerage_service_orders')
-    ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName')
+    ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType')
     ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
     ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
     ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -337,7 +338,22 @@ class BrokerageController extends Controller
     ->where('brokerage_service_orders.id','=', $brokerage_id)
     ->get();
 
+    $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
+    ->select('duties_and_taxes_headers.id', 'brokerageFee')
+    ->where('brokerageServiceOrders_id', '=', $brokerage_id)
+    ->get();
 
-    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header']));
+
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header']));
+  }
+
+  public function update_status(Request $request)
+  {
+      $brokerage_id = $request->brokerage_id;
+      $brokerage_status_update = DB::table('brokerage_service_orders')
+      ->where('brokerage_service_orders.id', $brokerage_id)
+    ->update(['statusType' =>  $request->status]);
+
+    return $brokerage_id;
   }
 }

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+<div class = "panel-heading">
+  <h3><img src="/images/bar.png"> Brokerage | Create Duties and Taxes Decleration</h3>
+  <hr />
+</div>
 <div class="panel-body">
   <div class = "tab-content">
             <div id = "dutiesandtaxes_details" class="tab-pane fade in active">
@@ -699,9 +703,9 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 									ctr++;
 						}
 		    }
-
     var employees = <?php echo json_encode($employees); ?>;
-		localStorage.setItem("addedItems", JSON.stringify(addedItems));
+    localStorage.setItem("Employees", JSON.stringify(employees));
+    localStorage.setItem("addedItems", JSON.stringify(addedItems));
 		localStorage.setItem("itemCtr", ctr);
 
 		localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');

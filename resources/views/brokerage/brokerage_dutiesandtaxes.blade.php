@@ -969,7 +969,6 @@
 
 	$('#brokerageBtn').on('click', function(e){
 
-		alert($('#processedBy').val());
 		$.ajax({
 			type: 'POST',
 			url: "{{ route('saveBrokerageOrder') }}",
@@ -997,7 +996,7 @@
 					$('#_cbusinessStyle').val(data[0].businessStyle);
 					$('#_cTIN').val(data[0].TIN);
 				}
-				window.location.replace("/brokerage");
+				window.location.replace('/brokerage/'+data+'/order');
 			},
 			error: function(data) {
 				if(data.status == 400){
