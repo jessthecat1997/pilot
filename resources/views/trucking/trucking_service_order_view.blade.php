@@ -732,7 +732,7 @@
 						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
-						window.location.reload();
+						//window.location.reload();
 					}
 				})
 				break;
@@ -748,7 +748,7 @@
 						'tr_so_id' : '{{ $service_order->id }}',
 					},
 					success: function(data){
-						window.location.reload();
+						//window.location.reload();
 					}
 				})
 				break

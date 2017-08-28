@@ -12,7 +12,7 @@ class ConsigneeDepositsController extends Controller
         //
     }
 
-   
+    
     public function create()
     {
         //
@@ -45,25 +45,25 @@ class ConsigneeDepositsController extends Controller
         ->where('consignees_id', '=', $request->id)
         ->get();
 
-  
+    }
     public function show($id)
     {
         //
     }
 
-   
+    
     public function edit($id)
     {
         //
     }
 
- 
+    
     public function update(Request $request, $id)
     {
         //
     }
 
-  
+    
     public function destroy($id)
     {
         //
