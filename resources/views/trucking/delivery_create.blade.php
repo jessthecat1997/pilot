@@ -236,7 +236,7 @@
 						<div class = "row">
 							<div class = "col-md-4">
 								<div class = "col-md-12">
-									{{ csrf_field() }}	
+									{{ csrf_field() }}
 									<div class="form-group required">
 										<label class = "control-label ">Location Name: </label>
 										<div class="input-group">
@@ -314,7 +314,7 @@
 						<div class = "row">
 							<div class = "col-md-4">
 								<div class = "col-md-12">
-									{{ csrf_field() }}	
+									{{ csrf_field() }}
 									<div class="form-group required">
 										<label class = "control-label ">Location Name: </label>
 										<div class="input-group">
@@ -387,7 +387,7 @@
 					<div class = "col-md-6">
 						<div class = "panel-default panel">
 							<div class = "panel-heading" id = "rate_header">
-								Rates for 
+								Rates for
 							</div>
 							<div class = "panel-body">
 								<div class="form-group">
@@ -449,7 +449,7 @@
 							<div class = "panel-body">
 								<div class="form-group">
 									<label class="control-label col-sm-3" for="vehicle_type">Vehicle Type: </label>
-									<div class="col-sm-8"> 
+									<div class="col-sm-8">
 										<select class="form-control" id = "vehicle_type">
 											<option value = "0"></option>
 											@forelse($vehicle_types as $vehicle_type)
@@ -461,7 +461,7 @@
 								</div>
 								<div class="form-group">
 									<label class="control-label col-sm-3" for="vehicle">Vehicle:  </label>
-									<div class="col-sm-8"> 
+									<div class="col-sm-8">
 										<select class="form-control" id = "vehicle">
 											<option value="0"></option>
 										</select>
@@ -522,7 +522,7 @@
 					</div>
 					<div class="modal-body">
 						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-							{{ csrf_field() }}	
+							{{ csrf_field() }}
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
@@ -547,7 +547,7 @@
 										@empty
 
 										@endforelse
-									</select>     
+									</select>
 								</div>
 							</div>
 							<div class="form-group required">
@@ -568,7 +568,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type = "submit" class="btn btn-success btnSave" >Save</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -579,7 +579,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				Delivery 
+				Delivery
 			</div>
 			<div class="modal-body">
 				Save Delivery
@@ -638,7 +638,7 @@
 			$('#_shippingLine').val($('#tr_shippingLine').text().trim());
 			$('#_portOfCfsLocation').val($('#tr_portOfCfsLocation').text().trim());
 			$('#_status').val($('#tr_status').text().trim());
-			
+
 		})
 
 		$(document).on('click', '.btnSave', function(e){
@@ -654,7 +654,7 @@
 					'zipCode' : $('#zip').val(),
 				},
 				success: function(data){
-					if(selected_location == 0){	
+					if(selected_location == 0){
 						$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
 						$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
 						$('#pickup_id').val(data.id);
@@ -678,14 +678,14 @@
 						$('#_dcity').val($('#loc_city option:selected').text());
 						$('#_dprovince').val($('#loc_province option:selected').text().trim());
 						$('#_dzip').val($('#zip').val());
-						
+
 						$('#address').val("");
 						$('#loc_city').val("0");
 						$('#loc_province').val("0");
 						$('#zip').val("");
 						$('#chModal').modal('hide');
 					}
-					
+
 				},
 				error: function(data) {
 					if(data.status == 400){
@@ -729,14 +729,14 @@
 				},
 				success: function(data){
 					if(typeof(data) == "object"){
-						
+
 						var new_rows = "<option value = '0'></option>";
 						for(var i = 0; i < data.length; i++){
 							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
 						}
 						$('#loc_city').find('option').not(':first').remove();
 						$('#loc_city').html(new_rows);
-						
+
 						$('#loc_city').val(num);
 					}
 				},
@@ -783,11 +783,11 @@
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
 					'delivery_head_id' : delivery_id,
-					
+
 				},
 				success: function(data){
 					location.reload();
-				}	
+				}
 			})
 		})
 		// Container
@@ -818,7 +818,7 @@
 			}
 			console.log(container_array);
 			$('#' + $(this).val()).remove();
-			
+
 		})
 		$(document).on('click', '.save-container-row', function(e){
 			e.preventDefault();
@@ -833,7 +833,7 @@
 			var id = $(this).val();
 			selected_container = id[0];
 			if(validateCurrentContainerDetail() == true){
-				
+
 				console.log(id);
 				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
 				$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
@@ -862,7 +862,7 @@
 		})
 		$(document).on('click', '.woadd-new-detail', function(e){
 			e.preventDefault();
-			
+
 			if(validateDetail() === true){
 				$('#wodetail_table:last').append(wodetail_row);
 			}
@@ -915,12 +915,12 @@
 					if(validateOrder() == true){
 
 						validateContainerDetail();
-						$('#confirm-create').modal('show');	
+						$('#confirm-create').modal('show');
 					}
 				}
 			}
 
-		})		
+		})
 		$(document).on('click', '#confirm-save', function(e){
 			if($("#choices li.active").text() === "Without Container"){
 				if(validateDetail() === true){
@@ -1066,8 +1066,8 @@
 				$('#deliveryFee').val("0.00");
 				$('#standard_rate').html("");
 			};
-			
-			
+
+
 		})
 
 		$(document).on('change', '#deliver_id', function(e){
@@ -1148,7 +1148,7 @@
 				$('#standard_rate').html("");
 				$('#quotation_rate').html("");
 			};
-			
+
 		})
 
 
@@ -1180,7 +1180,7 @@
 			}
 			if(error.length == 0){
 				return true;
-			} 
+			}
 			else
 			{
 				return false;
@@ -1206,7 +1206,7 @@
 				table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
 
 				var name = container_array[i];
-				
+
 
 				con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
 				con_gw = document.getElementsByName(name + '_grossWeight');

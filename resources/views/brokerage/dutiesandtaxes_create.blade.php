@@ -4,7 +4,7 @@
 	<div class = "row">
 			<div class = "panel default-panel">
 				<div class = "panel-heading">
-					<h3><img src="/images/bar.png"> Brokerage | Duties And Taxes</h3>
+					<h2>&nbsp;Brokerage / Duties And Taxes</h2>
 					<hr />
 	  <div class = "panel-body form-horizontal">
 

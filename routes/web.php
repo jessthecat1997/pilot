@@ -26,7 +26,7 @@ Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('sto
 
 Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
 Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
-
+Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
 Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
 
 Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
