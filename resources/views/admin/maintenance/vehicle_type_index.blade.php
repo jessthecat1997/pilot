@@ -13,14 +13,11 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "vtype_table">
+				<table class = "table-responsive table  table-striped" id = "vtype_table">
 					<thead>
 						<tr>
 							<td style="width: 30%;">
 								Name
-							</td>
-							<td style="width: 10%;">
-								With Container
 							</td>
 							<td style="width: 40%;">
 								Description
@@ -50,11 +47,6 @@
 							<div class="form-group required">
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
-							</div>	
-							<div class="form-group required">
-								<label class = "control-label">With Container: </label>
-								<input type="radio" name="withContainer" value="0" > With
-								<input type="radio" name="withContainer" value="1"> Without
 							</div>	
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
@@ -116,11 +108,11 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
-	var temp_withContainer = null;
+	
 	$(document).ready(function(){
 		var vtable = $('#vtype_table').DataTable({
 			scrollX: true,
@@ -130,24 +122,12 @@
 			ajax: '{{ route("vt.data") }}',
 			columns: [
 			{ data: 'name' },
-			{ data: 'withContainer',
-			"render" : function( data, type, full ) {
-				return formatWithContainer(data); }},
-				{ data: 'description' },
-				{ data: 'action', orderable: false, searchable: false }
+			{ data: 'description' },
+			{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "asc" ]],
-			});
+			],	"order": [[ 0, "asc" ]],
+		});
 
-		function formatWithContainer(n) { 
-
-			if (n === 0){
-				return "with ";
-			}else{
-				return "without ";
-			}
-
-		} 
 
 		$("#commentForm").validate({
 			rules: 
@@ -189,12 +169,11 @@
 
 			$('#description').val(data.description);
 			$('#name').val(data.name);
-			$('[name=withContainer].checked').val(data.withContainer);
+			
 
 			temp_name = data.name;
 			temp_desc = data.description;
-			temp_withContainer = data.withContainer;
-
+			
 			$('.modal-title').text('Edit Vehicle Type');
 			$('#vtModal').modal('show');
 		});
@@ -263,7 +242,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
-							'withContainer':$('input[name=withContainer]:checked').val(),
+							
 						},
 						success: function (data)
 						{
@@ -320,7 +299,7 @@
 			else
 			{
 				if($('#name').valid() && $('#description').valid() ){
-					if($('#name').val() === temp_name && $('#description').val() === temp_desc && $('input[name=withContainer]:checked').val() === temp_withContainer){
+					if($('#name').val() === temp_name && $('#description').val() === temp_desc ){
 						$('#name').val("");
 						$('#description').val("");
 						$('#btnSave').removeAttr('disabled');
@@ -336,7 +315,7 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
-								'withContainer':$('input[name=withContainer]:checked').val(),
+								
 							},
 							success: function (data)
 							{

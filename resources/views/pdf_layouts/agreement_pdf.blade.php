@@ -67,21 +67,7 @@
 		@else
 		<p>{!! $contract[0]->specificDetails !!}</p>
 		@endif
-		<p>
-			17. This agreement shall take effect for a period of <strong><u>{{ Carbon\Carbon::parse($contract[0]->dateEffective)->diffForHumans(Carbon\Carbon::parse($contract[0]->dateExpiration)) }}</u></strong> commencing on <strong><u>{{ Carbon\Carbon::parse($contract[0]->dateEffective)->format('F j, Y') }}</u></strong> and ending on <strong><u>{{ Carbon\Carbon::parse($contract[0]->dateExpiration)->format('F j, Y') }}</u></strong>. Renewal of the agreement will partly depend on the <strong>SECOND PARTY's</strong> services, which will be undertaken by the <strong>FIRST PARTY</strong> periodically.
-		</p>
-		<p>
-			18. The <strong>FIRST PARTY</strong> reserves the right total terminate the contract by reason of the violation of any provision of this agreement or whenever it determines that the services of the <strong>SECOND PARTY</strong> no longer satisfactory meets its requirements, as well as when business condition so dedicated.
-		</p>
-		<p>
-			The parties shall consult each other in good faith and shall exhaust all available remedies to settle any and all disputes or disagreements arising out of or relating the validity, interpretation, enforceablity, or performance under this Agreement. In case of failure to resolve the dispute and their joint decision shall be binding upon the reached between the two parties within fifteen (15) days from their initial meeting, the parties shall resort to arbitration as provided in Republic Act No.9285.
-		</p>
-		<p>
-			19.	This contract shall be construed, interpreted and governed by the laws of the Philippines. Venue of any court action instituted for the purpose of any enforcing any right or obligation or other  means of resolution shall be exclusively laid in the courts of the Philippines.
-		</p>
-
 		<div style="page-break-before: always;">
-
 			<strong>IN WITNESS WHEREOF</strong>, the parties hereunto have signed this contract on this ____________ day of ________________, 2016 at __________________________________ Philippines.
 			<br/>
 			<br />

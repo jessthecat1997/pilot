@@ -19,7 +19,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "er_table">
+				<table class = "table-responsive table  table-striped" id = "er_table">
 					<thead>
 						<tr>
 							<td>

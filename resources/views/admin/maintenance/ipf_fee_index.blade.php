@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "ipf_table">
+				<table class = "table-responsive table  table-striped" id = "ipf_table">
 					<thead>
 						<tr>
 							<td>

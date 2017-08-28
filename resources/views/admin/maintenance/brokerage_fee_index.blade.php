@@ -12,7 +12,7 @@
     <div class = "row">
         <div class = "panel-default panel">
             <div class = "panel-body">
-                <table class = "table-responsive table" id = "bf_table">
+                <table class = "table-responsive table  table-striped" id = "bf_table">
                     <thead>
                         <tr>
                             <td>

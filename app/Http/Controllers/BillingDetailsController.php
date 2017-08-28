@@ -73,7 +73,7 @@ class BillingDetailsController extends Controller
 
 	public function getBillingDetails(Request $request){
 		$billing_details = DB::table('billing_invoice_details')
-		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->select('charges.name', 'billing_invoice_details.description', DB::raw('CONCAT("Php ", billing_invoice_details.amount) as amount'))
 		->join('charges', 'charge_id', '=', 'charges.id')
 		->where('bi_head_id', '=', $request->id)
 		->get();

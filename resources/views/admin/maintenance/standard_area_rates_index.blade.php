@@ -12,7 +12,7 @@
 		<div class = "row">
 			<div class = "panel-default panel">
 				<div class = "panel-body">
-					<table class = "table-responsive table" id = "sar_table">
+					<table class = "table-responsive table  table-striped" id = "sar_table">
 						<thead>
 							<tr>
 								<td>
@@ -48,255 +48,204 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="sarModal-title">New Standard Area Rate</h4>
 						</div>
-						<div class="modal-body ">		
-							<div class = "panel-heading">
-								Pickup Location
-							</div>
-							<div class="panel-body">
-								<div class = "row">
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											{{ csrf_field() }}	
-											<div class="form-group required">
-												<label class = "control-label ">Location Name: </label>
-												<div class="input-group">
-													<select class = "form-control" id = "pickup_id">
-														<option value = "0"></option>
-														@forelse($locations as $location)
-														<option value = "{{ $location->id }}">{{ $location->name }}</option>
-														@empty
-														@endforelse
-													</select>
-													<span class="input-group-btn">
-														<button class="btn btn-primary pick_add_new_location" type="button">+</button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class = "col-md-12">
-											
+						<div class="modal-body">
+							<div class = "col-md-6">		
+								
+								<h4>Pickup Location</h4>
+								
+								<div >
+									{{ csrf_field() }}	
+									<div class="form-group required">
+										<label class = "control-label ">Location Name: </label>
+										<div class="input-group">
+											<select class = "form-control" id = "pickup_id">
+												<option value = "0"></option>
+												@forelse($locations as $location)
+												<option value = "{{ $location->id }}">{{ $location->name }}</option>
+												@empty
+												@endforelse
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-primary pick_add_new_location" type="button">+</button>
+											</span>
 										</div>
 									</div>
-									<div class = "col-md-8">
-										{{ csrf_field() }}
-										<div class = "col-md-12">
-											<div class = "col-md-12">
-												<div class = "col-md-12">
-													<div class="form-group required">
-														<label class = "control-label">Address: </label>
-														<textarea class = "form-control" disabled  id = "_address"></textarea>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class = "col-md-12">
-											<div class = "col-md-4">
-												<div class =  "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">City</label>
-														<input type = "text" class = "form-control" disabled id = "_city" />
-													</div>
-												</div>
-											</div>
-											<div class = "col-md-4">
-												<div class = "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">Province</label>
-														<input type = "text" class = "form-control"  disabled id = "_province" />
-													</div>
-												</div>
-											</div>
-											<div class = "col-md-4">
-												<div class = "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">ZIP</label>
-														<input type = "text" class = "form-control" disabled id = "_zip" />
-													</div>
-												</div>
-											</div>
-										</div>
+									{{ csrf_field() }}
+									<div class="form-group required">
+										<label class = "control-label">Block No./Lot No./Street</label>
+										<textarea class = "form-control" disabled  id = "_address"></textarea>
 									</div>
-								</div>
-							</div>	
-
-
-							<div class = "panel-heading">
-								Destination Location
-							</div>
-							<div class="panel-body">
-								<div class = "row">
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											{{ csrf_field() }}	
-											<div class="form-group required">
-												<label class = "control-label ">Location Name: </label>
-												<div class="input-group">
-													<select class = "form-control" id = "deliver_id">
-														<option value = "0"></option>
-														@forelse($locations as $location)
-														<option value = "{{ $location->id }}">{{ $location->name }}</option>
-														@empty
-														@endforelse
-													</select>
-													<span class="input-group-btn">
-														<button class="btn btn-primary del_add_new_location" type="button">+</button>
-													</span>
-												</div>
-											</div>
-										</div>
-										<div class = "col-md-12">
-
-										</div>
+									<div class = "form-group">
+										<label class = "control-label">City</label>
+										<input type = "text" class = "form-control" disabled id = "_city" />
 									</div>
-									<div class = "col-md-8">
-										{{ csrf_field() }}
-										<div class = "col-md-12">
-											<div class = "col-md-12">
-												<div class = "col-md-12">
-													<div class="form-group required">
-														<label class = "control-label">Address: </label>
-														<textarea class = "form-control" disabled  id = "_daddress"></textarea>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class = "col-md-12">
-											<div class = "col-md-4">
-												<div class =  "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">City</label>
-														<input type = "text" class = "form-control" disabled id = "_dcity" />
-													</div>
-												</div>
-											</div>
-											<div class = "col-md-4">
-												<div class = "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">Province</label>
-														<input type = "text" class = "form-control"  disabled id = "_dprovince" />
-													</div>
-												</div>
-											</div>
-											<div class = "col-md-4">
-												<div class = "col-md-12">
-													<div class = "form-group">
-														<label class = "control-label">ZIP</label>
-														<input type = "text" class = "form-control" disabled id = "_dzip" />
-													</div>
-												</div>
-											</div>
-										</div>
+									<div class = "form-group">
+										<label class = "control-label">Province</label>
+										<input type = "text" class = "form-control"  disabled id = "_province" />
+									</div>
+									<div class = "form-group">
+										<label class = "control-label">ZIP</label>
+										<input type = "text" class = "form-control" disabled id = "_zip" />
 									</div>
 								</div>
 							</div>
-							<div class="form-group required">
+							<div class ="col-md-6">
+
+								
+								<h4>Destination Location</h4>
+
+								<div >
+									{{ csrf_field() }}	
+									<div class="form-group required">
+										<label class = "control-label ">Location Name: </label>
+										<div class="input-group">
+											<select class = "form-control" id = "deliver_id">
+												<option value = "0"></option>
+												@forelse($locations as $location)
+												<option value = "{{ $location->id }}">{{ $location->name }}</option>
+												@empty
+												@endforelse
+											</select>
+											<span class="input-group-btn">
+												<button class="btn btn-primary del_add_new_location" type="button">+</button>
+											</span>
+										</div>
+									</div>
+
+									{{ csrf_field() }}
+
+									<div class="form-group required">
+										<label class = "control-label">Block No./Lot No./Street</label>
+										<textarea class = "form-control" disabled  id = "_daddress"></textarea>
+									</div>
+
+									<div class = "form-group">
+										<label class = "control-label">City</label>
+										<input type = "text" class = "form-control" disabled id = "_dcity" />
+									</div>
+
+									<div class = "form-group">
+										<label class = "control-label">Province</label>
+										<input type = "text" class = "form-control"  disabled id = "_dprovince" />
+									</div>
+
+									<div class = "form-group">
+										<label class = "control-label">ZIP</label>
+										<input type = "text" class = "form-control" disabled id = "_dzip" />
+
+									</div>
+								</div>
+							</div>
+							<div class="form-group required col-md-12">
 								<br/>
-								<label class = "control-label col-md-3">Standard Rate: </label>
+								<label class = "control-label">Standard Rate: </label>
 								<div class = "form-group input-group " >
 									<span class = "input-group-addon">Php</span>
 									<input type = "text"  class = "form-control money" name = "amount" id = "amount"  data-rule-required="true" value="0.00" />
 								</div>
+								
 							</div>
 						</div>
+
+
 						<div class="modal-footer">
 							<button id = "btnSave" type = "submit" class="btn btn-success finalize-sar">Save</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
+						</div>
+
+					</div>
+				</form>
+				<br />
+			</div>
+		</div>
+	</section>
+	<section class="content">
+		<form role = "form" method = "POST">
+			{{ csrf_field() }}
+			{{ method_field('DELETE') }}
+			<div class="modal fade" id="confirm-delete" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Deactivate record
+						</div>
+						<div class="modal-body">
+							Confirm Deactivating
+						</div>
+						<div class="modal-footer">
+
+							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
-		<br />
-	</div>
-</div>
-</section>
-<section class="content">
-	<form role = "form" method = "POST">
-		{{ csrf_field() }}
-		{{ method_field('DELETE') }}
-		<div class="modal fade" id="confirm-delete" role="dialog">
+	</section>
+
+
+	<section class="content">
+		<div class="modal fade" id="chModal" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						Deactivate record
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">New Location</h4>
 					</div>
 					<div class="modal-body">
-						Confirm Deactivating
+						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+							{{ csrf_field() }}
+							<div class="form-group required">
+								<label class = "control-label col-md-3">Name</label>
+								<div class = "col-md-9">
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class = "control-label col-md-3">Block No./Lot No./Street: </label>
+								<div class = "col-md-9">
+									<textarea class = "form-control" id = "address" name = "address"></textarea>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class = "control-label col-md-3">Province: </label>
+								<div class = "col-md-9">
+									<select name = "loc_province" id="loc_province" class = "form-control">
+										<option value = '0'></option>
+										@forelse($provinces as $province)
+										<option value="{{ $province->id }}" >
+											{{ $province->name }}
+										</option>
+										@empty
+
+										@endforelse
+									</select>     
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class = "control-label col-md-3">City: </label>
+								<div class = "col-md-9">
+									<select name = "loc_city" id="loc_city" class = "form-control">
+										<option value="0"></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class = "control-label col-md-3">ZIP: </label>
+								<div class = "col-md-9">
+									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+								</div>
+							</div>
+						</form>
 					</div>
 					<div class="modal-footer">
-
-						<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type = "submit" class="btn btn-success btnSave" >Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
-</section>
-
-
-<section class="content">
-	<div class="modal fade" id="chModal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">New Location</h4>
-				</div>
-				<div class="modal-body">
-					<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-						{{ csrf_field() }}
-						<div class="form-group required">
-							<label class = "control-label col-md-3">Name: </label>
-							<div class = "col-md-9">
-								<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class = "control-label col-md-3">Address: </label>
-							<div class = "col-md-9">
-								<textarea class = "form-control" id = "address" name = "address"></textarea>
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class = "control-label col-md-3">Province: </label>
-							<div class = "col-md-9">
-								<select name = "loc_province" id="loc_province" class = "form-control">
-									<option value = '0'></option>
-									@forelse($provinces as $province)
-									<option value="{{ $province->id }}" >
-										{{ $province->name }}
-									</option>
-									@empty
-
-									@endforelse
-								</select>     
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class = "control-label col-md-3">City: </label>
-							<div class = "col-md-9">
-								<select name = "loc_city" id="loc_city" class = "form-control">
-									<option value="0"></option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class = "control-label col-md-3">ZIP: </label>
-							<div class = "col-md-9">
-								<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type = "submit" class="btn btn-success btnSave" >Save</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+	</section>
 </div>
 
 @endsection
@@ -320,7 +269,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var temp_deliver_id = null;
 	var temp_pickup_id = null;
 	var temp_amount = null;
@@ -374,6 +323,7 @@
 				{
 					required: true,
 				},
+
 				
 
 			},
@@ -415,6 +365,7 @@
 
 		$(document).on('change', '#loc_province', function(e){
 			fill_cities(0);
+
 		})
 
 		$(document).on('click', '.pick_add_new_location', function(e){
@@ -431,9 +382,7 @@
 			selected_location = 1;
 		})
 
-
-
-
+	
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
 			temp_pickup_id = $(this).val();
@@ -467,9 +416,6 @@
 				$('#_province').val("");
 				$('#_zip').val("");
 			}
-
-
-
 			
 		})
 
@@ -684,153 +630,155 @@
 			e.preventDefault();
 
 			$('#amount').valid();
-			var title = $('.sarModal-title').text();
-			console.log("hihiho" + title);
-			if(title == "New Standard Area Rate")
-			{
-				console.log("new new new");
-
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/standard_arearates',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'areaFrom' : temp_pickup_id,
-						'areaTo' : temp_deliver_id,
-						'amount' : $('#amount').inputmask('unmaskedvalue'),
-					},
-
-					success: function (data){
-
-						sartable.ajax.reload();
-						$('#sarModal').modal('hide');
-						$('.modal-title').text('New Standard Area Rate');
-						$('#amount').val("0.00");
-						$('#_address').val("");
-						$('#_city').val("");
-						$('#_province').val("");
-						$('#_zip').val("");
-
-						$('#_daddress').val("");
-						$('#_dcity').val("");
-						$('#_dprovince').val("");
-						$('#_dzip').val("");
-
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record addded successfully")
-
-					}
-				})
-			}
-			else
-			{
-				if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+			if($('#amount').valid() && $('#amount').val() > 0){
+				var title = $('.sarModal-title').text();
+				console.log("hihiho" + title);
+				if(title == "New Standard Area Rate")
 				{
+					console.log("new new new");
 
-					if($('#pickup_id').val() === temp_pickup_id &&
-						$('#deliver_id').val() === temp_deliver_id && 
-						$('#amount').inputmask("unmaskedvalue") === temp_amount  )
-					{
-						$('#amount').val("0.00");
-						$('#btnSave').removeAttr('disabled');
-						$('#sarModal').modal('hide');
-					}
-					else
-					{
-						$('#btnSave').attr('disabled', 'true');
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/standard_arearates',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'areaFrom' : temp_pickup_id,
+							'areaTo' : temp_deliver_id,
+							'amount' : $('#amount').inputmask('unmaskedvalue'),
+						},
 
-						$.ajax({
-							type: 'PUT',
-							url:  '/admin/standard_arearates/' + data.id,
-							data: {
-								'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
-								'areaTo' : $('#deliver_id').val(),
-								'amount' : $('#amount').inputmask('unmaskedvalue'),
-							},
+						success: function (data){
 
-							success: function (data){
+							sartable.ajax.reload();
+							$('#sarModal').modal('hide');
+							$('.modal-title').text('New Standard Area Rate');
+							$('#amount').val("0.00");
+							$('#_address').val("");
+							$('#_city').val("");
+							$('#_province').val("");
+							$('#_zip').val("");
 
-								if(typeof(data) === "object"){
-									sartable.ajax.reload();
-									$('#sarModal').modal('hide');
-									$('.modal-title').text('New Standard Area Rate');
-									$('#amount').val("0.00");
-									$('#_address').val("");
-									$('#_city').val("");
-									$('#_province').val("");
-									$('#_zip').val("");
+							$('#_daddress').val("");
+							$('#_dcity').val("");
+							$('#_dprovince').val("");
+							$('#_dzip').val("");
 
-									$('#_daddress').val("");
-									$('#_dcity').val("");
-									$('#_dprovince').val("");
-									$('#_dzip').val("");
-
-									toastr.options = {
-										"closeButton": false,
-										"debug": false,
-										"newestOnTop": false,
-										"progressBar": false,
-										"rtl": false,
-										"positionClass": "toast-bottom-right",
-										"preventDuplicates": false,
-										"onclick": null,
-										"showDuration": 300,
-										"hideDuration": 1000,
-										"timeOut": 2000,
-										"extendedTimeOut": 1000,
-										"showEasing": "swing",
-										"hideEasing": "linear",
-										"showMethod": "fadeIn",
-										"hideMethod": "fadeOut"
-									}
-									toastr["success"]("Record updated successfully")
-
-
-									$('#btnSave').removeAttr('disabled');
-
-
-								}
-								else{
-									resetErrors();
-									var invdata = JSON.parse(data);
-									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
-										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-									});
-
-									$('#btnSave').removeAttr('disabled');
-
-								}
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
 							}
-						})
+							toastr["success"]("Record addded successfully")
+
+						}
+					})
+				}
+				else
+				{
+					if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
+					{
+
+						if($('#pickup_id').val() === temp_pickup_id &&
+							$('#deliver_id').val() === temp_deliver_id && 
+							$('#amount').inputmask("unmaskedvalue") === temp_amount  )
+						{
+							$('#amount').val("0.00");
+							$('#btnSave').removeAttr('disabled');
+							$('#sarModal').modal('hide');
+						}
+						else
+						{
+							$('#btnSave').attr('disabled', 'true');
+
+							$.ajax({
+								type: 'PUT',
+								url:  '/admin/standard_arearates/' + data.id,
+								data: {
+									'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
+									'areaTo' : $('#deliver_id').val(),
+									'amount' : $('#amount').inputmask('unmaskedvalue'),
+								},
+
+								success: function (data){
+
+									if(typeof(data) === "object"){
+										sartable.ajax.reload();
+										$('#sarModal').modal('hide');
+										$('.modal-title').text('New Standard Area Rate');
+										$('#amount').val("0.00");
+										$('#_address').val("");
+										$('#_city').val("");
+										$('#_province').val("");
+										$('#_zip').val("");
+
+										$('#_daddress').val("");
+										$('#_dcity').val("");
+										$('#_dprovince').val("");
+										$('#_dzip').val("");
+
+										toastr.options = {
+											"closeButton": false,
+											"debug": false,
+											"newestOnTop": false,
+											"progressBar": false,
+											"rtl": false,
+											"positionClass": "toast-bottom-right",
+											"preventDuplicates": false,
+											"onclick": null,
+											"showDuration": 300,
+											"hideDuration": 1000,
+											"timeOut": 2000,
+											"extendedTimeOut": 1000,
+											"showEasing": "swing",
+											"hideEasing": "linear",
+											"showMethod": "fadeIn",
+											"hideMethod": "fadeOut"
+										}
+										toastr["success"]("Record updated successfully")
+
+
+										$('#btnSave').removeAttr('disabled');
+
+
+									}
+									else{
+										resetErrors();
+										var invdata = JSON.parse(data);
+										$.each(invdata, function(i, v) {
+											console.log(i + " => " + v); 
+											var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+											$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+										});
+
+										$('#btnSave').removeAttr('disabled');
+
+									}
+								}
+							})
+						}
 					}
 				}
 			}
 		});
 
 
-		function resetErrors() {
-			$('form input, form select').removeClass('inputTxtError');
-			$('label.error').remove();
-		}
-	})
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
+})
 </script>
 @endpush
