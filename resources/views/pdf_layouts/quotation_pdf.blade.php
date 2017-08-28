@@ -82,18 +82,18 @@
 					<tbody>
 						@forelse($quotation_details as $quotation_detail)
 						<tr>
-							<td>
-								{{ $quotation_detail->from }}
+							<td> 
+								{{ $quotation_detail->_from }} 
+							</td> 
+							<td> 
+								{{ $quotation_detail->_to }} 
 							</td>
-							<td>
-								{{ $quotation_detail->to }}
-							</td>
-							<td style="text-align: center;">
-								{{ $quotation_detail->size }}
-							</td>
-							<td style="text-align: right;">
-								Php {{ $quotation_detail->amount }}
-							</td>
+							<td> 
+								{{ $quotation_detail->sizes }} 
+							</td> 
+							<td> 
+								Php {{ $quotation_detail->amount }} 
+							</td> 
 						</tr>
 						@empty
 						<tr>
