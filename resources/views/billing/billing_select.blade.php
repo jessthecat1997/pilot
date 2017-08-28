@@ -9,46 +9,49 @@
 <div class = "container-fluid">
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="panel-heading" id="heading">Consignee Details</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="consignee">Company:</label>
+			<form>
+				{{ csrf_field() }}
+				<div class="panel-heading" id="heading">Consignee Details</div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="consignee">Company:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="consignee">{{ $bills[0]->companyName }}</label>
+							</div>
 						</div>
 					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="consignee">{{ $bills[0]->companyName }}</label>
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="address">Address:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="address">{{ $bills[0]->address }}</label>
+							</div>
 						</div>
 					</div>
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="sotype">Service Order:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="sotype">{{ $bills[0]->name }}</label>
+							</div>
+						</div>
+					</div>
+					<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
 				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="address">Address:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="address">{{ $bills[0]->address }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="sotype">Service Order:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="sotype">{{ $bills[0]->name }}</label>
-						</div>
-					</div>
-				</div>
-				<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
-			</div>
+			</form>
 		</div>
 	</div>
 	<hr>
@@ -172,7 +175,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<a class="btn but void-header">Save</a>
+				<a class="btn btn-success void-header">Confirm</a>
 			</div>
 		</div>
 	</div>
@@ -221,7 +224,7 @@
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
-			url: '/postHeader',
+			url: 'billing_header.store',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $bills[0]->id }},
@@ -238,18 +241,18 @@
 	$(document).on('click', '.update-header', function(e){
 		console.log($('#update_billed').val());
 
-		// $.ajax({
-		// 	method: 'PUT',
-		// 	url: '{{ route("billing.update", $so_head_id) }}',
-		// 	data: {
-		// 		'_token' : $('input[name=_token]').val(),
-		// 		'date_billed' : $('#update_billed').val(),
-		// 		'due_date' : $('#updue_date').val(),
-		// 	},
-		// 	success: function (data){
-		// 		location.reload();
-		// 	}
-		// })
+		$.ajax({
+			method: 'PUT',
+			url: '{{ route("billing_header.update", $so_head_id) }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'date_billed' : $('#update_billed').val(),
+				'due_date' : $('#updue_date').val()
+			},
+			success: function (data){
+				location.reload();
+			}
+		})
 
 	})
 	$(document).on('click', '.void-header', function(e){

@@ -250,7 +250,7 @@
 					},
 					success: function (data)
 					{
-						
+
 
 						if(typeof(data) === "object"){
 							cdstable.ajax.reload();
@@ -335,6 +335,8 @@
 						$('#fee').val("");
 						$('#dateEffective').val("");
 						$('.modal-title').text('New CDS Fee');
+
+						window.location.reload();
 					}
 				})
 			}
