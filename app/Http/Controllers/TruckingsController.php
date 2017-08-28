@@ -309,9 +309,12 @@ class TruckingsController extends Controller
             ->where('status', '=', 'P')
             ->count();
 
+            $deposits = DB::table('consignee_deposits')
+            ->select('created_at', 'amount' ,'currentBalance', 'description')
+            ->where('consignees_id', '=', $service_order_details[0]->id)
+            ->get();
 
-
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate', 'deposits']));   
         }
         catch(ModelNotFoundException $e)
         {
