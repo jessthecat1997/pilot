@@ -313,7 +313,7 @@
 								Amount
 							</td>
 							<td>
-								Current Balance
+								Remaining Balance
 							</td>
 							<td>
 								Description
@@ -321,6 +321,23 @@
 						</tr>
 					</thead>
 					<tbody>
+						@forelse($deposits as $deposit)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+							</td>
+							<td>
+								{{ $deposit->amount }}
+							</td>
+							<td>
+								Php {{ $deposit->currentBalance }}
+							</td>
+							<td>
+								{{ $deposit->description }}
+							</td>
+						</tr>
+						@empty
+						@endforelse
 					</tbody>
 				</table>
 			</div>
