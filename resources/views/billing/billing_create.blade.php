@@ -4,44 +4,44 @@
 <hr>
 <div class="container-fluid">
 	<div class="row col-lg-12">
-	<div class="panel panel-default">
-		<div class="panel-heading"><h4>Consignee Details</h4></div>
-		<div class="panel-body">
-			<div class="col-sm-6">
-				<div class="form-group">
-					<label>Consignee:</label>
-					<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h4>Consignee Details</h4></div>
+			<div class="panel-body">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Consignee:</label>
+						<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
+					</div>
+					<div class="form-group">
+						<label>Address:</label>
+						<input type="text" class="det" value="{{ $bills[0]->address }}" id="address" disabled>
+					</div>
+					<div class="form-group">
+						<label>Service Order:</label>
+						<input type="text" class="det" value="{{ $bills[0]->name }}" id="sotype" disabled>
+					</div>
+					<div class="form-group">
+						<label>Status:</label>
+						@if($bills[0]->isFinalize == 1)
+						<label class="label label-success" id="status">Finalized</label>
+						@else
+						<label class="label label-danger" id="status">Not Finalize</label>
+						@endif
+					</div>
 				</div>
-				<div class="form-group">
-					<label>Address:</label>
-					<input type="text" class="det" value="{{ $bills[0]->address }}" id="address" disabled>
-				</div>
-				<div class="form-group">
-					<label>Service Order:</label>
-					<input type="text" class="det" value="{{ $bills[0]->name }}" id="sotype" disabled>
-				</div>
-				<div class="form-group">
-					<label>Status:</label>
-					@if($bills[0]->isFinalize == 1)
-					<label class="label label-success" id="status">Finalized</label>
-					@else
-					<label class="label label-danger" id="status">Not Finalize</label>
-					@endif
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="form-group">
-					<label>Invoice No.:</label>
-					<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id" disabled>
-				</div>
-				<div class="form-group">
-					<label>Due Date:</label>
-					<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date" disabled>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label>Invoice No.:</label>
+						<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id" disabled>
+					</div>
+					<div class="form-group">
+						<label>Due Date:</label>
+						<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date" disabled>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 	<div class="row col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading"><h4>New Bills</h4></div>
@@ -67,7 +67,11 @@
 						<tbody>
 							@forelse($rev_bill as $bill)
 							<tr>
-								<td style="text-align: center;">{{ $bill->name }} <i>{{ $bill->description }}</i></td>
+								@if($bill->name == "Others")
+								<td style="text-align: center;">{{ $bill->name }} ({{ $bill->description }})</td>
+								@else
+								<td style="text-align: center;">{{ $bill->name }}</td>
+								@endif
 								<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
 							</tr>
 							@empty
