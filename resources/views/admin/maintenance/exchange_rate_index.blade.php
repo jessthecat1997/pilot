@@ -265,7 +265,7 @@
 					},
 					success: function (data)
 					{
-
+						window.location.reload();
 
 
 
@@ -327,6 +327,8 @@
 					},
 					success: function (data)
 					{
+						window.location.reload();
+						
 						toastr.options = {
 							"closeButton": false,
 							"debug": false,
