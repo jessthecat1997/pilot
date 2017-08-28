@@ -167,7 +167,6 @@
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
-					<form>
 					<div class = "form-group">
 						<label class="col-md-12">Amount</label>
 						<div class = "col-md-12">
@@ -180,7 +179,6 @@
 							<textarea class = "form-control" id = "description" required></textarea>
 						</div>
 					</div>
-					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -315,7 +313,7 @@
 								Amount
 							</td>
 							<td>
-								Remaining Balance
+								Current Balance
 							</td>
 							<td>
 								Description
@@ -323,24 +321,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						@forelse($deposits as $deposit)
-						<tr>
-							<td>
-								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-							</td>
-							<td>
-								Php {{ $deposit->amount }}
-							</td>
-							<td>
-								Php {{ $deposit->currentBalance }}
-							</td>
-							<td>
-								{{ $deposit->description }}
-							</td>
-						</tr>
-						@empty
-
-						@endforelse
 					</tbody>
 				</table>
 			</div>
@@ -589,58 +569,22 @@
 		var create_bill = null;
 
 		var selected_delivery = null;
-		var deposits;
-		@if(count($deposits) == 0)
-		deposits = $('#deposits_table').DataTable({
-			deferRender: true,
-			processing: false,
-			serverSide: false,
-		});
-		@else
-		deposits = $('#deposits_table').DataTable({
-			deferRender: true,
-			processing: false,
-			serverSide: false,
-			type: 'GET',
-			ajax: '{{ route("cdeposit.data") }}/{{$service_order_details[0]->id }}',
-			columns: [
-
-			{ data: 'created_at' },
-			{ data: 'amount' },
-			{ data: 'currentBalance'},
-			{ data: 'description'}
-			
-			],	"order": [[ 0, "desc" ]],
-		});
-		@endif
 
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
-			$('#deposit').valid()
-			if($('#deposit').valid()){
-				$('.confirm-create-deposit').attr('disabled', true);
-				$.ajax({
-					type : 'POST',
-					url : "{{ route('cdeposit.index') }}",
-					data : {
-						'_token' : $('input[name=_token]').val(),
-						'amount' : $('#deposit').val(),
-						'description' : $('#description').val(),
-						'consignees_id' : " {{ $service_order_details[0]->id }}",
-					},
-					success : function (data){
-						@if(count($deposits) == 0)
-						window.location.reload();
-						@else
-						$('#deposit_modal').modal('hide');
-						$('#deposit').val("");
-						$('#description').val("");
-						$('.confirm-create-deposit').removeAttr('disabled');
-						deposits.ajax.reload();
-						@endif
-					}
-				})
-			}
+			$.ajax({
+				type : 'POST',
+				url : "{{ route('cdeposit.index') }}",
+				data : {
+					'_token' : $('input[name=_token]').val(),
+					'amount' : $('#deposit').val(),
+					'description' : $('#description').val(),
+					'consignees_id' : " {{ $service_order_details[0]->id }}",
+				},
+				success : function (data){
+					console.log(data);
+				}
+			})
 		})
 		
 		$(document).on('click', '.new_deposit', function(e){
