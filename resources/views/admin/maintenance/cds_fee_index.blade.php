@@ -250,7 +250,7 @@
 					},
 					success: function (data)
 					{
-						window.location.reload();
+						
 
 						if(typeof(data) === "object"){
 							cdstable.ajax.reload();
@@ -277,7 +277,8 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-							toastr["success"]("Record added successfully")
+							toastr["success"]("Record added successfully");
+							window.location.reload();
 						}else{
 
 							resetErrors();
