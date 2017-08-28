@@ -591,6 +591,10 @@
 
 		var selected_delivery = null;
 
+		$('#deposits_table').DataTable({
+			serverSide: false,
+			processing: false,
+		})
 		$(document).on('click', '.confirm-create-deposit', function(e){
 			e.preventDefault();
 			$.ajax({
