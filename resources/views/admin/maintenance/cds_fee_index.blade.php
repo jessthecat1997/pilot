@@ -36,7 +36,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped" id = "cds_table">
+				<table class = "table-responsive table" id = "cds_table">
 					<thead>
 						<tr>
 							<td>
@@ -309,8 +309,7 @@
 					},
 					success: function (data)
 					{
-						window.location.reload();
-
+						
 						toastr.options = {
 							"closeButton": false,
 							"debug": false,
