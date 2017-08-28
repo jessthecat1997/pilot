@@ -72,7 +72,7 @@
 									</div>
 									{{ csrf_field() }}
 									<div class="form-group required">
-										<label class = "control-label">Address: </label>
+										<label class = "control-label">Block No./Lot No./Street</label>
 										<textarea class = "form-control" disabled  id = "_address"></textarea>
 									</div>
 									<div class = "form-group">
@@ -115,7 +115,7 @@
 									{{ csrf_field() }}
 
 									<div class="form-group required">
-										<label class = "control-label">Address: </label>
+										<label class = "control-label">Block No./Lot No./Street</label>
 										<textarea class = "form-control" disabled  id = "_daddress"></textarea>
 									</div>
 
