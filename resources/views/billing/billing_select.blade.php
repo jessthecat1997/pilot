@@ -236,24 +236,26 @@
 		})
 	})
 	$(document).on('click', '.update-header', function(e){
-		$.ajax({
-			method: 'PUT',
-			url: '{{ route("billing.update", $so_head_id) }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'date_billed' : $('#update_billed').val(),
-				'due_date' : $('#updue_date').val(),
-			},
-			success: function (data){
-				location.reload();
-			}
-		})
+		console.log($('#update_billed').val());
+
+		// $.ajax({
+		// 	method: 'PUT',
+		// 	url: '{{ route("billing.update", $so_head_id) }}',
+		// 	data: {
+		// 		'_token' : $('input[name=_token]').val(),
+		// 		'date_billed' : $('#update_billed').val(),
+		// 		'due_date' : $('#updue_date').val(),
+		// 	},
+		// 	success: function (data){
+		// 		location.reload();
+		// 	}
+		// })
 
 	})
 	$(document).on('click', '.void-header', function(e){
 		$.ajax({
 			method: 'PUT',
-			url: '/billing/{{ $so_head_id }}/void',
+			url: '{{ route("void_bill",$so_head_id) }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'isVoid' : 1
