@@ -13,7 +13,7 @@
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
-    <link href= "/js/select2/select2.css" rel = "stylesheet">  
+    <link href= "/js/select2/select2.css" rel = "stylesheet">
     <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
@@ -79,15 +79,24 @@
     <div id="wrapper" id="sidebar">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <!-- <li class="sidebar-brand" id="sidebrand">
+                    <a href="#">
+                        <img src="/images/pilotlogo.png" id="logo">
+                    </a>
+                </li> -->
                 <li>
                     <br>
-                    <a href=" {{ route('dasboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
+                    <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
                     <a data-toggle="collapse" href="#collapse1"><i class="fa fa-exchange"></i>&nbsp;&nbsp;Transactions</a>
                 </li>
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
+                      <li>
+                          <a href = "{{ route('employees.index' ) }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
+                      </li>
                         <li>
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
@@ -228,12 +237,11 @@
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script> 
-    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script> 
+    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
     <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src = "/js/jqueryDatatable/dataTables.rowGroup.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
     <script>
