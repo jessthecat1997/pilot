@@ -5,7 +5,7 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-heading">
-				<h2>View Contract <button class="btn btn-md btn-primary pull-right generate_pdf">Generate Quotation</button></h2>
+				<h2>&nbsp;Amend Contract</h2>
 				<hr />
 			</div>
 			<div class = "panel-body">
@@ -119,22 +119,14 @@
 							<label class = "control-label">Area From: </label>
 							<select id = "area_from" class="form-control">
 								<option></option>
-								@forelse($areas as $area)
-								<option value = "{{ $area->id }}">{{ $area->description }}</option>
-								@empty
-
-								@endforelse
+								
 							</select>
 						</div>
 						<div class="form-group required">
 							<label class = "control-label">Area To: </label>
 							<select id = "area_to" class="form-control">
 								<option></option>
-								@forelse($areas as $area)
-								<option value = "{{ $area->id }}">{{ $area->description }}</option>
-								@empty
-
-								@endforelse
+								
 							</select>
 						</div>
 						<div class="form-group required">
@@ -426,15 +418,17 @@
 				url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
 				data: {
 					'_token' : $('input[name=_token').val(),
-					'update_type' : 1,
+					'update_type' : 1, 
 					'dateEffective' : $('#dateEffective').val(),
 					'dateExpiration' : $('#dateExpiration').val(),
-					'contract_id' : {{ $contract[0]->id }},
+					'dateEffectivep' : '{{ $contract[0]->dateEffective }}',
+					'dateExpirationp' : '{{ $contract[0]->dateExpiration }}',
+					'contract_id' : '{{ $contract[0]->id }}',
 
 				},
 				success: function (data)
 				{
-					console.log(data);
+					window.location.reload();
 					$('#drModal').modal('hide');
 				}
 			});
@@ -452,11 +446,12 @@
 						'_token' : $('input[name=_token').val(),
 						'update_type' : 3,
 						'specificDetails' : detail,
-						'contract_id' : {{ $contract[0]->id }},
+						'contract_id' : '{{ $contract[0]->id }}',
 
 					},
 					success: function (data)
 					{
+						window.location.reload();
 						$('.specificDetails').val(data.specificDetails);
 						$('.actualspecificDetails').html(data.specificDetails);
 						$('#tcModal').modal('hide');

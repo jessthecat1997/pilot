@@ -163,8 +163,6 @@ class ContractsController extends Controller
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
 
-            $areas = Area::all();
-
             $amendments = DB::table('contract_amendments')
             ->select('created_at', 'amendment')
             ->where('contract_headers_id', '=', $request->contract_id)
@@ -185,6 +183,13 @@ class ContractsController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $newdateFrom = \Carbon\Carbon::parse($request->dateEffective)->toFormattedDateString();
+        $newdateTo = \Carbon\Carbon::parse($request->dateExpiration)->toFormattedDateString();
+
+        $dateFrom = \Carbon\Carbon::parse($request->dateEffectivep)->toFormattedDateString();
+        $dateTo = \Carbon\Carbon::parse($request->dateExpirationp)->toFormattedDateString();
+
         switch ($request->update_type) {
             case '1':
             $contract = ContractHeader::findOrFail($request->contract_id);
@@ -192,6 +197,13 @@ class ContractsController extends Controller
             $contract->dateExpiration = $request->dateExpiration;
 
             $contract->save();
+
+
+            $new_amend = new ContractAmendment;
+            $new_amend->amendment = "Date changed from : { " . $dateFrom . " - " . $dateTo . " } \n to"
+            . " { " . $newdateFrom . " - " . $newdateTo . " }";
+            $new_amend->contract_headers_id = $request->contract_id;
+            $new_amend->save();
 
             return $contract;
 
@@ -207,13 +219,17 @@ class ContractsController extends Controller
 
             $contract->save();
 
+            $new_amend = new ContractAmendment;
+            $new_amend->amendment = "Updated terms and conditions";
+            $new_amend->contract_headers_id = $request->contract_id;
+            $new_amend->save();
+
             return $contract;
 
             break;
 
             case '4':
             $contract = ContractHeader::findOrFail($request->contract_id);
-           // $contract->consignees_id = $request->consignees_id;
             $contract->dateEffective = $request->dateEffective;
             $contract->dateExpiration = $request->dateExpiration;
             $contract->specificDetails = $request->specificDetails;
