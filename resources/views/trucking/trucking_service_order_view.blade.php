@@ -207,10 +207,10 @@
 								Name
 							</td>
 							<td>
-								Description
+								Amount
 							</td>
 							<td>
-								Amount
+								Description
 							</td>
 						</tr>
 					</thead>
@@ -261,10 +261,10 @@
 								Name
 							</td>
 							<td>
-								Description
+								Amount
 							</td>
 							<td>
-								Amount
+								Description
 							</td>
 						</tr>
 					</thead>
@@ -705,8 +705,8 @@
 			columns: [
 
 			{ data: 'name' },
-			{ data: 'description' },
 			{ data: 'amount'},
+			{ data: 'description' },
 			
 			],	"order": [[ 0, "desc" ]],
 		});
@@ -722,8 +722,8 @@
 			columns: [
 
 			{ data: 'name' },
-			{ data: 'description' },
 			{ data: 'amount'},
+			{ data: 'description' },
 			
 			],	"order": [[ 0, "desc" ]],
 		});
