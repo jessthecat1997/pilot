@@ -36,6 +36,7 @@ class ConsigneeDepositsController extends Controller
     {
         $deposits = \DB::table('consignee_deposits')
         ->select(
+            'id',
             'created_at',
             \DB::raw('CONCAT("Php ", amount) as amount') ,
             \DB::raw('CONCAT("Php ", currentBalance) as currentBalance'),

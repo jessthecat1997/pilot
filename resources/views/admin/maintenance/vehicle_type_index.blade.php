@@ -115,6 +115,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;

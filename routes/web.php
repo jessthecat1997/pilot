@@ -239,6 +239,7 @@ Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->
 
 //Deposits
 Route::resource('cdeposit', 'ConsigneeDepositsController');
+Route::resource('dpayment', 'DepositPaymentsController');
 Route::get('cdepositData/{id?}', 'ConsigneeDepositsController@getConsigneeDeposits')->name('cdeposit.data');
 
 //Trucking Bills

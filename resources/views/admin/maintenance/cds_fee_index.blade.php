@@ -1,4 +1,3 @@
-
 @extends('layouts.maintenance')
 @push('styles')
 <style>
@@ -123,7 +122,8 @@
 
 @push('scripts')
 <script type="text/javascript">
-$('#collapse2').addClass('in');
+	$('#brokeragecollapse').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 
@@ -155,7 +155,7 @@ $('#collapse2').addClass('in');
 					date: true,
 				}
 			},
-        onkeyup: false, //turn off auto validate whilst typing
+        onkeyup: false, 
         submitHandler: function (form) {
         	return false;
         }

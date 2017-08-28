@@ -192,6 +192,7 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+    $('#brokeragecollapse').addClass('in');
     $('#collapse2').addClass('in');
     var minimum_id = [];
     var maximum_id = [];
