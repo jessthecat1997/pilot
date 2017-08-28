@@ -2,9 +2,9 @@
 @section('content')
 <h2>&nbsp;Billing</h2>
 <hr>
-<div class="row col-md-5">
-	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">Consignee Details</div>
+<div class="row col-lg-3 col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Consignee Details</h4></div>
 		<div class="panel-body">
 			<form class="inline">
 				<div class="form-group">
@@ -30,18 +30,32 @@
 				</div>
 				<div class="form-group">
 					<label>Status:</label>
-					@if($bills[0]->status = 'U')
-					<h5>Unpaid</h5>
+					@if($bills[0]->status == 'P')
+					<label class="label label-success" id="status">Paid</label>
 					@else
-					<h5>Paid</h5>
+					<label class="label label-danger" id="status">Not Paid</label>
 					@endif
 				</div>
 			</form>
 		</div>
 	</div>
-</div><div class="row col-md-7">
+</div>
+<div class="row col-md-7">
 	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Bills</div>
+		@if($bills[0]->isRevenue == 1)
+		<div class="panel-heading"><h4>List of Bills</h4></div>
+		<div class = "panel-body">
+
+		</div>
+		@else
+		<div class="panel-heading"><h4>List of Refundable Charges</h4></div>
+		<div class = "panel-body">
+
+		</div>
+		@endif
+	</div>
+	<div class="panel-default panel">
+		<div class="panel-heading"><h4>List of Bills</h4></div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
