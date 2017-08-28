@@ -45,18 +45,6 @@
 		@if($bills[0]->isRevenue == 1)
 		<div class="panel-heading"><h4>List of Bills</h4></div>
 		<div class = "panel-body">
-
-		</div>
-		@else
-		<div class="panel-heading"><h4>List of Refundable Charges</h4></div>
-		<div class = "panel-body">
-
-		</div>
-		@endif
-	</div>
-	<div class="panel-default panel">
-		<div class="panel-heading"><h4>List of Bills</h4></div>
-		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
 				<table class="table" id="revenue_table">
@@ -112,13 +100,8 @@
 				</table>
 			</form>
 		</div>
-	</div>
-</div>
-<div class="row col-md-5">
-</div>
-<div class="row col-md-7">
-	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Refundable Charges</div>
+		@else
+		<div class="panel-heading"><h4>List of Refundable Charges</h4></div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
@@ -175,8 +158,10 @@
 				</table>
 			</form>
 		</div>
+		@endif
 	</div>
 </div>
+
 @endsection
 @push('styles')
 <style>
