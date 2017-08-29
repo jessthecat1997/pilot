@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Import Processing Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = 'width: 100%;''>New Import Processing Fee Range</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#ipfModal" style = 'width: 100%;'>New Import Processing Fee Range</button>
 		</div>
 	</div>
 	<br />
@@ -145,7 +145,7 @@
 		<br/>
 	</div>
 </section>
-<section class="content"> 
+<section class="content">
 	<form role = "form" method = "POST">
 		{{ csrf_field() }}
 		{{ method_field('DELETE') }}
@@ -249,7 +249,7 @@
 
 			$('#dateEffective').val(today);
 			$('#ipfModal').modal('show');
-			
+
 			$("ipf_parent_table > tbody").html("");
 			$('#ipf_parent_table > tbody').html(ipf_row);
 			$('#minimum').val("0.00");
@@ -280,7 +280,7 @@
 					}
 					$('#ipf_parent_table > tbody').html("");
 					$('#ipf_parent_table > tbody').append(rows);
-					
+
 				}
 
 			})
@@ -449,7 +449,7 @@
 					jsonMaximum = JSON.stringify(maximum_id);
 					jsonAmount = JSON.stringify(amount_value);
 
-					
+
 					$.ajax({
 						type: 'PUT',
 						url:  '/admin/ipf_fee/'+ data.id,

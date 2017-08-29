@@ -250,7 +250,7 @@ Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name(
 
 //Deposits
 Route::resource('cdeposit', 'ConsigneeDepositsController');
-Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
+Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@getConsigneeDeposits')->name('depositView');
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');

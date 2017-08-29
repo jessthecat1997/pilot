@@ -151,6 +151,7 @@ class DutiesAndTaxesController extends Controller
     $new_dutiesandtaxes->bankCharges = $request->bankCharges;
     $new_dutiesandtaxes->brokerageServiceOrders_id = $request->brokerage_id;
     $new_dutiesandtaxes->employees_id_broker = $request->employee_id;
+    $new_dutiesandtaxes->statusType = 'P';
     $new_dutiesandtaxes->save();
 
     $_ItemName = json_decode(stripslashes($request->StoredItemName), true);

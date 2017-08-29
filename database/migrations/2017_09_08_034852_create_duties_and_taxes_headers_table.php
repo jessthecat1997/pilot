@@ -22,6 +22,7 @@ class CreateDutiesAndTaxesHeadersTable extends Migration
           $table->decimal('arrastre', 19, 2);
           $table->decimal('wharfage', 19, 2);
           $table->decimal('bankCharges', 19, 2);
+          $table->string('statusType', 1);
 
           $table->date('date');
           $table->integer('brokerageServiceOrders_id')->unsigned();
