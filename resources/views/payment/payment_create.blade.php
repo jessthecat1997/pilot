@@ -358,7 +358,7 @@
 
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
-		var amt = $('#depositPayment').val();
+		var amt = parseFloat($('#depositPayment').val());
 		var rem = $('#depositDescription').val();
 		console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
 		console.log(typeof(dep_balance));
@@ -654,7 +654,7 @@ $(document).on('click', '#check', function(e){
 
 $(document).on('click', '.finalize-payment-rev', function(e){
 	e.preventDefault();
-	var amt = $('#amount').val();
+	var amt = parseFloat($('#amount').val());
 	var rem = $('#remarks').val();
 
 	if( amt > 0 ){
@@ -868,10 +868,11 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 		toastr["warning"]('Invalid payment');
 		$('.finalize-payment-rev').removeAttr('disabled');
 	}
+
 })
 $(document).on('click', '.finalize-payment', function(e){
 
-	var amt = $('#bill_amount').val();
+	var amt = parseFloat($('#bill_amount').val());
 	var rem = $('#b_remarks').val();
 	console.log(amt);
 	if( amt > 0 ){
