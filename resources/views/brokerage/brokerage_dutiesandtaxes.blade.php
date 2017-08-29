@@ -973,6 +973,9 @@
 
 	$('#brokerageBtn').on('click', function(e){
 
+		var loc = document.getElementById("pickup_id");
+		var strloc = loc.options[loc.selectedIndex].value;
+
 		$.ajax({
 			type: 'POST',
 			url: "{{ route('saveBrokerageOrder') }}",
@@ -980,7 +983,7 @@
 				'_token' : $('input[name=_token]').val(),
 				'cs_id' : consigneeID,
 				'employee_id' : $('#processedBy').val(),
-				'location_id': $('#pickup_id').val(),
+				'location_id': strloc,
 				'shipper' : document.getElementById('shipper').value,
 				'companyName' : document.getElementById('freightNumber').value,
 				'freightType' : document.getElementById('FreightType').value,

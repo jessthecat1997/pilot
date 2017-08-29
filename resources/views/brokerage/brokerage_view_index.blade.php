@@ -170,77 +170,218 @@
 		</div>
 
 </div>
-<div class="modal fade" id="confirm-create" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				Create Bill
-			</div>
-			<div class="modal-body">
-				Confirm Creating new Bill
-			</div>
-			<div class="modal-footer">
 
-				<button class = "btn btn-success confirm-create-bill">Confirm</button>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+<div class = "row">
+		<div class = "panel">
+			<div class = "panel-body">
+				@if($brokerage_header[0]->bi_head_id_rev)
+				<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				@else
+				<h4>List of Billings</h4>
+				@endif
+				<br />
+				@if($brokerage_header[0]->bi_head_id_rev != null)
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Description
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				@else
+				<div class = "form-horizontal">
+					<div class = "col-md-10">
+						Create Billing First to Add Payables.
+					</div>
+					<div class="col-md-2">
+						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
+					</div>
+				</div>
+				@endif
 			</div>
 		</div>
-	</div>
+
 </div>
 
+<div class = "row">
+		<div class = "panel">
+			<div class = "panel-body">
+				@if($brokerage_header[0]->bi_head_id_exp != null)
+				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
+				@else
+				<h4>List of Refundable Charges</h4>
+				@endif
+				<br />
+				@if($brokerage_header[0]->bi_head_id_exp != null)
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
+					<thead>
+						<tr>
+							<td>
+								Name
+							</td>
+							<td>
+								Description
+							</td>
+							<td>
+								Amount
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				@else
+				<div class = "form-horizontal">
+					<div class = "col-md-10">
+						Create Bill First to Add Payables.
+					</div>
+					<div class="col-md-2">
+						<button class = "btn but new_expense_bill btn-sm">New Bill</button>
+					</div>
+				</div>
+				@endif
+
+			</div>
+		</div>
+
+</div>
 <div class = "row">
 
 		<div class = "panel">
 			<div class = "panel-body">
+
+				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
+				<br />
+				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
+					<thead>
+						<tr>
+							<td>
+								Date Added
+							</td>
+							<td>
+								Amount
+							</td>
+							<td>
+								Current Balance
+							</td>
+							<td>
+								Description
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+</div>
+
+<!-- Revenue Modal -->
+<div id="revModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Payable</h4>
 			</div>
 			<div class = "modal-body">
-				<div class = "col-md-12">
+
 					<div class="form-horizontal">
-						<div class = "col-md-6">
+						<div class = "col-md-12">
 							<div class = "form-group">
 								<label class = "control-label col-md-3">Name *</label>
 								<div class = "col-md-9">
 									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
 										<option value = "0">Select Charges</option>
-
-										<option value = ""></option>
+										@php $ctr = 0; @endphp
+										@forelse($bill_revs as $rev)
+										<option value = "{{$rev->id}}">{{ $rev->name }}</option>
+										@empty
+										@endforelse
 									</select>
 								</div>
 							</div>
 						</div>
-						<div class = "col-md-6">
-							<div class = "form-group">
+						<div class = "form-group">
+							<div class = "col-md-12">
 								<label class = "control-label col-md-3">Amount *</label>
 								<div class = "col-md-9">
 									<input type = "text" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
-						<thead>
-							<tr style="width: 40%; text-align: center;">
-								<td>
-									Delivery No.
-								</td>
-								<td style="width: 60%; text-align: center;">
-									Amount
-								</td>
-							</tr>
-						</thead>
-						<tbody>
 
-						</tbody>
-					</table>
-				</div>
-				<div class = "col-md-12">
-					<label for="rev_description">Description:</label>
-					<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+						<div id = "brokerage" style = "display: none">
+							<div class="panel-group" id = "brokerage_copy">
+								<div class="panel panel-default" id = "1_panel">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<label data-toggle="collapse">Declared Duties And Taxes</label>
+											<div class="pull-right">
+												<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#1_container">_</button>
+												</div>
+										</h4>
+									</div>
+									<div id="1_container" class="panel-collapse collapse in">
+										<div class="panel-body">
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class = "form-group">
+							<div class = "col-md-12">
+								<label for="rev_description " class = "control-label col-md-3">Description:</label>
+								<div class = "col-md-9">
+									<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<div class = "col-md-12 collapse">
+
 				</div>
 				<strong>Note:</strong> All fields with * are required.
-			</div>
+		</div>
 			<div class="modal-footer">
 				<a class="btn but finalize-rev">Save</a>
 			</div>
@@ -248,6 +389,8 @@
 	</div>
 </div>
 
+
+<!-- Expenses Modal -->
 <div id="expModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -256,22 +399,25 @@
 				<h4 class="modal-title">New Payable</h4>
 			</div>
 			<div class = "modal-body">
-				<div class = "col-md-12">
+
 					<div class="form-horizontal">
-						<div class = "col-md-6">
+						<div class = "col-md-12">
 							<div class = "form-group">
 								<label class = "control-label col-md-3">Name *</label>
 								<div class = "col-md-9">
 									<select id = "exp_bill_id" name="exp_bill_id" class = "form-control">
 										<option value = "0">Select Charges</option>
+										@php $ctr = 0; @endphp
+										@forelse($bill_exps as $exp)
+										<option value = "{{$exp->id}}">{{ $exp->name }}</option>
+										@empty
 
-										<option value = ""></option>
-
+										@endforelse
 									</select>
 								</div>
 							</div>
 						</div>
-						<div class = "col-md-6">
+						<div class = "col-md-12">
 							<div class = "form-group">
 								<label class = "control-label col-md-3">Amount *</label>
 								<div class = "col-md-9">
@@ -279,10 +425,19 @@
 								</div>
 							</div>
 						</div>
+
+						<div class = "col-md-12">
+							<div class = "form-group">
+							<label for="rev_description" class = "control-label col-md-3">Description:</label>
+							<div class = "col-md-9">
+								<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
+							</div>
+						</div>
+						</div>
 					</div>
-				</div>
+
 				<div class = "col-md-12 collapse">
-					<table style="width: 100%;" id = "delivery_fees_table">
+					<table style="width: 100%;" id = "delivery_fees_table" class="table table-striped table-responsive">
 						<thead>
 							<tr style="width: 40%; text-align: center;">
 								<td>
@@ -298,10 +453,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class = "col-md-12">
-					<label for="rev_description">Description:</label>
-					<textarea class="form-control" rows="3" id="exp_description" name="exp_description"></textarea>
-				</div>
+
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
@@ -363,7 +515,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Status Update</h4>
+				<h4 class="modal-title">Trucking Information</h4>
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
@@ -371,16 +523,12 @@
 						<label class="control-label col-sm-3" for="_status">Status</label>
 						<div class="col-sm-8">
 							<select name = "_status" id = "_status" class = "form-control">
-								<option value = "P" @if($brokerage_header[0]->statusType == 'P')
-									selected disabled title="The order is already pending."
-									@endif>Pending</option>
-								<option value = "C" @if($brokerage_header[0]->statusType == 'C')
-									selected disabled title="The order is already cancelled."
-									@endif>Cancelled</option>
-										<option value = "F" @if($brokerage_header[0]->statusType == 'F')
-											selected disabled title="The order is already finished."
-											@endif
-										>Finished</option>
+								<option value = "P">Pending</option>
+								<option value = "C">Cancelled</option>
+
+								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
+
+								<option value = "F" >Finished</option>
 
 							</select>
 						</div>
@@ -388,14 +536,59 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<form class="form-horizontal" role="form">
-					{{ csrf_field() }}
-						<button type="button" class="btn btn-success" data-dismiss="modal" id = "StatusUpdate">Save</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				</form>
+				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
+	</div>
+</div>
 
+<div class="modal fade" id="confirm-create" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Create Bill
+			</div>
+			<div class="modal-body">
+				Confirm Creating new Bill
+			</div>
+			<div class="modal-footer">
+
+				<button class = "btn btn-success confirm-create-bill">Confirm</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="deposit_modal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				New Deposit
+			</div>
+			<div class="modal-body">
+				<div class = "form-horizontal">
+					<div class = "form-group">
+						<label class="col-md-12">Amount</label>
+						<div class = "col-md-12">
+							<input type="number" class = "form-control" id = "deposit" required />
+						</div>
+					</div>
+					<div class = "form-group">
+						<label class= "col-md-12">Description</label>
+						<div class="col-md-12">
+							<textarea class = "form-control" id = "description" required></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -414,9 +607,253 @@
 @push('scripts')
 <script type = "text/javascript">
 
+var bill_rev_amount = [];
+var bill_exp_amount = [];
+
+var bill_rev_amount = <?php echo json_encode($bill_revs) ?>;
+var chargeAmount = 0;
+var isBrokerageFee = 0;
+var BrokerageFeeId = 0;
+var brokerage_fees;
+
+$(document).on('click', '.new_deposit', function(e){
+	e.preventDefault();
+	$('#deposit_modal').modal('show');
+})
+
+$(document).on('click', '.new_revenue_bill', function(e){
+	e.preventDefault();
+	$('#confirm-create').modal('show');
+	create_bill = 1;
+})
+
+$(document).on('click', '.new_expense_bill', function(e){
+	e.preventDefault();
+	$('#confirm-create').modal('show');
+	create_bill = 0;
+})
+
+$(document).on('click', '.new_expense ', function(e){
+	e.preventDefault();
+	$('#expModal').modal('show');
+})
+
+$(document).on('click', '.new_revenue', function(e){
+	e.preventDefault();
+	$('#revModal').modal('show');
+})
+
+$(document).on('click', '.confirm-create-deposit', function(e){
+	e.preventDefault();
+	$.ajax({
+		type : 'POST',
+		url : "{{ route('cdeposit.index') }}",
+		data : {
+			'_token' : $('input[name=_token]').val(),
+			'amount' : $('#deposit').val(),
+			'description' : $('#description').val(),
+			'consignees_id' : " {{ $brokerage_header[0]->consigneeid }}",
+		},
+		success : function (data){
+			console.log(data);
+			window.location.reload();
+		}
+	})
+})
+
+$(document).on('click', '.confirm-create-bill', function(e){
+	e.preventDefault();
+
+	switch(create_bill){
+		case 0 :
+		$.ajax({
+
+			type: 'POST',
+			url: '{{ route("create_br_billing_header") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'isRevenue' : create_bill,
+				'br_so_id' : '{{ $brokerage_header[0]->id }}',
+			},
+			success: function(data){
+				window.location.reload();
+			}
+		})
+		break;
+
+		case 1 :
+		$.ajax({
+
+			type: 'POST',
+			url: '{{ route("create_br_billing_header") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'isRevenue' : create_bill,
+				'br_so_id' : '{{ $brokerage_header[0]->id }}',
+			},
+			success: function(data){
+				window.location.reload();
+			}
+		})
+		break
+	}
+})
+
+@if($brokerage_header[0]->bi_head_id_exp != null)
+$(document).on('click', '.finalize-exp', function(e){
+	$.ajax({
+		method: 'POST',
+		url: "{{ route('postBrokerageRefundable') }}",
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'charge_id' : $('#exp_bill_id').val(),
+			'description' : $('#exp_description').val(),
+			'amount' : $('#exp_amount').val(),
+			'bi_head_id' : '{{ $brokerage_header[0]->bi_head_id_exp }}',
+		},
+		success: function (data){
+			location.reload();
+		}
+	})
+})
+@endif
+
+@if($brokerage_header[0]->bi_head_id_rev != null)
+$(document).on('click', '.finalize-rev', function(e){
+
+	$.ajax({
+		method: 'POST',
+		url: "{{ route('post_brokerage_payables') }}",
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'isBrokerageFee' : ''+isBrokerageFee,
+			'declaration_id' : ''+BrokerageFeeId,
+			'charge_id' : $('#rev_bill_id').val(),
+			'description' : $('#rev_description').val(),
+			'amount' : document.getElementById("rev_amount").value,
+			'bi_head_id' : '{{ $brokerage_header[0]->bi_head_id_rev }}',
+		},
+		success: function (data){
+			isBrokerageFee = 0;
+			location.reload();
+		}
+	})
+})
+@endif
+
 $('#newDutiesAndTaxes').on('click', function(e){
 	window.location.replace('{{route("brokerage.index")}}/{{ $brokerage_id}}/create_dutiesandtaxes');
 });
+
+$(document).on('change', '#rev_bill_id', function(e){
+	document.getElementById("rev_amount").value = "";
+	revID = $('#rev_bill_id').val();
+	if($('#rev_bill_id').val() != 0){
+		var e = document.getElementById("rev_bill_id");
+		var strUser = e.options[e.selectedIndex].text;
+		var brokerage_fees_rows = "";
+		isBrokerageFee = 0;
+		if(strUser == "Brokerage Fee"){
+			$.ajax({
+				type: 'GET',
+				url: '{{ route("getBrokerageFees")}}/{{ $brokerage_id }}',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'br_so_id' : '{{ $brokerage_id }}',
+				},
+				success: function(data){
+
+
+					for(var i = 0; i < data.length; i++){
+						brokerage_fees_rows += "<tr><td style = 'text-align: center;	'>"  + data[i].id + "</td><td>" +
+						"<input type = 'number' style = 'text-align: right;' class = 'form-control' value = '" + data[i].amount + "' /></td><td>" +
+						"<button class = 'btn btn-md btn-primary ' onclick = '+	document.getElementById('rev_amoun').value ='+data[i].brokerageFee+';+'>+</button>";
+					}
+					$('#brokerage_fees_table > tbody').html("");
+					$('#brokerage_fees_table > tbody').append(brokerage_fees_rows);
+
+				}
+			})
+
+
+		}
+	}
+	if($('#rev_bill_id').val() != 0 &&  strUser != "Brokerage Fee")
+	{
+		$.ajax({
+			type: 'GET',
+			url: '{{ route("getCharges") }}/{{ $brokerage_id }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'charge_id' : $('#rev_bill_id').val(),
+			},
+			success: function(data){
+				document.getElementById("rev_amount").value = parseFloat(data[0].amount).toFixed(2);
+					}
+		})
+	}
+	if($('#rev_bill_id').val() == 0 )
+	{
+		document.getElementById("rev_amount").value = 0.00;
+		chargeAmount = 0.00;
+	}
+	else
+	{
+
+	}
+
+
+})
+
+$(document).on('change', '#exp_bill_id', function(e){
+	document.getElementById("exp_amount").value = "";
+	revID = $('#exp_bill_id').val();
+	if($('#exp_bill_id').val() != 0 )
+	{
+		$.ajax({
+
+			type: 'GET',
+			url: '{{ route("getCharges") }}/{{ $brokerage_id }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'charge_id' : $('#exp_bill_id').val(),
+			},
+			success: function(data){
+				document.getElementById("exp_amount").value = parseFloat(data[0].amount).toFixed(2);
+					}
+		})
+	}
+	if($('#rev_bill_id').val() == 0 )
+	{
+		document.getElementById("exp_amount").value = 0.00;
+		chargeAmount = 0.00;
+	}
+	else
+	{
+
+	}
+
+
+})
+
+@if($brokerage_header[0]->bi_head_id_rev != null)
+var delivery_table = $('#revenues_table').DataTable({
+	processing: false,
+	deferRender: true,
+	serverSide: false,
+	scrollX: true,
+	ajax: '{{ route("getBrokerageBillingDetails") }}/{{  $brokerage_id }}',
+	columns: [
+
+	{ data: 'name' },
+	{ data: 'description' },
+	{ data: 'amount'},
+
+	],	"order": [[ 0, "desc" ]],
+});
+@endif
+
+
 
 $(document).ready(function(){
   var dutiesandtaxes_table = $('#dutiesandtaxes_table').DataTable({
@@ -434,10 +871,26 @@ $(document).ready(function(){
 
     ],	"order": [[ 0, "desc" ]],
   });
+
+	@if($brokerage_header[0]->bi_head_id_exp != null)
+	var delivery_table = $('#expense_table').DataTable({
+		processing: false,
+		deferRender: true,
+		serverSide: false,
+		scrollX: true,
+		ajax: '{{ route("getBrokerageRefundableDetails") }}/{{ $brokerage_id }}',
+		columns: [
+
+		{ data: 'name' },
+		{ data: 'description' },
+		{ data: 'amount'},
+
+		],	"order": [[ 0, "desc" ]],
+	});
+	@endif
 })
 
 $('#StatusUpdate').on('click', function(e){
-
 
 	$.ajax({
 		type: 'PATCH',

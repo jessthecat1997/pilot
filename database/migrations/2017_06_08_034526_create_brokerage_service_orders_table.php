@@ -28,6 +28,7 @@ class CreateBrokerageServiceOrdersTable extends Migration
         $table->integer('bi_head_id_rev')->unsigned()->nullable();
         $table->integer('bi_head_id_exp')->unsigned()->nullable();
         $table->timestamps();
+        $table->softDeletes();
 
         $table->foreign('consigneeSODetails_id')-> references('id')->on('consignee_service_order_details');
         $table->foreign('location_id')->references('id')->on('locations');

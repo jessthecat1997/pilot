@@ -72,7 +72,7 @@
 							<td class="active">
 								<strong>Estimated Delivery Fee: </strong>
 							</td>
-							
+
 							<td class="success" colspan="2">
 								<strong>Php {{ number_format((float)$estimate, 3, '.', '') }}</strong>
 							</td>
@@ -136,7 +136,7 @@
 							</td>
 						</tr>
 					</thead>
-				</table> 
+				</table>
 			</div>
 		</div>
 	</div>
@@ -344,7 +344,7 @@
 									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
 										<option value = "0">Select Charges</option>
 										@forelse($bill_revs as $rev)
-										<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
+										<option value = "{{ $rev->id }}" onclick = "alert('hey');">{{ $rev->name }}</option>
 
 										@empty
 
@@ -471,7 +471,7 @@
 					{{ csrf_field() }}
 					<div class="form-group required">
 						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
-						<div class="col-sm-8"> 
+						<div class="col-sm-8">
 							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
 								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
@@ -482,13 +482,13 @@
 					<div class = "collapse delivery_remarks_collapse fade">
 						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryCancel">Date Cancelled</label>
-							<div class="col-sm-8"> 
+							<div class="col-sm-8">
 								<input type = "date" class = "form-control" name = "deliveryCancel" id = "deliveryCancel" />
 							</div>
 						</div>
 						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
-							<div class="col-sm-8"> 
+							<div class="col-sm-8">
 								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
 							</div>
 						</div>
@@ -513,11 +513,11 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Trucking Information</h4>
 			</div>
-			<div class="modal-body">	
+			<div class="modal-body">
 				<div class = "form-horizontal">
 					<div class="form-group">
 						<label class="control-label col-sm-3" for="_status">Status</label>
-						<div class="col-sm-8"> 
+						<div class="col-sm-8">
 							<select name = "_status" id = "_status" class = "form-control">
 								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
@@ -586,7 +586,7 @@
 				}
 			})
 		})
-		
+
 		$(document).on('click', '.new_deposit', function(e){
 			e.preventDefault();
 			$('#deposit_modal').modal('show');
@@ -631,7 +631,7 @@
 				}
 			})
 		})
-		@endif
+		rev@endif
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
@@ -658,12 +658,12 @@
 						}
 					})
 
-					break;					
+					break;
 				}
 			}
 			else
 			{
-				
+
 			}
 		})
 
@@ -695,7 +695,7 @@
 			{ data: 'name' },
 			{ data: 'description' },
 			{ data: 'amount'},
-			
+
 			],	"order": [[ 0, "desc" ]],
 		});
 		@endif
@@ -712,7 +712,7 @@
 			{ data: 'name' },
 			{ data: 'description' },
 			{ data: 'amount'},
-			
+
 			],	"order": [[ 0, "desc" ]],
 		});
 		@endif
@@ -721,7 +721,7 @@
 			e.preventDefault();
 
 			switch(create_bill){
-				case 0 : 
+				case 0 :
 				$.ajax({
 
 					type: 'POST',
@@ -812,12 +812,12 @@
 				break;
 				case 'F' : $('#_status > option:eq(2)').attr('selected', 'true');
 				break;
-				
+
 			}
 		})
 		$(document).on('click', '.new-delivery', function(e){
 			e.preventDefault();
-			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/create";	
+			window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/create";
 		})
 
 		$(document).on('click', '.save-trucking-information', function(e){
@@ -923,7 +923,7 @@
 
 		$(document).on('click', '.woadd-new-detail', function(e){
 			e.preventDefault();
-			
+
 			if(validateDetail() === true){
 				$('#wodetail_table:last-child').append(wodetail_row);
 			}
@@ -962,7 +962,7 @@
 				}
 			})
 		})
-		
+
 		$(document).on('click', '.save-delivery-information', function(e){
 			$.ajax({
 				type: 'PUT',
@@ -973,13 +973,13 @@
 					'remarks' : $('#deliveryRemarks').val(),
 					'cancelDateTime' : $('#deliveryCancel').val(),
 					'delivery_head_id' : selected_delivery,
-					
+
 				},
 				success: function(data){
 					delivery_table.ajax.reload();
 					$('#deliveryModal').modal('hide');
 					window.location.reload();
-				}	
+				}
 			})
 		})
 
@@ -1062,7 +1062,7 @@
 				con_supp = document.getElementsByName(name + '_supplier');
 
 				for (var j = 0; j < table_detail_row_count; j++) {
-					
+
 					child[0].details.push({
 						descriptionOfGood : con_descrp[j].value,
 						grossWeight : con_gw[j].value,
