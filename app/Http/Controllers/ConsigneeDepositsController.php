@@ -47,6 +47,8 @@ class ConsigneeDepositsController extends Controller
         ->where('consignees_id', '=', $request->id)
         ->get();
 
+        return $deposits;
+    }
     public function view_deposit(Request $request)
     {
       $deposits = DB::table('consignee_deposits')
@@ -55,29 +57,29 @@ class ConsigneeDepositsController extends Controller
       ->get();
 
       return Datatables::of($deposits)
-  		->make(true);
-    }
+      ->make(true);
+  }
 
-    public function show($id)
-    {
+  public function show($id)
+  {
         //
-    }
+  }
 
 
-    public function edit($id)
-    {
+  public function edit($id)
+  {
         //
-    }
+  }
 
 
-    public function update(Request $request, $id)
-    {
+  public function update(Request $request, $id)
+  {
         //
-    }
+  }
 
 
-    public function destroy($id)
-    {
+  public function destroy($id)
+  {
         //
-    }
+  }
 }

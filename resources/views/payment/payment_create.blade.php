@@ -264,7 +264,7 @@
 				<h4 class="modal-title">New Deposit Payment</h4>
 			</div>
 			<div class="modal-body">
-				<form class = "form-horizontal" onsubmit="this.preventDefault();">
+				<form class = "form-horizontal">
 					<div class = "form-group">
 						<label class = "col-md-5 control-label pull-left">Remaining Balance: </label>
 						<label class="col-md-7 control-label pull-left" id = "remain_balance" style="text-align: left;"></label>
