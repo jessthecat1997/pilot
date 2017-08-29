@@ -152,6 +152,9 @@
 							<td style="width: 40%;">
 								Remarks
 							</td>
+							<td>
+								Action
+							</td>
 						</tr>
 					</thead>
 				</table>
@@ -336,7 +339,8 @@
 			{ data: 'created_at'},
 			{ data: 'record' },
 			{ data: 'amount' },
-			{ data: 'description'}
+			{ data: 'description'},
+			{data : 'action'}
 			]
 		})
 		var p_table = $('#bills_table').DataTable({
