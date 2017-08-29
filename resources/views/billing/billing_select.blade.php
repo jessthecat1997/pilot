@@ -49,7 +49,7 @@
 							</div>
 						</div>
 					</div>
-					<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
+					<button class="btn but col-sm-4 pull-right new_bill_modal" data-toggle="modal" data-target="#billModal">Create Bill</button>
 				</div>
 			</form>
 		</div>
@@ -117,7 +117,7 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but save-header">Save</a>
+				<button class="btn but save-header">Save</button>
 			</div>
 		</div>
 	</div>
@@ -198,7 +198,9 @@
 	console.log('{{ route('history.data',$so_head_id) }}/{{ $so_head_id }}');
 	var data;
 	$(document).ready(function(){
-
+		$(document).on('click', '.new_bill_modal', function(e){
+			e.preventDefault();
+		})
 		var hist_table = $('#hist_table').DataTable({
 			processing: true,
 			serverSide: true,
@@ -224,7 +226,7 @@
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
-			url: 'billing_header.store',
+			url: '{{ route("billing_header.index") }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $bills[0]->id }},

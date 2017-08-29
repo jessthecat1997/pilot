@@ -62,7 +62,7 @@ class PaymentsController extends Controller
 			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
 			pay.totpay,
-			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - (pay.totpay + dpay.totdpay) AS balance,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
             dpay.totdpay
