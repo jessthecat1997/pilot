@@ -249,8 +249,10 @@ Route::put('/billing/{id}/void', 'BillingDetailsController@void_bill')->name('vo
 Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
 
 //Deposits
-Route::resource('cdeposit', 'ConsigneeDepositsController');
+Route::resource('/cdeposit', 'ConsigneeDepositsController');
 Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
+
+Route::resource('/dpayment', 'DepositPaymentsController');
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
