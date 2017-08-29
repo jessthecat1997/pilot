@@ -132,7 +132,10 @@
 			</div>
 		</div>
 	</div>
-	<br />
+	<button  class="btn btn-success payment-receipt col-sm-4 pull-right">Generate Receipt</button>
+	<br/>
+	<br/>
+	<br/>
 	<div class="row">
 		<div class="panel-default col-sm-12">
 			<div class="panel-heading" id="heading">Payment History</div>

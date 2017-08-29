@@ -326,7 +326,6 @@ class BillingDetailsController extends Controller
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status
 
-
 			FROM billing_invoice_headers t LEFT JOIN
 			(
 			SELECT bi_head_id, SUM(amount) total
@@ -336,7 +335,9 @@ class BillingDetailsController extends Controller
 
 			ON t.id = p.bi_head_id
 			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
-			JOIN consignees AS C on B.consignees_id = C.id');
+			JOIN consignees AS C on B.consignees_id = C.id
+			WHERE t.isVoid = 0;
+			');
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
