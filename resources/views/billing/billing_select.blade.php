@@ -205,8 +205,8 @@
 			e.preventDefault();
 		})
 		var hist_table = $('#hist_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
 			ajax: "{{ route('history.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
