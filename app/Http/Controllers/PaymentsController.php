@@ -111,6 +111,10 @@ class PaymentsController extends Controller
 			', [$id, $id]
 			);
 		return Datatables::of($history)
+		->addColumn('action', function ($hist) {
+			return
+			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info payment_receipt"><i class="fa fa-print"></i></a>';
+		})
 		->make(true);
 	}
 	public function bills_table(Request $request, $id)
