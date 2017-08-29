@@ -132,7 +132,10 @@
 			</div>
 		</div>
 	</div>
-	<br />
+	<button  class="btn btn-success payment-receipt col-sm-4 pull-right">Generate Receipt</button>
+	<br/>
+	<br/>
+	<br/>
 	<div class="row">
 		<div class="panel-default col-sm-12">
 			<div class="panel-heading" id="heading">Payment History</div>
@@ -313,11 +316,11 @@
 	0
 	@else
 	@if($total[0]->totpay == null && $total[0]->totdpay != null)
-		{{ ( $total[0]->totall - $total[0]->totdpay )}}
+	{{ ( $total[0]->totall - $total[0]->totdpay )}}
 	@elseif($total[0]->totpay != null && $total[0]->totdpay == null)
-		{{ ( $total[0]->totall - $total[0]->totpay )}}
+	{{ ( $total[0]->totall - $total[0]->totpay )}}
 	@else
-		{{ $total[0]->balance }}
+	{{ $total[0]->balance }}
 	@endif
 	{{ $total[0]->totall }}
 	@endif ;
