@@ -349,24 +349,26 @@
 		</div>
 	</div>
 </div>
-<div id="revModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Payable</h4>
-			</div>
-			<div class = "modal-body">
-				<div class = "col-md-12">
-					<div class="form-horizontal">
-						<div class = "col-md-6">
-							<div class = "form-group">
-								<label class = "control-label col-md-3">Name *</label>
-								<div class = "col-md-9">
-									<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
-										<option value = "0">Select Charges</option>
-										@forelse($bill_revs as $rev)
-										<option value = "{{ $rev->id }}" onclick = "alert('hey');">{{ $rev->name }}</option>
+<form>
+	<div id="revModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">New Payable</h4>
+				</div>
+				<div class = "modal-body">
+					<div class = "col-md-12">
+						<div class="form-horizontal">
+							<div class = "col-md-6">
+								<div class = "form-group">
+
+									<label class = "control-label col-md-3">Name *</label>
+									<div class = "col-md-9">
+										<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
+											<option value = "0">Select Charges</option>
+											@forelse($bill_revs as $rev)
+											<option value = "{{ $rev->id }}" onclick = "alert('hey');">{{ $rev->name }}</option>
 
 											@empty
 
@@ -595,6 +597,7 @@
 
 		var selected_delivery = null;
 
+		$('#collapse1').addClass('in');
 		$('#deposits_table').DataTable({
 			serverSide: false,
 			processing: false,
@@ -675,7 +678,7 @@
 				})
 			}
 		})
-		rev@endif
+		@endif
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
@@ -739,7 +742,6 @@
 			{ data: 'name' },
 			{ data: 'amount'},
 			{ data: 'description' },
-			{ data: 'amount'},
 
 			],	"order": [[ 0, "desc" ]],
 		});
@@ -757,7 +759,6 @@
 			{ data: 'name' },
 			{ data: 'amount'},
 			{ data: 'description' },
-			{ data: 'amount'},
 
 			],	"order": [[ 0, "desc" ]],
 		});

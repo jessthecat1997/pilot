@@ -221,7 +221,7 @@ Route::resource('/orders', 'OrdersController');
 //Payments
 Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
-Route::get('/payment/{payment_id}/show_pdf', 'PaymentsController@payment_pdf');
+Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->name('payment_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 
@@ -245,12 +245,14 @@ Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
-Route::put('/billing/{id}/void', 'BillingDetailsController@void_bill')->name('void_bill');
+Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
 Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
 
 //Deposits
-Route::resource('cdeposit', 'ConsigneeDepositsController');
-Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@getConsigneeDeposits')->name('depositView');
+Route::resource('/cdeposit', 'ConsigneeDepositsController');
+Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
+
+Route::resource('/dpayment', 'DepositPaymentsController');
 //Trucking Bills
 Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');

@@ -196,14 +196,17 @@
 	$('#collapse1').addClass('in');
 	console.log('{{ $so_head_id }}')
 	console.log('{{ route('history.data',$so_head_id) }}/{{ $so_head_id }}');
+
+	var void_id = null;
+	var update_id = null;
 	var data;
 	$(document).ready(function(){
 		$(document).on('click', '.new_bill_modal', function(e){
 			e.preventDefault();
 		})
 		var hist_table = $('#hist_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
 			ajax: "{{ route('history.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
@@ -223,10 +226,20 @@
 		} 
 
 	})
+
+	$(document).on('click', '.updateBill', function(e){
+		e.preventDefault();
+		update_id = $(this).val();
+	})
+
+	$(document).on('click', '.voidBill', function(e){
+		e.preventDefault();
+		void_id = $(this).val();
+	})
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
-			url: '{{ route("billing_header.index") }}',
+			url: '/postHeader',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $bills[0]->id }},
@@ -248,8 +261,10 @@
 			url: '{{ route("billing_header.update", $so_head_id) }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
+				'vatRate' : $('#update_vat').val(),
 				'date_billed' : $('#update_billed').val(),
-				'due_date' : $('#updue_date').val()
+				'due_date' : $('#updue_date').val(),
+				'bi_head' : update_id,
 			},
 			success: function (data){
 				location.reload();
@@ -260,9 +275,10 @@
 	$(document).on('click', '.void-header', function(e){
 		$.ajax({
 			method: 'PUT',
-			url: '{{ route("void_bill",$so_head_id) }}',
+			url: '{{ route("void_bill") }}/{{ $so_head_id }}' ,
 			data: {
 				'_token' : $('input[name=_token]').val(),
+				'bi_head' : void_id,
 				'isVoid' : 1
 			},
 			success: function (data){

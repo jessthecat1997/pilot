@@ -62,7 +62,7 @@ class PaymentsController extends Controller
 			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
 			pay.totpay,
-			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - (pay.totpay + dpay.totdpay) AS balance,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
             dpay.totdpay
@@ -103,14 +103,18 @@ class PaymentsController extends Controller
 	public function payments_table(Request $request, $id)
 	{
 		$history = DB::select(
-			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description FROM payments as p  WHERE p.bi_head_id = ? 
+			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description, p.id as id FROM payments as p  WHERE p.bi_head_id = ? 
 			UNION 
 			(
-			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description FROM deposit_payments as dp WHERE dp.bi_head_id = ?
+			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description, dp.id as id FROM deposit_payments as dp WHERE dp.bi_head_id = ?
 			)
 			', [$id, $id]
 			);
 		return Datatables::of($history)
+		->addColumn('action', function ($hist) {
+			return
+			'<a href = "'. route('payment_receipt'). "/". $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info payment_receipt"><i class="fa fa-print"></i></a>';
+		})
 		->make(true);
 	}
 	public function bills_table(Request $request, $id)
