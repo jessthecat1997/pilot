@@ -559,7 +559,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Trucking Information</h4>
+				<h4 class="modal-title">Brokerage Information</h4>
 			</div>
 			<div class="modal-body">
 				<div class = "form-horizontal">
@@ -569,10 +569,8 @@
 							<select name = "_status" id = "_status" class = "form-control">
 								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
+								<option value = "F" disabled title="Unable to update.">Finished</option>
 
-								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
-
-								<option value = "F" >Finished</option>
 
 							</select>
 						</div>

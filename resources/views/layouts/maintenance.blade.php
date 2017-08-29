@@ -232,13 +232,12 @@
     <script src="/js/app.js"></script>
     <script type="text/javascript" src = "/js/jquery.validate.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script> 
+    <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
     <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
     <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
     <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
     <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
-
     <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
@@ -256,35 +255,35 @@
             $("#wrapper").toggleClass("toggled");
         });
 
-        $('.money_er').inputmask("numeric", { 
-            radixPoint: ".", 
-            groupSeparator: ",", 
-            digits: 7, 
-            autoGroup: true, 
-            rightAlign: true, 
+        $('.money_er').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 7,
+            autoGroup: true,
+            rightAlign: true,
 
 
-        }); 
+        });
 
-         $('.money').inputmask("numeric", { 
-        radixPoint: ".", 
-        groupSeparator: ",", 
-        digits: 2, 
-        autoGroup: true, 
-        rightAlign: true, 
-        removeMaskOnSubmit:true, 
-    }); 
- 
- 
+         $('.money').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+    });
+
+
     function formatNumber(n) { 
-        var currency = "Php "; 
-        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-    } 
- 
-    function formatNumber_s(n) { 
-        var currency = "$ "; 
-        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
-    } 
+        var currency = "Php ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+
+    function formatNumber_s(n) {
+        var currency = "$ ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
     </script>
     @stack('scripts')
 </body>
