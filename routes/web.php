@@ -245,7 +245,7 @@ Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
-Route::put('/billing/{id}/void', 'BillingDetailsController@void_bill')->name('void_bill');
+Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
 Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
 
 //Deposits

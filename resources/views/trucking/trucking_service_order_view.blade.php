@@ -739,7 +739,6 @@
 			{ data: 'name' },
 			{ data: 'amount'},
 			{ data: 'description' },
-			{ data: 'amount'},
 
 			],	"order": [[ 0, "desc" ]],
 		});
@@ -757,7 +756,6 @@
 			{ data: 'name' },
 			{ data: 'amount'},
 			{ data: 'description' },
-			{ data: 'amount'},
 
 			],	"order": [[ 0, "desc" ]],
 		});

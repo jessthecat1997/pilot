@@ -46,7 +46,16 @@ class BillingDetailsController extends Controller
 
 		return $charge;
 	}
+	public function getBillingDetails(Request $request){ 
+		$billing_details = DB::table('billing_invoice_details') 
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount') 
+		->join('charges', 'charge_id', '=', 'charges.id') 
+		->where('bi_head_id', '=', $request->id) 
+		->get(); 
 
+		return Datatables::of($billing_details)
+		->make(true);
+	}
 	public function postTruckingPayable(Request $request){
 		$new_bill_detail = new \App\BillingInvoiceDetails;
 		$new_bill_detail->description = $request->description;
@@ -113,11 +122,11 @@ class BillingDetailsController extends Controller
 
 		$id = $request->id;
 		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
-		FROM brokerage_service_orders br_so
-		INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
-		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
-		INNER JOIN charges charge ON charge.id = bl_det.charge_id
-		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
+			FROM brokerage_service_orders br_so
+			INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
+			LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+			INNER JOIN charges charge ON charge.id = bl_det.charge_id
+			WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -127,11 +136,11 @@ class BillingDetailsController extends Controller
 
 		$id = $request->id;
 		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
-		FROM brokerage_service_orders br_so
-		INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
-		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
-		INNER JOIN charges charge ON charge.id = bl_det.charge_id
-		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
+			FROM brokerage_service_orders br_so
+			INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
+			LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+			INNER JOIN charges charge ON charge.id = bl_det.charge_id
+			WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -366,22 +375,22 @@ class BillingDetailsController extends Controller
 
 	public function getBrokerageFees(Request $request)
 	{
-			$brokerage = DB::table('duties_and_taxes_headers')
-			->select('duties_and_taxes_headers.id', 'id', 'brokerageFee')
-			->where('brokerageServiceOrders_id', '=', $request->br_so_id)
-			->get();
+		$brokerage = DB::table('duties_and_taxes_headers')
+		->select('duties_and_taxes_headers.id', 'id', 'brokerageFee')
+		->where('brokerageServiceOrders_id', '=', $request->br_so_id)
+		->get();
 
-			return $brokerage;
+		return $brokerage;
 	}
 
 	public function getBrokerageCharges(Request $request)
 	{
-			$charges = DB::table('charges')
-			->select('amount', 'id')
-			->where('id', '=', $request->charge_id)
-			->get();
+		$charges = DB::table('charges')
+		->select('amount', 'id')
+		->where('id', '=', $request->charge_id)
+		->get();
 
-			return $charges;
+		return $charges;
 	}
 
 	public function billing_history(Request $request)
@@ -399,7 +408,7 @@ class BillingDetailsController extends Controller
 			return
 			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal" data-target="#updateModal" value="'. $history->id .'"><i class="fa fa-edit"></i></button>'.
 			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv"><i class="fa fa-plus"></i></a>'.
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger updateBill" data-toggle="modal" data-target="#voidModal" value="'. $history->id .'">Void</button>';
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger voidBill" data-toggle="modal" data-target="#voidModal" value="'. $history->id .'">Void</button>';
 
 		})
 		->make(true);
@@ -412,9 +421,9 @@ class BillingDetailsController extends Controller
 
 		return $finalize;
 	}
-	public function void_bill(Request $request, $id)
+	public function void_bill(Request $request)
 	{
-		$void = BillingInvoiceHeader::findOrFail($id);
+		$void = BillingInvoiceHeader::findOrFail($request->bi_head);
 		$void->isVoid = $request->isVoid;
 		$void->save();
 

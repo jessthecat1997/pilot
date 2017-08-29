@@ -44,9 +44,9 @@ class BillingInvoiceHeadersController extends Controller
 		$billing_header->due_date = $request->due_date;
 		$billing_header->save();
 	}
-	public function update(Request $request, $id)
+	public function update(Request $request)
 	{
-		$csh = BillingInvoiceHeader::findOrFail($id);
+		$csh = BillingInvoiceHeader::findOrFail($request->bi_head);
 		$csh->vatRate = $request->vatRate;
 		$csh->date_billed = $request->date_billed;
 		$csh->due_date = $request->due_date;
