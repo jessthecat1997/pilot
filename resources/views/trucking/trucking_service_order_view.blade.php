@@ -675,7 +675,7 @@
 				})
 			}
 		})
-		rev@endif
+		@endif
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
