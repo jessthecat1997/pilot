@@ -111,6 +111,10 @@ class PaymentsController extends Controller
 			', [$id, $id]
 			);
 		return Datatables::of($history)
+		->addColumn('action', function ($hist) {
+			return
+			swit
+		})
 		->make(true);
 	}
 	public function bills_table(Request $request, $id)
