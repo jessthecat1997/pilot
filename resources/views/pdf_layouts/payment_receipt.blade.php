@@ -25,8 +25,7 @@
 <body>
 	<div class="row">
 		<div class = "container">
-			<div style="float: left;">
-				<img src="{{ public_path() }}\images\pilotlogo.png"/>
+			<div>
 			</div>
 			<div style="margin-left: 200px;">
 				<br />
