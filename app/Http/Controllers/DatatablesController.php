@@ -262,7 +262,7 @@ class DatatablesController extends Controller
 			WHEN t.isRevenue = 1 THEN "Revenue"
 			WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,
-			CONCAT("Php ", p.total) as Total,
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
 
 
@@ -436,7 +436,7 @@ class DatatablesController extends Controller
 	}
 
 	public function bf_datatable(){
-		$bfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id GROUP BY h.id");
+		$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id");
 
 		return Datatables::of($bfs)
 		->addColumn('action', function ($bf){

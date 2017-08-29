@@ -632,8 +632,23 @@
 		var wodetail_row = '<tr id = "wodescription_row"><td width="35%"><input type = "text" name = "wodescriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "wogrossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "wosupplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
-		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button><button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate"/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>;';
-		@if($delivery[0]->withContainer == 1)var container_ctr = {{ count($container_with_detail) }} @endif;
+		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button> <button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate"/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>';
+		@if($delivery[0]->withContainer == 1) var container_ctr = {{ count($container_with_detail) }} @endif;
+
+		@if($delivery[0]->withContainer == 1)
+		@php
+		for($i = 0; $i < count($container_with_detail); $i++){
+			@endphp
+			console.log("{{ $container_with_detail[$i]['container']->containerVolume }}");
+			console.log($('select[name=containerVolume]').eq({{ $i }}).find("option").filter(function() {
+				return $(this).text() == "{{ $container_with_detail[$i]['container']->containerVolume }}"; 
+			}).prop('selected', true));
+
+			@php
+		}
+		@endphp
+		@endif
+
 		var container_array = [0];
 		var selected_container = 0;
 		var selected_location = 0;
@@ -653,39 +668,39 @@
 		fill_delivery_fee();
 		function fill_delivery_fee(){
 			$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
-				$.ajax({
-					type: 'GET',
-					url: '{{ route("get_area_rate") }}',
-					data: {
-						'area_from' : selected_from,
-						'area_to' : selected_to,
-						'consignee_id' : {{ $consignee[0]->id }}
-					},
-					success : function(data) {
-						if(data[1].length == 0){
-							$('#standard_rate').html('No set standard rate.');
-						}
-						else{
-							$('#standard_rate').html("Php " + data[1][0].amount);
-						}
-						if(data[0].length == 0){
-							$('#quotation_rate').html('No existing quotation rates');
-							$('#quotation_collapse').removeClass('in');
-						}
-						else
-						{
-							var quotation_rows = "";
-							for(var i = 0; i < data[0].length; i++)
-							{
-								console.log(data[0][i].from);
-								quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
-							}
-							console.log(quotation_rows);
-							$('#quotation_collapse').addClass('in');
-							$('#quotation_table > tbody').html(quotation_rows);
-						}
+			$.ajax({
+				type: 'GET',
+				url: '{{ route("get_area_rate") }}',
+				data: {
+					'area_from' : selected_from,
+					'area_to' : selected_to,
+					'consignee_id' : {{ $consignee[0]->id }}
+				},
+				success : function(data) {
+					if(data[1].length == 0){
+						$('#standard_rate').html('No set standard rate.');
 					}
-				})
+					else{
+						$('#standard_rate').html("Php " + data[1][0].amount);
+					}
+					if(data[0].length == 0){
+						$('#quotation_rate').html('No existing quotation rates');
+						$('#quotation_collapse').removeClass('in');
+					}
+					else
+					{
+						var quotation_rows = "";
+						for(var i = 0; i < data[0].length; i++)
+						{
+							console.log(data[0][i].from);
+							quotation_rows += "<tr><td>" + data[0][i].volume + "</td><td>Php " + data[0][i].amount + "</td></tr>";
+						}
+						console.log(quotation_rows);
+						$('#quotation_collapse').addClass('in');
+						$('#quotation_table > tbody').html(quotation_rows);
+					}
+				}
+			})
 		}
 		function fill_vehicle()
 		{
@@ -1187,7 +1202,7 @@
 					success : function(data) {
 						if(data[1].length == 0){
 							$('#standard_rate').html('No set standard rate.');
-				
+
 						}
 						else{
 							$('#standard_rate').html("Php " + data[1][0].amount);

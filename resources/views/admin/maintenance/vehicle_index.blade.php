@@ -28,7 +28,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "v_table">
+				<table class = "table-responsive table  table-striped" id = "v_table">
 					<thead>
 						<tr>
 							<td>
@@ -193,7 +193,8 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	var temp_plateNumber = null;
 	var temp_model = null;
@@ -244,41 +245,7 @@
 			},
 		});
 
-		$("#commentForm").validate({
-			rules: 
-			{
-				plateNumber:
-				{
-					required: true,
-				},
-				bodyType:
-				{
-					required: true,
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
-					maxlength: 50,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-
-				},
-				model:
-				{
-					required: true,
-					maxlength: 50,
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-
-				},
-
-
-			},
-			onkeyup: function(element) {$(element).valid()},
-		});
-
+	
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();

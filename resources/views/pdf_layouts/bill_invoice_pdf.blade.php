@@ -45,6 +45,7 @@
 				<small style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</small>
 			</div>
 			<hr />
+			@if($bills[0]->isRevenue == 1)
 			<h3><center>Billing Invoice</center></h3>
 			<table style="width: 100%; border: 1px solid black">
 				<tr>
@@ -160,6 +161,123 @@
 					</tr>
 				</tbody>
 			</table>
+			@else
+			<h3><center>Refundable Charges</center></h3>
+			<table style="width: 100%; border: 1px solid black">
+				<tr>
+					<td style="border:1px solid transparent; text-align: left;" width="20%">
+						<h4>Invoice No.:</h4>
+					</td>
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<h3>0{{ $number }}</h3>
+					</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid transparent;" width="20%">
+						BILLED TO:
+					</td>
+					<td style="border:1px solid transparent;  text-align: left;" width="30%">
+						<strong>
+							{{ $bills[0]->companyName }}
+						</strong>
+					</td>
+					<td style="border:1px solid transparent;" width="20%">
+						Date:
+					</td>
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<strong>
+							{{ Carbon\Carbon::parse($bills[0]->created_at)->toFormattedDateString() }}
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid transparent;" width="20%">
+						Address:
+					</td>
+					<td style="border:1px solid transparent;  text-align: left;" width="30%">
+						<strong>
+							{{ $bills[0]->address }}
+						</strong>
+					</td>
+					<td style="border:1px solid transparent;" width="20%">
+						Terms:
+					</td>
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<strong>
+							
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td style="border:1px solid transparent;" width="20%">
+						Business Style:
+					</td>
+					<td style="border:1px solid transparent;  text-align: left;" width="30%">
+						<strong>
+							{{ $bills[0]->businessStyle }}
+						</strong>
+					</td>
+					<td style="border:1px solid transparent;" width="20%">
+						TIN:
+					</td>
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<strong>
+							{{ $bills[0]->TIN }}
+						</strong>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<table style="border: 1px solid black; width: 100%;">
+				<thead>
+					<tr>
+						<th width="70%" style="text-align: center;">
+							<strong>P A R T I C U L A R S</span></strong>
+						</th>
+						<th width="30%" style="text-align: center;">
+							<strong>Amount</strong>
+						</th>					
+					</tr>
+				</thead>
+				<tbody>
+					@forelse($exp_bill as $pt)
+					<tr>
+						<td style="text-align: center;">
+							{{ $pt->name }}
+						</td>
+						<td style="text-align: right;">
+							Php {{ $pt->amount }}
+						</td>
+					</tr>
+					@empty
+					@endforelse
+					<tr>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: right">
+							<strong>{{ $exp_vat[0]->rates }}%&nbsp;VAT</strong>
+						</td>
+						<td style="text-align: right;">
+							Php&nbsp;{{ $exp_vat[0]->Total }}
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: right">
+							<strong>TOTAL</strong>
+						</td>
+						<td style="text-align: right;">
+							<h3>Php {{ $exp_total[0]->Total }}</h3>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			@endif
 			<br />
 			<br />
 			<strong>JAY CASTILLO, LCB/MCA.</strong>

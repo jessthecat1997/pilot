@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "lc_table">
+				<table class = "table-responsive table  table-striped" id = "lc_table">
 					<thead>
 						<tr>
 							<td>
@@ -31,12 +31,9 @@
 		</div>
 	</div>
 </div>
-</div>
-</div>
 <section class="content">
-
-	<form role="form" method = "POST" class="commentForm">
-		<div class="modal fade" id="lcModal" role="dialog">
+	<div class="modal fade" id="lcModal" role="dialog">
+		<form role="form" method = "POST" class="commentForm">
 			<div class="form-group">
 				<div class="modal-dialog ">
 					<div class="modal-content">
@@ -46,69 +43,29 @@
 						</div>
 						<div class="modal-body ">		
 							<div class="form-group required">
-								<label class="control-label " for="dateEffective">Province:</label>
-								<select name = "loc_province" id="loc_province" class = "form-control required select2_province">
-								</select>     
-							</div>
-
-							<div class = "form-group">
-								<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
-								<br>
-							</div>		
-						</form>
-						<br />
-						<div class = "collapse" id = "lc_table_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one city.
-							</div>
-						</div>
-						<div class = "collapse" id = "lc_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the cities.
-							</div>
-						</div>
-						<div class = "panel panel-default">
-							<div  style="overflow-x: auto;">
-								<div class = "panel-default">
-									{{ csrf_field() }}
-									<form id = "lc_form" class = "commentForm">
-										<table class="table responsive table-hover" width="100%" id= "lc_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
-											<thead>
-												<tr>
-													<td >
-														<div class="form-group required">
-															<label class = "control-label"><strong>City</strong></label>
-														</div>
-													</td>
-													<td  style="text-align: center;">
-														<strong>Action</strong>
-													</td>
-												</tr>
-											</thead>
-											<tr id = "lc-row">
-												<td width="90%">
-
-													<div class = "form-group " >
-														
-														<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" 
-														name = "city" id = "city" value=""  data-rule-required="true"   />
-													</div>
-
-												</td>
-												
-												<td style="text-align: center;">
-													<button class = "btn btn-danger btn-md delete-lc-row">x</button>
-												</td>
-											</tr>
-										</table>
-										<div class = "form-group" style = "margin-left:10px">
-											<button    class = "btn btn-primary btn-md new-lc-row pull-left">New City</button>
-											<br /><br />
-										</div>
+								<label class="control-label col-md-2" for="dateEffective">Province:</label>
+								<div class = "col-md-10">
+									<div class = "col-md-8">
+										<select name = "loc_province" id="loc_province" class = "form-control required select2_province" style="width: 100%;">
+										</select> 
+									</div>
+									<div class = "col-md-4">
+										<button  id = "new_province" class = "btn btn-sm btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal" style="width: 100%;" >New Province </button> 
 									</div>
 								</div>
 							</div>
-
+							<br />
+							<div class="form-group required">
+								<form id = "lc_form" class = "commentForm">
+									{{ csrf_field() }}
+									<label class = "control-label col-md-2"><strong>City</strong></label>
+									<div class = "col-md-9">			
+										<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" 
+										name = "city" id = "city" value=""  data-rule-required="true"   />
+									</div>
+								</form>
+							</div>
+							<br />
 						</div>
 						<div class="modal-footer">
 							<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>
@@ -118,9 +75,7 @@
 				</div>
 			</div>
 		</form>
-		<br />
 	</div>
-</div>
 </section>
 <section class="content">
 	<form role="form" method = "POST" id = "commentForm">
@@ -206,7 +161,7 @@
 		</div>
 	</form>
 </section>
-</div>
+
 
 @endsection
 @push('styles')
@@ -228,6 +183,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
+	$('#deliverycollapse').addClass('in');
+	$('#collapse2').addClass('in');
 	var city_id = [];
 	var city_id_descrp = [];
 	var arr_provinces =[
@@ -236,12 +193,11 @@
 	@empty
 	@endforelse
 	];
-	
+
 
 
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
-		$('#collapse1').addClass('in');
 		//$(city).attr("disabled", true);
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
@@ -254,18 +210,12 @@
 			{ data: 'province' },
 			{ data: 'city'},
 
-
-			
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "asc" ]],
 
 
 		});
-
-
-
-
 
 		$("#commentForm").validate({
 			rules: 
@@ -427,41 +377,39 @@
 						$('#name').val("");
 						$('.modal-title').text('New Province');
 
-					//Show success
-
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Record addded successfully")
 					}
-					toastr["success"]("Record addded successfully")
-				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
-	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-	    });
-					
-				}
-			},
-			
-		})
+					else{
+						resetErrors();
+						var invdata = JSON.parse(data);
+						$.each(invdata, function(i, v) {
+							console.log(i + " => " + v); 
+							var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+							$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+						});
+
+					}
+				},
+
+			})
 		});
 
 
@@ -507,23 +455,19 @@
 			e.preventDefault();
 
 			if(finalvalidatelcRows() === true){
-
-				console.log('cities: ' + city_id);
-				console.log('provinces_id: ' +  $('#loc_province').val());	
+				
 				$.ajax({
 
 					type: 'POST',
 					url:  '/admin/location_city',
 					data: {
 						'_token' : $('input[name=_token]').val(),
-						'name' : city_id,
+						'name' : $('#city').val(),
 						'provinces_id' : $('#loc_province').val(),
 
 					},
 
 					success: function (data){
-
-
 
 						lctable.ajax.reload();
 						$('#lcModal').modal('hide');

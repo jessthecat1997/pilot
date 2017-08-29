@@ -2,46 +2,53 @@
 @section('content')
 <h2>&nbsp;Billing</h2>
 <hr>
-<div class="row col-md-5">
-	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">Consignee Details</div>
+<div class="row col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h4>Consignee Details</h4></div>
 		<div class="panel-body">
-			<form class="inline">
-				<div class="form-group">
-					<label>Invoice No.:</label>
-					<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id">
-				</div>
-				<div class="form-group">
-					<label>Due Date:</label>
-					<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date">
-				</div>
-				<hr>
+			<div class="col-sm-6">
 				<div class="form-group">
 					<label>Consignee:</label>
-					<h5>{{ $bills[0]->companyName }}</h5>
+					<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
 				</div>
 				<div class="form-group">
 					<label>Address:</label>
-					<h5>{{ $bills[0]->address }}</h5>
+					<input type="text" class="det" value="{{ $bills[0]->address }}" id="address" disabled>
 				</div>
 				<div class="form-group">
 					<label>Service Order:</label>
-					<h5>{{ $bills[0]->name }}</h5>
+					<input type="text" class="det" value="{{ $bills[0]->name }}" id="sotype" disabled>
 				</div>
 				<div class="form-group">
 					<label>Status:</label>
-					@if($bills[0]->status = 'U')
-					<h5>Unpaid</h5>
+					@if($bills[0]->status == 'P')
+					<label class="label label-success" id="status">Paid</label>
 					@else
-					<h5>Paid</h5>
+					<label class="label label-danger" id="status">Not Paid</label>
 					@endif
 				</div>
-			</form>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Invoice No.:</label>
+					<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id" disabled>
+				</div>
+				<div class="form-group">
+					<label>Due Date:</label>
+					<input type="text" class="det" value="{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}" id="due_date" disabled>
+				</div>
+				<hr>
+				<div class="form-group">
+					<a href="/billing/{{ $so_head_id }}/show_pdf" class="btn but col-sm-4">Print Invoice</a>
+				</div>
+			</div>
 		</div>
 	</div>
-</div><div class="row col-md-7">
+</div>
+<div class="row col-lg-12		">
 	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Bills</div>
+		@if($bills[0]->isRevenue == 1)
+		<div class="panel-heading"><h4>List of Bills</h4></div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
@@ -98,13 +105,8 @@
 				</table>
 			</form>
 		</div>
-	</div>
-</div>
-<div class="row col-md-5">
-</div>
-<div class="row col-md-7">
-	<div class="panel-default panel">
-		<div class="panel-heading" id="heading">List of Refundable Charges</div>
+		@else
+		<div class="panel-heading"><h4>List of Refundable Charges</h4></div>
 		<div class = "panel-body">
 			<form class="form-inline">
 				{{ csrf_field() }}
@@ -161,8 +163,10 @@
 				</table>
 			</form>
 		</div>
+		@endif
 	</div>
 </div>
+
 @endsection
 @push('styles')
 <style>

@@ -111,7 +111,6 @@
 
 	$(document).ready(function(){
 
-		alert('here');
 		var ettable = $('#ch_table').DataTable({
 			processing: false,
 			serverSide: false,

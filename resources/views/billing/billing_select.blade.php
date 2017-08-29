@@ -8,48 +8,50 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		{{ csrf_field() }}
 		<div class="col-sm-12">
-			<div class="panel-heading" id="heading">Consignee Details</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="consignee">Company:</label>
+			<form>
+				{{ csrf_field() }}
+				<div class="panel-heading" id="heading">Consignee Details</div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="consignee">Company:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="consignee">{{ $bills[0]->companyName }}</label>
+							</div>
 						</div>
 					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="consignee">{{ $bills[0]->companyName }}</label>
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="address">Address:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="address">{{ $bills[0]->address }}</label>
+							</div>
 						</div>
 					</div>
+					<div class="col-sm-12">
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="sotype">Service Order:</label>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+								<label id="sotype">{{ $bills[0]->name }}</label>
+							</div>
+						</div>
+					</div>
+					<button class="btn but col-sm-4 pull-right new_bill_modal" data-toggle="modal" data-target="#billModal">Create Bill</button>
 				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="address">Address:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="address">{{ $bills[0]->address }}</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="sotype">Service Order:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label id="sotype">{{ $bills[0]->name }}</label>
-						</div>
-					</div>
-				</div>
-				<button class="btn but col-sm-4 pull-right" data-toggle="modal" data-target="#billModal">Create Bill</button>
-			</div>
+			</form>
 		</div>
 	</div>
 	<hr>
@@ -65,7 +67,7 @@
 								No.
 							</td>
 							<td>
-								Type
+								Status
 							</td>
 							<td>
 								Due Date
@@ -115,12 +117,69 @@
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
-				<a class="btn but save-header">Save</a>
+				<button class="btn but save-header">Save</button>
 			</div>
 		</div>
 	</div>
 </div>
-
+<div id="updateModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Update Billing Invoice</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-sm-12">
+					<form class="form-inline">
+						{{ csrf_field() }}
+						<div class="col-sm-3">
+							<div class="form-group">
+								<label for="vat">Vat Rate:*</label>
+								<input type="text" class="form-control" id="update_vat" value="{{ $vat[0]->rates }}">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="date_billed">Date Billed:*</label>
+								<input type="date" class="form-control" id="update_billed">
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="due_date">Due Date:*</label>
+								<input type="date" class="form-control" id="updue_date">
+							</div>
+						</div>
+					</form>
+				</div>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but update-header">Save</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="voidModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Void Billing Invoice</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					{{ csrf_field() }}
+					<strong>Are you to sure to void the billing invoice?</strong>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-success void-header">Confirm</a>
+			</div>
+		</div>
+	</div>
+</div>
 @endsection
 @push('styles')
 <style>
@@ -139,25 +198,35 @@
 	console.log('{{ route('history.data',$so_head_id) }}/{{ $so_head_id }}');
 	var data;
 	$(document).ready(function(){
-		console.log($('input[name=_token]').val());
-
+		$(document).on('click', '.new_bill_modal', function(e){
+			e.preventDefault();
+		})
 		var hist_table = $('#hist_table').DataTable({
 			processing: true,
 			serverSide: true,
 			ajax: "{{ route('history.data',$so_head_id) }}",
 			columns: [
 			{ data: 'id' },
-			{ data: 'isRevenue' },
+			{ data: 'isFinalize',
+			"render" : function( data, type, full ) {return formatWithBillType(data); }},
 			{ data: 'due_date' },
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})
+		function formatWithBillType(n) { 
+
+			if (n == 0){
+				return "Not Finalize";
+			}else{
+				return "Finalize";
+			}
+		} 
 
 	})
 	$(document).on('click', '.save-header', function(e){
 		$.ajax({
 			method: 'POST',
-			url: '{{ route("billing_header.store") }}',
+			url: '{{ route("billing_header.index") }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'so_head_id' : {{ $bills[0]->id }},
@@ -170,6 +239,37 @@
 				location.reload();
 			}
 		})
+	})
+	$(document).on('click', '.update-header', function(e){
+		console.log($('#update_billed').val());
+
+		$.ajax({
+			method: 'PUT',
+			url: '{{ route("billing_header.update", $so_head_id) }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'date_billed' : $('#update_billed').val(),
+				'due_date' : $('#updue_date').val()
+			},
+			success: function (data){
+				location.reload();
+			}
+		})
+
+	})
+	$(document).on('click', '.void-header', function(e){
+		$.ajax({
+			method: 'PUT',
+			url: '{{ route("void_bill",$so_head_id) }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'isVoid' : 1
+			},
+			success: function (data){
+				location.reload();
+			}
+		})
+
 	})
 </script>
 @endpush

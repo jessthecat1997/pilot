@@ -214,8 +214,8 @@ class TruckingsController extends Controller
         ->select('consignee_service_order_headers.id')
         ->where('B.id', '=', $request->tr_so_id)
         ->get();
-
         $vat = DB::select('SELECT rate FROM vat_rates where currentRate = 1');
+
         $billing_header = new \App\BillingInvoiceHeader;
         $billing_header->so_head_id = $consignee_order[0]->id;
         $billing_header->isRevenue = $request->isRevenue;
@@ -226,7 +226,7 @@ class TruckingsController extends Controller
         $billing_header->due_date = null;
         $billing_header->save();
 
-        $consignee_header = \App\TruckingServiceOrder::findOrFail($consignee_order[0]->id);
+        $consignee_header = \App\TruckingServiceOrder::findOrFail($request->tr_so_id);
         switch ($request->isRevenue) {
             case 0:
             $consignee_header->bi_head_id_exp = $billing_header->id;
@@ -241,6 +241,7 @@ class TruckingsController extends Controller
             break;
         }
         $consignee_header->save();
+
         return $consignee_header;
         
     }
@@ -309,9 +310,12 @@ class TruckingsController extends Controller
             ->where('status', '=', 'P')
             ->count();
 
+            $deposits = DB::table('consignee_deposits')
+            ->where('consignees_id', '=', $service_order_details[0]->id)
+            ->where('currentBalance', '>', 0)
+            ->get();
 
-
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate', 'deposits']));   
         }
         catch(ModelNotFoundException $e)
         {

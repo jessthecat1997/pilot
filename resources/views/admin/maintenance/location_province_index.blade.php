@@ -16,7 +16,7 @@
 			<div class = "col-md-10 col-md-offset-1">
 				<div class = "panel-default panel">
 					<div class = "panel-body">
-						<table class = "table-responsive table" id = "lp_table">
+						<table class = "table-responsive table  table-striped" id = "lp_table">
 							<thead>
 								<tr>
 									<td style="width: 40%;">
@@ -103,7 +103,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	$(document).ready(function(){
 		var lptable = $('#lp_table').DataTable({
@@ -128,10 +129,10 @@
 						minlength: 2,
 						maxlength: 50,
 						normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-					regex: /^[A-Za-z ]+$/,
+							value = value.replace("something", "new thing");
+							return $.trim(value)
+						},
+						regex: /^[A-Za-z ]+$/,
 
 					},
 
@@ -224,7 +225,7 @@
 			{
 				$.ajax({
 					type: 'POST',
-					url:  '/admin/location_city/new_province',
+					url:  '/admin/location_province',
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('input[name=name]').val(),
@@ -269,7 +270,7 @@
 					});
 					
 				}
-			},
+			}
 			
 		})
 			}

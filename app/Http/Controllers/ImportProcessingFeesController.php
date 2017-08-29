@@ -41,18 +41,29 @@ class ImportProcessingFeesController extends Controller
 
 	public function update(StoreIPFFee $request, $id)
 	{
+		\DB::table('import_processing_fee_details')
+		->where('ipf_headers_id','=', $request->ipf_head_id)
+		->delete();
+
 		$new_ipf= ImportProcessingFeeHeader::findOrFail($id);
 		$new_ipf->dateEffective = $request->dateEffective;
+		$new_ipf->save();
 
-		for($i = 0; $i < count($request->minimum); $i++){
-			$ipf_detail = ImportProcessingFeeDetail::findOrFail($id);
-			$ipf_detail->minimum = $request->minimum[$i];
-			$ipf_detail->maximum = $request->maximum[$i];
-			$ipf_detail->amount = $request->amount[$i];
+
+		$_minimum = json_decode(stripslashes($request->minimum), true);
+		$_maximum = json_decode(stripslashes($request->maximum), true);
+		$_amount = json_decode(stripslashes($request->amount), true);
+
+
+		for($x = 0; $x < count($_minimum); $x++)
+		{
+			$ipf_detail = new ImportProcessingFeeDetail;
+			$ipf_detail->ipf_headers_id = $new_ipf->id;
+			$ipf_detail->minimum = (string)$_minimum[$x];
+			$ipf_detail->maximum = (string)$_maximum[$x];
+			$ipf_detail->amount = (string)$_amount[$x];
 			$ipf_detail->save();
 		}
-		return $new_ipf;
-		return $ipf_detail;
 	}
 
 

@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "ch_table" style="text-align:left">
+				<table class = "table-responsive table  table-striped" id = "ch_table" style="text-align:left">
 					<thead>
 						<tr style="text-align:left">
 							<td style="width: 20%;">
@@ -120,7 +120,8 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
+	$('#deliverycollapse').addClass('in');
+    $('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;

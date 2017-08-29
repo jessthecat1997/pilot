@@ -85,7 +85,7 @@ Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
-
+Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
 
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
@@ -245,6 +245,8 @@ Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
 Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
 Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
+Route::put('/billing/{id}/void', 'BillingDetailsController@void_bill')->name('void_bill');
+Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
 
 //Deposits
 Route::resource('cdeposit', 'ConsigneeDepositsController');

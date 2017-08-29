@@ -196,7 +196,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-4" for="TIN">TIN:</label>
 											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="XXX-XXX-XXX-XXXXXX">
 											</div>
 										</div>
 
@@ -273,6 +273,8 @@
 			],
 
 		});
+
+		Inputmask(" 9{3}-9{3}-9{3}-9{5}").mask($("#TIN"));
 
 		$(document).on('change', '#phy_province', function(e){
 

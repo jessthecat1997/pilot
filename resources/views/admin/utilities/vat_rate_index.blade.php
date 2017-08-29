@@ -122,11 +122,14 @@
 
 <script type="text/javascript">
 	var data;
+	$('#collapse2').addClass('in');
+	$('#billingcollapse').addClass('in');
 	$(document).ready(function(){
 
 		var vrtable = $('#vr_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
 
@@ -274,7 +277,8 @@
 									"showMethod": "fadeIn",
 									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record added successfully")
+								toastr["success"]("Record added successfully");
+								window.location.reload();
 							}else{
 
 								resetErrors();
@@ -299,46 +303,47 @@
 				if($('#rate').valid() && $('#dateEffective').valid()){
 
 
-				$.ajax({
-					type: 'PUT',
-					url:  '{{ route("vat_rate.index") }}/' + data.id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'rate' : $('#rate').val(),
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'currentrate' : $('input[name=currentrate]').val(),
-					},
-					success: function (data)
-					{
+					$.ajax({
+						type: 'PUT',
+						url:  '{{ route("vat_rate.index") }}/' + data.id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'rate' : $('#rate').val(),
+							'dateEffective' : $('input[name=dateEffective]').val(),
+							'currentrate' : $('input[name=currentrate]').val(),
+						},
+						success: function (data)
+						{
 
 
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record updated successfully")
+
+							vrtable.ajax.reload();
+							$('#vrModal').modal('hide');
+							$('#rate').val("");
+							$('#dateEffective').val("");
+							$('.modal-title').text('New vr rate');
+							window.location.reload();
 						}
-						toastr["success"]("Record updated successfully")
-
-						vrtable.ajax.reload();
-						$('#vrModal').modal('hide');
-						$('#rate').val("");
-						$('#dateEffective').val("");
-						$('.modal-title').text('New vr rate');
-					}
-				})
+					})
 				}
 
 

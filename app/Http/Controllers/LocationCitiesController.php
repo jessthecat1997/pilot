@@ -22,14 +22,13 @@ class LocationCitiesController extends Controller
 
 	public function store(StoreLocationCities $request)
 	{
+		$new_city  = new \App\LocationCities;
+		$new_city->name = $request->name;
+		$new_city->provinces_id = $request->provinces_id;
 
-		for($i = 0; $i < count($request->name); $i++){
-			$city = new LocationCities;
-			$city->name = $request->name[$i];
-			$city->provinces_id = $request->provinces_id[$i];
-			$city->save();
-			return $city;
-		}
+		$new_city->save();
+
+		return $new_city;
 	}
 
 	public function update(StoreLocationCities $request, $id)
