@@ -258,9 +258,10 @@
 
 		$.ajax({
 			method: 'PUT',
-			url: '{{ route("billing.update", $so_head_id) }}',
+			url: '{{ route("billing_header.update", $so_head_id) }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
+				'vatRate' : $('#update_vat').val(),
 				'date_billed' : $('#update_billed').val(),
 				'due_date' : $('#updue_date').val(),
 				'bi_head' : update_id,
