@@ -34,7 +34,6 @@ class BrokerageController extends Controller
         ->select('id', 'rate', 'dateEffective')
         ->get();
 
-
         $row_count = count($exchange_rate);
         $dateEffective_temp = $current_date;
         $dateEffective_temp2 = $current_date;
@@ -327,10 +326,20 @@ class BrokerageController extends Controller
 
   public function view_order(Request $request)
   {
+    $bill_revs = DB::table('charges')
+    ->select('id','name', 'amount')
+    ->where('bill_type', '=', 'R')
+    ->get();
+
+    $bill_exps = DB::table('charges')
+    ->select('id','name', 'amount')
+    ->where('bill_type', '=', 'E')
+    ->get();
+
     $brokerage_id = $request->brokerage_id;
 
     $brokerage_header = DB::table('brokerage_service_orders')
-    ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType')
+    ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'bi_head_id_rev', 'bi_head_id_exp')
     ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
     ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
     ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -343,8 +352,9 @@ class BrokerageController extends Controller
     ->where('brokerageServiceOrders_id', '=', $brokerage_id)
     ->get();
 
+    $brokerage_fees = DB::Select('select dt_hed.id as duty_details_id, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) ORDER BY dt_hed.brokerageServiceOrders_id');
 
-    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header']));
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps']));
   }
 
   public function update_status(Request $request)
@@ -355,5 +365,42 @@ class BrokerageController extends Controller
     ->update(['statusType' =>  $request->status]);
 
     return $brokerage_id;
+  }
+
+  public function create_br_billing_header(Request $request){
+      $consignee_order = \DB::table('consignee_service_order_headers')
+      ->join('consignee_service_order_details AS A', 'A.so_headers_id', '=', 'consignee_service_order_headers.id')
+      ->join('brokerage_service_orders AS B', 'B.consigneeSODetails_id', '=', 'A.id')
+      ->select('consignee_service_order_headers.id')
+      ->where('B.id', '=', $request->br_so_id)
+      ->get();
+
+      $vat = DB::select('SELECT rate FROM vat_rates where currentRate = 1');
+      $billing_header = new \App\BillingInvoiceHeader;
+      $billing_header->so_head_id = $consignee_order[0]->id;
+      $billing_header->isRevenue = $request->isRevenue;
+      $billing_header->vatRate = $vat[0]->rate;
+      $billing_header->status = 'U';
+      $billing_header->date_billed = \Carbon\Carbon::now();
+      $billing_header->override_date = null;
+      $billing_header->due_date = null;
+      $billing_header->save();
+
+
+      $consignee_header = \App\BrokerageServiceOrder::findOrFail($request->br_so_id);
+      switch ($request->isRevenue) {
+          case 0:
+          $consignee_header->bi_head_id_exp = $billing_header->id;
+          break;
+          case 1:
+          $consignee_header->bi_head_id_rev = $billing_header->id;
+          break;
+          default:
+              # code...
+          break;
+      }
+      $consignee_header->save();
+      return $consignee_header;
+
   }
 }

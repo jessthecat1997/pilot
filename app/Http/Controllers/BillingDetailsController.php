@@ -71,15 +71,73 @@ class BillingDetailsController extends Controller
 		return $new_bill_detail;
 	}
 
-	public function getBillingDetails(Request $request){
-		$billing_details = DB::table('billing_invoice_details')
-		->select('charges.name', 'billing_invoice_details.description', DB::raw('CONCAT("Php ", billing_invoice_details.amount) as amount'))
-		->join('charges', 'charge_id', '=', 'charges.id')
-		->where('bi_head_id', '=', $request->id)
-		->get();
+	public function postBrokeragePayable(Request $request){
+		$new_bill_detail = new \App\BillingInvoiceDetails;
+		$new_bill_detail->description = $request->description;
+		$new_bill_detail->amount = $request->amount;
+		$new_bill_detail->tax = 0;
+		$new_bill_detail->charge_id = $request->charge_id;
+		$new_bill_detail->bi_head_id = $request->bi_head_id;
+		$new_bill_detail->save();
+
+		if($request->isBrokerageFee == 1)
+		{
+			$new_order_billedrevenue = new \App\OrderBilledRevenues;
+			$new_order_billedrevenue->order_brokerage_id = $request->declaration_id;
+			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
+			$new_order_billedrevenue->save();
+		}
+		return $new_bill_detail;
+	}
+
+	public function postBrokerageRefundable(Request $request){
+		$new_bill_detail = new \App\BillingInvoiceDetails;
+		$new_bill_detail->description = $request->description;
+		$new_bill_detail->amount = $request->amount;
+		$new_bill_detail->tax = 0;
+		$new_bill_detail->charge_id = $request->charge_id;
+		$new_bill_detail->bi_head_id = $request->bi_head_id;
+		$new_bill_detail->save();
+
+		if($request->isBrokerageFee == 1)
+		{
+			$new_order_billedrevenue = new \App\OrderBilledRevenues;
+			$new_order_billedrevenue->order_brokerage_id = $request->declaration_id;
+			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
+			$new_order_billedrevenue->save();
+		}
+		return $new_bill_detail;
+	}
+
+	public function getBrokerageBillingDetails(Request $request){
+
+		$id = $request->id;
+		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
+		FROM brokerage_service_orders br_so
+		INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
+		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+		INNER JOIN charges charge ON charge.id = bl_det.charge_id
+		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
+
 	}
+
+	public function getBrokerageRefundableDetails(Request $request){
+
+		$id = $request->id;
+		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
+		FROM brokerage_service_orders br_so
+		INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
+		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+		INNER JOIN charges charge ON charge.id = bl_det.charge_id
+		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
+		return Datatables::of($billing_details)
+		->make(true);
+
+	}
+
+
 
 	public function show_billing(Request $request, $id)
 	{
@@ -101,7 +159,7 @@ class BillingDetailsController extends Controller
 		->select('consignee_service_order_headers.id', 'companyName', 'service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'), 'isRevenue', 'status','due_date', 'isFinalize')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
-		
+
 		$so_head_id = $id;
 
 		$vat = DB::table('vat_rates')
@@ -169,7 +227,7 @@ class BillingDetailsController extends Controller
 		->get();
 
 		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill']));
-		
+
 	}
 	public function view_billing(Request $request, $id)
 	{
@@ -253,14 +311,14 @@ class BillingDetailsController extends Controller
 	}
 	public function billing_invoice(Request $request)
 	{
-		$bill_hists = DB::select('SELECT t.id, 
-			C.companyName, t.isRevenue,	
+		$bill_hists = DB::select('SELECT t.id,
+			C.companyName, t.isRevenue,
 			CONCAT("Php ",(ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status
 
 
-			FROM billing_invoice_headers t LEFT JOIN 
+			FROM billing_invoice_headers t LEFT JOIN
 			(
 			SELECT bi_head_id, SUM(amount) total
 			FROM billing_invoice_details
@@ -285,7 +343,7 @@ class BillingDetailsController extends Controller
 				case 'P':
 				return 'Paid';
 				break;
-				
+
 				default:
 					# code...
 				break;
@@ -293,6 +351,7 @@ class BillingDetailsController extends Controller
 		})
 		->make(true);
 	}
+
 
 	public function getDeliveryFees(Request $request)
 	{
@@ -303,6 +362,26 @@ class BillingDetailsController extends Controller
 		->get();
 
 		return $deliveries;
+	}
+
+	public function getBrokerageFees(Request $request)
+	{
+			$brokerage = DB::table('duties_and_taxes_headers')
+			->select('duties_and_taxes_headers.id', 'id', 'brokerageFee')
+			->where('brokerageServiceOrders_id', '=', $request->br_so_id)
+			->get();
+
+			return $brokerage;
+	}
+
+	public function getBrokerageCharges(Request $request)
+	{
+			$charges = DB::table('charges')
+			->select('amount', 'id')
+			->where('id', '=', $request->charge_id)
+			->get();
+
+			return $charges;
 	}
 
 	public function billing_history(Request $request)
@@ -331,7 +410,7 @@ class BillingDetailsController extends Controller
 		$finalize->isFinalize = $request->isFinalize;
 		$finalize->save();
 
-		return $finalize;	
+		return $finalize;
 	}
 	public function void_bill(Request $request, $id)
 	{

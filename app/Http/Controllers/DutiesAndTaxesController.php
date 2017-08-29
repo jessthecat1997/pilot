@@ -184,7 +184,8 @@ class DutiesAndTaxesController extends Controller
       $new_dutiesandtaxes_details->save();
     }
 
-    $brokerage_id = $request->brokerage_id;
+
+    $brokerage_id = $new_dutiesandtaxes->id;
     return $brokerage_id;
     //
   }
