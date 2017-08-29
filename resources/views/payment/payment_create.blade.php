@@ -356,6 +356,20 @@
 		
 	})
 
+
+	$(document).on('click', '.payment_receipt', function(e){
+		e.preventDefault();
+		type = $(this).closest('tr').find('.type').val();
+		console.log($(this).val());
+		if(type == 1){
+			window.open("{{ route('payment_receipt') }}/" + $(this).val());
+		}
+		else
+		{
+			window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
+		}
+		
+	})
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
 		var amt = parseFloat($('#depositPayment').val());

@@ -103,17 +103,18 @@ class PaymentsController extends Controller
 	public function payments_table(Request $request, $id)
 	{
 		$history = DB::select(
-			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description, p.id as id FROM payments as p  WHERE p.bi_head_id = ? 
+			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description, p.id as id, CONCAT("1") as type FROM payments as p  WHERE p.bi_head_id = ?
 			UNION 
 			(
-			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description, dp.id as id FROM deposit_payments as dp WHERE dp.bi_head_id = ?
+			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description, dp.id as id, CONCAT("2") as type FROM deposit_payments as dp WHERE dp.bi_head_id = ?
 			)
 			', [$id, $id]
 			);
 		return Datatables::of($history)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "'. route('payment_receipt'). "/". $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info payment_receipt"><i class="fa fa-print"></i></a>';
+			'<button value = "'. $hist->id .'" class = "btn btn-md btn-info payment_receipt"><span class="fa fa-print"></span></button>
+			<input type = "hidden" class = "type" value = "' . $hist->type . '" />';
 		})
 		->make(true);
 	}
@@ -150,6 +151,21 @@ class PaymentsController extends Controller
 		return $csh;
 	}
 	public function payment_pdf(Request $request, $id)
+	{
+		$payments = DB::table('consignee_service_order_headers')
+		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
+		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
+		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
+		->select('billing_invoice_headers.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
+		->where('billing_invoice_headers.id', '=', $id)
+		->get();
+
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments', 'exp'));
+		return $pdf->stream();
+	}
+
+	public function payment_deposit_pdf(Request $request, $id)
 	{
 		$payments = DB::table('consignee_service_order_headers')
 		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
