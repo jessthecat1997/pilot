@@ -95,9 +95,6 @@
                 <div id="collapse1" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                       <li>
-                          <a href = "{{ route('employees.index' ) }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
-                      </li>
-                      <li>
                         <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                     </li>
                     <li>
