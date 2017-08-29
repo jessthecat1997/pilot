@@ -2698,18 +2698,20 @@ class DatatablesController extends Controller
 
 
 			$dutiesandtaxes = DB::table('duties_and_taxes_headers')
-			->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName')
+			->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName', 'brokerageFee', 'statusType')
 			->join('employees', 'employees_id_broker', '=', 'employees.id')
 			->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
 			->where('brokerageServiceOrders_id','=', $request->brokerage_id)
 			->get();
 
 
+
 			return Datatables::of($dutiesandtaxes)
 			->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+
 			->addColumn('action', function ($dutiesandtax){
 				return
-				'<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+				'<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>';
 			})
 
 			->make(true);

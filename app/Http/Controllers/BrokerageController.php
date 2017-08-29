@@ -352,9 +352,9 @@ class BrokerageController extends Controller
     ->where('brokerageServiceOrders_id', '=', $brokerage_id)
     ->get();
 
-    $brokerage_fees = DB::Select('select dt_hed.id as duty_details_id, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) ORDER BY dt_hed.brokerageServiceOrders_id');
+    $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as createdat, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) ORDER BY dt_hed.brokerageServiceOrders_id');
 
-    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps']));
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees']));
   }
 
   public function update_status(Request $request)

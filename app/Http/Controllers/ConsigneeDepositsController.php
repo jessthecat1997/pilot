@@ -51,8 +51,14 @@ class ConsigneeDepositsController extends Controller
     }
     public function view_deposit(Request $request)
     {
-      $deposits = DB::table('consignee_deposits')
-      ->select('created_at', 'amount', 'currentBalance', 'description')
+      $deposits = \DB::table('consignee_deposits')
+      ->select(
+          'id',
+          'created_at',
+          \DB::raw('CONCAT("Php ", amount) as amount') ,
+          \DB::raw('CONCAT("Php ", currentBalance) as currentBalance'),
+          'description'
+          )
       ->where('consignees_id', '=', $request->id)
       ->get();
 

@@ -44,6 +44,7 @@
 							</td>
 						</tr>
 
+
 						<tr>
 							<td class="active"><strong>Status: </strong></td>
 							<td class="success">
@@ -154,12 +155,16 @@
 							<td style="width: 5%;">
 								ID
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 5%;">
 							  Exchange Rate
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 20%;">
+								Brokerage Fee
+							</td>
+							<td style="width: 20%;">
 								Processed By
 							</td>
+
 							<td style="width: 15%;">
 								Actions
 							</td>
@@ -346,27 +351,66 @@
 							</div>
 						</div>
 
-						<div id = "brokerage" style = "display: none">
-							<div class="panel-group" id = "brokerage_copy">
-								<div class="panel panel-default" id = "1_panel">
-									<div class="panel-heading">
-										<h4 class="panel-title">
-											<label data-toggle="collapse">Declared Duties And Taxes</label>
-											<div class="pull-right">
-												<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#1_container">_</button>
-												</div>
+						<div class = "form-group">
+							<div class = "col-md-12 collapse" id = "1_panel">
+							<div id = "brokerage" >
+								<div class="panel-group" id = "brokerage_copy">
+									<div class="panel panel-default" >
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<label data-toggle="collapse">Declared Duties And Taxes</label>
+												<div class="pull-right">
+													</div>
 										</h4>
 									</div>
 									<div id="1_container" class="panel-collapse collapse in">
 										<div class="panel-body">
+												<table class="table table-responsive table-striped" style="width: 100%;" id = "declared_dutiesandtaxes">
+													<thead>
+														<tr class = "info">
+															<td>
+																ID
+															</td>
+															<td>
+																Date Created
+															</td>
+															<td>
+																Brokerage Fee
+															</td>
+															<td>
+																Action
+															</td>
+														</tr>
 
+
+																@foreach($brokerage_fees as $fees)
+																	<tr>
+																<td>
+																	{{$fees->duty_header_id}}
+																</td>
+																<td>
+																	{{$fees->createdat}}
+																</td>
+																<td>
+																		{{$fees->brokerageFee}}
+																</td>
+																<td>
+																	<button class = "btn but" onclick = "selected_decleration({{$fees->duty_header_id}})">Select</button>
+																</td>
+																	</tr>
+																@endforeach
+
+													</thead>
+													<tbody>
+													</tbody>
+												</table>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-
-
+					</div>
+					</div>
 						<div class = "form-group">
 							<div class = "col-md-12">
 								<label for="rev_description " class = "control-label col-md-3">Description:</label>
@@ -752,8 +796,11 @@ $(document).on('change', '#rev_bill_id', function(e){
 		var e = document.getElementById("rev_bill_id");
 		var strUser = e.options[e.selectedIndex].text;
 		var brokerage_fees_rows = "";
-		isBrokerageFee = 0;
+
 		if(strUser == "Brokerage Fee"){
+
+			$('#1_panel').addClass('in');
+			document.getElementById("rev_amount").disabled = true;
 			$.ajax({
 				type: 'GET',
 				url: '{{ route("getBrokerageFees")}}/{{ $brokerage_id }}',
@@ -761,6 +808,7 @@ $(document).on('change', '#rev_bill_id', function(e){
 					'_token' : $('input[name=_token]').val(),
 					'br_so_id' : '{{ $brokerage_id }}',
 				},
+
 				success: function(data){
 
 
@@ -780,6 +828,9 @@ $(document).on('change', '#rev_bill_id', function(e){
 	}
 	if($('#rev_bill_id').val() != 0 &&  strUser != "Brokerage Fee")
 	{
+		isBrokerageFee = 0;
+		$('#1_panel').removeClass('in');
+		document.getElementById("rev_amount").disabled = false;
 		$.ajax({
 			type: 'GET',
 			url: '{{ route("getCharges") }}/{{ $brokerage_id }}',
@@ -865,9 +916,10 @@ $(document).ready(function(){
     columns: [
 
     { data: 'id' },
-    { data: 'rate' },
+		{ data: 'rate'},
+    { data: 'brokerageFee'},
     { data: 'processedBy'},
-    { data: 'action', orderable: false, searchable: false }
+    { data: 'action', orderable: false, searchable: false },
 
     ],	"order": [[ 0, "desc" ]],
   });
@@ -888,6 +940,22 @@ $(document).ready(function(){
 		],	"order": [[ 0, "desc" ]],
 	});
 	@endif
+
+	var delivery_table = $('#deposits_table').DataTable({
+		processing: false,
+		deferRender: true,
+		serverSide: false,
+		scrollX: true,
+		ajax: '{{ route("depositView") }}/{{ $brokerage_id }}',
+		columns: [
+
+		{ data: 'created_at' },
+		{ data: 'amount' },
+		{ data: 'currentBalance'},
+		{ data: 'description'},
+		],	"order": [[ 0, "desc" ]],
+	});
+
 })
 
 $('#StatusUpdate').on('click', function(e){
@@ -909,5 +977,25 @@ $('#StatusUpdate').on('click', function(e){
 		}
 	})
 });
+
+function selected_decleration(duty_det_id){
+
+	var brokerage_fee = <?php echo json_encode($brokerage_fees)?>;
+	var brokerage_ctr = <?php echo count($brokerage_fees)?>;
+
+	for(var x = 0; x < brokerage_ctr; x++)
+	{
+		if(brokerage_fee[x].duty_header_id == duty_det_id)
+		{
+			document.getElementById("rev_amount").value = parseFloat(brokerage_fee[x].brokerageFee).toFixed(2);
+			$('#1_panel').removeClass('in');
+			document.getElementById("rev_amount").disabled = true;
+			BrokerageFeeId = duty_det_id;
+			isBrokerageFee = 1;
+		}
+	}
+
+
+}
 </script>
 @endpush

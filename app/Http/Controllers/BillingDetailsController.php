@@ -122,11 +122,12 @@ class BillingDetailsController extends Controller
 
 		$id = $request->id;
 		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
-			FROM brokerage_service_orders br_so
-			INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
-			LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
-			INNER JOIN charges charge ON charge.id = bl_det.charge_id
-			WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
+		FROM brokerage_service_orders br_so
+        INNER JOIN duties_and_taxes_details dt_det ON dt_det.id = br_so.consigneeSODetails_id
+		INNER JOIN billing_invoice_headers bl_head ON dt_det.id = bl_head.so_head_id
+		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+		INNER JOIN charges charge ON charge.id = bl_det.charge_id
+		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -136,11 +137,12 @@ class BillingDetailsController extends Controller
 
 		$id = $request->id;
 		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description
-			FROM brokerage_service_orders br_so
-			INNER JOIN billing_invoice_headers bl_head ON br_so.id = bl_head.so_head_id
-			LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
-			INNER JOIN charges charge ON charge.id = bl_det.charge_id
-			WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
+		FROM brokerage_service_orders br_so
+    INNER JOIN duties_and_taxes_details dt_det ON dt_det.id = br_so.consigneeSODetails_id
+		INNER JOIN billing_invoice_headers bl_head ON dt_det.id = bl_head.so_head_id
+		LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id
+		INNER JOIN charges charge ON charge.id = bl_det.charge_id
+		WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -428,7 +430,7 @@ class BillingDetailsController extends Controller
 		$void->isVoid = $request->isVoid;
 		$void->save();
 
-		return $void;	
+		return $void;
 	}
 	public function postBilling_header(Request $request)
 	{
