@@ -262,7 +262,7 @@ class DatatablesController extends Controller
 			WHEN t.isRevenue = 1 THEN "Revenue"
 			WHEN t.isRevenue = 0 THEN "Expense"
 			END) as isRevenue,
-			CONCAT("Php ", p.total) as Total,
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
 
 
