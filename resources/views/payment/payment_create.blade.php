@@ -376,7 +376,7 @@
 		var rem = $('#depositDescription').val();
 		console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
 		console.log(typeof(dep_balance));
-		if(amt <= dep_balance && amt <= bals)
+		if(amt <= dep_balance && amt <= bals && amt > 0)
 		{	
 
 			console.log('mawo');

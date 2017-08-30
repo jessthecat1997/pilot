@@ -46,7 +46,7 @@
 			<hr />
 			<table style="width: 100%;">
 				<tr>
-					<td style="border-style: none;" colspan="2"><strong>@if($bill[0]->billtype == 1)OFFICIAL RECEIPT @else ACKNOWLEDGEMENT RECEIPT @endif</strong></td>
+					<td style="border-style: none;" colspan="2"><strong>OFFICIAL RECEIPT</strong></td>
 					<td style="border-style: none; text-align: right;">No:</td>
 					<td style="border-style: none;">{{ $payment->id }}</td>
 				</tr>
