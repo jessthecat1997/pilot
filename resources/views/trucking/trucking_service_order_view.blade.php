@@ -377,6 +377,15 @@
 									</div>
 								</div>
 							</div>
+							<div class = "collapse" id = "rev_delivery_collapse">
+								<div class = "col-md-12">
+									<div class = "form-group">
+
+										<label class = "control-label col-md-5">Estimated Delivery Fee:</label>
+										<strong class="col-md-7">Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></strong>
+									</div>
+								</div>
+							</div>
 							<div class = "col-md-12">
 								<div class = "form-group">
 									<label class = "control-label col-md-3">Amount *</label>
@@ -500,7 +509,6 @@
 						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
 						<div class="col-sm-8">
 							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
-								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
 								<option value = "F">Finished</option>
 							</select>
@@ -546,7 +554,6 @@
 						<label class="control-label col-sm-3" for="_status">Status</label>
 						<div class="col-sm-8">
 							<select name = "_status" id = "_status" class = "form-control">
-								<option value = "P">Pending</option>
 								<option value = "C">Cancelled</option>
 								@if( $pending_trucking != 0)
 								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
@@ -682,35 +689,62 @@
 
 		$(document).on('change', '#rev_bill_id', function(e){
 			revID = $('#rev_bill_id').val();
+			if($('#rev_bill_id option:selected').text() == "Delivery Fee"){
+				$('#rev_delivery_collapse').addClass('in');
+			}
+			else{
+				$('#rev_delivery_collapse').removeClass('in');
+			}
 			if($('#rev_bill_id').val() != 0){
-				switch($('#rev_bill_id').val()){
-					case '1':
-					$.ajax({
-
-						type: 'GET',
-						url: '{{ route("getDeliveryFees") }}/{{ $service_order->id }}',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'tr_so_id' : '{{ $service_order->id }}',
-						},
-						success: function(data){
-							var delivery_fees_rows = "";
-							console.log(data);
-							for(var i = 0; i < data.length; i++){
-								delivery_fees_rows += "<tr><td style = 'text-align: center;	'>"  + data[i].id + "</td><td>" +
-								"<input type = 'number' style = 'text-align: right;' class = 'form-control' value = '" + data[i].amount + "' /></td></tr>";
-							}
-							$('#delivery_fees_table > tbody').html("");
-							$('#delivery_fees_table > tbody').append(delivery_fees_rows);
+				$.ajax({
+					type: 'GET',
+					url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data[0].amount);
+							$('#rev_amount').val(data[0].amount);
 						}
-					})
-
-					break;
-				}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
 			}
 			else
 			{
+				$('#rev_amount').val("0.00")
+			}
+		})
 
+		$(document).on('change', '#exp_bill_id', function(e){
+			revID = $('#exp_bill_id').val();
+			if($('#exp_bill_id').val() != 0){
+				$.ajax({
+					type: 'GET',
+					url: "/charge/"+ $('#exp_bill_id').val() + "/getCharge",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							$('#exp_amount').val(data[0].amount);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else
+			{
+				$('#exp_amount').val("0.00");
 			}
 		})
 

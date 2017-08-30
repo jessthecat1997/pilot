@@ -172,7 +172,7 @@
                         <li>
                             <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
                         </li>
-                        <div id="billingcollapse" class="pane;-collapse collapse">
+                        <div id="billingcollapse" class="panel-collapse collapse">
                             <li>
                                 <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
                             </li>
@@ -212,45 +212,6 @@
                         </li>
                         <li>
                             <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
-                        </li>
-                    </ul>
-                </div>
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
-                </li>
-                <div id="billingcollapse" class="pane;-collapse collapse">
-                    <li>
-                        <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
-                    </li>
-                </div>
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#templatescollapse"><i></i>&nbsp;&nbsp;Templates</a>
-                </li>
-                <div id="templatescollapse" class="pane;-collapse collapse">
-                    <li>
-                        <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Agreements</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Terms</a>
-                    </li>
-                </div>
-
-                <li>
-                    <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
-                </li>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <ul class="list-group" style="list-style-type: circle;">
-                        <li>
-                            <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
                         </li>
                     </ul>
                 </div>
