@@ -258,12 +258,13 @@ class DatatablesController extends Controller
 	public function pso_head_datatable(){
 		$bill_hists = DB::select('SELECT t.id,
 			C.companyName,
-			(CASE t.isRevenue
-			WHEN t.isRevenue = 1 THEN "Revenue"
-			WHEN t.isRevenue = 0 THEN "Expense"
-			END) as isRevenue,
+			CASE t.isRevenue
+			WHEN 1 THEN "Billing"
+			WHEN 0 THEN "Refundable Charge"
+			END as isRevenue,
 			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
-			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date
+			coalesce((ROUND(((p.total * t.vatRate)/100), 2) + p.total), 0) as totall,
+			coalesce(DATE_FORMAT(t.due_date, "%M %d, %Y"), "Not set") as due_date
 
 
 			FROM billing_invoice_headers t LEFT JOIN
