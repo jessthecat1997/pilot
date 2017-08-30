@@ -4,10 +4,10 @@
 <div class = "row">
     <div class = "panel default-panel">
       <div class = "panel-heading">
-        <h3><img src="/images/bar.png"> Brokerage | Duties And Taxes</h3>
-        <hr />
+        <h2>&nbsp; Brokerage | Duties And Taxes</h2>
 
-
+	<a href="/brokerage/{{$brokerage_header[0]->id}}/order" class="btn but">Back</a>
+<hr />
   <div class = "panel-body form-horizontal">
 
     <table class="table table-responsive table-borderless" >

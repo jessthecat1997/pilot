@@ -384,7 +384,6 @@
 															</td>
 														</tr>
 
-
 													</thead>
 
 												</table>
@@ -1066,13 +1065,14 @@ $(document).on('click', '.updateTax', function(e){
 
 $(document).on('click', '.selectedBrokerage', function(e){
 	e.preventDefault();
+	alert($(this).val());
 	selected_decleration($(this).val());
 })
-
+var brokerage_fee = <?php echo json_encode($brokerage_fees)?>;
+var brokerage_ctr = <?php echo count($brokerage_fees)?>;
 function selected_decleration(duty_det_id){
 
-	var brokerage_fee = <?php echo json_encode($brokerage_fees)?>;
-	var brokerage_ctr = <?php echo count($brokerage_fees)?>;
+
 
 	for(var x = 0; x < brokerage_ctr; x++)
 	{
