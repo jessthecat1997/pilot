@@ -55,7 +55,7 @@
 				<div class="col-sm-8">
 					<div class="form-group">
 						<label for="bal"><h3>Balance: &nbsp;</h3></label>
-						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt" id="bal" disabled>
+						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
 					</div>
 				</div>
 				<div class="col-sm-2">
@@ -77,7 +77,7 @@
 	</div>
 	<br/>
 
-	<button type="button" class="btn but pull-right" data-toggle="modal" @if($total[0]->totpay == $total[0]->totall) disabled @endif data-target="#revModal">New Payment</button>
+	<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#revModal">New Payment</button>
 	<br/>
 	<br/>
 	<div class="row">
@@ -116,6 +116,7 @@
 						</tr>
 					</thead>
 					<tbody>
+						@if($pays[0]->status != 'P')
 						@forelse($deposits as $deposit)
 						<tr>
 							<td>
@@ -133,7 +134,27 @@
 						<tr>
 							<td colspan="3">No Deposits</td>
 						</tr>
-						@endforelse	
+						@endforelse
+						@else
+						@forelse($deposits as $deposit)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+							</td>
+							<td style="text-align: right;">
+								Php {{ $deposit->currentBalance }}
+							</td>
+							<td style="text-align: center;">
+								
+							</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="3">No Deposits</td>
+						</tr>
+						@endforelse
+						@endif
+
 					</tbody>
 				</table>
 			</div>
@@ -340,7 +361,8 @@
 	$(document).ready(function(){
 		var b_table = $('#hist_table').DataTable({
 			processing: false,
-			serverSide: true,
+			serverSide: false,
+			deferRender:true,
 			ajax: "{{ route('payments.data', $so_head_id) }}",
 			columns: [
 			{ data: 'created_at'},
@@ -352,11 +374,14 @@
 		})
 		var p_table = $('#bills_table').DataTable({
 			processing: false,
-			serverSide: true,
+			serverSide: false,
+			deferRender: true,
 			ajax: "{{ route('paybills.data', $so_head_id) }}",
 			columns: [
 			{ data: 'name' },
-			{ data: 'amount' },
+			{ data: 'amount',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },
 
 			]
 		})

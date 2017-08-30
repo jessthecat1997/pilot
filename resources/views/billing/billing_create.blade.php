@@ -253,7 +253,8 @@
 
 			var rc_table = $('#revTable').DataTable({
 				processing: false,
-				serverSide: true,
+				serverSide: false,
+				deferRender: true,
 				ajax: "{{ route('revenue.data',$so_head_id) }}",
 				columns: [
 				{ data: 'name' },
@@ -263,7 +264,8 @@
 			})
 			var br_table = $('#expTable').DataTable({
 				processing: false,
-				serverSide: true,
+				serverSide: false,
+				deferRender: true,
 				ajax: "{{ route('expenses.data', $so_head_id) }}",
 				columns: [
 				{ data: 'name' },

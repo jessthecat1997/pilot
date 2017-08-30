@@ -34,7 +34,8 @@ class PaymentsController extends Controller
 			'companyName', 'service_order_types.name',
 			DB::raw('CONCAT(firstName, " ", lastName) as con_name'),
 			DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'),
-			'consignees_id as con_id'
+			'consignees_id as con_id',
+			'billing_invoice_headers.status'
 			)
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
