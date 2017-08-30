@@ -145,6 +145,7 @@
 								</div>
 								
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 
 

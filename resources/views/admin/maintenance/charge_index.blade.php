@@ -68,7 +68,7 @@
 									<input type="radio" name="chargeType" value="1">Rate
 									<br/>
 								</div>
-								<div class="form-group">
+								<div class="form-group required">
 									<div id = "type0" class = "chargeValue">
 										<label class = "control-label">Amount: </label>
 										<div class = "form-group input-group " >
@@ -86,6 +86,7 @@
 									</div>
 								</div>
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
