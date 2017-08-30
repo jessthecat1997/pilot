@@ -65,6 +65,7 @@
 									<input type = "text" class = "form-control money" style= "text-align: right"
 									value ="0" name = "maxWeight" id = "maxWeight"  data-rule-required="true" /><span class = "input-group-addon">kgs</span>
 								</div>
+								<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 							</div>
 
 						</div>

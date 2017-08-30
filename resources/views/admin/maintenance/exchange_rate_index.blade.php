@@ -79,6 +79,7 @@
 								<label class = "form-group">Remarks</label>
 								<textarea  row = "6" class = "form-control" id = "description" ></textarea> 
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 
 						<div class="modal-footer">

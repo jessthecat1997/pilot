@@ -70,15 +70,12 @@
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>
-							<div class="form-group required">
-								<label class = "control-label">With Container: </label>
-								<input type="radio" name="withContainer" value="0" > With
-								<input type="radio" name="withContainer" value="1"> Without
-							</div>		
+					
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave_sub" type = "submit" class="btn btn-success" value = "Save" />
@@ -131,6 +128,7 @@
 								<label class = "control-label">LTO Date Registered</label>
 								<input type = "date" class = "form-control"   data-rule-required="true" name = "dateRegistered" id = "dateRegistered" />
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
@@ -473,7 +471,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
-							'withContainer':$('input[name=withContainer]:checked').val(),
+							
 						},
 						success: function (data)
 						{

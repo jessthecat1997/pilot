@@ -84,11 +84,15 @@
 							</div>
 							
 							<input type="hidden" name = "currentFee" value = "0" />
+
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
+
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 						</div>
+
 					</div>
 				</div>
 			</div>

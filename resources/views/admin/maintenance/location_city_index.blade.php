@@ -66,6 +66,7 @@
 								</form>
 							</div>
 							<br />
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>

@@ -50,6 +50,7 @@
 								<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
 								
 							</div>
+							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
