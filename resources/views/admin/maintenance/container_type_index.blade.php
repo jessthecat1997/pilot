@@ -45,7 +45,7 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">New Container Size</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="form-group required">
 
 								<label class = "control-label">Size: </label>
@@ -62,15 +62,15 @@
 							<div class="form-group required">
 								<label class = "control-label">Maximum Weight Capacity: </label>
 								<div class = "form-group input-group">
-									<input type = "text" class = "form-control money" style= "text-align: right" 
+									<input type = "text" class = "form-control money" style= "text-align: right"
 									value ="0" name = "maxWeight" id = "maxWeight"  data-rule-required="true" /><span class = "input-group-addon">kgs</span>
 								</div>
 							</div>
-							
+
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -126,7 +126,7 @@
 	var temp_name = null;
 	var temp_desc = null;
 	var temp_maxWeight = null;
-	
+
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
 			scrollX: true,
@@ -135,12 +135,9 @@
 			deferRender: true,
 			ajax: 'http://localhost:8000/admin/ctData',
 			columns: [
-			{ data: 'name',
-			"render" : function( data, type, full ) {
-				return format_container_size(data); }},
-				{ data: 'maxWeight',
-				"render" : function( data, type, full ) {
-					return format_container_maxweight(data); }},
+			{ data: 'name'},
+				{ data: 'maxWeight'
+				},
 					{ data: 'description' },
 					{ data: 'action', orderable: false, searchable: false }
 
@@ -148,7 +145,7 @@
 				});
 
 		$("#commentForm").validate({
-			rules: 
+			rules:
 			{
 				name:
 				{
@@ -182,7 +179,7 @@
 			$('#description').val("");
 			$('#name').val("");
 			$('#maxWeight').val("");
-			
+
 			$('#ctModal').modal('show');
 
 		});
@@ -194,7 +191,7 @@
 			$('#description').val(data.description);
 			$('#name').val(data.name);
 			$('#maxWeight').val(data.maxWeight);
-			
+
 			temp_name = data.name;
 			temp_desc = data.description;
 			temp_maxWeight = data.description;
@@ -254,7 +251,7 @@
 			$('#name').valid();
 			$('#description').valid();
 			$('#maxWeight').valid();
-			
+
 
 
 			if(title == "New Container Volume")
@@ -270,7 +267,7 @@
 							'name' : $('#name').val(),
 							'description' : $('#description').val(),
 							'maxWeight' : $('#maxWeight').inputmask('unmaskedvalue'),
-							
+
 						},
 						success: function (data)
 						{
@@ -280,7 +277,7 @@
 								$('#name').val("");
 								$('#description').val("");
 								$('#maxWeight').val("");
-								
+
 								$('.modal-title').text('New Container Volume');
 
 
@@ -311,7 +308,7 @@
 								resetErrors();
 								var invdata = JSON.parse(data);
 								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v); 
+									console.log(i + " => " + v);
 									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 								});
@@ -330,13 +327,13 @@
 				{
 
 					if($('#name').val() === temp_name &&
-						$('#description').val() === temp_desc && 
+						$('#description').val() === temp_desc &&
 						$('#maxWeight').inputmask("unmaskedvalue") === temp_maxWeight  )
 					{
 						$('#name').val("");
 						$('#description').val("");
 						$('#maxWeight').val("");
-						
+
 						$('#btnSave').removeAttr('disabled');
 						$('#ctModal').modal('hide');
 					}
@@ -352,7 +349,7 @@
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
 								'maxWeight' : $('#maxWeight').inputmask("unmaskedvalue"),
-								
+
 
 							},
 							success: function (data)
@@ -362,7 +359,7 @@
 									$('#ctModal').modal('hide');
 									$('#description').val("");
 									$('#maxWeight').val("");
-									
+
 									$('.modal-title').text('New Container Volume');
 
 
@@ -394,7 +391,7 @@
 									resetErrors();
 									var invdata = JSON.parse(data);
 									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
+										console.log(i + " => " + v);
 										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 									});
