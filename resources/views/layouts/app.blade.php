@@ -172,7 +172,7 @@
                         <li>
                             <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
                         </li>
-                        <div id="billingcollapse" class="pane;-collapse collapse">
+                        <div id="billingcollapse" class="panel-collapse collapse">
                             <li>
                                 <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
                             </li>
@@ -214,28 +214,6 @@
                             <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
                         </li>
                     </ul>
-                </div>
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
-                </li>
-                <div id="billingcollapse" class="pane;-collapse collapse">
-                    <li>
-                        <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
-                    </li>
-                </div>
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#templatescollapse"><i></i>&nbsp;&nbsp;Templates</a>
-                </li>
-                <div id="templatescollapse" class="pane;-collapse collapse">
-                    <li>
-                        <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Agreements</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Terms</a>
-                    </li>
                 </div>
 
                 <li>
