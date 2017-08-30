@@ -292,9 +292,6 @@
                             </li> 
                         </div> 
                     </div> 
-                    <li> 
-                        <a data-toggle="collapse" class="maintenance-group" href = "#employeecollapse"><i></i>&nbsp;&nbsp;Employee</a> 
-                    </li> 
                     <div id="employeecollapse" class="pane;-collapse collapse"> 
                         <li> 
                             <a href = "{{ route('employee_type.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee Type</a> 

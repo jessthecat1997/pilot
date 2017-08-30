@@ -15,8 +15,8 @@ class CdsFeesController extends Controller
         $cdss = \DB::select("SELECT * FROM cds_fees WHERE dateEffective < NOW() ORDER BY dateEffective");
         $current = $cdss[count($cdss) -1 ];
       
-        \DB::update('UPDATE cds_fees SET currentFee = 0 WHERE id != ' . $current->id);
-        \DB::update('UPDATE cds_fees SET currentFee = 1 WHERE id = ' . $current->id);
+        \DB::update('UPDATE cds_fees SET currentFee = 0 WHERE deleted_at is null and id != ' . $current->id);
+        \DB::update('UPDATE cds_fees SET currentFee = 1 WHERE deleted_at is null and id = ' . $current->id);
 
         $cds_fee = \DB::table('cds_fees')
         ->select('fee')
