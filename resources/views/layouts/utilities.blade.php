@@ -217,19 +217,16 @@
                 </li> 
                 <div id="collapse4" class ="panel-collapse collapse"> 
                     <ul class="list-group" style="list-style-type: circle;"> 
-                       <li>
-                          <a href = "{{ route('employees.index' ) }}"  class = "employees"><i class="fa fa-user"></i>&nbsp;&nbsp;Employees</a>
-                      </li>
-                      <li> 
+                     <li> 
                         <a data-toggle="collapse" class="maintenance-group" href = "#archivecollapse"><i></i>&nbsp;&nbsp;Archive</a> 
                     </li> 
                     <div id="archivecollapse" class="pane;-collapse collapse"> 
-                     
+                       
                         <li> 
                             <a data-toggle="collapse" class="maintenance-group" href = "#archive_brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a> 
                         </li> 
                         <div id="archive_brokeragecollapse" class="pane;-collapse collapse"> 
-                         
+                           
                             <li> 
                                 <a href = "{{ route('cds_fee.utilities_index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a> 
                             </li> 
