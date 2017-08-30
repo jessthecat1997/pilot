@@ -212,6 +212,7 @@
                 <li>
                     <a href="{{ route('utilities.index') }}" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
                 </li>
+                
             </ul>
         </div>
 

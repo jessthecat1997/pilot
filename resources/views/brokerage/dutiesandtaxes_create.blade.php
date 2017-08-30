@@ -71,7 +71,10 @@
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
+
 			</form>
+			<button id = "editButton" class = "btn btn-md but view-service-order">Edit</button>';
+
 
 
 
@@ -193,7 +196,7 @@
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
-		  <input type = "reset" class = "btn btn-danger btn-md" value = "Clear" />
+		
 		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
 		    </form>
 		</div>
@@ -572,8 +575,13 @@
 		var jsonFreight = localStorage.getItem("jsonFreight");
 		var jsonInsurance = localStorage.getItem("jsonInsurance");
 
-		$('#btnSave').on('click', function(e){
 
+
+
+		$('#editButton').on('click', function(e){
+			window.location.replace("/brokerage/"+ localStorage.getItem('brokerage_id') +"/create_dutiesandtaxes");
+		});
+		$('#btnSave').on('click', function(e){
 
 			e.preventDefault();
 			$.ajax({

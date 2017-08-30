@@ -3,11 +3,36 @@
 
 <div class = "row">
 		<div class = "panel default-panel">
-			<div class = "panel-heading">
-				<h3><img src="/images/bar.png"> Brokerage | Create Service Order</h3>
-				<hr />
+			<div class = "panel-heading" id = "brokerageTitleHeader">
+				<h2>&nbsp;Brokerage / Create Service Order </h2>
+				<hr/>
 			</div>
+
+
+
 			<div class = "panel-body">
+
+				<div class = "collapse" id = "brokerage_warning">
+
+					<div class="panel-body alert alert-danger">
+							<div class = "col-md-12">
+								<strong class = "col-md-10">Oops! We were unable to save your order due to some unforseen consequences</strong>
+								<button class = "btn btn-danger col-md-1 pull-right" id = "exitPrompt" onclick = "resetMessages();"><small>X</small></button>
+								<div class = "col-md-12">
+
+										<li class = "collapse" id = "arrivalDateError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose an expected date of arrival</a></li>
+										<li class = "collapse" id = "freightTypeError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose a freight type</a></li>
+										<li class = "collapse" id = "BLError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Input a BL/AWL Number</a></li>
+										<li class = "collapse" id = "pickupError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Select a pick up point</a></li>
+										<li class = "collapse" id = "shipperError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input shipper</a></li>
+										<li class = "collapse" id = "weightError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input weights</a></li>
+										<li class = "collapse" id = "processedByError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Select an employee who processed this order</a></li>
+
+								</div>
+							</div>
+					</div>
+				</div>
+
 				<div class="panel-heading">
 					<h4 id = "basic-information-heading"><small>1</small> Consignee Information</h4>
 				</div>
@@ -22,7 +47,6 @@
 											<option value = "0">Select Consignee</option>
 											@forelse($consignees as $consignee)
 											<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
-
 											@empty
 											@endforelse
 										</select>
@@ -91,7 +115,7 @@
 					</div>
 				</div>
 				<div class = "panel-heading">
-					<h4><small>2</small>Brokerage Information</h4>
+					<h4 id = "brokerageInformationHeader"><small>2</small> Brokerage Information</h4>
 				</div>
 
 				<div class = "panel-body">
@@ -107,12 +131,10 @@
 									<label class= "col-md-4 control-label">Expected Arrival Date*</label>
 									 <div class = "col-md-5">
 										<div class = "input-group">
-
-												<input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" disabled>
+												<input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" data-msg="Please fill this field" disabled required>
 												<span class="input-group-btn">
 														<button class="btn btn-default" type="button" onclick="getData()" id = "arrivalDateButton"><i class="fa fa-calendar "></i></button>
 												</span>
-
 										</div>
 									</div>
 								</div>
@@ -121,13 +143,12 @@
 									<label  class="col-md-4 control-label">Freight Type*</label>
 									<div class="col-md-5">
 										<div class="input-group">
-											<input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" readonly>
+											<input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" data-msg="Please fill this field"  readonly required>
 											<div class="input-group-btn">
 												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Freight Type <span class="caret"></span></button>
 												<ul class="dropdown-menu dropdown-menu-right">
 													<li><a onclick = "document.getElementById('FreightType').value = 'Air Freight'">Air Freight</a></li>
 													<li><a	onclick = "document.getElementById('FreightType').value = 'Sea Freight'">Sea Freight</a></li>
-													<li><a  onclick = "document.getElementById('FreightType').value = 'Train Freight'">Train Freight</a></li>
 
 												</ul>
 											</div>
@@ -138,7 +159,7 @@
 								<div class="form-group">
 										<label for="email" class="col-md-4 control-label">BL\AWL Number*</label>
 										<div class="col-md-5">
-													<input  type="text" class="form-control" name = "freightnumber" id = "freightNumber">
+													<input  type="text" class="form-control" name = "freightnumber" id = "freightNumber" data-msg="Please fill this field" required>
 										</div>
 								</div>
 
@@ -147,7 +168,7 @@
 										<label class = "col-md-4 control-label ">Pick up point: </label>
 										<div class = "col-md-5">
 										<div class="input-group">
-											<select class = "form-control" id = "pickup_id">
+											<select class = "form-control" id = "pickup_id" required data-msg="Please fill this field. Hint: Click on the plus sign to add a new location">
 												<option value = "0"></option>
 												@forelse($locations as $location)
 												<option value = "{{ $location->id }}">{{ $location->name }}</option>
@@ -165,7 +186,7 @@
 								<div class="form-group">
 										<label  class="col-md-4 control-label">Shipper*</label>
 										<div class="col-md-5">
-													<input  type="text" class="form-control" name = "shipper" id = "shipper">
+													<input  type="text" class="form-control" name = "shipper" id = "shipper" required data-msg="Please fill this field">
 										</div>
 								</div>
 
@@ -173,7 +194,7 @@
 									<label  class="col-md-4 control-label">Weight </label>
 									<div class="col-md-5">
 										<div class="input-group">
-											<input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight">
+											<input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight" required data-msg="Please fill this field">
 											<div class="input-group-btn">
 												<button type="button" class="btn btn-default" aria-expanded="false"> kgs</label>
 											</div>
@@ -187,14 +208,13 @@
 													<textarea class="form-control" rows="3"></textarea>
 										</div>
 								</div>
-
 							</div>
 						</div>
 					</div>
 
-						<label class="control-label col-sm-4" for="noOfDeliveries">Processed by:</label>
+						<label class="control-label col-sm-4" for="noOfDeliveries" >Processed by:</label>
 						<div class="col-sm-6">
-							<select name = "processedBy" id = "processedBy" class = "form-control">
+							<select name = "processedBy" id = "processedBy" class = "form-control" required data-msg="Select a Processor">
 								<option value = "0"></option>
 								@forelse($employees as $employee)
 								<option value = "{{ $employee->id }}">
@@ -480,6 +500,12 @@
 	var consigneeID = null;
 	var selected_location = 0;
 	$(document).ready(function(){
+
+
+
+		$('#exitPrompt').on('click', function(e){
+			$('#brokerage_warning').removeClass('in');
+		});
 
 		$('#consignee_id').select2();
 
@@ -975,43 +1001,152 @@
 
 		var loc = document.getElementById("pickup_id");
 		var strloc = loc.options[loc.selectedIndex].value;
+		if(Validations() == true)
+		{
+		}
+		if(Validations() == false){
 
-		$.ajax({
-			type: 'POST',
-			url: "{{ route('saveBrokerageOrder') }}",
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'cs_id' : consigneeID,
-				'employee_id' : $('#processedBy').val(),
-				'location_id': strloc,
-				'shipper' : document.getElementById('shipper').value,
-				'companyName' : document.getElementById('freightNumber').value,
-				'freightType' : document.getElementById('FreightType').value,
-				'arrivalDate' : document.getElementById('expectedArrivalDate').value,
-				'freightNumber' : document.getElementById('freightNumber').value,
-				'weight' : document.getElementById('weight').value,
-			},
-			success: function(data){
-				if(typeof(data) == "object"){
-					console.log(data);
-					$('#_cfirstName').val(data[0].firstName);
-					$('#_cmidddleName').val(data[0].middleName);
-					$('#_clastName').val(data[0].lastName);
-					$('#_ccontactNumber').val(data[0].contactNumber);
-					$('#_cemail').val(data[0].email);
-					$('#_ccompanyName').val(data[0].companyName);
-					$('#_cbusinessStyle').val(data[0].businessStyle);
-					$('#_cTIN').val(data[0].TIN);
-				}
-				window.location.replace('/brokerage/'+data+'/order');
-			},
-			error: function(data) {
-				if(data.status == 400){
-					alert("Nothing found");
-				}
-			}
-		})
+
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('saveBrokerageOrder') }}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'cs_id' : consigneeID,
+						'employee_id' : $('#processedBy').val(),
+						'location_id': strloc,
+						'shipper' : document.getElementById('shipper').value,
+						'companyName' : document.getElementById('freightNumber').value,
+						'freightType' : document.getElementById('FreightType').value,
+						'arrivalDate' : document.getElementById('expectedArrivalDate').value,
+						'freightNumber' : document.getElementById('freightNumber').value,
+						'weight' : document.getElementById('weight').value,
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data);
+							$('#_cfirstName').val(data[0].firstName);
+							$('#_cmidddleName').val(data[0].middleName);
+							$('#_clastName').val(data[0].lastName);
+							$('#_ccontactNumber').val(data[0].contactNumber);
+							$('#_cemail').val(data[0].email);
+							$('#_ccompanyName').val(data[0].companyName);
+							$('#_cbusinessStyle').val(data[0].businessStyle);
+							$('#_cTIN').val(data[0].TIN);
+						}
+						window.location.replace('/brokerage/'+data+'/order');
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+		}
 	});
+	function Validations(){
+
+		resetMessages();
+		var isError = false;
+		if($('#expectedArrivalDate').valid() == false)
+		{
+				location.href = '#brokerageTitleHeader';
+				$('#expectedArrivalDate').css('border-color', 'red');
+				$('#brokerage_warning').addClass('in');
+				$('#arrivalDateError').addClass('in');
+
+        isError= true;
+    }
+
+		if($('#FreightType').valid() == false)
+		{
+
+				location.href = '#brokerageTitleHeader';
+				$('#FreightType').css('border-color', 'red');
+				$('#brokerage_warning').addClass('in');
+				$('#freightTypeError').addClass('in');
+
+        isError = true;
+    }
+
+		if($('#freightNumber').valid() == false)
+		{
+
+			location.href = '#brokerageTitleHeader';
+			$('#freightNumber').css('border-color', 'red');
+	  	$('#brokerage_warning').addClass('in');
+			$('#BLError').addClass('in');
+
+				isError = true;
+		}
+
+		var pickup = document.getElementById("pickup_id");
+
+		if(pickup.options[pickup.selectedIndex].value == 0)
+		{
+
+			location.href = '#brokerageTitleHeader';
+			$('#pickup_id').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#pickupError').addClass('in');
+
+				isError = true;
+		}
+
+		if($('#shipper').valid() == false)
+		{
+			location.href = '#brokerageTitleHeader';
+			$('#shipper').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#shipperError').addClass('in');
+
+				isError = true;
+		}
+
+		if($('#weight').valid() == false)
+		{
+
+			location.href = '#brokerageTitleHeader';
+			$('#weight').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#weightError').addClass('in');
+
+				isError = true;
+		}
+
+		var pby = document.getElementById("processedBy");
+
+		if(pby.options[pby.selectedIndex].value == 0)
+		{
+			location.href = '#brokerageTitleHeader';
+			$('#processedBy').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#processedByError').addClass('in');
+
+				isError = true;
+		}
+
+		return isError;
+
+	}
+
+	function resetMessages(){
+    $('#arrivalDateError').removeClass('in');
+
+    $('#freightTypeError').removeClass('in');
+
+    $('#BLError').removeClass('in');
+
+    $('#pickupError').removeClass('in');
+
+		$('#shipperError').removeClass('in');
+    $('#weightError').removeClass('in');
+
+		$('#weight').valid();
+    $('#processedByError').removeClass('in');
+
+		$('#processedBy').valid();
+  }
 
 </script>
 @endpush

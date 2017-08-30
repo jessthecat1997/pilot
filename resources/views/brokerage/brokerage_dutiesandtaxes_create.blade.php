@@ -1,10 +1,27 @@
 @extends('layouts.app')
 @section('content')
 <div class = "panel-heading">
-  <h3><img src="/images/bar.png"> Brokerage | Create Duties and Taxes Decleration</h3>
+  <h2 id = "DutiesAndTaxesHeader">&nbsp;Brokerage / Create Duties And Taxes </h2>
   <hr />
 </div>
 <div class="panel-body">
+  <div class = "collapse" id = "dutiesAndTaxes_warning">
+    <div class="panel-body alert alert-danger">
+        <div class = "col-md-12">
+          <strong class = "col-md-10">Uh-oh.. We were unable to calculate your order because of some unprecdented events</strong>
+          <button class = "btn btn-danger col-md-1 pull-right" id = "exitPrompt" onclick = "resetMessages();"><small>X</small></button>
+          <div class = "col-md-12">
+
+            <li class = "collapse" id = "arrastreError"> > <a href = "#DutiesAndTaxesHeader" style = "text-decoration: none; color: red;">Input amount for arrastre</a></li>
+            <li class = "collapse" id = "wharfageError"> > <a href = "#DutiesAndTaxesHeader" style = "text-decoration: none; color: red;">Input amount for wharfage</a></li>
+            <li class = "collapse" id = "tableError"> > <a href = "#DutiesAndTaxesHeader" style = "text-decoration: none; color: red;">Add at least one item </a></li>
+
+          </div>
+        </div>
+    </div>
+  </div>
+
+
   <div class = "tab-content">
             <div id = "dutiesandtaxes_details" class="tab-pane fade in active">
               <div class = "col-md-12">
@@ -20,6 +37,7 @@
                         </div>
                   </div>
               </div>
+
 
               <div class="form-group">
                 <label class="col-md-2 control-label">CDS Fee*</label>
@@ -41,22 +59,23 @@
                   </div>
                   </div>
               </div>
-              <div class="form-group">
+              <form data-toggle = "validator">
+              <div class="form-group" id = "validateArrastre">
                   <label class="col-md-2 control-label">Arrastre*</label>
                     <div class="col-md-5">
                         <div class="input-group ">
                           <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                            <input  type="text" class=" form-control" name = "arrastre" id = "arrastre" style="text-align: right;">
+                            <input  type="number" class=" form-control" name = "arrastre" id = "arrastre" style="text-align: right;" required >
                         </div>
                   </div>
-              </div>
+              </div >
 
               <div class="form-group">
                   <label class="col-md-2 control-label">Wharfage*</label>
                     <div class="col-md-5">
                       <div class="input-group">
                         <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                          <input  type="text" class="form-control" name = "wharfage" id = "wharfage" style="text-align: right;">
+                          <input  type="number" class="form-control" name = "wharfage" id = "wharfage" style="text-align: right;" required>
                       </div>
                   </div>
               </div>
@@ -66,11 +85,11 @@
                     <div class="col-md-5">
                       <div class="input-group">
                         <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                          <input  type="text" class=" form-control" name = "wharfage" id = "bankCharges" style="text-align: right;">
+                          <input  type="number" class=" form-control" name = "wharfage" id = "bankCharges" style="text-align: right;">
                       </div>
                   </div>
               </div>
-
+            </form>
               <div class="form-group">
                 <div class = "panel panel-default table-responsive">
                   <table id = "itemTable" class = "table table-hover table-responsive">
@@ -197,30 +216,52 @@
 <div class="modal fade" id="ItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
+
 <div class="modal-header">
   <button type="button" class="close" onclick="$('#ItemModal').modal('hide');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title">Add Item</h4>
 </div>
 <div class="modal-body">
+
+
+    <div class = "collapse" id = "item_warning">
+      <div class="panel-body alert alert-danger">
+          <div class = "col-md-12">
+            <strong class = "col-md-10">Woopsies...theres some unexpected conflicts while attempting to submit the data</strong>
+            <button class = "btn btn-danger col-md-1 pull-right" id = "exitItemPrompt" onclick = "resetItemMessages();"><small>X</small></button>
+            <div class = "col-md-12">
+
+              <li class = "collapse" id = "itemNameError"> > <a style = "text-decoration: none; color: red;">Supply an item name</a></li>
+              <li class = "collapse" id = "HSCodeError"> > <a  style = "text-decoration: none; color: red;">An HS Code for the corresponding item is needed</a></li>
+              <li class = "collapse" id = "rateError"> > <a  style = "text-decoration: none; color: red;">Input the rate</a></li>
+              <li class = "collapse" id = "valueError"> > <a style = "text-decoration: none; color: red;">Input the value</a></li>
+              <li class = "collapse" id = "insuraceError"> > <a  style = "text-decoration: none; color: red;">Input the insurance</a></li>
+              <li class = "collapse" id = "freightError"> > <a  style = "text-decoration: none; color: red;">Input the freight</a></li>
+
+            </div>
+          </div>
+      </div>
+    </div>
+
   <form class = "form-horizontal">
   <div class="form-group">
       <label class="col-md-3 control-label">Item Name</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "itemName">
+              <input  type="text" class="form-control" id = "itemName" required>
       </div>
   </div>
 
   <div class="form-group">
       <label class="col-md-3 control-label">HS Code</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "HSCode">
+              <input  type="text" class="form-control" id = "HSCode" required>
       </div>
   </div>
 
   <div class="form-group">
       <label class="col-md-3 control-label">Rate Of Duty</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "RateOfDuty">
+              <input  type="text" class="form-control" id = "RateOfDuty" required>
       </div>
   </div>
 
@@ -229,7 +270,7 @@
     <div class = "col-md-7">
     <div class="input-group">
         <span class="input-group-addon" id="valuefeeadd">$</span>
-        <input type="text" class="form-control"  aria-describedby="valuefeeadd" id = "Value">
+        <input type="number" class="form-control money"  aria-describedby="valuefeeadd" id = "Value" required>
       </div>
     </div>
   </div>
@@ -239,7 +280,7 @@
     <div class = "col-md-7">
     <div class="input-group">
         <span class="input-group-addon" id="insuranceadd">$</span>
-        <input type="text" class="form-control"  aria-describedby="insuranceadd" id = "Freight">
+        <input type="number" class="form-control money"  aria-describedby="insuranceadd" id = "Freight" required>
       </div>
     </div>
   </div>
@@ -249,7 +290,7 @@
     <div class = "col-md-7">
     <div class="input-group">
         <span class="input-group-addon" id="freightadd">$</span>
-        <input type="text" class="form-control"  aria-describedby="freightadd" id = "Insurance">
+        <input type="number" class="form-control money"  aria-describedby="freightadd" id = "Insurance" required>
       </div>
     </div>
   </div>
@@ -258,7 +299,7 @@
 <div class="modal-footer">
   <button type="button" class="btn btn-success" id = "addItem" >Add</button>
   <input type = "reset" class = "btn btn-danger btn-md" value = "Clear" />
-  <button type="button" class="btn btn-default" onclick="$('#ItemModal').modal('hide');">Close</button>
+  <button type="button" class="btn btn-default money" onclick="$('#ItemModal').modal('hide');">Close</button>
     </form>
 </div>
 </div>
@@ -471,10 +512,6 @@
 </div>
 </div>
 
-
-
-
-
 @endsection
 @push('styles')
 <link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -558,6 +595,16 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 			  })
 
   $(document).ready(function(){
+
+    $('#exitPrompt').on('click', function(e){
+      $('#dutiesAndTaxes_warning').removeClass('in');
+    });
+
+    $('#exitItemPrompt').on('click', function(e){
+      $('#item_warning').removeClass('in');
+    });
+
+
   var cstable = $('#cs_table').DataTable({
     responsive: true,
     scrollX: true,
@@ -664,71 +711,92 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 
   });
 	$('#addItem').on('click', function(e){
-		var table = document.getElementById('itemTable');
-		var row = table.insertRow();
-		var cell0 = row.insertCell(0);
-		var cell1 = row.insertCell(1);
-		var cell2 = row.insertCell(2);
-		var cell3 = row.insertCell(3);
-		var cell4 = row.insertCell(4);
-		var cell5 = row.insertCell(5);
-		var cell6 = row.insertCell(6);
-		cell0.innerHTML = document.getElementById('itemName').value;
-		cell0.contentEditable = true;
-		cell1.innerHTML = document.getElementById('HSCode').value;
-		cell1.contentEditable = true;
-		cell2.innerHTML = document.getElementById('RateOfDuty').value;
-		cell2.contentEditable = true;
-		cell3.innerHTML = document.getElementById('Value').value;
-		cell3.contentEditable = true;
-		cell4.innerHTML = document.getElementById('Freight').value;
-		cell4.contentEditable = true;
-		cell5.innerHTML = document.getElementById('Insurance').value;
-		cell5.contentEditable = true;
-		cell6.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'clicked(this)' >Delete</button>";
 
-		$('#ItemModal').modal('hide');
+    if(ItemValidations() == true)
+    {
+
+    }
+    if(ItemValidations() == false){
+      var table = document.getElementById('itemTable');
+      var row = table.insertRow();
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
+      cell0.innerHTML = document.getElementById('itemName').value;
+      cell0.contentEditable = true;
+      cell1.innerHTML = document.getElementById('HSCode').value;
+      cell1.contentEditable = true;
+      cell2.innerHTML = document.getElementById('RateOfDuty').value;
+      cell2.contentEditable = true;
+      cell3.innerHTML = document.getElementById('Value').value;
+      cell3.contentEditable = true;
+      cell4.innerHTML = document.getElementById('Freight').value;
+      cell4.contentEditable = true;
+      cell5.innerHTML = document.getElementById('Insurance').value;
+      cell5.contentEditable = true;
+      cell6.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'clicked(this)' >Delete</button>";
+
+      $('#ItemModal').modal('hide');
+    }
+
+
+
+
 	});
 
 	$('#generateDAT').on('click', function(e){
 
-			var addedItems = new Array();
-		  var table = document.getElementById('itemTable');
-			var ctr = 0;
-			localStorage.setItem("tblRowLength", table.rows.length);
 
-		    for (var r = 0, n = table.rows.length; r < n; r++) {
-		        for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
-									addedItems[ctr] = table.rows[r].cells[c].innerHTML;
-									ctr++;
-						}
-		    }
+    if(Validations() == true)
+    {
+
+    }
+    if(Validations() == false)
+    {
+      var addedItems = new Array();
+      var table = document.getElementById('itemTable');
+      var ctr = 0;
+      localStorage.setItem("tblRowLength", table.rows.length);
+
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+                  addedItems[ctr] = table.rows[r].cells[c].innerHTML;
+                  ctr++;
+            }
+        }
     var employees = <?php echo json_encode($employees); ?>;
     localStorage.setItem("Employees", JSON.stringify(employees));
     localStorage.setItem("addedItems", JSON.stringify(addedItems));
-		localStorage.setItem("itemCtr", ctr);
+    localStorage.setItem("itemCtr", ctr);
 
     localStorage.setItem("arrastre",  document.getElementById('arrastre').value);
     localStorage.setItem("wharfage",  document.getElementById('wharfage').value);
-		localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');
-		localStorage.setItem("freightNumber", '<?php echo $brokerage_header[0]->freightBillNo?>');
-		localStorage.setItem("arrivalDate",  <?php echo $brokerage_header[0]->expectedArrivalDate?>);
-		localStorage.setItem("weight", <?php echo $brokerage_header[0]->Weight?>);
-		localStorage.setItem("port",  '<?php echo $brokerage_header[0]->name?>');
-		localStorage.setItem("companyName",  '<?php echo $brokerage_header[0]->companyName?>');
-		localStorage.setItem("freightType",  '<?php echo $brokerage_header[0]->freightType?>');
-		localStorage.setItem("bankCharges", document.getElementById('bankCharges').value);
+    localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');
+    localStorage.setItem("freightNumber", '<?php echo $brokerage_header[0]->freightBillNo?>');
+    localStorage.setItem("arrivalDate",  <?php echo $brokerage_header[0]->expectedArrivalDate?>);
+    localStorage.setItem("weight", <?php echo $brokerage_header[0]->Weight?>);
+    localStorage.setItem("port",  '<?php echo $brokerage_header[0]->name?>');
+    localStorage.setItem("companyName",  '<?php echo $brokerage_header[0]->companyName?>');
+    localStorage.setItem("freightType",  '<?php echo $brokerage_header[0]->freightType?>');
+    localStorage.setItem("bankCharges", document.getElementById('bankCharges').value);
     localStorage.setItem('brokerage_id', <?php echo $brokerage_id ?>);
 
     localStorage.setItem("currentExchange_id", currentExchange_id);
-		localStorage.setItem("exchangeRate",  document.getElementById('exchangeRate').value);
-		localStorage.setItem("currentCds_id", currentCds_id);
-		localStorage.setItem("CDSFee",  document.getElementById('CDSFee').value);
-		localStorage.setItem("currentIpf_id", currentIpf_id);
-		localStorage.setItem("ipfFeeHeader", JSON.stringify(ipfFeeHeader));
-		localStorage.setItem("ipfFeeDetail", JSON.stringify(ipfFeeDetail));
+    localStorage.setItem("exchangeRate",  document.getElementById('exchangeRate').value);
+    localStorage.setItem("currentCds_id", currentCds_id);
+    localStorage.setItem("CDSFee",  document.getElementById('CDSFee').value);
+    localStorage.setItem("currentIpf_id", currentIpf_id);
+    localStorage.setItem("ipfFeeHeader", JSON.stringify(ipfFeeHeader));
+    localStorage.setItem("ipfFeeDetail", JSON.stringify(ipfFeeDetail));
 
-		window.location.replace("/dutiesandtaxes");
+
+    window.location.replace("/dutiesandtaxes");
+    }
+
 
 	});
 
@@ -817,5 +885,126 @@ function decimalsOnly(event) {
 	        event.preventDefault();
 	}
 
+  function Validations(){
+
+		resetMessages();
+		var isError = false;
+
+
+
+    if($('#arrastre').valid() == false)
+    {
+      location.href = '#dutiesAndTaxesHeader';
+      $('#arrastre').css('border-color', 'red');
+      $('#dutiesAndTaxes_warning').addClass('in');
+      $('#arrastreError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#wharfage').valid() == false)
+    {
+      location.href = '#dutiesAndTaxesHeader';
+      $('#wharfage').css('border-color', 'red');
+      $('#dutiesAndTaxes_warning').addClass('in');
+      $('#wharfageError').addClass('in');
+
+        isError = true;
+    }
+
+    var table = document.getElementById('itemTable');
+		if(table.rows.length == 2)
+		{
+
+			location.href = '#dutiesAndTaxesHeader';
+		  $('#dutiesAndTaxes_warning').addClass('in');
+			$('#tableError').addClass('in');
+
+				isError = true;
+		}
+
+		return isError;
+
+	}
+
+	function resetMessages(){
+
+		$('#arrastreError').removeClass('in');
+    $('#wharfageError').removeClass('in');
+	  $('#tableError').removeClass('in');
+
+  }
+
+  function ItemValidations(){
+
+    resetMessages();
+    var isError = false;
+
+    if($('#itemName').valid() == false)
+    {
+      $('#itemName').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#itemNameError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#HSCode').valid() == false)
+    {
+      $('#HSCode').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#HSCodeError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#RateOfDuty').valid() == false)
+    {
+      $('#RateOfDuty').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#rateError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#Value').valid() == false)
+    {
+      $('#Value').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#valueError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#Freight').valid() == false)
+    {
+      $('#Freight').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#freightError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#Insurance').valid() == false)
+    {
+      $('#Insurance').css('border-color', 'red');
+      $('#item_warning').addClass('in');
+      $('#insuranceError').addClass('in');
+
+        isError = true;
+    }
+    return isError;
+  }
+
+  function resetItemMessages(){
+
+		$('#itemNameError').removeClass('in');
+    $('#HSCodeError').removeClass('in');
+	  $('#rateError').removeClass('in');
+    $('#valueError').removeClass('in');
+    $('#insuranceError').removeClass('in');
+    $('#freightError').removeClass('in');
+
+  }
 </script>
 @endpush

@@ -235,4 +235,14 @@ class DutiesAndTaxesController extends Controller
   {
       //
   }
+
+  public function update_taxstatus(Request $request)
+  {
+      $brokerage_id = $request->brokerage_id;
+      $brokerage_status_update = DB::table('duties_and_taxes_headers')
+      ->where('duties_and_taxes_headers.id', $brokerage_id)
+    ->update(['statusType' =>  $request->status]);
+
+    return $brokerage_id;
+  }
 }

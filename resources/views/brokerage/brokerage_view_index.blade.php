@@ -4,9 +4,11 @@
 	span.control-label {
 		font-size: 20px;
 	}
+
 	span.label {
 		font-size: 15px;
 	}
+
 	strong {
 		font-size: 15px;
 	}
@@ -19,6 +21,7 @@
 	.table-borderless > thead > tr > th {
 		border: none;
 	}
+
 </style>
 @endpush
 
@@ -77,16 +80,13 @@
 								Php {{number_format((float)$totalBrokerageFee, 2, '.', ',')}}
 							</td>
 						</tr>
-
-
-
 				</table>
 				<div id = "containers">
 					<div class="panel-group" id = "container_copy">
 						<div class="panel panel-default" id = "0_panel">
 							<div class="panel-heading">
 								<h4 class="panel-title">
-									<a data-toggle="collapse" href="#0_container ">Order Details</a>
+									<a data-toggle="collapse" href="#0_container " style = "text-decoration: none;">Order Details</a>
 									<div class="pull-right">
 										<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
 										</div>
@@ -139,7 +139,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 
@@ -147,7 +146,7 @@
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 
-				<h4>Duties and Taxes Decleration <button class = "btn btn-md btn-success col-md-5 pull-right" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
+				<h4>Duties and Taxes Declaration <button class = "btn btn-md btn-success col-md-5 pull-right" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
 				<hr />
 				<table class = "table table-responsive" id = "dutiesandtaxes_table">
 					<thead>
@@ -163,6 +162,9 @@
 							</td>
 							<td style="width: 20%;">
 								Processed By
+							</td>
+							<td style = "width: 10%">
+								Status
 							</td>
 
 							<td style="width: 15%;">
@@ -367,42 +369,24 @@
 										<div class="panel-body">
 												<table class="table table-responsive table-striped" style="width: 100%;" id = "declared_dutiesandtaxes">
 													<thead>
-														<tr class = "info">
-															<td>
-																ID
-															</td>
-															<td>
+														<tr>
+															<td  style="width: 40%; text-align: center;">
+																	ID
+															</td  >
+															<td style="width: 40%; text-align: center;">
 																Date Created
 															</td>
-															<td>
+															<td style="width: 40%; text-align: center;">
 																Brokerage Fee
 															</td>
-															<td>
+															<td style="width: 40%; text-align: center;">
 																Action
 															</td>
 														</tr>
 
 
-																@foreach($brokerage_fees as $fees)
-																	<tr>
-																<td>
-																	{{$fees->duty_header_id}}
-																</td>
-																<td>
-																	{{$fees->createdat}}
-																</td>
-																<td>
-																		{{$fees->brokerageFee}}
-																</td>
-																<td>
-																	<button class = "btn but" onclick = "selected_decleration({{$fees->duty_header_id}})">Select</button>
-																</td>
-																	</tr>
-																@endforeach
-
 													</thead>
-													<tbody>
-													</tbody>
+
 												</table>
 										</div>
 									</div>
@@ -566,19 +550,58 @@
 					<div class="form-group">
 						<label class="control-label col-sm-3" for="_status">Status</label>
 						<div class="col-sm-8">
-							<select name = "_status" id = "_status" class = "form-control">
-								<option value = "P">Pending</option>
-								<option value = "C">Cancelled</option>
-								<option value = "F" disabled title="Unable to update.">Finished</option>
+								<select name = "_status" id = "_status" class = "form-control">
+									<option value = "P" @if($brokerage_header[0]->statusType == 'P')
+										selected disabled title="The order is already pending."
+										@endif>Pending</option>
+									<option value = "C" @if($brokerage_header[0]->statusType == 'C')
+										selected disabled title="The order is already cancelled."
+										@endif>Cancelled</option>
+											<option value = "F" @if($brokerage_header[0]->statusType == 'F')
+												selected disabled title="The order is already finished."
+												@endif
+											>Finished</option>
 
-
+								</select>
 							</select>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal">Save</button>
+				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal" id = "StatusUpdate">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="updateModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Duties And Taxes Information</h4>
+			</div>
+			<div class="modal-body">
+				<div class = "form-horizontal">
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="_status">Status</label>
+						<div class="col-sm-8">
+								<select name = "_status" id = "_taxstatus" class = "form-control">
+									<option value = "P">Pending</option>
+									<option value = "A">Approved</option>
+									<option value = "R">Rejected</option>
+								</select>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success save-tax-information" data-dismiss="modal" id = "TaxStatusUpdate">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -881,8 +904,6 @@ $(document).on('change', '#exp_bill_id', function(e){
 	{
 
 	}
-
-
 })
 
 @if($brokerage_header[0]->bi_head_id_rev != null)
@@ -905,7 +926,7 @@ var delivery_table = $('#revenues_table').DataTable({
 
 
 $(document).ready(function(){
-  var dutiesandtaxes_table = $('#dutiesandtaxes_table').DataTable({
+  var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({
     processing: false,
     deferRender: true,
     serverSide: false,
@@ -917,10 +938,70 @@ $(document).ready(function(){
 		{ data: 'rate'},
     { data: 'brokerageFee'},
     { data: 'processedBy'},
+		{ data: 'statusType'},
     { data: 'action', orderable: false, searchable: false },
 
     ],	"order": [[ 0, "desc" ]],
   });
+
+
+		var declared_dutiesandtaxesvar = $('#declared_dutiesandtaxes').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			scrollX: true,
+			ajax: '{{ route("brokerage.index") }}/{{  $brokerage_id }}/get_approveddutiesandtaxes',
+			columns: [
+
+			{ data: 'duty_header_id' },
+			{ data: 'created_at' },
+			{ data: 'amount'},
+			{ data: 'action', orderable: false, searchable: false}
+
+			],	"order": [[ 0, "desc" ]],
+		});
+
+	$('#TaxStatusUpdate').on('click', function(e){
+
+		$.ajax({
+			type: 'PATCH',
+			url: '{{route("brokerage.index")}}/'+update_id+'/order/statusTaxUpdate',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'status' : document.getElementById('_taxstatus').value,
+			},
+			success: function(data){
+				dutiesandtaxes_tableVar.ajax.reload();
+				declared_dutiesandtaxesvar.ajax.reload();
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]("Update successful");
+
+
+			},
+			error: function(data) {
+
+			}
+		})
+	});
+
+
 
 	@if($brokerage_header[0]->bi_head_id_exp != null)
 	var delivery_table = $('#expense_table').DataTable({
@@ -975,6 +1056,18 @@ $('#StatusUpdate').on('click', function(e){
 		}
 	})
 });
+
+var update_id = 0;
+var select_id = 0;
+$(document).on('click', '.updateTax', function(e){
+	e.preventDefault();
+	update_id = $(this).val();
+})
+
+$(document).on('click', '.selectedBrokerage', function(e){
+	e.preventDefault();
+	selected_decleration($(this).val());
+})
 
 function selected_decleration(duty_det_id){
 

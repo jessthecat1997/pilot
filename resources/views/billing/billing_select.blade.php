@@ -81,7 +81,7 @@
 			</div>
 		</div>
 	</div>
-	<hr>	
+	<hr>
 </div>
 <div id="billModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
@@ -216,14 +216,14 @@
 			{ data: 'action', orderable: false, searchable: false }
 			]
 		})
-		function formatWithBillType(n) { 
+		function formatWithBillType(n) {
 
 			if (n == 0){
 				return "Not Finalize";
 			}else{
 				return "Finalize";
 			}
-		} 
+		}
 
 	})
 
