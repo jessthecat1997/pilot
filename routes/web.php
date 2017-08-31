@@ -29,8 +29,9 @@ Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrok
 Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
 Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
 
-
+Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
 Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
+
 
 Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
 Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
@@ -39,7 +40,7 @@ Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesCon
 Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
-
+Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
 Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
 Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
 

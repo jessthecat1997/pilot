@@ -46,12 +46,12 @@ class BillingDetailsController extends Controller
 
 		return $charge;
 	}
-	public function getBillingDetails(Request $request){ 
-		$billing_details = DB::table('billing_invoice_details') 
-		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount') 
-		->join('charges', 'charge_id', '=', 'charges.id') 
-		->where('bi_head_id', '=', $request->id) 
-		->get(); 
+	public function getBillingDetails(Request $request){
+		$billing_details = DB::table('billing_invoice_details')
+		->select('charges.name', 'billing_invoice_details.description', 'billing_invoice_details.amount')
+		->join('charges', 'charge_id', '=', 'charges.id')
+		->where('bi_head_id', '=', $request->id)
+		->get();
 
 		return Datatables::of($billing_details)
 		->make(true);
@@ -380,6 +380,7 @@ class BillingDetailsController extends Controller
 	{
 		$brokerage = DB::table('duties_and_taxes_headers')
 		->select('duties_and_taxes_headers.id', 'id', 'brokerageFee')
+		->where('statusType', '=', 'A')
 		->where('brokerageServiceOrders_id', '=', $request->br_so_id)
 		->get();
 
@@ -545,9 +546,7 @@ class BillingDetailsController extends Controller
 	}
 	public function ref_pdf(Request $request, $id)
 	{
-
 		$pdf = PDF::loadView('pdf_layouts.refundable_charges_pdf');
 		return $pdf->stream();
 	}
-
 }

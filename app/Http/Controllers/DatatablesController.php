@@ -2704,14 +2704,28 @@ class DatatablesController extends Controller
 			->where('brokerageServiceOrders_id','=', $request->brokerage_id)
 			->get();
 
-
-
 			return Datatables::of($dutiesandtaxes)
 			->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-
+			->editColumn('statusType', function($dutiesandtaxes){
+				switch ($dutiesandtaxes->statusType) {
+					case 'A':
+					return 'Approved';
+					break;
+					case 'P':
+					return 'Pending';
+					break;
+					case 'R':
+					return 'Rejected';
+					break;
+					default:
+					return 'Unknown';
+					break;
+				}})
 			->addColumn('action', function ($dutiesandtax){
 				return
-				'<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>';
+				'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
+				<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
+				<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
 			})
 
 			->make(true);

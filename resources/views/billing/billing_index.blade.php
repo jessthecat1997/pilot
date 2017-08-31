@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="pull-right">
@@ -69,7 +70,7 @@
 				</table>
 			</div>
 		</div>
-		<hr>	
+		<hr>
 		<div class="panel-default panel">
 			<div class="panel-heading" id="heading">Trucking Service Order</div>
 			<div class = "panel-body">
@@ -124,7 +125,7 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
-			{ data: 'isRevenue', 
+			{ data: 'isRevenue',
 			"render" : function( data, type, full ) {return formatWithBillType(data); }},
 			{ data: 'Total' },
 			{ data: 'due_date' },
@@ -133,14 +134,14 @@
 			]
 		})
 
-		function formatWithBillType(n) { 
+		function formatWithBillType(n) {
 
 			if (n == '0'){
 				return "Refundable Charges";
 			}else{
 				return "Billing";
 			}
-		} 
+		}
 	})
 
 	$(document).on('click', '#btn_newBill', function(e){

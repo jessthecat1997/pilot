@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Http\Request;
 use App\ReceiveType;
 use Illuminate\Support\Facades\DB;
@@ -352,11 +353,29 @@ class BrokerageController extends Controller
     ->where('brokerageServiceOrders_id', '=', $brokerage_id)
     ->get();
 
-    $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as createdat, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) ORDER BY dt_hed.brokerageServiceOrders_id');
+    $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as createdat, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) AND dt_hed.StatusType = "A" ORDER BY dt_hed.brokerageServiceOrders_id');
 
     return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees']));
   }
 
+  public function get_approveddutiesandtaxes(Request $request)
+  {
+    $brokerage_id = $request->brokerage_id;
+
+
+      $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as created_at, dt_hed.brokerageFee as amount from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) AND dt_hed.StatusType = "A" ORDER BY dt_hed.brokerageServiceOrders_id');
+
+
+
+    return Datatables::of($brokerage_fees)
+    ->addColumn('action', function ($brokerage_fee){
+      return
+      '<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info selectedBrokerage"  value = '.$brokerage_fee->duty_header_id.' ><i class="fa fa-edit"></i>Select</button>';
+    })
+    ->make(true);
+
+
+  }
   public function update_status(Request $request)
   {
       $brokerage_id = $request->brokerage_id;

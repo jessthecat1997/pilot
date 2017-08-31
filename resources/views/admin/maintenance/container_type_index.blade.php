@@ -145,6 +145,7 @@
 				});
 
 		$("#commentForm").validate({
+			var str = "someting someting";
 			rules:
 			{
 				name:
@@ -169,6 +170,7 @@
 
 
 			},
+	
 			onkeyup: function(element) {$(element).valid()},
 		});
 
