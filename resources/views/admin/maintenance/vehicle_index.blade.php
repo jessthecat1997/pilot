@@ -70,7 +70,7 @@
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>
-					
+
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
@@ -99,9 +99,12 @@
 						<div class="modal-body">			
 							<div class="form-group required">
 								<label class = "control-label">Vehicle Type</label>
-								<select class = "form-control vehicle_types_id select2"  id = "vehicle_types_id">
-								</select>
+								<div class="col-md-12">
+									<select class = "form-control vehicle_types_id select2"  id = "vehicle_types_id" style="width: 100%;">
+									</select>
+								</div>
 							</div>
+							<br/>
 							<div><button  id = "nvt" class = "btn btn-md btn-info new_vehicle_type pull-right" data-toggle = 'modal' data-target = "#vtModal"  >New Vehicle Type </button></div>
 						</div>
 
@@ -192,7 +195,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_plateNumber = null;
 	var temp_model = null;
@@ -243,7 +246,7 @@
 			},
 		});
 
-	
+
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();

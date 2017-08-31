@@ -146,7 +146,6 @@
 				});
 
 		$("#commentForm").validate({
-			var str = "someting someting";
 			rules:
 			{
 				name:
