@@ -32,6 +32,7 @@ class PaymentsController extends Controller
 			'billing_invoice_headers.id as bi_head',
 			'consignee_service_order_headers.id',
 			'companyName', 'service_order_types.name',
+			DB::raw('CONCAT(firstName, " ", lastName) as con_name'),
 			DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'),
 			'consignees_id as con_id'
 			)
@@ -103,17 +104,18 @@ class PaymentsController extends Controller
 	public function payments_table(Request $request, $id)
 	{
 		$history = DB::select(
-			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description, p.id as id FROM payments as p  WHERE p.bi_head_id = ? 
+			'SELECT CONCAT("Payment: ", id) as record, CONCAT("Php ",amount) as amount, created_at, description, p.id as id, CONCAT("1") as type FROM payments as p  WHERE p.bi_head_id = ?
 			UNION 
 			(
-			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description, dp.id as id FROM deposit_payments as dp WHERE dp.bi_head_id = ?
+			SELECT CONCAT("Deposit Payment: ", id) as record, CONCAT("Php ", amount) as amount, created_at, description, dp.id as id, CONCAT("2") as type FROM deposit_payments as dp WHERE dp.bi_head_id = ?
 			)
 			', [$id, $id]
 			);
 		return Datatables::of($history)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "'. route('payment_receipt'). "/". $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-info payment_receipt"><i class="fa fa-print"></i></a>';
+			'<button value = "'. $hist->id .'" class = "btn btn-md btn-info payment_receipt"><span class="fa fa-print"></span></button>
+			<input type = "hidden" class = "type" value = "' . $hist->type . '" />';
 		})
 		->make(true);
 	}
@@ -149,18 +151,144 @@ class PaymentsController extends Controller
 
 		return $csh;
 	}
-	public function payment_pdf(Request $request, $id)
+	public function payment_pdf(Request $request)
 	{
-		$payments = DB::table('consignee_service_order_headers')
-		->join('consignee_service_order_details', 'consignee_service_order_headers.id', '=', 'consignee_service_order_details.so_headers_id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
-		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('billing_invoice_headers.id','companyName','service_order_types.name', 'address','TIN', 'businessStyle', 'billing_invoice_headers.created_at')
-		->where('billing_invoice_headers.id', '=', $id)
-		->get();
 
-		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact('payments', 'exp'));
+		$payment = \App\Payment::findOrFail($request->payment_id);
+
+		$bill = DB::select('
+			SELECT t.id, 
+			con.firstName,
+			con.lastName,
+			con.TIN,
+			con.address,
+			con.businessStyle,
+			t.id as bill_id,
+			t.isRevenue as billtype,
+
+
+			(CASE t.isRevenue
+			WHEN t.isRevenue = 1 THEN "Revenue"
+			WHEN t.isRevenue = 0 THEN "Expense"
+			END) as isRevenue,	
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+			pay.totpay,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
+			t.status,
+            dpay.totdpay
+
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+
+			LEFT JOIN
+
+			(
+			SELECT bi_head_id, SUM(amount) totpay
+			FROM payments
+			GROUP BY bi_head_id
+			) pay
+
+			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
+            
+            JOIN consignee_service_order_headers as so 
+            
+            on so.id = t.so_head_id
+            
+            JOIN consignees as con
+            
+            on con.id = so.consignees_id
+
+            where t.id = ?
+			', [$payment->bi_head_id]);
+
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
+		return $pdf->stream();
+	}
+
+	public function payment_deposit_pdf(Request $request, $id)
+	{
+		$payment = \App\DepositPayment::findOrFail($request->payment_id);
+
+		$bill = DB::select('
+			SELECT t.id, 
+			con.firstName,
+			con.lastName,
+			con.TIN,
+			con.address,
+			con.businessStyle,
+			t.id as bill_id,
+			t.isRevenue as billtype,
+
+
+			(CASE t.isRevenue
+			WHEN t.isRevenue = 1 THEN "Revenue"
+			WHEN t.isRevenue = 0 THEN "Expense"
+			END) as isRevenue,	
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+			pay.totpay,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
+			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
+			t.status,
+            dpay.totdpay
+
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+
+			LEFT JOIN
+
+			(
+			SELECT bi_head_id, SUM(amount) totpay
+			FROM payments
+			GROUP BY bi_head_id
+			) pay
+
+			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
+            
+            JOIN consignee_service_order_headers as so 
+            
+            on so.id = t.so_head_id
+            
+            JOIN consignees as con
+            
+            on con.id = so.consignees_id
+
+            where t.id = ?
+			', [$payment->bi_head_id]);
+
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
 		return $pdf->stream();
 	}
 }

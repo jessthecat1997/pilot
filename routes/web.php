@@ -223,6 +223,7 @@ Route::resource('/orders', 'OrdersController');
 Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
 Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->name('payment_receipt');
+Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 

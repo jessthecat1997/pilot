@@ -5,18 +5,25 @@
 <div class = "container-fluid">
 	<div class="row">
 		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading">Consignee Details</div>
+			<div class="panel-heading" id="heading">Billing Information</div>
 			<table class="table">
 				<tbody>
 					<tr>
-						<td class="active"><strong>No.: </strong></td>
+						<td class="active"><strong>Billing Invoice No:</strong></td>
 						@forelse($pays as $pay)
-						<td class = "success" id="so_head_id"><strong>{{ $pay->id }}</strong></td>
+						<td class = "success"><strong>{{ $so_head_id }}</strong></td>
 						@empty
 						@endforelse
 					</tr>
 					<tr>
 						<td class="active"><strong>Consignee: </strong></td>
+						@forelse($pays as $pay)
+						<td class = "success" id="consignee"><strong>{{ $pay->con_name }}</strong></td>
+						@empty
+						@endforelse
+					</tr>
+					<tr>
+						<td class="active"><strong>Company Name: </strong></td>
 						@forelse($pays as $pay)
 						<td class = "success" id="consignee"><strong>{{ $pay->companyName }}</strong></td>
 						@empty
@@ -32,7 +39,7 @@
 					<tr>
 						<td class="active"><strong>Service Order: </strong></td>
 						@forelse($pays as $pay)
-						<td class="success" id="sotype"><strong>{{ $pay->name }}</strong></td>
+						<td class="success" id="sotype"><strong>{{ $pay->name }} Service Order No: {{ $pay->id }}</strong></td>
 						@empty
 						@endforelse
 					</tr>
@@ -356,13 +363,27 @@
 		
 	})
 
+
+	$(document).on('click', '.payment_receipt', function(e){
+		e.preventDefault();
+		type = $(this).closest('tr').find('.type').val();
+		console.log($(this).val());
+		if(type == 1){
+			window.open("{{ route('payment_receipt') }}/" + $(this).val());
+		}
+		else
+		{
+			window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
+		}
+		
+	})
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
 		var amt = parseFloat($('#depositPayment').val());
 		var rem = $('#depositDescription').val();
 		console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
 		console.log(typeof(dep_balance));
-		if(amt <= dep_balance && amt <= bals)
+		if(amt <= dep_balance && amt <= bals && amt > 0)
 		{	
 
 			console.log('mawo');
