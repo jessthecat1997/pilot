@@ -74,7 +74,7 @@
 							</td>
 
 							<td class="success" colspan="2">
-								<strong>Php {{ number_format((float)$estimate, 3, '.', '') }}</strong>
+								<strong>Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></strong>
 							</td>
 						</tr>
 						<tr>
@@ -173,7 +173,7 @@
 							<div class= "col-md-9">
 								<div class="input-group">
 									<span class="input-group-addon" id="freightadd">Php</span>
-									<input type="number" class="form-control"  id = "deposit" style = "text-align: right" required>
+									<input type="number" class="form-control money"  id = "deposit" style = "text-align: right" required>
 								</div>
 							</div>
 						</div>
@@ -311,16 +311,16 @@
 				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 15%;">
 								Date Added
 							</td>
-							<td>
+							<td style="width: 25%;">
 								Amount
 							</td>
-							<td>
+							<td style="width: 25%;">
 								Remaining Balance
 							</td>
-							<td>
+							<td style="width: 35%;">
 								Description
 							</td>
 						</tr>
@@ -331,11 +331,11 @@
 							<td>
 								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
 							</td>
-							<td>
-								{{ $deposit->amount }}
+							<td style="text-align: right;">
+								Php <span class = "money">{{ $deposit->amount }}</span>
 							</td>
 							<td style="text-align: right;">
-								Php {{ $deposit->currentBalance }}
+								Php <span class = "money">{{ $deposit->currentBalance }}</span>
 							</td>
 							<td>
 								{{ $deposit->description }}
@@ -360,7 +360,7 @@
 				<div class = "modal-body">
 					<div class = "col-md-12">
 						<div class="form-horizontal">
-							<div class = "col-md-6">
+							<div class = "col-md-12">
 								<div class = "form-group">
 
 									<label class = "control-label col-md-3">Name *</label>
@@ -377,11 +377,11 @@
 									</div>
 								</div>
 							</div>
-							<div class = "col-md-6">
+							<div class = "col-md-12">
 								<div class = "form-group">
 									<label class = "control-label col-md-3">Amount *</label>
 									<div class = "col-md-9">
-										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control" required style="text-align: right">
+										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control money" required style="text-align: right"  data-rule-required="true" value="0.00">
 									</div>
 								</div>
 							</div>
@@ -429,7 +429,7 @@
 				<div class = "modal-body">
 					<div class = "col-md-12">
 						<div class="form-horizontal">
-							<div class = "col-md-6">
+							<div class = "col-md-12">
 								<div class = "form-group">
 									<label class = "control-label col-md-3">Name *</label>
 									<div class = "col-md-9">
@@ -445,11 +445,11 @@
 									</div>
 								</div>
 							</div>
-							<div class = "col-md-6">
+							<div class = "col-md-12">
 								<div class = "form-group">
 									<label class = "control-label col-md-3">Amount *</label>
 									<div class = "col-md-9">
-										<input type = "number" name = "exp_amount" id="exp_amount" required class = "form-control" style="text-align: right">
+										<input type = "number" name = "exp_amount" id="exp_amount" required class = "form-control money" style="text-align: right">
 									</div>
 								</div>
 							</div>
@@ -740,11 +740,13 @@
 			columns: [
 
 			{ data: 'name' },
-			{ data: 'amount'},
-			{ data: 'description' },
+			{ data: 'amount',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); }},
+				{ data: 'description' },
 
-			],	"order": [[ 0, "desc" ]],
-		});
+				],	"order": [[ 0, "desc" ]],
+			});
 		@endif
 
 		@if($service_order->bi_head_id_exp != null)
@@ -757,11 +759,13 @@
 			columns: [
 
 			{ data: 'name' },
-			{ data: 'amount'},
-			{ data: 'description' },
+			{ data: 'amount',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); }},
+				{ data: 'description' },
 
-			],	"order": [[ 0, "desc" ]],
-		});
+				],	"order": [[ 0, "desc" ]],
+			});
 		@endif
 
 		$(document).on('click', '.confirm-create-bill', function(e){

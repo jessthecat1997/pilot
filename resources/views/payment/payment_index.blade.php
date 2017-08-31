@@ -35,37 +35,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="row">
-		<div class = "panel-default panel c" id="so_collapse">
-			<div class = "panel-body">
-				<div>
-					<h3>Select Service Order</h3>
-					<br>
-					<table class = "table-responsive table" id = "so_head_table">
-						<thead>
-							<tr>
-								<td>
-									ID
-								</td>
-								<td>
-									Consignee
-								</td>
-								<td>
-									Service Order Type
-								</td>
-								<td>
-									Date Created
-								</td>
-								<td>
-									Actions
-								</td>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div> -->
 </div>
 @endsection
 @push('styles')
@@ -95,10 +64,17 @@
 			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'isRevenue' },
-			{ data: 'Total' },
+			{ data: 'totall',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },
 			{ data: 'due_date' },
 			{ data: 'action', orderable: false, searchable: false }
-			]
+			],
+			columnDefs: [
+
+                 {"className": "dt-right", "targets": "1"}
+
+          ]
 		})
 	})
 </script>

@@ -127,12 +127,14 @@
 			{ data: 'companyName' },
 			{ data: 'isRevenue',
 			"render" : function( data, type, full ) {return formatWithBillType(data); }},
-			{ data: 'Total' },
-			{ data: 'due_date' },
-			{ data: 'status' },
-			{ data: 'action', orderable: false, searchable: false }
-			]
-		})
+			{ data: 'totall',
+			"render" : function( data, type, full ) {
+				return formatNumber(data); } },
+				{ data: 'due_date' },
+				{ data: 'status' },
+				{ data: 'action', orderable: false, searchable: false }
+				]
+			})
 
 		function formatWithBillType(n) {
 
@@ -149,8 +151,9 @@
 		$('#so_collapse').addClass('in');
 		$('#btn_newBill').removeClass('in');
 		var vtable = $('#brso_head_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: '{{ route("brso_head.data") }}',
 			columns: [
 			{ data: 'id' },
@@ -160,8 +163,9 @@
 			]
 		})
 		var trtable = $('#trso_head_table').DataTable({
-			processing: true,
-			serverSide: true,
+			processing: false,
+			serverSide: false,
+			deferRender: true,
 			ajax: '{{ route("trso_head.data") }}',
 			columns: [
 			{ data: 'id' },
