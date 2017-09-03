@@ -84,6 +84,9 @@ Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
+Route::resource('/admin/requirement','RequirementsController');
+
+
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
@@ -213,6 +216,12 @@ Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data'
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
 Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
+Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('lc.data');
+
+
+
+
+
 Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
