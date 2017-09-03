@@ -59,7 +59,6 @@
 		var chtable = $('#contracts_table').DataTable({
 			processing: false,
 			deferRender: true,
-			scrollX: true,
 			serverSide: false,
 			ajax: "{{ route('contract.data') }}",
 			columns: [

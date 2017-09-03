@@ -708,6 +708,7 @@
 							"hideMethod": "fadeOut"
 						}
 						toastr["success"]("Contract save as draft successfully")
+						window.location.replace(" {{ route('contracts.index') }}");
 					}
 
 				})

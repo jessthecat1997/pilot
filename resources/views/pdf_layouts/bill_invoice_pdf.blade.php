@@ -68,11 +68,19 @@
 					<td style="border:1px solid transparent;" width="20%">
 						Date:
 					</td>
+					@if($bills[0]->date_billed == NULL)
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							{{ Carbon\Carbon::parse($bills[0]->created_at)->toFormattedDateString() }}
+							{{ Carbon\Carbon::parse($bills[0]->date_billed)->toFormattedDateString() }}
 						</strong>
 					</td>
+					@else
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<strong>
+								Not Set
+						</strong>
+					</td>
+					@endif
 				</tr>
 				<tr>
 					<td style="border:1px solid transparent;" width="20%">
@@ -84,13 +92,21 @@
 						</strong>
 					</td>
 					<td style="border:1px solid transparent;" width="20%">
-						Terms:
+						Due Date:
 					</td>
+					@if($bills[0]->due_date == NULL)
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							
+							{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}
 						</strong>
 					</td>
+					@else
+					<td style="border:1px solid transparent; text-align: left;" width="30%">
+						<strong>
+								Not Set
+						</strong>
+					</td>
+					@endif
 				</tr>
 				<tr>
 					<td style="border:1px solid transparent;" width="20%">
@@ -186,7 +202,7 @@
 					</td>
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
-							{{ Carbon\Carbon::parse($bills[0]->created_at)->toFormattedDateString() }}
+							{{ Carbon\Carbon::parse($bills[0]->date_billed)->toFormattedDateString() }}
 						</strong>
 					</td>
 				</tr>
