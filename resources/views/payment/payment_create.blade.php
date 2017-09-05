@@ -56,7 +56,7 @@
 					<div class="form-group required">
 						<label class = "control-label" >Mode of Payment: &nbsp;</label>
 						<label class="radio-inline" id="cash"><input type="radio" name="p_mode" id="p_mode" value="Cash">Cash</label>
-						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check">Check</label>
+						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Check</label>
 					</div>
 					<div class="form-group pull-right">
 						<label for="bal"><h3>Balance: &nbsp;</h3></label>
@@ -235,6 +235,55 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn but finalize-payment-rev">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="checkModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Check Payment</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					{{ csrf_field() }}
+					<thead>
+						<tr>
+							<td>
+								Name *
+							</td>
+							<td>
+								Amount *
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<form class="form-horizontal" onsubmit="this.preventDefault();">
+								<td>
+									<input type = "text" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+								</td>
+								<td>
+									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+								</td>
+							</form>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div class="form-group">
+									<label for="remarks">Remarks:</label>
+									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<button class="btn but finalize-payment-check">Confirm</button>
 			</div>
 		</div>
 	</div>
