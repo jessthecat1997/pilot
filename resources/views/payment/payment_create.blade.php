@@ -53,7 +53,12 @@
 			<form class="form-inline" onsubmit="this.preventDefault();">
 				{{ csrf_field() }}
 				<div class="col-sm-8">
-					<div class="form-group">
+					<div class="form-group required">
+						<label class = "control-label" >Mode of Payment: &nbsp;</label>
+						<label class="radio-inline" id="cash"><input type="radio" name="p_mode" id="p_mode" value="Cash">Cash</label>
+						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check">Check</label>
+					</div>
+					<div class="form-group pull-right">
 						<label for="bal"><h3>Balance: &nbsp;</h3></label>
 						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
 					</div>
@@ -383,8 +388,8 @@
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },
 
-			]
-		})
+				]
+			})
 		
 	})
 
