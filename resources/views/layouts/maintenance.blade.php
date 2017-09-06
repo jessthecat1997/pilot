@@ -265,6 +265,8 @@
 
         });
 
+        $
+
          $('.money').inputmask("numeric", {
         radixPoint: ".",
         groupSeparator: ",",
@@ -283,6 +285,11 @@
     function formatNumber_s(n) {
         var currency = "$ ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
+
+    function formatNumber_container_size(n) {
+        var unit = "-footer";
+        return  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + unit;
     }
     </script>
     @stack('scripts')

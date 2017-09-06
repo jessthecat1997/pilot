@@ -85,11 +85,12 @@ Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 Route::resource('/admin/requirement','RequirementsController');
-
+Route::resource('/admin/arrastre_fee','ArrastreFeesController');
 
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
+Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
 
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
@@ -216,8 +217,8 @@ Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data'
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
 Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
-Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('lc.data');
-
+Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
+Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
 
 
 
