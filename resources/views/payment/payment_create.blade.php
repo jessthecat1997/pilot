@@ -247,39 +247,16 @@
 				<h4 class="modal-title">Check Payment</h4>
 			</div>
 			<div class="modal-body">
-				<table class="table">
-					{{ csrf_field() }}
-					<thead>
-						<tr>
-							<td>
-								Name *
-							</td>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<form class="form-horizontal" onsubmit="this.preventDefault();">
-								<td>
-									<input type = "text" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-								<td>
-									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-							</form>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="form-group">
-									<label for="remarks">Remarks:</label>
-									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="name">Name: &nbsp;</label>
+						<input type="text" class="txt" id="name" value="{{ $pays[0]->con_name }}" style="width: 300px;" disabled>
+					</div>
+					<div class="form-group">
+						<label for="check_amount">Amount:</label>
+						&nbsp;<input type="text" class="form-control money" id="check_amount">
+					</div>
+				</form>
 				<strong>Note:</strong> All fields with * are required.
 			</div>
 			<div class="modal-footer">
@@ -439,7 +416,7 @@
 
 				]
 			})
-		
+
 	})
 
 
@@ -454,7 +431,7 @@
 		{
 			window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
 		}
-		
+
 	})
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
