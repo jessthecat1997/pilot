@@ -22,6 +22,7 @@ use App\VatRate;
 use App\LocationProvince;
 use App\LocationCities;
 use App\ContractTemplate;
+use App\Requirement;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -49,6 +50,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function req_datatable(){
+		$reqs = Requirement::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($reqs)
+		->addColumn('action', function ($req){
+			return
+			'<button value = "'. $req->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $req->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
