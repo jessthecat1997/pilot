@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
-use App\ArrastreFeeHeader;
-use App\ArrastreFeeDetail;
+use App\ArrastreHeader;
+use App\ArrastreDetail;
 
 class ArrastreFeesController extends Controller
 {
@@ -21,9 +21,28 @@ class ArrastreFeesController extends Controller
     }
 
     
-    public function create()
+    public function store(Request $request)
     {
+        $af_header = new ArrastreHeader;
+        $af_header->locations_id = $request->locations_id;
+        $af_header->save();
+
       
+        $_container_size_id = json_decode(stripslashes($request->container_size_id), true);
+        $_amount = json_decode(stripslashes($request->amount), true);
+
+        $tblRowLength = $request->tblLength;
+
+        for($x = 0; $x < $tblRowLength; $x++)
+        {
+            $af_detail = new ArrastreDetail;
+            $af_detail->af_headers_id = $af_header->id;
+            $af_detail->container_size_id = (string)$_container_size_id[$x];
+            $af_detail->amount = (string)$_amount[$x];
+            $af_detail->save();
+        }
+
+
     }
 
    
@@ -35,6 +54,8 @@ class ArrastreFeesController extends Controller
 
     public function destroy($id)
     {
+        $new_af = ArrastreHeader::findOrFail($id);
+        $new_af->delete();
        
     }
 

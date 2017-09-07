@@ -8,7 +8,7 @@ class ArrastreHeader extends Model
 {
 	use SoftDeletes;
 	protected $fillable = [
-	'location_id',
+	'locations_id',
 	];
 
 	protected $dates = [

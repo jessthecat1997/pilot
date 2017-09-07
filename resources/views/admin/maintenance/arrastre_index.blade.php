@@ -188,10 +188,10 @@
 	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
-	var container_size_id = [];
+	var container_size= [];
 	var amount_value = [];
 	var data, tblLength;
-	var jsonMinimum, jsonMaximum, jsonAmount;
+	var jsonContainerSize, jsonAmount;
 	$(document).ready(function(){
 		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
 
@@ -369,24 +369,22 @@
 		});
 		$(document).on('click', '.finalize-af', function(e){
 			e.preventDefault();
-			//if(finalvalidateIpfRows() === true){
+			if(finalvalidateIpfRows() === true){
 
 				var title = $('.modal-title').text();
 				if(title == "New Arrastre Fee Per Port")
 				{
-					jsonMinimum = JSON.stringify(minimum_id);
-					jsonMaximum = JSON.stringify(container_size_id);
+
+					jsonContainerSize = JSON.stringify(container_size);
 					jsonAmount = JSON.stringify(amount_value);
 
-					minimum_unmask = [];
 					$.ajax({
 						type: 'POST',
 						url:  '/admin/arrastre_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'location' : $('#dateEffective').val(),
-							'minimum' : jsonMinimum,
-							'maximum' : jsonMaximum,
+							'location_id' : $('#location').val(),
+							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
 						},
@@ -397,7 +395,6 @@
 							$('.modal-title').text('New Arrastre Fee Per Port');
 							
 							$('#amount').val("0.00");
-							$('#dateEffective').val("");
 							toastr.options = {
 								"closeButton": false,
 								"debug": false,
@@ -424,8 +421,8 @@
 
 
 
-					jsonMinimum = JSON.stringify(minimum_id);
-					jsonMaximum = JSON.stringify(container_size_id);
+					
+					jsonContainerSize = JSON.stringify(container_size_id);
 					jsonAmount = JSON.stringify(amount_value);
 
 
@@ -436,7 +433,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'af_head_id': data.id,
 							'dateEffective' : $('#dateEffective').val(),
-							'container_sizes_id' : jsonMinimum,
+							'container_sizes_id' : jsonContainerSize,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
 						},
@@ -447,7 +444,7 @@
 							$('.modal-title').text('New Arrastre Fee Per Port');
 							
 							$('#amount').val("0.00");
-						
+
 							toastr.options = {
 								"closeButton": false,
 								"debug": false,
@@ -473,7 +470,7 @@
 
 
 				}
-			//}
+			}
 		});
 	});
 function validateIpfRows()
@@ -482,7 +479,7 @@ function validateIpfRows()
 	container_size_id = [];
 	amount_value = [];
 	minimum_id_descrp = [];
-	container_size_id_descrp = [];
+	
 	amount_value_descrp = [];
 	range_pairs = [];
 	dateEffective = document.getElementsByName('dateEffective');
@@ -506,7 +503,7 @@ function validateIpfRows()
 		else
 		{
 			container_size[i].style.borderColor = 'green';
-			container_size_id_descrp.push(container_size[i].value);
+			
 			container_size_id.push(container_size[i].value);
 			$('#af_warning').removeClass('in');
 		}
@@ -578,6 +575,7 @@ function validateIpfRows()
 			return false;
 		}
 	}
+
 	function finalvalidateIpfRows()
 	{
 
@@ -589,10 +587,10 @@ function validateIpfRows()
 
 		error = "";
 
-		
-		
-		for(var i = 0; i < minimum.length; i++){
-			
+
+
+		for(var i = 0; i < container_size.length; i++){
+
 			if(container_size[i].value === "")
 			{
 				container_size[i].style.borderColor = 'red';
@@ -602,7 +600,7 @@ function validateIpfRows()
 			else
 			{
 				container_size[i].style.borderColor = 'green';
-				container_size_id_descrp.push(container_size[i].value);
+				
 				container_size_id.push(container_size[i].value);
 				$('#af_warning').removeClass('in');
 			}
@@ -624,8 +622,8 @@ function validateIpfRows()
 					$('#af_warning').removeClass('in');
 				}
 			}
-			
-			
+
+
 			pair = {
 				amount: amount[i].value,
 				container_size: container_size[i].value
@@ -647,6 +645,7 @@ function validateIpfRows()
 					amount[j].style.borderColor = 'red';
 
 
+				}
 			}
 		}
 		if(found == true){
@@ -654,17 +653,18 @@ function validateIpfRows()
 			$('#af_warning').addClass('in');
 		}
 		if(error.length == 0){
-			tblLength = minimum.length;
+			tblLength = container_size.length;
 			return true;
 		}
 		else
 		{
 			return false;
 		}
-	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+	
+}
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush
