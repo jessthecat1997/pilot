@@ -142,6 +142,15 @@
                             <li>
                                 <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage Fee</a>
                             </li>
+                            <li>
+                                <a href = "{{ route('arrastre_fee.index') }}"  class = "class-arrastre-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Arrastre Fee</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('wharfage_fee.index') }}"  class = "class-wharfage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Wharfage Fee</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('cargo_type.index') }}"  class = "class-cargo-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Cargo Type</a>
+                            </li>
                         </div>
                         <li>
                             <a data-toggle="collapse" class="maintenance-group" href = "#deliverycollapse"><i></i>&nbsp;&nbsp;Delivery</a>
@@ -275,7 +284,7 @@
     });
 
 
-    function formatNumber(n) { 
+    function formatNumber(n) {
         var currency = "Php ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }

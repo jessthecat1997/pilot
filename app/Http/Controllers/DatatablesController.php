@@ -25,6 +25,9 @@ use App\ContractTemplate;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
+use App\CargoType;
+use App\ArrastreFee;
+use App\WharfageFee;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -2729,6 +2732,18 @@ class DatatablesController extends Controller
 				<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
 			})
 
+			->make(true);
+		}
+
+		public function cargoType_datatable(){
+			$ctypes = CargoType::select(['id', 'name','description' ]);
+			return Datatables::of($ctypes)
+			->addColumn('action', function ($ctype) {
+				return
+				'<button  style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>'.
+				'<button  class="btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{$id}}')
 			->make(true);
 		}
 }
