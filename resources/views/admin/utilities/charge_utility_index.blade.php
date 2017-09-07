@@ -106,6 +106,11 @@
 <script type="text/javascript">
 	var data;
 	var filter = 0;
+
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#billing_collapse').addClass('in');
+	
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
 			processing: true,
