@@ -19,7 +19,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Utilites | Archive | Standard Area Rates</h3>
+		<h2>&nbsp;Utilites | Archive | Standard Area Rates</h2>
 			<hr>
 			<div class="form-group col-md-3 col-md-offset-9">
 				<label>Filter</label>
@@ -30,7 +30,7 @@
 
 				</select>
 			</div>
-		</div>
+
 		<br />
 		<div class = "row">
 			<div class = "panel-default panel">
@@ -131,7 +131,6 @@
 		</div>
 	</form>
 </section>
-</div>
 
 @endsection
 
@@ -140,6 +139,11 @@
 	
 	var data;
 	var filter = 0;
+
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#archive_deliverycollapse').addClass('in');
+
 	$(document).ready(function(){
 		var sartable = $('#sar_table').DataTable({
 			processing: true,

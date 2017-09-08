@@ -227,7 +227,7 @@
                         </li> 
                         <div id="archive_brokeragecollapse" class="pane;-collapse collapse"> 
                            
-                            <li> 
+                            <li id = ""> 
                                 <a href = "{{ route('cds_fee.utilities_index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a> 
                             </li> 
                             <li> 

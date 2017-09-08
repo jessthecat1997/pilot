@@ -111,6 +111,11 @@
 <script type="text/javascript">
     var data;
     var filter = 0;
+
+    $('#collapse4').addClass('in');
+    $('#archivecollapse').addClass('in');
+    $('#archive_brokeragecollapse').addClass('in');
+
     $(document).ready(function(){
         var bftable = $('#bf_table').DataTable({
             processing: false,

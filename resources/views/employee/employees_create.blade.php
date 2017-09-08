@@ -1,11 +1,58 @@
 @extends('layouts.app')
 @section('content')
-<div class = "row">
-  <div class = "panel default-panel">
-   <div class = "panel-heading">
-    <h3><img src="/images/bar.png"> Employee | Create Employee</h3>
-    <hr />
+<div class = "col-md-12">
+  <div class = "panel panel-default">
+    <div class = "panel-heading">
+      <h3>
+        <img src="/images/bar.png"> Employee | Create Employee
+      </h3>
+      <hr />
+    </div>
+    <div class = "panel-body">
+      <div class = "col-md-12">
+        @php
+        $checkboxCtr = 0;
+        $employeeTypeId = array();
+        @endphp
+        <div class = "form-group">
+          <div class = "col-md-12">
+            @forelse($employee_role as $employee_roles)
+            <div class = "col-md-3" id = "employeeRoles">
+              <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  >&nbsp;&nbsp;{{$employee_roles->name }}
+            </div>
+
+            @php
+            $checkboxCtr++;
+            $employeeTypeId[$checkboxCtr] = $employee_roles->id;
+            @endphp
+
+            @empty
+            <label>No employee Types found </label>
+            @endforelse
+          </div>
+        </div>
+      </div>
+      <div class = "col-md-12">
+       <form role = "form" class="form-horizontal" method = "POST">
+        {{ csrf_field() }}
+        <div class="form-group required">
+          <label class = "control-label">First Name</label>
+          <input  type="text" class="form-control" name = "freightnumber" id = "firstName">
+        </div>
+        <div class="form-group required">
+          <label>Middle Name</label>
+          <input  type="text" class="form-control" name = "freightnumber" id = "middleName">
+        </div>
+        <div class="form-group required">
+          <label class = "control-label">Last Name</label>
+          <input  type="text" class="form-control" name = "freightnumber" id = "lastName">
+        </div>
+      </form>
+    </div>
   </div>
+</div>
+</div>
+<div class = "row">
 
   <div class = "panel-body">
     <div class = "panel-heading">
@@ -13,51 +60,16 @@
    </div>
 
 
-   @php
-   $checkboxCtr = 0;
-   $employeeTypeId = array();
-   @endphp
-   <div class = "form-group">
-    <div class = "col-md-12">
-      @forelse($employee_role as $employee_roles)
-      <div class = "col-md-3" id = "employeeRoles">
-        <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  >
-        &nbsp;&nbsp;{{$employee_roles->name }}
-      </div>
+   <br />
+   <div class = "panel-heading">
+     <h4>
+       <small>2</small>&nbsp;&nbsp;Employee Information
+     </h4>
+   </div>
+   <div class="panel-body">
 
-      @php
-      $checkboxCtr++;
-      $employeeTypeId[$checkboxCtr] = $employee_roles->id;
-      @endphp
-
-      @empty
-      <label> No employee Types found </label>
-      @endforelse
-    </div>
-  </div>
-
-  <br />
-  <div class = "panel-heading">
-   <h4><small>2</small>&nbsp;&nbsp;Employee Information</h4>
- </div>
- <div class="panel-body">
-   <form role = "form" class="form-horizontal" method = "POST">
-    {{ csrf_field() }}
-    <div class="form-group required">
-      <label class = "control-label">First Name</label>
-      <input  type="text" class="form-control" name = "freightnumber" id = "firstName">
-    </div>
-    <div class="form-group required">
-      <label>Middle Name</label>
-      <input  type="text" class="form-control" name = "freightnumber" id = "middleName">
-    </div>
-    <div class="form-group required">
-      <label class = "control-label">Last Name</label>
-      <input  type="text" class="form-control" name = "freightnumber" id = "lastName">
-    </div>
-
-  </div>
-  <div class = "col-md-12">
+   </div>
+   <div class = "col-md-12">
     <label>Current Address</label>
   </div>
   <div class = "form-group">
@@ -193,7 +205,6 @@
 
 </div>
 </div>
-
 @endsection
 @push('styles')
 <link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
