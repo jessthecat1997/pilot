@@ -16,7 +16,7 @@
 					<thead>
 						<tr>
 							<td>
-								Location Port
+								Location Pier
 							</td>
 							<td>
 								Container Size
@@ -43,13 +43,12 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Arrastre</h4>
+							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
-								<label class="control-label " for="dateEffective">Location Port:</label>
-								<select class = "form-control" id = "location_id">
-									<option value = "0"></option>
+								<label class="control-label " for="dateEffective">Location Pier:</label>
+								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
 									@forelse($locations as $location)
 									<option value = "{{ $location->id }}">{{ $location->name }}</option>
 									@empty
@@ -76,20 +75,18 @@
 										<table class="table responsive table-hover" width="100%" id= "af_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
-													<td width="20%">
+													<td width="5%">
 														<div class="form-group required">
 															<label class = "control-label"><strong>Container Size</strong></label>
 														</div>
 													</td>
 
-													<td width="20%">
+													<td width="10%">
 														<div class="form-group required">
 															<label class = "control-label"><strong>Arrastre Fee</strong></label>
 														</div>
 													</td>
-													<td width="10%" style="text-align: center;">
-														<strong>Action</strong>
-													</td>
+													
 												</tr>
 											</thead>
 											<tr id = "af-row">
@@ -97,13 +94,8 @@
 
 													<div class = "form-group input-group" >
 														
-														<select class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true" >
-															<option value = "0"></option>
-															@forelse($sizes as $size)
-															<option value = "{{ $location->id }}">{{ $size->name }}</option>
-															@empty
-															@endforelse
-														</select><span class = "input-group-addon">-footer</span>
+														<input type = "text" class = "form-control  af_container_size_valid"
+														value ="" name = "container_size" id = "container_size"  data-rule-required="true" disabled style="text-align: right;"/><span class = "input-group-addon">-footer</span>
 														
 													</div>
 
@@ -111,21 +103,15 @@
 												<td>
 													<div class = "form-group input-group " >
 														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = "form-control amount_valid"
+														<input type = "text" class = "form-control money amount_valid"
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
 												</td>
-												<td style="text-align: center;">
-													<button class = "btn btn-danger btn-md delete-af-row">x</button>
-												</td>
+												
 											</tr>
 										</table>
-										<div class = "form-group" style = "margin-left:10px">
-											<button    class = "btn btn-primary btn-md new-af-row pull-left">New Arrastre Fee</button>
-											<br /><br/>
-											
-										</div>
+										
 									</div>
 								</div>					
 							</div>
@@ -192,7 +178,18 @@
 	var amount_value = [];
 	var data, tblLength;
 	var jsonContainerSize, jsonAmount;
+	var arr_container_size_id = [];
+	var arr_container_size_name = [];
+	@forelse($sizes as $size)
+	arr_container_size_name.push({{ $size->name }});
+	arr_container_size_id.push({{ $size->id }});
+	@empty
+	@endforelse
+
 	$(document).ready(function(){
+
+
+
 		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
 
 		var aftable = $('#af_table').DataTable({
@@ -232,16 +229,28 @@
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
-			$('.modal-title').text('New Arrastre Fee Per Port');
-			$('#afModal').modal('show');
-			$("af_parent_table > tbody").html("");
-			$('#af_parent_table > tbody').html(af_row);
+
+
+			
 			$('#amount').val("0.00");
+
+			$('#af_parent_table > tbody').html("");
+			var rows = "";
+			for(var i = 0; i < arr_container_size_id.length; i++){
+
+				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+
+			}
+			$('.modal-title').text('New Arrastre Fee Per Pier');
+			$('#afModal').modal('show');
+			
+			$('#af_parent_table > tbody').append(rows);
+
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update Arrastre Fee Per Port');
+			$('.modal-title').text('Update Arrastre Fee Per Pier');
 			var af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			
@@ -258,7 +267,9 @@
 				{
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control af_container_size_valid" value ="' + data[i].location + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
+
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+
 					}
 					$('#af_parent_table > tbody').html("");
 					$('#af_parent_table > tbody').append(rows);
@@ -272,47 +283,9 @@
 			data = aftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
-		$(document).on('click', '.delete-af-row', function(e){
-			e.preventDefault();
-			$('#af_warning').removeClass('in');
-			if($('#af_parent_table > tbody > tr').length == 1){
-				$(this).closest('tr').remove();
-				$('#af_table_warning').addClass('fade in');
-			}
-			else{
-				$(this).closest('tr').remove();
-			}
-		})
-		$(document).on('click', '.new-af-row', function(e){
-			e.preventDefault();
-			$('#af_table_warning').removeClass('fade in');
-			if(validateIpfRows() === true){
-				$('#af_parent_table').append(af_row);
-				
-			}
-		})
-		$(document).on('change', '.af_container_size_valid', function(e){
-			$(".af_container_size_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-		$(document).on('change', '.af_container_size_valid', function(e){
-			$(".af_container_size_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+		
+		
+		
 		$(document).on('keypress', '.amount_valid', function(e){
 			$(".amount_valid").each(function(){
 				try{
@@ -324,7 +297,8 @@
 				}
 				else{
 				}
-				if($(this).val() != ""){
+
+				if($(this).val() > 0){
 					$(this).css('border-color', 'green');
 					$('#af_warning').removeClass('in');
 				}
@@ -369,13 +343,13 @@
 		});
 		$(document).on('click', '.finalize-af', function(e){
 			e.preventDefault();
-			if(finalvalidateIpfRows() === true){
+			if(finalvalidateAfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New Arrastre Fee Per Port")
+				if(title == "New Arrastre Fee Per Pier")
 				{
-
-					jsonContainerSize = JSON.stringify(container_size);
+					console.log(amount_value);
+					jsonContainerSize = JSON.stringify(container_size_id);
 					jsonAmount = JSON.stringify(amount_value);
 
 					$.ajax({
@@ -383,8 +357,8 @@
 						url:  '/admin/arrastre_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'location_id' : $('#location').val(),
-							'container_size_id' : jsonContainerSize,
+							'locations_id' : $('#locations_id').val(),
+							'container_sizes_id' : jsonContainerSize,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
 						},
@@ -392,7 +366,7 @@
 
 							aftable.ajax.reload();
 							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Port');
+							$('.modal-title').text('New Arrastre Fee Per Pier');
 							
 							$('#amount').val("0.00");
 							toastr.options = {
@@ -432,16 +406,16 @@
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'af_head_id': data.id,
-							'dateEffective' : $('#dateEffective').val(),
-							'container_sizes_id' : jsonContainerSize,
+							'locations_id' : $('#locations_id').val(),
+							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
-							'tblLength' : tblLength,
+							
 						},
 						success: function (data){
 
 							aftable.ajax.reload();
 							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Port');
+							$('.modal-title').text('New Arrastre Fee Per Pier');
 							
 							$('#amount').val("0.00");
 
@@ -475,38 +449,23 @@
 	});
 function validateIpfRows()
 {
-	minimum_id = [];
+	
 	container_size_id = [];
 	amount_value = [];
-	minimum_id_descrp = [];
-	
-	amount_value_descrp = [];
 	range_pairs = [];
-	dateEffective = document.getElementsByName('dateEffective');
-	minimum =  document.getElementsByName('minimum');
-	maximum =   document.getElementsByName('maximum');
-	amount =  document.getElementsByName('amount');
+	
+	container_size = document.getElementsByName('container_size');
+	amount = document.getElementsByName('amount');
 	error = "";
 
-	var min, max;
-	if(dateEffective === ""){
+
+	if($(locations_id).val() === 0){
 		dateEffective.style.borderColor = 'red';
-		error += "Date Effective Required.";
+		error += "Location is required.";
 	}
-	for(var i = 0; i < minimum.length; i++){
+	for(var i = 0; i < container_size.length; i++){
 		var temp;
-		if(container_size[i].value === "")
-		{
-			container_size[i].style.borderColor = 'red';
-			error += "Maximum Required.";
-		}
-		else
-		{
-			container_size[i].style.borderColor = 'green';
-			
-			container_size_id.push(container_size[i].value);
-			$('#af_warning').removeClass('in');
-		}
+		
 		if(amount[i].value === "")
 		{
 			amount[i].style.borderColor = 'red';
@@ -520,51 +479,20 @@ function validateIpfRows()
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
+
+				
+				container_size_id.push(container_size[i].value);
 				$('#af_warning').removeClass('in');
 			}
 		}
-		if(minimum[i].value === container_size[i].value){
-			container_size[i].style.borderColor = 'red';
-			error += "Same.";
-		}
-
-		min = parseFloat(minimum[i].value);
-		max = parseFloat(container_size[i].value);
-		if(min > max){
-
-			console.log(min);
-			console.log(max);
-			container_size[i].style.borderColor = 'red';
-			error += "Minimum is greater than maximum";
-			$('#af_warning').addClass('in');
-
-		}
+		
 		pair = {
-			minimum: minimum[i].value,
-			maximum : container_size[i].value
+			amount: amount[i].value,
+			container_size: container_size[i].value
 		};
 		range_pairs.push(pair);
 	}
 
-	var i, j, n;
-	found= false;
-	n=range_pairs.length;
-	for (i=0; i<n; i++) {
-		for (j=i+1; j<n; j++)
-		{
-			if (range_pairs[i].minimum === range_pairs[j].maximum && range_pairs[i].maximum === range_pairs[j].maximum){
-				found = true;
-
-				container_size[i].style.borderColor = 'red';
-				minimum[j].style.borderColor = 'red';
-				container_size[j].style.borderColor = 'red';
-			}
-		}
-	}
-	if(found == true){
-		error+= "Existing rate.";
-	}
 		//Final validation
 		if(error.length == 0){
 
@@ -576,7 +504,7 @@ function validateIpfRows()
 		}
 	}
 
-	function finalvalidateIpfRows()
+	function finalvalidateAfRows()
 	{
 
 		container_size_id = [];
@@ -591,19 +519,7 @@ function validateIpfRows()
 
 		for(var i = 0; i < container_size.length; i++){
 
-			if(container_size[i].value === "")
-			{
-				container_size[i].style.borderColor = 'red';
-				error += "Container size Required.";
-				$('#af_warning').addClass('in');
-			}
-			else
-			{
-				container_size[i].style.borderColor = 'green';
-				
-				container_size_id.push(container_size[i].value);
-				$('#af_warning').removeClass('in');
-			}
+			
 			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 			{
 				amount[i].style.borderColor = 'red';
@@ -618,7 +534,12 @@ function validateIpfRows()
 				}
 				else{
 					amount[i].style.borderColor = 'green';
-					amount_value.push(amount[i].value);
+					var amounty = amount[i].value;
+					console.log('amounty is' +amounty);
+					//var temp = $('amounty').inputmask('unmaskedvalue');
+					var temp = amounty;
+					container_size_id.push(container_size[i].value);
+					amount_value.push(temp);
 					$('#af_warning').removeClass('in');
 				}
 			}
@@ -631,27 +552,7 @@ function validateIpfRows()
 			range_pairs.push(pair);
 		}
 		var i, j, n;
-		found= false;
-		n=range_pairs.length;
-		for (i=0; i<n; i++) {
-			for (j=i+1; j<n; j++)
-			{
-				if (range_pairs[i].container_size === range_pairs[j].container_size && range_pairs[i].amount === range_pairs[j].amount){
-					found = true;
-
-					container_size[i].style.borderColor = 'red';
-					container_size[j].style.borderColor = 'red';
-					amount[i].style.borderColor = 'red';
-					amount[j].style.borderColor = 'red';
-
-
-				}
-			}
-		}
-		if(found == true){
-			error+= "Existing rate.";
-			$('#af_warning').addClass('in');
-		}
+		
 		if(error.length == 0){
 			tblLength = container_size.length;
 			return true;
@@ -660,11 +561,11 @@ function validateIpfRows()
 		{
 			return false;
 		}
-	
-}
-function resetErrors() {
-	$('form input, form select').removeClass('inputTxtError');
-	$('label.error').remove();
-}
+
+	}
+	function resetErrors() {
+		$('form input, form select').removeClass('inputTxtError');
+		$('label.error').remove();
+	}
 </script>
 @endpush

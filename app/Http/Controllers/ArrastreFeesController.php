@@ -27,7 +27,32 @@ class ArrastreFeesController extends Controller
         $af_header->locations_id = $request->locations_id;
         $af_header->save();
 
-      
+
+        $_container_sizes_id = json_decode(stripslashes($request->container_sizes_id), true);
+        $_amount = json_decode(stripslashes($request->amount), true);
+
+        $tblRowLength = $request->tblLength;
+
+        for($x = 0; $x < $tblRowLength; $x++)
+        {
+            $af_detail = new ArrastreDetail;
+            $af_detail->arrastre_header_id = $af_header->id;
+            $af_detail->container_sizes_id = (string)$_container_sizes_id[$x];
+            $af_detail->amount = (string)$_amount[$x];
+            $af_detail->save();
+        }
+
+
+    } 
+    public function update(Request $request, $id)
+    {
+
+        
+        $af_header= ArrastreHeader::findOrFail($id);
+        $af_header->locations_id = $request->locations_id;
+        $af_header->save();
+
+    
         $_container_size_id = json_decode(stripslashes($request->container_size_id), true);
         $_amount = json_decode(stripslashes($request->amount), true);
 
@@ -36,32 +61,25 @@ class ArrastreFeesController extends Controller
         for($x = 0; $x < $tblRowLength; $x++)
         {
             $af_detail = new ArrastreDetail;
-            $af_detail->af_headers_id = $af_header->id;
-            $af_detail->container_size_id = (string)$_container_size_id[$x];
+            $af_detail->arrastre_header_id =$af_header->id;
+            $af_detail->container_sizes_id = (string)$_container_size_id[$x];
             $af_detail->amount = (string)$_amount[$x];
             $af_detail->save();
         }
-
-
-    }
-
-   
-    
-    public function update(Request $request, $id)
-    {
-      
     }
 
     public function destroy($id)
     {
         $new_af = ArrastreHeader::findOrFail($id);
         $new_af->delete();
-       
+
     }
 
     public function af_maintain_data(Request $request){
         $rates = DB::table('arrastre_details')
-        ->where('arrastre_headers_id', '=', $request->arrastre_id)
+        ->join ('container_types', 'container_types.id','=','container_sizes_id') 
+        -> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
+        ->where('arrastre_header_id', '=', $request->af_id)
         ->get();
 
         return $rates;
