@@ -110,6 +110,11 @@
     var filter = 0;
 	var data;
 	
+
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#archive_deliverycollapse').addClass('in');
+	
 	$(document).ready(function(){
 		var vtable = $('#v_table').DataTable({
 			processing: true,

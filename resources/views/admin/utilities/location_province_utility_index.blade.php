@@ -108,9 +108,13 @@
 
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse2').addClass('in');
 	var data;
 	var filter = 0;
+
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#archive_deliverycollapse').addClass('in');
+	
 	$(document).ready(function(){
 		var lptable = $('#lp_table').DataTable({
 			processing: false,

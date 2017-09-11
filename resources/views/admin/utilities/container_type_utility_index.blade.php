@@ -105,6 +105,11 @@
 <script type="text/javascript">
 	var data;
 	var filter = 0;
+
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#archive_deliverycollapse').addClass('in');
+	
 	$(document).ready(function(){
 		var cttable = $('#ct_table').DataTable({
 			processing: true,
