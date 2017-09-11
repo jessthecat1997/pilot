@@ -19,9 +19,9 @@ class CreateContainerTypesTable extends Migration
         });
         DB::statement("
             INSERT INTO `container_types` (`id`, `name`, `maxWeight`) VALUES
-             (NULL, '10', '11300'),
              (NULL, '20', '30480'),
-             (NULL, '40', '30400')
+             (NULL, '40', '30400'),
+             (NULL, '45', '30800')
             ");
 
     }

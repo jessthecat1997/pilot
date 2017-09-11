@@ -23,6 +23,7 @@ use App\LocationProvince;
 use App\LocationCities;
 use App\ContractTemplate;
 use App\Requirement;
+use App\Arrastre;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -978,6 +979,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function af_datatable(){
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($arrastres)
+		->addColumn('action', function ($arrastre){
+			return
+			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

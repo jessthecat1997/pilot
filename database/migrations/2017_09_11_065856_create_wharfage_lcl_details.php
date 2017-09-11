@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWharfageDetailsTable extends Migration
+class CreateWharfageLclDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateWharfageDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('wharfage_details', function (Blueprint $table) {
+        Schema::create('wharfage_lcl_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('wharfage_header_id')->unsigned();
-            $table->integer('container_sizes_id')->unsigned();
+            $table->integer('wharfage_lcl_headers_id')->unsigned();
+            $table->integer('basis_types_id')->unsigned();
             $table->decimal('amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('wharfage_header_id')->references('id')->on('wharfage_headers');
-            $table->foreign('container_sizes_id')->references('id')->on('container_types');
+            $table->foreign('wharfage_lcl_headers_id')->references('id')->on('wharfage_lcl_headers');
+            $table->foreign('basis_types_id')->references('id')->on('basis_types');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateWharfageDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wharfage_details');
+        Schema::dropIfExists('wharfage_lcl_details');
     }
 }
