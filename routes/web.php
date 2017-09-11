@@ -236,6 +236,7 @@ Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->
 Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
+Route::post('payment/cheques/{id?}', 'PaymentsController@verify_cheque')->name('cheque');
 
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
