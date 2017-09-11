@@ -26,6 +26,7 @@ use App\Requirement;
 use App\Arrastre;
 use App\LclType;
 use App\BasisType;
+use App\DangerousCargoType;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -53,6 +54,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function dct_datatable(){
+		$dcts = DangerousCargoType::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($dcts)
+		->addColumn('action', function ($dct){
+			return
+			'<button value = "'. $dct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $dct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

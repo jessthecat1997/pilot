@@ -88,7 +88,7 @@ Route::resource('/admin/requirement','RequirementsController');
 Route::resource('/admin/arrastre_fee','ArrastreFeesController');
 Route::resource('/admin/lcl_type','LclTypesController');
 Route::resource('/admin/basis_type','BasisTypeController');
-
+Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
 
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
@@ -224,7 +224,7 @@ Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.da
 Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
 Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
 Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
-
+Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
 
 Route::get('pdfview','PaymentsController@pdfview');
 
