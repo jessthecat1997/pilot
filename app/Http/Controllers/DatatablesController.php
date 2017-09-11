@@ -24,6 +24,7 @@ use App\LocationCities;
 use App\ContractTemplate;
 use App\Requirement;
 use App\Arrastre;
+use App\LclType;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -51,6 +52,20 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+
+	public function lcl_datatable(){
+		$lcls = LclType::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($lcls)
+		->addColumn('action', function ($lcl){
+			return
+			'<button value = "'. $lcl->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $lcl->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
@@ -2709,54 +2724,54 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-		public function employee_datatable(){
-			$employees = DB::select("SELECT e.id, e.firstName, e.middleName, e.lastName, GROUP_CONCAT(t.name ORDER BY t.name) AS roles FROM employees e INNER JOIN employee_roles r ON e.id = r.employee_id LEFT JOIN employee_types t ON t.id = r.employee_type_id GROUP BY e.id");
-			return Datatables::of($employees)
-			->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-			->removeColumn('middleName')
-			->removeColumn('lastName')
-			->addColumn('action', function ($employee){
-				return
-				'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
-			})
-			->editColumn('id', '{{ $id }}')
-			->make(true);
-		}
+	public function employee_datatable(){
+		$employees = DB::select("SELECT e.id, e.firstName, e.middleName, e.lastName, GROUP_CONCAT(t.name ORDER BY t.name) AS roles FROM employees e INNER JOIN employee_roles r ON e.id = r.employee_id LEFT JOIN employee_types t ON t.id = r.employee_type_id GROUP BY e.id");
+		return Datatables::of($employees)
+		->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+		->removeColumn('middleName')
+		->removeColumn('lastName')
+		->addColumn('action', function ($employee){
+			return
+			'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
 
-		public function get_dutiesandtaxes_table(Request $request){
+	public function get_dutiesandtaxes_table(Request $request){
 
 
-			$dutiesandtaxes = DB::table('duties_and_taxes_headers')
-			->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName', 'brokerageFee', 'statusType')
-			->join('employees', 'employees_id_broker', '=', 'employees.id')
-			->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
-			->where('brokerageServiceOrders_id','=', $request->brokerage_id)
-			->get();
+		$dutiesandtaxes = DB::table('duties_and_taxes_headers')
+		->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName', 'brokerageFee', 'statusType')
+		->join('employees', 'employees_id_broker', '=', 'employees.id')
+		->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
+		->where('brokerageServiceOrders_id','=', $request->brokerage_id)
+		->get();
 
-			return Datatables::of($dutiesandtaxes)
-			->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-			->editColumn('statusType', function($dutiesandtaxes){
-				switch ($dutiesandtaxes->statusType) {
-					case 'A':
-					return 'Approved';
-					break;
-					case 'P':
-					return 'Pending';
-					break;
-					case 'R':
-					return 'Rejected';
-					break;
-					default:
-					return 'Unknown';
-					break;
-				}})
-			->addColumn('action', function ($dutiesandtax){
-				return
-				'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
-				<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
-				<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
-			})
+		return Datatables::of($dutiesandtaxes)
+		->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+		->editColumn('statusType', function($dutiesandtaxes){
+			switch ($dutiesandtaxes->statusType) {
+				case 'A':
+				return 'Approved';
+				break;
+				case 'P':
+				return 'Pending';
+				break;
+				case 'R':
+				return 'Rejected';
+				break;
+				default:
+				return 'Unknown';
+				break;
+			}})
+		->addColumn('action', function ($dutiesandtax){
+			return
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
+			<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
+			<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
+		})
 
-			->make(true);
-		}
+		->make(true);
+	}
 }
