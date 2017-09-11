@@ -56,7 +56,7 @@
 					<div class="form-group required">
 						<label class = "control-label" >Mode of Payment: &nbsp;</label>
 						<label class="radio-inline" id="cash"><input type="radio" name="p_mode" id="p_mode" value="Cash">Cash</label>
-						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Check</label>
+						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Cheque</label>
 					</div>
 					<div class="form-group pull-right">
 						<label for="bal"><h3>Balance: &nbsp;</h3></label>
@@ -244,20 +244,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Check Payment</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal">
-					<div class="form-group">
-						<label for="name">Name: &nbsp;</label>
-						<input type="text" class="txt" id="name" value="{{ $pays[0]->con_name }}" style="width: 300px;" disabled>
-					</div>
-					<div class="form-group">
-						<label for="check_amount">Amount:</label>
-						&nbsp;<input type="text" class="form-control money" id="check_amount">
-					</div>
-				</form>
-				<strong>Note:</strong> All fields with * are required.
+				<h4 class="modal-title">Confirm Cheque Payment</h4>
 			</div>
 			<div class="modal-footer">
 				<button class="btn but finalize-payment-check">Confirm</button>
@@ -433,6 +420,24 @@
 		}
 
 	})
+	$(document).on('click', '.finalize-payment-check', function(e){
+		$.ajax({
+			method: 'POST',
+			url: 'cheques/{{ $pays[0]->bi_head }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'bi_head_id' : {{ $pays[0]->bi_head }},
+				'isVerify' : 1
+			},
+			success: function (data){
+				$('#checkModal').modal('hide');
+				$('#depModal').modal('show');
+			}
+		})
+		console.log({{ $pays[0]->bi_head }})
+
+	})
+
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
 		var amt = parseFloat($('#depositPayment').val());

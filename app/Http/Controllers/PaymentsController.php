@@ -7,6 +7,7 @@ use App\Payment;
 use App\PaymentHistory;
 use App\ConsigneeServiceOrderHeader;
 use App\BillingInvoiceHeader;
+use App\Cheque;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -291,5 +292,13 @@ class PaymentsController extends Controller
 
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
 		return $pdf->stream();
+	}
+	public function verify_cheque(Request $request, $id)
+	{
+		$chq = new Cheque;
+
+		$chq->isVerify = $request->isVerify;
+		$chq->bi_head_id = $request->bi_head_id;
+		$chq->save();
 	}
 }
