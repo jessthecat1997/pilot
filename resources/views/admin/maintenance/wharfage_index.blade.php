@@ -2,17 +2,17 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Containerized Arrastre Fee</h2>
+		<h2>&nbsp;Maintenance | Containerized wharfage Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Arrastre</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Wharfage</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped" id = "af_table">
+				<table class = "table-responsive table  table-striped" id = "wf_table">
 					<thead>
 						<tr>
 							<td>
@@ -22,7 +22,7 @@
 								Container Size
 							</td>
 							<td>
-								Arrastre Fee Amount
+								Wharfage Fee Amount
 							</td>
 							
 							<td>
@@ -37,13 +37,13 @@
 </div>
 <section class="content">
 	<form role="form" method = "POST" class="commentForm">
-		<div class="modal fade" id="afModal" role="dialog">
+		<div class="modal fade" id="wfModal" role="dialog">
 			<div class="form-group">
 				<div class="modal-dialog ">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
+							<h4 class="modal-title">New Wharfage Fee Per Pier</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
@@ -57,22 +57,22 @@
 							</div>
 						</form>
 						<br />
-						<div class = "collapse" id = "af_table_warning">
+						<div class = "collapse" id = "wf_table_warning">
 							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one arrastre free per container.
+								<strong>Warning!</strong> Requires at least one wharfage free per container.
 							</div>
 						</div>
-						<div class = "collapse" id = "af_warning">
+						<div class = "collapse" id = "wf_warning">
 							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the arrastre fees.
+								<strong>Warning!</strong> Something is wrong with the wharfage fees.
 							</div>
 						</div>
 						<div class = "panel panel-default">
 							<div  style="overflow-x: auto;">
 								<div class = "panel-default">
 									{{ csrf_field() }}
-									<form id = "arrastre_form" class = "commentForm">
-										<table class="table responsive table-hover" width="100%" id= "af_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
+									<form id = "wharfage_form" class = "commentForm">
+										<table class="table responsive table-hover" width="100%" id= "wf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
 													<td width="5%">
@@ -83,18 +83,18 @@
 
 													<td width="10%">
 														<div class="form-group required">
-															<label class = "control-label"><strong>Arrastre Fee</strong></label>
+															<label class = "control-label"><strong>wharfage Fee</strong></label>
 														</div>
 													</td>
 													
 												</tr>
 											</thead>
-											<tr id = "af-row">
+											<tr id = "wf-row">
 												<td>
 
 													<div class = "form-group input-group" >
 														
-														<input type = "text" class = "form-control  af_container_size_valid"
+														<input type = "text" class = "form-control  wf_container_size_valid"
 														value ="" name = "container_size" id = "container_size"  data-rule-required="true" disabled style="text-align: right;"/><span class = "input-group-addon">-footer</span>
 														
 													</div>
@@ -118,7 +118,7 @@
 							<small style = "color:red; text-align: left"><i>All fields are required.</i></small>
 						</div>
 						<div class="modal-footer">
-							<button id = "btnSave" type = "submit" class="btn btn-success finalize-af">Save</button>
+							<button id = "btnSave" type = "submit" class="btn btn-success finalize-wf">Save</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
@@ -155,7 +155,7 @@
 @endsection
 @push('styles')
 <style>
-	.class-af-fee
+	.class-wf-fee
 	{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
@@ -190,14 +190,14 @@
 
 
 
-		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
+		var wf_row = "<tr>" + $('#wf-row').html() + "</tr>";
 
-		var aftable = $('#af_table').DataTable({
+		var wftable = $('#wf_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/afData',
+			ajax: 'http://localhost:8000/admin/wfData',
 			columns: [
 			{ data: 'location' },
 			{ data: 'container_size',
@@ -234,53 +234,53 @@
 			
 			$('#amount').val("0.00");
 
-			$('#af_parent_table > tbody').html("");
+			$('#wf_parent_table > tbody').html("");
 			var rows = "";
 			for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			$('.modal-title').text('New Arrastre Fee Per Pier');
-			$('#afModal').modal('show');
+			$('.modal-title').text('New wharfage Fee Per Pier');
+			$('#wfModal').modal('show');
 			
-			$('#af_parent_table > tbody').append(rows);
+			$('#wf_parent_table > tbody').append(rows);
 
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update Arrastre Fee Per Pier');
-			var af_id = $(this).val();
-			data = aftable.row($(this).parents()).data();
+			$('.modal-title').text('Update wharfage Fee Per Pier');
+			var wf_id = $(this).val();
+			data = wftable.row($(this).parents()).data();
 			
-			$('#afModal').modal('show');
+			$('#wfModal').modal('show');
 
 			$.ajax({
 				type: 'GET',
-				url:  '{{ route("af_maintain_data") }}',
+				url:  '{{ route("wf_maintain_data") }}',
 				data: {
 					'_token' : $('input[name=_token').val(),
-					'af_id' : $(this).val(),
+					'wf_id' : $(this).val(),
 				},
 				success: function (data)
 				{
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 					}
-					$('#af_parent_table > tbody').html("");
-					$('#af_parent_table > tbody').append(rows);
+					$('#wf_parent_table > tbody').html("");
+					$('#wf_parent_table > tbody').append(rows);
 
 				}
 
 			})
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var af_id = $(this).val();
-			data = aftable.row($(this).parents()).data();
+			var wf_id = $(this).val();
+			data = wftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 		
@@ -300,7 +300,7 @@
 
 				if($(this).val() > 0){
 					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
+					$('#wf_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -311,13 +311,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/arrastre_fee/' + data.id,
+				url:  '/admin/wharfage_fee/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					aftable.ajax.reload();
+					wftable.ajax.reload();
 					$('#confirm-delete').modal('hide');
 					toastr.options = {
 						"closeButton": false,
@@ -341,12 +341,12 @@
 				}
 			})
 		});
-		$(document).on('click', '.finalize-af', function(e){
+		$(document).on('click', '.finalize-wf', function(e){
 			e.preventDefault();
-			if(finalvalidateAfRows() === true){
+			if(finalvalidatewfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New Arrastre Fee Per Pier")
+				if(title == "New wharfage Fee Per Pier")
 				{
 					console.log(amount_value);
 					jsonContainerSize = JSON.stringify(container_size_id);
@@ -354,7 +354,7 @@
 
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/arrastre_fee',
+						url:  '/admin/wharfage_fee',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'locations_id' : $('#locations_id').val(),
@@ -364,9 +364,9 @@
 						},
 						success: function (data){
 
-							aftable.ajax.reload();
-							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Pier');
+							wftable.ajax.reload();
+							$('#wfModal').modal('hide');
+							$('.modal-title').text('New wharfage Fee Per Pier');
 							
 							$('#amount').val("0.00");
 							toastr.options = {
@@ -402,10 +402,10 @@
 
 					$.ajax({
 						type: 'PUT',
-						url:  '/admin/arrastre_fee/'+ data.id,
+						url:  '/admin/wharfage_fee/'+ data.id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'af_head_id': data.id,
+							'wf_head_id': data.id,
 							'locations_id' : $('#locations_id').val(),
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
@@ -413,9 +413,9 @@
 						},
 						success: function (data){
 
-							aftable.ajax.reload();
-							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Pier');
+							wftable.ajax.reload();
+							$('#wfModal').modal('hide');
+							$('.modal-title').text('New wharfage Fee Per Pier');
 							
 							$('#amount').val("0.00");
 
@@ -482,7 +482,7 @@ function validateIpfRows()
 
 				
 				container_size_id.push(container_size[i].value);
-				$('#af_warning').removeClass('in');
+				$('#wf_warning').removeClass('in');
 			}
 		}
 		
@@ -504,7 +504,7 @@ function validateIpfRows()
 		}
 	}
 
-	function finalvalidateAfRows()
+	function finalvalidatewfRows()
 	{
 
 		container_size_id = [];
@@ -524,7 +524,7 @@ function validateIpfRows()
 			{
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
-				$('#af_warning').addClass('in');
+				$('#wf_warning').addClass('in');
 			}
 			else
 			{
@@ -540,7 +540,7 @@ function validateIpfRows()
 					var temp = amounty;
 					container_size_id.push(container_size[i].value);
 					amount_value.push(temp);
-					$('#af_warning').removeClass('in');
+					$('#wf_warning').removeClass('in');
 				}
 			}
 
