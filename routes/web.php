@@ -87,6 +87,9 @@ Route::resource('/admin/location_city','LocationCitiesController');
 Route::resource('/admin/requirement','RequirementsController');
 Route::resource('/admin/arrastre_fee','ArrastreFeesController');
 Route::resource('/admin/lcl_type','LclTypesController');
+Route::resource('/admin/basis_type','BasisTypeController');
+
+
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
@@ -220,7 +223,7 @@ Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data'
 Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
 Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
 Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
-
+Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
 
 
 Route::get('pdfview','PaymentsController@pdfview');

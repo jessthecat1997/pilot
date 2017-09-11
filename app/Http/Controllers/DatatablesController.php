@@ -25,6 +25,7 @@ use App\ContractTemplate;
 use App\Requirement;
 use App\Arrastre;
 use App\LclType;
+use App\BasisType;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -52,6 +53,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function  bt_datatable(){
+		$bts = BasisType::select(['id', 'name', 'abbreviation', 'created_at']);
+
+		return Datatables::of($bts)
+		->addColumn('action', function ($bt){
+			return
+			'<button value = "'. $bt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $bt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

@@ -18,6 +18,7 @@ class CreateBasisTypes extends Migration
             $table->string('name', 50);
             $table->string('abbreviation', 5);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

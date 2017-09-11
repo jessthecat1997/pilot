@@ -4,21 +4,23 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
-class StoreLclType extends FormRequest
+class StoreBasisType extends FormRequest
 {
+    
     public function authorize()
     {
         return true;
     }
 
-     public function rules()
+    
+    public function rules()
     {
         switch ($this->method()) {
             case 'POST':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
-            'description' => 'max:50'
+            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
+            'abbreviation' => 'max:5|required'
             ];
 
             break;
@@ -27,7 +29,7 @@ class StoreLclType extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+            'abbreviation' => 'max:5|required'
             ];
 
             break;

@@ -18,6 +18,7 @@ class CreateDangerousCargoTypes extends Migration
             $table->string('name', 50);
             $table->string('description', 150)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
