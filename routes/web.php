@@ -85,11 +85,16 @@ Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 Route::resource('/admin/requirement','RequirementsController');
-
-
+Route::resource('/admin/arrastre_fee','ArrastreFeesController');
+Route::resource('/admin/lcl_type','LclTypesController');
+Route::resource('/admin/basis_type','BasisTypeController');
+Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
+Route::resource('/admin/wharfage_fee','WharfageFeeController');
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
+Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
+Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
 
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
@@ -216,11 +221,12 @@ Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data'
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
 Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
-Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('lc.data');
-
-
-
-
+Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
+Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
+Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
+Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
+Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
+Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
 
 Route::get('pdfview','PaymentsController@pdfview');
 
@@ -235,6 +241,7 @@ Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->
 Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
+Route::post('payment/cheques/{id?}', 'PaymentsController@verify_cheque')->name('cheque');
 
 //Billing
 Route::resource('/billing', 'BillingDetailsController');

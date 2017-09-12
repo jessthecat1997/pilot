@@ -56,7 +56,7 @@
 					<div class="form-group required">
 						<label class = "control-label" >Mode of Payment: &nbsp;</label>
 						<label class="radio-inline" id="cash"><input type="radio" name="p_mode" id="p_mode" value="Cash">Cash</label>
-						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Check</label>
+						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Cheque</label>
 					</div>
 					<div class="form-group pull-right">
 						<label for="bal"><h3>Balance: &nbsp;</h3></label>
@@ -244,43 +244,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Check Payment</h4>
-			</div>
-			<div class="modal-body">
-				<table class="table">
-					{{ csrf_field() }}
-					<thead>
-						<tr>
-							<td>
-								Name *
-							</td>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<form class="form-horizontal" onsubmit="this.preventDefault();">
-								<td>
-									<input type = "text" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-								<td>
-									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-							</form>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="form-group">
-									<label for="remarks">Remarks:</label>
-									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<strong>Note:</strong> All fields with * are required.
+				<h4 class="modal-title">Confirm Cheque Payment</h4>
 			</div>
 			<div class="modal-footer">
 				<button class="btn but finalize-payment-check">Confirm</button>
@@ -439,7 +403,7 @@
 
 				]
 			})
-		
+
 	})
 
 
@@ -454,8 +418,26 @@
 		{
 			window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
 		}
-		
+
 	})
+	$(document).on('click', '.finalize-payment-check', function(e){
+		$.ajax({
+			method: 'POST',
+			url: 'cheques/{{ $pays[0]->bi_head }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'bi_head_id' : {{ $pays[0]->bi_head }},
+				'isVerify' : 1
+			},
+			success: function (data){
+				$('#checkModal').modal('hide');
+				$('#depModal').modal('show');
+			}
+		})
+		console.log({{ $pays[0]->bi_head }})
+
+	})
+
 	$(document).on('click', '.finalize-deposit-payment', function(e){
 
 		var amt = parseFloat($('#depositPayment').val());
