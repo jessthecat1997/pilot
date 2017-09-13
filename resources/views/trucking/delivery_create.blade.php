@@ -432,7 +432,7 @@
 									<div class="col-sm-8">
 										<div class="input-group ">
 											<span class="input-group-addon" id="cdsfeeadd">Php</span>
-											<input  type="text" class=" form-control" name = "deliveryFee" id = "deliveryFee" style="text-align: right;">
+											<input  value = "0.00" type="text" class=" form-control money" name = "deliveryFee" id = "deliveryFee" style="text-align: right;">
 										</div>
 									</div>
 								</div>
@@ -941,7 +941,7 @@
 								'locations_id_del' : $('#deliver_id').val(),
 								'deliveryDate' : $('#deldatecon').val(),
 								'pickupDate' : $('#pickdatecon').val(),
-								'amount' : $('#deliveryFee').val(),
+								'amount' : $('#deliveryFee').inputmask('unmaskedvalue'),
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -975,7 +975,7 @@
 								'containerReturnDate' : con_ReturnDate,
 								'shippingLine' : con_ShippingLine,
 								'portOfCfsLocation' : con_PortOfCfsLocation,
-								'amount' : $('#deliveryFee').val(),
+								'amount' : $('#deliveryFee').inputmask('unmaskedvalue'),
 								'container_data' : results,
 							},
 							success: function(data){

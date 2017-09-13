@@ -60,9 +60,7 @@ class ArrastreFeesController extends Controller
 
         for($x = 0; $x < $tblRowLength; $x++)
         {
-            $af_detail = new ArrastreDetail;
-            $af_detail->arrastre_header_id =$af_header->id;
-            $af_detail->container_sizes_id = (string)$_container_size_id[$x];
+            $af_detail = ArrastreDetail::findOrFail($_container_size_id[$x]);
             $af_detail->amount = (string)$_amount[$x];
             $af_detail->save();
         }
