@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Containerized Wharfage Fee</h2>
+		<h2>&nbsp;Maintenance | Less Cargo Load Wharfage Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Wharfage</button>
@@ -19,7 +19,7 @@
 								Location Pier
 							</td>
 							<td>
-								Container Size
+								Basis
 							</td>
 							<td>
 								Wharfage Fee Amount
@@ -68,45 +68,58 @@
 							</div>
 						</div>
 						<div class = "panel panel-default">
-							<div  style="overflow-x: auto;">
+							<div  ">
 								<div class = "panel-default">
 									{{ csrf_field() }}
 									<form id = "wharfage_form" class = "commentForm">
-										<table class="table responsive table-hover" width="100%" id= "wf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
+										<table class="table responsive table-hover"  id= "wf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
-													<td width="5%">
+													<td >
 														<div class="form-group required">
-															<label class = "control-label"><strong>Container Size</strong></label>
+															<label class = "control-label"><strong>Basis</strong></label>
 														</div>
 													</td>
 
-													<td width="10%">
+													<td width = "40%" >
 														<div class="form-group required">
-															<label class = "control-label"><strong>wharfage Fee</strong></label>
+															<label class = "control-label"><strong>Wharfage Fee</strong></label>
 														</div>
 													</td>
+													<td >
+														<div >
+															<label class = "control-label"><strong>Action</strong></label>
+														</div>
+													</td>
+													
 													
 												</tr>
 											</thead>
 											<tr id = "wf-row">
-												<td>
+												<td width = "20%">
 
-													<div class = "form-group input-group" >
+													<div class = "form-group " >
 														
-														<input type = "text" class = "form-control  wf_container_size_valid"
-														value ="" name = "container_size" id = "container_size"  data-rule-required="true" disabled style="text-align: right;"/><span class = "input-group-addon">-footer</span>
+														<select class = "form-control" id = "basis_type_id" >
+														@forelse($basis_types as $basis_type)
+															<option value = "{{ $basis_type->id }}">{{ $basis_type->abbreviation }}</option>
+															@empty
+															@endforelse
+														</select>
 														
 													</div>
 
 												</td>
-												<td>
-													<div class = "form-group input-group " >
+												<td width = "40%">
+													<div class = "input-group " >
 														<span class = "input-group-addon">Php</span>
 														<input type = "text" class = "form-control money amount_valid"
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
+												</td>
+												<td width = "10%" style="text-align: center;">
+													<button class = "btn btn-danger btn-md delete-ipf-row">x</button>
 												</td>
 												
 											</tr>
@@ -174,17 +187,13 @@
 	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
-	var container_size= [];
+	var basis_type= [];
 	var amount_value = [];
 	var data, tblLength;
-	var jsonContainerSize, jsonAmount;
-	var arr_container_size_id = [];
-	var arr_container_size_name = [];
-	@forelse($sizes as $size)
-	arr_container_size_name.push({{ $size->name }});
-	arr_container_size_id.push({{ $size->id }});
-	@empty
-	@endforelse
+	var jsonBasisType, jsonAmount;
+	var arr_basis_type_id = [];
+	var arr_basis_type_name = [];
+	
 
 	$(document).ready(function(){
 
@@ -197,10 +206,10 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/wfData',
+			ajax: 'http://localhost:8000/admin/wf_lcl_Data',
 			columns: [
 			{ data: 'location' },
-			{ data: 'container_size',
+			{ data: 'basis_type',
 			"render": function(data, type, row){
 				return data.split(",").join("<br/>");}
 			},
@@ -235,16 +244,10 @@
 			$('#amount').val("0.00");
 
 			$('#wf_parent_table > tbody').html("");
-			var rows = "";
-			for(var i = 0; i < arr_container_size_id.length; i++){
-
-				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
-
-			}
 			$('.modal-title').text('New wharfage Fee Per Pier');
 			$('#wfModal').modal('show');
 			
-			$('#wf_parent_table > tbody').append(rows);
+			$('#wf_parent_table > tbody').append(wf_row);
 
 
 		});
@@ -268,7 +271,7 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 					}
 					$('#wf_parent_table > tbody').html("");
@@ -307,11 +310,23 @@
 				}
 			});
 		})
+
+		$(document).on('click', '.delete-ipf-row', function(e){
+			e.preventDefault();
+			$('#ipf_warning').removeClass('in');
+			if($('#ipf_parent_table > tbody > tr').length == 1){
+				$(this).closest('tr').remove();
+				$('#ipf_table_warning').addClass('fade in');
+			}
+			else{
+				$(this).closest('tr').remove();
+			}
+		})
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/wharfage_fee/' + data.id,
+				url:  '/admin/wharfage_fee_lcl/' + data.id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -349,7 +364,7 @@
 				if(title == "New wharfage Fee Per Pier")
 				{
 					console.log(amount_value);
-					jsonContainerSize = JSON.stringify(container_size_id);
+					jsonBasisType = JSON.stringify(basis_type_id);
 					jsonAmount = JSON.stringify(amount_value);
 
 					$.ajax({
@@ -358,7 +373,7 @@
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'locations_id' : $('#locations_id').val(),
-							'container_sizes_id' : jsonContainerSize,
+							'basis_types_id' : jsonBasisType,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
 						},
@@ -396,18 +411,18 @@
 
 
 					
-					jsonContainerSize = JSON.stringify(container_size_id);
+					jsonBasisType = JSON.stringify(basis_type_id);
 					jsonAmount = JSON.stringify(amount_value);
 
 
 					$.ajax({
 						type: 'PUT',
-						url:  '/admin/wharfage_fee/'+ data.id,
+						url:  '/admin/wharfage_fee_lcl/'+ data.id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'wf_head_id': data.id,
 							'locations_id' : $('#locations_id').val(),
-							'container_size_id' : jsonContainerSize,
+							'basis_types_id' : jsonBasisType,
 							'amount' : jsonAmount,
 							
 						},
@@ -450,11 +465,11 @@
 function validateIpfRows()
 {
 	
-	container_size_id = [];
+	basis_type_id = [];
 	amount_value = [];
 	range_pairs = [];
 	
-	container_size = document.getElementsByName('container_size');
+	basis_type = document.getElementsByName('basis_type');
 	amount = document.getElementsByName('amount');
 	error = "";
 
@@ -463,7 +478,7 @@ function validateIpfRows()
 		dateEffective.style.borderColor = 'red';
 		error += "Location is required.";
 	}
-	for(var i = 0; i < container_size.length; i++){
+	for(var i = 0; i < basis_type.length; i++){
 		var temp;
 		
 		if(amount[i].value === "")
@@ -481,14 +496,14 @@ function validateIpfRows()
 				amount[i].style.borderColor = 'green';
 
 				
-				container_size_id.push(container_size[i].value);
+				basis_type_id.push(basis_type[i].value);
 				$('#wf_warning').removeClass('in');
 			}
 		}
 		
 		pair = {
 			amount: amount[i].value,
-			container_size: container_size[i].value
+			basis_type: basis_type[i].value
 		};
 		range_pairs.push(pair);
 	}
@@ -507,17 +522,17 @@ function validateIpfRows()
 	function finalvalidatewfRows()
 	{
 
-		container_size_id = [];
+		basis_type_id = [];
 		amount_value = [];
 		range_pairs = [];
-		container_size = document.getElementsByName('container_size');
+		basis_type = document.getElementsByName('basis_type');
 		amount = document.getElementsByName('amount');
 
 		error = "";
 
 
 
-		for(var i = 0; i < container_size.length; i++){
+		for(var i = 0; i < basis_type.length; i++){
 
 			
 			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
@@ -538,7 +553,7 @@ function validateIpfRows()
 					console.log('amounty is' +amounty);
 					//var temp = $('amounty').inputmask('unmaskedvalue');
 					var temp = amounty;
-					container_size_id.push(container_size[i].value);
+					basis_type_id.push(basis_type[i].value);
 					amount_value.push(temp);
 					$('#wf_warning').removeClass('in');
 				}
@@ -547,14 +562,14 @@ function validateIpfRows()
 
 			pair = {
 				amount: amount[i].value,
-				container_size: container_size[i].value
+				basis_type: basis_type[i].value
 			};
 			range_pairs.push(pair);
 		}
 		var i, j, n;
 		
 		if(error.length == 0){
-			tblLength = container_size.length;
+			tblLength = basis_type.length;
 			return true;
 		}
 		else
