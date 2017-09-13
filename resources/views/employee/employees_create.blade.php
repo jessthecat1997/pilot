@@ -27,183 +27,109 @@
             @endphp
 
             @empty
-            <label>No employee Types found </label>
+            <label>No employee Types found</label>
             @endforelse
           </div>
         </div>
       </div>
-      <div class = "col-md-12">
+      <div class = "col-md-10 col-md-offset-1">
        <form role = "form" class="form-horizontal" method = "POST">
         {{ csrf_field() }}
-        <div class="form-group required">
-          <label class = "control-label">First Name</label>
-          <input  type="text" class="form-control" name = "freightnumber" id = "firstName">
+        <div class = "col-md-4">
+          <div class = "col-md-12">
+            <div class="form-group required">
+              <label class = "control-label">First Name</label>
+              <input  type="text" class="form-control" name = "freightnumber" id = "firstName">
+            </div>
+          </div>
         </div>
-        <div class="form-group required">
-          <label>Middle Name</label>
-          <input  type="text" class="form-control" name = "freightnumber" id = "middleName">
+        <div class = "col-md-4">
+          <div class = "col-md-12">
+            <div class="form-group">
+              <label class="control-label">Middle Name</label>
+              <input  type="text" class="form-control" name = "freightnumber" id = "middleName">
+            </div>
+          </div>
         </div>
-        <div class="form-group required">
-          <label class = "control-label">Last Name</label>
-          <input  type="text" class="form-control" name = "freightnumber" id = "lastName">
+        <div class = "col-md-4">
+          <div class = "col-md-12">
+            <div class="form-group required">
+              <label class = "control-label">Last Name</label>
+              <input  type="text" class="form-control" name = "freightnumber" id = "lastName">
+            </div>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
-</div>
-<div class = "row">
-
-  <div class = "panel-body">
-    <div class = "panel-heading">
-     <h4><small>1</small>&nbsp;&nbsp;Employee Roles</h4>
-   </div>
-
-
-   <br />
-   <div class = "panel-heading">
-     <h4>
-       <small>2</small>&nbsp;&nbsp;Employee Information
-     </h4>
-   </div>
-   <div class="panel-body">
-
-   </div>
-   <div class = "col-md-12">
-    <label>Current Address</label>
-  </div>
-  <div class = "form-group">
-    <div class = "col-md-12">
-      <div class = "col-md-5">
-       <div class="form-group required">
-        <label class= " control-label">Street</label>
-        <input type="text" class = "form-control" name="age" id = "street">
+        <div class = "col-md-12">
+          <div class="form-group required">
+            <label class= " control-label">Street</label>
+            <input type="text" class = "form-control" name="age" id = "street">
+          </div>
+          <div class="form-group required">
+            <label class= " control-label">Province</label>
+            <select name = "loc_province" id="loc_province" class = "form-control">
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class= " control-label">City</label>
+            <select name = "loc_city" id="loc_city" class = "form-control">
+              <option value="0"></option>
+            </select>
+          </div>
+          <div class = "form-group">
+            <label class= " control-label">Zip Code</label>
+            <input type="text" class = "form-control" name="age" id = "zip">
+          </div>
+          <div class = "form-group required">
+            <div class = "col-md-12">
+              <div class = "col-md-3">
+               <label class= " control-label">
+                 Date Of Birth*
+               </label>
+               <div class = "input-group">
+                 <input type="text" class = "form-control" name="dateOfBirth" id = "dateOfBirth" disabled>
+                 <span class="input-group-btn">
+                   <button class="btn btn-default" type="button" onclick="getData()" id = "dateOfBirthButton">
+                     <i class="fa fa-calendar "></i></button></span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <div class = "form-group">
+              <label class= " control-label">Age</label>
+              <input type="text" class = "form-control" name="age" id = "age" disabled>
+            </div>
+            <div class = "form-group">
+              <label class= " control-label">Social Security Number</label>
+              <input type="text" class = "form-control" name="sss" id = "socialSecurityNumber" >
+            </div>
+            <div class = "form-group">
+              <label class= " control-label">Phone Number</label>
+              <input type="text" class = "form-control" name="age" id = "phoneNumber" placeholder="xxx-xx-xx">
+            </div>
+            <div class = "form-group">
+              <label class= " control-label">Cellphone Number</label>
+              <input type="text" class = "form-control" name="age" id = "cellphoneNumber"  placeholder="(xx)-xxxxxxxxx">
+            </div>
+            <div class = "form-group">
+              <label class= " control-label">Emergency Contact</label>
+              <input type="text" class = "form-control" name="age" id = "emergencyContact" placeholder="xxx-xx-xx">
+            </div>
+            <div class="form-group required">
+              <div class = "col-md-12">
+                <div class = "col-md-6">
+                  <label class=" control-label">In case of emergency</label>
+                  <textarea class="form-control" rows="3" id = "inCaseOfEmergency"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class = "form-group">
+              <button  class="btn btn-success" id = "saveRecord" >Save</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
-
-    <div class = "col-md-3">
-     <div class="form-group required">
-      <label class= " control-label">Province</label>
-      <select name = "loc_province" id="loc_province" class = "form-control">
-      </select>
-    </div>
   </div>
-
-  <div class = "col-md-3">
-   <div class="form-group required">
-    <label class= " control-label">City</label>
-    <select name = "loc_city" id="loc_city" class = "form-control">
-      <option value="0"></option>
-    </select>
-  </div>
-</div>
-</div>
-
-
-</div>
-<div class="form-group required">
-  <div class = "col-md-12">
-    <div class = "col-md-2">
-      <label class= " control-label">Zip Code</label>
-      <input type="text" class = "form-control" name="age" id = "zip">
-    </div>
-  </div>
-</div>
-</div>
-
-<div class = "form-group required">
-  <div class = "col-md-12">
-    <div class = "col-md-3">
-     <label class= " control-label">Date Of Birth*</label>
-     <div class = "input-group">
-       <input type="text" class = "form-control" name="dateOfBirth" id = "dateOfBirth" disabled>
-       <span class="input-group-btn">
-         <button class="btn btn-default" type="button" onclick="getData()" id = "dateOfBirthButton"><i class="fa fa-calendar "></i></button>
-       </span>
-     </div>
-   </div>
-
-   <div class = "col-md-2">
-    <label class= " control-label">Age</label>
-    <input type="text" class = "form-control" name="age" id = "age" disabled>
-  </div>
-  <div class="form-group required">
-    <div class = "col-md-3">
-      <label class= " control-label">Social Security Number</label>
-      <input type="text" class = "form-control" name="sss" id = "socialSecurityNumber" >
-    </div>
-  </div>
-</div>
-</div>
-
-
-
-<div class = "form-group required">
-  <div class = "col-md-12">
-    <div class = "col-md-3">
-      <label class= " control-label">Phone Number</label>
-      <input type="text" class = "form-control" name="age" id = "phoneNumber" placeholder="xxx-xx-xx">
-    </div>
-
-    <div class = "col-md-3">
-      <label class= " control-label">Cellphone Number</label>
-      <input type="text" class = "form-control" name="age" id = "cellphoneNumber"  placeholder="(xx)-xxxxxxxxx">
-    </div>
-  </div>
-</div>
-
-<div class = "form-group required">
-  <div class = "col-md-12">
-    <div class = "col-md-3">
-      <label class= " control-label">Emergency Contact</label>
-      <input type="text" class = "form-control" name="age" id = "emergencyContact" placeholder="xxx-xx-xx">
-    </div>
-
-
-  </div>
-</div>
-
-<div class="form-group required">
-  <div class = "col-md-12">
-    <div class = "col-md-6">
-      <label class=" control-label">In case of emergency</label>
-
-      <textarea class="form-control" rows="3" id = "inCaseOfEmergency"></textarea>
-
-    </div>
-  </div>
-</div>
-
-
-</form>
-</div>
-</div>
-</div>
-
-</div>
-
-<div class="form-group">
-  <hr>
-  <label class = "col-md-12 control-label">
-   <form role = "form" class="form-horizontal" method = "POST">
-    {{ csrf_field() }}
-    <button  class="btn btn-success" id = "saveRecord" >
-     Save Record
-   </button>
- </label>
-</form>
-<br/>
-
-<p class = "col-md-12"><small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
-</div>
-
-</div>
-</div>
-</div>
-
-
-
-</div>
 </div>
 @endsection
 @push('styles')

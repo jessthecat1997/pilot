@@ -409,10 +409,11 @@
 							'locations_id' : $('#locations_id').val(),
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
+							'tblLength' : tblLength,
 							
 						},
 						success: function (data){
-
+							console.log(data);
 							aftable.ajax.reload();
 							$('#afModal').modal('hide');
 							$('.modal-title').text('New Arrastre Fee Per Pier');
