@@ -864,7 +864,7 @@ class TruckingsController extends Controller
         $deliveries = DB::table('delivery_receipt_headers')
         ->select('deliveryDateTime', 'pickupDateTime', 'trucking_service_orders.id as tr_so_id', 'plateNumber', 'delivery_receipt_headers.id as del_head_id')
         ->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
-        ->where('delivery_receipt_headers.status', '=', 'P')
+        ->whereRaw('delivery_receipt_headers.status IN("P", "F")')
         ->get();
 
         return view('pdf_layouts.calendar', compact(['deliveries']));
