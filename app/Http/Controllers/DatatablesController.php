@@ -1052,6 +1052,19 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+	public function wf_lcl_datatable(){
+		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(basis_types.name ) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY basis_types.name ASC ) AS amount FROM basis_types,locations,wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($wharfages)
+		->addColumn('action', function ($wharfage){
+			return
+			'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
 	public function ipf_datatable(){
 		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
 

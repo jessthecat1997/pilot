@@ -90,6 +90,7 @@ Route::resource('/admin/lcl_type','LclTypesController');
 Route::resource('/admin/basis_type','BasisTypeController');
 Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
 Route::resource('/admin/wharfage_fee','WharfageFeeController');
+Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
@@ -227,6 +228,8 @@ Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.da
 Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
 Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
 Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
+Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
+
 
 Route::get('pdfview','PaymentsController@pdfview');
 
