@@ -2,14 +2,15 @@
 @section('content')
 <h2>&nbsp;Payment</h2>
 <hr>
-<div class="pull-right">
-	<a class="btn but" id="btn_newBill">Select Service Order</a>
-</div>
-</br>
-</br>
 <div class="container-fluid">
 	<div class="row collapse in" id="history_collapse">
 		<div class="panel-default panel">
+			<br>
+			<div class="pull-right">
+				<a class="btn but collapse in" id="btn_pso">Select Service Order</a>
+			</div>
+			<br>
+			<br>
 			<div class="panel-heading" id="heading">Payment History</div>
 			<div class = "panel-body">
 				<br>
@@ -23,10 +24,42 @@
 								Consignee
 							</td>
 							<td>
-								Amount(Balance)
+								Amount
 							</td>
 							<td>
-								Status
+								Payment Mode
+							</td>
+							<td>
+								Actions
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row collapse" id="pso_collapse">
+		<div class="panel-default panel">
+			<br>
+			<div class="pull-right">
+				<a class="btn but collapse in" id="btn_back">Back to Payment History</a>
+			</div>
+			<br>
+			<br>
+			<div class="panel-heading" id="heading">Service Order</div>
+			<div class = "panel-body">
+				<br>
+				<table class = "table-responsive table" id = "so_table">
+					<thead>
+						<tr>
+							<td>
+								No.
+							</td>
+							<td>
+								Consignee
+							</td>
+							<td>
+								Service Order
 							</td>
 							<td>
 								Actions
@@ -66,24 +99,48 @@
 			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'amount' },
-			{ data: 'status',
+			{ data: 'isCheque',
 			"render" : function( data, type, full ) {return formatStatus(data); }},
 			{ data: 'action', orderable: false, searchable: false }
 			],
 			columnDefs: [
 
-                 {"className": "dt-right", "targets": "1"}
+			{"className": "dt-right", "targets": "1"}
 
-          ]
+			]
 		})
 		function formatStatus(n) {
 
-			if (n == 'P'){
-				return "Paid";
+			if (n == '0'){
+				return "Cash";
 			}else{
-				return "Unpaid";
+				return "Cheque";
 			}
 		}
+	})
+	$(document).on('click', '#btn_pso', function(e){
+		$('#pso_collapse').addClass('in');
+		$('#history_collapse').removeClass('in');
+		var vtable = $('#so_table').DataTable({
+			processing: false,
+			serverSide: false,
+			deferRender: true,
+			ajax: "{{ route('p_order.data') }}",
+			columns: [
+			{ data: 'id' },
+			{ data: 'companyName' },
+			{ data: 'name' },
+			{ data: 'action', orderable: false, searchable: false }
+			],
+			columnDefs: [
+
+			{"className": "dt-right", "targets": "1"}
+
+			]
+		})
+	})
+	$(document).on('click', '#btn_back', function(e){
+		location.reload();
 	})
 </script>
 @endpush
