@@ -45,22 +45,18 @@ class WharfageFeeController extends Controller
     public function update(Request $request, $id)
     {
 
-        
         $wf_header= WharfageHeader::findOrFail($id);
         $wf_header->locations_id = $request->locations_id;
         $wf_header->save();
 
-    
         $_container_size_id = json_decode(stripslashes($request->container_size_id), true);
         $_amount = json_decode(stripslashes($request->amount), true);
 
         $tblRowLength = $request->tblLength;
 
-        for($x = 0; $x < $tblRowLength; $x++)
+        for($x = 0; $x <  $tblRowLength; $x++)
         {
-            $wf_detail = new WharfageDetail;
-            $wf_detail->wharfage_header_id =$wf_header->id;
-            $wf_detail->container_sizes_id = (string)$_container_size_id[$x];
+            $wf_detail = WharfageDetail::findOrFail($_container_size_id[$x]);
             $wf_detail->amount = (string)$_amount[$x];
             $wf_detail->save();
         }

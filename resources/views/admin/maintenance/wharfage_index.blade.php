@@ -155,18 +155,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-wf-fee
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-wf-fee
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -405,14 +405,14 @@
 						url:  '/admin/wharfage_fee/'+ data.id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'wf_head_id': data.id,
 							'locations_id' : $('#locations_id').val(),
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
+							'tblLength' : tblLength,
 							
 						},
 						success: function (data){
-
+							console.log(data);
 							wftable.ajax.reload();
 							$('#wfModal').modal('hide');
 							$('.modal-title').text('New wharfage Fee Per Pier');
