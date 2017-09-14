@@ -861,19 +861,12 @@ class TruckingsController extends Controller
 
 
     public function show_calendar(){
-     $events = [];
+        $deliveries = DB::table('delivery_receipt_headers')
+        ->select('deliveryDateTime', 'pickupDateTime', 'trucking_service_orders.id as tr_so_id', 'plateNumber', 'delivery_receipt_headers.id as del_head_id')
+        ->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
+        ->where('delivery_receipt_headers.status', '=', 'P')
+        ->get();
 
-     $events[] = \Calendar::event(
-        'Event One', 
-        false, 
-        '2017-02-11T0800', 
-        '2017-02-13T0800',
-        0
-        );
-     $calendar = \Calendar::addEvents($events)
-       ->setOptions([ //set fullcalendar options
-        'firstDay' => 1
-        ]); 
-       return view('pdf_layouts.calendar', compact('calendar'));
+        return view('pdf_layouts.calendar', compact(['deliveries']));
    }
 }

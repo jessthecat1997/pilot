@@ -598,6 +598,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
+		$("#collapse1").addClass('in');
 		var json;
 		var results;
 		var detail_object = [];
