@@ -49,122 +49,134 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="col-sm-12" id="tot">
-			<form class="form-inline" onsubmit="this.preventDefault();">
-				{{ csrf_field() }}
-				<div class="col-sm-8">
-					<div class="form-group required">
-						<label class = "control-label" >Mode of Payment: &nbsp;</label>
-						<label class="radio-inline" id="cash"><input type="radio" name="p_mode" id="p_mode" value="Cash">Cash</label>
-						<label class="radio-inline" id="check"><input type="radio" name="p_mode" id="p_mode" value="Check" data-toggle="modal" data-target="#checkModal">Cheque</label>
-					</div>
-					<div class="form-group pull-right">
-						<label for="bal"><h3>Balance: &nbsp;</h3></label>
-						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						@forelse($paid as $pd)
-						<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
-						@empty
-						<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
-						@endforelse
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-	<br/>
+		<ul class="nav nav-pills">
+			<li class="active"><a data-toggle="pill" href="#home">Cash</a></li>
+			<li><a data-toggle="pill" href="#menu1">Cheque</a></li>
+		</ul>
 
-	<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#revModal">New Payment</button>
-	<br/>
-	<br/>
-	<div class="row">
-		<div class="panel-default col-md-6">
-			<div class="panel-heading" id="heading">List of Payable</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "bills_table">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-				</table>
+		<div class="tab-content">
+			<div id="home" class="tab-pane fade in active">
+				<div class="row">
+					<div class="col-sm-12" id="tot">
+						<form class="form-inline" onsubmit="this.preventDefault();">
+							{{ csrf_field() }}
+							<div class="col-sm-8">
+								<div class="form-group pull-right">
+									<label for="bal"><h3>Balance: &nbsp;</h3></label>
+									<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									@forelse($paid as $pd)
+									<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
+									@empty
+									<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
+									@endforelse
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<br/>
+
+				<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#revModal">New Payment</button>
+				<br/>
+				<br/>
+				<div class="row">
+					<div class="panel-default col-md-6">
+						<div class="panel-heading" id="heading">List of Payable</div>
+						<div class="panel-body">
+							<table class = "table-responsive table" id = "bills_table">
+								<thead>
+									<tr>
+										<td>
+											Name
+										</td>
+										<td>
+											Amount
+										</td>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<div class="panel-default col-md-6">
+						<div class="panel-heading" id="heading">List of Deposits</div>
+						<div class="panel-body">
+							<table class = "table-responsive table" id = "bills_table">
+								<thead>
+									<tr>
+										<td>
+											Date Added
+										</td>
+										<td style="text-align: center;">
+											Remaining Balance
+										</td>
+										<td style="text-align: center;">
+											Action
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+									@if($pays[0]->status != 'P')
+									@forelse($deposits as $deposit)
+									<tr>
+										<td>
+											{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+										</td>
+										<td style="text-align: right;">
+											Php {{ $deposit->currentBalance }}
+										</td>
+										<td style="text-align: center;">
+											<button class="btn but deposit-payment">Make Payment</button>
+											<input type = "hidden" class = "deposit_id" value="{{ $deposit->id }}" />
+										</td>
+									</tr>
+									@empty
+									<tr>
+										<td colspan="3">No Deposits</td>
+									</tr>
+									@endforelse
+									@else
+									@forelse($deposits as $deposit)
+									<tr>
+										<td>
+											{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+										</td>
+										<td style="text-align: right;">
+											Php {{ $deposit->currentBalance }}
+										</td>
+										<td style="text-align: center;">
+
+										</td>
+									</tr>
+									@empty
+									<tr>
+										<td colspan="3">No Deposits</td>
+									</tr>
+									@endforelse
+									@endif
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="menu1" class="tab-pane fade">
+				<h3>Cheque</h3>
+				<p>Some content in menu 1.</p>
 			</div>
 		</div>
-		<div class="panel-default col-md-6">
-			<div class="panel-heading" id="heading">List of Deposits</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "bills_table">
-					<thead>
-						<tr>
-							<td>
-								Date Added
-							</td>
-							<td style="text-align: center;">
-								Remaining Balance
-							</td>
-							<td style="text-align: center;">
-								Action
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						@if($pays[0]->status != 'P')
-						@forelse($deposits as $deposit)
-						<tr>
-							<td>
-								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-							</td>
-							<td style="text-align: right;">
-								Php {{ $deposit->currentBalance }}
-							</td>
-							<td style="text-align: center;">
-								<button class="btn but deposit-payment">Make Payment</button>
-								<input type = "hidden" class = "deposit_id" value="{{ $deposit->id }}" />
-							</td>
-						</tr>
-						@empty
-						<tr>
-							<td colspan="3">No Deposits</td>
-						</tr>
-						@endforelse
-						@else
-						@forelse($deposits as $deposit)
-						<tr>
-							<td>
-								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-							</td>
-							<td style="text-align: right;">
-								Php {{ $deposit->currentBalance }}
-							</td>
-							<td style="text-align: center;">
-								
-							</td>
-						</tr>
-						@empty
-						<tr>
-							<td colspan="3">No Deposits</td>
-						</tr>
-						@endforelse
-						@endif
-
-					</tbody>
-				</table>
-			</div>
-		</div>
 	</div>
+	<hr>
+	
 	<br/>
 	<div class="row">
 		<div class="panel-default col-sm-12">
@@ -752,6 +764,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 					url: '{{ route("payment.store") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
+						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
 						'description' : rem
@@ -814,6 +827,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 					url: '{{ route("payment.store") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
+						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
 						'description' : rem
@@ -887,6 +901,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 				url: '{{ route("payment.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
+					'isCheque' : 0,
 					'bi_head_id' : {{ $so_head_id }},
 					'amount' : amt,
 					'description' : rem
@@ -970,6 +985,7 @@ $(document).on('click', '.finalize-payment', function(e){
 					url: '{{ route("payment.store") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
+						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
 						'description' : rem
@@ -1032,6 +1048,7 @@ $(document).on('click', '.finalize-payment', function(e){
 					url: '{{ route("payment.store") }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
+						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
 						'description' : rem
@@ -1105,6 +1122,7 @@ $(document).on('click', '.finalize-payment', function(e){
 				url: '{{ route("payment.store") }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
+					'isCheque' : 0,
 					'bi_head_id' : {{ $so_head_id }},
 					'amount' : amt,
 					'description' : rem
