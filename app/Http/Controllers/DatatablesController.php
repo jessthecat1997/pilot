@@ -313,28 +313,14 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function pso_head_datatable(){
-		$bill_hists = DB::select('SELECT t.id,
-			C.companyName,
-			CASE t.isRevenue
-			WHEN 1 THEN "Billing"
-			WHEN 0 THEN "Refundable Charge"
-			END as isRevenue,
-			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
-			coalesce((ROUND(((p.total * t.vatRate)/100), 2) + p.total), 0) as totall,
-			coalesce(DATE_FORMAT(t.due_date, "%M %d, %Y"), "Not set") as due_date
-
-
-			FROM billing_invoice_headers t LEFT JOIN
-			(
-			SELECT bi_head_id, SUM(amount) total
-			FROM billing_invoice_details
-			GROUP BY bi_head_id
-			) p
-			ON t.id = p.bi_head_id
-			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
-			JOIN consignees AS C on B.consignees_id = C.id');
-
-		return Datatables::of($bill_hists)
+		$payment_hist = DB::table('payments')
+		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('payments.id','companyName', 'amount', 'billing_invoice_headers.status')
+		->orderBy('companyName')
+		->get();
+		return Datatables::of($payment_hist)
 		->addColumn('action', function ($hist) {
 			return
 			'<a href = "/payment/'. $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';

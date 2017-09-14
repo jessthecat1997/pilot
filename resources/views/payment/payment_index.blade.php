@@ -2,10 +2,15 @@
 @section('content')
 <h2>&nbsp;Payment</h2>
 <hr>
+<div class="pull-right">
+	<a class="btn but" id="btn_newBill">Select Service Order</a>
+</div>
+</br>
+</br>
 <div class="container-fluid">
 	<div class="row collapse in" id="history_collapse">
 		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">List of Invoice</div>
+			<div class="panel-heading" id="heading">Payment History</div>
 			<div class = "panel-body">
 				<br>
 				<table class = "table-responsive table" id = "bill_hist_table">
@@ -18,13 +23,10 @@
 								Consignee
 							</td>
 							<td>
-								Type
+								Amount(Balance)
 							</td>
 							<td>
-								Amount
-							</td>
-							<td>
-								Due Date
+								Status
 							</td>
 							<td>
 								Actions
@@ -63,11 +65,9 @@
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
-			{ data: 'isRevenue' },
-			{ data: 'totall',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },
-			{ data: 'due_date' },
+			{ data: 'amount' },
+			{ data: 'status',
+			"render" : function( data, type, full ) {return formatStatus(data); }},
 			{ data: 'action', orderable: false, searchable: false }
 			],
 			columnDefs: [
@@ -76,6 +76,14 @@
 
           ]
 		})
+		function formatStatus(n) {
+
+			if (n == 'P'){
+				return "Paid";
+			}else{
+				return "Unpaid";
+			}
+		}
 	})
 </script>
 @endpush
