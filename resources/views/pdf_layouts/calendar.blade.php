@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<h3>Calendar</h3>
+<h2>Scheduled deliveries</h2>
 <div class = "col-md-10 col-md-offset-1">
 	<div id = "calendar">
 
@@ -11,6 +11,11 @@
 @endsection
 
 @push('styles')
+<style type="text/css">
+	#calendar h2:first-child{
+		border-left: none;
+	}
+</style>
 <link href="/js/fullCalendar/fullcalendar.min.css" rel="stylesheet">
 @endpush
 

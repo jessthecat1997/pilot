@@ -84,6 +84,30 @@ class TruckingsController extends Controller
         //
     }
 
+    public function show_trucks(){
+        $vehicle_type = VehicleType::all();
+        $vehicle_type_with_vehicles = [];
+        if(count($vehicle_type) > 0){
+            foreach ($vehicle_type as $vt) {
+                $vehicles =  DB::table('vehicles')
+                ->where('vehicle_types_id', '=', $vt->id)
+                ->get();
+                foreach($vehicles as $vh)
+                {
+                    $schedules = DB::table('delivery_receipt_headers')
+                    ->where('plateNumber', '=', $vh->plateNumber)
+                    ->get();
+                }
+                $new_row['vehicle_type']['deliveries'] = 
+                $new_row['vehicle_type'] = $vt;
+                $new_row['vehicles'] = $vehicles;
+                array_push($vehicle_type_with_vehicles, $new_row);
+
+            }
+        }
+        return view('trucking.trucking_service_order_view_truck_schedule', compact(['vehicle_type_with_vehicles']));
+    }
+
     public function get_area_rate(Request $request){
         $quotation = DB::table('quotation_details')
         ->join('quotation_headers as A', 'quotation_details.quot_header_id', '=', 'A.id')
@@ -868,5 +892,5 @@ class TruckingsController extends Controller
         ->get();
 
         return view('pdf_layouts.calendar', compact(['deliveries']));
-   }
+    }
 }
