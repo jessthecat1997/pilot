@@ -9,7 +9,7 @@ class Cheque extends Model
 {
      use SoftDeletes;
 
-    protected $fillable = ['isVerify', 'bi_head_id'];
+    protected $fillable = ['bankName','isVerify', 'bi_head_id'];
 
     protected $dates = [
     'deleted_at',

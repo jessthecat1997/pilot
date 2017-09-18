@@ -142,6 +142,7 @@ class PaymentsController extends Controller
 
 		$new_payment->amount = $request->amount;
 		$new_payment->description = $request->description;
+		$new_payment->isCheque = $request->isCheque;
 		$new_payment->bi_head_id = $request->bi_head_id;
 		$new_payment->save();
 	}

@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->increments('id');
             $table->decimal('amount',19,2);
             $table->string('description', 200)->nullable();
+            $table->boolean('isCheque');
             $table->integer('bi_head_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();

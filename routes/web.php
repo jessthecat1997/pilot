@@ -245,7 +245,7 @@ Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 Route::post('payment/cheques/{id?}', 'PaymentsController@verify_cheque')->name('cheque');
-
+Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
@@ -332,7 +332,7 @@ Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsControl
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
 Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
 Route::Get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
-
+Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
 
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
