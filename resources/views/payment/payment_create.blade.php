@@ -49,42 +49,40 @@
 	</div>
 	<hr>
 	<div class="row">
+		<div class="col-sm-12" id="tot">
+			<form class="form-inline" onsubmit="this.preventDefault();">
+				{{ csrf_field() }}
+				<div class="col-sm-8">
+					<div class="form-group pull-right">
+						<label for="bal"><h3>Balance: &nbsp;</h3></label>
+						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						@forelse($paid as $pd)
+						<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
+						@empty
+						<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
+						@endforelse
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br/>
+	<div class="row">
 		<ul class="nav nav-pills">
 			<li class="active"><a data-toggle="pill" href="#home">Cash</a></li>
 			<li><a data-toggle="pill" href="#menu1">Cheque</a></li>
 		</ul>
-
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade in active">
-				<div class="row">
-					<div class="col-sm-12" id="tot">
-						<form class="form-inline" onsubmit="this.preventDefault();">
-							{{ csrf_field() }}
-							<div class="col-sm-8">
-								<div class="form-group pull-right">
-									<label for="bal"><h3>Balance: &nbsp;</h3></label>
-									<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group">
-									<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
-								</div>
-							</div>
-							<div class="col-sm-2">
-								<div class="form-group">
-									@forelse($paid as $pd)
-									<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
-									@empty
-									<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
-									@endforelse
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<br/>
-
 				<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#revModal">New Payment</button>
 				<br/>
 				<br/>
@@ -170,14 +168,12 @@
 				</div>
 			</div>
 			<div id="menu1" class="tab-pane fade">
-				<h3>Cheque</h3>
-				<p>Some content in menu 1.</p>
+				<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#checkModal">New Payment</button>
+				<br/>
 			</div>
 		</div>
 	</div>
 	<hr>
-	
-	<br/>
 	<div class="row">
 		<div class="panel-default col-sm-12">
 			<div class="panel-heading" id="heading">Payment History</div>
@@ -258,8 +254,21 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Confirm Cheque Payment</h4>
 			</div>
+			<div class="modal-body">
+				<form class="form-inline">
+					{{ csrf_field() }}
+					<div class="form-group">
+						<label for="bank"><h4>Bank Name: &nbsp;</h4></label>
+						&nbsp;&nbsp;<input type="text" id="bank">
+					</div>
+					<div class="form-group">
+						<label for="check_amt"><h4>Amount: &nbsp;</h4></label>
+						&nbsp;&nbsp;<input type="text" id="check_amt">
+					</div>
+				</form>
+			</div>
 			<div class="modal-footer">
-				<button class="btn but finalize-payment-check">Confirm</button>
+				<button class="btn but finalize-payment-check">Save</button>
 			</div>
 		</div>
 	</div>
@@ -418,7 +427,9 @@
 
 	})
 
-
+	$(document).on('click', '#test', function(e){
+		console.log($('#bank').val());
+	})
 	$(document).on('click', '.payment_receipt', function(e){
 		e.preventDefault();
 		type = $(this).closest('tr').find('.type').val();
@@ -438,6 +449,7 @@
 			url: 'cheques/{{ $pays[0]->bi_head }}',
 			data: {
 				'_token' : $('input[name=_token]').val(),
+				'bankName' : $('#bank').val(),
 				'bi_head_id' : {{ $pays[0]->bi_head }},
 				'isVerify' : 1
 			},
