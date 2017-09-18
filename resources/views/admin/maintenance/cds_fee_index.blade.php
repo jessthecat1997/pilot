@@ -19,7 +19,7 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Brokerage | Container Delivery System Fee</h2>
+		<h2>&nbsp;Maintenance | Brokerage | Customs Documentary Stamp Fee</h2>
 		<hr>
 		<h5>Current CDS Fee: Php 
 			@if($cds_fee[0]->fee != null)

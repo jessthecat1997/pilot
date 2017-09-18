@@ -4,15 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class ArrastreDetail extends Model
+class ArrastreLclHeader extends Model
 {
-	use SoftDeletes;
+   use SoftDeletes;
 	protected $fillable = [
-	'arrastre_lcl_headers_id','basis_types_id','container_sizes_id','amount',
+	'locations_id',
 	];
 
 	protected $dates = [
 	'deleted_at',
 	];
-    
 }
