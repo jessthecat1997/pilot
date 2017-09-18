@@ -1052,7 +1052,7 @@ class DatatablesController extends Controller
 	}
 
 	public function wf_lcl_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(basis_types.name ) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY basis_types.name ASC ) AS amount FROM basis_types,locations,wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($wharfages)
 		->addColumn('action', function ($wharfage){

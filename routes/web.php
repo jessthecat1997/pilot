@@ -96,7 +96,7 @@ Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_da
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
 Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
 Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
-
+Route::get('/wf_lcl_maintain_data', 'WharfageFeeLclController@wf_lcl_maintain_data')->name('wf_lcl_maintain_data');
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 

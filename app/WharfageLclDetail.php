@@ -8,7 +8,7 @@ class WharfageLclDetail extends Model
 {
     use SoftDeletes;
 	protected $fillable = [
-	'wharfage_header_id','basis_types_id','amount',
+	'wharfage_lcl_headers_id','basis_types_id','amount',
 	];
 
 	protected $dates = [
