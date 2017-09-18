@@ -100,8 +100,8 @@
 
 													<div class = "form-group " >
 														
-														<select class = "form-control" id = "basis_type_id" >
-														@forelse($basis_types as $basis_type)
+														<select class = "form-control" id = "basis_type" name="basis_type" >
+															@forelse($basis_types as $basis_type)
 															<option value = "{{ $basis_type->id }}">{{ $basis_type->abbreviation }}</option>
 															@empty
 															@endforelse
@@ -113,22 +113,25 @@
 												<td width = "40%">
 													<div class = "input-group " >
 														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = "form-control money amount_valid"
+														<input type = "text" class = "form-control amount_valid "
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
 												</td>
 												<td width = "10%" style="text-align: center;">
-													<button class = "btn btn-danger btn-md delete-ipf-row">x</button>
+													<button class = "btn btn-danger btn-md delete-wf-row">x</button>
 												</td>
 												
 											</tr>
 										</table>
-										
+										<div class = "form-group" style = "margin-left:10px">
+											<button    class = "btn btn-primary btn-md new-wf-row pull-left">New</button>
+											<br /><br/>
+											<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
+										</div>
 									</div>
 								</div>					
 							</div>
-							<small style = "color:red; text-align: left"><i>All fields are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<button id = "btnSave" type = "submit" class="btn btn-success finalize-wf">Save</button>
@@ -168,18 +171,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-wf-fee
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-wf-fee
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -238,16 +241,12 @@
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
-
-
-			
 			$('#amount').val("0.00");
-
 			$('#wf_parent_table > tbody').html("");
-			$('.modal-title').text('New wharfage Fee Per Pier');
+			$('.modal-title').text('New Wharfage Fee Per Pier');
 			$('#wfModal').modal('show');
-			
 			$('#wf_parent_table > tbody').append(wf_row);
+			$('#wf_warning').removeClass('in');
 
 
 		});
@@ -261,7 +260,7 @@
 
 			$.ajax({
 				type: 'GET',
-				url:  '{{ route("wf_maintain_data") }}',
+				url:  '{{ route("wf_lcl_maintain_data") }}',
 				data: {
 					'_token' : $('input[name=_token').val(),
 					'wf_id' : $(this).val(),
@@ -271,7 +270,7 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
 
 					}
 					$('#wf_parent_table > tbody').html("");
@@ -311,15 +310,24 @@
 			});
 		})
 
-		$(document).on('click', '.delete-ipf-row', function(e){
+		$(document).on('click', '.delete-wf-row', function(e){
 			e.preventDefault();
-			$('#ipf_warning').removeClass('in');
-			if($('#ipf_parent_table > tbody > tr').length == 1){
+			$('#wf_warning').removeClass('in');
+			if($('#wf_parent_table > tbody > tr').length == 1){
 				$(this).closest('tr').remove();
-				$('#ipf_table_warning').addClass('fade in');
+				$('#wf_table_warning').addClass('fade in');
 			}
 			else{
 				$(this).closest('tr').remove();
+			}
+		})
+
+		$(document).on('click', '.new-wf-row', function(e){
+			e.preventDefault();
+			$('#wf_table_warning').removeClass('fade in');
+			if(validatewfRows() === true){
+				$('#wf_parent_table').append(wf_row);
+
 			}
 		})
 		$('#btnDelete').on('click', function(e){
@@ -358,18 +366,20 @@
 		});
 		$(document).on('click', '.finalize-wf', function(e){
 			e.preventDefault();
-			if(finalvalidatewfRows() === true){
+			if(finalvalidateWfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New wharfage Fee Per Pier")
+				console.log(title);
+				if(title === "New Wharfage Fee Per Pier")
 				{
-					console.log(amount_value);
+					console.log("basis is "+basis_type_id);
+					console.log("amount is "+amount_value);
 					jsonBasisType = JSON.stringify(basis_type_id);
 					jsonAmount = JSON.stringify(amount_value);
 
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/wharfage_fee',
+						url:  '/admin/wharfage_fee_lcl/',
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'locations_id' : $('#locations_id').val(),
@@ -424,6 +434,7 @@
 							'locations_id' : $('#locations_id').val(),
 							'basis_types_id' : jsonBasisType,
 							'amount' : jsonAmount,
+							'tblLength' : tblLength,
 							
 						},
 						success: function (data){
@@ -462,7 +473,8 @@
 			}
 		});
 	});
-function validateIpfRows()
+
+function validatewfRows()
 {
 	
 	basis_type_id = [];
@@ -480,23 +492,33 @@ function validateIpfRows()
 	}
 	for(var i = 0; i < basis_type.length; i++){
 		var temp;
+
+		if(basis_type[i].value === "0")
+		{
+			basis_type[i].style.borderColor ='red';
+			error+= "Basis required";
+		}else
+		{
+			basis_type[i].style.borderColor = 'green';
+			basis_type_id.push(basis_type[i].value);
+			$('#wf_warning').removeClass('in');
+
+		}
 		
-		if(amount[i].value === "")
+		if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 		{
 			amount[i].style.borderColor = 'red';
 			error += "Amount Required.";
 		}
 		else
 		{
-			if(amount[i].value < 1){
+			if(amount[i].value < 0){
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-
-				
-				basis_type_id.push(basis_type[i].value);
+				amount_value.push(amount[i].value);
 				$('#wf_warning').removeClass('in');
 			}
 		}
@@ -506,6 +528,28 @@ function validateIpfRows()
 			basis_type: basis_type[i].value
 		};
 		range_pairs.push(pair);
+
+	}
+
+	var i, j, n;
+	found= false;
+	n=range_pairs.length;
+	for (i=0; i<n; i++) {
+		for (j=i+1; j<n; j++)
+		{
+			if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
+				found = true;
+
+				basis_type[i].style.borderColor = 'red';
+				basis_type[j].style.borderColor = 'red';
+				amount[i].style.borderColor = 'red';
+				amount[j].style.borderColor = 'red';
+				$('#wf_warning').addClass('in');
+
+			}else{
+				$('#wf_warning').removeClass('in');
+			}
+		}
 	}
 
 		//Final validation
@@ -519,7 +563,8 @@ function validateIpfRows()
 		}
 	}
 
-	function finalvalidatewfRows()
+
+	function finalvalidateWfRows()
 	{
 
 		basis_type_id = [];
@@ -530,11 +575,9 @@ function validateIpfRows()
 
 		error = "";
 
+		for(var i = 0; i < amount.length; i++){
 
 
-		for(var i = 0; i < basis_type.length; i++){
-
-			
 			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 			{
 				amount[i].style.borderColor = 'red';
@@ -567,6 +610,25 @@ function validateIpfRows()
 			range_pairs.push(pair);
 		}
 		var i, j, n;
+		found= false;
+		n=range_pairs.length;
+		for (i=0; i<n; i++) {
+			for (j=i+1; j<n; j++)
+			{
+				if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
+					found = true;
+
+					basis_type[i].style.borderColor = 'red';
+					basis_type[j].style.borderColor = 'red';
+					amount[i].style.borderColor = 'red';
+					amount[j].style.borderColor = 'red';
+					$('#wf_warning').addClass('in');
+
+				}else{
+					$('#wf_warning').removeClass('in');
+				}
+			}
+		}
 		
 		if(error.length == 0){
 			tblLength = basis_type.length;
@@ -575,6 +637,7 @@ function validateIpfRows()
 		else
 		{
 			return false;
+			btnSave.disabled('true');
 		}
 
 	}
