@@ -92,7 +92,7 @@ Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
 Route::resource('/admin/wharfage_fee','WharfageFeeController');
 Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
 Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
-
+Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
 
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
@@ -101,7 +101,7 @@ Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name
 Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
 Route::get('/wf_lcl_maintain_data', 'WharfageFeeLclController@wf_lcl_maintain_data')->name('wf_lcl_maintain_data');
 Route::get('/af_lcl_maintain_data', 'ArrastreFeeLclController@af_lcl_maintain_data')->name('af_lcl_maintain_data');
-
+Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data')->name('af_dc_maintain_data');
 
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
@@ -236,6 +236,9 @@ Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.da
 Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
 Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
 Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
+
+Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+
 
 
 Route::get('pdfview','PaymentsController@pdfview');

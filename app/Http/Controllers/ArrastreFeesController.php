@@ -12,7 +12,12 @@ class ArrastreFeesController extends Controller
 
     public function index()
     {
-        $sizes = \App\ContainerType::all();
+        $sizes = DB::table('container_types')
+        ->select('id','container_types.name')
+        ->where('deleted_at', '=', null)
+        ->get();
+
+
         $locations = DB::table('locations')
         ->select('id', 'locations.name')
         ->where('deleted_at', '=', null)

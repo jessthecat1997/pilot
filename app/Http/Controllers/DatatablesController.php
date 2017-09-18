@@ -1025,6 +1025,19 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
+	public function af_dc_datatable(){
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id");
+
+		return Datatables::of($arrastres)
+		->addColumn('action', function ($arrastre){
+			return
+			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
 	public function af_datatable(){
 		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
