@@ -311,7 +311,7 @@ class BillingDetailsController extends Controller
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::select('SELECT t.id,
-			C.companyName, t.isRevenue,
+			C.companyName, t.isFinalize,
 			CONCAT("Php ",(ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			coalesce((ROUND(((p.total * t.vatRate)/100), 2) + p.total), 0 ) as totall,
 			coalesce(DATE_FORMAT(t.due_date, "%M %d, %Y"), "Not set") as due_date,
@@ -335,20 +335,6 @@ class BillingDetailsController extends Controller
 			return
 			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
-		})
-		->addColumn('status', function ($hist) {
-			switch ($hist->status) {
-				case 'U':
-				return 'Not paid';
-				break;
-				case 'P':
-				return 'Paid';
-				break;
-
-				default:
-					# code...
-				break;
-			}
 		})
 		->make(true);
 	}

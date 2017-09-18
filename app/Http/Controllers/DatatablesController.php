@@ -288,7 +288,6 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at')
-		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
