@@ -108,6 +108,13 @@ class TruckingsController extends Controller
         return view('trucking.trucking_service_order_view_truck_schedule', compact(['vehicle_type_with_vehicles']));
     }
 
+    public function getTruckSchedule(Request $request){
+        $deliveries = DB::table('delivery_receipt_headers')
+        ->where('plateNumber', '=', $request->plateNumber)
+        ->get();
+        return $deliveries;
+    }
+
     public function get_area_rate(Request $request){
         $quotation = DB::table('quotation_details')
         ->join('quotation_headers as A', 'quotation_details.quot_header_id', '=', 'A.id')

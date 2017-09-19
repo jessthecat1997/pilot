@@ -2797,7 +2797,9 @@ class DatatablesController extends Controller
 		->removeColumn('lastName')
 		->addColumn('action', function ($employee){
 			return
-			'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
+				"<button class = 'btn btn-info view-employee' title = 'View'><span class = 'fa fa-eye'></span></button>
+				<button class = 'btn btn-primary edit-employee' title = 'Edit'><span class = 'fa fa-edit'></span></button>".
+				"<input type = 'hidden' value = '" . $employee->id . "' class = 'employee-id' />";
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
