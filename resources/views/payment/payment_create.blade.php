@@ -4,130 +4,108 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		<div class = "panel-default panel">
-			<div class="panel-heading" id="heading">Billing Information</div>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td class="active"><strong>Billing Invoice No:</strong></td>
-						@forelse($pays as $pay)
-						<td class = "success"><strong>{{ $so_head_id }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Consignee: </strong></td>
-						@forelse($pays as $pay)
-						<td class = "success" id="consignee"><strong>{{ $pay->con_name }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Company Name: </strong></td>
-						@forelse($pays as $pay)
-						<td class = "success" id="consignee"><strong>{{ $pay->companyName }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Address: </strong></td>
-						@forelse($pays as $pay)
-						<td class="success" id="address"><strong>{{ $pay->address }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-					<tr>
-						<td class="active"><strong>Service Order: </strong></td>
-						@forelse($pays as $pay)
-						<td class="success" id="sotype"><strong>{{ $pay->name }} Service Order No: {{ $pay->id }}</strong></td>
-						@empty
-						@endforelse
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-sm-12" id="tot">
-			<form class="form-inline" onsubmit="this.preventDefault();">
-				{{ csrf_field() }}
-				<div class="col-sm-8">
-					<div class="form-group pull-right">
-						<label for="bal"><h3>Balance: &nbsp;</h3></label>
-						<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
-					</div>
-				</div>
-				<div class="col-sm-2">
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Consignee Details</div>
+				<div class="panel-body">
 					<div class="form-group">
-						<input type="text" class="txt" id="total" value="{{ $total[0]->Total }}" disabled hidden>
+						<label>Invoice No:</label>
+						<input type="text" class="det" value="{{ $so_head_id }}" id="companyName" disabled>
 					</div>
-				</div>
-				<div class="col-sm-2">
+					@forelse($pays as $pay)
 					<div class="form-group">
-						@forelse($paid as $pd)
-						<input type="text" class="txt" id="paid" value="{{ $pd->total }}" disabled hidden>
-						@empty
-						<input type="text" class="txt" id="paid" value="0.00" disabled hidden>
-						@endforelse
+						<label>Consignee:</label>
+						<input type="text" class="det" value="{{ $pay->con_name }}" id="consignee" disabled>
 					</div>
+					<div class="form-group">
+						<label>Company Name:</label>
+						<input type="text" class="det" value="{{ $pay->companyName }}" id="sotype" disabled>
+					</div>
+					<div class="form-group">
+						<h5 id="address"><strong>Address:</strong> {{ $pay->address }}</h5>
+					</div>
+					<div class="form-group">
+						<label>Service Order:</label>
+						<input type="text" class="det" value="{{ $pay->name }} Service Order No: {{ $pay->id }}" id="sotype" disabled>
+					</div>
+					@empty
+					@endforelse
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
-	<br/>
-	<div class="row">
-		<ul class="nav nav-pills">
-			<li class="active"><a data-toggle="pill" href="#home">Cash</a></li>
-			<li><a data-toggle="pill" href="#menu1">Cheque</a></li>
-		</ul>
-		<div class="tab-content">
-			<div id="home" class="tab-pane fade in active">
-				<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#revModal">New Payment</button>
-				<br/>
-				<br/>
-				<div class="row">
-					<div class="panel-default col-md-6">
-						<div class="panel-heading" id="heading">List of Payable</div>
-						<div class="panel-body">
-							<table class = "table-responsive table" id = "bills_table">
-								<thead>
-									<tr>
-										<td>
-											Name
-										</td>
-										<td>
-											Amount
-										</td>
-									</tr>
-								</thead>
-							</table>
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Payment</div>
+				<div class="panel-body">
+					<form class="form" onsubmit="this.preventDefault();">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label for="bal">Balance: &nbsp;</label>
+							<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt money" id="bal" disabled>
 						</div>
-					</div>
-					<div class="panel-default col-md-6">
-						<div class="panel-heading" id="heading">List of Deposits</div>
-						<div class="panel-body">
-							<table class = "table-responsive table" id = "bills_table">
+						<div class="form-group">
+							<input type="hidden" class="txt" id="total" value="{{ $total[0]->Total }}" disabled>
+						</div>
+						<div class="form-group">
+							@forelse($paid as $pd)
+							<input type="hidden" class="txt" id="paid" value="{{ $pd->total }}" disabled>
+							@empty
+							<input type="hidden" class="txt" id="paid" value="0.00" disabled>
+							@endforelse
+						</div>
+					</form>
+					<ul class="nav nav-pills">
+						<li class="active"><a data-toggle="pill" href="#home">Cash</a></li>
+						<li><a data-toggle="pill" href="#menu1">Cheque</a></li>
+						<li><a data-toggle="pill" href="#menu2">Deposits</a></li>
+					</ul>
+					<div class="tab-content">
+						<div id="home" class="tab-pane fade in active">
+							<br>
+							<form class="form" onsubmit="this.preventDefault();">
+								{{ csrf_field() }}
+								<div class="form-group">
+									<label>*Amount</label>
+									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+								</div>
+								<div class="form-group">
+									<label for="remarks">Remarks:</label>
+									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
+								</div>
+								<button class="btn btn-primary finalize-payment-rev">Save</button>
+							</form>
+						</div>
+						<div id="menu1" class="tab-pane fade">
+							<br>
+							<form class="form">
+								{{ csrf_field() }}
+								<div class="form-group">
+									<label for="bank">*Bank Name: &nbsp;</label>
+									&nbsp;&nbsp;<input type="text" id="bank" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="check_amt">*Amount: &nbsp;</label>
+									&nbsp;&nbsp;<input type="text" id="check_amt" class="form-control">
+								</div>
+							</form>
+						</div>
+						<div id="menu2" class="tab-pane fade">
+							<br>
+							<table class = "table table-hover">
 								<thead>
 									<tr>
-										<td>
-											Date Added
-										</td>
-										<td style="text-align: center;">
+										<th style="text-align: center;">
 											Remaining Balance
-										</td>
-										<td style="text-align: center;">
+										</th>
+										<th style="text-align: center;">
 											Action
-										</td>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									@if($pays[0]->status != 'P')
 									@forelse($deposits as $deposit)
 									<tr>
-										<td>
-											{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-										</td>
 										<td style="text-align: right;">
 											Php {{ $deposit->currentBalance }}
 										</td>
@@ -167,165 +145,75 @@
 					</div>
 				</div>
 			</div>
-			<div id="menu1" class="tab-pane fade">
-				<button type="button" class="btn but pull-right" data-toggle="modal" @if($pays[0]->status == 'P') disabled @endif data-target="#checkModal">New Payment</button>
-				<br/>
-			</div>
 		</div>
 	</div>
-	<hr>
 	<div class="row">
-		<div class="panel-default col-sm-12">
-			<div class="panel-heading" id="heading">Payment History</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "hist_table">
-					<thead>
-						<tr>
-							<td style="width: 15%;">
-								Date of Payment
-							</td>
-							<td style="width: 25%:">
-								No.
-							</td>
-							<td style="width: 20%;">
-								Amount
-							</td>
-							<td style="width: 40%;">
-								Remarks
-							</td>
-							<td>
-								Action
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
-<hr>
-<div id="revModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Payment</h4>
-			</div>
-			<div class="modal-body">
-				<table class="table">
-					{{ csrf_field() }}
-					<thead>
-						<tr>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<form class="form-horizontal" onsubmit="this.preventDefault();">
-								<td>
-									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-							</form>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="form-group">
-									<label for="remarks">Remarks:</label>
-									<textarea class="form-control" rows="3" id="remarks" name="remarks"></textarea>
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<!-- .panel-heading -->
+				<div class="panel-body">
+					<div class="panel-group" id="accordion">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">List of Payables</a>
+								</h4>
+							</div>
+							<div id="collapseOne" class="panel-collapse collapse in">
+								<div class="panel-body">
+									<table class = "table-responsive table" id = "bills_table">
+										<thead>
+											<tr>
+												<th>
+													Name
+												</th>
+												<th>
+													Amount
+												</th>
+											</tr>
+										</thead>
+									</table>
 								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<strong>Note:</strong> All fields with * are required.
-			</div>
-			<div class="modal-footer">
-				<button class="btn but finalize-payment-rev">Save</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="checkModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Confirm Cheque Payment</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-inline">
-					{{ csrf_field() }}
-					<div class="form-group">
-						<label for="bank"><h4>Bank Name: &nbsp;</h4></label>
-						&nbsp;&nbsp;<input type="text" id="bank">
-					</div>
-					<div class="form-group">
-						<label for="check_amt"><h4>Amount: &nbsp;</h4></label>
-						&nbsp;&nbsp;<input type="text" id="check_amt">
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn but finalize-payment-check">Save</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="billModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Payment</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-inline" onsubmit="this.preventDefault();">
-					{{ csrf_field() }}
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label for="selected_bill"><h4>Amount: &nbsp;</h4></label>
-							<strong>Php</strong>&nbsp;&nbsp;<input type="text" class="txt" id="selected_bill" disabled>
+							</div>
+						</div>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment History</a>
+								</h4>
+							</div>
+							<div id="collapseTwo" class="panel-collapse collapse">
+								<div class="panel-body">
+									<table class = "table-hover table" id = "hist_table">
+										<thead>
+											<tr>
+												<th style="width: 15%;">
+													Date of Payment
+												</th>
+												<th style="width: 25%:">
+													No.
+												</th>
+												<th style="width: 20%;">
+													Amount
+												</th>
+												<th style="width: 40%;">
+													Remarks
+												</th>
+												<th>
+													Action
+												</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
-				</form>
-				<table class="table">
-					{{ csrf_field() }}
-					<thead>
-						<tr>
-							<td>
-								Amount *
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<form class="form-horizontal" onsubmit="this.preventDefault();">
-								<td>
-									<input type = "number" name="amount" id="bill_amount" class="form-control col-sm-2" style="text-align: right" required>
-								</td>
-							</form>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<div class="form-group">
-									<label for="remarks">Remarks:</label>
-									<textarea class="form-control" rows="3" id="b_remarks" name="b_remarks"></textarea>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<strong>Note:</strong> All fields with * are required.
-			</div>
-			<div class="modal-footer">
-				<button  class="btn but finalize-payment">Save</button>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 <div id="depModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
