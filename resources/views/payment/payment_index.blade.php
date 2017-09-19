@@ -3,70 +3,50 @@
 <h2>&nbsp;Payment</h2>
 <hr>
 <div class="container-fluid">
-	<div class="row collapse in" id="history_collapse">
-		<div class="panel-default panel">
-			<br>
-			<div class="pull-right">
-				<a class="btn but collapse in" id="btn_pso">Select Service Order</a>
-			</div>
-			<br>
-			<br>
-			<div class="panel-heading" id="heading">Payment History</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "bill_hist_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Consignee
-							</td>
-							<td>
-								Amount
-							</td>
-							<td>
-								Payment Mode
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Payment History
+				</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id="bill_hist_table">
+						<thead>
+							<tr>
+								<th>
+									Consignee
+								</th>
+								<th>
+									Amount
+								</th>
+								<th>
+									Payment Mode
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row collapse" id="pso_collapse">
-		<div class="panel-default panel">
-			<br>
-			<div class="pull-right">
-				<a class="btn but collapse in" id="btn_back">Back to Payment History</a>
-			</div>
-			<br>
-			<br>
-			<div class="panel-heading" id="heading">Service Order</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "so_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Consignee
-							</td>
-							<td>
-								Service Order
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
+		<div class="col-lg-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Select Service Order
+				</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id = "so_table">
+						<thead>
+							<tr>
+								<th>
+									Consignee
+								</th>
+								<th>
+									Actions
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -96,11 +76,22 @@
 			deferRender: true,
 			ajax: "{{ route('pso_head.data') }}",
 			columns: [
-			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'amount' },
-			{ data: 'isCheque',
-			"render" : function( data, type, full ) {return formatStatus(data); }},
+			{ data: 'isCheque', "render" : function( data, type, full ) 
+			{
+				return formatStatus(data); 
+			}
+		},
+		]
+	})
+		var sptable = $('#so_table').DataTable({
+			processing: false,
+			serverSide: false,
+			deferRender: true,
+			ajax: "{{ route('p_order.data') }}",
+			columns: [
+			{ data: 'companyName' },
 			{ data: 'action', orderable: false, searchable: false }
 			],
 			columnDefs: [
@@ -117,30 +108,6 @@
 				return "Cheque";
 			}
 		}
-	})
-	$(document).on('click', '#btn_pso', function(e){
-		$('#pso_collapse').addClass('in');
-		$('#history_collapse').removeClass('in');
-		var vtable = $('#so_table').DataTable({
-			processing: false,
-			serverSide: false,
-			deferRender: true,
-			ajax: "{{ route('p_order.data') }}",
-			columns: [
-			{ data: 'id' },
-			{ data: 'companyName' },
-			{ data: 'name' },
-			{ data: 'action', orderable: false, searchable: false }
-			],
-			columnDefs: [
-
-			{"className": "dt-right", "targets": "1"}
-
-			]
-		})
-	})
-	$(document).on('click', '#btn_back', function(e){
-		location.reload();
 	})
 </script>
 @endpush

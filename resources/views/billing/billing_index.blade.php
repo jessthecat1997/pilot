@@ -5,7 +5,7 @@
 <hr>
 <div class="row">
 	<div class="col-lg-8">
-		<div class="panel panel-info">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				List of Invoice
 			</div>
@@ -13,21 +13,21 @@
 				<table class = "table-responsive table" id = "bill_hist_table">
 					<thead>
 						<tr>
-							<td>
+							<th>
 								Consignee
-							</td>
-							<td>
+							</th>
+							<th>
 								Total Amount
-							</td>
-							<td>
+							</th>
+							<th>
 								Status
-							</td>
-							<td>
+							</th>
+							<th>
 								Due Date
-							</td>
-							<td>
+							</th>
+							<th>
 								Actions
-							</td>
+							</th>
 						</tr>
 					</thead>
 				</table>
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 	<div class="col-lg-4">
-		<div class="panel panel-info">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				Select Service Order
 			</div>
@@ -43,12 +43,12 @@
 				<table class = "table-responsive table" id = "so_table">
 					<thead>
 						<tr>
-							<td>
+							<th>
 								Consignee
-							</td>
-							<td>
+							</th>
+							<th>
 								Actions
-							</td>
+							</th>
 						</tr>
 					</thead>
 				</table>
