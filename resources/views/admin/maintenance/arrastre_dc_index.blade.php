@@ -42,13 +42,13 @@
 	<form role="form" method = "POST" class="commentForm">
 		<div class="modal fade" id="afModal" role="dialog">
 			<div class="form-group">
-				<div class="modal-dialog ">
+				<div class="modal-dialog modal-lg ">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
 						</div>
-						<div class="modal-body ">
+						<div class="modal-body  ">
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
 								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
@@ -112,7 +112,8 @@
 												</td>
 												<td>
 													<div class = "form-group input-group" >
-														<select  class ="dc_type" multiple= "multiple" id = "dc_type" name = "dc_type">	
+														<select id = "dc_type" name = "dc_type"   class = "form-control select2-allow-clear dc_type" style = "width:100%;" multiple="multiple" >
+														<option>Hi</option>
 														</select>	
 													</div>
 												</td>
@@ -171,6 +172,7 @@
 @endsection
 @push('styles')
 <style>
+ <link href= "/js/select2/select2.css" rel = "stylesheet">
 .class-af-fee
 {
 	border-left: 10px solid #8ddfcc;
@@ -253,57 +255,31 @@
 			}
 		});
 
-		$(".dc_type").select2({
-			data: arr_dc_types,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
+		$('.dc_type').select2({
+			data: arr_dc_types ,
+			placeholder: "Select Dangerous Cargo Types",
+			allowClear: true
 		});
 
 		
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
-
-
-			
 			$('#amount').val("0.00");
 
 			$('#af_parent_table > tbody').html("");
 			var rows = "";
-			for(var i = 0; i < arr_container_size_id.length; i++){
+			/*for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group" ><select class ="dc_type" multiple= "multiple" id = "dc_type" name = "dc_type"></select></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group" ><select multiple= "multiple" id = "dc_type" name = "dc_type" class = "form-control select2-allow-clear dc_type" style="width: 100%;"></select>	</div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			$(".dc_type").select2({
-			data: arr_dc_types,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
-		});
+			*/
+
 			$('.modal-title').text('New Arrastre Fee Per Pier');
 			$('#afModal').modal('show');
 			
-			$('#af_parent_table > tbody').append(rows);
+			$('#af_parent_table > tbody').append(af_row);
 
 
 		});
