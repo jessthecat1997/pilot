@@ -5,8 +5,8 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-6">
-			<div class="panel panel-info">
-				<div class="panel-heading"><h4>Consignee Details</h4></div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">Consignee Details</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label>Consignee:</label>
@@ -39,8 +39,8 @@
 			</div>
 		</div>
 		<div class="col-lg-6">
-			<div class="panel panel-info">
-				<div class="panel-heading"><h4>New Bills</h4></div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">New Bills</div>
 				<div class = "panel-body">
 					<table class="table table-hover" id="revenue_table">
 						<thead>
