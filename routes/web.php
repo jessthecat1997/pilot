@@ -54,6 +54,7 @@ Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave')
 Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
     return $from_new;
 });
+Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
 
 Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
 
@@ -247,6 +248,7 @@ Route::get('pdfview','PaymentsController@pdfview');
 //Orders
 Route::resource('/orders', 'OrdersController');
 
+
 //Payments
 Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
@@ -343,6 +345,7 @@ Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'Truckings
 Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
 Route::Get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
 Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
+Route::get('/get_truck_schedule','TruckingsController@getTruckSchedule')->name('get_truck_schedule');
 
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');

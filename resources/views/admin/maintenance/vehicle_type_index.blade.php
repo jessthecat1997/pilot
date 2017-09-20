@@ -16,17 +16,33 @@
 				<table class = "table-responsive table  table-striped" id = "vtype_table">
 					<thead>
 						<tr>
-							<td style="width: 30%;">
+							<td>
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td>
 								Description
 							</td>
-							<td style="width: 15%;">
+							<td>
 								Actions
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($vehicle_type as $vt)
+						<tr>
+							<td>
+								{{ $vt->name }}
+							</td>
+							<td>
+								{{ $vt->description }}
+							</td>
+							<td>
+								<button value = "{{ $vt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $vt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 
@@ -80,7 +96,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -115,11 +131,9 @@
 	
 	$(document).ready(function(){
 		var vtable = $('#vtype_table').DataTable({
-			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: '{{ route("vt.data") }}',
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -277,6 +291,9 @@
 								$('#description').val("");
 								$('#btnSave').removeAttr('disabled');
 
+								//EDIT MOTO
+								vtable.fnDatatable.ajax = "{{ route('vt.data') }}";
+								vtable.ajax.reload();
 							}
 							else{
 								resetErrors();

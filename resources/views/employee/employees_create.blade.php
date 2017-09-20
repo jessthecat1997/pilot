@@ -3,127 +3,126 @@
 <div class = "col-md-12">
   <div class = "panel panel-default">
     <div class = "panel-heading">
-      <h3>
-        <img src="/images/bar.png"> Employee | Create Employee
-      </h3>
-      <hr />
+      <h4>New Employee</h4>
     </div>
     <div class = "panel-body">
       <div class = "col-md-12">
-        @php
-        $checkboxCtr = 0;
-        $employeeTypeId = array();
-        @endphp
-        <div class = "form-group">
-          <div class = "col-md-12">
-            @forelse($employee_role as $employee_roles)
-            <div class = "col-md-3" id = "employeeRoles">
-              <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  >&nbsp;&nbsp;{{$employee_roles->name }}
+        <form class = "">
+          {{ csrf_field() }}
+          <div class="row">
+            <h5>Basic Information</h5>
+            <div class = "col-md-4">
+              <div class = "form-group required">
+                <label class="control-label">First Name</label>
+                <input type = "text" class = "form-control" placeholder="First Name" id = "firstName"/>
+              </div>
             </div>
-
-            @php
-            $checkboxCtr++;
-            $employeeTypeId[$checkboxCtr] = $employee_roles->id;
-            @endphp
-
-            @empty
-            <label>No employee Types found</label>
-            @endforelse
-          </div>
-        </div>
-      </div>
-      <div class = "col-md-10 col-md-offset-1">
-       <form role = "form" class="form-horizontal" method = "POST">
-        {{ csrf_field() }}
-        <div class = "col-md-4">
-          <div class = "col-md-12">
-            <div class="form-group required">
-              <label class = "control-label">First Name</label>
-              <input  type="text" class="form-control" name = "freightnumber" id = "firstName">
+            <div class = "col-md-4">
+              <div class = "form-group">
+                <label class="control-label">Middle Name</label>      
+                <input type = "text" class = "form-control" placeholder="Middle Name" id = "middleName"/>
+              </div>
+            </div>
+            <div class = "col-md-4">
+              <div class = "form-group required">
+                <label class="control-label">Last Name</label>
+                <input type = "text" class = "form-control" placeholder="Last Name" id = "lastName"/>
+              </div>
             </div>
           </div>
-        </div>
-        <div class = "col-md-4">
-          <div class = "col-md-12">
-            <div class="form-group">
-              <label class="control-label">Middle Name</label>
-              <input  type="text" class="form-control" name = "freightnumber" id = "middleName">
+          <div class="row">
+            <h5>Address</h5>
+            <div class="col-md-4">
+              <div class="form-group required">
+                <label class="control-label">Blk/ Lot/ Street</label>
+                <textarea class="form-control" id = "streetName"></textarea>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class = "col-md-4">
-          <div class = "col-md-12">
-            <div class="form-group required">
-              <label class = "control-label">Last Name</label>
-              <input  type="text" class="form-control" name = "freightnumber" id = "lastName">
-            </div>
-          </div>
-        </div>
-        <div class = "col-md-12">
-          <div class="form-group required">
-            <label class= " control-label">Street</label>
-            <input type="text" class = "form-control" name="age" id = "street">
-          </div>
-          <div class="form-group required">
-            <label class= " control-label">Province</label>
-            <select name = "loc_province" id="loc_province" class = "form-control">
-            </select>
-          </div>
-          <div class="form-group required">
-            <label class= " control-label">City</label>
-            <select name = "loc_city" id="loc_city" class = "form-control">
-              <option value="0"></option>
-            </select>
-          </div>
-          <div class = "form-group">
-            <label class= " control-label">Zip Code</label>
-            <input type="text" class = "form-control" name="age" id = "zip">
-          </div>
-          <div class = "form-group required">
-            <div class = "col-md-12">
-              <div class = "col-md-3">
-               <label class= " control-label">
-                 Date Of Birth*
-               </label>
-               <div class = "input-group">
-                 <input type="text" class = "form-control" name="dateOfBirth" id = "dateOfBirth" disabled>
-                 <span class="input-group-btn">
-                   <button class="btn btn-default" type="button" onclick="getData()" id = "dateOfBirthButton">
-                     <i class="fa fa-calendar "></i></button></span>
-                   </div>
-                 </div>
-               </div>
-             </div>
-             <div class = "form-group">
-              <label class= " control-label">Age</label>
-              <input type="text" class = "form-control" name="age" id = "age" disabled>
-            </div>
-            <div class = "form-group">
-              <label class= " control-label">Social Security Number</label>
-              <input type="text" class = "form-control" name="sss" id = "socialSecurityNumber" >
-            </div>
-            <div class = "form-group">
-              <label class= " control-label">Phone Number</label>
-              <input type="text" class = "form-control" name="age" id = "phoneNumber" placeholder="xxx-xx-xx">
-            </div>
-            <div class = "form-group">
-              <label class= " control-label">Cellphone Number</label>
-              <input type="text" class = "form-control" name="age" id = "cellphoneNumber"  placeholder="(xx)-xxxxxxxxx">
-            </div>
-            <div class = "form-group">
-              <label class= " control-label">Emergency Contact</label>
-              <input type="text" class = "form-control" name="age" id = "emergencyContact" placeholder="xxx-xx-xx">
-            </div>
-            <div class="form-group required">
-              <div class = "col-md-12">
-                <div class = "col-md-6">
-                  <label class=" control-label">In case of emergency</label>
-                  <textarea class="form-control" rows="3" id = "inCaseOfEmergency"></textarea>
+            <div class="col-md-8">
+              <div class = "col-md-4">
+                <div class="form-group required">
+                  <label class = "control-label">Province</label>
+                  <select class="form-control" name = "loc_province" id="loc_province" ></select>
+                </div>
+              </div>
+              <div class = "col-md-4">
+                <div class="form-group required">
+                  <label class = "control-label">City</label>
+                  <select class="form-control" name = "loc_city" id="loc_city"></select>
+                </div>
+              </div>
+              <div class = "col-md-4">
+                <div class="form-group required">
+                  <label class="control-label">Zip</label>
+                  <input type = "text" id = "zip" class = "form-control"/>
                 </div>
               </div>
             </div>
+          </div>
+          <div class = "row">
+            <div class = "col-md-3">
+              <div class="form-group required">
+                <label class = "control-label">Date of Birth</label>
+                <input type="text" class = "form-control" id = "dateOfBirth"/>
+              </div>
+            </div>
+            <div class = "col-md-3">
+              <div class="form-group">
+                <label class = "control-label">Age</label>
+                <input type="text" class="form-control" disabled style="text-align: right;" id = "age" />
+              </div>
+            </div>
+            <div class = "col-md-3">
+              <div class="form-group required">
+                <label class="control-label">SSS No.</label>
+                <input type = "text" class = "form-control" id = "socialSecurityNumber" />
+              </div>
+            </div>
+            <div class = "col-md-3">
+              <div class="form-group required">
+                <label class="control-label">Contact No.</label>
+                <input type = "text" id = "phoneNumber" class = "form-control"/>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h5>Employee Roles</h5>
+            @php
+            $checkboxCtr = 0;
+            $employeeTypeId = array();
+            @endphp
             <div class = "form-group">
-              <button  class="btn btn-success" id = "saveRecord" >Save</button>
+              <div class = "col-md-12">
+                @forelse($employee_role as $employee_roles)
+                <div class = "col-md-3" id = "employeeRoles">
+                  <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  >&nbsp;&nbsp;{{$employee_roles->name }}
+                </div>
+
+                @php
+                $checkboxCtr++;
+                $employeeTypeId[$checkboxCtr] = $employee_roles->id;
+                @endphp
+
+                @empty
+                <label>No employee Types found</label>
+                @endforelse
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h5>In Case of Emergency:</h5>
+            <div class = "col-md-12">
+              <div class="form-group">
+                <textarea class="form-control" id = "inCaseOfEmergency"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class = "col-md-8">
+
+            </div>
+            <div class = "col-md-4">
+              <button type = "button" class="btn btn-md btn-info" id = "saveRecord" style="width: 100%;">Save</button>
             </div>
           </div>
         </form>
@@ -132,126 +131,22 @@
   </div>
 </div>
 @endsection
-@push('styles')
-<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
-
-<style>
-	.employees
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
 
 @push('scripts')
-
-<script src="/js/bootstrap-toggle.min.js"></script>
-<script>
-	$('#collapse1').addClass('in');
-
-  var arr_provinces =[
-  @forelse($provinces as $province)
-  { id: '{{ $province->id }}', text:'{{ $province->name }}' },
-  @empty
-  @endforelse
-  ];
-
-  var checkboxCtr = <?php echo $checkboxCtr ?>
-
-  $('#dateOfBirth').datepicker({
-    onSelect: function(value, ui) {
-      var today = new Date(),
-      dob = new Date(value),
-      age = new Date(today - dob).getFullYear() - 1970;
-
-      document.getElementById('age').value = age;
-    },
-    maxDate: '+0d',
-    yearRange: '1920:2010',
-    changeMonth: true,
-    changeYear: true
-  });
-
-  $('#dateOfBirthButton').click(function () {
-   $('#dateOfBirth').datepicker('show');
- });
-
+<script type="text/javascript">
   $(document).ready(function(){
 
-    var checkedCheckBoxesValueArray = $('#employeeRoles input:checkbox:checked').map(
-     function(){
-      return this.value;
-    }).get();
-
-    $(document).on('click', '#saveRecord', function(e){
-
-
-     var trueToggle = new Array();
-     var ctr = 0; ctr1 = 0;
-
-     @forelse($employeeTypeId as $id)
-     if(document.getElementById("employeeType_toggle["+ctr+"]").checked == true)
-     {
-       trueToggle[ctr1] = {{ $id }};
-       ctr1++;
-     }
-     ctr++;
-     @empty
-     @endforelse
-
-     console.log('first name: '+$('#firstName').val());
-     console.log('middle name: '+$('#middleName').val());
-     console.log('last name: '+$('#lastName').val());
-     console.log('street name: '+$('#street').val());
-     console.log('city name: '+$('#loc_city').val());
-     console.log('date of birth: '+document.getElementById("dateOfBirth").value);
-     console.log('age: '+$('#age').val());
-     console.log('social security number: '+$('#socialSecurityNumber').val());
-     console.log('phone number: '+$('#phoneNumber').val());
-     console.log('cellphone number: '+$('#cellphoneNumber').val());
-     console.log('emergency contact: '+$('#emergencyContact').val());
-     console.log('in case of emergency: '+$('#inCaseOfEmergency').val());
-     console.log('toggles: '+JSON.stringify(trueToggle));
-
-     var dob = document.getElementById("dateOfBirth").value;
-     alert(dob);
-
-     e.preventDefault();
-     $.ajax({
-      type: 'POST',
-
-      url: '/StoreEmployee',
-      data: {
-       '_token' : $('input[name=_token]').val(),
-       'firstName' : $('#firstName').val(),
-       'middleName': $('#middleName').val(),
-       'lastName' : $('#lastName').val(),
-       'streetName' : $('#street').val(),
-       'city' :  $('#loc_city').val(),
-       'zip' : $('#zip').val(),
-       'dateOfBirth': document.getElementById("dateOfBirth").value,
-       'age': $('#age').val(),
-       'socialSecurityNumber': $('#socialSecurityNumber').val(),
-       'phoneNumber': $('#phoneNumber').val(),
-       'cellphoneNumber': $('#cellphoneNumber').val(),
-       'emergencyContact': $('#emergencyContact').val(),
-       'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
-       'toggles': JSON.stringify(trueToggle),
-
-     },
-     success: function(data){
-
-       window.location.replace(+data+"/view");
-
-     },
-
-   })
-   });
+    var arr_provinces =[
+    @forelse($provinces as $province)
+    { id: '{{ $province->id }}', text:'{{ $province->name }}' },
+    @empty
+    @endforelse
+    ];
 
     $("#loc_city").select2({
       width: '100%',
+      placeholder: "Select city",
+      allowClear: true,
       sorter: function(data) {
         return data.sort(function (a, b) {
           if (a.text > b.text) {
@@ -266,20 +161,22 @@
     });
 
     $("#loc_province").select2({
-     data: arr_provinces,
-     width: '100%',
-     sorter: function(data) {
-      return data.sort(function (a, b) {
-       if (a.text > b.text) {
-        return 1;
-      }
-      if (a.text < b.text) {
-        return -1;
-      }
-      return 0;
+      data: arr_provinces,
+      width: '100%',
+      placeholder: "Select province",
+      allowClear: true,
+      sorter: function(data) {
+        return data.sort(function (a, b) {
+          if (a.text > b.text) {
+            return 1;
+          }
+          if (a.text < b.text) {
+            return -1;
+          }
+          return 0;
+        });
+      },
     });
-    },
-  });
 
     Inputmask("9{4}").mask($("#zip"));
 
@@ -318,18 +215,90 @@
       })
     }
 
+    $('#dateOfBirth').datepicker({
+      onSelect: function(value, ui) {
+        var today = new Date(),
+        dob = new Date(value),
+        age = new Date(today - dob).getFullYear() - 1970;
+
+        document.getElementById('age').value = age;
+      },
+      maxDate: '+0d',
+      yearRange: '1920:2010',
+      changeMonth: true,
+      changeYear: true
+    });
+
     document.getElementById('phoneNumber').addEventListener('input', function (e) {
       var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,2})/);
       e.target.value = !x[2] ? x[1] : '' + x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     });
 
-    document.getElementById('cellphoneNumber').addEventListener('input', function (e) {
-      var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,6})/);
-      e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? + x[3] : '');
-    });
+    var checkboxCtr = <?php echo $checkboxCtr ?>;
+    var checkedCheckBoxesValueArray = $('#employeeRoles input:checkbox:checked').map(
+      function(){
+        return this.value;
+      }).get();
 
+    $(document).on('click', '#saveRecord', function(e){
+      e.preventDefault();
+      var trueToggle = new Array();
+      var ctr = 0; ctr1 = 0;
 
+      @forelse($employeeTypeId as $id)
+      if(document.getElementById("employeeType_toggle["+ctr+"]").checked == true)
+      {
+        trueToggle[ctr1] = {{ $id }};
+        ctr1++;
+      }
+      ctr++;
+      @empty
+      @endforelse
 
-  });
+      console.log('first name: '+$('#firstName').val());
+      console.log('middle name: '+$('#middleName').val());
+      console.log('last name: '+$('#lastName').val());
+      console.log('street name: '+$('#street').val());
+      console.log('city name: '+$('#loc_city').val());
+      console.log('date of birth: '+document.getElementById("dateOfBirth").value);
+      console.log('age: '+$('#age').val());
+      console.log('social security number: '+$('#socialSecurityNumber').val());
+      console.log('phone number: '+$('#phoneNumber').val());
+      console.log('cellphone number: '+$('#cellphoneNumber').val());
+      console.log('emergency contact: '+$('#emergencyContact').val());
+      console.log('in case of emergency: '+$('#inCaseOfEmergency').val());
+      console.log('toggles: '+JSON.stringify(trueToggle));
+
+      var dob = document.getElementById("dateOfBirth").value;
+
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+
+        url: '{{ route("EmployeeSave" )}}',
+        data: {
+          '_token' : $('input[name=_token]').val(),
+          'firstName' : $('#firstName').val(),
+          'middleName': $('#middleName').val(),
+          'lastName' : $('#lastName').val(),
+          'dob': document.getElementById("dateOfBirth").value,
+          'address' : $('#streetName').val(),
+          'zip' : $('#zip').val(),
+          'cities_id' :  $('#loc_city').val(),
+          'SSSNo': $('#socialSecurityNumber').val(),
+          'contactNumber': $('#phoneNumber').val(),
+          'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
+          'toggles': JSON.stringify(trueToggle),
+
+        },
+        success: function(data){
+
+          window.location.replace(+data+"/view");
+
+        },
+
+      })
+    })
+  })
 </script>
 @endpush

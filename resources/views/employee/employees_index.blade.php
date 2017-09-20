@@ -1,26 +1,29 @@
 @extends('layouts.app')
 @section('content')
-<h2>&nbsp;Employees</h2>
+<h2>
+  &nbsp;Employees
+</h2>
 <div class="pull-right">
   <a href = "{{ route('employees.create') }}" class = "btn but btn-md pull-right">New Employee</a>
 </div>
 <br/>
 <hr>
 <div class="container-fluid">
-  <div class="row">
-    <div class = "panel-default panel">
-      <div class="panel-heading" id="heading">List of Employees</div>
-      <div class="panel-body">
-       <table class="table table-responsive" id = "cs_table">
+  <div class = "panel-default panel">
+    <div class="panel-heading" id="heading">
+      List of Employees
+    </div>
+    <div class="panel-body">
+      <table class="table table-responsive table-striped" id = "cs_table" style="width: 100%;">
         <thead>
           <tr>
-            <td style = "width:50%"">
+            <td>
               Name
             </td>
-            <td style="width: 40%;">
+            <td>
               Roles
             </td>
-            <td style = "width: 10%">
+            <td>
               Action
             </td>
           </tr>
@@ -28,7 +31,6 @@
       </table>
     </div>
   </div>
-</div>
 </div>
 
 @endsection
@@ -60,9 +62,22 @@
       "render": function(data, type, row){
         return data.split(",").join("<br/>");}
       },
-      { data: 'action', orderable: false, searchable: false }
+      {
+        data: 'action',
+        orderable: false,
+        searchable: false 
+      }
       ],
     });
+
+    $(document).on('click', '.view-employee', function(e){
+      e.preventDefault();
+      window.location.href = "{{ route('employees.index') }}/" + $(this).closest('tr').find('.employee-id').val() + "/view";
+    })
+    $(document).on('click', '.edit-employee', function(e){
+      e.preventDefault();
+      window.location.href = "{{ route('employees.index')}}/" + $(this).closest('tr').find('.employee-id').val() + "/edit";
+    })
   })
 </script>
 @endpush

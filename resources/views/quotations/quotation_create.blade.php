@@ -159,7 +159,7 @@
 
 										</td>
 										<td style="text-align: center;">
-											<button class = "btn btn-danger btn-md delete-contract-row">x</button>
+											<button  type = "button" class = "btn btn-danger btn-md delete-contract-row">x</button>
 										</td>
 									</tr>
 								</table>

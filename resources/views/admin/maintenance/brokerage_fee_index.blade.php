@@ -339,7 +339,7 @@
                 $('#bf_parent_table').append(bf_row);
 
                 for(var i = 0; i < minimum.length; i++){
-                    minimum[i+1].value = parseFloat(maximum[i].value) + 1;
+                    minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
                 }
             }
 
@@ -365,7 +365,7 @@
                     $('#bf_warning').removeClass('in');
 
                     for(var i = 0; i < minimum.length; i++){
-                        minimum[i+1].value = parseFloat(maximum[i].value) + 1;
+                        minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
                     }
                 }
                 else{

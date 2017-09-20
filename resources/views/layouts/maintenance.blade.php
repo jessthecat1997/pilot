@@ -154,9 +154,9 @@
                             <li>
                                 <a href = "{{ route('arrastre_fee.index') }}"  class = "class-arrastre"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Arrastre</a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Dangerous Cargo Arrastre</a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-lcl-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Arrastre</a>
                             </li>
@@ -238,7 +238,7 @@
                 </li> 
                 <div id="collapse4" class ="panel-collapse collapse"> 
                     <ul class="list-group" style="list-style-type: circle;"> 
-                       <li> 
+                     <li> 
                         <a data-toggle="collapse" class="maintenance-group" href = "#archivecollapse"><i></i>&nbsp;&nbsp;Archive</a> 
                     </li> 
                     <div id="archivecollapse" class="pane;-collapse collapse"> 
