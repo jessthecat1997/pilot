@@ -4,6 +4,7 @@
 	<div class = "panel panel-default">
 		<div class = "panel-heading">
 			<h4>Employee <small><strong>{{ $employee->id }}</strong></small>.</h4>
+
 		</div>
 		<div class = "panel-body">
 			<div class = "col-md-12">
@@ -160,6 +161,7 @@
 			},
 		});
 
+
 		$("#loc_province").select2({
 			data: arr_provinces,
 			width: '100%',
@@ -177,6 +179,8 @@
 				});
 			},
 		});
+
+
 
 		Inputmask("9{4}").mask($("#zip"));
 
@@ -215,6 +219,8 @@
 			})
 		}
 
+		$('#loc_province').val({{ $location }});
+
 		$('#dateOfBirth').datepicker({
 			onSelect: function(value, ui) {
 				var today = new Date(),
@@ -228,6 +234,14 @@
 			changeMonth: true,
 			changeYear: true
 		});
+
+		$('#dateOfBirth').val("{{ Carbon\Carbon::parse($employee->dob)->format('Y/m/d') }}");
+		var today = new Date(),
+		dob = new Date($('#dateOfBirth').val()),
+		age = new Date(today - dob).getFullYear() - 1970;
+
+		document.getElementById('age').value = age;
+
 
 		document.getElementById('phoneNumber').addEventListener('input', function (e) {
 			var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,2})/);
@@ -274,9 +288,9 @@
 			var dob = document.getElementById("dateOfBirth").value;
 
 			$.ajax({
-				type: 'POST',
+				type: 'PUT',
 
-				url: '{{ route("EmployeeSave" )}}',
+				url: '{{ route("employees.index" )}}/{{ $employee->id }}',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'firstName' : $('#firstName').val(),

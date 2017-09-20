@@ -16,6 +16,7 @@ class CreateArrastreDcHeaders extends Migration
         Schema::create('arrastre_dc_headers', function (Blueprint $table) {
             $table->increments('id');
              $table->integer('locations_id')->unsigned();
+             $table->date('dateEffective');
             $table->timestamps();
             $table->softDeletes();
 

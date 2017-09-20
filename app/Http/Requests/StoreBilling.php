@@ -18,7 +18,7 @@ class StoreBilling extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:billings,name',
-            'description' => 'max:50'
+           
             ];
 
             break;
@@ -27,7 +27,7 @@ class StoreBilling extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:billings,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+            
             ];
 
             break;

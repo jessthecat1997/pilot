@@ -15,7 +15,7 @@ class CreateExchangeRatesTable extends Migration
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->decimal('rate', 10, 7);
             $table->boolean('currentRate');
             $table->date('dateEffective');

@@ -769,7 +769,6 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{ route("getBillingDetails") }}/{{  $service_order->bi_head_id_rev }}',
 			columns: [
 
@@ -788,7 +787,6 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{ route("getBillingDetails") }}/{{ $service_order->bi_head_id_exp }}',
 			columns: [
 
@@ -852,7 +850,6 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{ route("trucking.index") }}/{{ $service_order->id }}/get_deliveries',
 			columns: [
 

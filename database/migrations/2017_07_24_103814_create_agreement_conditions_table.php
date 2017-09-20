@@ -15,7 +15,7 @@ class CreateAgreementConditionsTable extends Migration
     {
         Schema::create('agreement_conditions', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('condition', 1500);
+            $table->text('condition');
             $table->timestamps();
         });
     }

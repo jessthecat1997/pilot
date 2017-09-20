@@ -17,7 +17,7 @@ class CreateConsigneeDepositsTable extends Migration
             $table->increments('id');
             $table->decimal('amount', 19, 3);
             $table->decimal('currentBalance', 19, 3); 
-            $table->string('description', 200)->nullable();
+            $table->text('description')->nullable();
             $table->integer('consignees_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();

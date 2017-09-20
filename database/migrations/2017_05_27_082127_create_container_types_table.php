@@ -13,7 +13,7 @@ class CreateContainerTypesTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->decimal('maxWeight', 9, 2);
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

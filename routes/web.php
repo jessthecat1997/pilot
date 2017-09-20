@@ -248,6 +248,7 @@ Route::get('pdfview','PaymentsController@pdfview');
 //Orders
 Route::resource('/orders', 'OrdersController');
 
+
 //Payments
 Route::resource('/payment', 'PaymentsController');
 Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');

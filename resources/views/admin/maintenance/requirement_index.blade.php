@@ -130,20 +130,17 @@
 				name:
 				{
 					required: true,
-					minlength: 3,
+					
 					maxlength: 50,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					regex: /^[A-Za-z ]+$/,
+				
 
 				},
 
-				description:
-				{
-					maxlength: 150,
-				},
+				
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 

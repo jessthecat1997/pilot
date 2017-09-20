@@ -145,10 +145,7 @@
 						maxlength: 50,
 					},
 
-					description:
-					{
-						maxlength: 50,
-					},
+					
 
 				},
 				onkeyup: false, 
