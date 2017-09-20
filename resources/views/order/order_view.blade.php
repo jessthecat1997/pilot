@@ -1,79 +1,44 @@
 @extends('layouts.app')
 @section('content')
-<h2>&nbsp;Orders</h2>
+<h2>&nbsp;Order <small><strong>{{ $so_head[0]->id }}</strong></small>.</h2>
 <hr>
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-sm-5">
-			<div class="panel-heading" id="heading">ORDER: 1</div>
-			<div class="panel-body">
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label>Name:</label>
-						</div>
+	<form>
+		<div class = "row">
+			<div class = "col-md-5">
+				<div class="panel">
+					<div class="panel-heading heading">
+						Order Information
 					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label>Skipper Igcasenza</label>
+					<div class="panel-body">
+						<div class = "form-group">
+							<label class="control-label col-md-4">Name</label>
+							<div class = "col-md-8">
+								{{ $so_head[0]->firstName }} {{ $so_head[0]->middleName }} {{ $so_head[0]->lastName }}
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="vat">Company:</label>
+						<br />
+						<div class = "form-group">
+							<label class="control-label col-md-4">Company Name</label>
+							<div class = "col-md-8">
+								{{ $so_head[0]->companyName }}
+							</div>
 						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label for="vat">Golden State Warriors</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-3">
-						<div class="form-group">
-							<label for="vat">Address:</label>
-						</div>
-					</div>
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label for="vat">55A Villa Concio St. San Joaquin, Pasig City</label>
+						<br />
+						<div class = "form-group">
+							<label class="control-label col-md-4">Billing Address</label>
+							<div class = "col-md-8">
+								{{ $so_head[0]->b_address }} {{ $so_head[0]->b_city }} {{ $so_head[0]->b_st_prov }}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-sm-7">
-			<div class="panel-heading" id="heading">DELIVERY</div>
-			<div class="panel-body">
+			<div class = "col-md-7">
+
 			</div>
 		</div>
-	</div>
-	<br/>
-	<div class="row">
-		<div class="col-sm-5">
-			<div class="panel-heading" id="heading">NOTES</div>
-			<div class="panel-body">
-			</div>
-		</div>
-		<div class="col-sm-7">
-			<div class="panel-heading" id="heading">REVENUE</div>
-			<div class="panel-body">
-			</div>
-		</div>
-	</div>
-	<br/>
-	<div class="row">
-		<div class="col-sm-5">
-		</div>
-		<div class="col-sm-7">
-			<div class="panel-heading" id="heading">EXPENSE</div>
-			<div class="panel-body">
-			</div>
-		</div>
-	</div>
+	</form>
 </div>
 @endsection
 @push('styles')

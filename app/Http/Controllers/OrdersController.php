@@ -17,6 +17,12 @@ class OrdersController extends Controller
 	}
 
 	public function show($id){
-		return view('order.order_view');
+		$so_head = \DB::table('consignee_service_order_headers')
+		->select('*')
+		->join('consignees as A', 'consignee_service_order_headers.consignees_id', '=', 'A.id')
+		->get();
+
+		return view('order.order_view', compact(['so_head']));
 	}
+	
 }
