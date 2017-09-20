@@ -50,6 +50,48 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					List of unconfirm cheques
+				</div>
+				<div class="panel-body">
+					<table class = "table-hover table" id = "chq_table">
+						<thead>
+							<tr>
+								<th>
+									Consignee
+								</th>
+								<th>
+									Bank
+								</th>
+								<th>
+									Actions
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="confirmModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confirm Cheque Payment</h4>
+			</div>
+			<div class="modal-body">
+				<p>Verify cheque payment?</p>
+			</div>
+			<div class="modal-footer">
+				<button  class="btn but finalize-confirm">Confirm</button>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
@@ -85,6 +127,17 @@
 		},
 		]
 	})
+		var chtable = $('#chq_table').DataTable({
+			processing: false,
+			serverSide: false,
+			deferRender: true,
+			ajax: "{{ route('chq.data') }}",
+			columns: [
+			{ data: 'companyName' },
+			{ data: 'bankName' },
+			{ data: 'action', orderable: false, searchable: false }
+			],
+		})
 		var sptable = $('#so_table').DataTable({
 			processing: false,
 			serverSide: false,
