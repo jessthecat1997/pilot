@@ -146,7 +146,7 @@
 
 				description:
 				{
-					maxlength: 50,
+					
 					regex: /^[A-Za-z0-9-',. ]+$/,
 
 				},

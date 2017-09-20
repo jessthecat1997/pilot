@@ -140,10 +140,7 @@
 
 				},
 
-				description:
-				{
-					maxlength: 150,
-				},
+				
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 

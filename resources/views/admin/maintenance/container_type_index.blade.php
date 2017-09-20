@@ -155,7 +155,7 @@
 				},
 				description:
 				{
-					maxlength: 150,
+				
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
