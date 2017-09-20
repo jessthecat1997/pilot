@@ -8,7 +8,15 @@ class OrdersController extends Controller
 {
 	public function index()
 	{
-		$orders = \App\ConsigneeServiceOrderHeader::all();
-		return view('order/order_index', compact(['orders']));
+		$orders = \DB::table('consignee_service_order_headers')
+		->select('*')
+		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->get();
+
+		return view('order.order_index', compact(['orders']));
+	}
+
+	public function show($id){
+		return view('order.order_view');
 	}
 }
