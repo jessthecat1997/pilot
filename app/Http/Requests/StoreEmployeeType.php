@@ -19,7 +19,7 @@ class StoreEmployeeType extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:employee_types,name',
-            'description' => 'max:50'
+           
             ];
 
             break;
@@ -28,7 +28,7 @@ class StoreEmployeeType extends FormRequest
 
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:employee_types,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+            
             ];
 
             break;

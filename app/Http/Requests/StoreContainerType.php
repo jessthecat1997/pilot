@@ -19,7 +19,7 @@ class StoreContainerType extends FormRequest
 
             return [
             'name' => 'required|unique:container_types,name',
-            'description' => 'max:50'
+            
             ];
 
             break;
@@ -28,7 +28,7 @@ class StoreContainerType extends FormRequest
 
             return [
             'name' => 'required| unique:container_types,name,'. $this->segment(3) ,
-            'description' => 'max:50'
+           
             ];
 
             break;
