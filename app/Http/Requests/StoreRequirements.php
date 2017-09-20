@@ -19,7 +19,7 @@ class StoreRequirements extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
+            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
            
             ];
 
