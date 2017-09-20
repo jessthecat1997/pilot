@@ -16,6 +16,7 @@ class CreateWharfageHeadersTable extends Migration
         Schema::create('wharfage_headers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('locations_id')->unsigned();
+            $table->date('dateEffective');
             $table->timestamps();
             $table->softDeletes();
 
