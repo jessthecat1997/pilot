@@ -8,6 +8,7 @@ class OrdersController extends Controller
 {
 	public function index()
 	{
-		return view('order/order_index');
+		$orders = \App\ConsigneeServiceOrderHeader::all();
+		return view('order/order_index', compact(['orders']));
 	}
 }

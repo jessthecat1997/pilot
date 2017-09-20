@@ -293,7 +293,7 @@
         },
         success: function(data){
 
-          window.location.replace(+data+"/view");
+          //window.location.replace(+data+"/view");
 
         },
 

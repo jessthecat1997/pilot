@@ -12,7 +12,8 @@ class VehicleTypesController extends Controller
 
     public function index()
     {
-        return view('admin/maintenance/vehicle_type_index');
+        $vehicle_type = \App\VehicleType::all();
+        return view('admin/maintenance/vehicle_type_index', compact(['vehicle_type']));
     }
 
 
