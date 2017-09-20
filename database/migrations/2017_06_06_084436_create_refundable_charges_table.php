@@ -15,7 +15,7 @@ class CreateRefundableChargesTable extends Migration
     {
         Schema::create('refundable_charges', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 50);
+            $table->text('description');
             $table->decimal('amount', 19, 2);
             $table->integer('charges_id')->unsigned();
             $table->integer('so_head_id')->unsigned();

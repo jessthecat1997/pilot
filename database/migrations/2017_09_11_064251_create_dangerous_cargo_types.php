@@ -16,7 +16,7 @@ class CreateDangerousCargoTypes extends Migration
         Schema::create('dangerous_cargo_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50);
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

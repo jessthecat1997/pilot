@@ -12,7 +12,7 @@ class CreateAccidentsTable extends Migration
         Schema::create('employee_accidents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('employees_id')->unsigned();
-            $table->string('description', 1000);
+            $table->text('description');
             $table->timestamps();
             $table->softDeletes();
 

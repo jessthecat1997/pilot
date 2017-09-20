@@ -16,7 +16,7 @@ class CreateChargesTable extends Migration
         Schema::create('charges', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 50);
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->char('bill_type',1);
             $table->boolean('chargeType');
             $table->decimal('amount', 10, 2);
