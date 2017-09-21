@@ -16,7 +16,7 @@ class CreateDeliveryReceiptHeadersTable extends Migration
         Schema::create('delivery_receipt_headers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('emp_id_driver')->unsigned();
-            $table->integer('emp_id_helper')->unsigned();
+            $table->integer('emp_id_helper')->unsigned()->nullable();
             
             $table->integer('locations_id_pick')->unsigned();
             $table->integer('locations_id_del')->unsigned();
