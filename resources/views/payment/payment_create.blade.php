@@ -149,63 +149,60 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div class="panel panel-primary">
-				<!-- .panel-heading -->
-				<div class="panel-body">
-					<div class="panel-group" id="accordion">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">List of Payables</a>
-								</h4>
-							</div>
-							<div id="collapseOne" class="panel-collapse collapse in">
-								<div class="panel-body">
-									<table class = "table-responsive table" id = "bills_table">
-										<thead>
-											<tr>
-												<th>
-													Name
-												</th>
-												<th>
-													Amount
-												</th>
-											</tr>
-										</thead>
-									</table>
-								</div>
+			<div class="panel-body">
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">List of Payables</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<table class = "table-responsive table" id = "bills_table">
+									<thead>
+										<tr>
+											<th>
+												Name
+											</th>
+											<th>
+												Amount
+											</th>
+										</tr>
+									</thead>
+								</table>
 							</div>
 						</div>
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment History</a>
-								</h4>
-							</div>
-							<div id="collapseTwo" class="panel-collapse collapse">
-								<div class="panel-body">
-									<table class = "table-hover table" id = "hist_table">
-										<thead>
-											<tr>
-												<th style="width: 15%;">
-													Date of Payment
-												</th>
-												<th style="width: 25%:">
-													No.
-												</th>
-												<th style="width: 20%;">
-													Amount
-												</th>
-												<th style="width: 40%;">
-													Remarks
-												</th>
-												<th>
-													Action
-												</th>
-											</tr>
-										</thead>
-									</table>
-								</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment History</a>
+							</h4>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="panel-body">
+								<table class = "table-hover table" id = "hist_table">
+									<thead>
+										<tr>
+											<th style="width: 15%;">
+												Date of Payment
+											</th>
+											<th style="width: 25%:">
+												No.
+											</th>
+											<th style="width: 20%;">
+												Amount
+											</th>
+											<th style="width: 40%;">
+												Remarks
+											</th>
+											<th>
+												Action
+											</th>
+										</tr>
+									</thead>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -315,9 +312,7 @@
 
 	})
 
-	$(document).on('click', '#test', function(e){
-		console.log($('#bank').val());
-	})
+	
 	$(document).on('click', '.payment_receipt', function(e){
 		e.preventDefault();
 		type = $(this).closest('tr').find('.type').val();

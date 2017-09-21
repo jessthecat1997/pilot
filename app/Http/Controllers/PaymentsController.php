@@ -296,10 +296,28 @@ class PaymentsController extends Controller
 	}
 	public function verify_cheque(Request $request, $id)
 	{
-		$chq = new Cheque;
-
+		$chq = Cheque::findOrFail($id);
 		$chq->isVerify = $request->isVerify;
-		$chq->bi_head_id = $request->bi_head_id;
 		$chq->save();
+
+		return $csh;
+	}
+
+	public function cheque_table(Request $request)
+	{
+		$chq = DB::table('cheques')
+		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('cheques.id','companyName','bankName')
+		->where('isVerify', '=', 0)
+		->get();
+
+		return Datatables::of($chq)
+		->addColumn('action', function ($ch) {
+			return
+			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con" data-toggle="modal" data-target="#confirmModal">Confirm</button>';
+		})
+		->make(true);
 	}
 }
