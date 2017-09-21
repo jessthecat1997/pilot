@@ -13,6 +13,14 @@ class CreateIncidentsTable extends Migration
         Schema::create('employee_incidents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('employees_id')->unsigned();
+            $table->date('incident_date');
+            $table->time('incident_time');
+            $table->date('date_opened');
+            $table->date('date_closed')->nullable();
+            $table->text('address')->nullable();
+            $table->integer('cities_id')->nullable();
+            $table->integer('delivery_id')->nullable();
+            $table->decimal('fine', 19, 2)->nullable();
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();
