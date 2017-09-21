@@ -12,7 +12,7 @@
 				<h4>Trucking Service Orders</h4>
 				<div class = "panel-default panel">
 					<div class = "panel-body">
-						<table class = "table-responsive table table-striped" width="100%" id = "pending_trucking_so_table">
+						<table class = "table table-responsive table-striped cell-border table-bordered" width="100%" id = "pending_trucking_so_table">
 							<thead>
 								<tr>
 									<td>

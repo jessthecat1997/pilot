@@ -14,7 +14,7 @@
       List of Employees
     </div>
     <div class="panel-body">
-      <table class="table table-responsive table-striped" id = "cs_table" style="width: 100%;">
+      <table class="table table-responsive table-striped cell-border table-bordered" id = "cs_table" style="width: 100%;">
         <thead>
           <tr>
             <td>

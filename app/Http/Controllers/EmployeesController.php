@@ -128,13 +128,22 @@ class EmployeesController extends Controller
 
         $employee_role = \App\EmployeeType::all();
 
+        $employee_incidents = \DB::table('employee_incidents')
+        ->where('employees_id', '=', $employee->id)
+        ->get();
+
+        $employee_accidents = \DB::table('employee_accidents')
+        ->where('employees_id', '=', $employee->id)
+        ->get();
+
         $location = DB::table('location_cities')
         ->join('location_provinces as A', 'provinces_id', '=', 'A.id')
         ->select('location_cities.name as city', 'A.name as province')
         ->where('location_cities.id', '=', $employee->cities_id)
         ->get();
+        
 
-        return view('employee/employee_view', compact(['employee_id', 'employee', 'location', 'employee_role']));
+        return view('employee/employee_view', compact(['employee_id', 'employee', 'location', 'employee_role', 'employee_accidents', 'employee_incidents']));
     }
 
     catch(ModelNotFoundException $e)

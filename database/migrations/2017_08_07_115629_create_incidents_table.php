@@ -18,14 +18,16 @@ class CreateIncidentsTable extends Migration
             $table->date('date_opened');
             $table->date('date_closed')->nullable();
             $table->text('address')->nullable();
-            $table->integer('cities_id')->nullable();
-            $table->integer('delivery_id')->nullable();
+            $table->integer('cities_id')->unsigned()->nullable();
+            $table->integer('delivery_id')->unsigned()->nullable();
             $table->decimal('fine', 19, 2)->nullable();
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('employees_id')->references('id')->on('employees');
+            $table->foreign('cities_id')->references('id')->on('location_cities');
+            $table->foreign('delivery_id')->references('id')->on('delivery_receipt_headers');
         });
     }
 

@@ -48,6 +48,8 @@ Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBroker
 Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
 
 //Employees
+Route::resource('/employee_incidents', 'EmployeeIncidentsController');
+Route::resource('/employee_accidents', 'EmployeeAccidentsController');
 Route::resource('/employees', 'EmployeesController');
 Route::resource('/employees/newemployee', 'EmployeesController');
 Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
