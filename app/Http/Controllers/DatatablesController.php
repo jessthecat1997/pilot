@@ -1078,7 +1078,7 @@ class DatatablesController extends Controller
 	}
 
 	public function af_lcl_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location,GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
