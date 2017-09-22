@@ -162,5 +162,21 @@
 			}
 		}
 	})
+	$(document).on('click', '.chq_con', function(e){
+		var vt_id = $(this).val();
+		console.log(vt_id);
+		$.ajax({
+			method: 'PUT',
+			url: "payment/"+vt_id+"/cheques",
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'id' : vt_id,
+				'isVerify' : 1,
+			},
+			success: function (data){
+				location.reload();
+			}
+		})
+	})
 </script>
 @endpush

@@ -16,6 +16,9 @@
 					<thead>
 						<tr>
 							<td>
+								Date Effective
+							</td>
+							<td>
 								Location Pier
 							</td>
 							<td>
@@ -46,6 +49,10 @@
 							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
 						</div>
 						<div class="modal-body ">
+							<div class="form-group required">
+								<label class="control-label " for="dateEffective">Date Effective:</label>
+								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
+							</div>
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
 								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
@@ -155,18 +162,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-af-fee
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-af-fee
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -186,6 +193,11 @@
 	@empty
 	@endforelse
 
+	var now = new Date();
+	var day = ("0" + now.getDate()).slice(-2);
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
 	$(document).ready(function(){
 
 
@@ -199,6 +211,7 @@
 			'scrollx': true,
 			ajax: 'http://localhost:8000/admin/afData',
 			columns: [
+			{ data: 'dateEffective'},
 			{ data: 'location' },
 			{ data: 'container_size',
 			"render": function(data, type, row){
@@ -229,9 +242,7 @@
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
-
-
-			
+			$('#dateEffective').val(today);
 			$('#amount').val("0.00");
 
 			$('#af_parent_table > tbody').html("");
@@ -253,7 +264,8 @@
 			$('.modal-title').text('Update Arrastre Fee Per Pier');
 			var af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
-			
+			 $("#locations_id option").filter(function(index) { return $(this).text() === data.locations_id; }).attr('selected', 'selected');
+			$('#dateEffective').val(data.dateEffective);
 			$('#afModal').modal('show');
 
 			$.ajax({
@@ -343,54 +355,68 @@
 		});
 		$(document).on('click', '.finalize-af', function(e){
 			e.preventDefault();
+			
+
+
 			if(finalvalidateAfRows() === true){
 
 				var title = $('.modal-title').text();
 				if(title == "New Arrastre Fee Per Pier")
 				{
-					console.log(amount_value);
-					jsonContainerSize = JSON.stringify(container_size_id);
-					jsonAmount = JSON.stringify(amount_value);
+					if($('#dateEffective').valid()){
 
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/arrastre_fee',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'locations_id' : $('#locations_id').val(),
-							'container_sizes_id' : jsonContainerSize,
-							'amount' : jsonAmount,
-							'tblLength' : tblLength,
-						},
-						success: function (data){
+						$('#btnSave').attr('disabled', 'true');
 
-							aftable.ajax.reload();
-							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Pier');
-							
-							$('#amount').val("0.00");
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+						console.log(amount_value);
+						jsonContainerSize = JSON.stringify(container_size_id);
+						jsonAmount = JSON.stringify(amount_value);
+
+						$.ajax({
+							type: 'POST',
+							url:  '/admin/arrastre_fee',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'dateEffective':$('#dateEffective').val(),
+								'locations_id' : $('#locations_id').val(),
+								'container_sizes_id' : jsonContainerSize,
+								'amount' : jsonAmount,
+								'tblLength' : tblLength,
+							},
+							success: function (data){
+
+								aftable.ajax.reload();
+								$('#afModal').modal('hide');
+								$('.modal-title').text('New Arrastre Fee Per Pier');
+
+								$('#amount').val("0.00");
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully")
+								$('#btnSave').removeAttr('disabled');
 							}
-							toastr["success"]("Record addded successfully")
 
-						}
-					})
+
+						})
+
+
+					}
+					
 				}else{
 
 
@@ -406,6 +432,7 @@
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'af_head_id': data.id,
+							'dateEffective':$('#dateEffective').val(),
 							'locations_id' : $('#locations_id').val(),
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,

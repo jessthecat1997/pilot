@@ -29,6 +29,7 @@ class ArrastreFeesController extends Controller
     public function store(Request $request)
     {
         $af_header = new ArrastreHeader;
+        $af_header->dateEffective = $request->dateEffective;
         $af_header->locations_id = $request->locations_id;
         $af_header->save();
 
@@ -54,6 +55,7 @@ class ArrastreFeesController extends Controller
 
         
         $af_header= ArrastreHeader::findOrFail($id);
+        $af_header->dateEffective = $request->dateEffective;
         $af_header->locations_id = $request->locations_id;
         $af_header->save();
 

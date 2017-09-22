@@ -294,9 +294,9 @@ class PaymentsController extends Controller
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
 		return $pdf->stream();
 	}
-	public function verify_cheque(Request $request, $id)
+	public function verify_cheque(Request $request)
 	{
-		$chq = Cheque::findOrFail($id);
+		$chq = Cheque::findOrFail($request->id);
 		$chq->isVerify = $request->isVerify;
 		$chq->save();
 
@@ -316,7 +316,7 @@ class PaymentsController extends Controller
 		return Datatables::of($chq)
 		->addColumn('action', function ($ch) {
 			return
-			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con" data-toggle="modal" data-target="#confirmModal">Confirm</button>';
+			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con">Confirm</button>';
 		})
 		->make(true);
 	}

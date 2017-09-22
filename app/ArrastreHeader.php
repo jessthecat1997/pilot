@@ -1,14 +1,13 @@
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class ArrastreHeader extends Model
 {
 	use SoftDeletes;
 	protected $fillable = [
-	'locations_id',
+	'locations_id','dateEffective',
 	];
 
 	protected $dates = [
