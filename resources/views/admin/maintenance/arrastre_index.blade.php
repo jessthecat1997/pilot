@@ -269,8 +269,10 @@
 			$('.modal-title').text('Update Arrastre Fee Per Pier');
 			var af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
+			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#dateEffective').val(data.dateEffective);
+			
 			$('#afModal').modal('show');
 
 			$.ajax({
