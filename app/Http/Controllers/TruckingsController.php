@@ -390,8 +390,12 @@ class TruckingsController extends Controller
         {
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
-            $new_delivery_head->emp_id_helper = $request->emp_id_helper;
-
+            if($request->emp_id_helper == 0){
+                 $new_delivery_head->emp_id_helper = null;
+            }
+            else{
+                $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
+            }
             $new_delivery_head->locations_id_pick = $request->locations_id_pick;
             $new_delivery_head->locations_id_del = $request->locations_id_del;
 
@@ -625,7 +629,7 @@ class TruckingsController extends Controller
         $delivery = DB::table('delivery_receipt_headers')
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
         ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
         ->join('location_cities AS F', 'E.cities_id', '=','F.id')
         ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
@@ -651,6 +655,7 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.pickupDateTime',
             'delivery_receipt_headers.cancelDateTime',
             'delivery_receipt_headers.remarks',
+            'delivery_receipt_headers.emp_id_helper',
             DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
             )
 
@@ -838,7 +843,7 @@ class TruckingsController extends Controller
         $delivery = DB::table('delivery_receipt_headers')
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
         ->join('trucking_service_orders AS E', 'delivery_receipt_headers.tr_so_id', '=', 'E.id')
         ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
         ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')

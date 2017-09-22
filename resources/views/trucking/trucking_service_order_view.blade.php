@@ -104,7 +104,7 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive table-striped" id = "delivery_table">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table">
 					<thead>
 						<tr>
 							<td style="width: 5%;">
@@ -119,19 +119,19 @@
 							<td style="width: 10%;">
 								Pickup Date
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 15%;">
 								Destination Name
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 15%;">
 								Destination City
 							</td>
-							<td style="width: 10%;">
+							<td style="width: 15%;">
 								Delivery Date
 							</td>
 							<td style="width: 5%;">
 								Status
 							</td>
-							<td style="width: 15%;">
+							<td style="width: 12%;">
 								Actions
 							</td>
 						</tr>
@@ -308,7 +308,7 @@
 
 				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
 				<br />
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
+				<table class="table table-responsive table-striped table-bordered cell-bordered" style="width: 100%;" id = "deposits_table">
 					<thead>
 						<tr>
 							<td style="width: 15%;">
@@ -397,7 +397,7 @@
 						</div>
 					</div>
 					<div class = "col-md-12 collapse">
-						<table style="width: 100%;" id = "delivery_fees_table" class = "table table-striped">
+						<table style="width: 100%;" id = "delivery_fees_table" class = "table table-responsive table-striped cell-border table-bordered">
 							<thead>
 								<tr style="width: 40%; text-align: center;">
 									<td>
@@ -465,7 +465,7 @@
 						</div>
 					</div>
 					<div class = "col-md-12 collapse">
-						<table style="width: 100%;" id = "delivery_fees_table" class="table table-striped table-responsive">
+						<table style="width: 100%;" id = "delivery_fees_table" class="table table-responsive table-striped cell-border table-bordered">
 							<thead>
 								<tr style="width: 40%; text-align: center;">
 									<td>

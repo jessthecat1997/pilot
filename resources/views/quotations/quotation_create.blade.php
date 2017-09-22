@@ -168,7 +168,7 @@
 					</div>
 					<div class="row">
 						<div class = "col-md-4">
-							<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
+							<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
 						</div>
 						<div class = "col-md-4">
 
@@ -211,7 +211,7 @@
 										<textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails">{{ substr($term, 3, strlen($term)) }}</textarea>
 									</td>
 									<td style="text-align: center;">
-										<button class = "btn btn-danger btn-md delete-term-row">x</button>
+										<button type = "button" class = "btn btn-danger btn-md delete-term-row">x</button>
 									</td>
 								</tr>
 								@empty
@@ -224,14 +224,14 @@
 
 						</div>
 						<div class = "col-md-4" style="text-align: center;">
-							<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Term &amp; Condition</button>
+							<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Term &amp; Condition</button>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<h3><small>4</small>&nbsp;&nbsp;Finalize</h3>
 					<div style=" text-align: center;">
-						<button class = "btn btn-md but finalize-contract" style = "width: 100%;">Create Quotation</button>
+						<button  type = "button" class = "btn btn-md but finalize-contract" style = "width: 100%;">Create Quotation</button>
 					</div>
 				</div>
 			</div>

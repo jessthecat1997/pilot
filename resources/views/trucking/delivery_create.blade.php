@@ -476,7 +476,7 @@
 								Driver Assignment
 							</div>
 							<div class = "panel-body">
-								<div class="form-group">
+								<div class="form-group required">
 									<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
 									<div class="col-sm-8">
 										<select class="form-control" id = "driver">
@@ -1290,9 +1290,9 @@
 			else{
 				$('#driver').css("border-color", 'green');
 			}
-			if($('#helper').val() == "0"){
+			if($('#helper').val() === $('#driver').val()){
 				$('#helper').css('border-color', 'red');
-				error += "No helper";
+				error += "Cannot be driver and helper";
 			}
 			else{
 				$('#helper').css('border-color', 'green');
