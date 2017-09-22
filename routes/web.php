@@ -256,7 +256,7 @@ Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->
 Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
-Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('cheque');
+Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
 Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
 Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
 Route::resource('/cheque', 'ChequesController');
