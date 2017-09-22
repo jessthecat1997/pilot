@@ -1076,27 +1076,35 @@
 			selected_to = $(this).val();
 			if(deliver_id != 0)
 			{
-				$.ajax({
-					type: 'GET',
-					url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-					},
-					success: function(data){
+				if($('#deliver_id').val() != $('#pickup_id').val())
+				{
+					$.ajax({
+						type: 'GET',
+						url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+						},
+						success: function(data){
 
-						if(typeof(data) == "object"){
-							$('#_daddress').val(data[0].address);
-							$('#_dcity').val(data[0].city_name);
-							$('#_dprovince').val(data[0].province_name);
-							$('#_dzip').val(data[0].zipCode);
+							if(typeof(data) == "object"){
+								$('#_daddress').val(data[0].address);
+								$('#_dcity').val(data[0].city_name);
+								$('#_dprovince').val(data[0].province_name);
+								$('#_dzip').val(data[0].zipCode);
+							}
+						},
+						error: function(data) {
+							if(data.status == 400){
+								alert("Nothing found");
+							}
 						}
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
+					})	
+				}
+				else
+				{
+					$('#deliver_id').css('border-color', 'red');
+				}
+				
 			}
 			else{
 				$('#_daddress').val("");
@@ -1296,7 +1304,7 @@
 			}
 			else{
 				$('#helper').css('border-color', 'green');
-			}
+			} 	
 			if($('#pickup_id').val() == "0"){
 				$('#pickup_id').css('border-color', 'red');
 				error += "No pickup location";
@@ -1311,11 +1319,22 @@
 			else{
 				$('#deliver_id').css('border-color', 'green');
 			}
+			if($('#deliver_id').val() === $('#pickup_id').val()){
+				$('#deliver_id').css('border-color', 'red');
+				$('#pickup_id').css('border-color', 'red');
+					error += "Same pickup and delivery point";
+			}
+			else{
+				$('#deliver_id').css('border-color', 'green');
+				$('#pickup_id').css('border-color', 'green');
+			}
+			
 			if(error.length == 0){
 				return true;
 			}
 			else
 			{
+				console.log(error);
 				return false;
 			}
 
