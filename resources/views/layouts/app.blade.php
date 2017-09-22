@@ -14,7 +14,8 @@
     <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
     <link href= "/js/select2/select2.css" rel = "stylesheet">
-    <link rel="stylesheet" href="/js/jqueryDatatable/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/js/jqueryDatatable/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.bootstrap.min.css">
     <link rel="stylesheet" href="/toaster/toastr.css">
     <link rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">

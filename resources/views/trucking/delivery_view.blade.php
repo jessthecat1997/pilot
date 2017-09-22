@@ -26,8 +26,13 @@
 								<div class="form-group">
 									<label class="control-label col-md-5" for="status">Driver: </label>
 									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->driverName }}</span>
+									@if($delivery[0]->emp_id_helper == null)
+									<label class="control-label col-md-5" for="status">Helper: </label>
+									<span class="control-label col-md-7" style="text-align: left;">N/A</span>
+									@else
 									<label class="control-label col-md-5" for="status">Helper: </label>
 									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->helperName }}</span>
+									@endif
 									<label class="control-label col-md-5" for="status">Vehicle: </label>
 									<span class="control-label col-md-7" style="text-align: left;">{{ $delivery[0]->plateNumber }}</span>
 								</div>
