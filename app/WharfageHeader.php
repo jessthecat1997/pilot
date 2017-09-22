@@ -9,7 +9,7 @@ class WharfageHeader extends Model
 {
     use SoftDeletes;
 	protected $fillable = [
-	'locations_id',
+	'locations_id','dateEffective',
 	];
 
 	protected $dates = [
