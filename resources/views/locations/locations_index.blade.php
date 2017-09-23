@@ -54,34 +54,38 @@
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"  data-rule-required="true" />
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Block No./Lot No./Street: </label>
 								<div class = "col-md-9">
-									<textarea class = "form-control" id = "address" name = "address"></textarea>
+									<textarea class = "form-control" id = "address" name = "address"  data-rule-required="true"></textarea>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Province: </label>
 								<div class = "col-md-9">
-									<select name = "loc_province" id="loc_province" class = "form-control">
+									<select name = "loc_province" id="loc_province" class = "form-control"  data-rule-required="true">
+									@forelse($provinces as $province)
+									<option value = "{{ $province->id }}">{{ $province->name }}</option>
+									@empty
+
+									@endforelse
 									</select>     
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">City: </label>
 								<div class = "col-md-9">
-									<select name = "loc_city" id="loc_city" class = "form-control">
-										<option value="0"></option>
+									<select name = "cities_id" id="cities_id" class = "form-control"  data-rule-required="true" required>
 									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">ZIP: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "zipCode" id = "zipCode" minlength = "3"  data-rule-required="true"/>
 								</div>
 							</div>
 						</form>
@@ -134,14 +138,8 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var location_id = null;
-	var arr_provinces =[
-	@forelse($provinces as $province)
-	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
-	@empty
-	@endforelse
-	];
 
 	var data;
 
@@ -163,53 +161,70 @@
 			],	"order": [[ 0, "asc" ]],
 		});
 
-		$("#loc_city").select2({
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
-		});
-		$("#loc_province").select2({
-			data: arr_provinces,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
+		$('#commentForm').validate({
+
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				address:
+				{
+					required: true,
+					minlength: 3,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				zipCode:
+				{
+					required: true,
+					minlength: 4,
+					maxlength: 4,
+				},
+				cities_id:
+				{
+					required:true,
+				},
+
+			},onkeyup: function(element) {$(element).valid()}, 
+
 		});
 
-		Inputmask("9{4}").mask($("#zip"));
+		Inputmask("9{4}").mask($("#zipCode"));
 
 		$(document).on('click', '.new', function(e){
+			resetErrors();
 			e.preventDefault();
 			$('.modal-title').text("New Location");
 			$('#name').val("");
 			$('#address').val("");
 			$('#loc_province').val("0");
-			$('#loc_city').val("0");
-			$('#zip').val("");
+			$('#cities_id').val("0");
+			$('#zipCode').val("");
 
 			$('#chModal').modal("show");
 		})
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			if($('.modal-title').text() == "New Location"){
-			
+			$('#zipCode').valid();
+			$('#name').valid();
+			$('#address').valid();
+			$('#cities_id').valid();
+
+			if($('#zipCode').valid() && $('#name').valid() && $('#address').valid() && $('#cities_id').valid()){
+				if($('.modal-title').text() == "New Location"){
+
 				$.ajax({
 					type: 'POST',
 					url: "{{ route('location.index')}}",
@@ -217,12 +232,27 @@
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
 						'address' : $('#address').val(),
-						'cities_id' : $('#loc_city').val(),
-						'zipCode' : $('#zip').val(),
+						'cities_id' : $('#cities_id').val(),
+						'zipCode' : $('#zipCode').val(),
 					},
 					success: function(data){
-						$('#chModal').modal('hide');
-						chtable.ajax.reload();
+						if(typeof(data) == "object"){
+							$('#chModal').modal('hide');
+							chtable.ajax.reload();
+						}
+						else{
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v);
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+							});
+							$('#btnSave').removeAttr('disabled');
+						}
+						
 
 					},
 					error: function(data) {
@@ -240,8 +270,8 @@
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
 						'address' : $('#address').val(),
-						'cities_id' : $('#loc_city').val(),
-						'zipCode' : $('#zip').val(),
+						'cities_id' : $('#	').val(),
+						'zipCode' : $('#zipCode').val(),
 					},
 					success: function(data){
 						$('#chModal').modal('hide');
@@ -256,6 +286,8 @@
 				})
 
 			}
+			}
+			
 		})
 
 		$(document).on('click', '.edit', function(e){
@@ -266,7 +298,7 @@
 			var data = chtable.row($(this).parents()).data();
 			$('#name').val(data.location_name);
 			$('#address').val(data.location_address);
-			$('#zip').val(data.zipCode);
+			$('#zipCode').val(data.zipCode);
 			$('#loc_province').val($(this).closest('tr').find('.province_id').val());
 			fill_cities($(this).closest('tr').find('.city_id').val());
 			
@@ -282,22 +314,22 @@
 		$(document).on('click', '#btnDelete', function(e){
 			e.preventDefault();
 			$.ajax({
-					type: 'DELETE',
-					url: "{{ route('location.index')}}/" + location_id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-					},
-					success: function(data){
-						$('#confirm-delete').modal('hide');
-						chtable.ajax.reload();
+				type: 'DELETE',
+				url: "{{ route('location.index')}}/" + location_id,
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					$('#confirm-delete').modal('hide');
+					chtable.ajax.reload();
 
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
 					}
-				})
+				}
+			})
 		})
 
 		$(document).on('change', '#loc_province', function(e){
@@ -316,14 +348,14 @@
 				success: function(data){
 					if(typeof(data) == "object"){
 						
-						var new_rows = "<option value = '0'></option>";
+						var new_rows = "";
 						for(var i = 0; i < data.length; i++){
 							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
 						}
-						$('#loc_city').find('option').not(':first').remove();
-						$('#loc_city').html(new_rows);
+						$('#cities_id').find('option').not(':first').remove();
+						$('#cities_id').html(new_rows);
 						
-						$('#loc_city').val(num);
+						$('#cities_id').val(num);
 					}
 				},
 				error: function(data) {
@@ -334,5 +366,9 @@
 			})
 		}
 	})
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush

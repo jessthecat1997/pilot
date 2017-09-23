@@ -43,10 +43,16 @@
 						</div>
 						<div class="modal-body ">		
 							<div class="form-group required">
-								<label class="control-label col-md-2" for="dateEffective">Province:</label>
-								<div class = "col-md-10">
+								<label class="control-label col-md-2">Province:</label>
+								<div class = "col-md-12">
 									<div class = "col-md-8">
-										<select name = "loc_province" id="loc_province" class = "form-control required select2_province" style="width: 100%;">
+										<select name = "loc_province" id="loc_province" class = "form-control required " style="width: 100%;">
+										@forelse($provinces as $province)
+										<option class="{{ $province->id }}">{{ $province->name }}</option>
+										
+										@empty
+
+										@endforelse
 										</select> 
 									</div>
 									<div class = "col-md-4">
@@ -199,7 +205,7 @@
 
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
-		//$(city).attr("disabled", true);
+	
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
 			serverSide: false,
@@ -244,23 +250,6 @@
 			onkeyup: function(element) {$(element).valid()}, 
 			
 		});
-
-		$(".select2_province").select2({
-			data: arr_provinces,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
-		});
-
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();

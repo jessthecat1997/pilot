@@ -218,7 +218,7 @@
   $(document).ready(function(){
     $(document).on('click', '.new_incident', function(e){
       e.preventDefault();
-      window.location.href = "{{ route('employee_incidents.create') }}";
+      window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/incidents/create";
     })
     $('#incident_table').DataTable();
 

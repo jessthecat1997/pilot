@@ -11,9 +11,14 @@ class EmployeeIncidentsController extends Controller
         //
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return 'wow';
+        $provinces = \App\LocationProvince::all();
+        $deliveries = \DB::table('delivery_receipt_headers')
+        ->where('emp_id_driver', '=', $request->employee_id)
+        ->get();
+
+        return view('incident.incident_create', compact(['provinces','deliveries']));
     }
 
     public function store(Request $request)
