@@ -84,6 +84,37 @@ class TruckingsController extends Controller
         //
     }
 
+    public function show_trucks(){
+        $vehicle_type = VehicleType::all();
+        $vehicle_type_with_vehicles = [];
+        if(count($vehicle_type) > 0){
+            foreach ($vehicle_type as $vt) {
+                $vehicles =  DB::table('vehicles')
+                ->where('vehicle_types_id', '=', $vt->id)
+                ->get();
+                foreach($vehicles as $vh)
+                {
+                    $schedules = DB::table('delivery_receipt_headers')
+                    ->where('plateNumber', '=', $vh->plateNumber)
+                    ->get();
+                }
+                $new_row['vehicle_type']['deliveries'] = 
+                $new_row['vehicle_type'] = $vt;
+                $new_row['vehicles'] = $vehicles;
+                array_push($vehicle_type_with_vehicles, $new_row);
+
+            }
+        }
+        return view('trucking.trucking_service_order_view_truck_schedule', compact(['vehicle_type_with_vehicles']));
+    }
+
+    public function getTruckSchedule(Request $request){
+        $deliveries = DB::table('delivery_receipt_headers')
+        ->where('plateNumber', '=', $request->plateNumber)
+        ->get();
+        return $deliveries;
+    }
+
     public function get_area_rate(Request $request){
         $quotation = DB::table('quotation_details')
         ->join('quotation_headers as A', 'quotation_details.quot_header_id', '=', 'A.id')
@@ -359,8 +390,12 @@ class TruckingsController extends Controller
         {
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
-            $new_delivery_head->emp_id_helper = $request->emp_id_helper;
-
+            if($request->emp_id_helper == 0){
+                 $new_delivery_head->emp_id_helper = null;
+            }
+            else{
+                $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
+            }
             $new_delivery_head->locations_id_pick = $request->locations_id_pick;
             $new_delivery_head->locations_id_del = $request->locations_id_del;
 
@@ -594,7 +629,7 @@ class TruckingsController extends Controller
         $delivery = DB::table('delivery_receipt_headers')
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
         ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
         ->join('location_cities AS F', 'E.cities_id', '=','F.id')
         ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
@@ -620,6 +655,7 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.pickupDateTime',
             'delivery_receipt_headers.cancelDateTime',
             'delivery_receipt_headers.remarks',
+            'delivery_receipt_headers.emp_id_helper',
             DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
             )
 
@@ -807,7 +843,7 @@ class TruckingsController extends Controller
         $delivery = DB::table('delivery_receipt_headers')
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
         ->join('trucking_service_orders AS E', 'delivery_receipt_headers.tr_so_id', '=', 'E.id')
         ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
         ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')
@@ -861,19 +897,12 @@ class TruckingsController extends Controller
 
 
     public function show_calendar(){
-     $events = [];
+        $deliveries = DB::table('delivery_receipt_headers')
+        ->select('deliveryDateTime', 'pickupDateTime', 'trucking_service_orders.id as tr_so_id', 'plateNumber', 'delivery_receipt_headers.id as del_head_id')
+        ->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
+        ->whereRaw('delivery_receipt_headers.status IN("P", "F")')
+        ->get();
 
-     $events[] = \Calendar::event(
-        'Event One', 
-        false, 
-        '2017-02-11T0800', 
-        '2017-02-13T0800',
-        0
-        );
-     $calendar = \Calendar::addEvents($events)
-       ->setOptions([ //set fullcalendar options
-        'firstDay' => 1
-        ]); 
-       return view('pdf_layouts.calendar', compact('calendar'));
-   }
+        return view('pdf_layouts.calendar', compact(['deliveries']));
+    }
 }

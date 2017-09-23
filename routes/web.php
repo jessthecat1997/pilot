@@ -48,12 +48,15 @@ Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBroker
 Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
 
 //Employees
+Route::resource('/employee_incidents', 'EmployeeIncidentsController');
+Route::resource('/employee_accidents', 'EmployeeAccidentsController');
 Route::resource('/employees', 'EmployeesController');
 Route::resource('/employees/newemployee', 'EmployeesController');
 Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
 Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
     return $from_new;
 });
+Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
 
 Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
 
@@ -87,9 +90,24 @@ Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
+Route::resource('/admin/requirement','RequirementsController');
+Route::resource('/admin/arrastre_fee','ArrastreFeesController');
+Route::resource('/admin/lcl_type','LclTypesController');
+Route::resource('/admin/basis_type','BasisTypeController');
+Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
+Route::resource('/admin/wharfage_fee','WharfageFeeController');
+Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
+Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
+Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
+
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
+Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
+Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
+Route::get('/wf_lcl_maintain_data', 'WharfageFeeLclController@wf_lcl_maintain_data')->name('wf_lcl_maintain_data');
+Route::get('/af_lcl_maintain_data', 'ArrastreFeeLclController@af_lcl_maintain_data')->name('af_lcl_maintain_data');
+Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data')->name('af_dc_maintain_data');
 
 //Sub maintenance
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
@@ -219,11 +237,25 @@ Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data'
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
 Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
 Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
+Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
+Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
+Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
+Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
+Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
+Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
+Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
+Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
+
+Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+
+
+
 Route::get('pdfview','PaymentsController@pdfview');
 
 //Skipper
 //Orders
 Route::resource('/orders', 'OrdersController');
+
 
 //Payments
 Route::resource('/payment', 'PaymentsController');
@@ -232,7 +264,10 @@ Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->
 Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
 Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
-
+Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
+Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
+Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
+Route::resource('/cheque', 'ChequesController');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
@@ -319,7 +354,8 @@ Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsControl
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
 Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
 Route::Get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
-
+Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
+Route::get('/get_truck_schedule','TruckingsController@getTruckSchedule')->name('get_truck_schedule');
 
 // Contract
 Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');

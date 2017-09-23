@@ -7,13 +7,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
 {
-    use SoftDeletes;
+	use SoftDeletes;
 
-    protected $fillable = [
-    	'firstName', 'middleName', 'lastName', 'employee_types_id',
-    ];
+	protected $fillable = [
+	'firstName',
+	'middleName',
+	'lastName',
+	'dob',
+	'address',
+	'zipCode',
+	'cities_id',
+	'SSSNo',
+	'contactNumber',
+	'inCaseOfEmergency',
+	];
 
-    protected $dates = [
-    	'deleted_at',
-    ];
+	protected $dates = [
+	'deleted_at',
+	];
 }

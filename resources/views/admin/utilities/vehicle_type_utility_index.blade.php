@@ -88,67 +88,73 @@
 			</div>
 		</form>
 	</section>
-	@endsection
-	@push('styles')
-	<style>
-		.utilities
-		{
-			border-left: 10px solid #2ad4a5;
-			background-color:rgba(128,128,128,0.1);
-			color: #fff;
-		}
-	</style>
-	@endpush
-	@push('scripts')
-	<script type="text/javascript">
-		var data;
-		var filter = 0;
-		$(document).ready(function(){
-			var vtable = $('#vtype_table').DataTable({
-				processing: true,
-				serverSide: true,
-				ajax: 'http://localhost:8000/utilities/vehicle_type_deactivated/' + filter,
-				columns: [
-				{ data: 'name' },
-				{ data: 'description' },
-				{ data: 'withContainer',
-				"render" : function( data, type, full ) {
-					return formatWithContainer(data); }},
-					{ data: 'status'},
-					{ data: 'action', orderable: false, searchable: false }
+</div>
+@endsection
+@push('styles')
+<style>
+	.utilities
+	{
+		border-left: 10px solid #2ad4a5;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+@endpush
+@push('scripts')
+<script type="text/javascript">
+	var data;
+	var filter = 0;
+	
+	$('#collapse4').addClass('in');
+	$('#archivecollapse').addClass('in');
+	$('#archive_deliverycollapse').addClass('in');
 
-					],
-					"order": [[ 4 , "desc"]],
-				});
+	$(document).ready(function(){
+		var vtable = $('#vtype_table').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: 'http://localhost:8000/utilities/vehicle_type_deactivated/' + filter,
+			columns: [
+			{ data: 'name' },
+			{ data: 'description' },
+			{ data: 'withContainer',
+			"render" : function( data, type, full ) {
+				return formatWithContainer(data); }},
+				{ data: 'status'},
+				{ data: 'action', orderable: false, searchable: false }
 
-
-
-
-			function formatWithContainer(n) { 
-
-				if (n === 0){
-					return "with ";
-				}else{
-					return "without ";
-				}
-				
-			} 
-
-
-
-			
-			$(document).on('click', '.deactivate', function(e){
-				var vt_id = $(this).val();
-				data = vtable.row($(this).parents()).data();
-				$('#confirm-deactivate').modal('show');
+				],
+				"order": [[ 4 , "desc"]],
 			});
 
 
-			$(document).on('click', '.activate', function(e){
-				var vt_id = $(this).val();
-				data = vtable.row($(this).parents()).data();
-				$('#confirm-activate').modal('show');
-			});
+
+
+		function formatWithContainer(n) { 
+
+			if (n === 0){
+				return "with ";
+			}else{
+				return "without ";
+			}
+
+		} 
+
+
+
+
+		$(document).on('click', '.deactivate', function(e){
+			var vt_id = $(this).val();
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-deactivate').modal('show');
+		});
+
+
+		$(document).on('click', '.activate', function(e){
+			var vt_id = $(this).val();
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
 
 
 
@@ -253,9 +259,9 @@ $(document).on('change', '.change-filter', function(e)
 })
 });
 
-		function resetErrors() {
-			$('form input, form select').removeClass('inputTxtError');
-			$('label.error').remove();
-		}
-	</script>
-	@endpush
+	function resetErrors() {
+		$('form input, form select').removeClass('inputTxtError');
+		$('label.error').remove();
+	}
+</script>
+@endpush

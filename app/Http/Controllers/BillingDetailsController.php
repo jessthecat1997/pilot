@@ -311,7 +311,7 @@ class BillingDetailsController extends Controller
 	public function billing_invoice(Request $request)
 	{
 		$bill_hists = DB::select('SELECT t.id,
-			C.companyName, t.isRevenue,
+			C.companyName, t.isFinalize,
 			CONCAT("Php ",(ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			coalesce((ROUND(((p.total * t.vatRate)/100), 2) + p.total), 0 ) as totall,
 			coalesce(DATE_FORMAT(t.due_date, "%M %d, %Y"), "Not set") as due_date,
@@ -335,20 +335,6 @@ class BillingDetailsController extends Controller
 			return
 			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
 			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
-		})
-		->addColumn('status', function ($hist) {
-			switch ($hist->status) {
-				case 'U':
-				return 'Not paid';
-				break;
-				case 'P':
-				return 'Paid';
-				break;
-
-				default:
-					# code...
-				break;
-			}
 		})
 		->make(true);
 	}
@@ -399,9 +385,9 @@ class BillingDetailsController extends Controller
 		return Datatables::of($bill_history)
 		->addColumn('action', function ($history) {
 			return
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal" data-target="#updateModal" value="'. $history->id .'"><i class="fa fa-edit"></i></button>'.
 			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv"><i class="fa fa-plus"></i></a>'.
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger voidBill" data-toggle="modal" data-target="#voidModal" value="'. $history->id .'">Void</button>';
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal" data-target="#updateModal" value="'. $history->id .'"><i class="fa fa-edit"></i></button>'.
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger voidBill" data-toggle="modal" data-target="#voidModal" value="'. $history->id .'"><i class="fa fa-times"></i></button>';
 
 		})
 		->make(true);
@@ -465,7 +451,7 @@ class BillingDetailsController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id','=','consignees.id')
 		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
 		->join('billing_invoice_headers', 'consignee_service_order_headers.id', '=', 'billing_invoice_headers.so_head_id')
-		->select('consignee_service_order_headers.id','companyName','service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'),'TIN', 'businessStyle', 'billing_invoice_headers.created_at', 'isRevenue')
+		->select('consignee_service_order_headers.id','companyName','service_order_types.name', DB::raw('CONCAT(b_address, ", ", b_city, ", ", b_st_prov) AS address'),'TIN', 'businessStyle', 'billing_invoice_headers.date_billed', 'isRevenue','due_date')
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 		$number = $id;

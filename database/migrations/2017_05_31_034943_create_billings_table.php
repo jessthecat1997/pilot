@@ -17,7 +17,7 @@ class CreateBillingsTable extends Migration
             $table->increments('id');
             $table->char('bill_type',1);
             $table->string('name', 50);
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

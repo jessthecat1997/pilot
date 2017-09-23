@@ -11,7 +11,7 @@
     <div class = "panel-default panel">
       <div class="panel-heading" id="heading">Select Service Order</div>
       <div class="panel-body">
-       <table class="table table-responsive" id = "cs_table">
+       <table class="table table-responsive table-striped" id = "cs_table">
         <thead>
           <tr>
             <td width="20%">

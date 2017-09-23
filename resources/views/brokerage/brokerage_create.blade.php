@@ -103,8 +103,8 @@
 									<div id = "dutiesandtaxes_details" class="tab-pane fade in active">
 										<div class = "col-md-12">
 											<div class = "form-horizontal">
-										<div class="form-group">
-												<label class="col-md-2 control-label">Exhange Rate*</label>
+										<div class="form-group required">
+												<label class="col-md-2 control-label">Exchange Rate</label>
 													<div class="col-md-5">
 															<div class="input-group input-group-lg">
 																<input  type="text" class="form-control" name = "exchangeRate" id = "exchangeRate" readonly = "true" value = '@php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') @endphp' style="text-align: right;">
@@ -115,8 +115,8 @@
 												</div>
 										</div>
 
-										<div class="form-group">
-											<label class="col-md-2 control-label">CDS Fee*</label>
+										<div class="form-group required">
+											<label class="col-md-2 control-label">CDS Fee</label>
 											<div class = "col-md-5">
 											<div class="input-group  input-group-lg">
 												<input  type="text" class="form-control" name = "CDSFee" id = "CDSFee" readonly = "true" value = "@php echo number_format((float)$cds_fee[$currentCds_id-1]->fee, 2, '.', '') @endphp" style="text-align: right;">
@@ -127,16 +127,16 @@
 											</div>
 										</div>
 
-										<div class="form-group">
-												<label class="col-md-2 control-label ">IPF Fee*</label>
+										<div class="form-group  required">
+												<label class="col-md-2 control-label ">IPF Fee</label>
 											<div class = "col-md-5">
 											<div class="input-group  input-group-lg">
 													<input type="checkbox" checked data-toggle="toggle" data-size="normal" data-on="Current" data-off="Custom" data-onstyle="success"  id = "ipfFee_toggle" style="text-align: right;">
 												</div>
 												</div>
 										</div>
-										<div class="form-group">
-												<label class="col-md-2 control-label">Arrastre*</label>
+										<div class="form-group required">
+												<label class="col-md-2 control-label">Arrastre</label>
 													<div class="col-md-5">
 															<div class="input-group ">
 																<span class="input-group-addon" id="cdsfeeadd">Php</span>
@@ -145,8 +145,8 @@
 												</div>
 										</div>
 
-										<div class="form-group">
-												<label class="col-md-2 control-label">Wharfage*</label>
+										<div class="form-group required">
+												<label class="col-md-2 control-label">Wharfage*/label>
 													<div class="col-md-5">
 														<div class="input-group">
 															<span class="input-group-addon" id="cdsfeeadd">Php</span>

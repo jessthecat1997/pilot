@@ -432,7 +432,7 @@
 									<div class="col-sm-8">
 										<div class="input-group ">
 											<span class="input-group-addon" id="cdsfeeadd">Php</span>
-											<input  type="text" class=" form-control" name = "deliveryFee" id = "deliveryFee" style="text-align: right;">
+											<input  value = "0.00" type="text" class=" form-control money" name = "deliveryFee" id = "deliveryFee" style="text-align: right;">
 										</div>
 									</div>
 								</div>
@@ -476,7 +476,7 @@
 								Driver Assignment
 							</div>
 							<div class = "panel-body">
-								<div class="form-group">
+								<div class="form-group required">
 									<label class="control-label col-sm-3" for="contactNumber">Driver:</label>
 									<div class="col-sm-8">
 										<select class="form-control" id = "driver">
@@ -598,6 +598,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
+		$("#collapse1").addClass('in');
 		var json;
 		var results;
 		var detail_object = [];
@@ -941,7 +942,7 @@
 								'locations_id_del' : $('#deliver_id').val(),
 								'deliveryDate' : $('#deldatecon').val(),
 								'pickupDate' : $('#pickdatecon').val(),
-								'amount' : $('#deliveryFee').val(),
+								'amount' : $('#deliveryFee').inputmask('unmaskedvalue'),
 							},
 							success: function(data){
 								window.location.href = "{{ route('trucking.index')}}/{{ $so_id }}/view";
@@ -975,7 +976,7 @@
 								'containerReturnDate' : con_ReturnDate,
 								'shippingLine' : con_ShippingLine,
 								'portOfCfsLocation' : con_PortOfCfsLocation,
-								'amount' : $('#deliveryFee').val(),
+								'amount' : $('#deliveryFee').inputmask('unmaskedvalue'),
 								'container_data' : results,
 							},
 							success: function(data){
@@ -1075,27 +1076,35 @@
 			selected_to = $(this).val();
 			if(deliver_id != 0)
 			{
-				$.ajax({
-					type: 'GET',
-					url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-					},
-					success: function(data){
+				if($('#deliver_id').val() != $('#pickup_id').val())
+				{
+					$.ajax({
+						type: 'GET',
+						url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+						},
+						success: function(data){
 
-						if(typeof(data) == "object"){
-							$('#_daddress').val(data[0].address);
-							$('#_dcity').val(data[0].city_name);
-							$('#_dprovince').val(data[0].province_name);
-							$('#_dzip').val(data[0].zipCode);
+							if(typeof(data) == "object"){
+								$('#_daddress').val(data[0].address);
+								$('#_dcity').val(data[0].city_name);
+								$('#_dprovince').val(data[0].province_name);
+								$('#_dzip').val(data[0].zipCode);
+							}
+						},
+						error: function(data) {
+							if(data.status == 400){
+								alert("Nothing found");
+							}
 						}
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
+					})	
+				}
+				else
+				{
+					$('#deliver_id').css('border-color', 'red');
+				}
+				
 			}
 			else{
 				$('#_daddress').val("");
@@ -1289,13 +1298,13 @@
 			else{
 				$('#driver').css("border-color", 'green');
 			}
-			if($('#helper').val() == "0"){
+			if($('#helper').val() === $('#driver').val()){
 				$('#helper').css('border-color', 'red');
-				error += "No helper";
+				error += "Cannot be driver and helper";
 			}
 			else{
 				$('#helper').css('border-color', 'green');
-			}
+			} 	
 			if($('#pickup_id').val() == "0"){
 				$('#pickup_id').css('border-color', 'red');
 				error += "No pickup location";
@@ -1310,11 +1319,22 @@
 			else{
 				$('#deliver_id').css('border-color', 'green');
 			}
+			if($('#deliver_id').val() === $('#pickup_id').val()){
+				$('#deliver_id').css('border-color', 'red');
+				$('#pickup_id').css('border-color', 'red');
+					error += "Same pickup and delivery point";
+			}
+			else{
+				$('#deliver_id').css('border-color', 'green');
+				$('#pickup_id').css('border-color', 'green');
+			}
+			
 			if(error.length == 0){
 				return true;
 			}
 			else
 			{
+				console.log(error);
 				return false;
 			}
 

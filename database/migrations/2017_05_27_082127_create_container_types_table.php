@@ -13,15 +13,15 @@ class CreateContainerTypesTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->decimal('maxWeight', 9, 2);
-            $table->string('description', 150)->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
         DB::statement("
             INSERT INTO `container_types` (`id`, `name`, `maxWeight`) VALUES
-             (NULL, '10', '11300'),
              (NULL, '20', '30480'),
-             (NULL, '40', '30400')
+             (NULL, '40', '30400'),
+             (NULL, '45', '30800')
             ");
 
     }

@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "sotype_table" style="width: 100%;">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "sotype_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td style="width: 25%;">
@@ -141,10 +141,7 @@
 
 				},
 
-				description:
-				{
-					maxlength: 150,
-				},
+				
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 

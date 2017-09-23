@@ -17,7 +17,7 @@ class CreateDepositPaymentsTable extends Migration
             $table->increments('id');
             $table->integer('deposits_id')->unsigned();
             $table->integer('bi_head_id')->unsigned();
-            $table->string('description', 250)->nullable();
+            $table->text('description')->nullable();
             $table->decimal('amount', 19, 3);
             $table->timestamps();
 

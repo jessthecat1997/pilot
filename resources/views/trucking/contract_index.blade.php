@@ -10,10 +10,10 @@
 	<div  class = "row">
 		<div class = "panel default-panel">
 			<div class = "panel-body">
-				<table class = "table table-responsive" id = "contracts_table">
+				<table class = "table table-responsive table-striped" id = "contracts_table">
 					<thead>
 						<tr>
-							<td>
+							<td >
 								Contract No.
 							</td>
 							<td>
@@ -59,7 +59,6 @@
 		var chtable = $('#contracts_table').DataTable({
 			processing: false,
 			deferRender: true,
-			scrollX: true,
 			serverSide: false,
 			ajax: "{{ route('contract.data') }}",
 			columns: [

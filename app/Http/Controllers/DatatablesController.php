@@ -22,6 +22,10 @@ use App\VatRate;
 use App\LocationProvince;
 use App\LocationCities;
 use App\ContractTemplate;
+use App\Requirement;
+use App\LclType;
+use App\BasisType;
+use App\DangerousCargoType;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
@@ -52,6 +56,59 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sot->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sot->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function dct_datatable(){
+		$dcts = DangerousCargoType::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($dcts)
+		->addColumn('action', function ($dct){
+			return
+			'<button value = "'. $dct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $dct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function  bt_datatable(){
+		$bts = BasisType::select(['id', 'name', 'abbreviation', 'created_at']);
+
+		return Datatables::of($bts)
+		->addColumn('action', function ($bt){
+			return
+			'<button value = "'. $bt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $bt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+
+	public function lcl_datatable(){
+		$lcls = LclType::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($lcls)
+		->addColumn('action', function ($lcl){
+			return
+			'<button value = "'. $lcl->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $lcl->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function req_datatable(){
+		$reqs = Requirement::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($reqs)
+		->addColumn('action', function ($req){
+			return
+			'<button value = "'. $req->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $req->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
@@ -234,7 +291,6 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
 		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at')
-		->where('consignee_service_order_details.service_order_types_id', '=', 1)
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -259,31 +315,31 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 	public function pso_head_datatable(){
-		$bill_hists = DB::select('SELECT t.id,
-			C.companyName,
-			CASE t.isRevenue
-			WHEN 1 THEN "Billing"
-			WHEN 0 THEN "Refundable Charge"
-			END as isRevenue,
-			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
-			coalesce((ROUND(((p.total * t.vatRate)/100), 2) + p.total), 0) as totall,
-			coalesce(DATE_FORMAT(t.due_date, "%M %d, %Y"), "Not set") as due_date
-
-
-			FROM billing_invoice_headers t LEFT JOIN
-			(
-			SELECT bi_head_id, SUM(amount) total
-			FROM billing_invoice_details
-			GROUP BY bi_head_id
-			) p
-			ON t.id = p.bi_head_id
-			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
-			JOIN consignees AS C on B.consignees_id = C.id');
-
-		return Datatables::of($bill_hists)
+		$payment_hist = DB::table('payments')
+		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('payments.id','companyName', 'amount', 'isCheque')
+		->orderBy('companyName')
+		->get();
+		return Datatables::of($payment_hist)
 		->addColumn('action', function ($hist) {
 			return
 			'<a href = "/payment/'. $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+		})
+		->make(true);
+	}
+	public function pso_datatable(){
+		$so_heads = DB::table('consignee_service_order_details')
+		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
+		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('consignee_service_order_headers.id','companyName', 'service_order_types.name')
+		->get();
+		return Datatables::of($so_heads)
+		->addColumn('action', function ($so_head) {
+			return
+			'<a href = "/payment/'. $so_head->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
 		})
 		->make(true);
 	}
@@ -967,6 +1023,72 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function af_dc_datatable(){
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id");
+
+		return Datatables::of($arrastres)
+		->addColumn('action', function ($arrastre){
+			return
+			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function af_datatable(){
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($arrastres)
+		->addColumn('action', function ($arrastre){
+			return
+			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function wf_datatable(){
+		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, 
+			h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($wharfages)
+		->addColumn('action', function ($wharfage){
+			return
+			'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function wf_lcl_datatable(){
+		$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($wharfages)
+		->addColumn('action', function ($wharfage){
+			return
+			'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function af_lcl_datatable(){
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+		return Datatables::of($arrastres)
+		->addColumn('action', function ($arrastre){
+			return
+			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
@@ -2684,66 +2806,56 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-		public function employee_datatable(){
-			$employees = DB::select("SELECT e.id, e.firstName, e.middleName, e.lastName, GROUP_CONCAT(t.name ORDER BY t.name) AS roles FROM employees e INNER JOIN employee_roles r ON e.id = r.employee_id LEFT JOIN employee_types t ON t.id = r.employee_type_id GROUP BY e.id");
-			return Datatables::of($employees)
-			->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-			->removeColumn('middleName')
-			->removeColumn('lastName')
-			->addColumn('action', function ($employee){
-				return
-				'<a href = "/employees/'. $employee->id .'/view" class = "btn btn-md but view-service-order">Manage</a>';
-			})
-			->editColumn('id', '{{ $id }}')
-			->make(true);
-		}
+	public function employee_datatable(){
+		$employees = DB::select("SELECT e.id, e.firstName, e.middleName, e.lastName, GROUP_CONCAT(t.name ORDER BY t.name) AS roles FROM employees e INNER JOIN employee_roles r ON e.id = r.employee_id LEFT JOIN employee_types t ON t.id = r.employee_type_id GROUP BY e.id");
+		return Datatables::of($employees)
+		->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+		->removeColumn('middleName')
+		->removeColumn('lastName')
+		->addColumn('action', function ($employee){
+			return
+				"<button class = 'btn btn-info view-employee' title = 'View'><span class = 'fa fa-eye'></span></button>
+				<button class = 'btn btn-primary edit-employee' title = 'Edit'><span class = 'fa fa-edit'></span></button>".
+				"<input type = 'hidden' value = '" . $employee->id . "' class = 'employee-id' />";
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
 
-		public function get_dutiesandtaxes_table(Request $request){
+	public function get_dutiesandtaxes_table(Request $request){
 
 
-			$dutiesandtaxes = DB::table('duties_and_taxes_headers')
-			->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName', 'brokerageFee', 'statusType')
-			->join('employees', 'employees_id_broker', '=', 'employees.id')
-			->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
-			->where('brokerageServiceOrders_id','=', $request->brokerage_id)
-			->get();
+		$dutiesandtaxes = DB::table('duties_and_taxes_headers')
+		->select('duties_and_taxes_headers.id', 'rate', 'firstName', 'middleName', 'lastName', 'brokerageFee', 'statusType')
+		->join('employees', 'employees_id_broker', '=', 'employees.id')
+		->join('exchange_rates', 'exchangeRate_id', '=', 'exchange_rates.id')
+		->where('brokerageServiceOrders_id','=', $request->brokerage_id)
+		->get();
 
-			return Datatables::of($dutiesandtaxes)
-			->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-			->editColumn('statusType', function($dutiesandtaxes){
-				switch ($dutiesandtaxes->statusType) {
-					case 'A':
-					return 'Approved';
-					break;
-					case 'P':
-					return 'Pending';
-					break;
-					case 'R':
-					return 'Rejected';
-					break;
-					default:
-					return 'Unknown';
-					break;
-				}})
-			->addColumn('action', function ($dutiesandtax){
-				return
-				'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
-				<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
-				<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
-			})
+		return Datatables::of($dutiesandtaxes)
+		->editColumn('processedBy', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+		->editColumn('statusType', function($dutiesandtaxes){
+			switch ($dutiesandtaxes->statusType) {
+				case 'A':
+				return 'Approved';
+				break;
+				case 'P':
+				return 'Pending';
+				break;
+				case 'R':
+				return 'Rejected';
+				break;
+				default:
+				return 'Unknown';
+				break;
+			}})
+		->addColumn('action', function ($dutiesandtax){
+			return
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
+			<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
+			<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
+		})
 
-			->make(true);
-		}
-
-		public function cargoType_datatable(){
-			$ctypes = CargoType::select(['id', 'name','description' ]);
-			return Datatables::of($ctypes)
-			->addColumn('action', function ($ctype) {
-				return
-				'<button  style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>'.
-				'<button  class="btn btn-md btn-danger deactivate">Deactivate</button>';
-			})
-			->editColumn('id', '{{$id}}')
-			->make(true);
-		}
+		->make(true);
+	}
 }

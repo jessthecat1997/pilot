@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped" id = "ch_table">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "ch_table">
 					<thead>
 						<tr>
 							<td>
@@ -216,7 +216,6 @@
 
 				description:
 				{
-					maxlength: 150,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)

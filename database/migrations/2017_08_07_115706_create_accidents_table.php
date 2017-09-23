@@ -12,11 +12,23 @@ class CreateAccidentsTable extends Migration
         Schema::create('employee_accidents', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('employees_id')->unsigned();
-            $table->string('description', 1000);
+            $table->date('incident_date');
+            $table->time('incident_time');
+            $table->date('date_opened');
+            $table->date('date_closed')->nullable();
+            $table->text('address')->nullable();
+            $table->integer('cities_id')->unsigned()->nullable();
+            $table->integer('delivery_id')->unsigned()->nullable();
+            $table->integer('numberOfInjuries');
+            $table->integer('numberOfFatalities');
+            $table->decimal('propertyDamage', 19, 2)->nullable();
+            $table->text('description');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('employees_id')->references('id')->on('employees');
+            $table->foreign('cities_id')->references('id')->on('location_cities');
+            $table->foreign('delivery_id')->references('id')->on('delivery_receipt_headers');
         });
     }
 

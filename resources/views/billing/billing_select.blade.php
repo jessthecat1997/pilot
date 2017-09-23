@@ -8,76 +8,50 @@
 <hr>
 <div class = "container-fluid">
 	<div class="row">
-		<div class="col-sm-12">
-			<form>
-				{{ csrf_field() }}
-				<div class="panel-heading" id="heading">Consignee Details</div>
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Consignee Details</div>
 				<div class="panel-body">
-					<div class="col-sm-12">
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="consignee">Company:</label>
-							</div>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group">
-								<label id="consignee">{{ $bills[0]->companyName }}</label>
-							</div>
-						</div>
+					<div class="form-group">
+						<label>Consignee:</label>
+						<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
 					</div>
-					<div class="col-sm-12">
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="address">Address:</label>
-							</div>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group">
-								<label id="address">{{ $bills[0]->address }}</label>
-							</div>
-						</div>
+					<div class="form-group">
+						<h5 id="address"><strong>Address:</strong> {{ $bills[0]->address }}</h5>
 					</div>
-					<div class="col-sm-12">
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="sotype">Service Order:</label>
-							</div>
-						</div>
-						<div class="col-sm-8">
-							<div class="form-group">
-								<label id="sotype">{{ $bills[0]->name }}</label>
-							</div>
-						</div>
+					<div class="form-group">
+						<label>Service Order:</label>
+						<input type="text" class="det" value="{{ $bills[0]->name }}" id="sotype" disabled>
 					</div>
-					<button class="btn but col-sm-4 pull-right new_bill_modal" data-toggle="modal" data-target="#billModal">Create Bill</button>
+					<button class="btn btn-primary col-sm-4 pull-right new_bill_modal" data-toggle="modal" data-target="#billModal">Create Bill</button>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="panel-default panel">
-			<div class="panel-heading" id="heading">Unpaid Invoice</div>
-			<div class = "panel-body">
-				<br>
-				<table class = "table-responsive table" id = "hist_table">
-					<thead>
-						<tr>
-							<td>
-								No.
-							</td>
-							<td>
-								Status
-							</td>
-							<td>
-								Due Date
-							</td>
-							<td>
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Unpaid Invoice
+				</div>
+				<div class="panel-body">
+					<table class = "table table-hover" id = "hist_table">
+						<thead>
+							<tr>
+								<th>
+									No.
+								</th>
+								<th>
+									Status
+								</th>
+								<th>
+									Due Date
+								</th>
+								<th>
+									Actions
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -92,26 +66,17 @@
 			</div>
 			<div class="modal-body">
 				<div class="col-sm-12">
-					<form class="form-inline">
+					<form class="form">
 						{{ csrf_field() }}
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="vat">Vat Rate:*</label>
-								<input type="text" class="form-control" id="vat" value="{{ $vat[0]->rates }}">
-							</div>
+						<div class="form-group">
+							<label for="date_billed">Date Billed:*</label>
+							<input type="date" class="form-control" id="date_billed">
 						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="date_billed">Date Billed:*</label>
-								<input type="date" class="form-control" id="date_billed">
-							</div>
+						<div class="form-group">
+							<label for="due_date">Due Date:*</label>
+							<input type="date" class="form-control" id="due_date">
 						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="due_date">Due Date:*</label>
-								<input type="date" class="form-control" id="due_date">
-							</div>
-						</div>
+						<input type="hidden" class="form-control" id="vat" value="{{ $vat[0]->rates }}" disabled>
 					</form>
 				</div>
 				<strong>Note:</strong> All fields with * are required.
@@ -131,26 +96,17 @@
 			</div>
 			<div class="modal-body">
 				<div class="col-sm-12">
-					<form class="form-inline">
+					<form class="form">
 						{{ csrf_field() }}
-						<div class="col-sm-3">
-							<div class="form-group">
-								<label for="vat">Vat Rate:*</label>
-								<input type="text" class="form-control" id="update_vat" value="{{ $vat[0]->rates }}">
-							</div>
+						<div class="form-group">
+							<label for="date_billed">Date Billed:*</label>
+							<input type="date" class="form-control" id="update_billed">
 						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="date_billed">Date Billed:*</label>
-								<input type="date" class="form-control" id="update_billed">
-							</div>
+						<div class="form-group">
+							<label for="due_date">Due Date:*</label>
+							<input type="date" class="form-control" id="updue_date">
 						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="due_date">Due Date:*</label>
-								<input type="date" class="form-control" id="updue_date">
-							</div>
-						</div>
+						<input type="hidden" class="form-control" id="update_vat" value="{{ $vat[0]->rates }}">
 					</form>
 				</div>
 				<strong>Note:</strong> All fields with * are required.

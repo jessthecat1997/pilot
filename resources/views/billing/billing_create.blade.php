@@ -3,11 +3,11 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="container-fluid">
-	<div class="row col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h4>Consignee Details</h4></div>
-			<div class="panel-body">
-				<div class="col-sm-6">
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Consignee Details</div>
+				<div class="panel-body">
 					<div class="form-group">
 						<label>Consignee:</label>
 						<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
@@ -27,8 +27,6 @@
 						<label class="label label-danger" id="status">Not Finalize</label>
 						@endif
 					</div>
-				</div>
-				<div class="col-sm-6">
 					<div class="form-group">
 						<label>Invoice No.:</label>
 						<input type="text" class="det" value="{{ $so_head_id }}" id="so_head_id" disabled>
@@ -40,14 +38,11 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h4>New Bills</h4></div>
-			<div class = "panel-body">
-				<form class="form-inline">
-					{{ csrf_field() }}
-					<table class="table" id="revenue_table">
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">New Bills</div>
+				<div class = "panel-body">
+					<table class="table table-hover" id="revenue_table">
 						<thead>
 							<tr>
 								<td colspan="2">
@@ -55,12 +50,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="text-align: center;">
-									NAME
-								</td>
-								<td style="text-align: center;">
-									AMOUNT
-								</td>
+								<th>Name</th>
+								<th>Amount</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -112,11 +103,10 @@
 							</tr>
 						</tbody>
 					</table>
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 <div class="container-fluid">
 	<div id="revModal" class="modal fade" role="dialog">
@@ -127,48 +117,34 @@
 					<h4 class="modal-title">Add Bills</h4>
 				</div>
 				<div class="modal-body">
-					<table class = "table-responsive table" id = "rev_table">
-						<thead>
-							<tr>
-								<td>
-									Name *
-								</td>
-								<td>
-									Amount *
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr id = "revenue-row" name="revenue-row">
-								<form class="form-horizontal">
-									{{ csrf_field() }}
-									<td>
-										<select id = "rev_bill_id" name="rev_bill_id" class = "form-control select2-allow-clear select2">
-											<option value = "0">Select Charges</option>
-											@forelse($bill_revs as $rev)
-											<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
-
-											@empty
-
-											@endforelse
-										</select>
-									</td>
-									<td>
-										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control" style="text-align: right">
-									</td>
-
-									<tr id="desc_rev_row">
-										<td colspan="4">
-											<div class="form-group">
-												<label for="rev_description">Description:</label>
-												<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
-											</div>
-										</td>
-									</tr>
-								</form>
-							</tr>
-						</tbody>
-					</table>
+					<form class="form-horizontal">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<label class="control-label col-sm-2" for="rev_bill_id">*Select Charge:</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="rev_bill_id" name="rev_bill_id">
+									<option></option>
+									@forelse($bill_revs as $rev)
+									<option value = "{{ $rev->id }}">{{ $rev->name }}</option>
+									@empty
+									<option>No records available.</option>
+									@endforelse
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-2" for="rev_amount">*Amount:</label>
+							<div class="col-sm-10"> 
+								<input type="number" class="form-control" name="rev_amount" id="rev_amount" style="text-align: right;">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-2" for="rev_description">Description:</label>
+							<div class="col-sm-10"> 
+								<textarea class="form-control" rows="3" id="rev_description" name="rev_description"></textarea>
+							</div>
+						</div>
+					</form>
 					<strong>Note:</strong> All fields with * are required.
 				</div>
 				<div class="modal-footer">
@@ -187,9 +163,7 @@
 			color: #fff;
 		}
 	</style>
-	<link href= "/js/select2/select2.css" rel = "stylesheet">
 	@push('scripts')
-	<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 	<script type="text/javascript">
 		$('#collapse1').addClass('in');
 		var rev_bill_id = [];
@@ -221,35 +195,6 @@
 			}
 			var bi_id = document.getElementById("so_head_id").value;
 			console.log(bi_id);
-
-			$('#rev_bill_id').select2(); 
-			$(document).on('change', '#rev_bill_id', function(e){
-				revID = $('#rev_bill_id').val();
-				if($('#rev_bill_id').val() != 0){
-					$.ajax({
-						type: 'GET',
-						url: "/charge/"+ $('#rev_bill_id').val() + "/getCharge",
-						data: {
-							'_token' : $('input[name=_token]').val(),
-						},
-						success: function(data){
-							if(typeof(data) == "object"){
-								console.log(data[0].amount);
-								$('#rev_amount').val(data[0].amount);
-							}
-						},
-						error: function(data) {
-							if(data.status == 400){
-								alert("Nothing found");
-							}
-						}
-					})
-				}
-				else
-				{
-					$('amount').val("");
-				}
-			})
 
 			var rc_table = $('#revTable').DataTable({
 				processing: false,

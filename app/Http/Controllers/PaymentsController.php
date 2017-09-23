@@ -7,6 +7,7 @@ use App\Payment;
 use App\PaymentHistory;
 use App\ConsigneeServiceOrderHeader;
 use App\BillingInvoiceHeader;
+use App\Cheque;
 use App\Http\Requests\StorePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -141,6 +142,7 @@ class PaymentsController extends Controller
 
 		$new_payment->amount = $request->amount;
 		$new_payment->description = $request->description;
+		$new_payment->isCheque = $request->isCheque;
 		$new_payment->bi_head_id = $request->bi_head_id;
 		$new_payment->save();
 	}
@@ -291,5 +293,31 @@ class PaymentsController extends Controller
 
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
 		return $pdf->stream();
+	}
+	public function verify_cheque(Request $request)
+	{
+		$chq = Cheque::findOrFail($request->id);
+		$chq->isVerify = $request->isVerify;
+		$chq->save();
+
+		return $csh;
+	}
+
+	public function cheque_table(Request $request)
+	{
+		$chq = DB::table('cheques')
+		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
+		->select('cheques.id','companyName','bankName')
+		->where('isVerify', '=', 0)
+		->get();
+
+		return Datatables::of($chq)
+		->addColumn('action', function ($ch) {
+			return
+			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con">Confirm</button>';
+		})
+		->make(true);
 	}
 }

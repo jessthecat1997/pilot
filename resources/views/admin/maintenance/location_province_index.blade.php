@@ -16,7 +16,7 @@
 			<div class = "col-md-10 col-md-offset-1">
 				<div class = "panel-default panel">
 					<div class = "panel-body">
-						<table class = "table-responsive table  table-striped" id = "lp_table">
+						<table class = "table-responsive table table-striped cell-border table-bordered" id = "lp_table">
 							<thead>
 								<tr>
 									<td style="width: 40%;">

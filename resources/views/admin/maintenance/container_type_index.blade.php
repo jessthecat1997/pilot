@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped" id = "ch_table" style="text-align:left">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "ch_table" style="text-align:left">
 					<thead>
 						<tr style="text-align:left">
 							<td style="width: 20%;">
@@ -146,7 +146,6 @@
 				});
 
 		$("#commentForm").validate({
-			var str = "someting someting";
 			rules:
 			{
 				name:
@@ -156,7 +155,7 @@
 				},
 				description:
 				{
-					maxlength: 150,
+				
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
