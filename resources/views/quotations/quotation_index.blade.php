@@ -3,29 +3,32 @@
 <h2>&nbsp;Quotations</h2>
 <hr>
 <div class="pull-right">
-	<a href="{{ route('quotation.create') }}" role = "button" class = "btn but">Create New Quotation</a>
+	<a href="{{ route('quotation.create') }}" role = "button" class = "btn btn-primary">Create New Quotation</a>
 </div>
 <br/>
 <br/>
-<div class = "container-fluid">
-	<div  class = "row">
-		<div class = "panel default-panel">
-			<div class = "panel-body">
-				<table class = "table table-responsive table-striped" id = "quotation_table">
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of Quotations
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id="quotation_table">
 					<thead>
 						<tr>
-							<td>
+							<th>
 								Quotation No.
-							</td>
-							<td>
+							</th>
+							<th>
 								Consignee
-							</td>
-							<td>
+							</th>
+							<th>
 								Created At
-							</td>
-							<td>
+							</th>
+							<th>
 								Action
-							</td>
+							</th>
 						</tr>
 					</thead>
 				</table>
@@ -43,7 +46,7 @@
 				Confirm Archiving this quotation
 			</div>
 			<div class="modal-footer">
-			{{ csrf_field() }}
+				{{ csrf_field() }}
 				<button class = "btn btn-danger	" id = "btnDelete" >Archive</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 			</div>
