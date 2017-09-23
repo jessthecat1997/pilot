@@ -131,6 +131,223 @@
 
 										</tr>
 									</table>
+
+
+									@if($withContainer == false)
+									<div class = "">
+										<div class = "panel-default panel">
+											<div class = "panel-heading">
+												<h5>Delivery Details: </h5>
+											</div>
+											<div class = "panel-body">
+												<div class = "col-md-10">
+													<form class="form-horizontal" role="form">
+														<table id = "detail_table" class = "table table-responsive">
+															<thead>
+																<tr>
+																	<td>
+
+																	</td>
+																	<td>
+																		Description Of Good
+																	</td>
+																	<td>
+																		Gross Weight(kg)
+																	</td>
+																	<td>
+																		Supplier/s
+																	</td>
+																</tr>
+															</thead>
+															<tbody>
+																@php
+																$num = 1;
+																@endphp
+																@forelse($brokerage_details as $delivery_detail)
+																<tr>
+																	<td>
+																		{{ $num++ }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->descriptionOfGoods }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->grossWeight }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->supplier }}
+																	</td>
+																</tr>
+																@empty
+																<tr>
+																	<td colspan="4">
+																		<h5>No records found.</h5>
+																	</td>
+																</tr>
+																@endforelse
+															</tbody>
+														</table>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									@endif
+									@if($withContainer == true)
+									<div class = "">
+										<div class = "panel-default panel">
+											<div class = "panel-heading">
+												<h5>List Of Containers: </h5>
+											</div>
+											<div class = "panel-body">
+												<div class = "col-md-12">
+													<form class="form-horizontal" role="form">
+														<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
+															<thead>
+																<tr>
+																	<td style="width: 5%;">
+
+																	</td>
+																	<td style="width: 25%;">
+																		Container Number
+																	</td>
+																	<td style="width: 20%;">
+																		Volume
+																	</td>
+																	<td style="width: 20%;">
+																		Status
+																	</td>
+																	<td style="width: 20%;">
+																		Container Return Date
+																	</td>
+																	<td style="width: 20%;">
+																		Date Returned
+																	</td>
+
+																</tr>
+															</thead>
+															<tbody>
+																@php
+																$num = 1
+																@endphp
+
+																@forelse($brokerage_containers as $delivery_container)
+																<tr>
+																	<td>
+																		{{ $num++ }}
+																		<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
+																		<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
+																		<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
+																		<input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
+																		<input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
+																		<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
+																		<input type = "hidden" class = "dateReturned"
+																		value = "@if($delivery_container->dateReturned == null)
+																		@else
+																		{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
+																		@endif"
+																		/>
+																		<input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
+																	</td>
+																	<td>
+																		<span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
+																	</td>
+																	<td>
+																		<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
+																	</td>
+																	<td>
+																		<span class = "containerReturnStatus">
+																			@php
+																			switch($delivery_container->containerReturnStatus){
+																			case 'Y':  echo "<span class = 'label label-success'>Returned</span>"; break;
+																			case 'N':  echo "<span class = 'label label-warning'>Pending</span>"; break;
+																			default : echo "Unknown"; break; }
+																			@endphp
+																		</span>
+																	</td>
+																	<td>
+																		<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
+																	</td>
+																	@if($delivery_container->dateReturned != null)
+																	<td>
+																		<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}</span>
+																	</td>
+																	@else
+																	<td>
+																		<span class = "containerReturnDate">Unreturned</span>
+																	</td>
+																	@endif
+
+																</tr>
+																@empty
+																<tr>
+																	<td colspan="4">
+																		<h5>No records found.</h5>
+																	</td>
+																</tr>
+																@endforelse
+															</tbody>
+														</table>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									<br/>
+									<div class = "">
+										<div class = "panel-default panel">
+											<div class = "panel-heading">
+												<h5>Container Contents: </h5>
+											</div>
+											<div class = "panel-body">
+												<div class = "col-md-10 col-md-offset-1">
+													<form class="form-horizontal" role="form">
+														@forelse($container_with_detail as $container)
+														<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
+														<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;">
+															<thead>
+																<tr>
+																	<td>
+																		Description of Goods
+																	</td>
+																	<td>
+																		Gross Weight(kg)
+																	</td>
+																	<td>
+																		Supplier/s
+																	</td>
+																</tr>
+															</thead>
+															<tbody>
+																@forelse($container['details'] as $detail)
+																<tr>
+																	<td>
+																		{{ $detail->descriptionOfGoods }}
+																	</td>
+																	<td>
+																		{{ $detail->grossWeight }}
+																	</td>
+																	<td>
+																		{{ $detail->supplier }}
+																	</td>
+																</tr>
+																@empty
+																<tr>
+																	<td colspan="4">
+																		<h5 style="text-align: center;">No records found.</h5>
+																	</td>
+																</tr>
+																@endforelse
+															</tbody>
+														</table>
+														@empty
+														@endforelse
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									@endif
 								</div>
 							</div>
 						</div>
@@ -148,7 +365,7 @@
 
 				<h4>Duties and Taxes Declaration <button class = "btn btn-md btn-success col-md-5 pull-right" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
 				<hr />
-				<table class = "table table-responsive" id = "dutiesandtaxes_table">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "dutiesandtaxes_table">
 					<thead>
 						<tr>
 							<td style="width: 5%;">
@@ -166,7 +383,6 @@
 							<td style = "width: 10%">
 								Status
 							</td>
-
 							<td style="width: 15%;">
 								Actions
 							</td>
@@ -175,7 +391,6 @@
 				</table>
 			</div>
 		</div>
-
 </div>
 
 

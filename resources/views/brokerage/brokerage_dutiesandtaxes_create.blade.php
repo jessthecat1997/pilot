@@ -30,6 +30,7 @@
                   <label class="col-md-2 control-label">Exhange Rate*</label>
                     <div class="col-md-5">
                         <div class="input-group input-group-lg">
+
                           <input  type="text" class="form-control" name = "exchangeRate" id = "exchangeRate" readonly = "true" value = '@php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') @endphp' style="text-align: right;">
                           <span class="input-group-addon">
                           <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "exchangeRate_toggle" style="text-align: right;">
@@ -55,7 +56,11 @@
                   <label class="col-md-2 control-label ">IPF Fee*</label>
                 <div class = "col-md-5">
                 <div class="input-group  input-group-lg">
+                    @if($currentIpf_id != 0)
                     <input type="checkbox" checked data-toggle="toggle" data-size="normal" data-on="Current" data-off="Custom" data-onstyle="success"  id = "ipfFee_toggle" style="text-align: right;">
+                    @else
+                    <div > No Ipf Fee's found </div>
+                    @endif
                   </div>
                   </div>
               </div>
@@ -68,7 +73,7 @@
                             <input  type="number" class=" form-control" name = "arrastre" id = "arrastre" style="text-align: right;" required >
                         </div>
                   </div>
-              </div >
+              </div>
 
               <div class="form-group">
                   <label class="col-md-2 control-label">Wharfage*</label>
@@ -490,7 +495,8 @@
         <button type="button" class="btn btn-success" onclick = "$('#IPFModal').modal('hide');
         currentIpf_id = <?php echo $Ipf_ctr; ?>;
 
-        if(currentIpf_id == <?php echo $currentIpf_id?>)
+
+        if(currentIpf_id == <?php echo $currentIpf_id;?>)
         {
           $('#ipfFee_toggle').bootstrapToggle('on')
         }
@@ -501,6 +507,7 @@
       </td>
     </tr>
       @empty
+      <td> No IPF Fee's Found </td>
       @endforelse
   </table>
 </div>

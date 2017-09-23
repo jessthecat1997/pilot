@@ -12,6 +12,9 @@ use App\ConsigneeServiceOrderDetail;
 use App\BrokerageServiceOrder;
 use App\DutiesAndTaxesHeader;
 use App\DutiesAndTaxesDetails;
+use App\BrokerageContainer;
+use App\BrokerageContainerDetails;
+use App\BrokerageNonContainerDetails;
 use PDF;
 
 class BrokerageController extends Controller
@@ -219,8 +222,8 @@ class BrokerageController extends Controller
           ->where('dutiesAndTaxesHeaders_id','=', $dutiesandtaxes_header[0]->id)
           ->get();
 
-
-          return view('brokerage/brokerage_view', compact(['so_id',  'brokerage_header', 'dutiesandtaxes_header', 'dutiesandtaxes_details', 'exchangeRate', 'cds_fee', 'ipf_fee_header', 'ipf_fee_details']));
+          $brokerage_container = false;
+          return view('brokerage/brokerage_view', compact(['so_id',  'brokerage_header', 'dutiesandtaxes_header', 'dutiesandtaxes_details', 'exchangeRate', 'cds_fee', 'ipf_fee_header', 'ipf_fee_details', 'brokerage_container']));
       }
       catch(ModelNotFoundException $e)
       {
@@ -292,7 +295,8 @@ class BrokerageController extends Controller
 
     $locations = \App\Location::all();
 
-      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations']));
+    $container_volumes = \App\ContainerType::all();
+      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes']));
   }
 
   public function save_neworder(Request $request)
@@ -321,6 +325,59 @@ class BrokerageController extends Controller
     $new_brokerage_so->bi_head_id_exp = null;
     $new_brokerage_so->save();
 
+    if($request->containerNumber == null)
+    {
+      for($i = 0; $i < count($request->descrp_goods); $i++)
+      {
+          $new_nonbro_detail = new BrokerageNonContainerDetails;
+          $new_nonbro_detail->descriptionOfGoods = $request->descrp_goods[$i];
+          $new_nonbro_detail->grossWeight = $request->gross_weights[$i];
+          $new_nonbro_detail->supplier = $request->suppliers[$i];
+          $new_nonbro_detail->brok_head_id = $new_brokerage_so->id;
+          $new_nonbro_detail->save();
+      }
+    }
+    else{
+        $response = "";
+
+        $data = json_decode($request->container_data);
+        foreach ($data as $container => $value)
+        {
+            $container = json_decode((string)json_encode($value));
+            foreach ($container as $key => $container_detail)
+            {
+                $new_brokerage_container = new BrokerageContainer;
+
+                $new_brokerage_container->containerNumber = $container_detail->container[0]->containerNumber;
+                $new_brokerage_container->containerVolume = $container_detail->container[0]->containerVolume;
+                $new_brokerage_container->shippingLine = $container_detail->container[0]->shippingLine;
+                $new_brokerage_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
+                $new_brokerage_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
+                $new_brokerage_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
+                $new_brokerage_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
+                $new_brokerage_container->containerReturnStatus = "N";
+                $new_brokerage_container->dateReturned = null;
+                $new_brokerage_container->remarks = "";
+                $new_brokerage_container->brok_so_id = $new_brokerage_so->id;
+
+                $new_brokerage_container->save();
+
+
+                foreach ($container_detail->details as $key => $container_detail_data){
+
+                    $new_brokerage_container_detail = new BrokerageContainerDetails;
+                    $new_brokerage_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
+                    $new_brokerage_container_detail->grossWeight = $container_detail_data->grossWeight;
+                    $new_brokerage_container_detail->supplier = $container_detail_data->supplier;
+                    $new_brokerage_container_detail->container_id = $new_brokerage_container->id;
+
+                    $new_brokerage_container_detail->save();
+                    $response .= $container_detail_data->descriptionOfGood;
+                }
+
+            }
+        }
+    }
     $brokerage_id = $new_brokerage_so->id;
     return $brokerage_id;
   }
@@ -355,7 +412,46 @@ class BrokerageController extends Controller
 
     $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as createdat, dt_hed.brokerageFee from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) AND dt_hed.StatusType = "A" ORDER BY dt_hed.brokerageServiceOrders_id');
 
-    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees']));
+    $brokerage_con = DB::Select('select brok_so_id from brokerage_containers where brok_so_id = '.$brokerage_id.'');
+
+    if($brokerage_con != null)
+    {
+      $withContainer = true;
+    }
+    else
+    {
+      $withContainer = false;
+    }
+
+    $delivery_details = [];
+    if($withContainer == false){
+        $brokerage_details = DB::table('brokerage_non_container_details')
+        ->join('brokerage_service_orders', 'brok_head_id', 'brokerage_service_orders.id')
+        ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+        ->where('brok_head_id', '=', $brokerage_id)
+        ->get();
+    }
+    else{
+        $container_with_detail = [];
+        $brokerage_containers = DB::table('brokerage_containers')
+        ->join('brokerage_service_orders AS A', 'brok_so_id', 'A.id')
+        ->where('brok_so_id', '=', $brokerage_id)
+        ->select('brokerage_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'brokerage_containers.remarks', 'brok_so_id', 'shippingLine', 'portOfCfsLocation')
+        ->get();
+        foreach ($brokerage_containers as $container) {
+            $container_details =  DB::table('brokerage_container_details')
+            ->select('brokerage_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('container_id', '=', $container->id)
+            ->get();
+
+            $new_row['container'] = $container;
+            $new_row['details'] = $container_details;
+            array_push($container_with_detail, $new_row);
+        }
+
+    }
+
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail']));
   }
 
   public function get_approveddutiesandtaxes(Request $request)

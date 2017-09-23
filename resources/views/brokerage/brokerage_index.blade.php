@@ -11,7 +11,7 @@
     <div class = "panel-default panel">
       <div class="panel-heading" id="heading">Select Service Order</div>
       <div class="panel-body">
-       <table class="table table-responsive table-striped" id = "cs_table">
+       <table class="table table-responsive table-striped cell-border table-bordered" id = "cs_table">
         <thead>
           <tr>
             <td width="20%">
@@ -58,11 +58,9 @@
   var current_route = "";
   $(document).ready(function(){
     var cstable = $('#cs_table').DataTable({
-      responsive: true,
-      scrollX: true,
-      scrollX: "100%",
-      processing: true,
-      serverSide: true,
+      processing: false,
+      deferRender: true,
+      serverSide: false,
       ajax: '{{ route("br.data") }}',
       columns: [
       { data: 'id' },
