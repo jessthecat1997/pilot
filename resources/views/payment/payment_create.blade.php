@@ -80,6 +80,10 @@
 							<form class="form">
 								{{ csrf_field() }}
 								<div class="form-group">
+									<label for="bank">*Cheque Number: &nbsp;</label>
+									&nbsp;&nbsp;<input type="text" id="chqNo" class="form-control">
+								</div>
+								<div class="form-group">
 									<label for="bank">*Bank Name: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" id="bank" class="form-control">
 								</div>
@@ -87,6 +91,7 @@
 									<label for="check_amt">*Amount: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" id="check_amt" class="form-control">
 								</div>
+								<button class="btn btn-primary finalize-cheque">Save</button>
 							</form>
 						</div>
 						<div id="menu2" class="tab-pane fade">
@@ -1082,6 +1087,41 @@ $(document).on('click', '.finalize-payment', function(e){
 		$('.finalize-payment').removeAttr('disabled');
 	}
 })
+$(document).on('click', '.finalize-cheque', function(e){
+	$.ajax({
+		method: 'POST',
+		url: '{{ route("postCheque") }}',
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'chequeNumber' : $('#chqNo').val(),
+			'bankName' : $('#bank').val(),
+			'isVerify' : 0
+			'bi_head_id' : {{ $so_head_id }},
+		},
+		success: function (data){
+			toastr.options = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"rtl": false,
+				"positionClass": "toast-bottom-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": 300,
+				"hideDuration": 1000,
+				"timeOut": 2000,
+				"extendedTimeOut": 1000,
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+			toastr["success"]('Successfully saved');
+		}
+	})
+})
+
 
 </script>
 @endpush
