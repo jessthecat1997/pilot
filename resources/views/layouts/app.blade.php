@@ -339,7 +339,7 @@
         </div>
         <!-- /#page-content-wrapper -->
     </div>
-    
+
 
 
 
@@ -369,7 +369,7 @@
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
-        $('.money').inputmask("numeric", 
+        $('.money').inputmask("numeric",
         {
             radixPoint: ".",
             groupSeparator: ",",
@@ -378,7 +378,7 @@
             rightAlign: true,
             removeMaskOnSubmit:true,
         });
-        function formatNumber(n) { 
+        function formatNumber(n) {
             var currency = "Php ";
             return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
         }

@@ -163,7 +163,7 @@
 		}
 	})
 	$(document).on('click', '.chq_con', function(e){
-		var vt_id = $(this).val();
+		vt_id = $(this).val();
 		console.log(vt_id);
 		$.ajax({
 			method: 'PUT',

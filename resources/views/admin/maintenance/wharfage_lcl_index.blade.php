@@ -12,9 +12,12 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped" id = "wf_table">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "wf_table">
 					<thead>
 						<tr>
+							<td>
+								Date Effective
+							</td>
 							<td>
 								Location Pier
 							</td>
@@ -46,6 +49,10 @@
 							<h4 class="modal-title">New Wharfage Fee Per Pier</h4>
 						</div>
 						<div class="modal-body ">
+							<div class="form-group required">
+								<label class="control-label " for="dateEffective">Date Effective:</label>
+								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
+							</div>
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
 								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
@@ -197,6 +204,10 @@
 	var arr_basis_type_id = [];
 	var arr_basis_type_name = [];
 	
+	var now = new Date();
+	var day = ("0" + now.getDate()).slice(-2);
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	$(document).ready(function(){
 
@@ -211,6 +222,7 @@
 			'scrollx': true,
 			ajax: 'http://localhost:8000/admin/wf_lcl_Data',
 			columns: [
+			{ data: 'dateEffective'},
 			{ data: 'location' },
 			{ data: 'basis_type',
 			"render": function(data, type, row){
@@ -231,6 +243,10 @@
 				{
 					required: true,
 				},
+				locations_id:
+				{
+					required: true,
+				}
 
 			},
 			onkeyup: false,
@@ -242,6 +258,7 @@
 			e.preventDefault();
 			resetErrors();
 			$('#amount').val("0.00");
+			$('#dateEffective').val(today);
 			$('#wf_parent_table > tbody').html("");
 			$('.modal-title').text('New Wharfage Fee Per Pier');
 			$('#wfModal').modal('show');
@@ -254,8 +271,12 @@
 			resetErrors();
 			$('.modal-title').text('Update wharfage Fee Per Pier');
 			var wf_id = $(this).val();
+
 			data = wftable.row($(this).parents()).data();
 			
+			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
+			$('#dateEffective').val(data.dateEffective);
+
 			$('#wfModal').modal('show');
 
 			$.ajax({
@@ -372,102 +393,110 @@
 				console.log(title);
 				if(title === "New Wharfage Fee Per Pier")
 				{
-					console.log("basis is "+basis_type_id);
-					console.log("amount is "+amount_value);
-					jsonBasisType = JSON.stringify(basis_type_id);
-					jsonAmount = JSON.stringify(amount_value);
+					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/wharfage_fee_lcl/',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'locations_id' : $('#locations_id').val(),
-							'basis_types_id' : jsonBasisType,
-							'amount' : jsonAmount,
-							'tblLength' : tblLength,
-						},
-						success: function (data){
+						$('#btnSave').attr('disabled', 'true');
+						console.log("basis is "+basis_type_id);
+						console.log("amount is "+amount_value);
+						jsonBasisType = JSON.stringify(basis_type_id);
+						jsonAmount = JSON.stringify(amount_value);
 
-							wftable.ajax.reload();
-							$('#wfModal').modal('hide');
-							$('.modal-title').text('New wharfage Fee Per Pier');
-							
-							$('#amount').val("0.00");
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+						$.ajax({
+							type: 'POST',
+							url:  '/admin/wharfage_fee_lcl/',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'locations_id' : $('#locations_id').val(),
+								'dateEffective':$('#dateEffective').val(),
+								'basis_types_id' : jsonBasisType,
+								'amount' : jsonAmount,
+								'tblLength' : tblLength,
+							},
+							success: function (data){
+
+								wftable.ajax.reload();
+								$('#wfModal').modal('hide');
+								$('.modal-title').text('New wharfage Fee Per Pier');
+
+								$('#amount').val("0.00");
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully")
+								$('#btnSave').removeAttr('disabled');
 							}
-							toastr["success"]("Record addded successfully")
-
-						}
-					})
+						})
+					}
+					
 				}else{
 
+					if($('#dateEffective').valid() && $('#locations_id').valid()){
+
+						$('#btnSave').attr('disabled', 'true');
+
+						jsonBasisType = JSON.stringify(basis_type_id);
+						jsonAmount = JSON.stringify(amount_value);
 
 
-					
-					jsonBasisType = JSON.stringify(basis_type_id);
-					jsonAmount = JSON.stringify(amount_value);
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/wharfage_fee_lcl/'+ data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'wf_head_id': data.id,
+								'dateEffective':$('#dateEffective').val(),
+								'locations_id' : $('#locations_id').val(),
+								'basis_types_id' : jsonBasisType,
+								'amount' : jsonAmount,
+								'tblLength' : tblLength,
 
+							},
+							success: function (data){
 
-					$.ajax({
-						type: 'PUT',
-						url:  '/admin/wharfage_fee_lcl/'+ data.id,
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'wf_head_id': data.id,
-							'locations_id' : $('#locations_id').val(),
-							'basis_types_id' : jsonBasisType,
-							'amount' : jsonAmount,
-							'tblLength' : tblLength,
-							
-						},
-						success: function (data){
+								wftable.ajax.reload();
+								$('#wfModal').modal('hide');
+								$('.modal-title').text('New wharfage Fee Per Pier');
 
-							wftable.ajax.reload();
-							$('#wfModal').modal('hide');
-							$('.modal-title').text('New wharfage Fee Per Pier');
-							
-							$('#amount').val("0.00");
+								$('#amount').val("0.00");
 
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+								$('#btnSave').removeAttr('disabled');
 							}
-							toastr["success"]("Record updated successfully")
-
-						}
-					})
-
+						})
+					}
 
 				}
 			}

@@ -109,20 +109,27 @@ class DutiesAndTaxesController extends Controller
 
           $row_count = count($ipf_fee_header);
           $dateEffective_temp = $current_date;
-          for($x = 0; $x < $row_count; $x++)
-          {
-            if(date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d") <= $current_date)
-            {
-              if(date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d") >= $dateEffective_temp)
-              {
-                $dateEffective_temp = date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d");
 
+          if($row_count > 0)
+          {
+            for($x = 0; $x < $row_count; $x++)
+            {
+              if(date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d") <= $current_date)
+              {
+                if(date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d") >= $dateEffective_temp)
+                {
+                  $dateEffective_temp = date_format(date_create($ipf_fee_header[$x]->dateEffective), "Y-m-d");
+
+                  $currentIpf_id = $ipf_fee_header[$x]->id;
+                }
+                else {
                 $currentIpf_id = $ipf_fee_header[$x]->id;
-              }
-              else {
-              $currentIpf_id = $ipf_fee_header[$x]->id;
+                }
               }
             }
+          }
+          else {
+            $currentIpf_id = 0; 
           }
 
           $ipf_fee_detail = DB::table('import_processing_fee_details')

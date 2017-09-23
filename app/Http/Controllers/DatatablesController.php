@@ -29,6 +29,9 @@ use App\DangerousCargoType;
 use App\BillingInvoiceHeader;
 use App\ConsigneeServiceOrderHeader;
 use App\BrokerageServiceOrderDetails;
+use App\CargoType;
+use App\ArrastreFee;
+use App\WharfageFee;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -1052,7 +1055,8 @@ class DatatablesController extends Controller
 	}
 
 	public function wf_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, 
+			h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($wharfages)
 		->addColumn('action', function ($wharfage){
@@ -1065,7 +1069,7 @@ class DatatablesController extends Controller
 	}
 
 	public function wf_lcl_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($wharfages)
 		->addColumn('action', function ($wharfage){
@@ -1078,7 +1082,7 @@ class DatatablesController extends Controller
 	}
 
 	public function af_lcl_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location,GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){

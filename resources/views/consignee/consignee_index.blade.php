@@ -5,41 +5,45 @@
 <div class = "container-fluid">
 	<div class = "row">
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn but btn-md new-consignee" style = "width: 100%;">New Consignee</button>
+			<button  class="btn btn-primary btn-md new-consignee" style = "width: 100%;">New Consignee</button>
 		</div>
 	</div>
 	<br />
-	<div class = "row">
-		<div class = "panel-default panel">
-			<div class = "panel-body">
-				<table class="table table-responsive" id = "cs_table">
-					<thead>
-						<tr>
-							<td width="20%">
-								Full Name
-							</td>
-							<td width="20%">
-								Company Name
-							</td>
-							<td width="20%">
-								Email
-							</td>
-							<td width="10%"> 
-								Contact Number
-							</td>
-							<td width="10%">
-								Created At
-							</td>
-							<td width="10%">
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					List of Consignees
+				</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id="cs_table">
+						<thead>
+							<tr>
+								<th width="20%">
+									Full Name
+								</th>
+								<th width="20%">
+									Company Name
+								</th>
+								<th width="20%">
+									Email
+								</th>
+								<th width="10%"> 
+									Contact Number
+								</th>
+								<th width="10%">
+									Created At
+								</th>
+								<th width="10%">
+									Actions
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-
 	<div id="chModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 
@@ -52,10 +56,10 @@
 				<div class="modal-body">	
 					<div class = "panel-default">
 						<div id="con_collapse" class="collapse in">
-							<ul class="nav nav-tabs">
-								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
-								<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
-								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
+							<ul class="nav nav-pills">
+							<li class="active"><a data-toggle="pill" href="#new_con">Basic Information</a></li>
+								<li><a data-toggle="pill" href="#physical_address">Current Address</a></li>
+								<li><a data-toggle="pill" href="#billing_address">Billing Address</a></li>
 							</ul>
 
 							<div class="tab-content">
@@ -101,7 +105,7 @@
 											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
 											<div class="col-md-8">          
 												
-													<input type="checkbox" class = "checkbox same_billing_address">
+												<input type="checkbox" class = "checkbox same_billing_address">
 												
 											</div>
 										</div>
@@ -207,7 +211,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+					<button class = "btn btn-primary btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
 					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 				</div>
 			</div>

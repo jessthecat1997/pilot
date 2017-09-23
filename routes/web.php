@@ -83,6 +83,9 @@ Route::resource('/admin/charge','ChargesController');
 Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
 Route::resource('/admin/cds_fee','CdsFeesController');
 Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
+Route::resource('/admin/arrastre_fee', 'ArrastreFeesController');
+Route::resource('/admin/wharfage_fee', 'wharfageFeesController');
+Route::resource('/admin/cargo_type', 'CargoTypesController');
 Route::resource('/admin/standard_arearates','StandardAreaRatesController');
 Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
@@ -226,6 +229,9 @@ Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data'
 Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
 Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
 Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
+Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
+Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
+Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
 Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
 Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
 Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
@@ -261,6 +267,7 @@ Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('
 Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
 Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
 Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
+Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
 Route::resource('/cheque', 'ChequesController');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');

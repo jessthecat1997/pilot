@@ -2,42 +2,44 @@
 @section('content')
 <h2>&nbsp;Brokerage</h2>
 <div class="pull-right">
-  <a href = "{{ route('brokerageOrder') }}" class = "btn but btn-md pull-right">New Brokerage Service Order</a>
+  <a href = "{{ route('brokerageOrder') }}" class = "btn btn-primary btn-md pull-right">New Brokerage Service Order</a>
 </div>
 <br/>
 <hr>
-<div class="container-fluid">
-  <div class="row">
-    <div class = "panel-default panel">
-      <div class="panel-heading" id="heading">Select Service Order</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        Select Service Order
+      </div>
       <div class="panel-body">
-       <table class="table table-responsive table-striped" id = "cs_table">
-        <thead>
-          <tr>
-            <td width="20%">
-              No.
-            </td>
-            <td>
-              Company Name
-            </td>
-            <td width="20%">
-              Shipper
-            </td>
-            <td width="10%">
-              Freight Type
-            </td>
-            <td width="10%">
-              Status Type
-            </td>
-            <td width="10%">
-              Action
-            </td>
-          </tr>
-        </thead>
-      </table>
+        <table class = "table-responsive table" id="cs_table">
+          <thead>
+            <tr>
+              <th width="20%">
+                No.
+              </th>
+              <th>
+                Company Name
+              </th>
+              <th width="20%">
+                Shipper
+              </th>
+              <th width="10%">
+                Freight Type
+              </th>
+              <th width="10%">
+                Status Type
+              </th>
+              <th width="10%">
+                Action
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 </div>
 @endsection
 @push('styles')
@@ -58,11 +60,9 @@
   var current_route = "";
   $(document).ready(function(){
     var cstable = $('#cs_table').DataTable({
-      responsive: true,
-      scrollX: true,
-      scrollX: "100%",
-      processing: true,
-      serverSide: true,
+      processing: false,
+      deferRender: true,
+      serverSide: false,
       ajax: '{{ route("br.data") }}',
       columns: [
       { data: 'id' },

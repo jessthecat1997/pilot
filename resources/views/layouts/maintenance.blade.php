@@ -387,7 +387,7 @@
     });
 
 
-    function formatNumber(n) { 
+    function formatNumber(n) {
         var currency = "Php ";
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }

@@ -320,4 +320,13 @@ class PaymentsController extends Controller
 		})
 		->make(true);
 	}
+	public function storeCheque(Request $request)
+	{
+		$new_chq = new Cheque;
+		$new_chq->chequeNumber = $request->chequeNumber;
+		$new_chq->bankName = $request->bankName;
+		$new_chq->isVerify = $request->isVerify;
+		$new_chq->bi_head_id = $request->bi_head_id;
+		$new_chq->save();
+	}
 }

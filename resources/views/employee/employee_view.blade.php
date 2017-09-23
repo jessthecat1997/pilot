@@ -114,7 +114,7 @@
                     </td>
                     <td>
                       Actions
-                    </td> 
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -162,7 +162,7 @@
                     </td>
                     <td>
                       Actions
-                    </td> 
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,7 +191,7 @@
       <div class = "col-md-12">
         <form class = "">
           {{ csrf_field() }}
-          
+
         </form>
       </div>
     </div>

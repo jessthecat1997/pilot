@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table" id = "bt_table" style="width: 100%;">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "bt_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td style="width: 25%;">

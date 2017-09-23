@@ -22,6 +22,7 @@ class WharfageFeeController extends Controller
     public function store(Request $request)
     {
         $wf_header = new WharfageHeader;
+        $wf_header->dateEffective = $request->dateEffective;
         $wf_header->locations_id = $request->locations_id;
         $wf_header->save();
 
@@ -46,6 +47,7 @@ class WharfageFeeController extends Controller
     {
 
         $wf_header= WharfageHeader::findOrFail($id);
+        $wf_header->dateEffective = $request->dateEffective;
         $wf_header->locations_id = $request->locations_id;
         $wf_header->save();
 

@@ -954,7 +954,7 @@
 			else{
 				if(validateContainer() == true){
 					if(validateOrder() == true){
-
+						alert.show(results);
 						validateContainerDetail();
 						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
@@ -1098,13 +1098,13 @@
 								alert("Nothing found");
 							}
 						}
-					})	
+					})
 				}
 				else
 				{
 					$('#deliver_id').css('border-color', 'red');
 				}
-				
+
 			}
 			else{
 				$('#_daddress').val("");
@@ -1304,7 +1304,7 @@
 			}
 			else{
 				$('#helper').css('border-color', 'green');
-			} 	
+			}
 			if($('#pickup_id').val() == "0"){
 				$('#pickup_id').css('border-color', 'red');
 				error += "No pickup location";
@@ -1328,7 +1328,7 @@
 				$('#deliver_id').css('border-color', 'green');
 				$('#pickup_id').css('border-color', 'green');
 			}
-			
+
 			if(error.length == 0){
 				return true;
 			}
@@ -1424,48 +1424,48 @@
 				return false;
 			}
 		}
-		function validateDetail(){
-			descrp_goods = [];
-			gross_weights = [];
-			suppliers = [];
-			var error = "";
-			if($("#choices li.active").text() === "Without Container"){
-				descrp = document.getElementsByName("wodescriptionOfGoods");
-				gw = document.getElementsByName("wogrossWeight");
-				supp = document.getElementsByName("wosupplier");
-			}
-			for(var i = 0; i < descrp.length; i++){
-				if(descrp[i].value === ""){
-					error += "No description";
-					descrp[i].style.borderColor = 'red';
+			function validateDetail(){
+				descrp_goods = [];
+				gross_weights = [];
+				suppliers = [];
+				var error = "";
+				if($("#choices li.active").text() === "Without Container"){
+					descrp = document.getElementsByName("wodescriptionOfGoods");
+					gw = document.getElementsByName("wogrossWeight");
+					supp = document.getElementsByName("wosupplier");
 				}
-				else{
-					descrp_goods.push(descrp[i].value);
-					descrp[i].style.borderColor = 'green';
+				for(var i = 0; i < descrp.length; i++){
+					if(descrp[i].value === ""){
+						error += "No description";
+						descrp[i].style.borderColor = 'red';
+					}
+					else{
+						descrp_goods.push(descrp[i].value);
+						descrp[i].style.borderColor = 'green';
+					}
+					if(gw[i].value === ""){
+						error += "No gross weight";
+						gw[i].style.borderColor = 'red';
+					}
+					else{
+						gross_weights.push(gw[i].value);
+						gw[i].style.borderColor = 'green';
+					}
+					if(supp[i].value === ""){
+						suppliers.push("");
+					}
+					else{
+						suppliers.push(supp[i].value);
+					}
 				}
-				if(gw[i].value === ""){
-					error += "No gross weight";
-					gw[i].style.borderColor = 'red';
-				}
-				else{
-					gross_weights.push(gw[i].value);
-					gw[i].style.borderColor = 'green';
-				}
-				if(supp[i].value === ""){
-					suppliers.push("");
-				}
-				else{
-					suppliers.push(supp[i].value);
-				}
-			}
-			if(error.length === 0){
+				if(error.length === 0){
 
-				return true;
+					return true;
+				}
+				else{
+					return false;
+				}
 			}
-			else{
-				return false;
-			}
-		}
 
 	})
 

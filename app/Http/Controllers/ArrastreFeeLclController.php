@@ -32,6 +32,7 @@ class ArrastreFeeLclController extends Controller
 	public function store(Request $request)
 	{
 		$af_header = new ArrastreLclHeader;
+		$af_header->dateEffective = $request->dateEffective;
 		$af_header->locations_id = $request->locations_id;
 		$af_header->save();
 
@@ -61,6 +62,7 @@ class ArrastreFeeLclController extends Controller
 		->delete();
 
 		$af_header= ArrastreLclHeader::findOrFail($id);
+		$af_header->dateEffective = $request->dateEffective;
 		$af_header->locations_id = $request->locations_id;
 		$af_header->save();
 
