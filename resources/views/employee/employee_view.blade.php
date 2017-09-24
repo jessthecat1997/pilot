@@ -178,10 +178,16 @@
                     {{ Carbon\Carbon::parse($emp_acc->date_opened)->toFormattedDateString() }}
                   </td>
                   <td>
-                    {{ Carbon\Carbon::parse($emp_acc->date_closed)->toFormattedDateString() }}
+                    @if($emp_acc->date_closed != null)
+                    {{ Carbon\Carbon::parse($emp_acc->date_closed)->format('F d, Y') }}
+                    @else
+                    Not set
+                    @endif
                   </td>
                   <td>
-                    <button class=""></button>
+                    <button class = 'btn btn-info view_accident' title = 'View'><span class = 'fa fa-eye'></span></button>
+                    <button class = 'btn btn-primary edit_accident' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+                    <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>
                   </td>
                 </tr>
                 @empty
@@ -236,7 +242,7 @@
       e.preventDefault();
       window.location.replace('');
     })
-    
+
     $('#incident_table').DataTable({
       processing: false,
       serverSide: false,

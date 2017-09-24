@@ -9,7 +9,7 @@ class EmployeeAccident extends Model
 {
 	use SoftDeletes;
 
-	private $fillable = [
+	protected $fillable = [
 	'incident_date',
 	'incident_time',
 	'date_opened',
@@ -23,7 +23,7 @@ class EmployeeAccident extends Model
 	'description',
 	];
 
-	private $dates = [
+	protected $dates = [
 	'deleted_at',
 	];
 }
