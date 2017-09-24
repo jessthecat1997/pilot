@@ -23,9 +23,6 @@ class EmployeeIncident extends Model
 
     protected $dates = [
     'deleted_at',
-    'date_opened',
-    'date_closed',
-
     ];
 
 }

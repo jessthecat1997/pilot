@@ -13,9 +13,16 @@ class EmployeeAccidentsController extends Controller
     }
 
   
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $provinces = \App\LocationProvince::all();
+        $deliveries = \DB::table('delivery_receipt_headers')
+        ->where('emp_id_driver', '=', $request->employee_id)
+        ->get();
+        $employee = \App\Employee::findOrFail($request->employee_id);
+
+        return view('accident.accident_create', compact(['provinces','deliveries', 'employee']));
+
     }
 
    
