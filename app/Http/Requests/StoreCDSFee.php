@@ -21,8 +21,8 @@ class StoreCDSFee extends FormRequest
 
             return [
 
-            'fee' => 'required|numeric',
-            'dateEffective' => 'required|unique:cds_fees,dateEffective',
+            'fee' => 'required|numeric|between:0,1000000',
+            'dateEffective' => 'required|date|unique:cds_fees,dateEffective',
 
             ];
             break;
@@ -31,8 +31,8 @@ class StoreCDSFee extends FormRequest
 
             return [
 
-            'fee' => 'required|numeric',
-            'dateEffective' => 'required|unique:cds_fees,dateEffective,' . $this->segment(3),
+            'fee' => 'required|numeric|between:0,1000000',
+            'dateEffective' => 'required|date|unique:cds_fees,dateEffective,' . $this->segment(3),
 
             ];
 
