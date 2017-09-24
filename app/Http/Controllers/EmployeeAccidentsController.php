@@ -9,7 +9,7 @@ class EmployeeAccidentsController extends Controller
   
     public function index()
     {
-        //
+        
     }
 
   

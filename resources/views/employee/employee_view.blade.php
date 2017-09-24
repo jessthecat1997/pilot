@@ -121,13 +121,15 @@
                   @forelse($employee_incidents as $emp_inc)
                   <tr>
                     <td>
-                      {{ $emp_inc->date_opened }}
+                      {{ Carbon\Carbon::parse($emp_inc->date_opened)->toFormattedDateString() }}
                     </td>
                     <td>
-                      {{ $emp_inc->date_closed }}
+                      {{ Carbon\Carbon::parse($emp_inc->date_opened)->toFormattedDateString() }}
                     </td>
                     <td>
-                      <button class=""></button>
+                      <button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
+                      <button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+                      <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>
                     </td>
                   </tr>
                   @empty
@@ -166,53 +168,52 @@
                   </tr>
                 </thead>
                 <tbody>
-                   @forelse($employee_accidents as $emp_acc)
-                  <tr>
-                    <td>
-                      {{ $emp_inc->date_opened }}
-                    </td>
-                    <td>
-                      {{ $emp_inc->date_closed }}
-                    </td>
-                    <td>
-                      <button class=""></button>
-                    </td>
-                  </tr>
-                  @empty
+                 @forelse($employee_accidents as $emp_acc)
+                 <tr>
+                  <td>
+                    {{ Carbon\Carbon::parse($emp_acc->date_opened)->toFormattedDateString() }}
+                  </td>
+                  <td>
+                    {{ Carbon\Carbon::parse($emp_acc->date_closed)->toFormattedDateString() }}
+                  </td>
+                  <td>
+                    <button class=""></button>
+                  </td>
+                </tr>
+                @empty
 
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
+                @endforelse
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class = "col-md-12">
-        <form class = "">
-          {{ csrf_field() }}
+    <div class = "col-md-12">
+      <form class = "">
+        {{ csrf_field() }}
 
-        </form>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+</div>
 @endsection
-@push('styles')
-<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<style>
- .employees
- {
+@push('styles')
+<style type="text/css">
+.employees
+{
   border-left: 10px solid #8ddfcc;
   background-color:rgba(128,128,128,0.1);
   color: #fff;
 }
 </style>
+
 @endpush
 
 @push('scripts')
-
 <script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
