@@ -33,6 +33,29 @@
                             </td>
                         </tr>
                     </thead>
+                    <tbody>
+                        @forelse($bfs as $bf)
+                        <tr>
+                            <td>
+                                {{ $bf->dateEffective}}
+                            </td>
+                            <td>
+                                {{ $bf->minimum}}
+                            </td>
+                            <td>
+                                {{ $bf->maximum}}
+                            </td>
+                            <td>
+                                {{ $bf->amount}}
+                            </td>
+                            <td>
+                                <button value = "{{ $bf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+                                <button value = "{{ $bf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+                            </td>
+                        </tr>
+                        @empty
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -54,22 +77,22 @@
                                 <label class="control-label " for="dateEffective">Date Effective:</label>
                                 <input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
                             </div>
-                       
-                        <br />
-                        <div class = "collapse" id = "bf_table_warning">
-                            <div class="alert alert-danger">
-                                <strong>Warning!</strong> Requires at least one import processing fee rate.
+
+                            <br />
+                            <div class = "collapse" id = "bf_table_warning">
+                                <div class="alert alert-danger">
+                                    <strong>Warning!</strong> Requires at least one import processing fee rate.
+                                </div>
                             </div>
-                        </div>
-                        <div class = "collapse" id = "bf_warning">
-                            <div class="alert alert-danger">
-                                <strong>Warning!</strong> Something is wrong with the range.
+                            <div class = "collapse" id = "bf_warning">
+                                <div class="alert alert-danger">
+                                    <strong>Warning!</strong> Something is wrong with the range.
+                                </div>
                             </div>
-                        </div>
-                        <div class = "panel panel-default">
-                            <div  style="overflow-x: auto;">
-                                <div class = "panel-default">
-                                    {{ csrf_field() }}
+                            <div class = "panel panel-default">
+                                <div  style="overflow-x: auto;">
+                                    <div class = "panel-default">
+                                        {{ csrf_field() }}
                                         <table class="table responsive table-hover" width="100%" id= "bf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
                                             <thead>
                                                 <tr>
@@ -203,7 +226,7 @@
 
 
 
-    var data;
+    var data,bf_id;
 
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
@@ -222,22 +245,21 @@
             serverSide: false,
             deferRender:true,
             'scrollx': true,
-            ajax: 'http://localhost:8000/admin/bfData',
             columns: [
 
             { data: 'dateEffective' },
 
             { data: 'minimum',
             "render": function(data, type, row){
-                return data.split(",").join("<br/>");}
+                return data.split("\n").join("<br/>");}
             },
             { data: 'maximum',
             "render": function(data, type, row){
-                return data.split(",").join("<br/>");}
+                return data.split("\n").join("<br/>");}
             },
             { data: 'amount',
             "render": function(data, type, row){
-                return data.split(",").join("<br/>");}
+                return data.split("\n").join("<br/>");}
             },
             { data: 'action', orderable: false, searchable: false }
 
@@ -273,18 +295,13 @@
             $('#minimum').val("0.00");
             $('#maximum').val("0.00");
             $('#amount').val("0.00");
-
-
-
-
             $('#bfModal').modal('show');
-
         });
 
 
         $(document).on('click', '.edit',function(e){
             resetErrors();
-            var bf_id = $(this).val();
+            bf_id = $(this).val();
             $('.modal-title').text('Update Brokerage Fee Range');
             data = bftable.row($(this).parents()).data();
             $('#dateEffective').val(data.dateEffective);
@@ -312,10 +329,10 @@
         });
 
         $(document).on('click', '.deactivate', function(e){
-            var bf_id = $(this).val();
-            data = bftable.row($(this).parents()).data();
-            $('#confirm-delete').modal('show');
-        });
+         bf_id = $(this).val();
+         data = bftable.row($(this).parents()).data();
+         $('#confirm-delete').modal('show');
+     });
 
 
         $(document).on('click', '.delete-bf-row', function(e){
@@ -401,13 +418,13 @@
             e.preventDefault();
             $.ajax({
                 type: 'DELETE',
-                url:  '/admin/brokerage_fee/' + data.id,
+                url:  '/admin/brokerage_fee/' + bf_id,
                 data: {
                     '_token' : $('input[name=_token').val()
                 },
                 success: function (data)
                 {
-                    bftable.ajax.reload();
+                    bftable.ajax.url( '{{ route("bf.data") }}' ).load();
                     $('#confirm-delete').modal('hide');
 
                     toastr.options = {
@@ -439,122 +456,117 @@
             if(finalvalidatebfRows() === true){
 
                 var title = $('.modal-title').text();
-                if ($('#dateEffective').valid()){
-                    $('#btnSave').attr('disabled', 'true');
-                    if(title == "New Brokerage Fee Range")
-                    {
-                        console.log('min' + minimum_id);    
-                        console.log(maximum_id);    
-                        jsonMinimum = JSON.stringify(minimum_id);
-                        jsonMaximum = JSON.stringify(maximum_id);
-                        jsonAmount = JSON.stringify(amount_value);
 
-                        $.ajax({
-                            type: 'POST',
-                            url:  '/admin/brokerage_fee',
-                            data: {
-                                '_token' : $('input[name=_token]').val(),
-                                'dateEffective' : $('#dateEffective').val(),
-                                'minimum' : jsonMinimum,
-                                'maximum' :jsonMaximum,
-                                'amount' : jsonAmount,
-                            },
+                $('#btnSave').attr('disabled', 'true');
+                if(title == "New Brokerage Fee Range"){
 
-                            success: function (data){
+                 if ($('#dateEffective').valid()){
+                    console.log('min' + minimum_id);    
+                    console.log(maximum_id);    
+                    jsonMinimum = JSON.stringify(minimum_id);
+                    jsonMaximum = JSON.stringify(maximum_id);
+                    jsonAmount = JSON.stringify(amount_value);
 
+                    $.ajax({
+                        type: 'POST',
+                        url:  '/admin/brokerage_fee',
+                        data: {
+                            '_token' : $('input[name=_token]').val(),
+                            'dateEffective' : $('#dateEffective').val(),
+                            'minimum' : jsonMinimum,
+                            'maximum' :jsonMaximum,
+                            'amount' : jsonAmount,
+                        },
 
+                        success: function (data){
+                            bftable.ajax.url( '{{ route("bf.data") }}' ).load();
+                            $('#bfModal').modal('hide');
+                            $('.modal-title').text('New Brokerage Fee Range');
+                            $('#minimum').val("0.00");
+                            $('#maximum').val("0.00"); 
+                            $('#amount').val("0.00");
 
-                                bftable.ajax.reload();
-                                $('#bfModal').modal('hide');
-                                $('.modal-title').text('New Brokerage Fee Range');
-                                $('#minimum').val("0.00");
-                                $('#maximum').val("0.00"); 
-                                $('#amount').val("0.00");
-
-
-
-                                toastr.options = {
-                                    "closeButton": false,
-                                    "debug": false,
-                                    "newestOnTop": false,
-                                    "progressBar": false,
-                                    "rtl": false,
-                                    "positionClass": "toast-bottom-right",
-                                    "preventDuplicates": false,
-                                    "onclick": null,
-                                    "showDuration": 300,
-                                    "hideDuration": 1000,
-                                    "timeOut": 2000,
-                                    "extendedTimeOut": 1000,
-                                    "showEasing": "swing",
-                                    "hideEasing": "linear",
-                                    "showMethod": "fadeIn",
-                                    "hideMethod": "fadeOut"
-                                }
-                                toastr["success"]("Record addded successfully")
-                                $('#btnSave').removeAttr('disabled');
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "rtl": false,
+                                "positionClass": "toast-bottom-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": 300,
+                                "hideDuration": 1000,
+                                "timeOut": 2000,
+                                "extendedTimeOut": 1000,
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
                             }
-                        })
-                    }
-                }else{
-                    if ($('#dateEffective').valid()){
-                        $('#btnSave').attr('disabled', 'true');
-                        jsonMinimum = JSON.stringify(minimum_id);
-                        jsonMaximum = JSON.stringify(maximum_id);
-                        jsonAmount = JSON.stringify(amount_value);
-
-                        $.ajax({
-                            type: 'PUT',
-                            url:  '/admin/brokerage_fee/' + data.id,
-                            data: {
-                                '_token' : $('input[name=_token]').val(),
-                                'dateEffective' : $('#dateEffective').val(),
-                                'minimum' : jsonMinimum,
-                                'maximum' :jsonMaximum,
-                                'amount' : jsonAmount,
-                                'bf_head_id': data.id,
-                            },
-
-                            success: function (data){
-
-
-
-                                bftable.ajax.reload();
-                                $('#bfModal').modal('hide');
-                                $('.modal-title').text('New Brokerage Fee Range');
-                                $('#minimum').val("0.00");
-                                $('#maximum').val("0.00"); 
-                                $('#amount').val("0.00");
-
-
-
-                                toastr.options = {
-                                    "closeButton": false,
-                                    "debug": false,
-                                    "newestOnTop": false,
-                                    "progressBar": false,
-                                    "rtl": false,
-                                    "positionClass": "toast-bottom-right",
-                                    "preventDuplicates": false,
-                                    "onclick": null,
-                                    "showDuration": 300,
-                                    "hideDuration": 1000,
-                                    "timeOut": 2000,
-                                    "extendedTimeOut": 1000,
-                                    "showEasing": "swing",
-                                    "hideEasing": "linear",
-                                    "showMethod": "fadeIn",
-                                    "hideMethod": "fadeOut"
-                                }
-                                toastr["success"]("Record updated successfully")
-                                $('#btnSave').removeAttr('disabled');
-                            }
-                        })
-                    }
+                            toastr["success"]("Record added successfully")
+                            $('#btnSave').removeAttr('disabled');
+                        }
+                    })
+                    
                 }
+                
+            }else{
+                if ($('#dateEffective').valid()){
+                       // $('#btnSave').attr('disabled', 'true');
+                       jsonMinimum = JSON.stringify(minimum_id);
+                       jsonMaximum = JSON.stringify(maximum_id);
+                       jsonAmount = JSON.stringify(amount_value);
 
-            }
-        });
+                       $.ajax({
+                        type: 'PUT',
+                        url:  '/admin/brokerage_fee/' + bf_id,
+                        data: {
+                            '_token' : $('input[name=_token]').val(),
+                            'dateEffective' : $('#dateEffective').val(),
+                            'minimum' : jsonMinimum,
+                            'maximum' :jsonMaximum,
+                            'amount' : jsonAmount,
+                            'bf_head_id': bf_id,
+                        },
+
+                        success: function (data){
+                            bftable.ajax.url( '{{ route("bf.data") }}' ).load();
+                            $('#bfModal').modal('hide');
+                            $('.modal-title').text('New Brokerage Fee Range');
+                            $('#minimum').val("0.00");
+                            $('#maximum').val("0.00"); 
+                            $('#amount').val("0.00");
+
+
+
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "rtl": false,
+                                "positionClass": "toast-bottom-right",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": 300,
+                                "hideDuration": 1000,
+                                "timeOut": 2000,
+                                "extendedTimeOut": 1000,
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            }
+                            toastr["success"]("Record updated successfully")
+                            $('#btnSave').removeAttr('disabled');
+                        }
+                    })
+                   }
+               }
+
+           }
+       });
 });
 
 
@@ -698,7 +710,7 @@ function validatebfRows()
 
         if($('#dateEffective').val() == ""){
 
-           
+
             error += "Date Effective Required.";
         }
 

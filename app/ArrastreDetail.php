@@ -8,7 +8,7 @@ class ArrastreDetail extends Model
 {
 	use SoftDeletes;
 	protected $fillable = [
-	'arrastre_lcl_headers_id','basis_types_id','container_sizes_id','amount',
+	'arrastre_header_id','container_sizes_id','amount',
 	];
 
 	protected $dates = [
