@@ -1,5 +1,23 @@
 @extends('layouts.app')
 @section('content')
+<h2>&nbsp;Brokerage</h2>
+<hr>
+<div class="row">
+	<ul class="nav nav-tabs nav-justified">
+		<li class="active"><a href="#">Home</a></li>
+		<li><a href="#">Menu 1</a></li>
+		<li><a href="#">Menu 2</a></li>
+		<li><a href="#">Menu 3</a></li>
+	</ul>
+
+	<!-- Centered Pills -->
+	<ul class="nav nav-pills nav-justified">
+		<li class="active"><a href="#">Home</a></li>
+		<li><a href="#">Menu 1</a></li>
+		<li><a href="#">Menu 2</a></li>
+		<li><a href="#">Menu 3</a></li>
+	</ul>
+</div>
 <div class = "row">
 	<div class = "col-md-8 col-md-offset-2">
 		<div class = "panel panel-default">
