@@ -18,7 +18,7 @@ class StoreBrokerageFee extends FormRequest
         'minimum' => 'required|',
         'maximum' => 'required|',
         'amount' => 'required|',
-        'dateEffective' =>'required|date|'
+        'dateEffective' =>'required|date'
         ];
     }
 

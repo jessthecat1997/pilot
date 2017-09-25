@@ -26,6 +26,23 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($dcts as $dct)
+						<tr>
+							<td>
+								{{ $vt->name }}
+							</td>
+							<td>
+								{{ $vt->description }}
+							</td>
+							<td>
+								<button value = "{{ $dct->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $dct->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -106,6 +123,7 @@
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
 	var data;
+	var dct_id;
 	var temp_name = null;
 	var temp_desc = null;
 	$(document).ready(function(){
@@ -114,7 +132,6 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/dctData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -137,7 +154,7 @@
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					regex: /^[A-Za-z ]+$/,
+					lettersonly:true,
 
 				},
 
@@ -158,7 +175,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var dct_id = $(this).val();
+			 dct_id = $(this).val();
 			data = dcttable.row($(this).parents()).data();
 			$('#name').val(data.name);	
 			$('#description').val(data.description);
@@ -168,7 +185,7 @@
 			$('#dctModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var dct_id = $(this).val();
+			 dct_id = $(this).val();
 			data = dcttable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -180,13 +197,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/dangerous_cargo_type/' + data.id,
+		url:  '/admin/dangerous_cargo_type/' + dct_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			dcttable.ajax.reload();
+			dcttable.ajax.url( '{{ route("dct.data") }}' ).load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -234,7 +251,7 @@ $('#btnSave').on('click', function(e){
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						dcttable.ajax.reload();
+						dcttable.ajax.url( '{{ route("dct.data") }}' ).load();
 						$('#dctModal').modal('hide');
 						$('#description').val("");
 						$('.modal-title').text('New Dangerous Cargo Type');
@@ -298,7 +315,7 @@ $('#btnSave').on('click', function(e){
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/dangerous_cargo_type/' + data.id,
+					url:  '/admin/dangerous_cargo_type/' + dct_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -307,7 +324,7 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							dcttable.ajax.reload();
+							dcttable.ajax.url( '{{ route("dct.data") }}' ).load();
 							$('#dctModal').modal('hide');
 							$('#description').val("");
 							$('.modal-title').text('New Dangerous Cargo Type');

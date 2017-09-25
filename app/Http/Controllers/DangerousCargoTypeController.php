@@ -11,7 +11,8 @@ class DangerousCargoTypeController extends Controller
 
     public function index()
     {
-        return view('admin/maintenance.dangerous_cargo_type_index');
+         $dcts = \App\DangerousCargoType::all();
+        return view('admin/maintenance.dangerous_cargo_type_index',compact(['dcts']));
     }
 
 

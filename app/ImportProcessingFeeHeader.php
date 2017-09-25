@@ -14,6 +14,6 @@ class ImportProcessingFeeHeader extends Model
 	];
 
 	protected $dates = [
-	'deleted_at',
-	];
+   		'deleted_at',
+   	];
 }

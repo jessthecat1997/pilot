@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\StoreIPFFee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\ImportProcessingFeeHeader;
 use App\ImportProcessingFeeDetail;
-use App\Http\Requests\StoreIPFFee;
+
 class ImportProcessingFeesController extends Controller
 {
 	public function index()
 	{
-		return view('admin/maintenance.ipf_fee_index');
+		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
+
+		return view('admin/maintenance.ipf_fee_index', compact(['ipfs']));
 	}
 
 	public function store(Request $request)
@@ -39,7 +41,7 @@ class ImportProcessingFeesController extends Controller
 
 	}
 
-	public function update(StoreIPFFee $request, $id)
+	public function update(Request $request, $id)
 	{
 		\DB::table('import_processing_fee_details')
 		->where('ipf_headers_id','=', $request->ipf_head_id)
