@@ -42,7 +42,13 @@
               <div class = "col-md-4">
                 <div class="form-group">
                   <label class = "control-label">Province</label>
-                  <select class="form-control" name = "loc_province" id="loc_province" ></select>
+                  <select class="form-control" name = "loc_province" id="loc_province" >
+                    @forelse($provinces as $province)
+                    <option value="{{ $province->id }}">{{ $province->name }}</option>
+                    @empty
+
+                    @endforelse
+                  </select>
                 </div>
               </div>
               <div class = "col-md-4">
@@ -139,49 +145,6 @@
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-
-    var arr_provinces =[
-    @forelse($provinces as $province)
-    { id: '{{ $province->id }}', text:'{{ $province->name }}' },
-    @empty
-    @endforelse
-    ];
-
-    $("#loc_city").select2({
-      width: '100%',
-      placeholder: "Select city",
-      allowClear: true,
-      sorter: function(data) {
-        return data.sort(function (a, b) {
-          if (a.text > b.text) {
-            return 1;
-          }
-          if (a.text < b.text) {
-            return -1;
-          }
-          return 0;
-        });
-      },
-    });
-
-    $("#loc_province").select2({
-      data: arr_provinces,
-      width: '100%',
-      placeholder: "Select province",
-      allowClear: true,
-      sorter: function(data) {
-        return data.sort(function (a, b) {
-          if (a.text > b.text) {
-            return 1;
-          }
-          if (a.text < b.text) {
-            return -1;
-          }
-          return 0;
-        });
-      },
-    });
-
     Inputmask("9{4}").mask($("#zip"));
 
 
@@ -229,7 +192,7 @@
       formatDate:'Y/m/d',
       value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
       startDate:  "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
-      minDate:'2013/12/03',
+      minDate:'1940/01/01',
       maxDate: "+1970/01/01",
       onSelectDate:function(ct,$i){
         var today = new Date();
@@ -309,42 +272,45 @@
 
       e.preventDefault();
 
+      
+      
 
       $('#firstName').valid();
       $('#lastName').valid();
       $('#dob').valid();
       $('#contactNumber').valid();
       $('#inCaseOfEmergency').valid();
-      if($('#firstName').valid()){
+      if($("#firstName").valid()){
         $.ajax({
-          type: 'POST',
+        type: 'POST',
 
-          url: '{{ route("EmployeeSave" )}}',
-          data: {
-            '_token' : $('input[name=_token]').val(),
-              'firstName' : $('#firstName').val(),
-              'middleName': $('#middleName').val(),
-              'lastName' : $('#lastName').val(),
-              'dob': document.getElementById("dob").value,
-              'address' : $('#streetName').val(),
-              'zip' : $('#zip').val(),
-              'cities_id' :  $('#loc_city').val(),
-              'SSSNo': $('#SSSNo').val(),
-              'contactNumber': $('#contactNumber').val(),
-              'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
-              'toggles': JSON.stringify(trueToggle),
+        url: '{{ route("EmployeeSave" )}}',
+        data: {
+          '_token' : $('input[name=_token]').val(),
+          'firstName' : $('#firstName').val(),
+          'middleName': $('#middleName').val(),
+          'lastName' : $('#lastName').val(),
+          'dob': document.getElementById("dob").value,
+          'address' : $('#streetName').val(),
+          'zip' : $('#zip').val(),
+          'cities_id' :  $('#loc_city').val(),
+          'SSSNo': $('#SSSNo').val(),
+          'contactNumber': $('#contactNumber').val(),
+          'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
+          'toggles': JSON.stringify(trueToggle),
 
-            },
-            success: function(data){
+        },
+        success: function(data){
 
-              window.location.replace(+data+"/view");
+          window.location.replace(+data+"/view");
 
-            },
+        },
 
-          });
-          }
-          
-        })
       })
-    </script>
-    @endpush
+      }
+      
+    })
+
+  })
+</script>
+@endpush
