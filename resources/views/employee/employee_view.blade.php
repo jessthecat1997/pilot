@@ -106,13 +106,19 @@
               <table class="table tabl-responsive table-striped table-bordered cell-border" style="width: 100%;" id = "incident_table">
                 <thead>
                   <tr>
-                    <td>
-                      Date
+                    <td style="width: 10%;">
+                      No.
                     </td>
+                    <td style="width: 20%;">
+                      Date Opened
+                    </td style="width: 20%;">
                     <td>
                       Date Closed
                     </td>
-                    <td>
+                    <td style="width: 30%;">
+                      Description
+                    </td>
+                    <td style="width: 20%;">
                       Actions
                     </td>
                   </tr>
@@ -121,7 +127,11 @@
                   @forelse($employee_incidents as $emp_inc)
                   <tr>
                     <td>
+                      {{ $emp_inc->id }}
+                    </td>
+                    <td>
                       {{ Carbon\Carbon::parse($emp_inc->date_opened)->format('F d, Y') }}
+                      <input type="hidden" value="{{ $emp_inc->id }}" class="incident">
                     </td>
                     <td>
                       @if($emp_inc->date_closed != null)
@@ -129,6 +139,9 @@
                       @else
                       Not set
                       @endif
+                    </td>
+                    <td>
+                      {{ $emp_inc->description }}
                     </td>
                     <td>
                       <button class = 'btn btn-info view_incident' title = 'View'><span class = 'fa fa-eye'></span></button>
@@ -160,13 +173,19 @@
               <table class="table tabl-responsive table-striped table-bordered cell-border" style="width: 100%;" id = "accident_table">
                 <thead>
                   <tr>
-                    <td>
-                      Date
+                    <td style="width: 10%;">
+                      No.
                     </td>
+                    <td style="width: 20%;">
+                      Date Opened
+                    </td style="width: 20%;">
                     <td>
                       Date Closed
                     </td>
-                    <td>
+                    <td style="width: 30%;">
+                      Description
+                    </td>
+                    <td style="width: 20%;">
                       Actions
                     </td>
                   </tr>
@@ -174,6 +193,9 @@
                 <tbody>
                  @forelse($employee_accidents as $emp_acc)
                  <tr>
+                  <td>
+                    {{ $emp_acc->id }}
+                  </td>
                   <td>
                     {{ Carbon\Carbon::parse($emp_acc->date_opened)->toFormattedDateString() }}
                   </td>
@@ -183,6 +205,9 @@
                     @else
                     Not set
                     @endif
+                  </td>
+                  <td>
+                    {{ $emp_acc->description }}
                   </td>
                   <td>
                     <button class = 'btn btn-info view_accident' title = 'View'><span class = 'fa fa-eye'></span></button>
@@ -238,9 +263,13 @@
       window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/accidents/create";
     })
 
+    $(document).on('click', '.edit_incident', function(e){
+      e.preventDefault();
+      window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/incidents/" + $(this).closest('tr').find('.incident').val() + "/edit");
+    })
     $(document).on('click', '.view_incident', function(e){
       e.preventDefault();
-      window.location.replace('');
+      window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/incidents/" + $(this).closest('tr').find('.incident').val());
     })
 
     $('#incident_table').DataTable({
@@ -248,7 +277,9 @@
       serverSide: false,
       deferRender: true,
       columns: [
-      { data: 'name' },
+      { data: 'id' },
+      { data: 'date_opened' },
+      { data: 'date_closed' },
       { data: 'description' },
       { data: 'action', orderable: false, searchable: false }
 
@@ -260,7 +291,9 @@
      serverSide: false,
      deferRender: true,
      columns: [
-     { data: 'name' },
+     { data: 'id' },
+     { data: 'date_opened' },
+     { data: 'date_closed' },
      { data: 'description' },
      { data: 'action', orderable: false, searchable: false }
 
