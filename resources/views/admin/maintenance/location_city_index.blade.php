@@ -32,95 +32,50 @@
 	</div>
 </div>
 <section class="content">
-	<div class="modal fade" id="lcModal" role="dialog">
-		<form role="form" method = "POST" class="commentForm">
-			<div class="form-group">
-				<div class="modal-dialog ">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New City</h4>
-						</div>
-						<div class="modal-body ">		
-							<div class="form-group required">
-								<label class="control-label col-md-2">Province:</label>
-								<div class = "col-md-12">
-									<div class = "col-md-8">
-										<select name = "loc_province" id="loc_province" class = "form-control required " style="width: 100%;">
-										@forelse($provinces as $province)
-										<option class="{{ $province->id }}">{{ $province->name }}</option>
-										
-										@empty
-
-										@endforelse
-										</select> 
-									</div>
-									<div class = "col-md-4">
-										<button  id = "new_province" class = "btn btn-sm btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal" style="width: 100%;" >New Province </button> 
-									</div>
-								</div>
+	
+	<form role="form" method = "POST" id="commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lcModal" role="dialog">
+			<div class="modal-dialog ">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">New City</h4>
+					</div>
+					<div class="modal-body ">		
+						<div class="form-group required">
+							<label class="control-label">Province:</label>
+							<div class = "input-group " >
+								<select name = "loc_province" id="loc_province" class = "form-control " >
+									@forelse($provinces as $province)
+									<option value="{{ $province->id }}">{{ $province->name }}</option>
+									@empty
+									@endforelse
+								</select> 
+								<span class="input-group-btn">
+									<button class="btn btn-primary new_province" type="button">+</button>
+								</span>
 							</div>
-							<br />
-							<div class="form-group required">
-								<form id = "lc_form" class = "commentForm">
-									{{ csrf_field() }}
-									<label class = "control-label col-md-2"><strong>City</strong></label>
-									<div class = "col-md-9">			
-										<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" 
-										name = "city" id = "city" value=""  data-rule-required="true"   />
-									</div>
-								</form>
-							</div>
-							<br />
-							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
-						<div class="modal-footer">
-							<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
+						<div class="form-group required">
+							<label class = "control-label"><strong>City</strong></label>
+							<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" name = "city" id = "city" value=""  data-rule-required="true"/>
 						</div>
+						<br />
+						<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
+					</div>
+					<div class="modal-footer">
+						<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
 					</div>
 				</div>
 			</div>
+			
 		</form>
 	</div>
 </section>
 <section class="content">
-	<form role="form" method = "POST" id = "commentForm">
-		{{ csrf_field() }}
-		<div class="modal fade" id="lcModal_update" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Update City</h4>
-					</div>
-					<div class="modal-body">
-						<div class="form-group required">
-							<label class="control-label " for="province">Province:</label>
-							<select name = "loc_province_update" id="loc_province_update" class = "form-control required select2_province">
-							</select>     
-						</div>
-						<div class = "col-md-3 col-md-offset-3">
-							<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
-							<br>
-						</div>			
-						<div class="form-group required">
-							<label class = "control-label">Name:</label>
-							<input type = "text" class = "form-control" name = "city_update" id = "city_update"  minlength = "2" data-rule-required="true" />
-
-						</div>
-					</div>
-					<div class="modal-footer">
-						<input id = "btnSave_update" type = "submit" class="btn btn-success submit" value = "Save" />
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-</section>
-<section class="content">
-	<form role="form" method = "POST" id = "commentForm">
+	<form role="form" method = "POST" id="provinceForm">
 		{{ csrf_field() }}
 		<div class="modal fade" id="lpModal" role="dialog">
 			<div class="modal-dialog">
@@ -173,18 +128,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-city
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-city
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 
 </style>
 @endpush
@@ -205,7 +160,7 @@
 
 	$(document).ready(function(){
 		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
-	
+
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
 			serverSide: false,
@@ -219,7 +174,7 @@
 
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
+			],	"order": [[ 0, "asc" ]], 
 
 
 		});
@@ -235,17 +190,32 @@
 				city:
 				{
 					required: true,
+					lettersonly:true,
 					minlength: 3,
 					maxlength: 50,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
-					},
-					regex: /^[A-Za-z ]+$/,
-
+					},	
 				}
-
-				
+			},
+			onkeyup: function(element) {$(element).valid()}, 
+			
+		});
+		$("#provinceForm").validate({
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					lettersonly:true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+				}
 			},
 			onkeyup: function(element) {$(element).valid()}, 
 			
@@ -265,10 +235,9 @@
 
 			console.log("this is  " + data.province);
 
-			$("#loc_province_update").select2("val", $("#loc_province_update option:contains('"+data.province+"')").val() );
-
-			$('#city_update').val(data.city);
-			$('#lcModal_update').modal('show');
+			
+			$('#city').val(data.city);
+			$('#lcModal').modal('show');
 		});
 
 		$(document).on('click', '.deactivate', function(e){
@@ -302,34 +271,9 @@
 
 		})
 
-		$(document).on('change', '.lc_city_valid', function(e){
-			$(".lc_city_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-		$(document).on('change', '.lc_city_valid', function(e){
-			$(".lc_city_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
 
 
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-
-
-		$(document).on('click', '#new_province', function(e){
+		$(document).on('click', '.new_province', function(e){
 			resetErrors();
 			e.preventDefault();
 			$('#name').val("");
@@ -350,17 +294,10 @@
 				success: function (data)
 				{
 
-					var lpdata = $('.select2_province').select2('data');
-					arr_provinces.push({id:data.id,text:data.name});
-					$latest = data.name;
-					$(".select2_province").select2({
-						data: arr_provinces,
-						width: '100%',
-					});
-
+					$('#mySelect').append($('<option selected>', {value: data.id,text: data.name
+					}));
 					console.log ("latest is "+$latest);
 
-					$(".select2_province").select2("val", $(".select2_province option:contains('antipolo')").val() );
 
 					if(typeof(data) === "object"){
 						$('#lpModal').modal('hide');
@@ -385,7 +322,7 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record addded successfully")
+						toastr["success"]("Record added successfully")
 					}
 					else{
 						resetErrors();
@@ -489,57 +426,6 @@
 
 			}
 		});
-
-
-		$(document).on('click', '#btnSave_update', function(e){
-			console.log('update city: ' +$('input[name=city_update').val());
-			console.log('update provinces_id: ' +  $('#loc_province').val());	
-			e.preventDefault();
-			$.ajax({
-				type: 'PUT',
-				url:  '/admin/location_city/' + data.id,
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('input[name=city_update').val(),
-					'provinces_id' : $('#loc_province').val(),
-
-				},
-				success: function (data){
-
-
-
-					lctable.ajax.reload();
-					$('#lcModal_update').modal('hide');
-					$('#city').val("");
-
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record Updated successfully")
-
-				}
-			})
-
-
-		});
-
-
-
 
 	});
 

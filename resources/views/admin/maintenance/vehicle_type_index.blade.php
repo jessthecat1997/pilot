@@ -37,7 +37,8 @@
 								{{ $vt->description }}
 							</td>
 							<td>
-								<button value = "{{ $vt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $vt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<button value = "{{ $vt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $vt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 							</td>
 						</tr>
 						@empty
