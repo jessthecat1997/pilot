@@ -214,13 +214,21 @@
         lastName:
         {
           required: true,
-          date: true,
         },
         dob:
         {
           required: true,
           date: true,
+        },
+        contactNumber:
+        {
+          required: true,
+        },
+        inCaseOfEmergency:
+        {
+          required: true,
         }
+
       },
       onkeyup: false, 
       submitHandler: function (form) {
@@ -280,37 +288,37 @@
       $('#dob').valid();
       $('#contactNumber').valid();
       $('#inCaseOfEmergency').valid();
-      if($("#firstName").valid()){
+      if($("#firstName").valid() && $('#lastName').valid() && $('#dob').valid() && $('#contactNumber').valid() && $('#inCaseOfEmergency').valid()){
         $.ajax({
-        type: 'POST',
+          type: 'POST',
 
-        url: '{{ route("EmployeeSave" )}}',
-        data: {
-          '_token' : $('input[name=_token]').val(),
-          'firstName' : $('#firstName').val(),
-          'middleName': $('#middleName').val(),
-          'lastName' : $('#lastName').val(),
-          'dob': document.getElementById("dob").value,
-          'address' : $('#streetName').val(),
-          'zip' : $('#zip').val(),
-          'cities_id' :  $('#loc_city').val(),
-          'SSSNo': $('#SSSNo').val(),
-          'contactNumber': $('#contactNumber').val(),
-          'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
-          'toggles': JSON.stringify(trueToggle),
+          url: '{{ route("EmployeeSave" )}}',
+          data: {
+            '_token' : $('input[name=_token]').val(),
+              'firstName' : $('#firstName').val(),
+              'middleName': $('#middleName').val(),
+              'lastName' : $('#lastName').val(),
+              'dob': document.getElementById("dob").value,
+              'address' : $('#streetName').val(),
+              'zip' : $('#zip').val(),
+              'cities_id' :  $('#loc_city').val(),
+              'SSSNo': $('#SSSNo').val(),
+              'contactNumber': $('#contactNumber').val(),
+              'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
+              'toggles': JSON.stringify(trueToggle),
 
-        },
-        success: function(data){
+            },
+            success: function(data){
 
-          window.location.replace(+data+"/view");
+              window.location.replace(+data+"/view");
 
-        },
+            },
+
+          })  
+          }
+          
+        })
 
       })
-      }
-      
-    })
-
-  })
-</script>
-@endpush
+    </script>
+    @endpush
