@@ -104,7 +104,7 @@
 				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
-				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td style="width: 5%;">
