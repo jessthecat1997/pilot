@@ -992,7 +992,7 @@ $.validator.addMethod(
             var re = new RegExp(regexp);
             return this.optional(element) || re.test(value);
         },
-        "Please check your input."
+        "Only letters are valid."
 );
 
 

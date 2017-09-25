@@ -16,16 +16,18 @@ class ExchangeRatesController extends Controller
         \DB::update('UPDATE exchange_rates SET currentRate = 0 WHERE  id != ' . $current->id);
         \DB::update('UPDATE exchange_rates SET currentRate = 1 WHERE  id = ' . $current->id);
 
-        $exchange_rate = \DB::table('exchange_rates')
+        $exchange_rate_current = \DB::table('exchange_rates')
         ->select('rate')
         ->where('currentRate', '=', 1)
         ->get();
 
-        if(count($exchange_rate) == 0){
-            $exchange_rate[0]->rate = 0;
+        if(count($exchange_rate_current) == 0){
+            $exchange_rate_current[0]->rate = 0;
         }
 
-        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate']));
+         $exchange_rate = \App\ExchangeRate::all();
+
+        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate_current', 'exchange_rate']));
     }
 
 
