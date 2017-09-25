@@ -20,7 +20,7 @@ class StoreExchangeRate extends FormRequest
         case 'POST':
 
         return [
-        'rate'          => 'required',
+        'rate'          => 'required|between:0,1000000|numeric',
         'dateEffective' => 'required|unique:exchange_rates|date',
 
         ];
@@ -30,7 +30,7 @@ class StoreExchangeRate extends FormRequest
         case 'PUT':
         
         return [
-        'rate'         => 'required',
+        'rate'         => 'required|between:0,1000000',
         'dateEffective' => 'required|date|unique:exchange_rates,dateEffective,' . $this->segment(3),
     
         ];

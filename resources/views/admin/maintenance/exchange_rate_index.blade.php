@@ -118,17 +118,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-exchange-rate{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-exchange-rate{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -163,6 +163,7 @@
 				dateEffective:
 				{
 					required: true,
+					date:true,
 				},
 
 
@@ -246,39 +247,95 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 
-			var rate_nocomma = $('#rate').inputmask("unmaskedvalue");
-			if (rate_nocomma == "0.00"){
+			var rate_unmask = $('#rate').inputmask("unmaskedvalue");
+			var rate_nocomma = parseFloat(rate_unmask);
+			if (rate_nocomma  == 0){
 				rate_nocomma = "";
 			}
 
 			var title = $('.modal-title').text();
 			if(title == "New Exchange Rate")
 			{
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/exchange_rate',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'rate' : rate_nocomma,
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'description' : $('input[name=description]').val(),
-						'currentRate' : $('input[name=currentRate]').val(),
-					},
-					success: function (data)
-					{
-						window.location.reload();
+				if ($('#dateEffective').valid()){
 
+					$('#btnSave').attr('disabled', 'true');
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/exchange_rate',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'rate' : rate_nocomma,
+							'dateEffective' : $('input[name=dateEffective]').val(),
+							'description' : $('input[name=description]').val(),
+							'currentRate' : $('input[name=currentRate]').val(),
+						},
 
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								ertable.ajax.reload();
+								$("#rate").val("0.00");
+								$("#description").val("");
+								$('#erModal').modal('hide');
+								$('.modal-title').text('New Exchange Rate');
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record addded successfully")
+								$('#btnSave').removeAttr('disabled');
+								window.location.reload();
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+							}
+						},
 
-						if(typeof(data) === "object"){
-							ertable.ajax.reload();
-							$("#rate").val("0.00");
-							$("#description").val("");
-							$('#erModal').modal('hide');
+					})
+					$('#btnSave').removeAttr('disabled');
+				}
+				
+			}
+			else
+			{
 
+				if($('#dateEffective').valid()){
 
-							$('.modal-title').text('New Exchange Rate');
+					$('#btnSave').attr('disabled', 'true');
 
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/exchange_rate/' + data.id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'description' : $('input[name=description]').val(),
+							'rate' : rate_nocomma,
+							'dateEffective' : $('input[name=dateEffective]').val(),
+							'currentRate' : $('input[name=currentRate]').val(),
+						},
+						success: function (data)
+						{
+							window.location.reload();
 
 							toastr.options = {
 								"closeButton": false,
@@ -298,65 +355,17 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-							toastr["success"]("Record addded successfully")
-						}
-						else{
-							resetErrors();
-							var invdata = JSON.parse(data);
-							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v); 
-								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-							});
+							toastr["success"]("Record updated successfully")
 
+							ertable.ajax.reload();
+							$('#erModal').modal('hide');
+							$("#rate").val("0.00");
+							$("#description").val("");
+							$('.modal-title').text('New Exchange Rate');
 						}
-					},
-
-				})
-			}
-			else
-			{
-				$.ajax({
-					type: 'PUT',
-					url:  '/admin/exchange_rate/' + data.id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'description' : $('input[name=description]').val(),
-						'rate' : rate_nocomma,
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'currentRate' : $('input[name=currentRate]').val(),
-					},
-					success: function (data)
-					{
-						window.location.reload();
-						
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record updated successfully")
-
-						ertable.ajax.reload();
-						$('#erModal').modal('hide');
-						$("#rate").val("0.00");
-						$("#description").val("");
-						$('.modal-title').text('New Exchange Rate');
-					}
-				})
+					})
+				}
+				
 			}
 		});
 

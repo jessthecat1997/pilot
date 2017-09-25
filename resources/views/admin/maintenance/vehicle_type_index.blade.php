@@ -263,7 +263,6 @@
 						{
 							if(typeof(data) === "object"){
 								vtable.ajax.url( '{{ route("vt.data") }}' ).load();
-
 								$('#vtModal').modal('hide');
 								$('#description').val("");
 								$('.modal-title').text('New Vehicle Type');
@@ -293,7 +292,10 @@
 								$('#description').val("");
 								$('#btnSave').removeAttr('disabled');
 
-															}
+								//EDIT MOTO
+								//vtable.fnDatatable.ajax = "{{ route('vt.data') }}";
+								//vtable.ajax.reload();
+							}
 							else{
 								resetErrors();
 								var invdata = JSON.parse(data);

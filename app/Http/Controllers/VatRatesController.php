@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\VatRate;
-use App\Http\Request\StoreVatRate;
+use App\Http\Requests\StoreVatRate;
 
 class VatRatesController extends Controller
 {
 	public function index()
 	{
-		$vrs = \DB::select("SELECT * FROM vat_rates WHERE dateEffective < NOW() ORDER BY dateEffective");
+		$vrs = \DB::select("SELECT * FROM vat_rates WHERE deleted_at is NULL AND dateEffective < NOW() ORDER BY dateEffective");
 		$current = $vrs[count($vrs) -1 ];
 
 		\DB::update('UPDATE vat_rates SET currentRate = 0 WHERE id != ' . $current->id);
@@ -29,14 +29,14 @@ class VatRatesController extends Controller
 	}
 
 
-	public function store(Request $request)
+	public function store(StoreVatRate $request)
 	{
 
 		$vr = VatRate::create($request->all());
 		return $vr;
 	}
 
-	public function update(Request $request, $id)
+	public function update(StoreVatRate $request, $id)
 	{
 		$vat_rate = VatRate::findOrFail($id);
 		$vat_rate ->rate = $request->rate;

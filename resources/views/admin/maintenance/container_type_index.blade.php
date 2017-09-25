@@ -151,7 +151,8 @@
 				name:
 				{
 					required: true,
-					maxlength: 50,
+					
+
 				},
 				description:
 				{
@@ -179,7 +180,7 @@
 			resetErrors();
 			$('.modal-title').text('New Container Volume');
 			$('#description').val("");
-			$('#name').val("");
+			$('#name').val("0.00");
 			$('#maxWeight').val("");
 
 			$('#ctModal').modal('show');
@@ -266,7 +267,7 @@
 						url:  '/admin/container_type',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'name' : $('#name').val(),
+							'name' : $('#name').inputmask('unmaskedvalue'),
 							'description' : $('#description').val(),
 							'maxWeight' : $('#maxWeight').inputmask('unmaskedvalue'),
 
@@ -276,7 +277,7 @@
 							if(typeof(data) === "object"){
 								cttable.ajax.reload();
 								$('#ctModal').modal('hide');
-								$('#name').val("");
+								$('#name').val("0.00");
 								$('#description').val("");
 								$('#maxWeight').val("");
 
@@ -301,7 +302,7 @@
 									"showMethod": "fadeIn",
 									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record addded successfully");
+								toastr["success"]("Record added successfully");
 
 								$('#btnSave').removeAttr('disabled');
 
