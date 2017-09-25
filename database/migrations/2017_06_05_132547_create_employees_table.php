@@ -16,7 +16,7 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
             $table->string('firstName', 100);
-            $table->string('middleName', 100);
+            $table->string('middleName', 100)->nullable();
             $table->string('lastName', 100);
             $table->date('dob');
             $table->text('address')->nullable();

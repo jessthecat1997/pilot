@@ -1,11 +1,12 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Brokerage</h2>
+<hr>
 <div class="pull-right">
   <a href = "{{ route('brokerageOrder') }}" class = "btn btn-primary btn-md pull-right">New Brokerage Service Order</a>
 </div>
 <br/>
-<hr>
+<br/>
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-primary">
