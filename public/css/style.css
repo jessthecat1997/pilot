@@ -59,7 +59,7 @@
 }
 hr
 {
-	border-color:  #002B5C;
+	border-color:  #428bca;
 }
 .nav-tabs > li.active > a:focus
 {
@@ -73,7 +73,7 @@ hr
 }
 .buts
 {
-	background-color: #2ad4a5;
+	background-color: #428bca;
 	color:#fff;
 }
 #title
@@ -99,7 +99,7 @@ hr
 }
 .but
 {
-	background-color:  #23375B;
+	background-color:  #428bca;
 	color: #fff;
 }
 .but:focus
@@ -113,7 +113,7 @@ hr
 }
 h2
 {
-	border-left: 5px solid #23375B;
+	border-left: 3px solid #428bca;
 }
 #vert
 {

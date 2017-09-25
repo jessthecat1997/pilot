@@ -1,39 +1,43 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Contracts</h2>
+<hr>
 <div class="pull-right">
 	<a href="{{route('contracts.create')}}" role = "button" class = "btn but pull-right">Create New Contract</a>
 </div>
 <br/>
-<hr>
-<div class = "container-fluid">
-	<div  class = "row">
-		<div class = "panel default-panel">
-			<div class = "panel-body">
-				<table class = "table table-responsive table-striped" id = "contracts_table">
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of Contracts
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id="contracts_table">
 					<thead>
 						<tr>
-							<td >
+							<th>
 								Contract No.
-							</td>
-							<td>
+							</th>
+							<th>
 								Consignee
-							</td>
-							<td>
+							</th>
+							<th>
 								Date Effective
-							</td>
-							<td>
+							</th>
+							<th>
 								Termination Date
-							</td>
-							<td>
+							</th>
+							<th>
 								Status
-							</td>
-							<td>
+							</th>
+							<th>
 								Created At
-							</td>
-							<td>
+							</th>
+							<th>
 								Action
-							</td>
+							</th>
 						</tr>
 					</thead>
 				</table>
