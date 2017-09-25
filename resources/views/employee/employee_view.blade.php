@@ -74,7 +74,7 @@
                 <div class = "col-md-12">
                   @forelse($employee_role as $employee_roles)
                   <div class = "col-md-3" id = "employeeRoles">
-                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  >&nbsp;&nbsp;{{$employee_roles->name }}
+                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  />&nbsp;&nbsp;{{$employee_roles->name }} 
                   </div>
 
                   @php
@@ -121,13 +121,19 @@
                   @forelse($employee_incidents as $emp_inc)
                   <tr>
                     <td>
-                      {{ $emp_inc->date_opened }}
+                      {{ Carbon\Carbon::parse($emp_inc->date_opened)->format('F d, Y') }}
                     </td>
                     <td>
-                      {{ $emp_inc->date_closed }}
+                      @if($emp_inc->date_closed != null)
+                      {{ Carbon\Carbon::parse($emp_inc->date_closed)->format('F d, Y') }}
+                      @else
+                      Not set
+                      @endif
                     </td>
                     <td>
-                      <button class=""></button>
+                      <button class = 'btn btn-info view_incident' title = 'View'><span class = 'fa fa-eye'></span></button>
+                      <button class = 'btn btn-primary edit_incident' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+                      <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>
                     </td>
                   </tr>
                   @empty
@@ -146,7 +152,7 @@
 
               </div>
               <div class="col-md-4">
-                <button class="btn but btn-md" type="button" style="width: 100%;">New Accident</button>
+                <button class="btn but btn-md new_accident" type="button" style="width: 100%;">New Accident</button>
               </div>
             </div>
             <br />
@@ -166,53 +172,59 @@
                   </tr>
                 </thead>
                 <tbody>
-                   @forelse($employee_accidents as $emp_acc)
-                  <tr>
-                    <td>
-                      {{ $emp_inc->date_opened }}
-                    </td>
-                    <td>
-                      {{ $emp_inc->date_closed }}
-                    </td>
-                    <td>
-                      <button class=""></button>
-                    </td>
-                  </tr>
-                  @empty
+                 @forelse($employee_accidents as $emp_acc)
+                 <tr>
+                  <td>
+                    {{ Carbon\Carbon::parse($emp_acc->date_opened)->toFormattedDateString() }}
+                  </td>
+                  <td>
+                    @if($emp_acc->date_closed != null)
+                    {{ Carbon\Carbon::parse($emp_acc->date_closed)->format('F d, Y') }}
+                    @else
+                    Not set
+                    @endif
+                  </td>
+                  <td>
+                    <button class = 'btn btn-info view_accident' title = 'View'><span class = 'fa fa-eye'></span></button>
+                    <button class = 'btn btn-primary edit_accident' title = 'Edit'><span class = 'fa fa-edit'></span></button>
+                    <button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>
+                  </td>
+                </tr>
+                @empty
 
-                  @endforelse
-                </tbody>
-              </table>
-            </div>
+                @endforelse
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class = "col-md-12">
-        <form class = "">
-          {{ csrf_field() }}
+    <div class = "col-md-12">
+      <form class = "">
+        {{ csrf_field() }}
 
-        </form>
-      </div>
+      </form>
     </div>
   </div>
 </div>
+</div>
 @endsection
-@push('styles')
-<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<style>
- .employees
- {
+@push('styles')
+<style type="text/css">
+.employees
+{
   border-left: 10px solid #8ddfcc;
   background-color:rgba(128,128,128,0.1);
   color: #fff;
 }
 </style>
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
+
 @endpush
 
 @push('scripts')
-
 <script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -220,9 +232,40 @@
       e.preventDefault();
       window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/incidents/create";
     })
-    $('#incident_table').DataTable();
 
-    $('#accident_table').DataTable();
+    $(document).on('click', '.new_accident', function(e){
+      e.preventDefault();
+      window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/accidents/create";
+    })
+
+    $(document).on('click', '.view_incident', function(e){
+      e.preventDefault();
+      window.location.replace('');
+    })
+
+    $('#incident_table').DataTable({
+      processing: false,
+      serverSide: false,
+      deferRender: true,
+      columns: [
+      { data: 'name' },
+      { data: 'description' },
+      { data: 'action', orderable: false, searchable: false }
+
+      ],  "order": [[ 0, "asc" ]],
+    });
+
+    $('#accident_table').DataTable({
+     processing: false,
+     serverSide: false,
+     deferRender: true,
+     columns: [
+     { data: 'name' },
+     { data: 'description' },
+     { data: 'action', orderable: false, searchable: false }
+
+     ],  "order": [[ 0, "asc" ]],
+   });
   })
 </script>
 @endpush

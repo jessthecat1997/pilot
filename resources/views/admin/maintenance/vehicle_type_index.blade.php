@@ -13,7 +13,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped cell-border table-bordered" id = "vtype_table">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "vtype_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td>
@@ -126,6 +126,7 @@
 	$('#deliverycollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var data;
+	var vt_id;
 	var temp_name = null;
 	var temp_desc = null;
 	
@@ -192,7 +193,7 @@
 			$('#vtModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var vt_id = $(this).val();
+			vt_id = $(this).val();
 			data = vtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -203,7 +204,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/vehicletype/' + data.id,
+				url:  '/admin/vehicletype/' + vt_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
