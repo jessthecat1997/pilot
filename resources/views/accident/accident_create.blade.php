@@ -167,13 +167,12 @@
 		});
 
 		$('#incident_time').datetimepicker({
-			lang:'en',
 			datepicker:false,
 			mask: '29:59',
 			formatTime:'H:i',
 			format:'H:i',
 			step:5,
-			value: "{{ Carbon\Carbon::now()->format('H:i') }}",
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('H:i') }}",
 		})
 
 		$('#date_opened').datetimepicker({

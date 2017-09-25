@@ -3,7 +3,7 @@
 <div class="col-md-12">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h2>&nbsp;New Incident</h2>
+			<h4>&nbsp;New Incident</h4>
 		</div>
 		<div class="panel-body">
 			<form id = "commentForm">
@@ -160,8 +160,8 @@
 			formatTime:'H:i',
 			format:'H:i',
 			step:5,
-			value: "{{ Carbon\Carbon::now()->format('H:i') }}",
-			startDate:	"{{ Carbon\Carbon::now()->format('H:i') }}",
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('H:i') }}",
 		})
 
 		$('#date_opened').datetimepicker({

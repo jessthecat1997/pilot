@@ -16,7 +16,7 @@
 					List of Consignees
 				</div>
 				<div class="panel-body">
-					<table class = "table-responsive table" id="cs_table">
+					<table class = "table-responsive table table-striped " style="width: 100%;" id="cs_table">
 						<thead>
 							<tr>
 								<th width="20%">
@@ -258,9 +258,6 @@
 	$('#collapse1').addClass('in');
 	$(document).ready(function(){
 		var cstable = $('#cs_table').DataTable({			
-			responsive: true,
-			scrollX: true,
-			scrollX: "100%",
 			deferRender: true,
 			processing: false,
 			serverSide: false,
