@@ -10,7 +10,8 @@ class LclTypesController extends Controller
 {
     public function index()
     {
-        return view('admin/maintenance.lcl_type_index');
+        $lcl_type = \App\LclType::all();
+        return view('admin/maintenance.lcl_type_index', compact(['lcl_type']));
     }
 
 

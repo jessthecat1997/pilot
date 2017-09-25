@@ -26,6 +26,22 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($basis_type as $bt)
+						<tr>
+							<td>
+								{{ $bt->name }}
+							</td>
+							<td>
+								{{ $bt->abbreviation }}
+							</td>
+							<td>
+								<button value = "{{ $bt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $bt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -89,17 +105,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-bt-type{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-bt-type{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -108,13 +124,13 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
+	var bt_id;
 	$(document).ready(function(){
 		var bttable = $('#bt_table').DataTable({
 			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/btData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'abbreviation' },
@@ -135,13 +151,14 @@
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					regex: /^[A-Za-z ]+$/,
+					alphanumeric:true,
 
 				},
 
 				abbreviation:
 				{
 					required:true,
+					lettersonly:true,
 					maxlength: 5,
 				},
 
@@ -160,7 +177,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var bt_id = $(this).val();
+			bt_id = $(this).val();
 			data = bttable.row($(this).parents()).data();
 			$('#name').val(data.name);	
 			$('#abbreviation').val(data.abbreviation);
@@ -170,7 +187,7 @@
 			$('#btModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var bt_id = $(this).val();
+			bt_id = $(this).val();
 			data = bttable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -182,13 +199,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/basis_type/' + data.id,
+		url:  '/admin/basis_type/' + bt_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			bttable.ajax.reload();
+			bttable.ajax.url( '{{ route("bt.data") }}' ).load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -236,7 +253,7 @@ $('#btnSave').on('click', function(e){
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						bttable.ajax.reload();
+						bttable.ajax.url( '{{ route("bt.data") }}' ).load();
 						$('#btModal').modal('hide');
 						$('#abbreviation').val("");
 						$('.modal-title').text('New Basis Type');
@@ -300,7 +317,7 @@ $('#btnSave').on('click', function(e){
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/basis_type/' + data.id,
+					url:  '/admin/basis_type/' + bt_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -309,7 +326,7 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							bttable.ajax.reload();
+							bttable.ajax.url( '{{ route("bt.data") }}' ).load();
 							$('#btModal').modal('hide');
 							$('#abbreviation').val("");
 							$('.modal-title').text('New Basis Type');
