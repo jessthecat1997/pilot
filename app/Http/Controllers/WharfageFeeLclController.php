@@ -21,7 +21,10 @@ class WharfageFeeLclController extends Controller
   ->select('id', 'locations.name')
   ->where('deleted_at', '=', null)
   ->get();
-  return view('admin/maintenance.wharfage_lcl_index', compact(['basis_types','locations']));
+
+  $wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+  return view('admin/maintenance.wharfage_lcl_index', compact(['basis_types','locations','wharfages']));
 }
 
 
