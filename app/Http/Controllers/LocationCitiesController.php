@@ -7,17 +7,15 @@ use Illuminate\Support\Facades\DB;
 use App\LocationCities;
 use App\LocationProvince;
 use App\Http\Requests\StoreLocationCities;
+use App\Http\Requests\StoreLocationProvince;
 
 class LocationCitiesController extends Controller
 {
 	public function index()
 	{
-
-		$provinces = DB::table('location_provinces')
-		->select('name', 'id')
-		->where('deleted_at', '=', null)
-		->get();
-		return view('admin/maintenance.location_city_index', compact(['provinces']));
+		$cities =  \App\LocationCities::all();
+		$provinces =  \App\LocationProvince::all();
+		return view('admin/maintenance.location_city_index', compact(['provinces', 'cities']));
 	}
 
 	public function store(StoreLocationCities $request)
@@ -42,7 +40,7 @@ class LocationCitiesController extends Controller
 		
 	}
 
-	public function new_province(Request $request)
+	public function new_province(StoreLocationProvince $request)
 	{
 		$lp = LocationProvince::create($request->all());
         return $lp;

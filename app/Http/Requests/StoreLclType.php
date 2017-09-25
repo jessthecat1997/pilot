@@ -17,7 +17,7 @@ class StoreLclType extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:lcl_types,name',
             
             ];
 
@@ -26,7 +26,7 @@ class StoreLclType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name,'. $this->segment(3) ,
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:lcl_types,name,'. $this->segment(3) ,
             
             ];
 

@@ -22,8 +22,8 @@
 		<h2>&nbsp;Maintenance | Brokerage | Customs Documentary Stamp Fee</h2>
 		<hr>
 		<h5>Current CDS Fee: Php 
-			@if($cds_fee[0]->fee != null)
-			{{ number_format((float)$cds_fee[0]->fee, 2) }}
+			@if($cds_fee_current[0]->fee != null)
+			{{ number_format((float)$cds_fee_current[0]->fee, 2) }}
 			@else
 			0.000000
 			@endif
@@ -40,16 +40,32 @@
 					<thead>
 						<tr>
 							<td>
-								Fee
+								Date Effective
 							</td>
 							<td>
-								Date Effective
+								Fee
 							</td>
 							<td>
 								Actions
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($cds_fee as $cds)
+						<tr>
+							<td>
+								{{ $cds->dateEffective }}
+							</td>
+							<td>
+								{{ $cds->fee }}
+							</td>
+							<td>
+								<button value = "{{ $cds->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $cds->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -129,18 +145,19 @@
 	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var data;
+	var cds_id;
 	$(document).ready(function(){
 
 		var cdstable = $('#cds_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender:true,
-			ajax: 'http://localhost:8000/admin/cdsData',
 			columns: [
+			{ data: 'dateEffective' },
 			{ data: 'fee',
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },                              
-				{ data: 'dateEffective' },
+				
 				{ data: 'action', orderable: false, searchable: false }
 
 				],	"order": [[ 0, "desc" ]],
@@ -180,7 +197,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
+			 cds_id = $(this).val();
 			data = cdstable.row($(this).parents()).data();
 			$('#fee').val(data.fee);
 			$('#dateEffective').val(data.dateEffective);
@@ -188,7 +205,7 @@
 			$('#cdsModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
+			 cds_id = $(this).val();
 			data = cdstable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -197,13 +214,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/cds_fee/' + data.id,
+				url:  '/admin/cds_fee/' + cds_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					cdstable.ajax.reload();
+					cdstable.ajax.url('{{ route("cds.data") }}').load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -244,8 +261,6 @@
 			{
 				if ($('#dateEffective').valid()){
 
-					$('#btnSave').attr('disabled', 'true');
-
 					$.ajax({
 						type: 'POST',
 						url:  '/admin/cds_fee',
@@ -260,7 +275,7 @@
 
 
 							if(typeof(data) === "object"){
-								cdstable.ajax.reload();
+								cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
 								$('#cdsModal').modal('hide');
 								$('.modal-title').text('New CDS Fee');
 								$('#fee').val('');
@@ -303,10 +318,9 @@
 				}
 			}else{
 				if ($('#dateEffective').valid()){
-					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'PUT',
-						url:  '/admin/cds_fee/' + data.id,
+						url:  '/admin/cds_fee/' + cds_id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'fee' : fee_nocomma,
@@ -315,7 +329,7 @@
 						},
 						success: function (data)
 						{
-
+							cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
 							toastr.options = {
 								"closeButton": false,
 								"debug": false,
@@ -334,16 +348,13 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-							toastr["success"]("Record updated successfully")
-							$('#btnSave').removeAttr('disabled');
-							
-							cdstable.ajax.reload();
+							toastr["success"]("Record updated successfully")	
 							$('#cdsModal').modal('hide');
-							$('#fee').val("");
+							$('#fee').val("0.00");
 							$('#dateEffective').val("");
 							$('.modal-title').text('New CDS Fee');
 
-							window.location.reload();
+							//window.location.reload();
 						}
 					})
 

@@ -2,251 +2,247 @@
 @section('content')
 <h2>&nbsp;Consignee</h2>
 <hr>
-<div class = "container-fluid">
-	<div class = "row">
-		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-primary btn-md new-consignee" style = "width: 100%;">New Consignee</button>
-		</div>
-	</div>
-	<br />
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					List of Consignees
-				</div>
-				<div class="panel-body">
-					<table class = "table-responsive table table-striped " style="width: 100%;" id="cs_table">
-						<thead>
-							<tr>
-								<th width="20%">
-									Full Name
-								</th>
-								<th width="20%">
-									Company Name
-								</th>
-								<th width="20%">
-									Email
-								</th>
-								<th width="10%"> 
-									Contact Number
-								</th>
-								<th width="10%">
-									Created At
-								</th>
-								<th width="10%">
-									Actions
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
+<div class="pull-right">
+	<button  class="btn btn-primary btn-md new-consignee" style = "width: 100%;">Create New Consignee</button>
+</div>
+<br/>
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of Consignees
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table table-striped " style="width: 100%;" id="cs_table">
+					<thead>
+						<tr>
+							<th width="20%">
+								Full Name
+							</th>
+							<th width="20%">
+								Company Name
+							</th>
+							<th width="20%">
+								Email
+							</th>
+							<th width="10%"> 
+								Contact Number
+							</th>
+							<th width="10%">
+								Created At
+							</th>
+							<th width="10%">
+								Actions
+							</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
-	<div id="chModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
+</div>
+<div id="chModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
 
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Consignee Information</h4>
-				</div>
-				<div class="modal-body">	
-					<div class = "panel-default">
-						<div id="con_collapse" class="collapse in">
-							<ul class="nav nav-pills">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Consignee Information</h4>
+			</div>
+			<div class="modal-body">	
+				<div class = "panel-default">
+					<div id="con_collapse" class="collapse in">
+						<ul class="nav nav-pills">
 							<li class="active"><a data-toggle="pill" href="#new_con">Basic Information</a></li>
-								<li><a data-toggle="pill" href="#physical_address">Current Address</a></li>
-								<li><a data-toggle="pill" href="#billing_address">Billing Address</a></li>
-							</ul>
+							<li><a data-toggle="pill" href="#physical_address">Current Address</a></li>
+							<li><a data-toggle="pill" href="#billing_address">Billing Address</a></li>
+						</ul>
 
-							<div class="tab-content">
-								<div id="physical_address" class="tab-pane fade in ">
-									<br />
-									<div class = "form-horizontal">
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_address">Block/Lot/Street:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
-											</div>
+						<div class="tab-content">
+							<div id="physical_address" class="tab-pane fade in ">
+								<br />
+								<div class = "form-horizontal">
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_address">Block/Lot/Street:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_province">Province:</label>
-											<div class="col-sm-8">          
-												<select name = "phy_province" id="phy_province" class = "form-control">
-													<option value = '0'></option>
-													@forelse($provinces as $province)
-													<option value="{{ $province->id }}" >
-														{{ $province->name }}
-													</option>
-													@empty
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_province">Province:</label>
+										<div class="col-sm-8">          
+											<select name = "phy_province" id="phy_province" class = "form-control">
+												<option value = '0'></option>
+												@forelse($provinces as $province)
+												<option value="{{ $province->id }}" >
+													{{ $province->name }}
+												</option>
+												@empty
 
-													@endforelse
-												</select>     
-											</div>
+												@endforelse
+											</select>     
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_city">City:</label>
-											<div class="col-sm-8">          
-												<select name = "phy_city" id="phy_city" class = "form-control">
-													<option value="0"></option>
-												</select>
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_city">City:</label>
+										<div class="col-sm-8">          
+											<select name = "phy_city" id="phy_city" class = "form-control">
+												<option value="0"></option>
+											</select>
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
-											<div class="col-md-8">          
-												
-												<input type="checkbox" class = "checkbox same_billing_address">
-												
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+										<div class="col-md-8">          
+											
+											<input type="checkbox" class = "checkbox same_billing_address">
+											
 										</div>
 									</div>
 								</div>
-								<div id="billing_address" class="tab-pane fade in ">
-									<br />
-									<div class = "form-horizontal">
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
-											</div>
+							</div>
+							<div id="billing_address" class="tab-pane fade in ">
+								<br />
+								<div class = "form-horizontal">
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_province">Province:</label>
-											<div class="col-sm-8">
-												<select name = "bill_province" id="bill_province"  class = "form-control">
-													<option value = '0'></option>
-													@forelse($provinces as $province)
-													<option value="{{ $province->id }}">
-														{{ $province->name }}
-													</option>
-													@empty
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_province">Province:</label>
+										<div class="col-sm-8">
+											<select name = "bill_province" id="bill_province"  class = "form-control">
+												<option value = '0'></option>
+												@forelse($provinces as $province)
+												<option value="{{ $province->id }}">
+													{{ $province->name }}
+												</option>
+												@empty
 
-													@endforelse
-												</select>          
-											</div>
+												@endforelse
+											</select>          
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_city">City:</label>
-											<div class="col-sm-8">          
-												<select name = "bill_city" id="bill_city" class = "form-control">
-													<option value="0"></option>
-												</select>
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_city">City:</label>
+										<div class="col-sm-8">          
+											<select name = "bill_city" id="bill_city" class = "form-control">
+												<option value="0"></option>
+											</select>
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
 										</div>
 									</div>
 								</div>
-								<div id="new_con" class="tab-pane fade in active">
-									<br />
-									<form class="form-horizontal" role="form">
-										{{ csrf_field() }}
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="firstName">First Name:</label>
-											<div class="col-sm-6">
-												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
-											</div>
+							</div>
+							<div id="new_con" class="tab-pane fade in active">
+								<br />
+								<form class="form-horizontal" role="form">
+									{{ csrf_field() }}
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="firstName">First Name:</label>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
 										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-											</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="email">Email</label>
-											<div class="col-sm-6">          
-												<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="email">Email</label>
+										<div class="col-sm-6">          
+											<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
 										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="TIN">TIN:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="XXX-XXX-XXX-XXXXXX">
-											</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="TIN">TIN:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="XXX-XXX-XXX-XXXXXX">
 										</div>
+									</div>
 
-									</form>	
-								</div>
+								</form>	
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<button class = "btn btn-primary btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
-					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
-				</div>
+			</div>
+			<div class="modal-footer">
+				<button class = "btn btn-primary btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+				<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
 			</div>
 		</div>
 	</div>
-	<section class="content">
-		<form role = "form" method = "POST">
-			{{ csrf_field() }}
-			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Delete record
-						</div>
-						<div class="modal-body">
-							Confirm Deleting
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-						</div>
+</div>
+<section class="content">
+	<form role = "form" method = "POST">
+		{{ csrf_field() }}
+		{{ method_field('DELETE') }}
+		<div class="modal fade" id="confirm-delete" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Delete record
+					</div>
+					<div class="modal-body">
+						Confirm Deleting
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
 					</div>
 				</div>
 			</div>
-		</form>
-	</section>
-</div>
+		</div>
+	</form>
+</section>
 @endsection
-
 @push('styles')
 <style>
 	.consignee
 	{
-		border-left: 10px solid #8ffdcc;
+		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}

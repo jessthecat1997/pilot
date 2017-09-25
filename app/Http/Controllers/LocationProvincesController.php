@@ -9,7 +9,8 @@ class LocationProvincesController extends Controller
 {
 public function index()
     {
-        return view('admin/maintenance.location_province_index');
+          $provinces = \App\LocationProvince::all();
+        return view('admin/maintenance.location_province_index', compact(['provinces']));
     }
 
 

@@ -19,8 +19,8 @@ class StoreBasisType extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
-            'abbreviation' => 'max:5|required'
+            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:basis_types,name',
+            'abbreviation' => 'max:5|required|unique:basis_types,abbreviation'
             ];
 
             break;
@@ -28,8 +28,8 @@ class StoreBasisType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name,'. $this->segment(3) ,
-            'abbreviation' => 'max:5|required'
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:basis_types,name,'. $this->segment(3) ,
+            'abbreviation' => 'max:5|required|unique:basis_types,name'
             ];
 
             break;

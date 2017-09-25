@@ -10,7 +10,8 @@ class BasisTypeController extends Controller
 {
     public function index()
     {
-        return view('admin/maintenance.basis_type_index');
+         $basis_type = \App\VehicleType::all();
+        return view('admin/maintenance.basis_type_index', compact(['basis_type']));
     }
 
 
