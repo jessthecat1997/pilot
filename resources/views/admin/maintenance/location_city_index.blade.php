@@ -26,6 +26,23 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($cities as $ct)
+						<tr>
+							<td>
+								{{ $ct->province }}
+							</td>
+							<td>
+								{{ $ct->city }}
+							</td>
+							<td>
+								<button value = "{{ $ct->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $ct->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -40,7 +57,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">New City</h4>
+						<h4 id="cModal-title">New City</h4>
 					</div>
 					<div class="modal-body ">		
 						<div class="form-group required">
@@ -147,26 +164,17 @@
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
 	$('#collapse2').addClass('in');
-	var city_id = [];
-	var city_id_descrp = [];
-	var arr_provinces =[
-	@forelse($provinces as $province)
-	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
-	@empty
-	@endforelse
-	];
-
-
+	var temp_city;
+	var lc_id;
 
 	$(document).ready(function(){
-		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
+
 
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/lcData',
 			columns: [
 
 			{ data: 'province' },
@@ -223,6 +231,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
+			$('#cModal-title').text('New City');
 			$('#lcModal').modal('show');
 
 		});
@@ -230,47 +239,20 @@
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			e.preventDefault();
-			var lc_id = $(this).val();
+			lc_id = $(this).val();
 			data = lctable.row($(this).parents()).data();
-
-			console.log("this is  " + data.province);
-
-			
+			console.log(data.province);
+			$('#cModal-title').text('Update City');
+			$("#loc_province option:contains(" + data.province +")").attr("selected", true);
 			$('#city').val(data.city);
 			$('#lcModal').modal('show');
 		});
 
 		$(document).on('click', '.deactivate', function(e){
-			var lc_id = $(this).val();
+			lc_id = $(this).val();
 			data = lctable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
-
-
-		$(document).on('click', '.delete-lc-row', function(e){
-			e.preventDefault();
-			$('#lc_warning').removeClass('in');
-			if($('#lc_parent_table > tbody > tr').length == 1){
-				$('#lc_table_warning').addClass('fade in');
-			}
-			else{
-				$(this).closest('tr').remove();
-			}
-		})
-
-		$(document).on('click', '.new-lc-row', function(e){
-			e.preventDefault();
-			$('#lc_table_warning').removeClass('fade in');
-			if(validatelcRows() === true){
-
-				$('#lc_parent_table').append(lc_row);
-
-				
-			}
-			
-
-		})
-
 
 
 		$(document).on('click', '.new_province', function(e){
@@ -293,12 +275,8 @@
 				},
 				success: function (data)
 				{
-
-					$('#mySelect').append($('<option selected>', {value: data.id,text: data.name
-					}));
-					console.log ("latest is "+$latest);
-
-
+					var newOption = $('<option selected value="'+data.id+'">'+data.name+'</option>');
+					$('#loc_province').append(newOption);
 					if(typeof(data) === "object"){
 						$('#lpModal').modal('hide');
 						$('#name').val("");
@@ -322,7 +300,7 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record added successfully")
+						toastr["success"]("Record added new province")
 					}
 					else{
 						resetErrors();
@@ -339,20 +317,17 @@
 			})
 		});
 
-
-
-
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/location_city/' + data.id,
+				url:  '/admin/location_city/' + lc_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					lctable.ajax.reload();
+					lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -380,9 +355,9 @@
 
 		$(document).on('click', '.finalize-lc', function(e){
 			e.preventDefault();
-
-			if(finalvalidatelcRows() === true){
-				
+			var title = $('#cModal-title').text();
+			console.log(title);
+			if(title === "New City"){
 				$.ajax({
 
 					type: 'POST',
@@ -396,7 +371,7 @@
 
 					success: function (data){
 
-						lctable.ajax.reload();
+						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 						$('#lcModal').modal('hide');
 						$('.modal-title').text('New City');
 						$('#city').val("");
@@ -419,169 +394,63 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record addded successfully")
+						toastr["success"]("Record added successfully");
+
+					}
+				})
+			}else{
+
+				$.ajax({
+
+					type: 'PUT',
+					url:  '/admin/location_city/' +lc_id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#city').val(),
+						'provinces_id' : $('#loc_province').val(),
+
+					},
+
+					success: function (data){
+
+						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
+						$('#lcModal').modal('hide');
+						$('.modal-title').text('New City');
+						$('#city').val("");
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Record updated successfully");
 
 					}
 				})
 
-			}
-		});
 
-	});
-
-
-
-
-
-
-function validatelcRows()
-{
-
-	city_id = [];
-	city_id_descrp = [];
-
-
-	range_pairs = [];
-	
-	city =  document.getElementsByName('city');
-	
-	error = "";
-
-	
-
-	for(var i = 0; i < city.length; i++){
-		var temp;
-
-
-
-
-		if(city[i].value === "")
-		{
-			city[i].style.borderColor = 'red';
-			error += "City Required.";
-		}
-
-		else
-		{
-			city[i].style.borderColor = 'green';
-			city_id_descrp.push(city[i].value);
-			city_id.push(city[i].value);
-		}
-
-		
-		pair = {
-			city: city[i].value,
-		};
-		range_pairs.push(pair);
-	}
-	var i, j, n;
-	found= false;
-	n=range_pairs.length;
-
-	for (i=0; i<n; i++) {                        
-		for (j=i+1; j<n; j++)
-		{              
-			if (range_pairs[i].city === range_pairs[j].city){
-				found = true;
-				
-				city[j].style.borderColor = 'red';
-				
-			}
-		}	
-	}
-	if(found == true){
-		error+= "Existing rate.";
-	}
-
-		//Final validation
-		if(error.length == 0){
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
-
-	}
-
-	function finalvalidatelcRows()
-	{
-		city_id = [];
-		city_id_descrp = [];
-		
-		range_pairs = [];
-
-		city = document.getElementsByName('city');
-		
-		error = "";
-		console.log("select is " + $('#loc_province').val());
-		if($('#loc_province').val() == ""){
-
-			document.getElementById("loc_province").style.borderColor = "red";
-			error += "Province is required.";
-
-		}else{
-			document.getElementById("loc_province").style.borderColor = "green";
-
-		}
-
-		for(var i = 0; i < city.length; i++){
-
-
-			if(city[i].value === "")
-			{
-
-				error += "city is Required.";
-				$('#lc_warning').addClass('in');
 			}
 
-			else
-			{
+		});//submit
 
-				city_id_descrp.push(city[i].value);
-				var min = city[i].value
-				city_id.push(city[i].value);
-			}
-			
-			pair = {
-				city: city[i].value,
-				
-			};
-			range_pairs.push(pair);
-		}
-		var i, j, n;
-		found= false;
-		n=range_pairs.length;
-		for (i=0; i<n; i++) {                        
-			for (j=i+1; j<n; j++)
-			{              
-				if (range_pairs[i].city === range_pairs[j].city ){
-					found = true;
-					
-					city[i].style.borderColor = 'red';
+	});//end
 
-
-					city[j].style.borderColor = 'red';
-				}
-			}	
+		function resetErrors() {
+			$('form input, form select').removeClass('inputTxtError');
+			$('label.error').remove();
 		}
-		if(found == true){
-			error+= "Existing city.";
-			$('#lc_warning').addClass('in');
-		}
-
-		if(error.length == 0){
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
-</script>
-@endpush
+	</script>
+	@endpush

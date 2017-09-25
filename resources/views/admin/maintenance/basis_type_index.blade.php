@@ -36,7 +36,8 @@
 								{{ $bt->abbreviation }}
 							</td>
 							<td>
-								<button value = "{{ $bt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $bt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<button value = "{{ $bt->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $bt->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 							</td>
 						</tr>
 						@empty
