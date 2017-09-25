@@ -13,7 +13,7 @@ class LocationCitiesController extends Controller
 {
 	public function index()
 	{
-		$cities =  \App\LocationCities::all();
+		$cities =   DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
 		$provinces =  \App\LocationProvince::all();
 		return view('admin/maintenance.location_city_index', compact(['provinces', 'cities']));
 	}

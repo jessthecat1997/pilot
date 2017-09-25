@@ -195,6 +195,7 @@
                  <tr>
                   <td>
                     {{ $emp_acc->id }}
+                    <input type="hidden" value="{{ $emp_acc->id }}" class="accident">
                   </td>
                   <td>
                     {{ Carbon\Carbon::parse($emp_acc->date_opened)->toFormattedDateString() }}
@@ -267,9 +268,20 @@
       e.preventDefault();
       window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/incidents/" + $(this).closest('tr').find('.incident').val() + "/edit");
     })
+
+    $(document).on('click', '.edit_accident', function(e){
+      e.preventDefault();
+      window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/accidents/" + $(this).closest('tr').find('.accident').val() + "/edit");
+    })
+
     $(document).on('click', '.view_incident', function(e){
       e.preventDefault();
       window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/incidents/" + $(this).closest('tr').find('.incident').val());
+    })
+
+    $(document).on('click', '.view_accident', function(e){
+      e.preventDefault();
+      window.location.replace("{{ route('employees.index') }}/{{ $employee->id }}/accidents/" + $(this).closest('tr').find('.accident').val());
     })
 
     $('#incident_table').DataTable({
