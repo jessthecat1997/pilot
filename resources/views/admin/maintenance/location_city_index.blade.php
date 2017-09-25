@@ -100,7 +100,7 @@
 							<select name = "loc_province_update" id="loc_province_update" class = "form-control required select2_province">
 							</select>     
 						</div>
-						<div class = "form-group">
+						<div class = "col-md-3 col-md-offset-3">
 							<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
 							<br>
 						</div>			

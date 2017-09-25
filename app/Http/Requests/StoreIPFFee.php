@@ -20,6 +20,7 @@ class StoreIPFFee extends FormRequest
         'minimum' => 'required|',
         'maximum' => 'required|',
         'amount' => 'required',
+        'dateEffective' = > 'required|date'
         ];
     }
 

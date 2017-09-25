@@ -58,7 +58,7 @@
 							</div>
 							<div class="form-group required">
 								<label class = "control-label" >Charge Type: &nbsp;</label>
-								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" value="R">Bill</label>
+								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" checked = "checked" value="R">Bill</label>
 								<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Refundable</label>
 							</div>
 							<div class="form-group" >
@@ -69,61 +69,51 @@
 									<br/>
 								</div>
 								<div class="form-group required">
-									<div id = "type0" class = "chargeValue">
-										<label class = "control-label">Amount: </label>
-										<div class = "form-group input-group " >
-											<span class = "input-group-addon">Php</span>
-											<input type = "text" class = "form-control money" name = "amount_fixed" id = "amount_fixed" data-rule-required="true" value= "0.00"/>
-										</div>
-									</div>
-									<div id = "type1" class = "chargeValue">
-										<label class = "control-label">Rate: </label>
-										<div class = "form-group input-group " >
-
-											<input type = "text" value= "0" class = "form-control" name = "amount_rate" id = "amount_rate" data-rule-required="true"  style="text-align: right"/>
-											<span class = "input-group-addon">%</span>
-										</div>
+									
+									<label class = "control-label">Amount: </label>
+									<div class = "form-group input-group " >
+										<span class = "input-group-addon">Php</span>
+										<input type = "text" class = "form-control money" name = "amount" id = "amount" data-rule-required="true" value= "0.00"/>
 									</div>
 								</div>
+								<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 							</div>
-							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
-						</div>
-						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	</section>
-	<section class="content">
-		<form role = "form" method = "POST">
-			{{ csrf_field() }}
-			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Deactivate record
-						</div>
-						<div class="modal-body">
-							Confirm Deactivating
-						</div>
-						<div class="modal-footer">
-							
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<div class="modal-footer">
+								<input id = "btnSave" type = "submit" class="btn btn-success" value = "Save" />
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
-	</section>
-</div>
-@endsection
-@push('styles')
-<style>
+			</form>
+		</section>
+		<section class="content">
+			<form role = "form" method = "POST">
+				{{ csrf_field() }}
+				{{ method_field('DELETE') }}
+				<div class="modal fade" id="confirm-delete" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								Deactivate record
+							</div>
+							<div class="modal-body">
+								Confirm Deactivating
+							</div>
+							<div class="modal-footer">
+
+								<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+	@endsection
+	@push('styles')
+	<style>
 	.class-charges{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
@@ -188,12 +178,7 @@
 				return "Refundable";
 			}
 
-		} 
-
-		$('#amount_rate').inputmask(
-
-			'Regex', { regex: "^[0-9][0-9]?$|^100$" 
-		});
+		}
 
 		jQuery.validator.addMethod("notEqual", function(value, element, param) {
 			return this.optional(element) || value != param;
@@ -223,16 +208,11 @@
 					regex: /^[A-Za-z0-9'-.,  ]+$/,
 				},
 
-				amount_fixed:
+				amount:
 				{
-					notEqual:"0.00",
+					required:true,
 
 				},
-				amount_rate:
-				{
-					notEqual: "0"
-				},
-
 			},
 			onkeyup: function(element) {$(element).valid()}, 
 		});
@@ -240,30 +220,13 @@
 
 
 
-		$("input[name$='chargeType']").click(function() {
-			var choice = $(this).val();
-			$("div.chargeValue").hide();
-			$("#type" + choice).show();
-		});
-
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			$('.modal-title').text('New Charge');
-			if(  $('input[name=chargeType]:checked').val() == 0){
-				$('#type1').hide();
-				$('#type0').show();
-				$('#amount_fixed').val("0.00");
-
-			}else{
-				$('#type0').hide();
-				$('#type1').show();
-				$('#amount_rate').val("0");
-			}
+			$('#amount').val("0.00");
 			$('#name').val("");
 			$('#description').val("");
-			
-			
 			$('#chModal').modal('show');
 
 		});
@@ -273,18 +236,6 @@
 			data = chtable.row($(this).parents()).data();
 			$('#description').val(data.description);
 			$('#name').val(data.name);
-			$("[name=chargeType]").val([data.chargeType]);
-
-
-			if(  $('input[name=chargeType]:checked').val() == 0){
-				$('#type1').hide();
-				$('#type0').show();
-				$('#amount_fixed').val(data.amount);
-			}else{
-				$('#type0').hide();
-				$('#type1').show();
-				$('#amount_rate').val(data.amount);
-			}
 			temp_chargeType = data.chargeType;
 			temp_name = data.name;
 			temp_desc = data.description;
@@ -343,16 +294,12 @@
 			var exp = "E";
 			$('#name').valid();
 			$('#description').valid();
-			$('#amount_rate').valid();
-			$('#amount_fixed').valid();
+			$('#amount').valid();
 
 			var final_amount;
-			if(  $('input[name=chargeType]:checked').val() == 0){
-				final_amount = $('#amount_fixed').inputmask('unmaskedvalue');
-			}else{
-				final_amount = $('#amount_rate').inputmask('unmaskedvalue');
-			}
-
+			
+				final_amount = $('#amount').inputmask('unmaskedvalue');
+			
 			if(title == "New Charge")
 			{
 				var ele = document.getElementsByName('b_type');
@@ -516,8 +463,7 @@
 						console.log("yey");
 						$('#name').val("");
 						$('#description').val("");
-						$('#amount_rate').val("0");
-						$('#amount_fixed').val("0.00");
+						$('#amount').val("0.00");
 						$('#btnSave').removeAttr('disabled');
 						$('#chModal').modal('hide');
 					}

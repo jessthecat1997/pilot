@@ -19,10 +19,30 @@ class StoreVatRate extends FormRequest
      */
     public function rules()
     {
-        return [
-        'fee' => 'required|numeric',
-        'dateEffective' => 'required|unique:vat_rates',
-        ];
+       switch ($this->method()) {
+            case 'POST':
+
+            return [
+
+            'rate' => 'required|numeric|between:0,1000000',
+            'dateEffective' => 'required|date|unique:vat_rates,dateEffective',
+
+            ];
+            break;
+            
+            case 'PUT':
+
+            return [
+
+            'rate' => 'required|numeric|between:0,1000000',
+            'dateEffective' => 'required|date|unique:vat_rates,dateEffective,' . $this->segment(3),
+
+            ];
+
+            break;
+            
+            default: break;
+        }
     }
 
     public function response(array $errors)

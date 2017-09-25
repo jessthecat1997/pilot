@@ -51,7 +51,7 @@
 						<div class="modal-body">			
 
 							<div class="form-group required">
-								<label class = "control-label">rate</label>
+								<label class = "control-label">Rate</label>
 								<div class = "form-group input-group " >
 									<input type = "number" class = "form-control percentage" name = "rate" id = "rate"  data-rule-required="true" max="100" value="0.00" style="text-align: right" />
 									<span class = "input-group-addon">%</span>
@@ -236,6 +236,8 @@
 			if(title == "New VAT Rate")
 			{
 				if($('#rate').valid() && $('#dateEffective').valid()){
+					$('#btnSave').attr('disabled', 'true');
+
 					$.ajax({
 						type: 'POST',
 						url:  '{{ route("vat_rate.store") }}',
@@ -278,6 +280,7 @@
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]("Record added successfully");
+								$('#btnSave').removeAttr('disabled');
 								window.location.reload();
 							}else{
 
@@ -302,6 +305,7 @@
 			{
 				if($('#rate').valid() && $('#dateEffective').valid()){
 
+					$('#btnSave').attr('disabled', 'true');
 
 					$.ajax({
 						type: 'PUT',
@@ -341,6 +345,7 @@
 							$('#rate').val("");
 							$('#dateEffective').val("");
 							$('.modal-title').text('New vr rate');
+							$('#btnSave').removeAttr('disabled');
 							window.location.reload();
 						}
 					})

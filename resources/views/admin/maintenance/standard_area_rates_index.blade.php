@@ -651,9 +651,9 @@
 				var title = $('.sarModal-title').text();
 				console.log("hihiho" + title);
 				if(title == "New Standard Area Rate")
-				{
+				{	
 					console.log("new new new");
-
+					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'POST',
 						url:  '/admin/standard_arearates',
@@ -699,14 +699,14 @@
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]("Record addded successfully")
-
+							$('#btnSave').removeAttr('disabled');
 						}
 					})
 				}
 				else
 				{
 					if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
-					{
+					{	$('#btnSave').attr('disabled', 'true');
 
 						if($('#pickup_id').val() === temp_pickup_id &&
 							$('#deliver_id').val() === temp_deliver_id && 
@@ -766,7 +766,7 @@
 										}
 										toastr["success"]("Record updated successfully")
 
-
+										
 										$('#btnSave').removeAttr('disabled');
 
 

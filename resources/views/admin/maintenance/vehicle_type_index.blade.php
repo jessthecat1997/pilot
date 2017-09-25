@@ -209,7 +209,7 @@
 				},
 				success: function (data)
 				{
-					vtable.ajax.reload();
+					vtable.ajax.url( '{{ route("vt.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -261,7 +261,7 @@
 						success: function (data)
 						{
 							if(typeof(data) === "object"){
-								vtable.ajax.reload();
+								vtable.ajax.url( '{{ route("vt.data") }}' ).load();
 								$('#vtModal').modal('hide');
 								$('#description').val("");
 								$('.modal-title').text('New Vehicle Type');
@@ -292,8 +292,8 @@
 								$('#btnSave').removeAttr('disabled');
 
 								//EDIT MOTO
-								vtable.fnDatatable.ajax = "{{ route('vt.data') }}";
-								vtable.ajax.reload();
+								//vtable.fnDatatable.ajax = "{{ route('vt.data') }}";
+								//vtable.ajax.reload();
 							}
 							else{
 								resetErrors();
@@ -337,7 +337,7 @@
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-									vtable.ajax.reload();
+									vtable.ajax.url( '{{ route("vt.data") }}' ).load();
 									$('#vtModal').modal('hide');
 									$('#description').val("");
 									$('.modal-title').text('New Vehicle Type');
