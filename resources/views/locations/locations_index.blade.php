@@ -49,12 +49,12 @@
 						<h4 class="modal-title">New Location</h4>
 					</div>
 					<div class="modal-body">
-						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+						<form id="commentForm" class = "form-horizontal">
 							{{ csrf_field() }}	
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"  data-rule-required="true" />
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3" required data-rule-required="true" />
 								</div>
 							</div>
 							<div class="form-group required">
@@ -67,11 +67,11 @@
 								<label class = "control-label col-md-3">Province: </label>
 								<div class = "col-md-9">
 									<select name = "loc_province" id="loc_province" class = "form-control"  data-rule-required="true">
-									@forelse($provinces as $province)
-									<option value = "{{ $province->id }}">{{ $province->name }}</option>
-									@empty
+										@forelse($provinces as $province)
+										<option value = "{{ $province->id }}">{{ $province->name }}</option>
+										@empty
 
-									@endforelse
+										@endforelse
 									</select>     
 								</div>
 							</div>
@@ -127,12 +127,12 @@
 
 @push('styles')
 <style>
-	.location
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.location
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -185,17 +185,7 @@
 						return $.trim(value)
 					},	
 
-				},
-				zipCode:
-				{
-					required: true,
-					minlength: 4,
-					maxlength: 4,
-				},
-				cities_id:
-				{
-					required:true,
-				},
+				}
 
 			},onkeyup: function(element) {$(element).valid()}, 
 
@@ -225,67 +215,79 @@
 			if($('#zipCode').valid() && $('#name').valid() && $('#address').valid() && $('#cities_id').valid()){
 				if($('.modal-title').text() == "New Location"){
 
-				$.ajax({
-					type: 'POST',
-					url: "{{ route('location.index')}}",
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('#name').val(),
-						'address' : $('#address').val(),
-						'cities_id' : $('#cities_id').val(),
-						'zipCode' : $('#zipCode').val(),
-					},
-					success: function(data){
-						if(typeof(data) == "object"){
-							$('#chModal').modal('hide');
-							chtable.ajax.reload();
+					$.ajax({
+						type: 'POST',
+						url: "{{ route('location.index')}}",
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'address' : $('#address').val(),
+							'cities_id' : $('#cities_id').val(),
+							'zipCode' : $('#zipCode').val(),
+						},
+						success: function(data){
+							if(typeof(data) == "object"){
+								$('#chModal').modal('hide');
+								chtable.ajax.reload();
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+								});
+								$('#btnSave').removeAttr('disabled');
+							}
+						},
+						error: function(data) {
+							if(data.status == 400){
+								alert("Nothing found");
+							}
 						}
-						else{
-							resetErrors();
-							var invdata = JSON.parse(data);
-							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v);
-								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+					})
+				}
+				else{
+					$.ajax({
+						type: 'PUT',
+						url: "{{ route('location.index')}}/" + location_id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#name').val(),
+							'address' : $('#address').val(),
+							'cities_id' : $('#cities_id').val(),
+							'zipCode' : $('#zipCode').val(),
+						},
+						success: function(data){
+							if(typeof(data) == "object"){
+								$('#chModal').modal('hide');
+								chtable.ajax.reload();
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
 
-							});
-							$('#btnSave').removeAttr('disabled');
+								});
+								$('#btnSave').removeAttr('disabled');
+							}
+
+						},
+						error: function(data) {
+							if(data.status == 400){
+								alert("Nothing found");
+							}
 						}
-						
+					})
 
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
-			}
-			else{
-				$.ajax({
-					type: 'PUT',
-					url: "{{ route('location.index')}}/" + location_id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('#name').val(),
-						'address' : $('#address').val(),
-						'cities_id' : $('#	').val(),
-						'zipCode' : $('#zipCode').val(),
-					},
-					success: function(data){
-						$('#chModal').modal('hide');
-						chtable.ajax.reload();
-
-					},
-					error: function(data) {
-						if(data.status == 400){
-							alert("Nothing found");
-						}
-					}
-				})
-
-			}
+				}
 			}
 			
 		})

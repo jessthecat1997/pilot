@@ -144,7 +144,7 @@ class TruckingsController extends Controller
         $delivery = DB::table('delivery_receipt_headers')
         ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
         ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
         ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
         ->join('location_cities AS F', 'E.cities_id', '=','F.id')
         ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
@@ -178,16 +178,15 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.withContainer',
             'delivery_receipt_headers.amount'
             )
-
         ->get();
         
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')
             ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
-            ->where('del_head_id', '=', $request->delivery_id)
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier')    
             ->get();
         }
+
 
         else{
             $container_with_detail = [];

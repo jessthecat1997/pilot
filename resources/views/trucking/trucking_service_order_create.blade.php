@@ -523,7 +523,7 @@
 		{
 			error = "";
 			if(consigneeID == null || consigneeID == 0){
-				error += "No selected consignee";
+				error += "No selected consignee.\n";
 				$('#consignee_id').css('border-color', 'red');
 			}
 			else{
@@ -540,12 +540,14 @@
 				return true;
 			}
 			else{
+				console.log(error);
 				return false;
 			}
 		}
 
 		
 		$(document).on('click', '.create-trucking-so', function(e){
+			$('.create-trucking-so').attr('disabled', 'true');
 			if(validateOrder() == true){
 
 				$.ajax({
@@ -566,6 +568,9 @@
 						}
 					}
 				})
+			}
+			else{
+				$('.create-trucking-so').removeAttr('disabled');
 			}
 		})
 		function validateConsignee()

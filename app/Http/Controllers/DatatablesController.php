@@ -255,7 +255,8 @@ class DatatablesController extends Controller
 			<input type = "hidden" value = "'. $consignee->email .'" class = "email" />
 			<input type = "hidden" value = "'. $consignee->contactNumber .'" class = "contactNumber" />
 			<input type = "hidden" value = "'. $consignee->businessStyle .'" class = "businessStyle" />
-			<input type = "hidden" value = "'. $consignee->TIN .'" class = "TIN" />'
+			<input type = "hidden" value = "'. $consignee->TIN .'" class = "TIN" />
+			<input type = "hidden" value = "'. $consignee->id . '" class = "consignees_id" />'
 			;
 		})
 		->editColumn('consigneeType', function($consignee){

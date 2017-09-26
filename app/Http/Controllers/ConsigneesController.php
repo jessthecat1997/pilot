@@ -79,23 +79,57 @@ class ConsigneesController extends Controller
 
 	}
 
-	public function update(StoreConsignee $request, $id)
+	public function update(Request $request, $id)
 	{
-		$consignee = Consignee::findOrFail($id);
-		$consignee->firstName = $request->firstName;
-		$consignee->middleName = $request->middleName;
-		$consignee->lastName = $request->lastName;
-		$consignee->companyName = $request->companyName;
-		$consignee->email = $request->email;
-		$consignee->address = $request->address;
-		$consignee->contactNumber = $request->contactNumber;
-		$consignee->consigneeType = $request->consigneeType;
-		$consignee->businessStyle = $request->businessStyle;
-		$consignee->TIN = $request->TIN;
 
-		$consignee->save();
+		if($request->same_billing_address == "true"){
+			$consignee = Consignee::findOrFail($id);
 
-		return $consignee;
+			$consignee->firstName  = $request->firstName;
+			$consignee->middleName = $request->middleName;
+			$consignee->lastName = $request->lastName;
+			$consignee->companyName = $request->companyName;
+			$consignee->email = $request->email;
+			$consignee->contactNumber = $request->contactNumber;
+			$consignee->businessStyle = $request->businessStyle;
+			$consignee->TIN = $request->TIN;
+			$consignee->address = $request->address;
+			$consignee->city = $request->city;
+			$consignee->st_prov = $request->st_prov;
+			$consignee->zip = $request->zip;
+			$consignee->b_address = $request->address;
+			$consignee->b_city = $request->city;
+			$consignee->b_st_prov = $request->st_prov;
+			$consignee->b_zip = $request->zip;
+
+			$consignee->save();
+			
+			return $consignee;
+		}
+		else
+		{
+			$consignee = Consignee::findOrFail($id);
+			$consignee->firstName  = $request->firstName;
+			$consignee->middleName = $request->middleName;
+			$consignee->lastName = $request->lastName;
+			$consignee->companyName = $request->companyName;
+			$consignee->email = $request->email;
+			$consignee->contactNumber = $request->contactNumber;
+			$consignee->businessStyle = $request->businessStyle;
+			$consignee->TIN = $request->TIN;
+			$consignee->address = $request->address;
+			$consignee->city = $request->city;
+			$consignee->st_prov = $request->st_prov;
+			$consignee->zip = $request->zip;
+			$consignee->b_address = $request->address;
+			$consignee->b_city = $request->city;
+			$consignee->b_st_prov = $request->st_prov;
+			$consignee->b_zip = $request->zip;
+
+			$consignee->save();
+
+			return $consignee;
+		}
 	}
 
 
