@@ -186,6 +186,7 @@
 		});
 
 		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
 			var value = $('.money').inputmask('unmaskedvalue');
 			if (event.keyCode == 8) {
 				if(parseFloat(value) == 0 || value == ""){
@@ -226,7 +227,7 @@
 			$.ajax({
 				type: 'GET',
 				url: "{{ route('get_prov_cities')}}/" + $('#loc_province').val(),
-				data: {
+				data: {5
 					'_token' : $('input[name=_token]').val(),
 				},
 				success: function(data){

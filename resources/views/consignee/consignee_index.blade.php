@@ -216,7 +216,7 @@
 	</form>
 </div>
 <section class="content">
-	<form role = "form" method = "POST">
+	<form method = "POST">
 		{{ csrf_field() }}
 		{{ method_field('DELETE') }}
 		<div class="modal fade" id="confirm-delete" role="dialog">
@@ -387,7 +387,41 @@
 			e.preventDefault();
 			$('.modal-title').text('Consignee Information');
 			$('#chModal').modal('show');
+			$('#firstName').val("");
+			$('#middleName').val("");
+			$('#lastName').val("");
+			$('#companyName').val("");
+			$('#email').val("");
+			$('#address').val("");
+			$('#contactNumber').val("");
+			$('#TIN').val("");
+			$('#businessStyle').val("");
+			$('#phy_address').val("");
+		})
 
+		$(document).on('click', '.deactivate', function(e){
+			e.preventDefault();
+			selected_consignee = $(this).closest('tr').find('.consignees_id').val();
+			$('#confirm-delete').modal('show');
+		})
+
+		$(document).on('click', '#btnDelete', function(e){
+			e.preventDefault();
+			$('#btnDelete').attr('disabled', 'true');
+			$.ajax({
+				type: 'DELETE',
+				url: "{{ route('consignee.index') }}/" + selected_consignee,
+				data:
+				{
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data)
+				{
+					$('#confirm-delete').modal('hide');
+					$('#btnDelete').removeAttr('disabled');
+					cstable.ajax.reload();
+				}
+			})
 		})
 
 		$(document).on('click', '.edit', function(e){
@@ -412,10 +446,12 @@
 
 
 			selected_consignee = $(this).closest('tr').find('.consignees_id').val();
+			
 		})
 
 		$(document).on('click', '.save-consignee-information', function(e){
 			e.preventDefault();
+			$('.save-consignee-information').attr('disabled', 'true');
 			$('#firstName').valid();
 			$('#lastName').valid();
 			$('#email').valid();
@@ -423,7 +459,7 @@
 			$('#companyName').valid();
 			$('#businessStyle').valid();
 			$('#TIN').valid();
-			
+
 			var checked = $('.same_billing_address').is(":checked");
 			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid())
 			{
@@ -457,9 +493,6 @@
 								'b_zip' : $('#bill_zip').val(),
 
 								'same_billing_address' : checked,
-
-
-
 							},
 							success: function (data) {
 								console.log(data);
@@ -494,7 +527,11 @@
 									$('#contactNumber').val("");
 									$('#TIN').val("");
 									$('#businessStyle').val("");
-								}	
+
+
+									$('.save-consignee-information').removeAttr('disabled');	
+
+								}
 							}
 						})
 					}
@@ -560,7 +597,10 @@
 									$('#contactNumber').val("");
 									$('#TIN').val("");
 									$('#businessStyle').val("");
-								}	
+
+
+									$('.save-consignee-information').removeAttr('disabled');	
+								}
 							}
 						})	
 					}

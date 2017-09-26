@@ -137,6 +137,8 @@ class ConsigneesController extends Controller
 	{
 		$consignee = Consignee::findOrFail($id);
 		$consignee->delete();
+
+		return $consignee;
 	
 	}
 
