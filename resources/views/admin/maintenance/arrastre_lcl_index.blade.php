@@ -30,7 +30,7 @@
 							<td>
 								Arrastre Fee Amount
 							</td>
-							
+
 							<td>
 								Actions
 							</td>
@@ -78,7 +78,7 @@
 							</div>
 						</div>
 						<div class = "panel panel-default">
-							<div  ">
+							<div>
 								<div class = "panel-default">
 									{{ csrf_field() }}
 									<form id = "Arrastre_form" class = "commentForm">
@@ -105,36 +105,36 @@
 															<label class = "control-label"><strong>Action</strong></label>
 														</div>
 													</td>
-													
-													
+
+
 												</tr>
 											</thead>
 											<tr id = "wf-row">
 												<td width = "20%">
 
 													<div class = "form-group " >
-														
+
 														<select class = "form-control" id = "lcl_type" name="lcl_type" >
 															@forelse($lcl_types as $lcl_type)
 															<option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
 															@empty
 															@endforelse
 														</select>
-														
+
 													</div>
 
 												</td>
 												<td width = "20%">
 
 													<div class = "form-group " >
-														
+
 														<select class = "form-control" id = "basis_type" name="basis_type" >
 															@forelse($basis_types as $basis_type)
 															<option value = "{{ $basis_type->id }}">{{ $basis_type->abbreviation }}</option>
 															@empty
 															@endforelse
 														</select>
-														
+
 													</div>
 
 												</td>
@@ -149,7 +149,7 @@
 												<td width = "10%" style="text-align: center;">
 													<button class = "btn btn-danger btn-md delete-wf-row">x</button>
 												</td>
-												
+
 											</tr>
 										</table>
 										<div class = "form-group" style = "margin-left:10px">
@@ -158,7 +158,7 @@
 											<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 										</div>
 									</div>
-								</div>					
+								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -226,7 +226,7 @@
 	var arr_basis_type_id = [];
 	var arr_lcl_type_id = [];
 
-	
+
 	$(document).ready(function(){
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
@@ -256,7 +256,7 @@
 			"render": function(data, type, row){
 				return data.split(",").join("<br/>");}
 			},
-			
+
 			{ data: 'action', orderable: false, searchable: false }
 			],	"order": [[ 0, "desc" ]],
 		});
@@ -332,9 +332,9 @@
 			data = wftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
-		
-		
-		
+
+
+
 		$(document).on('keypress', '.amount_valid', function(e){
 			$(".amount_valid").each(function(){
 				try{
@@ -473,7 +473,7 @@
 							}
 						})
 					}
-					
+
 				}else{
 
 
@@ -534,8 +534,8 @@
 
 
 					}
-					
-					
+
+
 
 				}
 			}
@@ -548,7 +548,7 @@ function validatewfRows()
 	basis_type_id = [];
 	amount_value = [];
 	range_pairs = [];
-	
+
 	lcl_type = document.getElementsByName('lcl_type');
 	basis_type = document.getElementsByName('basis_type');
 	amount = document.getElementsByName('amount');
@@ -574,7 +574,7 @@ function validatewfRows()
 			$('#wf_warning').removeClass('in');
 
 		}
-		
+
 		if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
 		{
 			amount[i].style.borderColor = 'red';
@@ -592,7 +592,7 @@ function validatewfRows()
 				$('#wf_warning').removeClass('in');
 			}
 		}
-		
+
 		pair = {
 			amount: amount[i].value,
 			basis_type: basis_type[i].value,
@@ -707,7 +707,7 @@ function validatewfRows()
 				}
 			}
 		}
-		
+
 		if(error.length == 0){
 			tblLength = basis_type.length;
 			return true;
