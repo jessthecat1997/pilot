@@ -1013,7 +1013,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($cds){
 			return
 			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button><input type = "hidden" value = "'. '{{ Carbon\Carbon::parse($cds->dateEffective)->toFormattedDateString() }}' .'" class = "dateEffective" />'
+			;
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
