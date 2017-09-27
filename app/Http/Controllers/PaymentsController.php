@@ -41,6 +41,8 @@ class PaymentsController extends Controller
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 
+		return $pays;
+
 		$so_head_id = $id;
 
 		$paid = DB::table('payments')

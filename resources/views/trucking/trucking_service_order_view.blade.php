@@ -205,7 +205,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -259,7 +259,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
+				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -361,9 +361,9 @@
 					<div class = "col-md-12">
 						<div class="form-horizontal">
 							<div class = "col-md-12">
-								<div class = "form-group">
+								<div class = "form-group required">
 
-									<label class = "control-label col-md-3">Name *</label>
+									<label class = "control-label col-md-3">Name</label>
 									<div class = "col-md-9">
 										<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
 											<option value = "0">Select Charges</option>
@@ -387,8 +387,8 @@
 								</div>
 							</div>
 							<div class = "col-md-12">
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Amount *</label>
+								<div class = "form-group required">
+									<label class = "control-label col-md-3">Amount</label>
 									<div class = "col-md-9">
 										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control money" required style="text-align: right"  data-rule-required="true" value="0.00">
 									</div>

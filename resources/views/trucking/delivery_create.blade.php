@@ -675,6 +675,8 @@
 		});
 
 
+
+
 		$.datetimepicker.setLocale('en');
 		$('#pickdatecon').datetimepicker({
 			mask:'9999/19/39',
@@ -727,6 +729,7 @@
 			$('#loc_city').valid();
 
 			if($('#zip').valid() && $('#name').valid() && $('#address').valid() && $('#loc_city').valid()){
+				$('.btnSave').attr('disabled', 'true');
 				$.ajax({
 					type: 'POST',
 					url: "{{ route('location.index')}}",
@@ -769,6 +772,7 @@
 								$('#loc_province').val("0");
 								$('#zip').val("");
 								$('#chModal').modal('hide');
+								$('.btnSave').removeAttr('disabled');
 							}
 						}
 						else{
@@ -791,6 +795,9 @@
 						}
 					}
 				})
+			}
+			else{
+				$('.btnSave').removeAttr('disabled');
 			}
 		})
 
