@@ -319,16 +319,20 @@
 
 		$(document).on('click', '.edit', function(e){
 			e.preventDefault();
-			location_id = $(this).closest('tr').find('.location_id').val();
+			location_id = $(this).val();
+
 			console.log(location_id);
 			$('.modal-title').text("Update Location");
+
 			var data = chtable.row($(this).parents()).data();
+
 			$('#name').val(data.location_name);
 			$('#address').val(data.location_address);
 			$('#zipCode').val(data.zipCode);
-			$('#loc_province').val($(this).closest('tr').find('.province_id').val());
-			fill_cities($(this).closest('tr').find('.city_id').val());
-			
+			$("#loc_province option:contains(" + data.province_name +")").attr("selected", true);
+			fill_cities(data.city_id);
+			$("#cities_id option:contains(" + data.city_name +")").attr("selected", true);
+			console.log(data.city_id);
 			$('#chModal').modal('show');
 		})
 
