@@ -719,30 +719,38 @@
   </div>
 </section>
 
-<!-- Confirm Save -->
-<section class="content">
-  <div class="modal fade" id="ProcessedByModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Processed By</h4>
-        </div>
-        <div class="modal-body">
-          <form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-            {{ csrf_field() }}
-            <label class="control-label col-sm-4" for="noOfDeliveries" >Processed by:</label>
-            <div class="col-sm-6">
-              <select name = "processedBy" id = "processedBy" class = "form-control" required data-msg="Select a Processor">
-                <option value = "0"></option>
-                @forelse($employees as $employee)
-                <option value = "{{ $employee->id }}">
-                  {{ $employee->lastName . ", " . $employee->firstName }}
-                </option>
-                @empty
+  <!-- Confirm Save -->
+        <section class="content">
+          <div class="modal fade" id="ProcessedByModal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Processed By</h4>
+                </div>
+                <div class="modal-body">
+                  <form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+                    {{ csrf_field() }}
+                    <label class="control-label col-sm-4" for="noOfDeliveries" >Processed by:</label>
+                    <div class="col-sm-6">
+                      <select name = "processedBy" id = "processedBy" class = "form-control" required data-msg="Select a Processor">
+                        <option value = "0"></option>
+                        @forelse($employees as $employee)
+                        <option value = "{{ $employee->id }}">
+                          {{ $employee->lastName . ", " . $employee->firstName }}
+                        </option>
+                        @empty
 
-                @endforelse
-              </select>
+                        @endforelse
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type = "submit" class="btn btn-success" id = "brokerageBtn" >Save</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+              </div>
             </div>
           </form>
         </div>
@@ -800,28 +808,28 @@
   var gross_weights = [];
 	var lcl_types = [];
 
-  $(document).ready(function(){
+	$(document).ready(function(){
 
 
 
-    $('#exitPrompt').on('click', function(e){
-     $('#brokerage_warning').removeClass('in');
-   });
+		$('#exitPrompt').on('click', function(e){
+			$('#brokerage_warning').removeClass('in');
+		});
 
-    $('#consignee_id').select2();
+		$('#consignee_id').select2();
 
-    $('#expectedArrivalDate').datepicker({
-      onSelect: function(value, ui) {
+		$('#expectedArrivalDate').datepicker({
+		    onSelect: function(value, ui) {
 
-      },
-      minDate: 0,
-      changeMonth: true,
-      changeYear: true
-    });
+		    },
+		    minDate: 0,
+		    changeMonth: true,
+		    changeYear: true
+		});
 
-    $('#arrivalDateButton').click(function () {
-     $('#expectedArrivalDate').datepicker('show');
-   });
+		$('#arrivalDateButton').click(function () {
+		 $('#expectedArrivalDate').datepicker('show');
+		 });
 
 
     $(document).on('click', '.pick_add_new_location', function(e){
@@ -832,474 +840,474 @@
       e.preventDefault();
     })
 
-    $(document).on('change', '#consignee_id', function(e){
-     consigneeID = $('#consignee_id').val();
-     if($('#consignee_id').val() != 0){
-      $.ajax({
-       type: 'GET',
-       url: "{{ route('consignee.index')}}/" + $('#consignee_id').val() + "/getConsignee",
-       data: {
-        '_token' : $('input[name=_token]').val(),
-      },
-      success: function(data){
-        if(typeof(data) == "object"){
-         console.log(data);
-         $('#_cfirstName').val(data[0].firstName);
-         $('#_cmidddleName').val(data[0].middleName);
-         $('#_clastName').val(data[0].lastName);
-         $('#_ccontactNumber').val(data[0].contactNumber);
-         $('#_cemail').val(data[0].email);
-         $('#_ccompanyName').val(data[0].companyName);
-         $('#_cbusinessStyle').val(data[0].businessStyle);
-         $('#_cTIN').val(data[0].TIN);
-       }
-     },
-     error: function(data) {
-      if(data.status == 400){
-       alert("Nothing found");
-     }
-   }
- })
-    }
-    else
-    {
-      $('#_cfirstName').val("");
-      $('#_cmidddleName').val("");
-      $('#_clastName').val("");
-      $('#_ccontactNumber').val("");
-      $('#_cemail').val("");
-      $('#_ccompanyName').val("");
-      $('#_cbusinessStyle').val("");
-      $('#_cTIN').val("");
-    }
-  })
+		$(document).on('change', '#consignee_id', function(e){
+			consigneeID = $('#consignee_id').val();
+			if($('#consignee_id').val() != 0){
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('consignee.index')}}/" + $('#consignee_id').val() + "/getConsignee",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							console.log(data);
+							$('#_cfirstName').val(data[0].firstName);
+							$('#_cmidddleName').val(data[0].middleName);
+							$('#_clastName').val(data[0].lastName);
+							$('#_ccontactNumber').val(data[0].contactNumber);
+							$('#_cemail').val(data[0].email);
+							$('#_ccompanyName').val(data[0].companyName);
+							$('#_cbusinessStyle').val(data[0].businessStyle);
+							$('#_cTIN').val(data[0].TIN);
+						}
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
+					}
+				})
+			}
+			else
+			{
+				$('#_cfirstName').val("");
+				$('#_cmidddleName').val("");
+				$('#_clastName').val("");
+				$('#_ccontactNumber').val("");
+				$('#_cemail').val("");
+				$('#_ccompanyName').val("");
+				$('#_cbusinessStyle').val("");
+				$('#_cTIN').val("");
+			}
+		})
 
-    $(document).on('click', '.add_new_consignee', function(e){
-     e.preventDefault();
-     $('#chModal').modal('show');
-   })
+		$(document).on('click', '.add_new_consignee', function(e){
+			e.preventDefault();
+			$('#chModal').modal('show');
+		})
 
-    $(document).on('change', '#phy_province', function(e){
+		$(document).on('change', '#phy_province', function(e){
 
-     $.ajax({
-      type: 'GET',
-      url: "{{ route('get_prov_cities')}}/" + $('#phy_province').val(),
-      data: {
-       '_token' : $('input[name=_token]').val(),
-     },
-     success: function(data){
-       if(typeof(data) == "object"){
-        console.log(data);
-        var new_rows = "<option value = '0'></option>";
-        for(var i = 0; i < data.length; i++){
-         new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
-       }
-       $('#phy_city').find('option').not(':first').remove();
-       $('#phy_city').html(new_rows);
-     }
-   },
-   error: function(data) {
-     if(data.status == 400){
-      alert("Nothing found");
-    }
-  }
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#phy_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#phy_city').find('option').not(':first').remove();
+						$('#phy_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '#bill_province', function(e){
+
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_prov_cities')}}/" + $('#bill_province').val(),
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+					if(typeof(data) == "object"){
+						console.log(data);
+						var new_rows = "<option value = '0'></option>";
+						for(var i = 0; i < data.length; i++){
+							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+						}
+						$('#bill_city').find('option').not(':first').remove();
+						$('#bill_city').html(new_rows);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		})
+
+		$(document).on('change', '.same_billing_address', function(e){
+			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
+			if(checked == true){
+				$('#bill_address').attr('disabled', 'true');
+				$('#bill_address').val("");
+				$('#bill_zip').val("");
+				$('#bill_zip').attr('disabled', 'true');
+				$('#bill_city').attr('disabled', 'true');
+				$('#bill_province').attr('disabled', 'true');
+			}
+			else{
+				$('#bill_province').val("");
+				$('#bill_city').val("");
+				$('#bill_address').removeAttr('disabled');
+				$('#bill_province').removeAttr('disabled');
+				$('#bill_city').removeAttr('disabled');
+				$('#bill_zip').removeAttr('disabled');
+			}
+
+		})
+
+		$(document).on('click', '.new-consignee', function(e){
+			e.preventDefault();
+			$('#chModal').modal('show');
+
+		})
+
+		$(document).on('click', '.save-consignee-information', function(e){
+			e.preventDefault();
+			var checked = $('.same_billing_address').is(":checked");
+
+			if(validateConsignee() == true){
+
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("consignee.index") }}',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'firstName' : $('#firstName').val(),
+						'middleName' : $('#middleName').val(),
+						'lastName' : $('#lastName').val(),
+						'companyName' : $('#companyName').val(),
+						'email' : $('#email').val(),
+						'contactNumber' : $('#contactNumber').val(),
+						'businessStyle' : $('#businessStyle').val(),
+						'TIN' : $('#TIN').val(),
+
+						'address' : $('#phy_address').val(),
+						'city' : $('#phy_city option:selected').text(),
+						'st_prov' : $('#phy_province option:selected').text(),
+						'zip' : $('#phy_zip').val(),
+
+						'b_address' : $('#bill_address').val(),
+						'b_city' : $('#bill_city option:selected').text(),
+						'b_st_prov' : $('#bill_province option:selected').text(),
+						'b_zip' : $('#bill_zip').val(),
+
+						'same_billing_address' : checked,
+
+
+
+					},
+					success: function (data) {
+						console.log(data);
+						if(typeof(data) == "object"){
+							consigneeID = data.id;
+							$('#chModal').modal('hide');
+							$('#collapse_1').removeClass('in');
+							$('#collapse_2').addClass('in');
+							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
+							$('#_companyName').val($('#companyName').val());
+
+							$('#_email').val($('#email').val());
+							$('#_contactNumber').val($('#contactNumber').val());
+
+							$('#firstName').val("");
+							$('#middleName').val("");
+							$('#lastName').val("");
+							$('#companyName').val("");
+							$('#email').val("");
+							$('#address').val("");
+							$('#contactNumber').val("");
+							$('#TIN').val("");
+							$('#businessStyle').val("");
+
+
+							$('#_cfirstName').val(data.firstName);
+							$('#_cmidddleName').val(data.middleName);
+							$('#_clastName').val(data.lastName);
+							$('#_ccontactNumber').val(data.contactNumber);
+							$('#_cemail').val(data.email);
+							$('#_ccompanyName').val(data.companyName);
+							$('#_cbusinessStyle').val(data.businessStyle);
+							$('#_cTIN').val(data.TIN);
+						}
+					}
+				})
+			}
+		})
+
+		function validateOrder()
+		{
+			error = "";
+			if(consigneeID == null || consigneeID == 0){
+				error += "No selected consignee";
+				$('#consignee_id').css('border-color', 'red');
+			}
+			else{
+				$('#consignee_id').css('border-color', 'green');
+			}
+			if($('#processedBy').val() == "0"){
+				error += "No processedBy";
+				$('#processedBy').css('border-color', 'red');
+			}
+			else{
+				$('#processedBy').css('border-color', 'green');
+			}
+			if(error.length == 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
+
+
+		function validateConsignee()
+		{
+			var error = "";
+			if($('#firstName').val() === ""){
+				$('#firstName').css('border-color', 'red');
+				error += "First name is required. \n";
+			}
+			else
+			{
+				$('#firstName').css('border-color', 'green');
+			}
+			if($('#middleName').val() === ""){
+				$('#middleName').css('border-color', 'green');
+			}
+			else
+			{
+				$('#middleName').css('border-color', 'green');
+			}
+			if($('#lastName').val() === ""){
+				$('#lastName').css('border-color', 'red');
+				error += "Last name is required.\n";
+			}
+			else
+			{
+				$('#lastName').css('border-color', 'green');
+			}
+
+			if($('#companyName').val() === ""){
+				$('#companyName').css('border-color', 'red');
+				error += "Company name is required.\n";
+			}
+			else
+			{
+				$('#companyName').css('border-color', 'green');
+			}
+
+			if($('#businessStyle').val() === ""){
+				$('#businessStyle').css('border-color', 'red');
+				error += "Business Style is required.\n";
+			}
+			else
+			{
+				$('#businessStyle').css('border-color', 'green');
+			}
+
+			if($('#TIN').val() === ""){
+				$('#TIN').css('border-color', 'red');
+				error += "TIN is required.\n";
+			}
+			else
+			{
+				$('#TIN').css('border-color', 'green');
+			}
+			if($('#email').val() === ""){
+				$('#email').css('border-color', 'red');
+				error += "Email is required.\n";
+			}
+			else
+			{
+				$('#email').css('border-color', 'green');
+			}
+			if($('#contactNumber').val() === ""){
+				$('#contactNumber').css('border-color', 'red');
+				error += "Contact Number is required.\n";
+			}
+			else
+			{
+				$('#contactNumber').css('border-color', 'green');
+			}
+			console.log(error);
+			if(error.length == 0){
+
+				return true;
+			}
+			else{
+				return false;
+			}
+
+		}
+	})
+
+	$(document).on('change', '#deliver_id', function(e){
+		deliver_id = $(this).val();
+		selected_to = $(this).val();
+		if(deliver_id != 0)
+		{
+			$.ajax({
+				type: 'GET',
+				url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function(data){
+
+					if(typeof(data) == "object"){
+						$('#_daddress').val(data[0].address);
+						$('#_dcity').val(data[0].city_name);
+						$('#_dprovince').val(data[0].province_name);
+						$('#_dzip').val(data[0].zipCode);
+					}
+				},
+				error: function(data) {
+					if(data.status == 400){
+						alert("Nothing found");
+					}
+				}
+			})
+		}
+		else{
+			$('#_daddress').val("");
+			$('#_dcity').val("");
+			$('#_dprovince').val("");
+			$('#_dzip').val("");
+		}
+		if(selected_from != 0 && selected_to != 0){
+			$.ajax({
+				type: 'GET',
+				url: '{{ route("get_area_rate") }}',
+				data: {
+					'area_from' : selected_from,
+					'area_to' : selected_to,
+				},
+				success : function(data) {
+					if(data.length == 0){
+						$('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
+						$('#deliveryFee').val("0.00");
+					}
+					else{
+						$('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
+						$('#deliveryFee').val(data[0].amount);
+					}
+				}
+			})
+		}
+		if(selected_from == 0 || selected_to == 0)
+		{
+			$('#deliveryFee').val("0.00");
+			$('#standard_rate').html("");
+		};
+
+	})
+
+	$(document).on('change', '#loc_province', function(e){
+		fill_cities(0);
+	})
+
+	$(document).on('click', '.btnSave', function(e){
+
+		e.preventDefault();
+		$.ajax({
+			type: 'POST',
+			url: "{{ route('location.index')}}",
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'name' : $('#name').val(),
+				'address' : $('#address').val(),
+				'cities_id' : $('#loc_city').val(),
+				'zipCode' : $('#zip').val(),
+			},
+			success: function(data){
+
+				if(selected_location == 0){
+					$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+					$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+					$('#pickup_id').val(data.id);
+
+					$('#_address').val($('#address').val());
+					$('#_city').val($('#loc_city option:selected').text());
+					$('#_province').val($('#loc_province option:selected').text().trim());
+					$('#_zip').val($('#zip').val());
+
+					$('#address').val("");
+					$('#loc_city').val("0");
+					$('#loc_province').val("0");
+					$('#zip').val("");
+					$('#LocationModal').modal('hide');
+				}
+				else{
+					$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+					$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+					$('#deliver_id').val(data.id);
+					$('#_daddress').val($('#address').val());
+					$('#_dcity').val($('#loc_city option:selected').text());
+					$('#_dprovince').val($('#loc_province option:selected').text().trim());
+					$('#_dzip').val($('#zip').val());
+
+					$('#address').val("");
+					$('#loc_city').val("0");
+					$('#loc_province').val("0");
+					$('#zip').val("");
+					$('#LocationModal').modal('hide');
+				}
+
+			$('#LocationModal').modal('hide');
+
+			},
+			error: function(data) {
+				if(data.status == 400){
+					alert("Nothing found");
+				}
+			}
+		})
 })
-   })
+	function clear_location(){
+		$('#address').val("");
+		$('#loc_city').val("0");
+		$('#loc_province').val("0");
+		$('#zip').val("");
+	}
 
-    $(document).on('change', '#bill_province', function(e){
+	function fill_cities(num)
+	{
+		console.log(num);
+		$.ajax({
+			type: 'GET',
+			url: "{{ route('get_prov_cities')}}/" + $('#loc_province').val(),
+			data: {
+				'_token' : $('input[name=_token]').val(),
+			},
+			success: function(data){
+				if(typeof(data) == "object"){
 
-     $.ajax({
-      type: 'GET',
-      url: "{{ route('get_prov_cities')}}/" + $('#bill_province').val(),
-      data: {
-       '_token' : $('input[name=_token]').val(),
-     },
-     success: function(data){
-       if(typeof(data) == "object"){
-        console.log(data);
-        var new_rows = "<option value = '0'></option>";
-        for(var i = 0; i < data.length; i++){
-         new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
-       }
-       $('#bill_city').find('option').not(':first').remove();
-       $('#bill_city').html(new_rows);
-     }
-   },
-   error: function(data) {
-     if(data.status == 400){
-      alert("Nothing found");
-    }
-  }
-})
-   })
+					var new_rows = "<option value = '0'></option>";
+					for(var i = 0; i < data.length; i++){
+						new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+					}
+					$('#loc_city').find('option').not(':first').remove();
+					$('#loc_city').html(new_rows);
 
-    $(document).on('change', '.same_billing_address', function(e){
-     e.preventDefault();
-     var checked = $('.same_billing_address').is(":checked");
-     if(checked == true){
-      $('#bill_address').attr('disabled', 'true');
-      $('#bill_address').val("");
-      $('#bill_zip').val("");
-      $('#bill_zip').attr('disabled', 'true');
-      $('#bill_city').attr('disabled', 'true');
-      $('#bill_province').attr('disabled', 'true');
-    }
-    else{
-      $('#bill_province').val("");
-      $('#bill_city').val("");
-      $('#bill_address').removeAttr('disabled');
-      $('#bill_province').removeAttr('disabled');
-      $('#bill_city').removeAttr('disabled');
-      $('#bill_zip').removeAttr('disabled');
-    }
-
-  })
-
-    $(document).on('click', '.new-consignee', function(e){
-     e.preventDefault();
-     $('#chModal').modal('show');
-
-   })
-
-    $(document).on('click', '.save-consignee-information', function(e){
-     e.preventDefault();
-     var checked = $('.same_billing_address').is(":checked");
-
-     if(validateConsignee() == true){
-
-      $.ajax({
-       type: 'POST',
-       url: '{{ route("consignee.index") }}',
-       data: {
-        '_token' : $('input[name=_token]').val(),
-        'firstName' : $('#firstName').val(),
-        'middleName' : $('#middleName').val(),
-        'lastName' : $('#lastName').val(),
-        'companyName' : $('#companyName').val(),
-        'email' : $('#email').val(),
-        'contactNumber' : $('#contactNumber').val(),
-        'businessStyle' : $('#businessStyle').val(),
-        'TIN' : $('#TIN').val(),
-
-        'address' : $('#phy_address').val(),
-        'city' : $('#phy_city option:selected').text(),
-        'st_prov' : $('#phy_province option:selected').text(),
-        'zip' : $('#phy_zip').val(),
-
-        'b_address' : $('#bill_address').val(),
-        'b_city' : $('#bill_city option:selected').text(),
-        'b_st_prov' : $('#bill_province option:selected').text(),
-        'b_zip' : $('#bill_zip').val(),
-
-        'same_billing_address' : checked,
-
-
-
-      },
-      success: function (data) {
-        console.log(data);
-        if(typeof(data) == "object"){
-         consigneeID = data.id;
-         $('#chModal').modal('hide');
-         $('#collapse_1').removeClass('in');
-         $('#collapse_2').addClass('in');
-         $('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
-         $('#_companyName').val($('#companyName').val());
-
-         $('#_email').val($('#email').val());
-         $('#_contactNumber').val($('#contactNumber').val());
-
-         $('#firstName').val("");
-         $('#middleName').val("");
-         $('#lastName').val("");
-         $('#companyName').val("");
-         $('#email').val("");
-         $('#address').val("");
-         $('#contactNumber').val("");
-         $('#TIN').val("");
-         $('#businessStyle').val("");
-
-
-         $('#_cfirstName').val(data.firstName);
-         $('#_cmidddleName').val(data.middleName);
-         $('#_clastName').val(data.lastName);
-         $('#_ccontactNumber').val(data.contactNumber);
-         $('#_cemail').val(data.email);
-         $('#_ccompanyName').val(data.companyName);
-         $('#_cbusinessStyle').val(data.businessStyle);
-         $('#_cTIN').val(data.TIN);
-       }
-     }
-   })
-    }
-  })
-
-    function validateOrder()
-    {
-     error = "";
-     if(consigneeID == null || consigneeID == 0){
-      error += "No selected consignee";
-      $('#consignee_id').css('border-color', 'red');
-    }
-    else{
-      $('#consignee_id').css('border-color', 'green');
-    }
-    if($('#processedBy').val() == "0"){
-      error += "No processedBy";
-      $('#processedBy').css('border-color', 'red');
-    }
-    else{
-      $('#processedBy').css('border-color', 'green');
-    }
-    if(error.length == 0){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-
-
-  function validateConsignee()
-  {
-   var error = "";
-   if($('#firstName').val() === ""){
-    $('#firstName').css('border-color', 'red');
-    error += "First name is required. \n";
-  }
-  else
-  {
-    $('#firstName').css('border-color', 'green');
-  }
-  if($('#middleName').val() === ""){
-    $('#middleName').css('border-color', 'green');
-  }
-  else
-  {
-    $('#middleName').css('border-color', 'green');
-  }
-  if($('#lastName').val() === ""){
-    $('#lastName').css('border-color', 'red');
-    error += "Last name is required.\n";
-  }
-  else
-  {
-    $('#lastName').css('border-color', 'green');
-  }
-
-  if($('#companyName').val() === ""){
-    $('#companyName').css('border-color', 'red');
-    error += "Company name is required.\n";
-  }
-  else
-  {
-    $('#companyName').css('border-color', 'green');
-  }
-
-  if($('#businessStyle').val() === ""){
-    $('#businessStyle').css('border-color', 'red');
-    error += "Business Style is required.\n";
-  }
-  else
-  {
-    $('#businessStyle').css('border-color', 'green');
-  }
-
-  if($('#TIN').val() === ""){
-    $('#TIN').css('border-color', 'red');
-    error += "TIN is required.\n";
-  }
-  else
-  {
-    $('#TIN').css('border-color', 'green');
-  }
-  if($('#email').val() === ""){
-    $('#email').css('border-color', 'red');
-    error += "Email is required.\n";
-  }
-  else
-  {
-    $('#email').css('border-color', 'green');
-  }
-  if($('#contactNumber').val() === ""){
-    $('#contactNumber').css('border-color', 'red');
-    error += "Contact Number is required.\n";
-  }
-  else
-  {
-    $('#contactNumber').css('border-color', 'green');
-  }
-  console.log(error);
-  if(error.length == 0){
-
-    return true;
-  }
-  else{
-    return false;
-  }
-
-}
-})
-
-$(document).on('change', '#deliver_id', function(e){
-  deliver_id = $(this).val();
-  selected_to = $(this).val();
-  if(deliver_id != 0)
-  {
-   $.ajax({
-    type: 'GET',
-    url: '{{ route("location.index") }}/' + deliver_id + '/getLocation',
-    data: {
-     '_token' : $('input[name=_token]').val(),
-   },
-   success: function(data){
-
-     if(typeof(data) == "object"){
-      $('#_daddress').val(data[0].address);
-      $('#_dcity').val(data[0].city_name);
-      $('#_dprovince').val(data[0].province_name);
-      $('#_dzip').val(data[0].zipCode);
-    }
-  },
-  error: function(data) {
-   if(data.status == 400){
-    alert("Nothing found");
-  }
-}
-})
- }
- else{
-   $('#_daddress').val("");
-   $('#_dcity').val("");
-   $('#_dprovince').val("");
-   $('#_dzip').val("");
- }
- if(selected_from != 0 && selected_to != 0){
-   $.ajax({
-    type: 'GET',
-    url: '{{ route("get_area_rate") }}',
-    data: {
-     'area_from' : selected_from,
-     'area_to' : selected_to,
-   },
-   success : function(data) {
-     if(data.length == 0){
-      $('#standard_rate').html('No set standard rate for <strong>' + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "<strong>");
-      $('#deliveryFee').val("0.00");
-    }
-    else{
-      $('#standard_rate').html("<strong>" + $('#pickup_id :selected').text() + "</strong> to <strong>" + $('#deliver_id :selected').text() + "</strong> : <strong>Php " + data[0].amount + "</strong>");
-      $('#deliveryFee').val(data[0].amount);
-    }
-  }
-})
- }
- if(selected_from == 0 || selected_to == 0)
- {
-   $('#deliveryFee').val("0.00");
-   $('#standard_rate').html("");
- };
-
-})
-
-$(document).on('change', '#loc_province', function(e){
-  fill_cities(0);
-})
-
-$(document).on('click', '.btnSave', function(e){
-
-  e.preventDefault();
-  $.ajax({
-   type: 'POST',
-   url: "{{ route('location.index')}}",
-   data: {
-    '_token' : $('input[name=_token]').val(),
-    'name' : $('#name').val(),
-    'address' : $('#address').val(),
-    'cities_id' : $('#loc_city').val(),
-    'zipCode' : $('#zip').val(),
-  },
-  success: function(data){
-
-    if(selected_location == 0){
-     $('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-     $('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-     $('#pickup_id').val(data.id);
-
-     $('#_address').val($('#address').val());
-     $('#_city').val($('#loc_city option:selected').text());
-     $('#_province').val($('#loc_province option:selected').text().trim());
-     $('#_zip').val($('#zip').val());
-
-     $('#address').val("");
-     $('#loc_city').val("0");
-     $('#loc_province').val("0");
-     $('#zip').val("");
-     $('#LocationModal').modal('hide');
-   }
-   else{
-     $('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-     $('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-     $('#deliver_id').val(data.id);
-     $('#_daddress').val($('#address').val());
-     $('#_dcity').val($('#loc_city option:selected').text());
-     $('#_dprovince').val($('#loc_province option:selected').text().trim());
-     $('#_dzip').val($('#zip').val());
-
-     $('#address').val("");
-     $('#loc_city').val("0");
-     $('#loc_province').val("0");
-     $('#zip').val("");
-     $('#LocationModal').modal('hide');
-   }
-
-   $('#LocationModal').modal('hide');
-
- },
- error: function(data) {
-  if(data.status == 400){
-   alert("Nothing found");
- }
-}
-})
-})
-function clear_location(){
-  $('#address').val("");
-  $('#loc_city').val("0");
-  $('#loc_province').val("0");
-  $('#zip').val("");
-}
-
-function fill_cities(num)
-{
-  console.log(num);
-  $.ajax({
-   type: 'GET',
-   url: "{{ route('get_prov_cities')}}/" + $('#loc_province').val(),
-   data: {
-    '_token' : $('input[name=_token]').val(),
-  },
-  success: function(data){
-    if(typeof(data) == "object"){
-
-     var new_rows = "<option value = '0'></option>";
-     for(var i = 0; i < data.length; i++){
-      new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
-    }
-    $('#loc_city').find('option').not(':first').remove();
-    $('#loc_city').html(new_rows);
-
-    $('#loc_city').val(num);
-  }
-},
-error: function(data) {
-  if(data.status == 400){
-   alert("Nothing found");
- }
-}
-})
-}
+					$('#loc_city').val(num);
+				}
+			},
+			error: function(data) {
+				if(data.status == 400){
+					alert("Nothing found");
+				}
+			}
+		})
+	}
 
   // Container
   $(document).on('click', '.add-new-container', function(e){
@@ -1676,8 +1684,8 @@ error: function(data) {
 
 
 
-      if(Validations() == true)
-      {
+      	if(Validations() == true)
+    		{
 
       }
       if(Validations() == false){
@@ -1801,98 +1809,98 @@ error: function(data) {
       $('#brokerage_warning').addClass('in');
       $('#arrivalDateError').addClass('in');
 
-      isError= true;
+        isError= true;
     }
 
-    if($('#FreightType').valid() == false)
-    {
+		if($('#FreightType').valid() == false)
+		{
 
-      location.href = '#brokerageTitleHeader';
-      $('#FreightType').css('border-color', 'red');
-      $('#brokerage_warning').addClass('in');
-      $('#freightTypeError').addClass('in');
+				location.href = '#brokerageTitleHeader';
+				$('#FreightType').css('border-color', 'red');
+				$('#brokerage_warning').addClass('in');
+				$('#freightTypeError').addClass('in');
 
-      isError = true;
+        isError = true;
     }
 
-    if($('#freightNumber').valid() == false)
-    {
+		if($('#freightNumber').valid() == false)
+		{
 
-     location.href = '#brokerageTitleHeader';
-     $('#freightNumber').css('border-color', 'red');
-     $('#brokerage_warning').addClass('in');
-     $('#BLError').addClass('in');
+			location.href = '#brokerageTitleHeader';
+			$('#freightNumber').css('border-color', 'red');
+	  	$('#brokerage_warning').addClass('in');
+			$('#BLError').addClass('in');
 
-     isError = true;
-   }
+				isError = true;
+		}
 
-   var pickup = document.getElementById("pickup_id");
+		var pickup = document.getElementById("pickup_id");
 
-   if(pickup.options[pickup.selectedIndex].value == 0)
-   {
+		if(pickup.options[pickup.selectedIndex].value == 0)
+		{
 
-     location.href = '#brokerageTitleHeader';
-     $('#pickup_id').css('border-color', 'red');
-     $('#brokerage_warning').addClass('in');
-     $('#pickupError').addClass('in');
+			location.href = '#brokerageTitleHeader';
+			$('#pickup_id').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#pickupError').addClass('in');
 
-     isError = true;
-   }
+				isError = true;
+		}
 
-   if($('#shipper').valid() == false)
-   {
-     location.href = '#brokerageTitleHeader';
-     $('#shipper').css('border-color', 'red');
-     $('#brokerage_warning').addClass('in');
-     $('#shipperError').addClass('in');
+		if($('#shipper').valid() == false)
+		{
+			location.href = '#brokerageTitleHeader';
+			$('#shipper').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#shipperError').addClass('in');
 
-     isError = true;
-   }
+				isError = true;
+		}
 
-   if($('#weight').valid() == false)
-   {
+		if($('#weight').valid() == false)
+		{
 
-     location.href = '#brokerageTitleHeader';
-     $('#weight').css('border-color', 'red');
-     $('#brokerage_warning').addClass('in');
-     $('#weightError').addClass('in');
+			location.href = '#brokerageTitleHeader';
+			$('#weight').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#weightError').addClass('in');
 
-     isError = true;
-   }
+				isError = true;
+		}
 
-   var pby = document.getElementById("processedBy");
+		var pby = document.getElementById("processedBy");
 
-   if(pby.options[pby.selectedIndex].value == 0)
-   {
-     location.href = '#brokerageTitleHeader';
-     $('#processedBy').css('border-color', 'red');
-     $('#brokerage_warning').addClass('in');
-     $('#processedByError').addClass('in');
+		if(pby.options[pby.selectedIndex].value == 0)
+		{
+			location.href = '#brokerageTitleHeader';
+			$('#processedBy').css('border-color', 'red');
+			$('#brokerage_warning').addClass('in');
+			$('#processedByError').addClass('in');
 
-     isError = true;
-   }
+				isError = true;
+		}
 
-   return isError;
+		return isError;
 
- }
+	}
 
- function resetMessages(){
-  $('#arrivalDateError').removeClass('in');
+	function resetMessages(){
+    $('#arrivalDateError').removeClass('in');
 
-  $('#freightTypeError').removeClass('in');
+    $('#freightTypeError').removeClass('in');
 
-  $('#BLError').removeClass('in');
+    $('#BLError').removeClass('in');
 
-  $('#pickupError').removeClass('in');
+    $('#pickupError').removeClass('in');
 
-  $('#shipperError').removeClass('in');
-  $('#weightError').removeClass('in');
+		$('#shipperError').removeClass('in');
+    $('#weightError').removeClass('in');
 
-  $('#weight').valid();
-  $('#processedByError').removeClass('in');
+		$('#weight').valid();
+    $('#processedByError').removeClass('in');
 
-  $('#processedBy').valid();
-}
+		$('#processedBy').valid();
+  }
 
 </script>
 @endpush

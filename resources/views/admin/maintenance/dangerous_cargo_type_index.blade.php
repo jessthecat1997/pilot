@@ -30,10 +30,10 @@
 					@forelse($dcts as $dct)
 						<tr>
 							<td>
-								{{ $vt->name }}
+								{{ $dct->name }}
 							</td>
 							<td>
-								{{ $vt->description }}
+								{{ $dct->description }}
 							</td>
 							<td>
 								<button value = "{{ $dct->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
@@ -106,7 +106,7 @@
 @endsection
 @push('styles')
 <style>
-	.class-service-order{
+	.class-dc-type{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;

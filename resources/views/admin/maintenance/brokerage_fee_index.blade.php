@@ -37,7 +37,7 @@
                         @forelse($bfs as $bf)
                         <tr>
                             <td>
-                                {{ $bf->dateEffective}}
+                               {{ Carbon\Carbon::parse($bf->dateEffective)->format("F d, Y") }}
                             </td>
                             <td>
                                 {{ $bf->minimum}}

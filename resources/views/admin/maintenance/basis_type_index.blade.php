@@ -106,7 +106,7 @@
 @endsection
 @push('styles')
 <style>
-.class-bt-type{
+.class-basis-type{
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
 	color: #fff;

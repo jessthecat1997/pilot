@@ -19,7 +19,12 @@ class ContractsController extends Controller
 
     public function index()
     {
-        return view('/trucking.contract_index');
+        $contract_headers = DB::table('contract_headers')
+        ->join('consignees', 'consignees_id', '=', 'consignees.id')
+        ->select('contract_headers.id', 'dateEffective', 'isFinalize', 'dateExpiration', 'companyName', 'contract_headers.created_at')
+        ->get();
+
+        return view('/trucking.contract_index', compact(['contract_headers']));
     }
     public function manage_contract(Request $request){
         try

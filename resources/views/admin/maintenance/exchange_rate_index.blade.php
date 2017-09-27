@@ -40,7 +40,7 @@
 					@forelse($exchange_rate as $er)
 						<tr>
 							<td>
-								{{ $er->dateEffective}}
+								{{ Carbon\Carbon::parse($er->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $er->rate }}
@@ -190,6 +190,37 @@
 			submitHandler: function (form) {
 				return false;
 			}
+		});
+
+		$(document).on('keyup keydown keypress', '.money_er', function (event) {
+			var len = $('.money_er').val();
+			var value = $('.money_er').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money_er').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money_er').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
 		});
 
 

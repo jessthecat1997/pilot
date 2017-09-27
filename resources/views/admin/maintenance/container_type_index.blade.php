@@ -12,20 +12,20 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped cell-border table-bordered" id = "ch_table" style="text-align:left">
+				<table class = "table-responsive table table-striped cell-border table-bordered" id = "ch_table">
 					<thead>
-						<tr style="text-align:left">
-							<td style="width: 20%;">
+						<tr>
+							<td >
 								Size
 							</td>
-							<td style="width: 20%;">
-								Maximum Weight Capacity<br>
+							<td >
+								Maximum Weight Capacity
 								(kgs)
 							</td>
-							<td style="width: 20%;">
+							<td >
 								Description
 							</td>
-							<td style="width: 20%;">
+							<td>
 								Actions
 							</td>
 						</tr>
@@ -130,7 +130,6 @@
 
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
-			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
