@@ -117,7 +117,7 @@
 					<h4 class="modal-title">Add Bills</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal">
+					<form class="form-horizontal" id="bill_form">
 						{{ csrf_field() }}
 						<div class="form-group">
 							<label class="control-label col-sm-2" for="rev_bill_id">*Select Charge:</label>
@@ -135,7 +135,10 @@
 						<div class="form-group">
 							<label class="control-label col-sm-2" for="rev_amount">*Amount:</label>
 							<div class="col-sm-10"> 
-								<input type="number" class="form-control" name="rev_amount" id="rev_amount" style="text-align: right;">
+								<div class="input-group">
+									<span class="input-group-addon">Php</span>
+									<input type="number" class="form-control money" id="rev_amount" name="rev_amount" data-rule-required="true" style = "text-align: right" value = "0.00" required >
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
@@ -219,6 +222,55 @@
 				]
 			})
 		})
+		$("#bill_form").validate({
+			rules: 
+			{
+				rev_bill_id:
+				{
+					required: true,
+				},
+
+				rev_amount:
+				{
+					required: true,
+					date: true,
+				},
+			},
+			onkeyup: false, 
+			submitHandler: function (form) {
+				return false;
+			}
+		});
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999999999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 		$(document).on('click', '.new-rev-row', function(e){
 			e.preventDefault();
 			$('#rev_table > tbody').append(rev_row);
@@ -246,27 +298,29 @@
 
 		$(document).on('click', '.finalize-rev', function(e){
 			if(validateRevenueRows() === true){
-				var bi_id = document.getElementById("so_head_id").value;
-				console.log(rev_bill_id);
-				console.log(rev_amount_value);
-				console.log(rev_description_value);
-				console.log(rev_tax_value);
-				console.log({{ $so_head_id }});
-				$.ajax({
-					method: 'POST',
-					url: '{{ route("billing.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'charge_id' : rev_bill_id,
-						'description' : rev_description_value,
-						'amount' : rev_amount_value,
-						'tax' : 0,
-						'bi_head_id' : bi_id,
-					},
-					success: function (data){
-						location.reload();
-					}
-				})
+				if($('#rev_bill_id').valid() && $('#rev_amount').valid()){
+					var bi_id = document.getElementById("so_head_id").value;
+					console.log(rev_bill_id);
+					console.log(rev_amount_value);
+					console.log(rev_description_value);
+					console.log(rev_tax_value);
+					console.log({{ $so_head_id }});
+					$.ajax({
+						method: 'POST',
+						url: '{{ route("billing.store") }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'charge_id' : rev_bill_id,
+							'description' : rev_description_value,
+							'amount' : rev_amount_value,
+							'tax' : 0,
+							'bi_head_id' : bi_id,
+						},
+						success: function (data){
+							location.reload();
+						}
+					})
+				}
 			}
 		})
 		function validateRevenueRows()

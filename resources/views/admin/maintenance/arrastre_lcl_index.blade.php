@@ -40,7 +40,7 @@
 					@forelse($arrastres as $a)
 						<tr>
 							<td>
-								{{ $a->dateEffective }}
+								{{ Carbon\Carbon::parse($a->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $a->location}}
@@ -225,7 +225,7 @@
 @endsection
 @push('styles')
 <style>
-.class-af-fee
+.class-af-fee-lcl
 {
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);

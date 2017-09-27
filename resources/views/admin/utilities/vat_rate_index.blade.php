@@ -3,11 +3,11 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Vat Rate</h3>
+		<h3><img src="/images/bar.png">Maintenance| Billing| Vat Rate</h3>
 		<hr>
 		Current Vat Rate: 
-		@if($vat_rate[0]->rate != null)
-		{{ number_format((float)$vat_rate[0]->rate, 3) }}%
+		@if($vat_rate_current[0]->rate != null)
+		{{ number_format((float)$vat_rate_current[0]->rate, 3) }}%
 		@else
 		0.00 %
 		@endif
@@ -23,16 +23,33 @@
 					<thead>
 						<tr>
 							<td>
-								Rate
-							</td>
-							<td>
 								Date Effective
 							</td>
+							<td>
+								Rate
+							</td>
+							
 							<td>
 								Actions
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($vat_rate as $vr)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($vr->dateEffective)->format("F d, Y") }}
+							</td>
+							<td>
+								{{ $vr->rate }}
+							</td>
+							<td>
+								<button value = "{{ $vr->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $vr->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -104,12 +121,12 @@
 @endsection
 @push('styles')
 <style>
-	.maintenance
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.maintenance
+{
+	border-left: 10px solid #2ad4a5;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 
 
@@ -122,6 +139,7 @@
 
 <script type="text/javascript">
 	var data;
+	var vr_id;
 	$('#collapse2').addClass('in');
 	$('#billingcollapse').addClass('in');
 	$(document).ready(function(){
@@ -130,12 +148,9 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/vrData',
 			columns: [
-
-			{ data: 'rate' },                              
 			{ data: 'dateEffective' },
-
+			{ data: 'rate' },                              
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -176,7 +191,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
+			vr_id = $(this).val();
 			data = vrtable.row($(this).parents()).data();
 			$('#rate').val(data.rate);
 			$('#dateEffective').val(data.dateEffective);
@@ -184,7 +199,7 @@
 			$('#vrModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
+			vr_id = $(this).val();
 			data = vrtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -194,13 +209,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/vat_rate/' + data.id,
+				url:  '/admin/vat_rate/' + vr_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					vrtable.ajax.reload();
+					vrtable.ajax.url('{{ route("vr.data") }}').load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -253,7 +268,7 @@
 						{
 
 							if(typeof(data) === "object"){
-								vrtable.ajax.reload();
+								vrtable.ajax.url('{{ route("vr.data") }}').load();
 								$('#vrModal').modal('hide');
 								$('.modal-title').text('New VAT Rate');
 								$('#rate').val('0.00');
@@ -309,7 +324,7 @@
 
 					$.ajax({
 						type: 'PUT',
-						url:  '{{ route("vat_rate.index") }}/' + data.id,
+						url:  '{{ route("vat_rate.index") }}/' + vr_id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'rate' : $('#rate').val(),
@@ -340,7 +355,7 @@
 							}
 							toastr["success"]("Record updated successfully")
 
-							vrtable.ajax.reload();
+							vrtable.ajax.ajax.url('{{ route("vr.data") }}').load();
 							$('#vrModal').modal('hide');
 							$('#rate').val("");
 							$('#dateEffective').val("");

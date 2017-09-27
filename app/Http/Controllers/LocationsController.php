@@ -16,7 +16,16 @@ class LocationsController extends Controller
         ->select('name', 'id')
         ->where('deleted_at', '=', null)
         ->get();
-        return view('locations.locations_index', compact(['provinces']));
+
+        $locations = DB::table('locations')
+        ->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+        ->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+        ->select('locations.id as location_id', 'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+        ->where('locations.deleted_at', '=', null)
+        ->orderBy('location_name')
+        ->get();
+
+        return view('locations.locations_index', compact(['provinces','locations']));
     }
 
     public function store(LocationRequest $request)

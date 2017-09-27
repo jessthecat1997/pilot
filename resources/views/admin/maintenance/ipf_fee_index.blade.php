@@ -36,7 +36,7 @@
 					@forelse($ipfs as $ipf)
 						<tr>
 							<td>
-								{{ $ipf->dateEffective }}
+								{{ Carbon\Carbon::parse($ipf->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $ipf->minimum}}

@@ -37,7 +37,7 @@
 						@forelse($wharfages as $w)
 						<tr>
 							<td>
-								{{ $w->dateEffective }}
+								{{ Carbon\Carbon::parse($w->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $w->location}}
@@ -201,7 +201,7 @@
 @endsection
 @push('styles')
 <style>
-.class-wf-fee
+.class-wf-fee-lcl
 {
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
