@@ -1,3 +1,4 @@
+
 @extends('layouts.maintenance')
 @section('content')
 <div class = "container-fluid">
@@ -33,6 +34,29 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($wharfages as $w)
+						<tr>
+							<td>
+								{{ $w->dateEffective }}
+							</td>
+							<td>
+								{{ $w->location}}
+							</td>
+							<td>
+								{{ $w->container_size}}
+							</td>
+							<td>
+								{{ $w->amount}}
+							</td>
+							<td>
+								<button value = "{{ $w->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $w->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -71,7 +95,7 @@
 						</div>
 						<div class = "collapse" id = "wf_warning">
 							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the wharfage fees.
+								<strong>Warning!</strong> Something is wrong with the Wharfage fees.
 							</div>
 						</div>
 						<div class = "panel panel-default">
@@ -90,7 +114,7 @@
 
 													<td width="10%">
 														<div class="form-group required">
-															<label class = "control-label"><strong>wharfage Fee</strong></label>
+															<label class = "control-label"><strong>Wharfage Fee</strong></label>
 														</div>
 													</td>
 													
@@ -199,6 +223,8 @@
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 
+	var wf_id;
+
 	$(document).ready(function(){
 
 
@@ -210,17 +236,16 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/wfData',
 			columns: [
 			{ data: 'dateEffective'},
 			{ data: 'location' },
 			{ data: 'container_size',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'amount',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			
 			{ data: 'action', orderable: false, searchable: false }
@@ -232,6 +257,7 @@
 				dateEffective:
 				{
 					required: true,
+					date:true,
 				},
 				locations_id:
 				{
@@ -256,7 +282,7 @@
 				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			$('.modal-title').text('New wharfage Fee Per Pier');
+			$('.modal-title').text('New Wharfage Fee Per Pier');
 			$('#wfModal').modal('show');
 			
 			$('#wf_parent_table > tbody').append(rows);
@@ -265,8 +291,8 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update wharfage Fee Per Pier');
-			var wf_id = $(this).val();
+			$('.modal-title').text('Update Wharfage Fee Per Pier');
+			wf_id = $(this).val();
 			data = wftable.row($(this).parents()).data();
 			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
@@ -297,7 +323,7 @@
 			})
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var wf_id = $(this).val();
+			wf_id = $(this).val();
 			data = wftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -329,13 +355,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/wharfage_fee/' + data.id,
+				url:  '/admin/wharfage_fee/' + wf_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					wftable.ajax.reload();
+					wftable.ajax.url( '{{ route("wf.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 					toastr.options = {
 						"closeButton": false,
@@ -364,7 +390,7 @@
 			if(finalvalidatewfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New wharfage Fee Per Pier")
+				if(title == "New Wharfage Fee Per Pier")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
@@ -387,9 +413,9 @@
 							},
 							success: function (data){
 
-								wftable.ajax.reload();
+								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New wharfage Fee Per Pier');
+								$('.modal-title').text('New Wharfage Fee Per Pier');
 
 								$('#amount').val("0.00");
 								toastr.options = {
@@ -430,21 +456,22 @@
 
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/wharfage_fee/'+ data.id,
+							url:  '/admin/wharfage_fee/'+ wf_id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'locations_id' : $('#locations_id').val(),
 								'dateEffective':$('#dateEffective').val(),
-								'container_size_id' : jsonContainerSize,
+								'container_sizes_id' : jsonContainerSize,
 								'amount' : jsonAmount,
 								'tblLength' : tblLength,
+								'wf_head_id':wf_id,
 
 							},
 							success: function (data){
 								console.log(data);
-								wftable.ajax.reload();
+								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New wharfage Fee Per Pier');
+								$('.modal-title').text('New Wharfage Fee Per Pier');
 
 								$('#amount').val("0.00");
 

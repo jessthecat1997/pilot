@@ -5,8 +5,8 @@
 		<h2>&nbsp;Maintenance | Brokerage | Exchange Rate</h2>
 		<hr>
 		<h5>Current Exchange Rate: Php 
-			@if($exchange_rate[0]->rate != null)
-			{{ number_format((float)$exchange_rate[0]->rate, 5) }}
+			@if($exchange_rate_current[0]->rate != null)
+			{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}
 			@else
 			0.000000
 			@endif
@@ -26,17 +26,35 @@
 								Rate
 							</td>
 							<td>
-								Remarks
-							</td>
-							<td>
 								Date Effective
 							</td>
-
+							<td>
+								Remarks
+							</td>
 							<td>
 								Actions
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($exchange_rate as $er)
+						<tr>
+							<td>
+								{{ $er->dateEffective}}
+							</td>
+							<td>
+								{{ $er->rate }}
+							</td>
+							<td>
+								{{ $er->description}}
+							</td>
+							<td>
+								<button value = "{{ $er->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $er->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -57,8 +75,8 @@
 								<label>Current Rate: </label>
 								<input type="hidden" name = "currentRate" value = "0" />
 								<input type = "text" class = "form-control" value = 
-								@if($exchange_rate != null)
-								"{{ number_format((float)$exchange_rate[0]->rate, 5) }}"
+								@if($exchange_rate_current != null)
+								"{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}"
 								@else
 								"0.0000000"
 								@endif
@@ -107,7 +125,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -118,17 +136,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-exchange-rate{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-exchange-rate{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -136,16 +154,16 @@
 	$('#brokeragecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var data;
+	var er_id;
 	$(document).ready(function(){
 		var ertable = $('#er_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/erData',
 			columns: [
+			{ data: 'dateEffective' },
 			{ data: 'rate' },
 			{ data: 'description' },
-			{ data: 'dateEffective' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 2, "desc" ]],
@@ -163,6 +181,7 @@
 				dateEffective:
 				{
 					required: true,
+					date:true,
 				},
 
 
@@ -191,7 +210,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var er_id = $(this).val();
+			er_id = $(this).val();
 			data = ertable.row($(this).parents()).data();
 			$('#dateEffective').val(data.dateEffective);
 			$('#description').val(data.description);
@@ -200,7 +219,7 @@
 			$('#erModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
+			er_id = $(this).val();
 			data = ertable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -210,13 +229,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/exchange_rate/' + data.id,
+				url:  '/admin/exchange_rate/' + er_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					ertable.ajax.reload();
+					ertable.ajax.url('{{ route("er.data") }}').load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -246,39 +265,96 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 
-			var rate_nocomma = $('#rate').inputmask("unmaskedvalue");
-			if (rate_nocomma == "0.00"){
+			var rate_unmask = $('#rate').inputmask("unmaskedvalue");
+			var rate_nocomma = parseFloat(rate_unmask);
+			if (rate_nocomma  == 0){
 				rate_nocomma = "";
 			}
 
 			var title = $('.modal-title').text();
 			if(title == "New Exchange Rate")
 			{
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/exchange_rate',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'rate' : rate_nocomma,
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'description' : $('input[name=description]').val(),
-						'currentRate' : $('input[name=currentRate]').val(),
-					},
-					success: function (data)
-					{
-						window.location.reload();
+				if ($('#dateEffective').valid()){
 
+					
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/exchange_rate',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'rate' : rate_nocomma,
+							'dateEffective' : $('input[name=dateEffective]').val(),
+							'description' : $('input[name=description]').val(),
+							'currentRate' : $('input[name=currentRate]').val(),
+						},
 
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								ertable.ajax.url('{{ route("er.data") }}').load();
+								$("#rate").val("0.00");
+								$("#description").val("");
+								$('#erModal').modal('hide');
+								$('.modal-title').text('New Exchange Rate');
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+								$('#btnSave').removeAttr('disabled');
+								window.location.reload();
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+							}
+						},
 
-						if(typeof(data) === "object"){
-							ertable.ajax.reload();
-							$("#rate").val("0.00");
-							$("#description").val("");
-							$('#erModal').modal('hide');
+					})
+					$('#btnSave').removeAttr('disabled');
+				}
+				
+			}
+			else
+			{
 
+				if($('#dateEffective').valid()){
 
-							$('.modal-title').text('New Exchange Rate');
+					
 
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/exchange_rate/' + er_id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'description' : $('input[name=description]').val(),
+							'rate' : rate_nocomma,
+							'dateEffective' : $('input[name=dateEffective]').val(),
+							'currentRate' : $('input[name=currentRate]').val(),
+						},
+						success: function (data)
+						{
+							ertable.ajax.url('{{ route("er.data") }}').load();
+							//window.location.reload();
 
 							toastr.options = {
 								"closeButton": false,
@@ -298,65 +374,15 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-							toastr["success"]("Record addded successfully")
+							toastr["success"]("Record updated successfully")
+							$('#erModal').modal('hide');
+							$("#rate").val("0.00");
+							$("#description").val("");
+							$('.modal-title').text('New Exchange Rate');
 						}
-						else{
-							resetErrors();
-							var invdata = JSON.parse(data);
-							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v); 
-								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-							});
-
-						}
-					},
-
-				})
-			}
-			else
-			{
-				$.ajax({
-					type: 'PUT',
-					url:  '/admin/exchange_rate/' + data.id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'description' : $('input[name=description]').val(),
-						'rate' : rate_nocomma,
-						'dateEffective' : $('input[name=dateEffective]').val(),
-						'currentRate' : $('input[name=currentRate]').val(),
-					},
-					success: function (data)
-					{
-						window.location.reload();
-						
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record updated successfully")
-
-						ertable.ajax.reload();
-						$('#erModal').modal('hide');
-						$("#rate").val("0.00");
-						$("#description").val("");
-						$('.modal-title').text('New Exchange Rate');
-					}
-				})
+					})
+				}
+				
 			}
 		});
 

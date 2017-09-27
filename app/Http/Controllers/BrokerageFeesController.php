@@ -12,7 +12,10 @@ class BrokerageFeesController extends Controller
 {
     public function index()
     {
-        return view('admin/maintenance/brokerage_fee_index');
+        $bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at ,
+            GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.amount ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id ORDER by h.dateEffective DESC");
+
+        return view('admin/maintenance/brokerage_fee_index', compact(['bfs']));
     }
 
     public function store(StoreBrokerageFee $request)

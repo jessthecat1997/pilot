@@ -3,99 +3,81 @@
 <h2>&nbsp;Contracts</h2>
 <hr>
 <div class = "container-fluid">
-	<div class = "row">
-		<div class = "panel-default panel">
-			<div class = "panel-body">
-				<div class = "col-md-12">
-					<h3 id = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Consignee Information
+				</div>
+				<div class="panel-body">
 					<div class = "collapse" id = "consignee_warning">
 						<div class="alert alert-danger">
 							<strong>Warning!</strong> No selected consignee.
 						</div>
 					</div>
-					<div class = "panel-default">
-						<div class = "col-md-12">
-							<div class = "col-md-6 col-md-offset-2">
-								<div class = "form-horizontal">
-									<div class = "form-group">
-										<label class = "control-label col-md-3">Consignee: </label>
-										<div class = "input-group col-md-9">
-											<select id = "consignee_id" class = "form-control select2-allow-clear select2">
-												<option value = "0">Select Consignee</option>
-												@forelse($consignees as $consignee)
-												<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
-
-												@empty
-
-												@endforelse
-											</select>
-
-										</div>
+					<div class="col-md-12">
+						<div class = "form-horizontal">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Name: </label>
+								<div class = "col-md-9">
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
+									</div>
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
+									</div>
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
 									</div>
 								</div>
 							</div>
-							<div class = "col-md-4">
-								<button class = "btn but add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Contact Number: </label>
+								<div class = "col-md-3">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
+									</div>
+								</div>
+								<label class = "control-label col-md-2">Email: </label>
+								<div class = "col-md-4">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
+									</div>
+								</div>
 							</div>
-						</div>
-						<div class="col-md-12">
-							<div class = "form-horizontal">
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Name: </label>
-									<div class = "col-md-9">
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
-										</div>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Company Name</label>
+								<div class = "col-md-9">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
 									</div>
 								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Contact Number: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">Email: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
-										</div>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Business Style: </label>
+								<div class = "col-md-3">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
 									</div>
 								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Company Name</label>
-									<div class = "col-md-9">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Business Style: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">TIN: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
-										</div>
+								<label class = "control-label col-md-2">TIN: </label>
+								<div class = "col-md-4">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<hr />
-					<h3 id = "contract_duration_title"><small>2</small>&nbsp;&nbsp;Contract Duration</h3>
-					<br />
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Contract Duration
+				</div>
+				<div class="panel-body">
 					<div class = "collapse" id = "contract_duration_warning">
 						<div class="alert alert-danger">
 							<strong>Warning!</strong> Something is wrong with the duration.
@@ -115,69 +97,83 @@
 							</div>
 						</div>
 					</form>
-
-					<br />
-					<br />
 				</div>
-
-				<div class="col-md-12">
-					<hr />
-					<h3><small>4</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
-					<div class = "collapse" id = "term_condition_warning">
-						<div class="alert alert-danger">
-							<strong>Warning!</strong> Terms and Condition(s) is required.
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms & Condition</a>
+					</h4>
+				</div>
+				<div id="collapseTwo" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class = "collapse" id = "term_condition_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Terms and Condition(s) is required.
+							</div>
 						</div>
-					</div>
-					<div class = "collapse" id = "term_condition_count_warning">
-						<div class="alert alert-danger">
-							<strong>Warning!</strong> Requires at least one term and condition.
+						<div class = "collapse" id = "term_condition_count_warning">
+							<div class="alert alert-danger">
+								<strong>Warning!</strong> Requires at least one term and condition.
+							</div>
 						</div>
-					</div>
-					<div class = "col-md-12">
-						<table style="width: 100%;" class="table table-responsive" id = "term_table">
-							<thead>
-								<tr>
-									<th style="width: 95%;">
-										Description
-									</th>
-									<th style="width: 5%; text-align: center;">
-										Action
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								@forelse($desc_array as $desc)
+						<div class = "col-md-12">
+							<table style="width: 100%;" class="table table-responsive" id = "term_table">
+								<thead>
+									<tr>
+										<th style="width: 95%;">
+											Description
+										</th>
+										<th style="width: 5%; text-align: center;">
+											Action
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									@forelse($desc_array as $desc)
 
-								<tr>
-									<td>
-										<textarea class = "form-control specificDetails"  rows = "5" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Agreements . . . " name = "specificDetails">{{ substr($desc, 3, strlen($desc)) }}</textarea>
-									</td>
-									<td style="text-align: center;">
-										<button class = "btn btn-danger btn-md delete-term-row">x</button>
-									</td>
-								</tr>
-								@empty
-								@endforelse
-							</tbody>
-						</table>
-					</div>
-					<div class="row">
-						<div classs = "col-md-8">
-
+									<tr>
+										<td>
+											<textarea class = "form-control specificDetails"  rows = "5" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Agreements . . . " name = "specificDetails">{{ substr($desc, 3, strlen($desc)) }}</textarea>
+										</td>
+										<td style="text-align: center;">
+											<button class = "btn btn-danger btn-md delete-term-row">x</button>
+										</td>
+									</tr>
+									@empty
+									@endforelse
+								</tbody>
+							</table>
 						</div>
-						<div class = "col-md-4" style="text-align: center;">
-							<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Agreement</button>
+						<div class="row">
+							<div classs = "col-md-8">
+
+							</div>
+							<div class = "col-md-4" style="text-align: center;">
+								<button  type = "submit" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Agreement</button>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12 ">
-					<h3><small>5</small>&nbsp;&nbsp;Finalize</h3>
+			</div>
+		</div>
+	</div>
+	<div class = "row">
+		<div class="col-lg-12">
+			<div class = "panel panel-primary">
+				<div class="panel-heading">
+					Finalize
+				</div>
+				<div class = "panel-body">
 					<div style=" text-align: center;" class="pull-right">
 						<button class = "btn btn-md btn-success finalize-contract " >&nbsp;&nbsp;&nbsp;&nbsp;Create Contract&nbsp;&nbsp;&nbsp;&nbsp;</button>
-
 						<button class = "btn btn-md btn but  draft-contract" ">Save as Draft</button>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -369,11 +365,11 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	
+
 
 
 	var consigneeID = null;
-	
+
 	$(document).ready(function(){
 
 		var contract_row = "<tr>" + $('#contract-row').html() + "</tr>";
@@ -550,7 +546,7 @@
 				$('#bill_city').removeAttr('disabled');
 				$('#bill_zip').removeAttr('disabled');
 			}
-			
+
 		})
 
 		$(document).on('click', '.new-consignee', function(e){
@@ -578,7 +574,7 @@
 						'contactNumber' : $('#contactNumber').val(),
 						'businessStyle' : $('#businessStyle').val(),
 						'TIN' : $('#TIN').val(),
-						
+
 						'address' : $('#phy_address').val(),
 						'city' : $('#phy_city option:selected').text(),
 						'st_prov' : $('#phy_province option:selected').text(),
@@ -603,7 +599,7 @@
 							$('#collapse_2').addClass('in');
 							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
 							$('#_companyName').val($('#companyName').val());
-							
+
 							$('#_email').val($('#email').val());
 							$('#_contactNumber').val($('#contactNumber').val());
 
@@ -634,9 +630,9 @@
 			}
 		})
 
-		
 
-		
+
+
 
 		$(document).on('click', '.delete-contract-row', function(e){
 			e.preventDefault();
@@ -680,7 +676,7 @@
 			}
 		})
 
-		
+
 
 		$(document).on('click', '.finalize-contract', function(e){
 			e.preventDefault();

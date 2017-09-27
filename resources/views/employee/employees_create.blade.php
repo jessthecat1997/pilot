@@ -7,14 +7,14 @@
     </div>
     <div class = "panel-body">
       <div class = "col-md-12">
-        <form class = "">
+        <form class = "" id="commentForm">
           {{ csrf_field() }}
           <div class="row">
             <h5>Basic Information</h5>
             <div class = "col-md-4">
               <div class = "form-group required">
                 <label class="control-label">First Name</label>
-                <input type = "text" class = "form-control" placeholder="First Name" id = "firstName"/>
+                <input type = "text" class = "form-control" placeholder="First Name" id = "firstName" required />
               </div>
             </div>
             <div class = "col-md-4">
@@ -26,33 +26,39 @@
             <div class = "col-md-4">
               <div class = "form-group required">
                 <label class="control-label">Last Name</label>
-                <input type = "text" class = "form-control" placeholder="Last Name" id = "lastName"/>
+                <input type = "text" class = "form-control" placeholder="Last Name" id = "lastName" required />
               </div>
             </div>
           </div>
           <div class="row">
             <h5>Address</h5>
             <div class="col-md-4">
-              <div class="form-group required">
+              <div class="form-group">
                 <label class="control-label">Blk/ Lot/ Street</label>
                 <textarea class="form-control" id = "streetName"></textarea>
               </div>
             </div>
             <div class="col-md-8">
               <div class = "col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                   <label class = "control-label">Province</label>
-                  <select class="form-control" name = "loc_province" id="loc_province" ></select>
+                  <select class="form-control" name = "loc_province" id="loc_province" >
+                    @forelse($provinces as $province)
+                    <option value="{{ $province->id }}">{{ $province->name }}</option>
+                    @empty
+
+                    @endforelse
+                  </select>
                 </div>
               </div>
               <div class = "col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                   <label class = "control-label">City</label>
                   <select class="form-control" name = "loc_city" id="loc_city"></select>
                 </div>
               </div>
               <div class = "col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                   <label class="control-label">Zip</label>
                   <input type = "text" id = "zip" class = "form-control"/>
                 </div>
@@ -63,7 +69,7 @@
             <div class = "col-md-3">
               <div class="form-group required">
                 <label class = "control-label">Date of Birth</label>
-                <input type="text" class = "form-control" id = "dateOfBirth"/>
+                <input type="text" class = "form-control" id = "dob" name="dob" required />
               </div>
             </div>
             <div class = "col-md-3">
@@ -75,13 +81,13 @@
             <div class = "col-md-3">
               <div class="form-group required">
                 <label class="control-label">SSS No.</label>
-                <input type = "text" class = "form-control" id = "socialSecurityNumber" />
+                <input type = "text" class = "form-control" id = "SSSNo" name="SSSNo" />
               </div>
             </div>
             <div class = "col-md-3">
               <div class="form-group required">
                 <label class="control-label">Contact No.</label>
-                <input type = "text" id = "phoneNumber" class = "form-control"/>
+                <input type = "text" id = "contactNumber" name="contactNumber" class = "form-control" required />
               </div>
             </div>
           </div>
@@ -113,7 +119,7 @@
             <h5>In Case of Emergency:</h5>
             <div class = "col-md-12">
               <div class="form-group">
-                <textarea class="form-control" id = "inCaseOfEmergency"></textarea>
+                <textarea class="form-control" id = "inCaseOfEmergency" name="inCaseOfEmergency"></textarea>
               </div>
             </div>
           </div>
@@ -143,53 +149,14 @@
 <link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 @endpush
 
+@push('styles')
+<link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
+@endpush
 @push('scripts')
 <script src="/js/bootstrap-toggle.min.js"></script>
+<script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-
-    var arr_provinces =[
-    @forelse($provinces as $province)
-    { id: '{{ $province->id }}', text:'{{ $province->name }}' },
-    @empty
-    @endforelse
-    ];
-
-    $("#loc_city").select2({
-      width: '100%',
-      placeholder: "Select city",
-      allowClear: true,
-      sorter: function(data) {
-        return data.sort(function (a, b) {
-          if (a.text > b.text) {
-            return 1;
-          }
-          if (a.text < b.text) {
-            return -1;
-          }
-          return 0;
-        });
-      },
-    });
-
-    $("#loc_province").select2({
-      data: arr_provinces,
-      width: '100%',
-      placeholder: "Select province",
-      allowClear: true,
-      sorter: function(data) {
-        return data.sort(function (a, b) {
-          if (a.text > b.text) {
-            return 1;
-          }
-          if (a.text < b.text) {
-            return -1;
-          }
-          return 0;
-        });
-      },
-    });
-
     Inputmask("9{4}").mask($("#zip"));
 
 
@@ -227,21 +194,61 @@
       })
     }
 
-    $('#dateOfBirth').datepicker({
-      onSelect: function(value, ui) {
-        var today = new Date(),
-        dob = new Date(value),
+    $('#dob').datetimepicker({
+      mask:'9999/19/39',
+      scrollInput: false,
+      dayOfWeekStart : 1,
+      timepicker: false,
+      lang:'en',
+      format:'Y/m/d',
+      formatDate:'Y/m/d',
+      value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+      startDate:  "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+      minDate:'1940/01/01',
+      maxDate: "+1970/01/01",
+      onSelectDate:function(ct,$i){
+        var today = new Date();
+        dob = new Date(ct);
         age = new Date(today - dob).getFullYear() - 1970;
 
         document.getElementById('age').value = age;
+      }
+    }); 
+
+    $("#commentForm").validate({
+      rules: 
+      {
+        firstName:
+        {
+          required: true,
+        },
+
+        lastName:
+        {
+          required: true,
+        },
+        dob:
+        {
+          required: true,
+          date: true,
+        },
+        contactNumber:
+        {
+          required: true,
+        },
+        inCaseOfEmergency:
+        {
+          required: true,
+        }
+
       },
-      maxDate: '+0d',
-      yearRange: '1920:2010',
-      changeMonth: true,
-      changeYear: true
+      onkeyup: false, 
+      submitHandler: function (form) {
+        return false;
+      }
     });
 
-    document.getElementById('phoneNumber').addEventListener('input', function (e) {
+    document.getElementById('contactNumber').addEventListener('input', function (e) {
       var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,2})/);
       e.target.value = !x[2] ? x[1] : '' + x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
     });
@@ -272,42 +279,57 @@
       console.log('last name: '+$('#lastName').val());
       console.log('street name: '+$('#street').val());
       console.log('city name: '+$('#loc_city').val());
-      console.log('date of birth: '+document.getElementById("dateOfBirth").value);
+      console.log('date of birth: '+document.getElementById("dob").value);
       console.log('age: '+$('#age').val());
-      console.log('social security number: '+$('#socialSecurityNumber').val());
-      console.log('phone number: '+$('#phoneNumber').val());
-      console.log('cellphone number: '+$('#cellphoneNumber').val());
+      console.log('social security number: '+$('#SSSNo').val());
+      console.log('phone number: '+$('#contactNumber').val());
+      console.log('cellphone number: '+$('#cellcontactNumber').val());
       console.log('emergency contact: '+$('#emergencyContact').val());
       console.log('in case of emergency: '+$('#inCaseOfEmergency').val());
       console.log('toggles: '+JSON.stringify(trueToggle));
 
-      var dob = document.getElementById("dateOfBirth").value;
+      var dob = document.getElementById("dob").value;
 
       e.preventDefault();
-      $.ajax({
-        type: 'POST',
 
-        url: '{{ route("EmployeeSave" )}}',
-        data: {
-          '_token' : $('input[name=_token]').val(),
-          'firstName' : $('#firstName').val(),
-          'middleName': $('#middleName').val(),
-          'lastName' : $('#lastName').val(),
-          'dob': document.getElementById("dateOfBirth").value,
-          'address' : $('#streetName').val(),
-          'zip' : $('#zip').val(),
-          'cities_id' :  $('#loc_city').val(),
-          'SSSNo': $('#socialSecurityNumber').val(),
-          'contactNumber': $('#phoneNumber').val(),
-          'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
-          'toggles': JSON.stringify(trueToggle),
+      
+      
 
-        },
-        success: function(data){
+      $('#firstName').valid();
+      $('#lastName').valid();
+      $('#dob').valid();
+      $('#contactNumber').valid();
+      $('#inCaseOfEmergency').valid();
+      if($("#firstName").valid() && $('#lastName').valid() && $('#dob').valid() && $('#contactNumber').valid() && $('#inCaseOfEmergency').valid()){
+        $.ajax({
+          type: 'POST',
 
-          window.location.replace(+data+"/view");
+          url: '{{ route("EmployeeSave" )}}',
+          data: {
+            '_token' : $('input[name=_token]').val(),
+              'firstName' : $('#firstName').val(),
+              'middleName': $('#middleName').val(),
+              'lastName' : $('#lastName').val(),
+              'dob': document.getElementById("dob").value,
+              'address' : $('#streetName').val(),
+              'zip' : $('#zip').val(),
+              'cities_id' :  $('#loc_city').val(),
+              'SSSNo': $('#SSSNo').val(),
+              'contactNumber': $('#contactNumber').val(),
+              'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
+              'toggles': JSON.stringify(trueToggle),
 
-        },
+            },
+            success: function(data){
+
+              window.location.replace(+data+"/view");
+
+            },
+
+          })  
+          }
+          
+        })
 
       })
     })

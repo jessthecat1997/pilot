@@ -27,6 +27,20 @@
 									</td>
 								</tr>
 							</thead>
+							<tbody>
+								@forelse($provinces as $province)
+								<tr>
+									<td>
+										{{ $province->name }}
+									</td>
+									<td>
+										<button value = "{{ $province->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+										<button value = "{{ $province->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+									</td>
+								</tr>
+								@empty
+								@endforelse
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -50,7 +64,6 @@
 								<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
 								
 							</div>
-							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
@@ -88,31 +101,31 @@
 @endsection
 @push('styles')
 <style>
-	.class-province
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-province
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
+	var p_id;
 	$(document).ready(function(){
 		var lptable = $('#lp_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/lpData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'action', orderable: false, searchable: false }
@@ -133,7 +146,7 @@
 							value = value.replace("something", "new thing");
 							return $.trim(value)
 						},
-						regex: /^[A-Za-z ]+$/,
+						lettersonly:true,
 
 					},
 
@@ -169,14 +182,14 @@
 		
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var bst_id = $(this).val();
+			p_id = $(this).val();
 			data = lptable.row($(this).parents()).data();
 			$('#name').val(data.name);
 			$('.modal-title').text('Update Province');
 			$('#lpModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var bst_id = $(this).val();
+			p_id = $(this).val();
 			data = lptable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -187,13 +200,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/location_province/' + data.id,
+				url:  '/admin/location_province/' + p_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					lptable.ajax.reload();
+					lptable.ajax.url( '{{ route("lp.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -234,7 +247,7 @@
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							lptable.ajax.reload();
+							lptable.ajax.url( '{{ route("lp.data") }}' ).load();
 							$('#lpModal').modal('hide');
 							$('#name').val("");
 							$('.modal-title').text('New Province');
@@ -279,7 +292,7 @@
 			{
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/location_province/' + data.id,
+					url:  '/admin/location_province/' + p_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('input[name=name]').val(),
@@ -306,7 +319,7 @@
 						}
 						toastr["success"]("Record updated successfully")
 
-						lptable.ajax.reload();
+						lptable.ajax.url( '{{ route("lp.data") }}' ).load();
 						$('#lpModal').modal('hide');
 						$('#name').val("");
 						$('.modal-title').text('New Province');

@@ -32,6 +32,29 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($ipfs as $ipf)
+						<tr>
+							<td>
+								{{ $ipf->dateEffective }}
+							</td>
+							<td>
+								{{ $ipf->minimum}}
+							</td>
+							<td>
+								{{ $ipf->maximum}}
+							</td>
+							<td>
+								{{ $ipf->amount}}
+							</td>
+							<td>
+								<button value = "{{ $ipf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $ipf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -52,23 +75,21 @@
 								<label class="control-label " for="dateEffective">Date Effective:</label>
 								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
 							</div>
-						</form>
-						<br />
-						<div class = "collapse" id = "ipf_table_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one import processing fee rate.
+							<br />
+							<div class = "collapse" id = "ipf_table_warning">
+								<div class="alert alert-danger">
+									<strong>Warning!</strong> Requires at least one import processing fee rate.
+								</div>
 							</div>
-						</div>
-						<div class = "collapse" id = "ipf_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the range.
+							<div class = "collapse" id = "ipf_warning">
+								<div class="alert alert-danger">
+									<strong>Warning!</strong> Something is wrong with the range.
+								</div>
 							</div>
-						</div>
-						<div class = "panel panel-default">
-							<div  style="overflow-x: auto;">
-								<div class = "panel-default">
-									{{ csrf_field() }}
-									<form id = "ipf_form" class = "commentForm">
+							<div class = "panel panel-default">
+								<div  style="overflow-x: auto;">
+									<div class = "panel-default">
+										{{ csrf_field() }}
 										<table class="table responsive table-hover" width="100%" id= "ipf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
@@ -172,18 +193,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-ipf-fee
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-ipf-fee
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -196,11 +217,13 @@
 	var minimum_id_descrp = [];
 	var maximum_id_descrp = [];
 	var amount_value_descrp = [];
+
 	var now = new Date();
 	var day = ("0" + now.getDate()).slice(-2);
 	var month = ("0" + (now.getMonth() + 1)).slice(-2);
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-	var data, tblLength;
+
+	var data, tblLength,ipf_id;
 	var jsonMinimum, jsonMaximum, jsonAmount;
 	$(document).ready(function(){
 		var ipf_row = "<tr>" + $('#ipf-row').html() + "</tr>";
@@ -210,20 +233,19 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/ipfData',
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'minimum',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split('\n').join("<br/>");}
 			},
 			{ data: 'maximum',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split('\n').join("<br/>");}
 			},
 			{ data: 'amount',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split('\n').join("<br/>");}
 			},
 			{ data: 'action', orderable: false, searchable: false }
 			],	"order": [[ 0, "desc" ]],
@@ -234,6 +256,7 @@
 				dateEffective:
 				{
 					required: true,
+					date:true,
 				},
 
 			},
@@ -260,7 +283,7 @@
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			$('.modal-title').text('Update Import Processing Fee Range');
-			var ipf_id = $(this).val();
+			ipf_id = $(this).val();
 			data = ipftable.row($(this).parents()).data();
 			$('#dateEffective').val(data.dateEffective);
 			$('#ipfModal').modal('show');
@@ -286,8 +309,7 @@
 			})
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ipf_id = $(this).val();
-			data = ipftable.row($(this).parents()).data();
+			 ipf_id = $(this).val();
 			$('#confirm-delete').modal('show');
 		});
 		$(document).on('click', '.delete-ipf-row', function(e){
@@ -355,15 +377,16 @@
 		})
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
+			console.log(ipf_id);
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/ipf_fee/' + data.id,
+				url:  '/admin/ipf_fee/' + ipf_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					ipftable.ajax.reload();
+					ipftable.ajax.url( '{{ route("ipf.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 					toastr.options = {
 						"closeButton": false,
@@ -392,109 +415,114 @@
 			if(finalvalidateIpfRows() === true){
 
 				var title = $('.modal-title').text();
+
 				if(title == "New Import Processing Fee Range")
 				{
-					jsonMinimum = JSON.stringify(minimum_id);
-					jsonMaximum = JSON.stringify(maximum_id);
-					jsonAmount = JSON.stringify(amount_value);
+					if ($('#dateEffective').valid()){
 
-					minimum_unmask = [];
-					$.ajax({
-						type: 'POST',
-						url:  '/admin/ipf_fee',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'dateEffective' : $('#dateEffective').val(),
-							'minimum' : jsonMinimum,
-							'maximum' : jsonMaximum,
-							'amount' : jsonAmount,
-							'tblLength' : tblLength,
-						},
-						success: function (data){
+						//$('#btnSave').attr('disabled', 'true');
+						jsonMinimum = JSON.stringify(minimum_id);
+						jsonMaximum = JSON.stringify(maximum_id);
+						jsonAmount = JSON.stringify(amount_value);
 
-							ipftable.ajax.reload();
-							$('#ipfModal').modal('hide');
-							$('.modal-title').text('New Import Processing Fee Range');
-							$('#minimum').val("0.00");
-							$('#maximum').val("0.00");
-							$('#amount').val("0.00");
-							$('#dateEffective').val("");
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+						minimum_unmask = [];
+						$.ajax({
+							type: 'POST',
+							url:  '/admin/ipf_fee',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'dateEffective' : $('#dateEffective').val(),
+								'minimum' : jsonMinimum,
+								'maximum' : jsonMaximum,
+								'amount' : jsonAmount,
+								'tblLength' : tblLength,
+							},
+							success: function (data){
+
+								ipftable.ajax.url( '{{ route("ipf.data") }}' ).load();
+								$('#ipfModal').modal('hide');
+								$('.modal-title').text('New Import Processing Fee Range');
+								$('#minimum').val("0.00");
+								$('#maximum').val("0.00");
+								$('#amount').val("0.00");
+								$('#dateEffective').val("");
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+								$('#btnSave').removeAttr('disabled');
 							}
-							toastr["success"]("Record addded successfully")
-
-						}
-					})
+						})
+					}
 				}else{
+					if ($('#dateEffective').valid()){
+
+						//$('#btnSave').attr('disabled', 'true');
+						jsonMinimum = JSON.stringify(minimum_id);
+						jsonMaximum = JSON.stringify(maximum_id);
+						jsonAmount = JSON.stringify(amount_value);
 
 
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/ipf_fee/'+ ipf_id,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'ipf_head_id': ipf_id,
+								'dateEffective' : $('#dateEffective').val(),
+								'minimum' : jsonMinimum,
+								'maximum' : jsonMaximum,
+								'amount' : jsonAmount,
+								'tblLength' : tblLength,
+							},
+							success: function (data){
 
-					jsonMinimum = JSON.stringify(minimum_id);
-					jsonMaximum = JSON.stringify(maximum_id);
-					jsonAmount = JSON.stringify(amount_value);
-
-
-					$.ajax({
-						type: 'PUT',
-						url:  '/admin/ipf_fee/'+ data.id,
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'ipf_head_id': data.id,
-							'dateEffective' : $('#dateEffective').val(),
-							'minimum' : jsonMinimum,
-							'maximum' : jsonMaximum,
-							'amount' : jsonAmount,
-							'tblLength' : tblLength,
-						},
-						success: function (data){
-
-							ipftable.ajax.reload();
-							$('#ipfModal').modal('hide');
-							$('.modal-title').text('New Import Processing Fee Range');
-							$('#minimum').val("0.00");
-							$('#maximum').val("0.00");
-							$('#amount').val("0.00");
-							$('#dateEffective').val("");
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+								ipftable.ajax.url( '{{ route("ipf.data") }}' ).load();
+								$('#ipfModal').modal('hide');
+								$('.modal-title').text('New Import Processing Fee Range');
+								$('#minimum').val("0.00");
+								$('#maximum').val("0.00");
+								$('#amount').val("0.00");
+								$('#dateEffective').val("");
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+								$('#btnSave').removeAttr('disabled');
 							}
-							toastr["success"]("Record updated successfully")
+						})
 
-						}
-					})
-
-
+					}
 				}
 			}
 		});
@@ -515,10 +543,7 @@ function validateIpfRows()
 	error = "";
 
 	var min, max;
-	if(dateEffective === ""){
-		dateEffective.style.borderColor = 'red';
-		error += "Date Effective Required.";
-	}
+	
 	for(var i = 0; i < minimum.length; i++){
 		var temp;
 		if(maximum[i].value === "")

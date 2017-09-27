@@ -3,437 +3,467 @@
 <h2>&nbsp;Quotations</h2>
 <hr>
 <div class = "container-fluid">
-	<div class = "row">
-		<div class = "panel-default panel">
-			<div class = "panel-body">
-				<div class = "col-md-12">
-					<h3 id = "con-info-header"><small>1</small>&nbsp;&nbsp;Consignee Information</h3>
-
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					1. Consignee Information
+				</div>
+				<div class="panel-body">
 					<div class = "collapse" id = "consignee_warning">
 						<div class="alert alert-danger">
 							<strong>Warning!</strong> No selected consignee.
 						</div>
 					</div>
-					<div class = "panel-default">
-						<div class = "col-md-12">
-							<div class = "col-md-6 col-md-offset-2">
-								<div class = "form-horizontal">
-									<div class = "form-group">
-										<label class = "control-label col-md-3">Consignee: </label>
-										<div class = "input-group col-md-9">
-											<select id = "consignee_id" class = "form-control select2-allow-clear select2">
-												<option value = "0">Select Consignee</option>
-												@forelse($consignees as $consignee)
-												<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
-
-												@empty
-
-												@endforelse
-											</select>
-
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class = "col-md-4">
-								<button class = "btn but add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
-							</div>
-						</div>
-						<div class="col-md-12">
+					<div class = "col-md-12">
+						<div class = "col-md-6 col-md-offset-2">
 							<div class = "form-horizontal">
 								<div class = "form-group">
-									<label class = "control-label col-md-3">Name: </label>
-									<div class = "col-md-9">
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Contact Number: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">Email: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Company Name</label>
-									<div class = "col-md-9">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Business Style: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">TIN: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
-										</div>
+									<label class = "control-label col-md-3">Consignee: </label>
+									<div class = "input-group col-md-9">
+										<select id = "consignee_id" class = "form-control select2-allow-clear select2">
+											<option value = "0">Select Consignee</option>
+											@forelse($consignees as $consignee)
+											<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
+
+											@empty
+
+											@endforelse
+										</select>
+
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<br />
-				</div>
-				<div class = "col-md-12">
-					<hr />
-					<h3 id = "contract_rate_title"><small>2</small>&nbsp;&nbsp;Area Rates</h3>
-					<br />
-					<div class = "collapse" id = "contract_rates_warning">
-						<div class="alert alert-danger">
-							<strong>Warning!</strong> Something is wrong with the rates.
-						</div>
-					</div>
-					<div class = "col-md-12" style="overflow-x: auto;">
-						<div class = "panel-default">
-							<form id = "contract_rates_form">
-								<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
-									<thead>
-										<tr>
-											<th width="25%">
-												<strong>Pickup Point</strong>
-											</th>
-											<th width="25%">
-												<strong>Delivery Point</strong>
-											</th>
-											<th width="20%">
-												<strong>Size</strong>
-											</th>
-											<th width="20%">
-												<strong>Amount</strong>
-											</th>
-											<th width="10%" style="text-align: center;">
-												<strong>Action</strong>
-											</th>
-										</tr>
-									</thead>
-									<tr id = "contract-row">
-										<td>
-											<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
-												<option></option>
-												@forelse($locations as $location)
-												<option value = "{{ $location->id }}">{{ $location->name }}</option>
-												@empty
-
-												@endforelse
-											</select>
-										</td>
-										<td>
-											<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
-												<option></option>
-												@forelse($locations as $location)
-												<option value = "{{ $location->id }}">{{ $location->name }}</option>
-												@empty
-
-												@endforelse
-											</select>
-										</td>
-										<td>
-											<select name = "volume" id = "0_volume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
-
-											</select>
-										</td>
-										<td>
-											<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
-
-										</td>
-										<td style="text-align: center;">
-											<button  type = "button" class = "btn btn-danger btn-md delete-contract-row">x</button>
-										</td>
-									</tr>
-								</table>
-							</form>
-						</div>
-					</div>
-					<div class="row">
 						<div class = "col-md-4">
-							<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
-						</div>
-						<div class = "col-md-4">
-
-						</div>
-						<div class = "col-md-4">
-
+							<button class = "btn but add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
 						</div>
 					</div>
-				</div>
-				<br />
-				<div class="col-md-12">
-					<hr />
-					<h3><small>3</small>&nbsp;&nbsp;Terms &amp; Conditions</h3>
-					<div class = "collapse" id = "term_condition_warning">
-						<div class="alert alert-danger">
-							<strong>Warning!</strong> Terms and Condition(s) is required.
+					<div class="col-md-12">
+						<div class = "form-horizontal">
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Name: </label>
+								<div class = "col-md-9">
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
+									</div>
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
+									</div>
+									<div class = "col-md-4">
+										<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
+									</div>
+								</div>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Contact Number: </label>
+								<div class = "col-md-3">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
+									</div>
+								</div>
+								<label class = "control-label col-md-2">Email: </label>
+								<div class = "col-md-4">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
+									</div>
+								</div>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Company Name</label>
+								<div class = "col-md-9">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
+									</div>
+								</div>
+							</div>
+							<div class = "form-group">
+								<label class = "control-label col-md-3">Business Style: </label>
+								<div class = "col-md-3">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
+									</div>
+								</div>
+								<label class = "control-label col-md-2">TIN: </label>
+								<div class = "col-md-4">
+									<div class = "col-md-12">
+										<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class = "collapse" id = "term_condition_count_warning">
-						<div class="alert alert-danger">
-							<strong>Warning!</strong> Requires at least one term and condition.
-						</div>
-					</div>
-					<div class = "col-md-12">
-						<table style="width: 100%;" class="table table-responsive" id = "term_table">
-							<thead>
-								<tr>
-									<th style="width: 95%;">
-										Description
-									</th>
-									<th style="width: 5%; text-align: center;">
-										Action
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								@forelse($term_array as $term)
-								<tr id = "term-condition-row">
-									<td>
-										<textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails">{{ substr($term, 3, strlen($term)) }}</textarea>
-									</td>
-									<td style="text-align: center;">
-										<button type = "button" class = "btn btn-danger btn-md delete-term-row">x</button>
-									</td>
-								</tr>
-								@empty
-								@endforelse
-							</tbody>
-						</table>
-					</div>
-					<div class="row">
-						<div classs = "col-md-8">
-
-						</div>
-						<div class = "col-md-4" style="text-align: center;">
-							<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Term &amp; Condition</button>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<h3><small>4</small>&nbsp;&nbsp;Finalize</h3>
-					<div style=" text-align: center;">
-						<button  type = "button" class = "btn btn-md but finalize-contract" style = "width: 100%;">Create Quotation</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<section class="content">
-		<form role="form" method = "POST" id="commentForm">
-			{{ csrf_field() }}
-			<div class="modal fade" id="arModal" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Area</h4>
+	<hr>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel-body">
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">2. Area Rates</a>
+							</h4>
 						</div>
-						<div class="modal-body">			
-							<div class="form-group required">
-								<label class = "control-label">Name: </label>
-								<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
-								
-							</div>
-						</div>
-						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	</section>
-	<div id="chModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Consignee Information</h4>
-				</div>
-				<div class="modal-body">	
-					<div class = "panel-default">
-						<div id="con_collapse" class="collapse in">
-							<ul class="nav nav-tabs">
-								<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
-								<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
-								<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
-							</ul>
-
-							<div class="tab-content">
-								<div id="physical_address" class="tab-pane fade in ">
-									<br />
-									<div class = "form-horizontal">
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_address">Blk/ Lot/ Street:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_province">Province:</label>
-											<div class="col-sm-8">          
-												<select name = "phy_province" id="phy_province" class = "form-control">
-													<option value="0"></option>
-													@forelse($provinces as $province)
-													<option value="{{ $province->id }}" >
-														{{ $province->name }}
-													</option>
-													@empty
-
-													@endforelse
-												</select>     
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_city">City:</label>
-											<div class="col-sm-8">          
-												<select name = "phy_city" id="phy_city" class = "form-control">
-													<option value="0"></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
-											<div class="col-md-8">          
-												<input type="checkbox" class = "checkbox same_billing_address">
-											</div>
-										</div>
+						<div id="collapseOne" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<div class = "collapse" id = "contract_rates_warning">
+									<div class="alert alert-danger">
+										<strong>Warning!</strong> Something is wrong with the rates.
 									</div>
 								</div>
-								<div id="billing_address" class="tab-pane fade in ">
-									<br />
-									<div class = "form-horizontal">
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_province">Province:</label>
-											<div class="col-sm-8">
-												<select name = "bill_province" id="bill_province"  class = "form-control">
-													<option value = '0'></option>
-													@forelse($provinces as $province)
-													<option value="{{ $province->id }}">
-														{{ $province->name }}
-													</option>
-													@empty
+								<div class = "col-md-12" style="overflow-x: auto;">
+									<div class = "panel-default">
+										<form id = "contract_rates_form">
+											<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
+												<thead>
+													<tr>
+														<th width="25%">
+															<strong>Pickup Point</strong>
+														</th>
+														<th width="25%">
+															<strong>Delivery Point</strong>
+														</th>
+														<th width="20%">
+															<strong>Size</strong>
+														</th>
+														<th width="20%">
+															<strong>Amount</strong>
+														</th>
+														<th width="10%" style="text-align: center;">
+															<strong>Action</strong>
+														</th>
+													</tr>
+												</thead>
+												<tr id = "contract-row">
+													<td>
+														<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
+															<option></option>
+															@forelse($locations as $location)
+															<option value = "{{ $location->id }}">{{ $location->name }}</option>
+															@empty
 
-													@endforelse
-												</select>          
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_city">City:</label>
-											<div class="col-sm-8">          
-												<select name = "bill_city" id="bill_city" class = "form-control">
-													<option value="0"></option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
-											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
-											</div>
-										</div>
+															@endforelse
+														</select>
+													</td>
+													<td>
+														<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
+															<option></option>
+															@forelse($locations as $location)
+															<option value = "{{ $location->id }}">{{ $location->name }}</option>
+															@empty
+
+															@endforelse
+														</select>
+													</td>
+													<td>
+														<select name = "volume" id = "0_volume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
+
+														</select>
+													</td>
+													<td>
+														<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
+
+													</td>
+													<td style="text-align: center;">
+														<button  type = "button" class = "btn btn-danger btn-md delete-contract-row">x</button>
+													</td>
+												</tr>
+											</table>
+										</form>
 									</div>
 								</div>
-								<div id="new_con" class="tab-pane fade in active">
-									<br />
-									<form class="form-horizontal" role="form">
-										{{ csrf_field() }}
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="firstName">First Name:</label>
-											<div class="col-sm-6">
-												<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="email">Email</label>
-											<div class="col-sm-6">          
-												<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
-											</div>
-										</div>
-										<div class="form-group required">
-											<label class="control-label col-sm-4" for="TIN">TIN:</label>
-											<div class="col-sm-6">          
-												<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
-											</div>
-										</div>
+								<div class="row">
+									<div class = "col-md-4">
+										<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
+									</div>
+									<div class = "col-md-4">
 
-									</form>	
+									</div>
+									<div class = "col-md-4">
+
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
-					<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
+					<hr>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms & Condition</a>
+							</h4>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div class = "collapse" id = "term_condition_warning">
+									<div class="alert alert-danger">
+										<strong>Warning!</strong> Terms and Condition(s) is required.
+									</div>
+								</div>
+								<div class = "collapse" id = "term_condition_count_warning">
+									<div class="alert alert-danger">
+										<strong>Warning!</strong> Requires at least one term and condition.
+									</div>
+								</div>
+								<div class = "col-md-12">
+									<table style="width: 100%;" class="table table-responsive" id = "term_table">
+										<thead>
+											<tr>
+												<th style="width: 95%;">
+													Description
+												</th>
+												<th style="width: 5%; text-align: center;">
+													Action
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											@forelse($term_array as $term)
+											<tr id = "term-condition-row">
+												<td>
+													<textarea class = "form-control specificDetails" style = "max-width: 100%; min-width: 100%;" placeholder="Enter Terms and Conditions . . . " name = "specificDetails">{{ substr($term, 3, strlen($term)) }}</textarea>
+												</td>
+												<td style="text-align: center;">
+													<button type = "button" class = "btn btn-danger btn-md delete-term-row">x</button>
+												</td>
+											</tr>
+											@empty
+											@endforelse
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<div classs = "col-md-8">
+
+									</div>
+									<div class = "col-md-4" style="text-align: center;">
+										<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-term-row pull-right">New Term &amp; Condition</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">4. Finalize</a>
+							</h4>
+						</div>
+						<div id="collapseThree" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div style=" text-align: center;">
+									<button  type = "button" class = "btn btn-md but finalize-contract" style = "width: 100%;">Create Quotation</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+<section class="content">
+	<form role="form" method = "POST" id="commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="arModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">New Area</h4>
+					</div>
+					<div class="modal-body">			
+						<div class="form-group required">
+							<label class = "control-label">Name: </label>
+							<input type = "text" class = "form-control" name = "description" id = "description"  minlength = "2" data-rule-required="true" />
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
+<div id="chModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Consignee Information</h4>
+			</div>
+			<div class="modal-body">	
+				<div class = "panel-default">
+					<div id="con_collapse" class="collapse in">
+						<ul class="nav nav-tabs">
+							<li class = "active" ><a data-toggle="tab" href="#new_con">Basic Information</a></li>
+							<li><a data-toggle="tab" href="#physical_address">Current Address</a></li>
+							<li><a data-toggle="tab" href="#billing_address">Billing Address</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="physical_address" class="tab-pane fade in ">
+								<br />
+								<div class = "form-horizontal">
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_address">Blk/ Lot/ Street:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_province">Province:</label>
+										<div class="col-sm-8">          
+											<select name = "phy_province" id="phy_province" class = "form-control">
+												<option value="0"></option>
+												@forelse($provinces as $province)
+												<option value="{{ $province->id }}" >
+													{{ $province->name }}
+												</option>
+												@empty
+
+												@endforelse
+											</select>     
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_city">City:</label>
+										<div class="col-sm-8">          
+											<select name = "phy_city" id="phy_city" class = "form-control">
+												<option value="0"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+										<div class="col-md-8">          
+											<input type="checkbox" class = "checkbox same_billing_address">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="billing_address" class="tab-pane fade in ">
+								<br />
+								<div class = "form-horizontal">
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_province">Province:</label>
+										<div class="col-sm-8">
+											<select name = "bill_province" id="bill_province"  class = "form-control">
+												<option value = '0'></option>
+												@forelse($provinces as $province)
+												<option value="{{ $province->id }}">
+													{{ $province->name }}
+												</option>
+												@empty
+
+												@endforelse
+											</select>          
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_city">City:</label>
+										<div class="col-sm-8">          
+											<select name = "bill_city" id="bill_city" class = "form-control">
+												<option value="0"></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+										<div class="col-sm-8">          
+											<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="new_con" class="tab-pane fade in active">
+								<br />
+								<form class="form-horizontal" role="form">
+									{{ csrf_field() }}
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="firstName">First Name:</label>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="email">Email</label>
+										<div class="col-sm-6">          
+											<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+										</div>
+									</div>
+									<div class="form-group required">
+										<label class="control-label col-sm-4" for="TIN">TIN:</label>
+										<div class="col-sm-6">          
+											<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+										</div>
+									</div>
+
+								</form>	
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+				<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 @endsection
 

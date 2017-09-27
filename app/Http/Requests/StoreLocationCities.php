@@ -19,7 +19,7 @@ class StoreLocationCities extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|',
+            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name',
             'provinces_id' =>'required',
             
             ];

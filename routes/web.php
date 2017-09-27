@@ -48,8 +48,8 @@ Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBroker
 Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
 
 //Employees
-Route::resource('/employee_incidents', 'EmployeeIncidentsController');
-Route::resource('/employee_accidents', 'EmployeeAccidentsController');
+Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
+Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
 Route::resource('/employees', 'EmployeesController');
 Route::resource('/employees/newemployee', 'EmployeesController');
 Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
@@ -267,6 +267,7 @@ Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('
 Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
 Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
 Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
+Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
 Route::resource('/cheque', 'ChequesController');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');

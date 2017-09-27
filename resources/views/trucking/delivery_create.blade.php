@@ -18,7 +18,7 @@
 						<div id="wcontainer" class="tab-pane fade in active">
 							<div class = "panel">
 								<div class = "">
-									<form class="form-horizontal" role="form">
+									<form class="form-horizontal">
 										{{ csrf_field() }}
 										<div class="row">
 											<h4>&nbsp;Container Information</h4>
@@ -65,7 +65,7 @@
 																			<div class="form-group required">
 																				<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																				<div class="col-sm-8">
-																					<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" />
+																					<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control " />
 																				</div>
 																			</div>
 																		</div>
@@ -73,7 +73,7 @@
 																			<div class="form-group required">
 																				<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																				<div class="col-sm-8">
-																					<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" />
+																					<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control" />
 																				</div>
 																			</div>
 																		</div>
@@ -83,7 +83,7 @@
 																			<div class="form-group required">
 																				<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																				<div class="col-sm-8">
-																					<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" />
+																					<input type = "text" name = "containerReturnDate" id = "containerReturnDate " class = "form-control containerReturnDate" />
 																				</div>
 																			</div>
 																		</div>
@@ -256,7 +256,7 @@
 								<div class = "col-md-12">
 									<div class="form-group">
 										<label class="control-label" for = "deldatecon">Pickup Date:</label>
-										<input type = "date" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
+										<input type = "text" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
 									</div>
 								</div>
 							</div>
@@ -334,7 +334,7 @@
 								<div class = "col-md-12">
 									<div class="form-group">
 										<label class="control-label" for = "deldatecon">Delivery Date:</label>
-										<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
+										<input type = "text" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
 									</div>
 								</div>
 							</div>
@@ -492,7 +492,7 @@
 									<label class="control-label col-sm-3" for="contactNumber">Helper:</label>
 									<div class="col-sm-8">
 										<select class="form-control" id = "helper">
-											<option value = "0"></option>
+											<option></option>
 											@forelse($employees as $employee)
 											<option value = "{{ $employee->id }}">{{ $employee->firstName . " " . $employee->lastName }}</option>
 											@empty
@@ -521,18 +521,18 @@
 						<h4 class="modal-title">New Location</h4>
 					</div>
 					<div class="modal-body">
-						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+						<form id="loc_form" class = "form-horizontal">
 							{{ csrf_field() }}
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3" required />
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Address: </label>
 								<div class = "col-md-9">
-									<textarea class = "form-control" id = "address" name = "address"></textarea>
+									<textarea class = "form-control" id = "address" name = "address" required></textarea>
 								</div>
 							</div>
 							<div class="form-group required">
@@ -553,21 +553,21 @@
 							<div class="form-group required">
 								<label class = "control-label col-md-3">City: </label>
 								<div class = "col-md-9">
-									<select name = "loc_city" id="loc_city" class = "form-control">
-										<option value="0"></option>
+									<select name = "loc_city" id="loc_city" class = "form-control" required>
+										<option></option>
 									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">ZIP: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3" required />
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type = "submit" class="btn btn-success btnSave" >Save</button>
+						<button type = "button" class="btn btn-success btnSave" >Save</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
@@ -594,8 +594,12 @@
 </div>
 @endsection
 
+@push('styles')
+<link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
+@endpush
 
 @push('scripts')
+<script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#collapse1").addClass('in');
@@ -630,7 +634,80 @@
 		//containerNumber
 		Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
 
+		$('#loc_form').validate({
 
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				address:
+				{
+					required: true,
+					minlength: 3,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				zip:
+				{
+					required: true,
+					minlength: 4,
+					maxlength: 4,
+				},
+				loc_city:
+				{
+					required:true,
+				},
+
+			},onkeyup: function(element) {$(element).valid()}, 
+
+		});
+
+
+		$.datetimepicker.setLocale('en');
+		$('#pickdatecon').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			lang:'en',
+			step: 5,
+			format:'Y/m/d H:i:s',
+			formatDate:'Y/m/d H:i:s',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+		});
+
+		$('#deldatecon').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			lang:'en',
+			step: 5,
+			format:'Y/m/d H:i:s',
+			formatDate:'Y/m/d H:i:s',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+		});
+
+		$('.containerReturnDate').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			timepicker: false,
+			lang:'en',
+			format:'Y/m/d',
+			formatDate:'Y/m/d',
+			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+		});
 
 
 		// Trucking
@@ -644,56 +721,77 @@
 
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			$.ajax({
-				type: 'POST',
-				url: "{{ route('location.index')}}",
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'address' : $('#address').val(),
-					'cities_id' : $('#loc_city').val(),
-					'zipCode' : $('#zip').val(),
-				},
-				success: function(data){
-					if(selected_location == 0){
-						$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-						$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-						$('#pickup_id').val(data.id);
+			$('#zip').valid();
+			$('#name').valid();
+			$('#address').valid();
+			$('#loc_city').valid();
 
-						$('#_address').val($('#address').val());
-						$('#_city').val($('#loc_city option:selected').text());
-						$('#_province').val($('#loc_province option:selected').text().trim());
-						$('#_zip').val($('#zip').val());
+			if($('#zip').valid() && $('#name').valid() && $('#address').valid() && $('#loc_city').valid()){
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('location.index')}}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'address' : $('#address').val(),
+						'cities_id' : $('#loc_city').val(),
+						'zipCode' : $('#zip').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							if(selected_location == 0){
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#pickup_id').val(data.id);
 
-						$('#address').val("");
-						$('#loc_city').val("0");
-						$('#loc_province').val("0");
-						$('#zip').val("");
-						$('#chModal').modal('hide');
+								$('#_address').val($('#address').val());
+								$('#_city').val($('#loc_city option:selected').text());
+								$('#_province').val($('#loc_province option:selected').text().trim());
+								$('#_zip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+							}
+							else{
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id').val(data.id);
+								$('#_daddress').val($('#address').val());
+								$('#_dcity').val($('#loc_city option:selected').text());
+								$('#_dprovince').val($('#loc_province option:selected').text().trim());
+								$('#_dzip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+							}
+						}
+						else{
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v);
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+							});
+							$('#btnSave').removeAttr('disabled');
+						}
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
 					}
-					else{
-						$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-						$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
-						$('#deliver_id').val(data.id);
-						$('#_daddress').val($('#address').val());
-						$('#_dcity').val($('#loc_city option:selected').text());
-						$('#_dprovince').val($('#loc_province option:selected').text().trim());
-						$('#_dzip').val($('#zip').val());
-
-						$('#address').val("");
-						$('#loc_city').val("0");
-						$('#loc_province').val("0");
-						$('#zip').val("");
-						$('#chModal').modal('hide');
-					}
-
-				},
-				error: function(data) {
-					if(data.status == 400){
-						alert("Nothing found");
-					}
-				}
-			})
+				})
+			}
 		})
 
 		function clear_location(){
@@ -731,7 +829,7 @@
 				success: function(data){
 					if(typeof(data) == "object"){
 
-						var new_rows = "<option value = '0'></option>";
+						var new_rows = "<option></option>";
 						for(var i = 0; i < data.length; i++){
 							new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
 						}
@@ -807,6 +905,20 @@
 			container_array.push(container_ctr);
 			container_ctr++;
 			$('#container_copy:last-child').append(new_container);
+			$('.containerReturnDate:last').each(function(i){
+				$(this).datetimepicker({
+					mask:'9999/19/39',
+					dayOfWeekStart : 1,
+					timepicker: false,
+					lang:'en',
+					format:'Y/m/d',
+					formatDate:'Y/m/d',
+					value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+					startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+				});
+			})
+			Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
+			
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
@@ -954,7 +1066,6 @@
 			else{
 				if(validateContainer() == true){
 					if(validateOrder() == true){
-						alert.show(results);
 						validateContainerDetail();
 						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
@@ -1322,7 +1433,7 @@
 			if($('#deliver_id').val() === $('#pickup_id').val()){
 				$('#deliver_id').css('border-color', 'red');
 				$('#pickup_id').css('border-color', 'red');
-					error += "Same pickup and delivery point";
+				error += "Same pickup and delivery point";
 			}
 			else{
 				$('#deliver_id').css('border-color', 'green');
@@ -1424,52 +1535,54 @@
 				return false;
 			}
 		}
-			function validateDetail(){
-				descrp_goods = [];
-				gross_weights = [];
-				suppliers = [];
-				var error = "";
-				if($("#choices li.active").text() === "Without Container"){
-					descrp = document.getElementsByName("wodescriptionOfGoods");
-					gw = document.getElementsByName("wogrossWeight");
-					supp = document.getElementsByName("wosupplier");
-				}
-				for(var i = 0; i < descrp.length; i++){
-					if(descrp[i].value === ""){
-						error += "No description";
-						descrp[i].style.borderColor = 'red';
-					}
-					else{
-						descrp_goods.push(descrp[i].value);
-						descrp[i].style.borderColor = 'green';
-					}
-					if(gw[i].value === ""){
-						error += "No gross weight";
-						gw[i].style.borderColor = 'red';
-					}
-					else{
-						gross_weights.push(gw[i].value);
-						gw[i].style.borderColor = 'green';
-					}
-					if(supp[i].value === ""){
-						suppliers.push("");
-					}
-					else{
-						suppliers.push(supp[i].value);
-					}
-				}
-				if(error.length === 0){
-
-					return true;
+		function validateDetail(){
+			descrp_goods = [];
+			gross_weights = [];
+			suppliers = [];
+			var error = "";
+			if($("#choices li.active").text() === "Without Container"){
+				descrp = document.getElementsByName("wodescriptionOfGoods");
+				gw = document.getElementsByName("wogrossWeight");
+				supp = document.getElementsByName("wosupplier");
+			}
+			for(var i = 0; i < descrp.length; i++){
+				if(descrp[i].value === ""){
+					error += "No description";
+					descrp[i].style.borderColor = 'red';
 				}
 				else{
-					return false;
+					descrp_goods.push(descrp[i].value);
+					descrp[i].style.borderColor = 'green';
+				}
+				if(gw[i].value === ""){
+					error += "No gross weight";
+					gw[i].style.borderColor = 'red';
+				}
+				else{
+					gross_weights.push(gw[i].value);
+					gw[i].style.borderColor = 'green';
+				}
+				if(supp[i].value === ""){
+					suppliers.push("");
+				}
+				else{
+					suppliers.push(supp[i].value);
 				}
 			}
+			if(error.length === 0){
+
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 
 	})
-
-
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 
 </script>
 @endpush

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Pilot Cargo Chain</title>
+    <title>HSMS</title>
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">

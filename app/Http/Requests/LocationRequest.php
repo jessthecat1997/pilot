@@ -4,21 +4,24 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
-class StoreLclType extends FormRequest
+class LocationRequest extends FormRequest
 {
     public function authorize()
     {
         return true;
     }
 
-     public function rules()
+    
+    public function rules()
     {
         switch ($this->method()) {
             case 'POST':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:lcl_types,name',
-            
+            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:locations,name',
+            'address' => 'required',
+            'cities_id' => 'required',
+            'zipCode' => 'required',
             ];
 
             break;
@@ -26,8 +29,10 @@ class StoreLclType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:lcl_types,name,'. $this->segment(3) ,
-            
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:locations,name,'. $this->segment(3) ,
+            'address' => 'required',
+            'cities_id' => 'required',
+            'zipCode' => 'required',
             ];
 
             break;

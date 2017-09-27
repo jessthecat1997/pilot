@@ -15,9 +15,10 @@ class StoreBrokerageFee extends FormRequest
     public function rules()
     {
         return [
-        'minimum' => 'required',
-        'maximum' => 'required',
-        'amount' => 'required',
+        'minimum' => 'required|',
+        'maximum' => 'required|',
+        'amount' => 'required|',
+        'dateEffective' =>'required|date'
         ];
     }
 

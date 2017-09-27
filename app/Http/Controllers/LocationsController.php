@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\LocationRequest;
 use DB;
 use App\Location;
 
@@ -18,7 +19,7 @@ class LocationsController extends Controller
         return view('locations.locations_index', compact(['provinces']));
     }
 
-    public function store(Request $request)
+    public function store(LocationRequest $request)
     {
         $location = Location::create($request->all());
         return $location;
@@ -34,7 +35,7 @@ class LocationsController extends Controller
         return $location;
     }
 
-    public function update(Request $request, $id)
+    public function update(LocationRequest $request, $id)
     {
         $location = Location::findOrFail($id);
         $location->name = $request->name;

@@ -5,14 +5,14 @@
 		<h2>&nbsp;Maintenance | Less Cargo Load Arrastre Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Arrastre</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Arrastre</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped cell-border table-bordered" id = "wf_table">
+				<table class = "table-responsive table  table-striped cell-border table-bordered" id = "af_table">
 					<thead>
 						<tr>
 							<td>
@@ -36,6 +36,32 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($arrastres as $a)
+						<tr>
+							<td>
+								{{ $a->dateEffective }}
+							</td>
+							<td>
+								{{ $a->location}}
+							</td>
+							<td>
+								{{ $a->lcl_type}}
+							</td>
+							<td>
+								{{ $a->basis_type}}
+							</td>
+							<td>
+								{{ $a->amount}}
+							</td>
+							<td>
+								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -43,7 +69,7 @@
 </div>
 <section class="content">
 	<form role="form" method = "POST" class="commentForm">
-		<div class="modal fade" id="wfModal" role="dialog">
+		<div class="modal fade" id="afModal" role="dialog">
 			<div class="form-group">
 				<div class="modal-dialog ">
 					<div class="modal-content">
@@ -67,12 +93,12 @@
 							</div>
 						</form>
 						<br />
-						<div class = "collapse" id = "wf_table_warning">
+						<div class = "collapse" id = "af_table_warning">
 							<div class="alert alert-danger">
 								<strong>Warning!</strong> Requires at least one Arrastre free per container.
 							</div>
 						</div>
-						<div class = "collapse" id = "wf_warning">
+						<div class = "collapse" id = "af_warning">
 							<div class="alert alert-danger">
 								<strong>Warning!</strong> Something is wrong with the Arrastre fees.
 							</div>
@@ -82,7 +108,7 @@
 								<div class = "panel-default">
 									{{ csrf_field() }}
 									<form id = "Arrastre_form" class = "commentForm">
-										<table class="table responsive table-hover"  id= "wf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
+										<table class="table responsive table-hover"  id= "af_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
 													<td >
@@ -109,7 +135,7 @@
 
 												</tr>
 											</thead>
-											<tr id = "wf-row">
+											<tr id = "af-row">
 												<td width = "20%">
 
 													<div class = "form-group " >
@@ -147,13 +173,13 @@
 
 												</td>
 												<td width = "10%" style="text-align: center;">
-													<button class = "btn btn-danger btn-md delete-wf-row">x</button>
+													<button class = "btn btn-danger btn-md delete-af-row">x</button>
 												</td>
 
 											</tr>
 										</table>
 										<div class = "form-group" style = "margin-left:10px">
-											<button    class = "btn btn-primary btn-md new-wf-row pull-left">New</button>
+											<button    class = "btn btn-primary btn-md new-af-row pull-left">New</button>
 											<br /><br/>
 											<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 										</div>
@@ -162,7 +188,7 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button id = "btnSave" type = "submit" class="btn btn-success finalize-wf">Save</button>
+							<button id = "btnSave" type = "submit" class="btn btn-success finalize-af">Save</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
@@ -199,7 +225,7 @@
 @endsection
 @push('styles')
 <style>
-.class-wf-fee
+.class-af-fee
 {
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
@@ -225,17 +251,17 @@
 	var jsonBasisType, jsonAmount;
 	var arr_basis_type_id = [];
 	var arr_lcl_type_id = [];
-
-
+	var af_id;
+	
 	$(document).ready(function(){
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
 		var month = ("0" + (now.getMonth() + 1)).slice(-2);
 		var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
-		var wf_row = "<tr>" + $('#wf-row').html() + "</tr>";
+		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
 
-		var wftable = $('#wf_table').DataTable({
+		var aftable = $('#af_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -287,23 +313,23 @@
 			resetErrors();
 			$('#amount').val("0.00");
 			$('#dateEffective').val(today);
-			$('#wf_parent_table > tbody').html("");
+			$('#af_parent_table > tbody').html("");
 			$('.modal-title').text('New Arrastre Fee Per Pier');
-			$('#wfModal').modal('show');
-			$('#wf_parent_table > tbody').append(wf_row);
-			$('#wf_warning').removeClass('in');
+			$('#afModal').modal('show');
+			$('#af_parent_table > tbody').append(af_row);
+			$('#af_warning').removeClass('in');
 
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			$('.modal-title').text('Update Arrastre Fee Per Pier');
-			var wf_id = $(this).val();
-			data = wftable.row($(this).parents()).data();
+			af_id = $(this).val();
+			data = aftable.row($(this).parents()).data();
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#dateEffective').val(data.dateEffective);
 
-			$('#wfModal').modal('show');
+			$('#afModal').modal('show');
 
 			$.ajax({
 				type: 'GET',
@@ -317,19 +343,19 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
 
 					}
-					$('#wf_parent_table > tbody').html("");
-					$('#wf_parent_table > tbody').append(rows);
+					$('#af_parent_table > tbody').html("");
+					$('#af_parent_table > tbody').append(rows);
 
 				}
 
 			})
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var wf_id = $(this).val();
-			data = wftable.row($(this).parents()).data();
+			af_id = $(this).val();
+			data = aftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
@@ -349,7 +375,7 @@
 
 				if($(this).val() > 0){
 					$(this).css('border-color', 'green');
-					$('#wf_warning').removeClass('in');
+					$('#af_warning').removeClass('in');
 				}
 				else{
 					$(this).css('border-color', 'red');
@@ -357,23 +383,23 @@
 			});
 		})
 
-		$(document).on('click', '.delete-wf-row', function(e){
+		$(document).on('click', '.delete-af-row', function(e){
 			e.preventDefault();
-			$('#wf_warning').removeClass('in');
-			if($('#wf_parent_table > tbody > tr').length == 1){
+			$('#af_warning').removeClass('in');
+			if($('#af_parent_table > tbody > tr').length == 1){
 				$(this).closest('tr').remove();
-				$('#wf_table_warning').addClass('fade in');
+				$('#af_table_warning').addClass('fade in');
 			}
 			else{
 				$(this).closest('tr').remove();
 			}
 		})
 
-		$(document).on('click', '.new-wf-row', function(e){
+		$(document).on('click', '.new-af-row', function(e){
 			e.preventDefault();
-			$('#wf_table_warning').removeClass('fade in');
-			if(validatewfRows() === true){
-				$('#wf_parent_table').append(wf_row);
+			$('#af_table_warning').removeClass('fade in');
+			if(validateafRows() === true){
+				$('#af_parent_table').append(af_row);
 
 			}
 		})
@@ -381,13 +407,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/arrastre_fee_lcl/' + data.id,
+				url:  '/admin/arrastre_fee_lcl/' + af_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					wftable.ajax.reload();
+					aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 					toastr.options = {
 						"closeButton": false,
@@ -411,9 +437,9 @@
 				}
 			})
 		});
-		$(document).on('click', '.finalize-wf', function(e){
+		$(document).on('click', '.finalize-af', function(e){
 			e.preventDefault();
-			if(finalvalidateWfRows() === true){
+			if(finalvalidateafRows() === true){
 
 				var title = $('.modal-title').text();
 				console.log(title);
@@ -444,8 +470,8 @@
 							},
 							success: function (data){
 
-								wftable.ajax.reload();
-								$('#wfModal').modal('hide');
+								aftable.ajax.reload();
+								$('#afModal').modal('hide');
 								$('.modal-title').text('New Arrastre Fee Per Pier');
 
 								$('#amount').val("0.00");
@@ -488,10 +514,10 @@
 
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/arrastre_fee_lcl/'+ data.id,
+							url:  '/admin/arrastre_fee_lcl/'+ af_id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
-								'af_head_id': data.id,
+								'af_head_id': af_id,
 								'locations_id' : $('#locations_id').val(),
 								'dateEffective':  $('#dateEffective').val(),
 								'lcl_types_id':jsonLclType,
@@ -502,8 +528,8 @@
 							},
 							success: function (data){
 
-								wftable.ajax.reload();
-								$('#wfModal').modal('hide');
+								aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
+								$('#afModal').modal('hide');
 								$('.modal-title').text('New Arrastre Fee Per Pier');
 
 								$('#amount').val("0.00");
@@ -542,7 +568,7 @@
 		});
 	});
 
-function validatewfRows()
+function validateafRows()
 {
 	lcl_type_id = [];
 	basis_type_id = [];
@@ -571,7 +597,7 @@ function validatewfRows()
 			basis_type[i].style.borderColor = 'green';
 			lcl_type_id.push(lcl_type[i].value);
 			basis_type_id.push(basis_type[i].value);
-			$('#wf_warning').removeClass('in');
+			$('#af_warning').removeClass('in');
 
 		}
 
@@ -589,7 +615,7 @@ function validatewfRows()
 			else{
 				amount[i].style.borderColor = 'green';
 				amount_value.push(amount[i].value);
-				$('#wf_warning').removeClass('in');
+				$('#af_warning').removeClass('in');
 			}
 		}
 
@@ -617,10 +643,10 @@ function validatewfRows()
 				basis_type[j].style.borderColor = 'red';
 				amount[i].style.borderColor = 'red';
 				amount[j].style.borderColor = 'red';
-				$('#wf_warning').addClass('in');
+				$('#af_warning').addClass('in');
 
 			}else{
-				$('#wf_warning').removeClass('in');
+				$('#af_warning').removeClass('in');
 			}
 		}
 	}
@@ -637,7 +663,7 @@ function validatewfRows()
 	}
 
 
-	function finalvalidateWfRows()
+	function finalvalidateafRows()
 	{
 		lcl_type_id = [];
 		basis_type_id = [];
@@ -656,7 +682,7 @@ function validatewfRows()
 			{
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
-				$('#wf_warning').addClass('in');
+				$('#af_warning').addClass('in');
 			}
 			else
 			{
@@ -673,7 +699,7 @@ function validatewfRows()
 					lcl_type_id.push(lcl_type[i].value);
 					basis_type_id.push(basis_type[i].value);
 					amount_value.push(temp);
-					$('#wf_warning').removeClass('in');
+					$('#af_warning').removeClass('in');
 				}
 			}
 
@@ -700,10 +726,10 @@ function validatewfRows()
 					basis_type[j].style.borderColor = 'red';
 					amount[i].style.borderColor = 'red';
 					amount[j].style.borderColor = 'red';
-					$('#wf_warning').addClass('in');
+					$('#af_warning').addClass('in');
 
 				}else{
-					$('#wf_warning').removeClass('in');
+					$('#af_warning').removeClass('in');
 				}
 			}
 		}

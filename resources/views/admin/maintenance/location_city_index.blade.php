@@ -26,95 +26,73 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($cities as $ct)
+						<tr>
+							<td>
+								{{ $ct->province }}
+							</td>
+							<td>
+								{{ $ct->city }}
+							</td>
+							<td>
+								<button value = "{{ $ct->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $ct->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 </div>
 <section class="content">
-	<div class="modal fade" id="lcModal" role="dialog">
-		<form role="form" method = "POST" class="commentForm">
-			<div class="form-group">
-				<div class="modal-dialog ">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New City</h4>
-						</div>
-						<div class="modal-body ">		
-							<div class="form-group required">
-								<label class="control-label col-md-2" for="dateEffective">Province:</label>
-								<div class = "col-md-10">
-									<div class = "col-md-8">
-										<select name = "loc_province" id="loc_province" class = "form-control required select2_province" style="width: 100%;">
-										</select> 
-									</div>
-									<div class = "col-md-4">
-										<button  id = "new_province" class = "btn btn-sm btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal" style="width: 100%;" >New Province </button> 
-									</div>
-								</div>
+	
+	<form role="form" method = "POST" id="commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lcModal" role="dialog">
+			<div class="modal-dialog ">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 id="cModal-title">New City</h4>
+					</div>
+					<div class="modal-body ">		
+						<div class="form-group required">
+							<label class="control-label">Province:</label>
+							<div class = "input-group " >
+								<select name = "loc_province" id="loc_province" class = "form-control " >
+									@forelse($provinces as $province)
+									<option value="{{ $province->id }}">{{ $province->name }}</option>
+									@empty
+									@endforelse
+								</select> 
+								<span class="input-group-btn">
+									<button class="btn btn-primary new_province" type="button">+</button>
+								</span>
 							</div>
-							<br />
-							<div class="form-group required">
-								<form id = "lc_form" class = "commentForm">
-									{{ csrf_field() }}
-									<label class = "control-label col-md-2"><strong>City</strong></label>
-									<div class = "col-md-9">			
-										<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" 
-										name = "city" id = "city" value=""  data-rule-required="true"   />
-									</div>
-								</form>
-							</div>
-							<br />
-							<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 						</div>
-						<div class="modal-footer">
-							<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
+						<div class="form-group required">
+							<label class = "control-label"><strong>City</strong></label>
+							<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" name = "city" id = "city" value=""  data-rule-required="true"/>
 						</div>
+						<br />
+						<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
+					</div>
+					<div class="modal-footer">
+						<button id = "btnSave" type = "submit" class="btn btn-success finalize-lc">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>			
 					</div>
 				</div>
 			</div>
+			
 		</form>
 	</div>
 </section>
 <section class="content">
-	<form role="form" method = "POST" id = "commentForm">
-		{{ csrf_field() }}
-		<div class="modal fade" id="lcModal_update" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">Update City</h4>
-					</div>
-					<div class="modal-body">
-						<div class="form-group required">
-							<label class="control-label " for="province">Province:</label>
-							<select name = "loc_province_update" id="loc_province_update" class = "form-control required select2_province">
-							</select>     
-						</div>
-						<div class = "form-group">
-							<button  id = "new_province" class = "btn btn-md btn-info new_province pull-right" data-toggle = 'modal' data-target = "#lpModal"  >New Province </button>
-							<br>
-						</div>			
-						<div class="form-group required">
-							<label class = "control-label">Name:</label>
-							<input type = "text" class = "form-control" name = "city_update" id = "city_update"  minlength = "2" data-rule-required="true" />
-
-						</div>
-					</div>
-					<div class="modal-footer">
-						<input id = "btnSave_update" type = "submit" class="btn btn-success submit" value = "Save" />
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-</section>
-<section class="content">
-	<form role="form" method = "POST" id = "commentForm">
+	<form role="form" method = "POST" id="provinceForm">
 		{{ csrf_field() }}
 		<div class="modal fade" id="lpModal" role="dialog">
 			<div class="modal-dialog">
@@ -167,18 +145,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-city
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-city
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 
 </style>
 @endpush
@@ -186,26 +164,17 @@
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
 	$('#collapse2').addClass('in');
-	var city_id = [];
-	var city_id_descrp = [];
-	var arr_provinces =[
-	@forelse($provinces as $province)
-	{ id: '{{ $province->id }}', text:'{{ $province->name }}' }, 
-	@empty
-	@endforelse
-	];
-
-
+	var temp_city;
+	var lc_id;
 
 	$(document).ready(function(){
-		var lc_row = "<tr>" + $('#lc-row').html() + "</tr>";
-		//$(city).attr("disabled", true);
+
+
 		var lctable = $('#lc_table').DataTable({
 			processing: false,
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/lcData',
 			columns: [
 
 			{ data: 'province' },
@@ -213,7 +182,7 @@
 
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
+			],	"order": [[ 0, "asc" ]], 
 
 
 		});
@@ -229,41 +198,40 @@
 				city:
 				{
 					required: true,
+					lettersonly:true,
 					minlength: 3,
 					maxlength: 50,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
-					},
-					regex: /^[A-Za-z ]+$/,
-
+					},	
 				}
-
-				
+			},
+			onkeyup: function(element) {$(element).valid()}, 
+			
+		});
+		$("#provinceForm").validate({
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					lettersonly:true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+				}
 			},
 			onkeyup: function(element) {$(element).valid()}, 
 			
 		});
 
-		$(".select2_province").select2({
-			data: arr_provinces,
-			width: '100%',
-			sorter: function(data) {
-				return data.sort(function (a, b) {
-					if (a.text > b.text) {
-						return 1;
-					}
-					if (a.text < b.text) {
-						return -1;
-					}
-					return 0;
-				});
-			},
-		});
-
-
 		$(document).on('click', '.new', function(e){
 			resetErrors();
+			$('#cModal-title').text('New City');
 			$('#lcModal').modal('show');
 
 		});
@@ -271,76 +239,23 @@
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			e.preventDefault();
-			var lc_id = $(this).val();
+			lc_id = $(this).val();
 			data = lctable.row($(this).parents()).data();
-
-			console.log("this is  " + data.province);
-
-			$("#loc_province_update").select2("val", $("#loc_province_update option:contains('"+data.province+"')").val() );
-
-			$('#city_update').val(data.city);
-			$('#lcModal_update').modal('show');
+			console.log(data.province);
+			$('#cModal-title').text('Update City');
+			$("#loc_province option:contains(" + data.province +")").attr("selected", true);
+			$('#city').val(data.city);
+			$('#lcModal').modal('show');
 		});
 
 		$(document).on('click', '.deactivate', function(e){
-			var lc_id = $(this).val();
+			lc_id = $(this).val();
 			data = lctable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
 
-		$(document).on('click', '.delete-lc-row', function(e){
-			e.preventDefault();
-			$('#lc_warning').removeClass('in');
-			if($('#lc_parent_table > tbody > tr').length == 1){
-				$('#lc_table_warning').addClass('fade in');
-			}
-			else{
-				$(this).closest('tr').remove();
-			}
-		})
-
-		$(document).on('click', '.new-lc-row', function(e){
-			e.preventDefault();
-			$('#lc_table_warning').removeClass('fade in');
-			if(validatelcRows() === true){
-
-				$('#lc_parent_table').append(lc_row);
-
-				
-			}
-			
-
-		})
-
-		$(document).on('change', '.lc_city_valid', function(e){
-			$(".lc_city_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-		$(document).on('change', '.lc_city_valid', function(e){
-			$(".lc_city_valid").each(function(){
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-
-
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
-
-
-
-		$(document).on('click', '#new_province', function(e){
+		$(document).on('click', '.new_province', function(e){
 			resetErrors();
 			e.preventDefault();
 			$('#name').val("");
@@ -360,19 +275,8 @@
 				},
 				success: function (data)
 				{
-
-					var lpdata = $('.select2_province').select2('data');
-					arr_provinces.push({id:data.id,text:data.name});
-					$latest = data.name;
-					$(".select2_province").select2({
-						data: arr_provinces,
-						width: '100%',
-					});
-
-					console.log ("latest is "+$latest);
-
-					$(".select2_province").select2("val", $(".select2_province option:contains('antipolo')").val() );
-
+					var newOption = $('<option selected value="'+data.id+'">'+data.name+'</option>');
+					$('#loc_province').append(newOption);
 					if(typeof(data) === "object"){
 						$('#lpModal').modal('hide');
 						$('#name').val("");
@@ -396,7 +300,7 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record addded successfully")
+						toastr["success"]("Record added new province")
 					}
 					else{
 						resetErrors();
@@ -413,20 +317,17 @@
 			})
 		});
 
-
-
-
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/location_city/' + data.id,
+				url:  '/admin/location_city/' + lc_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					lctable.ajax.reload();
+					lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -454,9 +355,9 @@
 
 		$(document).on('click', '.finalize-lc', function(e){
 			e.preventDefault();
-
-			if(finalvalidatelcRows() === true){
-				
+			var title = $('#cModal-title').text();
+			console.log(title);
+			if(title === "New City"){
 				$.ajax({
 
 					type: 'POST',
@@ -470,7 +371,7 @@
 
 					success: function (data){
 
-						lctable.ajax.reload();
+						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 						$('#lcModal').modal('hide');
 						$('.modal-title').text('New City');
 						$('#city').val("");
@@ -493,220 +394,63 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record addded successfully")
+						toastr["success"]("Record added successfully");
+
+					}
+				})
+			}else{
+
+				$.ajax({
+
+					type: 'PUT',
+					url:  '/admin/location_city/' +lc_id,
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#city').val(),
+						'provinces_id' : $('#loc_province').val(),
+
+					},
+
+					success: function (data){
+
+						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
+						$('#lcModal').modal('hide');
+						$('.modal-title').text('New City');
+						$('#city').val("");
+
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Record updated successfully");
 
 					}
 				})
 
-			}
-		});
 
-
-		$(document).on('click', '#btnSave_update', function(e){
-			console.log('update city: ' +$('input[name=city_update').val());
-			console.log('update provinces_id: ' +  $('#loc_province').val());	
-			e.preventDefault();
-			$.ajax({
-				type: 'PUT',
-				url:  '/admin/location_city/' + data.id,
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('input[name=city_update').val(),
-					'provinces_id' : $('#loc_province').val(),
-
-				},
-				success: function (data){
-
-
-
-					lctable.ajax.reload();
-					$('#lcModal_update').modal('hide');
-					$('#city').val("");
-
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record Updated successfully")
-
-				}
-			})
-
-
-		});
-
-
-
-
-	});
-
-
-
-
-
-
-function validatelcRows()
-{
-
-	city_id = [];
-	city_id_descrp = [];
-
-
-	range_pairs = [];
-	
-	city =  document.getElementsByName('city');
-	
-	error = "";
-
-	
-
-	for(var i = 0; i < city.length; i++){
-		var temp;
-
-
-
-
-		if(city[i].value === "")
-		{
-			city[i].style.borderColor = 'red';
-			error += "City Required.";
-		}
-
-		else
-		{
-			city[i].style.borderColor = 'green';
-			city_id_descrp.push(city[i].value);
-			city_id.push(city[i].value);
-		}
-
-		
-		pair = {
-			city: city[i].value,
-		};
-		range_pairs.push(pair);
-	}
-	var i, j, n;
-	found= false;
-	n=range_pairs.length;
-
-	for (i=0; i<n; i++) {                        
-		for (j=i+1; j<n; j++)
-		{              
-			if (range_pairs[i].city === range_pairs[j].city){
-				found = true;
-				
-				city[j].style.borderColor = 'red';
-				
-			}
-		}	
-	}
-	if(found == true){
-		error+= "Existing rate.";
-	}
-
-		//Final validation
-		if(error.length == 0){
-			return true;
-		}
-
-		else
-		{
-			return false;
-		}
-
-	}
-
-	function finalvalidatelcRows()
-	{
-		city_id = [];
-		city_id_descrp = [];
-		
-		range_pairs = [];
-
-		city = document.getElementsByName('city');
-		
-		error = "";
-		console.log("select is " + $('#loc_province').val());
-		if($('#loc_province').val() == ""){
-
-			document.getElementById("loc_province").style.borderColor = "red";
-			error += "Province is required.";
-
-		}else{
-			document.getElementById("loc_province").style.borderColor = "green";
-
-		}
-
-		for(var i = 0; i < city.length; i++){
-
-
-			if(city[i].value === "")
-			{
-
-				error += "city is Required.";
-				$('#lc_warning').addClass('in');
 			}
 
-			else
-			{
+		});//submit
 
-				city_id_descrp.push(city[i].value);
-				var min = city[i].value
-				city_id.push(city[i].value);
-			}
-			
-			pair = {
-				city: city[i].value,
-				
-			};
-			range_pairs.push(pair);
-		}
-		var i, j, n;
-		found= false;
-		n=range_pairs.length;
-		for (i=0; i<n; i++) {                        
-			for (j=i+1; j<n; j++)
-			{              
-				if (range_pairs[i].city === range_pairs[j].city ){
-					found = true;
-					
-					city[i].style.borderColor = 'red';
+	});//end
 
-
-					city[j].style.borderColor = 'red';
-				}
-			}	
+		function resetErrors() {
+			$('form input, form select').removeClass('inputTxtError');
+			$('label.error').remove();
 		}
-		if(found == true){
-			error+= "Existing city.";
-			$('#lc_warning').addClass('in');
-		}
-
-		if(error.length == 0){
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
-</script>
-@endpush
+	</script>
+	@endpush

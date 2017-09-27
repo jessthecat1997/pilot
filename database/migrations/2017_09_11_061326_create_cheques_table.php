@@ -15,6 +15,7 @@ class CreateChequesTable extends Migration
     {
         Schema::create('cheques', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('chequeNumber', 100);
             $table->string('bankName', 100);
             $table->boolean('isVerify');
             $table->integer('bi_head_id')->unsigned();

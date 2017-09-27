@@ -255,7 +255,8 @@ class DatatablesController extends Controller
 			<input type = "hidden" value = "'. $consignee->email .'" class = "email" />
 			<input type = "hidden" value = "'. $consignee->contactNumber .'" class = "contactNumber" />
 			<input type = "hidden" value = "'. $consignee->businessStyle .'" class = "businessStyle" />
-			<input type = "hidden" value = "'. $consignee->TIN .'" class = "TIN" />'
+			<input type = "hidden" value = "'. $consignee->TIN .'" class = "TIN" />
+			<input type = "hidden" value = "'. $consignee->id . '" class = "consignees_id" />'
 			;
 		})
 		->editColumn('consigneeType', function($consignee){
@@ -365,7 +366,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'E']
-			])
+		])
 		->get();
 		return Datatables::of($exp)
 		->make(true);
@@ -382,7 +383,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'R']
-			])
+		])
 		->get();
 		return Datatables::of($rev)
 		->make(true);
@@ -496,7 +497,8 @@ class DatatablesController extends Controller
 	}
 
 	public function bf_datatable(){
-		$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id");
+		$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at ,
+			GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.amount ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return Datatables::of($bfs)
 		->addColumn('action', function ($bf){
@@ -1029,7 +1031,8 @@ class DatatablesController extends Controller
 	}
 
 	public function af_dc_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, 
+			GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
@@ -1042,7 +1045,7 @@ class DatatablesController extends Controller
 	}
 
 	public function af_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY dateEffective");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
@@ -1055,8 +1058,7 @@ class DatatablesController extends Controller
 	}
 
 	public function wf_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, 
-			h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($wharfages)
 		->addColumn('action', function ($wharfage){
@@ -1069,7 +1071,7 @@ class DatatablesController extends Controller
 	}
 
 	public function wf_lcl_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($wharfages)
 		->addColumn('action', function ($wharfage){
@@ -1082,7 +1084,7 @@ class DatatablesController extends Controller
 	}
 
 	public function af_lcl_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name) AS lcl_type, GROUP_CONCAT(basis_types.abbreviation) AS basis_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
@@ -1095,7 +1097,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ipf_datatable(){
-		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(d.minimum ORDER BY d.minimum ASC ) AS minimum, GROUP_CONCAT(d.maximum ORDER BY d.minimum ASC ) AS maximum, GROUP_CONCAT(d.amount ORDER BY d.minimum ASC) AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id GROUP BY h.id");
+		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
@@ -2702,14 +2704,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2732,14 +2734,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2814,9 +2816,9 @@ class DatatablesController extends Controller
 		->removeColumn('lastName')
 		->addColumn('action', function ($employee){
 			return
-				"<button class = 'btn btn-info view-employee' title = 'View'><span class = 'fa fa-eye'></span></button>
-				<button class = 'btn btn-primary edit-employee' title = 'Edit'><span class = 'fa fa-edit'></span></button>".
-				"<input type = 'hidden' value = '" . $employee->id . "' class = 'employee-id' />";
+			"<button class = 'btn btn-info view-employee' title = 'View'><span class = 'fa fa-eye'></span></button>
+			<button class = 'btn btn-primary edit-employee' title = 'Edit'><span class = 'fa fa-edit'></span></button>".
+			"<input type = 'hidden' value = '" . $employee->id . "' class = 'employee-id' />";
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

@@ -20,7 +20,7 @@ class CreateImportProcessingFeeDetails extends Migration
             $table->decimal('amount', 19, 2);
             $table->integer('ipf_headers_id')->unsigned();
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('ipf_headers_id')->references('id')->on('import_processing_fee_headers');
         });
     }
