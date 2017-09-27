@@ -120,13 +120,13 @@
 									<div class="form-group">
 										<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 										<div class="col-sm-8">
-											<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date">
+											<input type="text" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date">
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-sm-3" for="dateExpiration">Date Expiration:</label>
 										<div class="col-sm-8">
-											<input type="date" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date">
+											<input type="text" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date">
 										</div>
 									</div>
 								</form>
@@ -137,7 +137,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms & Condition</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
@@ -393,12 +393,12 @@
 		color: #fff;
 	}
 </style>
+<link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 @endpush
+
 @push('scripts')
+<script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
-	
-
-
 	var consigneeID = null;
 	
 	$(document).ready(function(){
@@ -424,6 +424,29 @@
 
 
 		});
+
+		$('#dateEffective').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			timepicker: false,
+			lang:'en',
+			format:'Y/m/d',
+			formatDate:'Y/m/d',
+			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+		});
+
+		$('#dateExpiration').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			timepicker: false,
+			lang:'en',
+			format:'Y/m/d',
+			formatDate:'Y/m/d',
+			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+		});
+
 
 		$('#consignee_id').select2(); 
 
@@ -468,6 +491,7 @@
 				$('#_cTIN').val("");
 			}
 		})
+		
 
 		$(document).on('click', '.add_new_consignee', function(e){
 			e.preventDefault();

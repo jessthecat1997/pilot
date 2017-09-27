@@ -295,8 +295,18 @@ class BrokerageController extends Controller
 
     $locations = \App\Location::all();
 
+    $lcl_types = DB::table('lcl_types')
+		->select('id', 'name')
+		->where('deleted_at', '=', null)
+		->get();
+
+    $basis = DB::table('basis_types')
+    ->select('id', 'name', 'abbreviation')
+		->where('deleted_at', '=', null)
+		->get();
+
     $container_volumes = \App\ContainerType::all();
-      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes']));
+      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis']));
   }
 
   public function save_neworder(Request $request)
@@ -321,6 +331,9 @@ class BrokerageController extends Controller
     $new_brokerage_so->Weight = $request->weight;
     $new_brokerage_so->freightType = $request->freightType;
     $new_brokerage_so->statusType = 'P';
+    $new_brokerage_so->cargo_type = $request->cargoType;
+    $new_brokerage_so->basis = $request->basis;
+    $new_brokerage_so->withCO = $request->withCO;
     $new_brokerage_so->bi_head_id_rev = null;
     $new_brokerage_so->bi_head_id_exp = null;
     $new_brokerage_so->save();
@@ -333,6 +346,7 @@ class BrokerageController extends Controller
           $new_nonbro_detail->descriptionOfGoods = $request->descrp_goods[$i];
           $new_nonbro_detail->grossWeight = $request->gross_weights[$i];
           $new_nonbro_detail->supplier = $request->suppliers[$i];
+            $new_nonbro_detail->lclType_id = $request->lcl_types[$i];
           $new_nonbro_detail->brok_head_id = $new_brokerage_so->id;
           $new_nonbro_detail->save();
       }
@@ -458,10 +472,7 @@ class BrokerageController extends Controller
   {
     $brokerage_id = $request->brokerage_id;
 
-
-      $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as created_at, dt_hed.brokerageFee as amount from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) AND dt_hed.StatusType = "A" ORDER BY dt_hed.brokerageServiceOrders_id');
-
-
+    $brokerage_fees = DB::Select('select dt_hed.id as duty_header_id, dt_hed.created_at as created_at, dt_hed.brokerageFee as amount from duties_and_taxes_headers dt_hed where dt_hed.brokerageServiceOrders_id = '.$brokerage_id.' AND not exists(select or_rev.order_brokerage_id from order_billed_revenues or_rev where dt_hed.id = or_rev.order_brokerage_id) AND dt_hed.StatusType = "A" ORDER BY dt_hed.brokerageServiceOrders_id');
 
     return Datatables::of($brokerage_fees)
     ->addColumn('action', function ($brokerage_fee){
@@ -470,8 +481,8 @@ class BrokerageController extends Controller
     })
     ->make(true);
 
-
   }
+
   public function update_status(Request $request)
   {
       $brokerage_id = $request->brokerage_id;

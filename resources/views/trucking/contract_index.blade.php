@@ -40,6 +40,58 @@
 							</th>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($contract_headers as $con_head)
+						<tr>
+							<td>
+								{{ $con_head->id }}
+							</td>
+							<td>
+								{{ $con_head->companyName }}
+							</td>
+							<td>
+								{{ $con_head->dateEffective ? with(new Carbon\Carbon ($con_head->dateEffective))->toFormattedDateString() : 'Pending' }}
+							</td>
+							<td>
+								{{ $con_head->dateExpiration ? with(new Carbon\Carbon ($con_head->dateExpiration))->toFormattedDateString()  : 'Pending' }}
+							</td>
+							<td>
+								@if($con_head->isFinalize == 1)
+
+								@if(Carbon\Carbon::now()->between(Carbon\Carbon::parse($con_head->dateEffective), Carbon\Carbon::parse($con_head->dateExpiration)))
+								Active
+
+								@elseif(Carbon\Carbon::parse($con_head->dateEffective)->isPast())
+
+								@else
+								Expire
+								@endif
+
+								@else
+								
+								Draft
+								
+								@endif
+							</td>
+							<td>
+								{{ Carbon\Carbon::parse($con_head->created_at)->toFormattedDateString() }}
+							</td>
+							<td>
+								@if($con_head->isFinalize == 1)
+
+								<button value = "{{ $con_head->id }}" class = "btn btn-md but view-contract-details">View</button>
+								<button value = "{{ $con_head->id }}" class = "btn btn-md btn-primary amend-contract">Amend</button>
+								<button value = "{{ $con_head->id }}" class = "btn btn-md btn-success print-contract-details">Print</button>
+
+								@else
+								<button value = "{{ $con_head->id }}" class = "btn btn-md btn-primary update-draft">Update</button>
+								@endif
+							</td>
+						</tr>
+						@empty
+
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -48,12 +100,12 @@
 @endsection
 @push('styles')
 <style>
-	.contracts
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.contracts
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -64,7 +116,7 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			ajax: "{{ route('contract.data') }}",
+			//ajax: "{{ route('contract.data') }}",
 			columns: [
 			{ data: 'id' },
 			{ data: 'companyName' },
