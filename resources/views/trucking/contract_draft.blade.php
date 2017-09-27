@@ -87,13 +87,13 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 							<div class="col-sm-8">
-								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" value="{{ $contract[0]->dateEffective }}">
+								<input type="text" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" value="{{ $contract[0]->dateEffective }}">
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="dateExpiration">Date Expiration:</label>
 							<div class="col-sm-8">
-								<input type="date" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date" value="{{ $contract[0]->dateExpiration }}">
+								<input type="text" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date" value="{{ $contract[0]->dateExpiration }}">
 							</div>
 						</div>
 					</form>
