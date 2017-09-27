@@ -40,13 +40,10 @@
 
 						<tr>
 							<td class="active" width = "30%" ><strong>Brokerage Service Order #: </strong></td>
-
 							<td class = "success" id="consignee">{{ $brokerage_id }}</td>
 							<td class="success">
-
 							</td>
 						</tr>
-
 
 						<tr>
 							<td class="active"><strong>Status: </strong></td>
@@ -103,7 +100,7 @@
 											<td >
 				                <strong>Company Name: </strong>
 												<strong>&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->companyName }}</strong>
-										</td>
+											</td>
 
 										</tr>
 										<tr>

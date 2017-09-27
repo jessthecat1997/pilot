@@ -1,255 +1,233 @@
 @extends('layouts.app')
 @section('content')
-
-<div class = "row">
-		<div class = "panel default-panel">
-			<div class = "panel-heading" id = "brokerageTitleHeader">
-				<h2>&nbsp;Brokerage / Create Service Order </h2>
-				<hr/>
-			</div>
-
-
-
-			<div class = "panel-body">
-
-				<div class = "collapse" id = "brokerage_warning">
-
-					<div class="panel-body alert alert-danger">
-							<div class = "col-md-12">
-								<strong class = "col-md-10">Oops! We were unable to save your order due to some unforseen consequences</strong>
-								<button class = "btn btn-danger col-md-1 pull-right" id = "exitPrompt" onclick = "resetMessages();"><small>X</small></button>
-								<div class = "col-md-12">
-
-										<li class = "collapse" id = "arrivalDateError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose an expected date of arrival</a></li>
-										<li class = "collapse" id = "freightTypeError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose a freight type</a></li>
-										<li class = "collapse" id = "BLError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Input a BL/AWL Number</a></li>
-										<li class = "collapse" id = "pickupError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Select a pick up point</a></li>
-										<li class = "collapse" id = "shipperError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input shipper</a></li>
-										<li class = "collapse" id = "weightError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input weights</a></li>
-										<li class = "collapse" id = "processedByError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Select an employee who processed this order</a></li>
-
-								</div>
-							</div>
-					</div>
-				</div>
-
-        <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#consignee">Consignee Information</a></li>
-          <li><a data-toggle="tab" href="#brokerageInfo">Brokerage Information</a></li>
-          <li><a data-toggle="tab" href="#containerInfo">Container Information</a></li>
-        </ul>
-
-        <div class = "tab-content">
-          <div id = "consignee" class = "tab-pane fade in active">
-      				<div class="panel-heading">
-      					<h4 id = "basic-information-heading"><small>1</small> Consignee Information</h4>
-      				</div>
-      				<div class = "panel-body">
-      					<div class = "col-md-12">
-      						<div class = "col-md-6 col-md-offset-2">
-      							<div class = "form-horizontal">
-      								<div class = "form-group">
-      									<label class = "control-label col-md-3">Consignee: </label>
-      									<div class = "input-group col-md-9">
-      										<select id = "consignee_id" class = "form-control select2-allow-clear select2">
-      											<option value = "0">Select Consignee</option>
-      											@forelse($consignees as $consignee)
-      											<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
-      											@empty
-      											@endforelse
-      										</select>
-
-      									</div>
-      								</div>
-      							</div>
-      						</div>
-      						<div class = "col-md-4">
-      							<button class = "btn btn-success add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
-      						</div>
-      					</div>
-      					<div class="col-md-12">
-      						<div class = "form-horizontal">
-      							<div class = "form-group">
-      								<label class = "control-label col-md-3">Name: </label>
-      								<div class = "col-md-9">
-      									<div class = "col-md-4">
-      										<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
-      									</div>
-      									<div class = "col-md-4">
-      										<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
-      									</div>
-      									<div class = "col-md-4">
-      										<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
-      									</div>
-      								</div>
-      							</div>
-      							<div class = "form-group">
-      								<label class = "control-label col-md-3">Contact Number: </label>
-      								<div class = "col-md-3">
-      									<div class = "col-md-12">
-      										<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
-      									</div>
-      								</div>
-      								<label class = "control-label col-md-2">Email: </label>
-      								<div class = "col-md-4">
-      									<div class = "col-md-12">
-      										<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
-      									</div>
-      								</div>
-      							</div>
-      							<div class = "form-group">
-      								<label class = "control-label col-md-3">Company Name</label>
-      								<div class = "col-md-9">
-      									<div class = "col-md-12">
-      										<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
-      									</div>
-      								</div>
-      							</div>
-      							<div class = "form-group">
-      								<label class = "control-label col-md-3">Business Style: </label>
-      								<div class = "col-md-3">
-      									<div class = "col-md-12">
-      										<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
-      									</div>
-      								</div>
-      								<label class = "control-label col-md-2">TIN: </label>
-      								<div class = "col-md-4">
-      									<div class = "col-md-12">
-      										<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
-      									</div>
-      								</div>
-      							</div>
-      						</div>
-      					</div>
-      				</div>
+<h2>&nbsp;Brokerage</h2>
+<hr>
+<div class="row">
+  <div class="col-lg-12">
+    <div class = "collapse" id = "brokerage_warning">
+     <div class="panel-body alert alert-danger">
+       <div class = "col-md-12">
+        <strong class = "col-md-10">Oops! We were unable to save your order due to some unforseen consequences</strong>
+        <button class = "btn btn-danger col-md-1 pull-right" id = "exitPrompt" onclick = "resetMessages();"><small>X</small></button>
+          <div class = "col-md-12">
+            <li class = "collapse" id = "arrivalDateError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose an expected date of arrival</a></li>
+            <li class = "collapse" id = "freightTypeError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Choose a freight type</a></li>
+            <li class = "collapse" id = "BLError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Input a BL/AWL Number</a></li>
+            <li class = "collapse" id = "pickupError"> > <a href = "#brokerageInformationHeader" style = "text-decoration: none; color: red;">Select a pick up point</a></li>
+            <li class = "collapse" id = "shipperError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input shipper</a></li>
+            <li class = "collapse" id = "weightError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Input weights</a></li>
+            <li class = "collapse" id = "processedByError"> > <a href = "#shipper" style = "text-decoration: none; color: red;">Select an employee who processed this order</a></li>
           </div>
-          <div id = "brokerageInfo" class = "tab-pane">
-    				<div class = "panel-heading">
-    					<h4 id = "brokerageInformationHeader"><small>2</small> Brokerage Information</h4>
-    				</div>
-    				<div class = "panel-body">
-    					<form class="form-horizontal" role="form">
-    						{{ csrf_field() }}
-    						<div class="form-group">
-    				<div id="so_details" class="tab-pane fade in active">
-    						<br />
-    							<div class = "col-md-12">
-    								<div class = "form-horizontal">
+        </div>
+      </div>
+     </div>
+      <ul class="nav nav-pills nav-justified">
+        <li class="active"><a data-toggle="pill" href="#home">Consignee Information</a></li>
+        <li><a data-toggle="pill" href="#menu1">Brokerage Information</a></li>
+        <li><a data-toggle="pill" href="#menu2">Container Information</a></li>
+      </ul>
+      <br />
+      <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Consignee Information
+            </div>
+            <div class="panel-body">
+              <div class = "col-md-12">
+                <div class = "col-md-6 col-md-offset-2">
+                 <div class = "form-horizontal">
+                  <div class = "form-group">
+                   <label class = "control-label col-md-3">Consignee: </label>
+                    <div class = "input-group col-md-9">
+                        <select id = "consignee_id" class = "form-control select2-allow-clear select2">
+                         <option value = "0">Select Consignee</option>
+                         @forelse($consignees as $consignee)
+                         <option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
+                         @empty
+                         @endforelse
+                        </select>
+                    </div>
+                   </div>
+                 </div>
+               </div>
+               <div class = "col-md-4">
+                 <button class = "btn btn-primary add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
+               </div>
+               <div class="col-md-12">
+                <div class = "form-horizontal">
+                  <div class = "form-group">
+                    <label class = "control-label col-md-3">Name: </label>
+                    <div class = "col-md-9">
+                      <div class = "col-md-4">
+                        <input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
+                      </div>
+                      <div class = "col-md-4">
+                        <input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
+                      </div>
+                      <div class = "col-md-4">
+                        <input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
+                      </div>
+                    </div>
+                  </div>
 
-    								<div class = "form-group">
-    									<label class= "col-md-4 control-label">Expected Arrival Date*</label>
-    									 <div class = "col-md-5">
-    										<div class = "input-group">
-    												<input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" data-msg="Please fill this field" disabled required>
-    												<span class="input-group-btn">
-    														<button class="btn btn-default" type="button" onclick="getData()" id = "arrivalDateButton"><i class="fa fa-calendar "></i></button>
-    												</span>
-    										</div>
-    									</div>
-    								</div>
-
-    								<div class = "form-group">
-    									<label  class="col-md-4 control-label">Freight Type*</label>
-    									<div class="col-md-5">
-    										<div class="input-group">
-    											<input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" data-msg="Please fill this field"  readonly required>
-    											<div class="input-group-btn">
-    												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Freight Type <span class="caret"></span></button>
-    												<ul class="dropdown-menu dropdown-menu-right">
-    													<li><a onclick = "document.getElementById('FreightType').value = 'Air Freight'">Air Freight</a></li>
-    													<li><a	onclick = "document.getElementById('FreightType').value = 'Sea Freight'">Sea Freight</a></li>
-
-    												</ul>
-    											</div>
-    										</div>
-    									</div>
-    								</div>
-
-    								<div class="form-group">
-    										<label for="email" class="col-md-4 control-label">BL\AWL Number*</label>
-    										<div class="col-md-5">
-    													<input  type="text" class="form-control" name = "freightnumber" id = "freightNumber" data-msg="Please fill this field" required>
-    										</div>
-    								</div>
-
-    								<div class="form-group">
-    									<div class="form-group required">
-    										<label class = "col-md-4 control-label ">Pick up point: </label>
-    										<div class = "col-md-5">
-    										<div class="input-group">
-    											<select class = "form-control" id = "pickup_id" required data-msg="Please fill this field. Hint: Click on the plus sign to add a new location">
-    												<option value = "0"></option>
-    												@forelse($locations as $location)
-    												<option value = "{{ $location->id }}">{{ $location->name }}</option>
-    												@empty
-    												@endforelse
-    											</select>
-    											<span class="input-group-btn">
-    												<button class="btn btn-primary pick_add_new_location" onclick = "	$('#LocationModal').modal('show');"type="button">+</button>
-    											</span>
-    										</div>
-    									</div>
-    								</div>
-    								</div>
-
-    								<div class="form-group">
-    										<label  class="col-md-4 control-label">Shipper*</label>
-    										<div class="col-md-5">
-    													<input  type="text" class="form-control" name = "shipper" id = "shipper" required data-msg="Please fill this field">
-    										</div>
-    								</div>
-
-    								<div class = "form-group">
-    									<label  class="col-md-4 control-label">Weight </label>
-    									<div class="col-md-5">
-    										<div class="input-group">
-    											<input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight" required data-msg="Please fill this field">
-    											<div class="input-group-btn">
-    												<button type="button" class="btn btn-default" aria-expanded="false"> kgs</label>
-    											</div>
-    										</div>
-    									</div>
-    								</div>
-
-										<div class = "form-group">
-											<label  class="col-md-4 control-label">Basis </label>
-											<div class="col-md-5">
-
-													<select class = "form-control" id = "basis" name="basis" >
-														@forelse($basis as $basis_types)
-														<option value = "{{ $basis_types->id }}">{{ $basis_types->name }}</option>
-														@empty
-														<option value = "No Cargo">No Basis Found</option>
-														@endforelse
-													</select>
-
-											</div>
-										</div>
-										<div class = "form-group">
-											<label  class="col-md-4 control-label">Cargo Type </label>
-											<div class="col-md-5">
-													<select class = "form-control" id = "cargoType" name="cargoType" >
-														<option value = "G">General Cargo</option>
-														<option value = "C">Chemical</option>
-													</select>
-											</div>
-										</div>
-
-										<div class = "form-group">
-											<label  class="col-md-4 control-label">Certificate Of Origin </label>
-											<div class="col-md-5">
-												<input type="checkbox" data-toggle="toggle" data-size="normal" data-on="Included" data-off="Not Included" data-onstyle="success"  id = "withCO" width = "100px" >
-											</div>
-										</div>
-    							</div>
-    						</div>
-    					</div>
-
-    					</div>
-    				</form>
-    					</div>
+                  <div class = "form-group">
+                    <label class = "control-label col-md-3">Company Name</label>
+                    <div class = "col-md-9">
+                      <div class = "col-md-12">
+                        <input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class = "form-group">
+                    <label class = "control-label col-md-3">Business Style: </label>
+                    <div class = "col-md-3">
+                      <div class = "col-md-12">
+                        <input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
+                      </div>
+                    </div>
+                    <label class = "control-label col-md-2">TIN: </label>
+                    <div class = "col-md-4">
+                      <div class = "col-md-12">
+                        <input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               </div>
+              </div>
+            </div>
           </div>
-          <div id = "containerInfo" class = "tab-pane">
+        </div>
+        <div id="menu1" class="tab-pane fade">
+         <div class="panel panel-primary">
+          <div id = "brokerageInformationHeader" class="panel-heading">
+            Brokerage Information
+          </div>
+          <div class="panel-body">
+                    <form class="form">
+                      {{ csrf_field() }}
+                      <div class = "form-group">
+                        <div class = "col-md-12">
+                          <div class = "form-horizontal">
+
+                          <div class = "form-group">
+                            <label class= "col-md-4 control-label">Expected Arrival Date*</label>
+                             <div class = "col-md-5">
+                              <div class = "input-group">
+                                  <input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" data-msg="Please fill this field" disabled required>
+                                  <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" onclick="getData()" id = "arrivalDateButton"><i class="fa fa-calendar "></i></button>
+                                  </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class = "form-group">
+                            <label  class="col-md-4 control-label">Freight Type*</label>
+                            <div class="col-md-5">
+                              <div class="input-group">
+                                <input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" data-msg="Please fill this field"  readonly required>
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Freight Type <span class="caret"></span></button>
+                                  <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a onclick = "document.getElementById('FreightType').value = 'Air Freight'">Air Freight</a></li>
+                                    <li><a	onclick = "document.getElementById('FreightType').value = 'Sea Freight'">Sea Freight</a></li>
+
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label for="email" class="col-md-4 control-label">BL\AWL Number*</label>
+                              <div class="col-md-5">
+                                    <input  type="text" class="form-control" name = "freightnumber" id = "freightNumber" data-msg="Please fill this field" required>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="form-group required">
+                              <label class = "col-md-4 control-label ">Pick up point: </label>
+                              <div class = "col-md-5">
+                              <div class="input-group">
+                                <select class = "form-control" id = "pickup_id" required data-msg="Please fill this field. Hint: Click on the plus sign to add a new location">
+                                  <option value = "0"></option>
+                                  @forelse($locations as $location)
+                                  <option value = "{{ $location->id }}">{{ $location->name }}</option>
+                                  @empty
+                                  @endforelse
+                                </select>
+                                <span class="input-group-btn">
+                                  <button class="btn btn-primary pick_add_new_location" onclick = "	$('#LocationModal').modal('show');"type="button">+</button>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+
+                          <div class="form-group">
+                              <label  class="col-md-4 control-label">Shipper*</label>
+                              <div class="col-md-5">
+                                    <input  type="text" class="form-control" name = "shipper" id = "shipper" required data-msg="Please fill this field">
+                              </div>
+                          </div>
+
+                          <div class = "form-group">
+                            <label  class="col-md-4 control-label">Weight </label>
+                            <div class="col-md-5">
+                              <div class="input-group">
+                                <input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight" required data-msg="Please fill this field">
+                                <div class="input-group-btn">
+                                  <button type="button" class="btn btn-default" aria-expanded="false"> kgs</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class = "form-group">
+                            <label  class="col-md-4 control-label">Basis </label>
+                            <div class="col-md-5">
+                                <select class = "form-control" id = "basis" name="basis" >
+                                  @forelse($basis as $basis_types)
+                                  <option value = "{{ $basis_types->id }}">{{ $basis_types->name }}</option>
+                                  @empty
+                                  <option value = "No Cargo">No Basis Found</option>
+                                  @endforelse
+                                </select>
+                            </div>
+                          </div>
+                          <div class = "form-group">
+                            <label  class="col-md-4 control-label">Cargo Type </label>
+                            <div class="col-md-5">
+                                <select class = "form-control" id = "cargoType" name="cargoType" >
+                                  <option value = "G">General Cargo</option>
+                                  <option value = "C">Chemical</option>
+                                </select>
+                            </div>
+                          </div>
+
+                          <div class = "form-group">
+                            <label  class="col-md-4 control-label">Certificate Of Origin </label>
+                            <div class="col-md-5">
+                              <input type="checkbox" data-toggle="toggle" data-size="normal" data-on="Included" data-off="Not Included" data-onstyle="success"  id = "withCO" width = "100px" >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              Container Information
+            </div>
+            <div class="panel-body">
+              <div id = "containerInfo" class = "tab-pane">
             <div class = "panel-heading">
               <h4 id = "containerInformationHeader"><small>3</small> Container Information</h4>
             </div>
@@ -261,7 +239,6 @@
               <br />
               <div class = "col-md-12">
                 <div class = "col-md-12">
-
                   <div class="tab-content">
                     <div id="wcontainer" class="tab-pane fade in active">
                       <div class = "panel">
@@ -269,7 +246,6 @@
                           <form class="form-horizontal" role="form">
                             {{ csrf_field() }}
                             <div class="row">
-
                               <div id = "containers">
                                 <div class="panel-group" id = "container_copy">
                                   <div class="panel panel-default" id = "0_panel">
@@ -400,7 +376,7 @@
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
+                                    </form>
                                   </div>
                                 </div>
                               </div>
@@ -413,139 +389,101 @@
 
                               </div>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
-
                     <div id="wocontainer" class="tab-pane fade">
                       <div class = "panel">
-                        <div class = "">
-                          <form class="form-horizontal" role="form">
-                            <div class="form-group">
+                          <div class = "">
+                            <form class="form-horizontal" role="form">
+                              <div class="form-group">
 
-															<br />
+                                <br />
 
-															<div class = "col-md-12">
-	                              <label class="control-label" for="wodetail_table">Delivery Content:</label>
-	                              <table class = "table-responsive table table-striped" id = "wodetail_table">
-	                                <thead>
-	                                  <tr>
-	                                    <td>
-	                                      Description of Goods
-	                                    </td>
-																			<td>
-																				Less Cargo Load Type
-																			</td>
-	                                    <td>
-	                                      Gross Weight(kg)
-	                                    </td>
-	                                    <td>
-	                                      Supplier/s
-	                                    </td>
-	                                    <td>
-	                                      Action
-	                                    </td>
-	                                  </tr>
-	                                </thead>
-	                                <tbody>
-	                                  <tr id = "wodescription_row">
-	                                    <td width="35%">
-	                                      <input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
-	                                    </td>
-																			<td width="35%">
-																				<select class = "form-control" id = "lcl_type" name="wolclTypes" >
-																					@forelse($lcl_types as $lcl_type)
-																					<option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
-																					@empty
-																					<option value = "No Cargo">No Less Cargo Type Found</option>
-																					@endforelse
-																				</select>
-																			</td>
-																			<td width="20%">
-	                                      <input type = "number" name = "wogrossWeight" class = "form-control"/>
-	                                    </td>
-	                                    <td width="30%">
-	                                      <input type = "text" name = "wosupplier"  class = "form-control" />
-	                                    </td>
-	                                    <td width="15%">
-	                                      <button class = "btn btn-md btn-danger woremove-current-detail">x</button>
-	                                    </td>
-	                                  </tr>
-	                                </tbody>
-	                              </table>
-															</div>
-                              <div class="row">
-                                <div class="col-md-4">
-                                  <button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
+                                <div class = "col-md-12">
+                                  <label class="control-label" for="wodetail_table">Delivery Content:</label>
+                                  <table class = "table-responsive table table-striped" id = "wodetail_table">
+                                    <thead>
+                                      <tr>
+                                        <td>
+                                          Description of Goods
+                                        </td>
+                                        <td>
+                                          Less Cargo Load Type
+                                        </td>
+                                        <td>
+                                          Gross Weight(kg)
+                                        </td>
+                                        <td>
+                                          Supplier/s
+                                        </td>
+                                        <td>
+                                          Action
+                                        </td>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr id = "wodescription_row">
+                                        <td width="35%">
+                                          <input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
+                                        </td>
+                                        <td width="35%">
+                                          <select class = "form-control" id = "lcl_type" name="wolclTypes" >
+                                            @forelse($lcl_types as $lcl_type)
+                                            <option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
+                                            @empty
+                                            <option value = "No Cargo">No Less Cargo Type Found</option>
+                                            @endforelse
+                                          </select>
+                                        </td>
+                                        <td width="20%">
+                                          <input type = "number" name = "wogrossWeight" class = "form-control"/>
+                                        </td>
+                                        <td width="30%">
+                                          <input type = "text" name = "wosupplier"  class = "form-control" />
+                                        </td>
+                                        <td width="15%">
+                                          <button class = "btn btn-md btn-danger woremove-current-detail">x</button>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="row">
+                                  <div class="col-md-4">
+                                    <button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
+                                  </div>
+                                  <div class="col-md-8">
 
-              </div>
-            </div>
-          </div>
-
-          <div id="wocontainer" class="tab-pane fade">
-            <div class = "panel">
-              <div class = "">
-                <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label class="control-label" for="wodetail_table">Delivery Content:</label>
-                    <table class = "table-responsive table table-striped" id = "wodetail_table">
-                      <thead>
-                        <tr>
-                          <td>
-                            Description of Goods
-                          </td>
-                          <td>
-                            Gross Weight(kg)
-                          </td>
-                          <td>
-                            Supplier/s
-                          </td>
-                          <td>
-                            Action
-                          </td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr id = "wodescription_row">
-                          <td width="35%">
-                            <input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
-                          </td>
-                          <td width="20%">
-                            <input type = "number" name = "wogrossWeight" class = "form-control"/>
-                          </td>
-                          <td width="30%">
-                            <input type = "text" name = "wosupplier"  class = "form-control" />
-                          </td>
-                          <td width="15%">
-                            <button class = "btn btn-md btn-danger woremove-current-detail">x</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="row">
-                      <div class="col-md-4">
-                        <button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <br />
-        <br />
-    		<button class = "btn btn-md btn-success" style="width: 100%;" onclick = "	$('#ProcessedByModal').modal('show');" >Create Brokerage Service Order</button>
-    	</div>
+            </div>
+          </div>
+          </div>
 
-		</div>
-	</div>
+      </div>
+        <br />
+        <br />
+
+        <button class = "btn btn-md btn-success ConfirmBut" style="width: 100%;" onclick = "	$('#ProcessedByModal').modal('show');" >Create Brokerage Service Order</button>
+  </div>
 </div>
-<div id="chModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+
+
+<!--Add Consignee Modal -->
+<section class = "content">
+  <div id="chModal" class="modal fade" role="dialog">
+	   <div class="modal-dialog">
 
 		<!-- Modal content-->
 		<div class="modal-content">
@@ -563,227 +501,223 @@
 						</ul>
 
 						<div class="tab-content">
-							<div id="physical_address" class="tab-pane fade in ">
-								<br />
-								<div class = "form-horizontal">
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="phy_address">Blk/Lot/Street:</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="phy_province">Province:</label>
-										<div class="col-sm-8">
-											<select name = "phy_province" id="phy_province" class = "form-control">
-												<option value="0"></option>
-												@forelse($provinces as $province)
-												<option value="{{ $province->id }}" >
-													{{ $province->name }}
-												</option>
-												@empty
+  							<div id="physical_address" class="tab-pane fade in ">
+  								<br />
+  								<div class = "form-horizontal">
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="phy_address">Blk/Lot/Street:</label>
+  										<div class="col-sm-8">
+  											<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="phy_province">Province:</label>
+  										<div class="col-sm-8">
+  											<select name = "phy_province" id="phy_province" class = "form-control">
+  												<option value="0"></option>
+  												@forelse($provinces as $province)
+  												<option value="{{ $province->id }}" >
+  													{{ $province->name }}
+  												</option>
+  												@empty
 
-												@endforelse
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="phy_city">City:</label>
-										<div class="col-sm-8">
-											<select name = "phy_city" id="phy_city" class = "form-control">
-												<option value="0"></option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
-										<div class="col-md-8">
-											<input type="checkbox" class = "checkbox same_billing_address">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="billing_address" class="tab-pane fade in ">
-								<br />
-								<div class = "form-horizontal">
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="bill_province">Province:</label>
-										<div class="col-sm-8">
-											<select name = "bill_province" id="bill_province"  class = "form-control">
-												<option value = '0'></option>
-												@forelse($provinces as $province)
-												<option value="{{ $province->id }}">
-													{{ $province->name }}
-												</option>
-												@empty
+  												@endforelse
+  											</select>
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="phy_city">City:</label>
+  										<div class="col-sm-8">
+  											<select name = "phy_city" id="phy_city" class = "form-control">
+  												<option value="0"></option>
+  											</select>
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
+  										<div class="col-sm-8">
+  											<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="same_billing_address">Same billing address:</label>
+  										<div class="col-md-8">
+  											<input type="checkbox" class = "checkbox same_billing_address">
+  										</div>
+  									</div>
+  								</div>
+  							</div>
+  							<div id="billing_address" class="tab-pane fade in ">
+  								<br />
+  								<div class = "form-horizontal">
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
+  										<div class="col-sm-8">
+  											<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="bill_province">Province:</label>
+  										<div class="col-sm-8">
+  											<select name = "bill_province" id="bill_province"  class = "form-control">
+  												<option value = '0'></option>
+  												@forelse($provinces as $province)
+  												<option value="{{ $province->id }}">
+  													{{ $province->name }}
+  												</option>
+  												@empty
 
-												@endforelse
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="bill_city">City:</label>
-										<div class="col-sm-8">
-											<select name = "bill_city" id="bill_city" class = "form-control">
-												<option value="0"></option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
-										<div class="col-sm-8">
-											<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="new_con" class="tab-pane fade in active">
-								<br />
-								<form class="form-horizontal" role="form">
-									{{ csrf_field() }}
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="firstName">First Name:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="pwd">Last Name:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="email">Email</label>
-										<div class="col-sm-6">
-											<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="companyName">Company Name:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class="control-label col-sm-4" for="TIN">TIN:</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
-										</div>
-									</div>
+  												@endforelse
+  											</select>
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="bill_city">City:</label>
+  										<div class="col-sm-8">
+  											<select name = "bill_city" id="bill_city" class = "form-control">
+  												<option value="0"></option>
+  											</select>
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
+  										<div class="col-sm-8">
+  											<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+  										</div>
+  									</div>
+  								</div>
+  							</div>
+  							<div id="new_con" class="tab-pane fade in active">
+  								<br />
+  								<form class="form-horizontal" role="form">
+  									{{ csrf_field() }}
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="firstName">First Name:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
+  										</div>
+  									</div>
+  									<div class="form-group">
+  										<label class="control-label col-sm-4" for="middleName">Middle Name:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="pwd">Last Name:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="email">Email</label>
+  										<div class="col-sm-6">
+  											<input type="email" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="companyName">Company Name:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="businessStyle">Business Style:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "businessStyle" id="businessStyle" placeholder="Enter Business Style">
+  										</div>
+  									</div>
+  									<div class="form-group required">
+  										<label class="control-label col-sm-4" for="TIN">TIN:</label>
+  										<div class="col-sm-6">
+  											<input type="text" class="form-control" name = "TIN" id="TIN" placeholder="Enter TIN">
+  										</div>
+  									</div>
 
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
-				<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
-			</div>
-		</div>
+  								</form>
+  							</div>
+  						</div>
+  					</div>
+  				</div>
+  			</div>
+  			<div class="modal-footer">
+  				<button class = "btn btn-info btn-md save-consignee-information" id = "btnConsigneeSave" >Save Consignee</button>
+  				<input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
+  			</div>
+		  </div>
+    </div>
+  </div>
+</section>
 
+<!-- Add Location Modal -->
+<section class="content">
+  <div class="modal fade" id="LocationModal" role="dialog">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">New Location</h4>
+     </div>
+     <div class="modal-body">
+      <form role="form" method = "POST" id="commentForm" class = "form-horizontal">
+       {{ csrf_field() }}
+         <div class="form-group required">
+          <label class = "control-label col-md-3">Name: </label>
+            <div class = "col-md-9">
+             <input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+            </div>
+         </div>
+         <div class="form-group required">
+           <label class = "control-label col-md-3">Address: </label>
+            <div class = "col-md-9">
+             <textarea class = "form-control" id = "address" name = "address"></textarea>
+            </div>
+         </div>
+         <div class="form-group required">
+            <label class = "control-label col-md-3">Province: </label>
+            <div class = "col-md-9">
+               <select name = "loc_province" id="loc_province" class = "form-control">
+                <option value = '0'></option>
+                @forelse($provinces as $province)
+                <option value="{{ $province->id }}" >
+                 {{ $province->name }}
+               </option>
+               @empty
 
-
-
-</div>
-</div>
-
-
-		<!-- Add Location Modal -->
-			<section class="content">
-				<div class="modal fade" id="LocationModal" role="dialog">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">New Location</h4>
-							</div>
-							<div class="modal-body">
-								<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-									{{ csrf_field() }}
-									<div class="form-group required">
-										<label class = "control-label col-md-3">Name: </label>
-										<div class = "col-md-9">
-											<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class = "control-label col-md-3">Address: </label>
-										<div class = "col-md-9">
-											<textarea class = "form-control" id = "address" name = "address"></textarea>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class = "control-label col-md-3">Province: </label>
-										<div class = "col-md-9">
-											<select name = "loc_province" id="loc_province" class = "form-control">
-												<option value = '0'></option>
-												@forelse($provinces as $province)
-												<option value="{{ $province->id }}" >
-													{{ $province->name }}
-												</option>
-												@empty
-
-												@endforelse
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class = "control-label col-md-3">City: </label>
-										<div class = "col-md-9">
-											<select name = "loc_city" id="loc_city" class = "form-control">
-												<option value="0"></option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group required">
-										<label class = "control-label col-md-3">ZIP: </label>
-										<div class = "col-md-9">
-											<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type = "submit" class="btn btn-success btnSave"  >Save</button>
-								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+               @endforelse
+               </select>
+           </div>
+        </div>
+        <div class="form-group required">
+          <label class = "control-label col-md-3">City: </label>
+          <div class = "col-md-9">
+           <select name = "loc_city" id="loc_city" class = "form-control">
+            <option value="0"></option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group required">
+          <label class = "control-label col-md-3">ZIP: </label>
+          <div class = "col-md-9">
+           <input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+          </div>
+        </div>
+      </form>
+     </div>
+      <div class="modal-footer">
+        <button type = "submit" class="btn btn-success btnSave"  >Save</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
 
   <!-- Confirm Save -->
         <section class="content">
@@ -818,8 +752,17 @@
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type = "submit" class="btn btn-success" id = "brokerageBtn" >Save</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 @endsection
 @push('styles')
 <style>
@@ -838,7 +781,6 @@
 <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
 <script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
-
 
 	$('#collapse1').addClass('in');
 
@@ -890,10 +832,13 @@
 		 });
 
 
-		 $(document).on('click', '.pick_add_new_location', function(e){
-			 e.preventDefault();
+    $(document).on('click', '.pick_add_new_location', function(e){
+      e.preventDefault();
+    })
 
-		 })
+    $(document).on('click', '.ConfirmBut', function(e){
+      e.preventDefault();
+    })
 
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();
@@ -1742,11 +1687,10 @@
       	if(Validations() == true)
     		{
 
-    		}
-    		if(Validations() == false){
-
-          if($("#choices li.active").text() === "Without Container"){
-            if(validateDetail() === true){
+      }
+      if(Validations() == false){
+        if($("#choices li.active").text() === "Without Container"){
+          if(validateDetail() === true){
 
               $.ajax({
                 type: 'POST',
@@ -1789,13 +1733,15 @@
                     alert("Nothing found");
                   }
                 }
-              })
-           }
-         }
-          else {
+
+
+            })
+          }
+          }
+        else {
 
             if(validateContainer() == true){
-              		validateContainerDetail();
+              validateContainerDetail();
               $.ajax({
                 type: 'POST',
                 url: "{{ route('saveBrokerageOrder') }}",
@@ -1837,15 +1783,15 @@
                   window.location.replace('/brokerage/'+data+'/order');
                 },
                 error: function(data) {
-                  if(data.status == 400){
-                    alert("Nothing found");
-                  }
+                    if(data.status == 400){
+                      alert("Nothing found");
+                    }
                 }
-              })
-              }
-            }
-    		}
-	});
+            })
+          }
+        }
+      }
+    });
 
 
 
