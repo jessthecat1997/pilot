@@ -2,15 +2,15 @@
 
 @push('styles')
 <style type="text/css">
-	span.control-label {
-		font-size: 20px;
-	}
-	span.label {
-		font-size: 15px;
-	}
-	strong {
-		font-size: 15px;
-	}
+span.control-label {
+	font-size: 20px;
+}
+span.label {
+	font-size: 15px;
+}
+strong {
+	font-size: 15px;
+}
 </style>
 @endpush
 
@@ -509,8 +509,8 @@
 						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
 						<div class="col-sm-8">
 							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
-								<option value = "C">Cancelled</option>
 								<option value = "F">Finished</option>
+								<option value = "C">Cancelled</option>
 							</select>
 						</div>
 					</div>
@@ -541,32 +541,32 @@
 
 <div id="trModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-
-		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Trucking Information</h4>
 			</div>
 			<div class="modal-body">
-				<div class = "form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="_status">Status</label>
-						<div class="col-sm-8">
-							<select name = "_status" id = "_status" class = "form-control">
-								<option value = "C">Cancelled</option>
-								@if( $pending_trucking != 0)
-								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
-								@else
-								<option value = "F" >Finished</option>
-								@endif
-							</select>
+				<form id = "truck_modal">
+					<div class = "form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="_status">Status</label>
+							<div class="col-sm-8">
+								<select name = "_status" id = "_status" class = "form-control" required>
+									<option></option>
+									@if( $pending_trucking != 0)
+									<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
+									@else
+									<option value = "F" >Finished</option>
+									@endif
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal">Save</button>
+				<button type="button" class="btn btn-success save-trucking-information">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -903,30 +903,42 @@
 		})
 
 		$(document).on('click', '.save-trucking-information', function(e){
-			$.ajax({
+			e.preventDefault();
+			$('#_status').valid();
+			var count = "{{ $pending_trucking }}";
 
-				type: 'PUT',
-				url: '{{ route("trucking.store") }}/{{ $so_id }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'destination' : $('#_destination').val(),
-					'shippingLine' : $('#_shippingLine').val(),
-					'portOfCfsLocation' : $('#_portOfCfsLocation').val(),
-					'status' : $('#_status').val(),
-				},
-				success: function(data){
-					$('#tr_destination').text($('#_destination').val());
-					$('#tr_shippingLine').text($('#_shippingLine').val());
-					$('#tr_portOfCfsLocation').text($('#_portOfCfsLocation').val());
-					$('#tr_status').text($('#_status > option:selected').text());
+			if(count == 0 ){
+				if($('#_status').valid()){
+					$.ajax({
 
-					$('#_destination').val();
-					$('#_shippingLine').val();
-					$('#_portOfCfsLocation').val();
+						type: 'PUT',
+						url: '{{ route("trucking.store") }}/{{ $so_id }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'destination' : $('#_destination').val(),
+							'shippingLine' : $('#_shippingLine').val(),
+							'portOfCfsLocation' : $('#_portOfCfsLocation').val(),
+							'status' : $('#_status').val(),
+						},
+						success: function(data){
+							$('#tr_destination').text($('#_destination').val());
+							$('#tr_shippingLine').text($('#_shippingLine').val());
+							$('#tr_portOfCfsLocation').text($('#_portOfCfsLocation').val());
+							$('#tr_status').text($('#_status > option:selected').text());
 
-					window.location.reload();
+							$('#_destination').val();
+							$('#_shippingLine').val();
+							$('#_portOfCfsLocation').val();
+
+							window.location.reload();
+						}
+					})
 				}
-			})
+			}
+			else{
+
+			}
+			
 		})
 
 		$(document).on('click', '.view-delivery-information', function(e){

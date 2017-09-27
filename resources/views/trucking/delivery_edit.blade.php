@@ -536,18 +536,18 @@
 						<h4 class="modal-title">New Location</h4>
 					</div>
 					<div class="modal-body">
-						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-							{{ csrf_field() }}	
+						<form id="loc_form" class = "form-horizontal">
+							{{ csrf_field() }}
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3" required />
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Address: </label>
 								<div class = "col-md-9">
-									<textarea class = "form-control" id = "address" name = "address"></textarea>
+									<textarea class = "form-control" id = "address" name = "address" required></textarea>
 								</div>
 							</div>
 							<div class="form-group required">
@@ -562,28 +562,28 @@
 										@empty
 
 										@endforelse
-									</select>     
+									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">City: </label>
 								<div class = "col-md-9">
-									<select name = "loc_city" id="loc_city" class = "form-control">
-										<option value="0"></option>
+									<select name = "loc_city" id="loc_city" class = "form-control" required>
+										<option></option>
 									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">ZIP: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3" required />
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type = "submit" class="btn btn-success btnSave" >Save</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+						<button type = "button" class="btn btn-success btnSave" >Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -812,43 +812,125 @@
 			
 		})
 
+
+		$('#loc_form').validate({
+
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				address:
+				{
+					required: true,
+					minlength: 3,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				zip:
+				{
+					required: true,
+					minlength: 4,
+					maxlength: 4,
+				},
+				loc_city:
+				{
+					required:true,
+				},
+
+			},onkeyup: function(element) {$(element).valid()}, 
+
+		});
+
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			console.log('aw');
-			$.ajax({
-				type: 'POST',
-				url: "{{ route('location.index')}}",
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'address' : $('#address').val(),
-					'cities_id' : $('#loc_city').val(),
-					'zipCode' : $('#zip').val(),
-				},
-				success: function(data){
-					$('#chModal').modal('hide');
-					if(selected_location == 0){	
-						
-						$('#_address').val($('#address').val());
-						$('#_city').val($('#loc_city option:selected').text());
-						$('#_province').val($('#loc_province option:selected').text().trim());
-						$('#_zip').val($('#zip').val());
-					}
-					else{
-						$('#_daddress').val($('#address').val());
-						$('#_dcity').val($('#loc_city option:selected').text());
-						$('#_dprovince').val($('#loc_province option:selected').text().trim());
-						$('#_dzip').val($('#zip').val());
+			$('#zip').valid();
+			$('#name').valid();
+			$('#address').valid();
+			$('#loc_city').valid();
 
+			if($('#zip').valid() && $('#name').valid() && $('#address').valid() && $('#loc_city').valid()){
+				$('.btnSave').attr('disabled', 'true');
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('location.index')}}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'address' : $('#address').val(),
+						'cities_id' : $('#loc_city').val(),
+						'zipCode' : $('#zip').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							if(selected_location == 0){
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#pickup_id').val(data.id);
+
+								$('#_address').val($('#address').val());
+								$('#_city').val($('#loc_city option:selected').text());
+								$('#_province').val($('#loc_province option:selected').text().trim());
+								$('#_zip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+							}
+							else{
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id').val(data.id);
+								$('#_daddress').val($('#address').val());
+								$('#_dcity').val($('#loc_city option:selected').text());
+								$('#_dprovince').val($('#loc_province option:selected').text().trim());
+								$('#_dzip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+								$('.btnSave').removeAttr('disabled');
+							}
+						}
+						else{
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v);
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+							});
+							$('#btnSave').removeAttr('disabled');
+						}
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
 					}
-					
-				},
-				error: function(data) {
-					if(data.status == 400){
-						alert("Nothing found");
-					}
-				}
-			})
+				})
+			}
+			else{
+				$('.btnSave').removeAttr('disabled');
+			}
 		})
 
 		function clear_location(){
@@ -1091,7 +1173,7 @@
 			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
-
+						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
 							type: 'PUT',
 							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
@@ -1116,11 +1198,21 @@
 							}
 						})
 					}
+					else
+					{
+						$('#confirm-save').removeAttr('disabled');
+					}
+				}
+				else{
+					$('#confirm-save').removeAttr('disabled');
 				}
 			}
 			else{
-				if(validateContainer() == true){
-					if(validateOrder() == true){
+				if(validateContainer() == true)
+				{
+					if(validateOrder() == true)
+					{
+						$('#confirm-save').attr('disabled', true);
 
 						validateContainerDetail();
 						$.ajax({

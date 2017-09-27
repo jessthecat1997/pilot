@@ -9,7 +9,7 @@
 				@if($delivery[0]->status == 'F' || $delivery[0]->status == 'C')
 				<h3>Delivery Information: <button  disabled class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button></h3>
 				@elseif($delivery[0]->status == 'P')
-				<h3>Delivery Information: <button  class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button></h3>
+				<h3>Delivery Information: <button  class = "btn btn-primary btn-sm pull-right update-delivery-information" >Update Delivery Status</button> <button  class = "btn btn-success btn-sm pull-right reschedule-delivery-information" >Reschedule</button></h3>
 				@endif
 			</div>
 			<div class = "panel-body">
@@ -202,7 +202,7 @@
 							</div>
 						</div>
 
-						<table class = "table table-responsive" id = "container_detail">
+						<table class = "table-responsive table table-striped table-bordered cell-border" id = "container_detail">
 							<thead>
 								<tr>
 									<td>
@@ -246,7 +246,7 @@
 			<div class = "panel-body">
 				<div class = "col-md-10">
 					<form class="form-horizontal" role="form">
-						<table id = "detail_table" class = "table table-responsive">
+						<table id = "detail_table" class = "table-responsive table table-striped table-bordered cell-border">
 							<thead>
 								<tr>
 									<td>
@@ -306,7 +306,7 @@
 			<div class = "panel-body">
 				<div class = "col-md-12">
 					<form class="form-horizontal" role="form">
-						<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
+						<table id = "detail_table" class = "table-responsive table table-striped table-bordered cell-border" style="width: 100%;">
 							<thead>
 								<tr>
 									<td style="width: 5%;">
@@ -412,7 +412,7 @@
 					<form class="form-horizontal" role="form">				
 						@forelse($container_with_detail as $container)
 						<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
-						<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;">
+						<table class = "table-responsive table table-striped table-bordered cell-border" id = "{{ $container['container']->id }}_table" style="width: 100%;">
 							<thead>	
 								<tr>
 									<td>
@@ -456,19 +456,61 @@
 		</div>
 	</div>
 	@endif
+	<div class = "col-md-12">
+		<section class="content">
+			<form id="reschedule_from" >
+				<div class="modal fade" id="rescheduleModal" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Reschedule Delivery</h4>
+							</div>
+							<div class="modal-body">
+								{{ csrf_field() }}
+								<div class="row">
+									<div class="form-group required">
+										<label class="control-label col-md-3">Pick-up Date:</label>
+										<div class="col-md-9">
+											<input type="text" class = "form-control" name="pickupDateTime" id = "pickupDateTime" required>
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="form-group required">
+										<label class="control-label col-md-3">Delivery Date:</label>
+										<div class="col-md-9">
+											<input type="text" class = "form-control" name="deliveryDateTime" id = "deliveryDateTime" required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type = "button" class="btn btn-success save-reschedule-information" >Save</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
 </div>
 @endsection
 @push('styles')
 <style>
-	.delivery
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.delivery
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
+<link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 @endpush
 @push('scripts')
+<script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
 	$(document).ready(function(){
@@ -476,6 +518,34 @@
 		var reset_container_table = $('#drModal').html();
 		var return_date_html = '<span class="control-label" id ="view_return_date"  style = "text-align: left"></span>';
 		var con_status = "N";
+
+		$('#pickupDateTime').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			lang:'en',
+			format:'Y/m/d H:i:s',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i:s') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i:s') }}",
+		});
+
+		$('#deliveryDateTime').datetimepicker({
+			mask:'9999/19/39',
+			dayOfWeekStart : 1,
+			lang:'en',
+			format:'Y/m/d H:i:s',
+			formatDate:'Y/m/d H:i:s',
+			value: "{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i:s') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i:s') }}",
+		});
+
+		$(document).on('click', '.save-reschedule-information', function(e){
+			e.preventDefault();
+			$('#deliveryDateTime').valid();
+			$('#pickupDateTime').valid();
+			console.log($('#deliveryDateTime').val());
+		})
+
 		$(document).on('click', '.view-container-detail', function(e){
 			e.preventDefault();
 			current_table = ($('#' + $(this).val()+ '_table > tbody').html());
@@ -518,6 +588,11 @@
 				$('#ac_returned').html($(this).closest('tr').find(".dateReturned").val().trim());
 			}
 
+		})
+
+		$(document).on('click', '.reschedule-delivery-information', function(e){
+			e.preventDefault();
+			$('#rescheduleModal').modal('show');
 		})
 		$(document).on('change', '#deliveryStatus', function(e){
 			e.preventDefault();
