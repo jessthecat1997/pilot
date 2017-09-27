@@ -697,6 +697,7 @@
 
 		$(document).on('click', '.finalize-contract', function(e){
 			$('.finalize-contract').attr('disabled', 'true');
+			$('.draft-contract').attr('disabled', 'true');
 			var valid_date = false;
 			if($('#dateExpiration').val() == "____/__/__")
 			{
@@ -741,6 +742,7 @@
 			else
 			{
 				$('.finalize-contract').removeAttr('disabled');
+				$('.draft-contract').removeAttr('disabled');
 			}
 		})
 
@@ -748,6 +750,7 @@
 
 		$(document).on('click', '.draft-contract', function(e){
 			$('.draft-contract').attr('disabled', 'true');
+			$('.finalize-contract').attr('disabled', 'true');
 			var valid_date = false;
 			if($('#dateExpiration').val() == "____/__/__")
 			{
@@ -809,6 +812,7 @@
 			}
 			else{
 				$('.draft-contract').removeAttr('disabled');
+				$('.finalize-contract').removeAttr('disabled');
 			}
 		})
 	})
@@ -905,9 +909,6 @@ function validateConsignee()
 
 function finalvalidateContractRows()
 {
-	
-
-
 	terms_and_condition_string = "";
 
 	rate_pairs = [];
