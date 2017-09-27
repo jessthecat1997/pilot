@@ -163,6 +163,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('rate', 'Php {{ $rate }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
@@ -507,6 +508,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
@@ -1014,6 +1016,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
@@ -1041,6 +1044,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
@@ -1054,6 +1058,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d Y") }}')
 		->make(true);
 	}
 
@@ -1067,6 +1072,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
@@ -1093,11 +1099,12 @@ class DatatablesController extends Controller
 			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 
 	public function ipf_datatable(){
-		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
+		$ipfs = DB::select("SELECT h.id, h.dateEffective  , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){
@@ -1106,6 +1113,7 @@ class DatatablesController extends Controller
 			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
+		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 		->make(true);
 	}
 

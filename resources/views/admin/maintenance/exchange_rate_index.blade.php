@@ -40,7 +40,7 @@
 					@forelse($exchange_rate as $er)
 						<tr>
 							<td>
-								{{ $er->dateEffective}}
+								{{ Carbon\Carbon::parse($er->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $er->rate }}

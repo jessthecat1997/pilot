@@ -16,16 +16,18 @@ class VatRatesController extends Controller
 		\DB::update('UPDATE vat_rates SET currentRate = 0 WHERE id != ' . $current->id);
 		\DB::update('UPDATE vat_rates SET currentRate = 1 WHERE id = ' . $current->id);
 
-		$vat_rate = \DB::table('vat_rates')
+		$vat_rate_current = \DB::table('vat_rates')
 		->select('rate')
 		->where('currentRate', '=', 1)
 		->get();
 
-		if(count($vat_rate) == 0){
-			$vat_rate[0]->rate = 0;
+		if(count($vat_rate_current) == 0){
+			$vat_rate_current[0]->rate = 0;
 		}
 
-		return view('admin/utilities.vat_rate_index', compact(['vat_rate']));
+		$vat_rate = \App\VatRate::all();
+
+		return view('admin/utilities.vat_rate_index', compact(['vat_rate_current','vat_rate']));
 	}
 
 
@@ -43,22 +45,22 @@ class VatRatesController extends Controller
 		$vat_rate ->currentRate = $request->currentRate;
 		$vat_rate ->dateEffective = $request->dateEffective;
 		$vat_rate ->description = $request->description;
-		$vat_rate ->save();
+		$vat_rate->save();
 
-		return $vat_rate;
+		return $vat_rate_current;
 	}
 
 
 	public function destroy($id)
 	{
-		$vat_rate = VatRate::findOrFail($id);
-		$vat_rate->delete();
+		$vat_rate_current = VatRate::findOrFail($id);
+		$vat_rate_current->delete();
 
 	}
 
 	public function reactivate(Request $request)
     {
-        $vat_rate = VatRate::withTrashed()
+        $vat_rate_current = VatRate::withTrashed()
         ->where('id',$request->id)
         ->restore();
         
@@ -66,6 +68,6 @@ class VatRatesController extends Controller
 
     public function vr_utilities(){
 
-        return view('admin/utilities.vat_rate_utility_index');
+        return view('admin/utilities.vat_rate_current_utility_index');
     }
 }

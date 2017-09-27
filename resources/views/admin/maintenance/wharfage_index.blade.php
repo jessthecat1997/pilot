@@ -38,7 +38,7 @@
 					@forelse($wharfages as $w)
 						<tr>
 							<td>
-								{{ $w->dateEffective }}
+								{{ Carbon\Carbon::parse($w->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $w->location}}

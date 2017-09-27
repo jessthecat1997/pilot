@@ -37,7 +37,7 @@
 					@forelse($arrastres as $a)
 						<tr>
 							<td>
-								{{ $a->dateEffective }}
+								{{ Carbon\Carbon::parse($a->dateEffective)->format("F d, Y") }}
 							</td>
 							<td>
 								{{ $a->location}}
