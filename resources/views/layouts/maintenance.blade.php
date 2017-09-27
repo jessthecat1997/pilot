@@ -152,19 +152,19 @@
                                 <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Basis Types</a>
                             </li>
                             <li>
-                                <a href = "{{ route('arrastre_fee.index') }}"  class = "class-arrastre"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Arrastre</a>
+                                <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Arrastre</a>
                             </li>
                             <!-- <li>
                                 <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Dangerous Cargo Arrastre</a>
                             </li> -->
                             <li>
-                                <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-lcl-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Arrastre</a>
+                                <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-af-fee-lcl"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Arrastre</a>
                             </li>
                             <li>
-                                <a href = "{{ route('wharfage_fee.index') }}"  class = "class-wharfage"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Wharfage</a>
+                                <a href = "{{ route('wharfage_fee.index') }}"  class = "class-wf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Wharfage</a>
                             </li>
                             <li>
-                                <a href = "{{ route('wharfage_fee_lcl.index') }}"  class = "class-wharfage-lcl"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Wharfage</a>
+                                <a href = "{{ route('wharfage_fee_lcl.index') }}"  class = "class-wf-fee-lcl"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Wharfage</a>
                             </li>
                         </div>
                         <li>

@@ -15,26 +15,52 @@
 				<table class = "table-responsive table table-striped" id = "ch_table">
 					<thead>
 						<tr>
-							<td style="width: 20%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 30%;">
+							<td>
 								Block No./Lot No./Street
 							</td>
-							<td style="width: 15%;">
+							<td >
 								City
 							</td>
-							<td style="width: 15%;">
+							<td >
 								Province
 							</td>
-							<td style="width: 5%;">
+							<td >
 								Zip
 							</td>
-							<td style="width: 20%;">
+							<td>
 								Actions
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($locations as $loc)
+						<tr>
+							<td>
+								{{ $loc->location_name }}
+							</td>
+							<td>
+								{{ $loc->location_address }}
+							</td>
+							<td>
+								{{ $loc->city_name }}
+							</td>
+							<td>
+								{{ $loc->province_name}}
+							</td>
+							<td>
+								{{ $loc->zipCode}}
+							</td>
+							<td>
+								<button value = "{{ $loc->location_id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $loc->location_id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -143,14 +169,13 @@
 
 	var data;
 
+
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			ajax: '{{ route("location_data") }}',
 			columns: [
-			
 			{ data: 'location_name' },
 			{ data: 'location_address' },
 			{ data: 'city_name' },
@@ -228,7 +253,7 @@
 						success: function(data){
 							if(typeof(data) == "object"){
 								$('#chModal').modal('hide');
-								chtable.ajax.reload();
+								chtable.ajax.url( '{{ route("location_data") }}' ).load();
 							}
 							else{
 								resetErrors();
@@ -264,7 +289,7 @@
 						success: function(data){
 							if(typeof(data) == "object"){
 								$('#chModal').modal('hide');
-								chtable.ajax.reload();
+								chtable.ajax.url( '{{ route("location_data") }}' ).load();
 							}
 							else{
 								resetErrors();
@@ -323,7 +348,7 @@
 				},
 				success: function(data){
 					$('#confirm-delete').modal('hide');
-					chtable.ajax.reload();
+					chtable.ajax.url( '{{ route("location_data") }}' ).load();
 
 				},
 				error: function(data) {

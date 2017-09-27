@@ -201,7 +201,7 @@
 @endsection
 @push('styles')
 <style>
-.class-wf-fee
+.class-wf-fee-lcl
 {
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
