@@ -117,13 +117,13 @@
 									</div>
 								</div>
 								<form class = "form-horizontal">
-									<div class="form-group">
+									<div class="form-group required">
 										<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date">
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group required">
 										<label class="control-label col-sm-3" for="dateExpiration">Date Expiration:</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date">
@@ -386,12 +386,12 @@
 @endsection
 @push('styles')
 <style>
-	.contracts
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.contracts
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 @endpush
@@ -432,8 +432,8 @@
 			lang:'en',
 			format:'Y/m/d',
 			formatDate:'Y/m/d',
-			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
-			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d') }}",
 		});
 
 		$('#dateExpiration').datetimepicker({
@@ -443,8 +443,6 @@
 			lang:'en',
 			format:'Y/m/d',
 			formatDate:'Y/m/d',
-			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
-			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
 		});
 
 
@@ -653,10 +651,6 @@
 			}
 		})
 
-		
-
-		
-
 		$(document).on('click', '.delete-contract-row', function(e){
 			e.preventDefault();
 			$('#contract_rates_warning').removeClass('in');
@@ -702,7 +696,28 @@
 		
 
 		$(document).on('click', '.finalize-contract', function(e){
-			if(finalvalidateContractRows() === true){
+			$('.finalize-contract').attr('disabled', 'true');
+			var valid_date = false;
+			if($('#dateExpiration').val() == "____/__/__")
+			{
+				valid_date = false;
+				$('#dateExpiration').css('border-color', 'red');
+			}
+			else
+			{
+				if($('#dateExpiration').val() > $('#dateEffective').val()){
+					valid_date = true;
+					$('#dateEffective').css('border-color', 'green');
+					$('#dateExpiration').css('border-color', 'green');
+				}
+				else{
+					valid_date = false;
+					$('#dateEffective').css('border-color', 'red');
+					$('#dateExpiration').css('border-color', 'red');
+				}
+			}
+		
+			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("create_contract") }}',
@@ -718,9 +733,14 @@
 
 					success: function (data){
 						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
+						$('.finalize-contract').removeAttr('disabled');
 					}
 
 				})
+			}
+			else
+			{
+				$('.finalize-contract').removeAttr('disabled');
 			}
 		})
 
@@ -736,7 +756,7 @@
 						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						'isFinalize':0,
+						'isFinalize': 0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
 					},
@@ -875,8 +895,9 @@ function finalvalidateContractRows()
 	terms = document.getElementsByName('specificDetails');
 	error = "";
 
-	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "")
+	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "" )
 	{
+
 		if($('#dateExpiration').val() < $('#dateEffective').val()){
 			error += "Invalid duration";
 			$('#contract_duration_warning').addClass('in');
@@ -884,6 +905,8 @@ function finalvalidateContractRows()
 		}
 		else{
 			$('#contract_duration_warning').removeClass('in');
+			$('#dateExpiration').css('border-color', 'green');
+			$('#dateEffective').css('border-color', 'green');
 		}
 	}
 	else{
@@ -891,6 +914,14 @@ function finalvalidateContractRows()
 		$('#contract_duration_warning').addClass('in');
 		location.href = "#contract_duration_title";
 	}
+	if($('#dateExpiration').val() == "____/__/__" || $('#dateExpiration').val() == ""){
+		error += "No date expiration";
+		$('#dateExpiration').css('border-color', 'red');
+	}
+	else{
+		$('#dateExpiration').css('border-color', 'green');
+	}
+
 
 	if(consigneeID == 0 || consigneeID == null)
 	{
@@ -932,9 +963,6 @@ function finalvalidateContractRows()
 
 function validateDraft()
 {
-	
-
-
 	terms_and_condition_string = "";
 
 	terms = document.getElementsByName('specificDetails');
