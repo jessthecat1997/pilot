@@ -733,7 +733,7 @@
 
 					success: function (data){
 						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
-						$('.finalize-contract').removeAttr('disabled');
+						
 					}
 
 				})

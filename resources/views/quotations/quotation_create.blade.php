@@ -857,7 +857,6 @@
 					success: function (data){
 						console.log(data);
 						window.location.replace("{{ route('quotation.index') }}/" + data.id);
-						$('.finalize-contract').attr('disabled', true);
 					}
 
 				})
