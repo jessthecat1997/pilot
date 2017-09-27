@@ -18,7 +18,7 @@ class StoreIPFFee extends FormRequest
 
 
         return [
-            'dateEffective' => 'required|date|' 
+            'dateEffective' => 'required|date|unique:import_processing_fee_headers,dateEffective' 
         ];
 
     //Overriding the response 422

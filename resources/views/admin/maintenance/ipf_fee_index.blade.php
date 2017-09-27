@@ -439,6 +439,7 @@
 							},
 							success: function (data){
 
+							if(typeof(data) === "object"){
 								ipftable.ajax.url( '{{ route("ipf.data") }}' ).load();
 								$('#ipfModal').modal('hide');
 								$('.modal-title').text('New Import Processing Fee Range');
@@ -466,7 +467,17 @@
 								}
 								toastr["success"]("Record added successfully")
 								$('#btnSave').removeAttr('disabled');
+							}else{
+
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
 							}
+						}
 						})
 					}
 				}else{
