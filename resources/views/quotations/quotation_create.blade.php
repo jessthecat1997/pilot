@@ -165,7 +165,7 @@
 														</select>
 													</td>
 													<td>
-														<input type = "number" name = "amount" class = "form-control amount_valid" style="text-align: right">
+														<input type = "text" name = "amount" class = "form-control amount_valid money" value = "0.00" style="text-align: right">
 
 													</td>
 													<td style="text-align: center;">
@@ -194,7 +194,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms & Condition</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
@@ -559,6 +559,9 @@
 			}
 		})
 
+		
+
+
 		$(document).on('click', '.add_new_consignee', function(e){
 			e.preventDefault();
 			$('#chModal').modal('show');
@@ -736,6 +739,22 @@
 
 
 		});
+
+
+
+		$(document).on('click', '.delete-contract-row', function(e){
+			e.preventDefault();
+			$('#contract_rates_warning').removeClass('in');
+			if ($('#contract_parent_table > tbody > tr').length == 1)
+			{
+				$(this).closest('tr').remove();
+				$('#contract_rates_warning').addClass('fade in');
+			}
+			else
+			{
+				$(this).closest('tr').remove();			
+			}
+		})
 		$(document).on('click', '.delete-term-row', function(e){
 			e.preventDefault();
 			$('#term_condition_count_warning').removeClass('in');
@@ -767,6 +786,7 @@
 					allowClear: true
 				});
 				row_ctr++;
+				
 			}
 
 		})
@@ -817,6 +837,7 @@
 		})
 
 		$(document).on('click', '.finalize-contract', function(e){
+			$('.finalize-contract').attr('disabled', true);
 			if(finalvalidateContractRows() === true){
 				$.ajax({
 					method: 'POST',
@@ -836,9 +857,14 @@
 					success: function (data){
 						console.log(data);
 						window.location.replace("{{ route('quotation.index') }}/" + data.id);
+						$('.finalize-contract').attr('disabled', true);
 					}
 
 				})
+				
+			}
+			else{
+				$('.finalize-contract').removeAttr('disabled');
 			}
 		})
 
