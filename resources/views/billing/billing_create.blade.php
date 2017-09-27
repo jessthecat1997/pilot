@@ -22,9 +22,9 @@
 					<div class="form-group">
 						<label>Status:</label>
 						@if($bills[0]->isFinalize == 1)
-						<label class="label label-success" id="status">Finalized</label>
+						<label class="label label-success" id="status">Posted</label>
 						@else
-						<label class="label label-danger" id="status">Not Finalize</label>
+						<label class="label label-danger" id="status">Not Posted</label>
 						@endif
 					</div>
 					<div class="form-group">
@@ -191,7 +191,7 @@
 		$(document).ready(function(){
 			var stat = document.getElementById("status").innerText;
 			console.log(stat);
-			if(stat == "Finalized")
+			if(stat == "Posted")
 			{
 				$('.addBill').attr('disabled','disabled');
 				$('.finalize-bill').attr('disabled','disabled');
