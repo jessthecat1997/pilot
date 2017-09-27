@@ -19,7 +19,7 @@
             </div>
             <div class = "col-md-4">
               <div class = "form-group">
-                <label class="control-label">Middle Name</label>      
+                <label class="control-label">Middle Name</label>
                 <input type = "text" class = "form-control" placeholder="Middle Name" id = "middleName"/>
               </div>
             </div>
@@ -137,11 +137,23 @@
   </div>
 </div>
 @endsection
+@push('styles')
+<style>
+	.brokerage
+	{
+		border-left: 10px solid #2ad4a5;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
+@endpush
 
 @push('styles')
 <link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 @endpush
 @push('scripts')
+<script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
@@ -320,5 +332,7 @@
         })
 
       })
-    </script>
-    @endpush
+    })
+  })
+</script>
+@endpush

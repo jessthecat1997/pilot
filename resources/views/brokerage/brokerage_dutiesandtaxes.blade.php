@@ -72,19 +72,131 @@
               </div>
             </div>
           </div>
-          <div class = "form-group">
-            <label class = "control-label col-md-3">Contact Number: </label>
-            <div class = "col-md-3">
-              <div class = "col-md-12">
-                <input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
-              </div>
-            </div>
-            <label class = "control-label col-md-2">Email: </label>
-            <div class = "col-md-4">
-              <div class = "col-md-12">
-                <input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
-              </div>
-            </div>
+          <div id = "brokerageInfo" class = "tab-pane">
+    				<div class = "panel-heading">
+    					<h4 id = "brokerageInformationHeader"><small>2</small> Brokerage Information</h4>
+    				</div>
+    				<div class = "panel-body">
+    					<form class="form-horizontal" role="form">
+    						{{ csrf_field() }}
+    						<div class="form-group">
+    				<div id="so_details" class="tab-pane fade in active">
+    						<br />
+    							<div class = "col-md-12">
+    								<div class = "form-horizontal">
+
+    								<div class = "form-group">
+    									<label class= "col-md-4 control-label">Expected Arrival Date*</label>
+    									 <div class = "col-md-5">
+    										<div class = "input-group">
+    												<input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" data-msg="Please fill this field" disabled required>
+    												<span class="input-group-btn">
+    														<button class="btn btn-default" type="button" onclick="getData()" id = "arrivalDateButton"><i class="fa fa-calendar "></i></button>
+    												</span>
+    										</div>
+    									</div>
+    								</div>
+
+    								<div class = "form-group">
+    									<label  class="col-md-4 control-label">Freight Type*</label>
+    									<div class="col-md-5">
+    										<div class="input-group">
+    											<input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" data-msg="Please fill this field"  readonly required>
+    											<div class="input-group-btn">
+    												<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Select Freight Type <span class="caret"></span></button>
+    												<ul class="dropdown-menu dropdown-menu-right">
+    													<li><a onclick = "document.getElementById('FreightType').value = 'Air Freight'">Air Freight</a></li>
+    													<li><a	onclick = "document.getElementById('FreightType').value = 'Sea Freight'">Sea Freight</a></li>
+
+    												</ul>
+    											</div>
+    										</div>
+    									</div>
+    								</div>
+
+    								<div class="form-group">
+    										<label for="email" class="col-md-4 control-label">BL\AWL Number*</label>
+    										<div class="col-md-5">
+    													<input  type="text" class="form-control" name = "freightnumber" id = "freightNumber" data-msg="Please fill this field" required>
+    										</div>
+    								</div>
+
+    								<div class="form-group">
+    									<div class="form-group required">
+    										<label class = "col-md-4 control-label ">Pick up point: </label>
+    										<div class = "col-md-5">
+    										<div class="input-group">
+    											<select class = "form-control" id = "pickup_id" required data-msg="Please fill this field. Hint: Click on the plus sign to add a new location">
+    												<option value = "0"></option>
+    												@forelse($locations as $location)
+    												<option value = "{{ $location->id }}">{{ $location->name }}</option>
+    												@empty
+    												@endforelse
+    											</select>
+    											<span class="input-group-btn">
+    												<button class="btn btn-primary pick_add_new_location" onclick = "	$('#LocationModal').modal('show');"type="button">+</button>
+    											</span>
+    										</div>
+    									</div>
+    								</div>
+    								</div>
+
+    								<div class="form-group">
+    										<label  class="col-md-4 control-label">Shipper*</label>
+    										<div class="col-md-5">
+    													<input  type="text" class="form-control" name = "shipper" id = "shipper" required data-msg="Please fill this field">
+    										</div>
+    								</div>
+
+    								<div class = "form-group">
+    									<label  class="col-md-4 control-label">Weight </label>
+    									<div class="col-md-5">
+    										<div class="input-group">
+    											<input  type="text" class="form-control" aria-label="..." name = "freightType" id = "weight" required data-msg="Please fill this field">
+    											<div class="input-group-btn">
+    												<button type="button" class="btn btn-default" aria-expanded="false"> kgs</label>
+    											</div>
+    										</div>
+    									</div>
+    								</div>
+
+										<div class = "form-group">
+											<label  class="col-md-4 control-label">Basis </label>
+											<div class="col-md-5">
+
+													<select class = "form-control" id = "basis" name="basis" >
+														@forelse($basis as $basis_types)
+														<option value = "{{ $basis_types->id }}">{{ $basis_types->name }}</option>
+														@empty
+														<option value = "No Cargo">No Basis Found</option>
+														@endforelse
+													</select>
+
+											</div>
+										</div>
+										<div class = "form-group">
+											<label  class="col-md-4 control-label">Cargo Type </label>
+											<div class="col-md-5">
+													<select class = "form-control" id = "cargoType" name="cargoType" >
+														<option value = "G">General Cargo</option>
+														<option value = "C">Chemical</option>
+													</select>
+											</div>
+										</div>
+
+										<div class = "form-group">
+											<label  class="col-md-4 control-label">Certificate Of Origin </label>
+											<div class="col-md-5">
+												<input type="checkbox" data-toggle="toggle" data-size="normal" data-on="Included" data-off="Not Included" data-onstyle="success"  id = "withCO" width = "100px" >
+											</div>
+										</div>
+    							</div>
+    						</div>
+    					</div>
+
+    					</div>
+    				</form>
+    					</div>
           </div>
           <div class = "form-group">
             <label class = "control-label col-md-3">Company Name</label>
@@ -393,7 +505,7 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </form>
                         </div>
                       </div>
                     </div>
@@ -404,9 +516,68 @@
                     </div>
                     <div class ="col-md-9">
 
-                    </div>
-                  </div>
-                </form>
+                    <div id="wocontainer" class="tab-pane fade">
+                      <div class = "panel">
+                        <div class = "">
+                          <form class="form-horizontal" role="form">
+                            <div class="form-group">
+
+															<br />
+
+															<div class = "col-md-12">
+	                              <label class="control-label" for="wodetail_table">Delivery Content:</label>
+	                              <table class = "table-responsive table table-striped" id = "wodetail_table">
+	                                <thead>
+	                                  <tr>
+	                                    <td>
+	                                      Description of Goods
+	                                    </td>
+																			<td>
+																				Less Cargo Load Type
+																			</td>
+	                                    <td>
+	                                      Gross Weight(kg)
+	                                    </td>
+	                                    <td>
+	                                      Supplier/s
+	                                    </td>
+	                                    <td>
+	                                      Action
+	                                    </td>
+	                                  </tr>
+	                                </thead>
+	                                <tbody>
+	                                  <tr id = "wodescription_row">
+	                                    <td width="35%">
+	                                      <input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
+	                                    </td>
+																			<td width="35%">
+																				<select class = "form-control" id = "lcl_type" name="wolclTypes" >
+																					@forelse($lcl_types as $lcl_type)
+																					<option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
+																					@empty
+																					<option value = "No Cargo">No Less Cargo Type Found</option>
+																					@endforelse
+																				</select>
+																			</td>
+																			<td width="20%">
+	                                      <input type = "number" name = "wogrossWeight" class = "form-control"/>
+	                                    </td>
+	                                    <td width="30%">
+	                                      <input type = "text" name = "wosupplier"  class = "form-control" />
+	                                    </td>
+	                                    <td width="15%">
+	                                      <button class = "btn btn-md btn-danger woremove-current-detail">x</button>
+	                                    </td>
+	                                  </tr>
+	                                </tbody>
+	                              </table>
+															</div>
+                              <div class="row">
+                                <div class="col-md-4">
+                                  <button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
+                                </div>
+                                <div class="col-md-8">
 
               </div>
             </div>
@@ -766,8 +937,12 @@
 	}
 </style>
 <link href= "/js/select2/select2.css" rel = "stylesheet">
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
+@endpush
+
 @push('scripts')
 <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+<script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
 
 
@@ -795,6 +970,7 @@
   var con_ReturnDate = [];
   var descrp_goods = [];
   var gross_weights = [];
+	var lcl_types = [];
 
   $(document).ready(function(){
 
@@ -1475,9 +1651,9 @@ error: function(data) {
       console.log(error);
       return false;
     }
-
-
   }
+
+
   function validateContainer(){
     con_Number = [];
     con_Volume = [];
@@ -1567,12 +1743,15 @@ error: function(data) {
     descrp_goods = [];
     gross_weights = [];
     suppliers = [];
-    var error = "";
+		lcl_types = [];
+		var error = "";
+
     if($("#choices li.active").text() === "Without Container"){
       descrp = document.getElementsByName("wodescriptionOfGoods");
       gw = document.getElementsByName("wogrossWeight");
       supp = document.getElementsByName("wosupplier");
-    }
+	 lcl = document.getElementsByName("wolclTypes");
+		}
     for(var i = 0; i < descrp.length; i++){
       if(descrp[i].value === ""){
         error += "No description";
@@ -1596,9 +1775,16 @@ error: function(data) {
       else{
         suppliers.push(supp[i].value);
       }
+			if(lcl[i].value === "")
+			{
+				lcl[i].style.borderColor = 'red';
+				error += "No LCL Type"
+			}
+			else{
+				lcl_types.push(lcl[i].value);
+			}
     }
     if(error.length === 0){
-
       return true;
     }
     else{
@@ -1609,21 +1795,43 @@ error: function(data) {
 
   $('#brokerageBtn').on('click', function(e){
 
-    var loc = document.getElementById("pickup_id");
-    var strloc = loc.options[loc.selectedIndex].value;
+		var loc = document.getElementById("pickup_id");
+		var basis = document.getElementById("basis");
+		var strloc = loc.options[loc.selectedIndex].value;
+		var strbasis = basis.options[basis.selectedIndex].value;
+		var withCOToggle;
 
-    /*
+		if(document.getElementById("withCO").checked == true)
+		{
+			withCOToggle = 1;
+		}
+		if(document.getElementById("withCO").checked == false)
+		{
+			withCOToggle = 0;
+		}
+
         if($("#choices li.active").text() === "Without Container"){
           if(validateDetail() === true){
           console.log("without continer");
+
+					console.log("basis: "+strbasis);
+					console.log("cargoType: "+document.getElementById('cargoType').value,);
+					console.log("withCO: "+withCOToggle);
+
           console.log("descrp_goods: "+descrp_goods);
           console.log("suppliers: "+suppliers);
-          console.log("gross_weights: "+gross_weights);
+					console.log("lcl_types: "+lcl_types);
+					console.log("gross_weights: "+gross_weights);
           }
         }
         else {
           if(validateContainer() == true){
             console.log("with continer");
+
+						console.log("basis: "+strbasis);
+						console.log("cargoType: "+document.getElementById('cargoType').value,);
+						console.log("withCO: "+withCOToggle);
+
             console.log('containerNumber: ' + con_Number);
             console.log('containerVolume: ' + con_Volume);
             console.log('containerReturnTo: ' + con_ReturnTo);
@@ -1633,7 +1841,7 @@ error: function(data) {
             console.log('portOfCfsLocation: ' + con_PortOfCfsLocation);
           console.log('container_data: ' + results);
         }
-      }*/
+      }
 
 
 
@@ -1646,35 +1854,46 @@ error: function(data) {
         if($("#choices li.active").text() === "Without Container"){
           if(validateDetail() === true){
 
-            $.ajax({
-              type: 'POST',
-              url: "{{ route('saveBrokerageOrder') }}",
-              data: {
-                '_token' : $('input[name=_token]').val(),
-                'cs_id' : consigneeID,
-                'employee_id' : $('#processedBy').val(),
-                'location_id': strloc,
-                'shipper' : document.getElementById('shipper').value,
-                'companyName' : document.getElementById('freightNumber').value,
-                'freightType' : document.getElementById('FreightType').value,
-                'arrivalDate' : document.getElementById('expectedArrivalDate').value,
-                'freightNumber' : document.getElementById('freightNumber').value,
-                'weight' : document.getElementById('weight').value,
-                'descrp_goods' : descrp_goods,
-                'gross_weights' : gross_weights,
-                'suppliers' : suppliers,
-              },
-              success: function(data){
-                if(typeof(data) == "object"){
-                  console.log(data);
-                  $('#_cfirstName').val(data[0].firstName);
-                  $('#_cmidddleName').val(data[0].middleName);
-                  $('#_clastName').val(data[0].lastName);
-                  $('#_ccontactNumber').val(data[0].contactNumber);
-                  $('#_cemail').val(data[0].email);
-                  $('#_ccompanyName').val(data[0].companyName);
-                  $('#_cbusinessStyle').val(data[0].businessStyle);
-                  $('#_cTIN').val(data[0].TIN);
+              $.ajax({
+                type: 'POST',
+                url: "{{ route('saveBrokerageOrder') }}",
+                data: {
+                  '_token' : $('input[name=_token]').val(),
+                  'cs_id' : consigneeID,
+                  'employee_id' : $('#processedBy').val(),
+                  'location_id': strloc,
+                  'shipper' : document.getElementById('shipper').value,
+                  'companyName' : document.getElementById('freightNumber').value,
+                  'freightType' : document.getElementById('FreightType').value,
+                  'arrivalDate' : document.getElementById('expectedArrivalDate').value,
+                  'freightNumber' : document.getElementById('freightNumber').value,
+                  'weight' : document.getElementById('weight').value,
+									'basis' : strbasis,
+									'cargoType' : document.getElementById('cargoType').value,
+									'withCO' : withCOToggle,
+                  'descrp_goods' : descrp_goods,
+									'lcl_types' : lcl_types,
+                  'gross_weights' : gross_weights,
+                  'suppliers' : suppliers,
+                },
+                success: function(data){
+                  if(typeof(data) == "object"){
+                    console.log(data);
+                    $('#_cfirstName').val(data[0].firstName);
+                    $('#_cmidddleName').val(data[0].middleName);
+                    $('#_clastName').val(data[0].lastName);
+                    $('#_ccontactNumber').val(data[0].contactNumber);
+                    $('#_cemail').val(data[0].email);
+                    $('#_ccompanyName').val(data[0].companyName);
+                    $('#_cbusinessStyle').val(data[0].businessStyle);
+                    $('#_cTIN').val(data[0].TIN);
+                  }
+                  window.location.replace('/brokerage/'+data+'/order');
+                },
+                error: function(data) {
+                  if(data.status == 400){
+                    alert("Nothing found");
+                  }
                 }
                 window.location.replace('/brokerage/'+data+'/order');
               },
@@ -1688,42 +1907,52 @@ error: function(data) {
         }
         else {
 
-          if(validateContainer() == true){
-            validateContainerDetail();
-            $.ajax({
-              type: 'POST',
-              url: "{{ route('saveBrokerageOrder') }}",
-              data: {
-                '_token' : $('input[name=_token]').val(),
-                'cs_id' : consigneeID,
-                'employee_id' : $('#processedBy').val(),
-                'location_id': strloc,
-                'shipper' : document.getElementById('shipper').value,
-                'companyName' : document.getElementById('freightNumber').value,
-                'freightType' : document.getElementById('FreightType').value,
-                'arrivalDate' : document.getElementById('expectedArrivalDate').value,
-                'freightNumber' : document.getElementById('freightNumber').value,
-                'weight' : document.getElementById('weight').value,
-                'containerNumber' : con_Number,
-                'containerVolume' : con_Volume,
-                'containerReturnTo' : con_ReturnTo,
-                'containerReturnAddress' : con_ReturnAddress,
-                'containerReturnDate' : con_ReturnDate,
-                'shippingLine' : con_ShippingLine,
-                'portOfCfsLocation' : con_PortOfCfsLocation,
-                'container_data' : results,
-              },
-              success: function(data){
-                if(typeof(data) == "object"){
-                  console.log(data);
-                  $('#_cfirstName').val(data[0].firstName);
-                  $('#_cmidddleName').val(data[0].middleName);
-                  $('#_clastName').val(data[0].lastName);
-                  $('#_ccontactNumber').val(data[0].contactNumber);
-                  $('#_cemail').val(data[0].email);
-                  $('#_ccompanyName').val(data[0].companyName);
-                  $('#_cbusinessStyle').val(data[0].businessStyle);
-                  $('#_cTIN').val(data[0].TIN);
+            if(validateContainer() == true){
+              		validateContainerDetail();
+              $.ajax({
+                type: 'POST',
+                url: "{{ route('saveBrokerageOrder') }}",
+                data: {
+                  '_token' : $('input[name=_token]').val(),
+                  'cs_id' : consigneeID,
+                  'employee_id' : $('#processedBy').val(),
+                  'location_id': strloc,
+                  'shipper' : document.getElementById('shipper').value,
+                  'companyName' : document.getElementById('freightNumber').value,
+                  'freightType' : document.getElementById('FreightType').value,
+                  'arrivalDate' : document.getElementById('expectedArrivalDate').value,
+                  'freightNumber' : document.getElementById('freightNumber').value,
+                  'weight' : document.getElementById('weight').value,
+									'basis' : strbasis,
+									'cargoType' : document.getElementById('cargoType').value,
+									'withCO' : withCOToggle,
+                  'containerNumber' : con_Number,
+  								'containerVolume' : con_Volume,
+  								'containerReturnTo' : con_ReturnTo,
+  								'containerReturnAddress' : con_ReturnAddress,
+  								'containerReturnDate' : con_ReturnDate,
+  								'shippingLine' : con_ShippingLine,
+  								'portOfCfsLocation' : con_PortOfCfsLocation,
+  								'container_data' : results,
+                },
+                success: function(data){
+                  if(typeof(data) == "object"){
+                    console.log(data);
+                    $('#_cfirstName').val(data[0].firstName);
+                    $('#_cmidddleName').val(data[0].middleName);
+                    $('#_clastName').val(data[0].lastName);
+                    $('#_ccontactNumber').val(data[0].contactNumber);
+                    $('#_cemail').val(data[0].email);
+                    $('#_ccompanyName').val(data[0].companyName);
+                    $('#_cbusinessStyle').val(data[0].businessStyle);
+                    $('#_cTIN').val(data[0].TIN);
+                  }
+                  window.location.replace('/brokerage/'+data+'/order');
+                },
+                error: function(data) {
+                  if(data.status == 400){
+                    alert("Nothing found");
+                  }
                 }
                 window.location.replace('/brokerage/'+data+'/order');
               },
@@ -1743,8 +1972,7 @@ error: function(data) {
   //containerNumber
   Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
 
-
-  function Validations(){
+	function Validations(){
 
     resetMessages();
     var isError = false;

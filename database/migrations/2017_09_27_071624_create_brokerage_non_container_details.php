@@ -17,9 +17,11 @@ class CreateBrokerageNonContainerDetails extends Migration
           $table->increments('id');
           $table->string('descriptionOfGoods', 200);
           $table->decimal('grossWeight', 10, 2);
+          $table->integer('lclType_id')->unsigned();
           $table->string('supplier', 100)->nullable();
           $table->integer('brok_head_id')->unsigned();
 
+          $table->foreign('lclType_id')->references('id')->on('lcl_types');
           $table->foreign('brok_head_id')->references('id')->on('brokerage_service_orders');
       });
         //

@@ -24,12 +24,16 @@ class CreateBrokerageServiceOrdersTable extends Migration
         $table->string('freightBillNo', 30);
         $table->decimal('Weight', 15, 2);
         $table->string('statusType', 1);
+        $table->string('cargo_type', 1)->nullable();
+        $table->integer('basis')->unsigned()->nullable();
+        $table->integer('withCO');
         $table->integer('consigneeSODetails_id')->unsigned();
         $table->integer('bi_head_id_rev')->unsigned()->nullable();
         $table->integer('bi_head_id_exp')->unsigned()->nullable();
         $table->timestamps();
         $table->softDeletes();
 
+        $table->foreign('basis')->references('id')->on('basis_types');
         $table->foreign('consigneeSODetails_id')-> references('id')->on('consignee_service_order_details');
         $table->foreign('location_id')->references('id')->on('locations');
         $table->foreign('bi_head_id_rev')->references('id')->on('billing_invoice_headers');

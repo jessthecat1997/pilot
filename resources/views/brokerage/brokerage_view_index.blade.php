@@ -1280,7 +1280,7 @@ $(document).on('click', '.updateTax', function(e){
 
 $(document).on('click', '.selectedBrokerage', function(e){
 	e.preventDefault();
-	alert($(this).val());
+
 	selected_decleration($(this).val());
 })
 var brokerage_fee = <?php echo json_encode($brokerage_fees)?>;
