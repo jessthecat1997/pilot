@@ -82,12 +82,11 @@ class ContractsController extends Controller
         $new_contract->dateExpiration = date_create($request->dateExpiration);
         $new_contract->consignees_id = $request->consigneeID;
         $new_contract->specificDetails = $request->specificDetails;
+        $new_contract->isFinalize = $request->isFinalize;
         $new_contract->save();
 
 
         $new_contract =  ContractHeader::all()->last();
-
-        Storage::disk('local')->put($request->consigneeID ."_". str_replace(" ", "_", $request->consigneeName).".txt", $newContent);
 
         return $new_contract->id;
     }

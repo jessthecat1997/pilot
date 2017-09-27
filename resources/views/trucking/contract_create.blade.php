@@ -716,7 +716,7 @@
 					$('#dateExpiration').css('border-color', 'red');
 				}
 			}
-		
+
 			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
@@ -733,7 +733,7 @@
 
 					success: function (data){
 						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
-						$('.finalize-contract').removeAttr('disabled');
+						
 					}
 
 				})
@@ -747,7 +747,28 @@
 
 
 		$(document).on('click', '.draft-contract', function(e){
-			if(validateDraft() === true){
+			$('.draft-contract').attr('disabled', 'true');
+			var valid_date = false;
+			if($('#dateExpiration').val() == "____/__/__")
+			{
+				valid_date = false;
+				$('#dateExpiration').css('border-color', 'red');
+			}
+			else
+			{
+				if($('#dateExpiration').val() > $('#dateEffective').val()){
+					valid_date = true;
+					$('#dateEffective').css('border-color', 'green');
+					$('#dateExpiration').css('border-color', 'green');
+				}
+				else{
+					valid_date = false;
+					$('#dateEffective').css('border-color', 'red');
+					$('#dateExpiration').css('border-color', 'red');
+				}
+			}
+
+			if(validateDraft() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("create_contract") }}',
@@ -786,11 +807,10 @@
 
 				})
 			}
+			else{
+				$('.draft-contract').removeAttr('disabled');
+			}
 		})
-
-
-
-
 	})
 
 
@@ -965,8 +985,37 @@ function validateDraft()
 {
 	terms_and_condition_string = "";
 
+	rate_pairs = [];
+
 	terms = document.getElementsByName('specificDetails');
 	error = "";
+
+	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "" )
+	{
+
+		if($('#dateExpiration').val() < $('#dateEffective').val()){
+			error += "Invalid duration";
+			$('#contract_duration_warning').addClass('in');
+			location.href = "#contract_duration_title";
+		}
+		else{
+			$('#contract_duration_warning').removeClass('in');
+			$('#dateExpiration').css('border-color', 'green');
+			$('#dateEffective').css('border-color', 'green');
+		}
+	}
+	else{
+		error += "No date effective";
+		$('#contract_duration_warning').addClass('in');
+		location.href = "#contract_duration_title";
+	}
+	if($('#dateExpiration').val() == "____/__/__" || $('#dateExpiration').val() == ""){
+		error += "No date expiration";
+		$('#dateExpiration').css('border-color', 'red');
+	}
+	else{
+		$('#dateExpiration').css('border-color', 'green');
+	}
 
 
 	if(consigneeID == 0 || consigneeID == null)
@@ -977,15 +1026,6 @@ function validateDraft()
 	}
 	else{
 		$('#consignee_warning').removeClass('in');
-	}
-
-	if($('#dateExpiration').val() < $('#dateEffective').val()){
-		error += "Invalid duration";
-		$('#contract_duration_warning').addClass('in');
-		location.href = "#contract_duration_title";
-	}
-	else{
-		$('#contract_duration_warning').removeClass('in');
 	}
 	
 	
