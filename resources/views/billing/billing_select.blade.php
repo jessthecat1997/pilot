@@ -175,9 +175,9 @@
 		function formatWithBillType(n) {
 
 			if (n == 0){
-				return "Not Finalize";
+				return "Pending";
 			}else{
-				return "Finalize";
+				return "Posted";
 			}
 		}
 

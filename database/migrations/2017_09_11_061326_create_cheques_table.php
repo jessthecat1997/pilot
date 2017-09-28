@@ -17,6 +17,7 @@ class CreateChequesTable extends Migration
             $table->increments('id');
             $table->string('chequeNumber', 100);
             $table->string('bankName', 100);
+            $table->decimal('amount', 19,2);
             $table->boolean('isVerify');
             $table->integer('bi_head_id')->unsigned();
             $table->timestamps();
