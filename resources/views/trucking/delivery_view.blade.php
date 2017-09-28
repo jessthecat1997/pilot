@@ -543,7 +543,9 @@
 			e.preventDefault();
 			$('#deliveryDateTime').valid();
 			$('#pickupDateTime').valid();
-			console.log($('#deliveryDateTime').val());
+			$.ajax({
+				
+			})
 		})
 
 		$(document).on('click', '.view-container-detail', function(e){
@@ -621,7 +623,7 @@
 					'status' : $('#deliveryStatus').val(),
 					'remarks' : $('#deliveryRemarks').val(),
 					'cancelDateTime' : $('#deliveryCancel').val(),
-					'delivery_head_id' : {{ $delivery[0]->id }},
+					'delivery_head_id' : "{{ $delivery[0]->id }}",
 
 				},
 				success: function(data){
