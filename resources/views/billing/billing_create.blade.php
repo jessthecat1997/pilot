@@ -24,7 +24,7 @@
 						@if($bills[0]->isFinalize == 1)
 						<label class="label label-success" id="status">Posted</label>
 						@else
-						<label class="label label-danger" id="status">Not Posted</label>
+						<label class="label label-warning" id="status">Pending</label>
 						@endif
 					</div>
 					<div class="form-group">
@@ -137,7 +137,7 @@
 							<div class="col-sm-10"> 
 								<div class="input-group">
 									<span class="input-group-addon">Php</span>
-									<input type="number" class="form-control money" id="rev_amount" name="rev_amount" data-rule-required="true" style = "text-align: right" value = "0.00" required >
+									<input type="number" class="form-control money" id="rev_amount" name="rev_amount" data-rule-required="true" style = "text-align: right" value = "0.00">
 								</div>
 							</div>
 						</div>
