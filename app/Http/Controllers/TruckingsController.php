@@ -250,7 +250,7 @@ class TruckingsController extends Controller
             $delivery_details = DB::table('delivery_non_container_details')
             ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
             ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier', 'delivery_non_container_details.id')
             ->where('B.del_head_id', '=', $request->delivery_id)    
             ->get();
         }
