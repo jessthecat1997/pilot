@@ -523,20 +523,20 @@
 			mask:'9999/19/39',
 			dayOfWeekStart : 1,
 			lang:'en',
-			format:'Y/m/d H:i:s',
+			format:'Y/m/d H:i',
 			formatDate:'Y/m/d H:i',
-			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i:s') }}",
+			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i') }}",
 		});
 
 		$('#deliveryDateTime').datetimepicker({
 			mask:'9999/19/39',
 			dayOfWeekStart : 1,
 			lang:'en',
-			format:'Y/m/d H:i:s',
-			formatDate:'Y/m/d H:i:s',
-			value: "{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i:s') }}",
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
 		});
 
 		$(document).on('click', '.save-reschedule-information', function(e){
@@ -544,6 +544,19 @@
 			$('#deliveryDateTime').valid();
 			$('#pickupDateTime').valid();
 			$.ajax({
+				type: 'POST',
+				url: '{{ route("trucking.index") }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/reschedule',
+				data: 
+				{
+					'_token' : $('input[name=_token]').val(),
+					'deliveryDateTime' : $('#deliveryDateTime').val(),
+					'pickupDateTime' : $('#pickupDateTime').val(),
+
+				},
+				success: function (data)
+				{
+					console.log(data);
+				}
 				
 			})
 		})

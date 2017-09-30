@@ -18,9 +18,8 @@ class CreateDeliveryNonContainerDetails extends Migration
             $table->string('descriptionOfGoods', 200);
             $table->decimal('grossWeight', 10, 2);
             $table->string('supplier', 100)->nullable();
-            $table->integer('del_head_id')->unsigned();
-
-            $table->foreign('del_head_id')->references('id')->on('delivery_receipt_headers');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
