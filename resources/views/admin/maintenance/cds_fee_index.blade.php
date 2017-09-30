@@ -61,7 +61,7 @@
 							</td>
 							<td>
 								<button value = "{{ $cds->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $cds->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
-								<input type = "hidden" value = "{{ Carbon\Carbon::parse($cds->dateEffective)->format('m/d/Y') }}"  class = "dateEffective" />
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($cds->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -232,7 +232,9 @@
 			cds_id = $(this).val();
 			data = cdstable.row($(this).parents()).data();
 			$('#fee').val(data.fee);
-			$('#dateEffective').val('.dateEffective');
+			console.log($(this).closest('tr').find('.date_Effective').val());
+
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('.modal-title').text('Update CDS Fee');
 			$('#cdsModal').modal('show');
 		});
