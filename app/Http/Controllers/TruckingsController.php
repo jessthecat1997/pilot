@@ -29,7 +29,19 @@ class TruckingsController extends Controller
 
     public function index()
     {
-        return view('trucking.trucking_service_order_index');
+        $truckings = DB::table('trucking_service_orders')
+        ->select(
+            'trucking_service_orders.id',
+            'companyName',
+            'status',
+            DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+        ->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
+        ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+        ->join('consignees', 'consignees_id', '=', 'consignees.id')
+        ->where('trucking_service_orders.status', '!=', ['F', 'C'])
+        ->get();
+
+        return view('trucking.trucking_service_order_index', compact(['truckings']));
     }
 
 
@@ -236,8 +248,10 @@ class TruckingsController extends Controller
 
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')    
+            ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
+            ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('B.del_head_id', '=', $request->delivery_id)    
             ->get();
         }
 
@@ -245,8 +259,9 @@ class TruckingsController extends Controller
         else{
             $container_with_detail = [];
             $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
+            ->join('delivery_head_containers AS B', 'B.container_id', '=', 'delivery_containers.id')
+            ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+            ->where('del_head_id', '=', $request->delivery_id)
             ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
             ->get();
             foreach ($delivery_containers as $container) {
