@@ -38,12 +38,12 @@
 								</div>
 								<div class="form-group">        
 									<label class="control-label col-md-5" for="status">Pick-up Date: </label>
-									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('F j, Y h:i:s A') }}</span>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('F j, Y h:i A') }}</span>
 									<label class="control-label col-md-5" for="status">Delivery Date: </label>
-									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('F j, Y h:i:s A') }}</span>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('F j, Y h:i A') }}</span>
 									@if($delivery[0]->status == 'C')
 									<label class="control-label col-md-5" for="status">Date Cancelled: </label>
-									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->cancelDateTime)->format('F j, Y h:i:s A') }}</span>
+									<span class="control-label col-md-7" style="text-align: left;">{{ Carbon\Carbon::parse($delivery[0]->cancelDateTime)->format('F j, Y h:i A') }}</span>
 									@endif
 									<label class="control-label col-md-5" for="status">Status: </label>
 									<span class="control-label col-sm-7" style="text-align: left;" id="status">
@@ -543,22 +543,26 @@
 			e.preventDefault();
 			$('#deliveryDateTime').valid();
 			$('#pickupDateTime').valid();
-			$.ajax({
-				type: 'POST',
-				url: '{{ route("trucking.index") }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/reschedule',
-				data: 
-				{
-					'_token' : $('input[name=_token]').val(),
-					'deliveryDateTime' : $('#deliveryDateTime').val(),
-					'pickupDateTime' : $('#pickupDateTime').val(),
+			if($('#deliveryDateTime').valid() && $('#pickupDateTime').valid()){
+				$('.save-reschedule-information').attr('disabled', 'true');
+				$.ajax({
+					type: 'POST',
+					url: '{{ route("trucking.index") }}/{{ $so_id }}/delivery/{{ $delivery[0]->id }}/reschedule',
+					data: 
+					{
+						'_token' : $('input[name=_token]').val(),
+						'deliveryDateTime' : $('#deliveryDateTime').val(),
+						'pickupDateTime' : $('#pickupDateTime').val(),
 
-				},
-				success: function (data)
-				{
-					console.log(data);
-				}
-				
-			})
+					},
+					success: function (data)
+					{
+						window.location.href = "{{ route('trucking.index') }}/{{ $so_id }}/delivery/" + data.id + "/view";
+					}
+
+				})
+			}
+			
 		})
 
 		$(document).on('click', '.view-container-detail', function(e){
