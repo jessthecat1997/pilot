@@ -13,7 +13,7 @@ class CreateDeliveryHeadContainerTable extends Migration
      */
     public function up()
     {
-        Schema::create('deliviery_head_containers', function (Blueprint $table) {
+        Schema::create('delivery_head_containers', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('del_head_id')->unsigned();
             $table->integer('container_id')->unsigned();

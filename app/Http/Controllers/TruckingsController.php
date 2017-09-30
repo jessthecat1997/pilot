@@ -469,8 +469,13 @@ class TruckingsController extends Controller
                 $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
                 $new_noncon_detail->grossWeight = $request->gross_weights[$i];
                 $new_noncon_detail->supplier = $request->suppliers[$i];
-                $new_noncon_detail->del_head_id =  $new_delivery_head->id;
+                
                 $new_noncon_detail->save();
+
+                $new_del_non_head = new \App\DeliveryHeadNonContainer;
+                $new_del_non_head->del_head_id = $new_delivery_head->id;
+                $new_del_non_head->non_con_id = $new_noncon_detail->id;
+                $new_del_non_head->save();
             }
 
         }
@@ -514,9 +519,15 @@ class TruckingsController extends Controller
                     $new_delivery_container->containerReturnStatus = "N";
                     $new_delivery_container->dateReturned = null;
                     $new_delivery_container->remarks = "";
-                    $new_delivery_container->del_head_id = $new_delivery_head->id;
+                    
 
                     $new_delivery_container->save();
+
+                    $new_del_head_con = new \App\DeliveryHeadContainer;
+                    $new_del_head_con->del_head_id = $new_delivery_head->id;
+                    $new_del_head_con->container_id = $new_delivery_container->id;
+
+                    $new_del_head_con->save();
 
 
                     foreach ($container_detail->details as $key => $container_detail_data){
@@ -717,16 +728,18 @@ class TruckingsController extends Controller
         
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
+            ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
+            ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
             ->select('descriptionOfGoods', 'grossWeight', 'supplier')
-            ->where('del_head_id', '=', $delivery[0]->id)
+            ->where('B.del_head_id', '=', $delivery[0]->id)
             ->get();
         }
         else{
             $container_with_detail = [];
             $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
+            ->join('delivery_head_containers AS B', 'B.container_id', '=', 'delivery_containers.id')
+            ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+            ->where('B.del_head_id', '=', $delivery[0]->id)
             ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
             ->get();
             foreach ($delivery_containers as $container) {
