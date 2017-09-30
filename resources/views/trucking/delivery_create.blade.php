@@ -683,10 +683,10 @@
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
-			format:'Y/m/d H:i:s',
-			formatDate:'Y/m/d H:i:s',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
 		});
 
 		$('#deldatecon').datetimepicker({
@@ -694,10 +694,10 @@
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
-			format:'Y/m/d H:i:s',
-			formatDate:'Y/m/d H:i:s',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
 		});
 
 		$('.containerReturnDate').datetimepicker({
