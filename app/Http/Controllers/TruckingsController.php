@@ -250,7 +250,7 @@ class TruckingsController extends Controller
             $delivery_details = DB::table('delivery_non_container_details')
             ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
             ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier', 'delivery_non_container_details.id')
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier', 'delivery_non_container_details.id', 'delivery_non_container_details.deleted_at')
             ->where('B.del_head_id', '=', $request->delivery_id)    
             ->get();
         }
@@ -459,9 +459,9 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             if($request->emp_id_helper == 0){
-               $new_delivery_head->emp_id_helper = null;
-           }
-           else{
+             $new_delivery_head->emp_id_helper = null;
+         }
+         else{
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
         }
         $new_delivery_head->locations_id_pick = $request->locations_id_pick;
@@ -596,9 +596,6 @@ public function getContainerDetail(Request $request){
 public function update_delivery_record(Request $request)
 {
     if($request->withContainer == "0"){
-        \DB::table('delivery_non_container_details')
-        ->where('del_head_id', '=', $request->del_head_id)
-        ->delete();
 
         $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
         $delivery->emp_id_driver = $request->emp_id_driver;
@@ -615,14 +612,42 @@ public function update_delivery_record(Request $request)
 
         $delivery->save();
 
-        for($i = 0; $i < count($request->descrp_goods); $i++)
+        $json_record = json_decode($request->delivery_non_container_array);
+
+        for($i = 0; $i < count($json_record); $i++)
         {
-            $new_noncon_detail = new DeliveryNonContainerDetail;
-            $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
-            $new_noncon_detail->grossWeight = $request->gross_weights[$i];
-            $new_noncon_detail->supplier = $request->suppliers[$i];
-            $new_noncon_detail->del_head_id =  $request->del_head_id;
-            $new_noncon_detail->save();
+            $edit_non_con_detail = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+            $edit_non_con_detail->descriptionOfGoods = $json_record[$i]->descriptionOfGood;
+            $edit_non_con_detail->grossWeight = $json_record[$i]->grossWeight;
+            $edit_non_con_detail->supplier = $json_record[$i]->supplier;
+
+            $edit_non_con_detail->save();
+
+            if($json_record[$i]->status != "1")
+            {
+                $deactivate_record = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+                $deactivate_record->delete();
+            }
+            else
+            {
+                $reactivate_record = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+                $reactivate_record->restore();
+            }
+        }
+        $new_json_record = json_decode($request->delivery_non_container_new_array);
+        for($i = 0; $i < count($new_json_record); $i++)
+        {
+            $new_non_con_detail = new \App\DeliveryNonContainerDetail;
+            $new_non_con_detail->descriptionOfGoods = $new_json_record[$i]->descriptionOfGoods;
+            $new_non_con_detail->grossWeight = $new_json_record[$i]->grossWeight;
+            $new_non_con_detail->supplier = $new_json_record[$i]->supplier;
+
+            $new_non_con_detail->save();
+
+            $new_del_non_head = new \App\DeliveryHeadNonContainer;
+            $new_del_non_head->del_head_id = $delivery->id;
+            $new_del_non_head->non_con_id = $new_non_con_detail->id;
+            $new_del_non_head->save();
         }
 
         return $delivery;
