@@ -13,7 +13,7 @@
 						@if($delivery[0]->withContainer == 1)
 						<div class = "panel">
 							<div class = "">
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" id = "container_form">
 									{{ csrf_field() }}
 									<div class="row">
 										<h4>&nbsp;Container Information</h4>
@@ -44,7 +44,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}"/>
+																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -52,7 +52,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Size:</label>
 																			<div class="col-sm-8">
-																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
+																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume" required>
 																					<option></option>
 																					@forelse($container_volumes as $container_volume)
 																					<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
@@ -67,7 +67,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}"/>
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -75,7 +75,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}"/>
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -85,7 +85,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																			<div class="col-sm-8">
-																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}"/>
+																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -93,7 +93,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}"/>
+																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -101,7 +101,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
 																			<div class="col-sm-8">
-																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress">{{ $container['container']->containerReturnAddress }}</textarea>
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress" required>{{ $container['container']->containerReturnAddress }}</textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -129,10 +129,10 @@
 																		@forelse($container['details'] as $detail)
 																		<tr>
 																			<td width="35%">
-																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}"/>
+																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}" required />
 																			</td>
 																			<td width="20%">
-																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}"/>
+																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}" required />
 																			</td>
 																			<td width="30%">
 																				<input type = "text" name = "{{ $ctr }}_supplier"  class = "form-control" value="{{ $detail->supplier }}" />
@@ -746,6 +746,41 @@
 
 		@endforelse
 		console.log(delivery_non_container_array.length);
+
+		@else
+		$('#container_form').validate({
+			rules:
+			{
+				containerNumber:
+				{
+					required: true,
+				},
+				containerVolume:
+				{
+					required: true,
+				},
+				shippingLine:
+				{
+					required: true,
+				},
+				portOfCfsLocation:
+				{
+					required: true,
+				},
+				containerReturnDate:
+				{
+					required: true,
+				},
+				containerReturnTo:
+				{
+					required: true,
+				},
+				containerReturnAddress:
+				{
+					required: true,
+				}
+			}
+		});
 		@endif
 
 		$.datetimepicker.setLocale('en');

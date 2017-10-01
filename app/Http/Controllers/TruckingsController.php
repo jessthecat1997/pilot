@@ -972,7 +972,7 @@ public function delivery_pdf(Request $request){
 
     if($delivery[0]->withContainer == 0){
         $delivery_details = DB::table('delivery_non_container_details')
-        ->join('delivery_head_non_containers AS B', 'B.non_con_id', '=', 'delivery_containers.id')
+        ->join('delivery_head_non_containers AS B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
         ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
         ->select('descriptionOfGoods', 'grossWeight', 'supplier')
         ->where('del_head_id', '=', $delivery[0]->id)
