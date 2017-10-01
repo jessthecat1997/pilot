@@ -17,16 +17,16 @@ class CreateUtilityTypesTables extends Migration
         Schema::create('utility_types', function (Blueprint $table) {
             $table->increments('id');
             $table->text('company_logo')->nullable();
-            $table->string('company_name',50)->nullable();
-            $table->text('company_address')->nullable();
-            $table->string('company_tin', 20)->nullable();
-            $table->string('company_contact', 20)->nullable();
-            $table->text('contract_template')->nullable();
-            $table->text('quotation_template')->nullable();
-            $table->decimal('bank_charges', 10, 7)->nullable();
-            $table->decimal('other_charges', 10, 7)->nullable();
-            $table->decimal('insurance_gc', 10, 7)->nullable();
-            $table->decimal('insurance_c', 10, 7)->nullable();
+            $table->string('company_name',50);
+            $table->text('company_address');
+            $table->string('company_tin', 20);
+            $table->string('company_contact', 20);
+            $table->text('contract_template');
+            $table->text('quotation_template');
+            $table->decimal('bank_charges', 10, 7);
+            $table->decimal('other_charges', 10, 7);
+            $table->decimal('insurance_gc', 10, 7);
+            $table->decimal('insurance_c', 10, 7);
             $table->timestamps();
         });
 
@@ -58,7 +58,7 @@ class CreateUtilityTypesTables extends Migration
                 'bank_charges' => 0.00125,
                 'other_charges'=> 3,
                 'insurance_c' => 4,
-                'insurance_gc' => 3,
+                'insurance_gc' => 2,
                 'created_at' => Carbon::now()->toDayDateTimeString(),
                 'updated_at' => Carbon::now()->toDayDateTimeString()
             )

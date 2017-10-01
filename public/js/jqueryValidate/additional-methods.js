@@ -995,6 +995,10 @@ $.validator.addMethod(
         "Only letters are valid."
 );
 
+jQuery.validator.addMethod("sevendecimalplaces", function(value, element) {
+    return this.optional(element) || /^\d{0,4}(\.\d{0,7})?$/i.test(value);
+}, "Up to seven decimal places only.");
+
 
 
 

@@ -9,11 +9,9 @@ class UtilitiesBrokerageController extends Controller
 {
     public function index()
 	{
-		$brokerage_utility = DB::table('utility_types')
-		->select('bank_charges', 'other_charges', 'id')
-		->get();
+		$utility = \App\UtilityType::all();
 
-		return view('admin/utilities.brokerage_utility_index', compact(['brokerage_utility']));
+		return view('admin/utilities.brokerage_utility_index', compact(['utility']));
 	}
 
 
@@ -21,11 +19,13 @@ class UtilitiesBrokerageController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		$brokerage_utility = UtilityType::findOrFail($id);
-		$brokerage_utility->bank_charges = $request->bank_charges;
-		$brokerage_utility->other_charges = $request->other_charges;
-		$brokerage_utility->save();
+		$utility = UtilityType::findOrFail($id);
+		$utility->bank_charges = $request->bank_charges;
+		$utility->other_charges = $request->other_charges;
+		$utility->insurance_gc = $request->insurance_gc;
+		$utility->insurance_c = $request->insurance_c;
+		$utility->save();
 
-		return $brokerage_utility;
+		return $utility;
 	}
 }
