@@ -675,16 +675,18 @@
 		});
 
 
+
+
 		$.datetimepicker.setLocale('en');
 		$('#pickdatecon').datetimepicker({
 			mask:'9999/19/39',
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
-			format:'Y/m/d H:i:s',
-			formatDate:'Y/m/d H:i:s',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
 		});
 
 		$('#deldatecon').datetimepicker({
@@ -692,10 +694,10 @@
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
-			format:'Y/m/d H:i:s',
-			formatDate:'Y/m/d H:i:s',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i:s') }}",
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
 		});
 
 		$('.containerReturnDate').datetimepicker({
@@ -727,6 +729,7 @@
 			$('#loc_city').valid();
 
 			if($('#zip').valid() && $('#name').valid() && $('#address').valid() && $('#loc_city').valid()){
+				$('.btnSave').attr('disabled', 'true');
 				$.ajax({
 					type: 'POST',
 					url: "{{ route('location.index')}}",
@@ -769,6 +772,7 @@
 								$('#loc_province').val("0");
 								$('#zip').val("");
 								$('#chModal').modal('hide');
+								$('.btnSave').removeAttr('disabled');
 							}
 						}
 						else{
@@ -791,6 +795,9 @@
 						}
 					}
 				})
+			}
+			else{
+				$('.btnSave').removeAttr('disabled');
 			}
 		})
 

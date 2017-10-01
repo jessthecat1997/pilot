@@ -1088,6 +1088,7 @@ $(document).on('click', '.finalize-payment', function(e){
 	}
 })
 $(document).on('click', '.finalize-cheque', function(e){
+	var bi_id = {{ $so_head_id }};
 	$.ajax({
 		method: 'POST',
 		url: '{{ route("postCheque") }}',
@@ -1095,8 +1096,9 @@ $(document).on('click', '.finalize-cheque', function(e){
 			'_token' : $('input[name=_token]').val(),
 			'chequeNumber' : $('#chqNo').val(),
 			'bankName' : $('#bank').val(),
-			'isVerify' : 0
-			'bi_head_id' : {{ $so_head_id }},
+			'amount' : $('#check_amt').val(),
+			'isVerify' : 0,
+			'bi_head_id' : bi_id,
 		},
 		success: function (data){
 			toastr.options = {

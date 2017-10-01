@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped" id = "ch_table">
+				<table class = "table-responsive table table-striped table-bordered cell-border" id = "ch_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td >
@@ -239,7 +239,7 @@
 
 			if($('#zipCode').valid() && $('#name').valid() && $('#address').valid() && $('#cities_id').valid()){
 				if($('.modal-title').text() == "New Location"){
-
+					$('.btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'POST',
 						url: "{{ route('location.index')}}",
@@ -254,6 +254,7 @@
 							if(typeof(data) == "object"){
 								$('#chModal').modal('hide');
 								chtable.ajax.url( '{{ route("location_data") }}' ).load();
+								$('.btnSave').removeAttr('disabled');
 							}
 							else{
 								resetErrors();
@@ -265,7 +266,7 @@
 
 
 								});
-								$('#btnSave').removeAttr('disabled');
+								$('.btnSave').removeAttr('disabled');
 							}
 						},
 						error: function(data) {
@@ -276,6 +277,7 @@
 					})
 				}
 				else{
+					$('.btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'PUT',
 						url: "{{ route('location.index')}}/" + location_id,
@@ -290,6 +292,7 @@
 							if(typeof(data) == "object"){
 								$('#chModal').modal('hide');
 								chtable.ajax.url( '{{ route("location_data") }}' ).load();
+								$('.btnSave').removeAttr('disabled');
 							}
 							else{
 								resetErrors();
@@ -301,7 +304,7 @@
 
 
 								});
-								$('#btnSave').removeAttr('disabled');
+								$('.btnSave').removeAttr('disabled');
 							}
 
 						},

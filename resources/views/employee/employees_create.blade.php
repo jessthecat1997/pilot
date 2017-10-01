@@ -139,12 +139,12 @@
 @endsection
 @push('styles')
 <style>
-	.brokerage
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.brokerage
+{
+  border-left: 10px solid #2ad4a5;
+  background-color:rgba(128,128,128,0.1);
+  color: #fff;
+}
 </style>
 <link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 @endpush
@@ -267,7 +267,7 @@
       @forelse($employeeTypeId as $id)
       if(document.getElementById("employeeType_toggle["+ctr+"]").checked == true)
       {
-        trueToggle[ctr1] = {{ $id }};
+        trueToggle[ctr1] = "{{ $id }}";
         ctr1++;
       }
       ctr++;
@@ -291,7 +291,7 @@
       var dob = document.getElementById("dob").value;
 
       e.preventDefault();
-
+      
       
       
 
@@ -300,39 +300,38 @@
       $('#dob').valid();
       $('#contactNumber').valid();
       $('#inCaseOfEmergency').valid();
-      if($("#firstName").valid() && $('#lastName').valid() && $('#dob').valid() && $('#contactNumber').valid() && $('#inCaseOfEmergency').valid()){
+      if($("#firstName").valid() && $('#lastName').valid() && $('#dob').valid() && $('#contactNumber').valid() && $('#inCaseOfEmergency').valid())
+      {
         $.ajax({
           type: 'POST',
 
           url: '{{ route("EmployeeSave" )}}',
           data: {
             '_token' : $('input[name=_token]').val(),
-              'firstName' : $('#firstName').val(),
-              'middleName': $('#middleName').val(),
-              'lastName' : $('#lastName').val(),
-              'dob': document.getElementById("dob").value,
-              'address' : $('#streetName').val(),
-              'zip' : $('#zip').val(),
-              'cities_id' :  $('#loc_city').val(),
-              'SSSNo': $('#SSSNo').val(),
-              'contactNumber': $('#contactNumber').val(),
-              'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
-              'toggles': JSON.stringify(trueToggle),
+            'firstName' : $('#firstName').val(),
+            'middleName': $('#middleName').val(),
+            'lastName' : $('#lastName').val(),
+            'dob': document.getElementById("dob").value,
+            'address' : $('#streetName').val(),
+            'zip' : $('#zip').val(),
+            'cities_id' :  $('#loc_city').val(),
+            'SSSNo': $('#SSSNo').val(),
+            'contactNumber': $('#contactNumber').val(),
+            'inCaseOfEmergency': $('#inCaseOfEmergency').val(),
+            'toggles': JSON.stringify(trueToggle),
 
-            },
-            success: function(data){
+          },
+          success: function(data){
 
-              window.location.replace(+data+"/view");
+            window.location.replace(+data+"/view");
 
-            },
+          },
 
-          })  
-          }
-          
-        })
+        })  
+      }
 
-      })
     })
+
   })
 </script>
 @endpush

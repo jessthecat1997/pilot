@@ -327,7 +327,7 @@ class BillingDetailsController extends Controller
 			ON t.id = p.bi_head_id
 			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
 			JOIN consignees AS C on B.consignees_id = C.id
-			WHERE t.isVoid = 0;
+			WHERE t.isVoid = 0 AND t.isFinalize = 0;
 			');
 
 		return Datatables::of($bill_hists)
@@ -378,7 +378,8 @@ class BillingDetailsController extends Controller
 		->select('id', 'isFinalize', 'due_date')
 		->where([
 			['billing_invoice_headers.so_head_id', '=', $request->id],
-			['isVoid', '=', 0 ]
+			['isVoid', '=', 0 ],
+			['isFinalize', '=', 0]
 			])
 		->get();
 

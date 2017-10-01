@@ -29,7 +29,7 @@ class LocationRequest extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:locations,name,' . $this->segment(3) ,
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:locations,name,' . $this->segment(2),
             'address' => 'required',
             'cities_id' => 'required',
             'zipCode' => 'required',

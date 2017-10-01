@@ -350,6 +350,7 @@ Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@updat
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
 Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery', 'TruckingsController@update_delivery_record');
 Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
+Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/reschedule', 'TruckingsController@reschedule_delivery');
 //Delivery Receipt Routes
 Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsController@view_delivery')->name('delivery.view');
