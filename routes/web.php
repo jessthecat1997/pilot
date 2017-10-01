@@ -99,6 +99,9 @@ Route::resource('/admin/wharfage_fee','WharfageFeeController');
 Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
 Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
 Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
+Route::resource('/admin/section','SectionsController');
+Route::resource('/admin/category','CategoryTypesController');
+Route::resource('/admin/item','ItemsController');
 
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
@@ -248,8 +251,11 @@ Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.da
 Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
 Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
 Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
-
 Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
+Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
+Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
+
 
 
 

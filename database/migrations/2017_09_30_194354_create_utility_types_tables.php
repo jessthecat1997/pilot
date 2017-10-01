@@ -27,6 +27,7 @@ class CreateUtilityTypesTables extends Migration
             $table->decimal('other_charges', 10, 7);
             $table->decimal('insurance_gc', 10, 7);
             $table->decimal('insurance_c', 10, 7);
+            $table->integer('payment_allowance');
             $table->timestamps();
         });
 
@@ -59,6 +60,7 @@ class CreateUtilityTypesTables extends Migration
                 'other_charges'=> 3,
                 'insurance_c' => 4,
                 'insurance_gc' => 2,
+                'payment_allowance' => 15,
                 'created_at' => Carbon::now()->toDayDateTimeString(),
                 'updated_at' => Carbon::now()->toDayDateTimeString()
             )

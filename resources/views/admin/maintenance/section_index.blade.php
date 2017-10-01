@@ -2,42 +2,42 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Less Cargo Load Types</h3>
+		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Section</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New LCL type</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#secModal" style = "width: 100%;">New Section</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped cell-border table-bordered" id = "lcl_table" style="width: 100%;">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "sec_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td>
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
 					</thead>
 					<tbody>
-						@forelse($lcl_type as $lcl)
+						@forelse($section as $sec)
 						<tr>
 							<td>
-								{{ $lcl->name }}
+								{{ $sec->name }}
 							</td>
 							<td>
-								{{ $lcl->description }}
+								{{ $sec->description }}
 							</td>
 							<td>
-								<button value = "{{ $lcl->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-								<button value = "{{ $lcl->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<button value = "{{ $sec->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $sec->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 							</td>
 						</tr>
 						@empty
@@ -51,12 +51,12 @@
 	<section class="content">
 		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
-			<div class="modal fade" id="lclModal" role="dialog">
+			<div class="modal fade" id="secModal" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New LCL Type</h4>
+							<h4 class="modal-title">New Section</h4>
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
@@ -66,7 +66,7 @@
 
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
-								<textarea class = "form-control" name = "description" id = "description"></textarea>
+								<input class = "form-control" name = "description" id = "description">
 							</div>
 
 						</div>
@@ -106,17 +106,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-lcl-type{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-section{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -125,9 +125,9 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
-	var lcl_id;
+	var sec_id;
 	$(document).ready(function(){
-		var lcltable = $('#lcl_table').DataTable({
+		var sectable = $('#sec_table').DataTable({
 			scrollX: true,
 			processing: false,
 			serverSide: false,
@@ -147,8 +147,8 @@
 				name:
 				{
 					required: true,
-					minlength: 3,
 					maxlength: 50,
+					minlength: 3,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
@@ -157,7 +157,13 @@
 
 				},
 
-				
+				description:
+				{
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+				},
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
@@ -166,26 +172,26 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New LCL Type');
+			$('.modal-title').text('New Section');
 			$('#name').val("");
 			$('#description').val("");
-			$('#lclModal').modal('show');
+			$('#secModal').modal('show');
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			lcl_id = $(this).val();
-			data = lcltable.row($(this).parents()).data();
+			sec_id = $(this).val();
+			data = sectable.row($(this).parents()).data();
 			$('#name').val(data.name);	
 			$('#description').val(data.description);
 			temp_name = data.name;
 			temp_desc = data.description;
-			$('.modal-title').text('Update LCL Type');
-			$('#lclModal').modal('show');
+			$('.modal-title').text('Update Section');
+			$('#secModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			lcl_id = $(this).val();
-			data = lcltable.row($(this).parents()).data();
+			sec_id = $(this).val();
+			data = sectable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
@@ -196,13 +202,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/lcl_type/' + lcl_id,
+		url:  '/admin/section/' + sec_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
+			sectable.ajax.url( '{{ route("sec.data") }}' ).load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -233,7 +239,7 @@ $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
 
-	if(title == "New LCL Type")
+	if(title == "New Section")
 	{
 		if($('#name').valid() && $('#description').valid()){
 			
@@ -241,7 +247,7 @@ $('#btnSave').on('click', function(e){
 
 			$.ajax({
 				type: 'POST',
-				url:  '/admin/lcl_type',
+				url:  '/admin/section',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'name' : $('#name').val(),
@@ -250,10 +256,10 @@ $('#btnSave').on('click', function(e){
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
-						$('#lclModal').modal('hide');
+						sectable.ajax.url( '{{ route("sec.data") }}' ).load();
+						$('#secModal').modal('hide');
 						$('#description').val("");
-						$('.modal-title').text('New LCL Type');
+						$('.modal-title').text('New Section');
 
 					//Show success
 
@@ -275,11 +281,11 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record added successfully");
+					toastr["success"]("Record addded successfully");
 
 					$('#name').val("");
 					$('#description').val("");
-					$('#lclModal').modal('hide');
+					$('#secModal').modal('hide');
 
 					$('#btnSave').removeAttr('disabled');
 				}
@@ -307,14 +313,14 @@ $('#btnSave').on('click', function(e){
 				$('#name').val("");
 				$('#description').val("");
 				$('#btnSave').removeAttr('disabled');
-				$('#lclModal').modal('hide');
+				$('#secModal').modal('hide');
 			}
 			else{
 				$('#btnSave').attr('disabled', 'true');
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/lcl_type/' + lcl_id,
+					url:  '/admin/section/' + sec_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -323,10 +329,10 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
-							$('#lclModal').modal('hide');
+							sectable.ajax.url( '{{ route("sec.data") }}' ).load();
+							$('#secModal').modal('hide');
 							$('#description').val("");
-							$('.modal-title').text('New LCL Type');
+							$('.modal-title').text('New Section');
 
 					//Show success
 
@@ -352,7 +358,7 @@ $('#btnSave').on('click', function(e){
 
 					$('#name').val("");
 					$('#description').val("");
-					$('#lclModal').modal('hide');
+					$('#secModal').modal('hide');
 					$('#btnSave').removeAttr('disabled');
 				}
 				else{
