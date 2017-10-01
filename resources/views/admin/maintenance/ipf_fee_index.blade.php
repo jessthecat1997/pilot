@@ -50,6 +50,7 @@
 							<td>
 								<button value = "{{ $ipf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $ipf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($ipf->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -285,7 +286,7 @@
 			$('.modal-title').text('Update Import Processing Fee Range');
 			ipf_id = $(this).val();
 			data = ipftable.row($(this).parents()).data();
-			$('#dateEffective').val(data.dateEffective);
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('#ipfModal').modal('show');
 
 			$.ajax({

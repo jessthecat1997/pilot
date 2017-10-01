@@ -50,6 +50,7 @@
 							</td>
 							<td>
 								<button value = "{{ $er->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $er->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($er->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -243,7 +244,7 @@
 			resetErrors();
 			er_id = $(this).val();
 			data = ertable.row($(this).parents()).data();
-			$('#dateEffective').val(data.dateEffective);
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('#description').val(data.description);
 			$('#rate').val(data.rate);
 			$('.modal-title').text('Edit Exchange Rate');

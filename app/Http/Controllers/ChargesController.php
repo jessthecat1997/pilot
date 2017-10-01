@@ -11,7 +11,8 @@ class ChargesController extends Controller
 
     public function index()
     {
-        return view('admin/maintenance.charge_index');
+        $charges = \App\Charge::all();
+        return view('admin/maintenance.charge_index', compact(['charges']));
     }
 
 

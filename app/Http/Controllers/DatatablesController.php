@@ -160,7 +160,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($er){
 			return
 			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
+			;
 		})
 		->editColumn('rate', 'Php {{ $rate }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
@@ -1013,7 +1014,7 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($cds){
 			return
 			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button><input type = "hidden" value = "'. '{{ Carbon\Carbon::parse($cds->dateEffective)->toFormattedDateString() }}' .'" class = "dateEffective" />'
+			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
 			;
 		})
 		->editColumn('id', '{{ $id }}')
@@ -1111,7 +1112,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($ipf){
 			return
 			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
+			;
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
