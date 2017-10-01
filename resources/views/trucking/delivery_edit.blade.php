@@ -13,7 +13,7 @@
 						@if($delivery[0]->withContainer == 1)
 						<div class = "panel">
 							<div class = "">
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" id = "container_form">
 									{{ csrf_field() }}
 									<div class="row">
 										<h4>&nbsp;Container Information</h4>
@@ -44,7 +44,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}"/>
+																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -52,7 +52,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Size:</label>
 																			<div class="col-sm-8">
-																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
+																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume" required>
 																					<option></option>
 																					@forelse($container_volumes as $container_volume)
 																					<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
@@ -67,7 +67,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}"/>
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -75,7 +75,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}"/>
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -85,7 +85,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																			<div class="col-sm-8">
-																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}"/>
+																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -93,7 +93,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}"/>
+																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -101,7 +101,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
 																			<div class="col-sm-8">
-																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress">{{ $container['container']->containerReturnAddress }}</textarea>
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress" required>{{ $container['container']->containerReturnAddress }}</textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -129,10 +129,10 @@
 																		@forelse($container['details'] as $detail)
 																		<tr>
 																			<td width="35%">
-																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}"/>
+																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}" required />
 																			</td>
 																			<td width="20%">
-																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}"/>
+																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}" required />
 																			</td>
 																			<td width="30%">
 																				<input type = "text" name = "{{ $ctr }}_supplier"  class = "form-control" value="{{ $detail->supplier }}" />
@@ -185,7 +185,7 @@
 						@else
 						<div class = "panel">
 							<div class = "">
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" id = "non_container_detail_form">
 									<div class="form-group">
 										<label class="control-label" for="wodetail_table">Delivery Content:</label>
 										<table class = "table-responsive table table-striped table-bordered cell-border" id = "wodetail_table">
@@ -210,15 +210,16 @@
 											</thead>
 											<tbody>
 												@forelse($delivery_details as $delivery_detail)
+												@if($delivery_detail->deleted_at == null)
 												<tr id = "wodescription_row">
 													<td style="width: 10%; text-align: center;">
 														<label class="control-label detail_id">{{ $delivery_detail->id }}</label>
 													</td>
 													<td style="width: 30%;">
-														<input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = "{{ $delivery_detail->descriptionOfGoods }}"/>
+														<input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = "{{ $delivery_detail->descriptionOfGoods }}" required />
 													</td>
 													<td style="width: 20%;">
-														<input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="{{ $delivery_detail->grossWeight }}" />
+														<input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="{{ $delivery_detail->grossWeight }}" required />
 													</td>
 													<td style="width: 30%;">
 														<input type = "text" name = "wosupplier"  class = "form-control supplier" value="{{ $delivery_detail->supplier }}" />
@@ -227,6 +228,7 @@
 														<button  type = "button" class = "btn btn-md btn-danger woremove-current-detail">x</button>
 													</td>
 												</tr>
+												@endif
 												@empty
 												@endforelse
 											</tbody>
@@ -262,6 +264,27 @@
 												</tr>
 											</thead>
 											<tbody>
+												@forelse($delivery_details as $delivery_detail)
+												@if($delivery_detail->deleted_at != null)
+												<tr id = "wodescription_row">
+													<td style="width: 10%; text-align: center;">
+														<label class="control-label del_non_con_id">{{ $delivery_detail->id }}</label>
+													</td>
+													<td style="width: 30%;">
+														<label class = "control-label del_non_con_descrp">{{ $delivery_detail->descriptionOfGoods }}</label>
+													</td>
+													<td style="width: 20%;">
+														<label class= "control-label del_non_gross_weight">{{ $delivery_detail->grossWeight }}</label>
+													</td>
+													<td style="width: 30%;">
+														<label class = "control-label del_non_con_supplier">{{ $delivery_detail->supplier }}</label>
+													</td>
+													<td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-info woback-deleted-non-detail"><</button>
+													</td>
+												</tr>
+												@endif
+												@empty
+												@endforelse
 											</tbody>
 										</table>
 									</div>
@@ -695,14 +718,69 @@
 		//EDIT PART
 		@if($delivery[0]->withContainer == 0)
 		var delivery_non_container_array = [];
+		var delivery_non_container_new_array = [];
 		@forelse($delivery_details as $delivery_detail)
-		var non_container = { id: "{{ $delivery_detail->id }}", status: 1};
+		var non_container = 
+		{ 
+			id: "{{ $delivery_detail->id }}",
+			status: @if($delivery_detail->deleted_at == null) 1 @else 0 @endif,
+			descriptionOfGood: "{{ $delivery_detail->descriptionOfGoods }}",
+			grossWeight: "{{ $delivery_detail->grossWeight }}",
+			supplier: "{{ $delivery_detail->supplier }}",
+		};
 		delivery_non_container_array.push(non_container);
-
+		$('#non_container_detail_form').validate({
+			rules:
+			{
+				descriptionOfGood:
+				{
+					required: true,
+				},
+				grossWeight:
+				{
+					required: true,
+				}
+			}
+		});
 		@empty
 
 		@endforelse
 		console.log(delivery_non_container_array.length);
+
+		@else
+		$('#container_form').validate({
+			rules:
+			{
+				containerNumber:
+				{
+					required: true,
+				},
+				containerVolume:
+				{
+					required: true,
+				},
+				shippingLine:
+				{
+					required: true,
+				},
+				portOfCfsLocation:
+				{
+					required: true,
+				},
+				containerReturnDate:
+				{
+					required: true,
+				},
+				containerReturnTo:
+				{
+					required: true,
+				},
+				containerReturnAddress:
+				{
+					required: true,
+				}
+			}
+		});
 		@endif
 
 		$.datetimepicker.setLocale('en');
@@ -1197,9 +1275,22 @@
 			if(row_id != ""){
 				var row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label del_non_con_id">'+ row_id + '</label></td><td style="width: 30%;"><label class = "control-label del_non_con_descrp">' + row_descriptionOfGood + '</label></td><td style="width: 20%;"><label class= "control-label del_non_gross_weight">' + row_grossWeight +'</label></td><td style="width: 30%;"><label class = "control-label del_non_con_supplier">'+ row_supplier +'</label></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-info woback-deleted-non-detail"><</button></td></tr>';
 				console.log(row_descriptionOfGood + row_grossWeight + row_supplier + row_id);
-
-				$('#deleted_wodetail_table > tbody').append(row);
-				$(this).closest('tr').remove();	
+				$(this).closest('tr').find('.grossWeight').valid();
+				$(this).closest('tr').find('.descriptionOfGood').valid();
+				if($(this).closest('tr').find('.grossWeight').valid() && $(this).closest('tr').find('.descriptionOfGood').valid()){
+					for(var i = 0; i < delivery_non_container_array.length; i++){
+						if(row_id === delivery_non_container_array[i].id)
+						{
+							delivery_non_container_array[i].status = 0;
+							delivery_non_container_array[i].descriptionOfGood = $(this).closest('tr').find('.descriptionOfGood').val();
+							delivery_non_container_array[i].grossWeight = $(this).closest('tr').find('.grossWeight').val();
+							break;
+						}
+					}
+					$('#deleted_wodetail_table > tbody').append(row);
+					$(this).closest('tr').remove();	
+				}
+				
 			}
 			else{
 				$(this).closest('tr').remove();
@@ -1209,14 +1300,24 @@
 
 		$(document).on('click', '.woback-deleted-non-detail', function(e){
 			e.preventDefault();
-			var row_descriptionOfGood = $(this).closest('tr').find('.del_non_con_descrp').val().trim();
-			var row_grossWeight = $(this).closest('tr').find('.del_non_gross_weight').val().trim();
-			var row_supplier = $(this).closest('tr').find('.del_non_con_supplier').val().trim();
+			var row_descriptionOfGood = $(this).closest('tr').find('.del_non_con_descrp').text().trim();
+			var row_grossWeight = $(this).closest('tr').find('.del_non_gross_weight').text().trim();
+			var row_supplier = $(this).closest('tr').find('.del_non_con_supplier').text().trim();
 			var row_id = $(this).closest('tr').find('.del_non_con_id').text().trim();
 
-			var new_row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label">' + row_id +'</label></td><td style="width: 30%;"><input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = "'+ row_descriptionOfGood +'"/></td><td style="width: 20%;"><input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="'+ row_grossWeight +'" /></td><td style="width: 30%;"><input type = "text" name = "wosupplier"  class = "form-control supplier" value="'+row_supplier +'" /></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
+			console.log(row_descriptionOfGood + row_grossWeight + row_supplier + row_id);
+
+			var new_row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label detail_id">' + row_id +'</label></td><td style="width: 30%;"><input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" required value = "'+ row_descriptionOfGood +'"/></td><td style="width: 20%;"><input type = "number" required name = "wogrossWeight" class = "form-control grossWeight" value="'+ row_grossWeight +'" /></td><td style="width: 30%;"><input type = "text" name = "wosupplier"  class = "form-control supplier" value="'+row_supplier +'" /></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
 
 			$('#wodetail_table > tbody').append(new_row);
+			for(var i = 0; i < delivery_non_container_array.length; i++){
+				if(row_id === delivery_non_container_array[i].id)
+				{
+					delivery_non_container_array[i].status = 1;
+					break;
+				}
+			}
+			$(this).closest('tr').remove();
 		})
 
 		$(document).on('change', '#vehicle_type', function(e){
@@ -1247,8 +1348,8 @@
 		})
 		$(document).on('click', '.save-delivery', function(e){
 			e.preventDefault();
-
-			if($("#choices li.active").text() === "Without Container"){
+			var checkWithoutContainer = "{{ $delivery[0]->withContainer }}";
+			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
 
@@ -1277,12 +1378,12 @@
 						$.ajax({
 							type: 'PUT',
 							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
-							data: {
+							data: 
+							{
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
-								'descrp_goods' : descrp_goods,
-								'gross_weights' : gross_weights,
-								'suppliers' : suppliers,
+								'delivery_non_container_new_array' : JSON.stringify(delivery_non_container_new_array),
+								'delivery_non_container_array' : JSON.stringify(delivery_non_container_array),
 								'emp_id_driver' : $('#driver').val(),
 								'emp_id_helper' : $('#helper').val(),
 								'locations_id_pick' : $('#pickup_id').val(),
@@ -1765,6 +1866,7 @@
 			descrp = document.getElementsByName("wodescriptionOfGoods");
 			gw = document.getElementsByName("wogrossWeight");
 			supp = document.getElementsByName("wosupplier");
+			delivery_non_container_new_array = [];
 			
 			for(var i = 0; i < descrp.length; i++){
 				if(descrp[i].value === ""){
@@ -1791,15 +1893,45 @@
 				}
 			}
 			if(error.length === 0){
+				for(var j = 0; j < $('input[name=wodescriptionOfGoods]').length; j++){
+					if($('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.detail_id').text() == "")
+					{
+					//new
+					var new_non_container_record = 
+					{
+						descriptionOfGoods: $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.descriptionOfGood').val(),
+						grossWeight: $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.grossWeight').val(),
+						supplier:  $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.supplier').val()
 
-				return true;
+					};
+					delivery_non_container_new_array.push(new_non_container_record);
+				}
+				else
+				{
+					//update
+					var current_id = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.detail_id').text();
+					for(var k = 0; k < delivery_non_container_array.length; k++)
+					{
+						if(delivery_non_container_array[k].id == current_id)
+						{
+							delivery_non_container_array[k].descriptionOfGood = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.descriptionOfGood').val();
+							delivery_non_container_array[k].grossWeight = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.grossWeight').val();
+							delivery_non_container_array[k].supplier = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.supplier').val();
+						}
+					}
+				}
 			}
-			else{
-				return false;
-			}
+			console.log(delivery_non_container_array);
+			console.log(delivery_non_container_new_array);
+			return true;
 		}
+		else
+		{
+			return false;
+		}
+	}
 
-	})
+})
 
 </script>
 @endpush
