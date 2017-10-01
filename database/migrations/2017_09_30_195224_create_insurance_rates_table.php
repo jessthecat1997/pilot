@@ -18,6 +18,7 @@ class CreateInsuranceRatesTable extends Migration
             $table->string('type', 50);
             $table->decimal('rate', 6,2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
