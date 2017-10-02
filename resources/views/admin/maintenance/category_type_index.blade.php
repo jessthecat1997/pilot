@@ -2,42 +2,49 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Less Cargo Load Types</h3>
+		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Category</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New LCL type</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#catModal" style = "width: 100%;">New Category</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table table-striped cell-border table-bordered" id = "lcl_table" style="width: 100%;">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "cat_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
-								Name
+							<td>
+								Section
 							</td>
-							<td style="width: 40%;">
+							<td >
+								Category Name
+							</td>
+							<td>
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
 					</thead>
 					<tbody>
-						@forelse($lcl_type as $lcl)
+						@forelse($category as $cat)
 						<tr>
 							<td>
-								{{ $lcl->name }}
+								{{ $cat->section }}
 							</td>
 							<td>
-								{{ $lcl->description }}
+								{{ $cat->category}}
 							</td>
 							<td>
-								<button value = "{{ $lcl->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-								<button value = "{{ $lcl->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								{{ $cat->description }}
+							</td>
+							
+							<td>
+								<button value = "{{ $cat->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $cat->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 							</td>
 						</tr>
 						@empty
@@ -48,17 +55,27 @@
 		</div>
 	</div>
 
-	<section class="content">
+	<category class="content">
 		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
-			<div class="modal fade" id="lclModal" role="dialog">
+			<div class="modal fade" id="catModal" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New LCL Type</h4>
+							<h4 class="modal-title">New Category</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">	
+							<div class = "form-group required" >
+								<label class = "control-label">Section: </label>
+								<select class = "form-control" id = "lcl_type" name="lcl_type" >
+									@forelse($sections as $section)
+									<option value = "{{ $section->id }}">{{ $section->name }}</option>
+									@empty
+									@endforelse
+								</select>
+
+							</div>		
 							<div class="form-group required">
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
@@ -66,9 +83,9 @@
 
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
-								<textarea class = "form-control" name = "description" id = "description"></textarea>
+								<input class = "form-control" name = "description" id = "description">
 							</div>
-
+							
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
@@ -78,8 +95,8 @@
 				</div>
 			</div>
 		</form>
-	</section>
-	<section class="content">
+	</category>
+	<category class="content">
 		<form role = "form" method = "POST">
 			{{ csrf_field() }}
 			{{ method_field('DELETE') }}
@@ -101,22 +118,22 @@
 				</div>
 			</div>
 		</form>
-	</section>
+	</category>
 </div>
 @endsection
 @push('styles')
 <style>
-	.class-lcl-type{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-category{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -125,15 +142,16 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
-	var lcl_id;
+	var cat_id;
 	$(document).ready(function(){
-		var lcltable = $('#lcl_table').DataTable({
+		var cattable = $('#cat_table').DataTable({
 			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
 			columns: [
-			{ data: 'name' },
+			{ data: 'section'},
+			{ data: 'category' },
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
@@ -147,8 +165,8 @@
 				name:
 				{
 					required: true,
-					minlength: 3,
 					maxlength: 50,
+					minlength: 3,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
@@ -157,7 +175,13 @@
 
 				},
 
-				
+				description:
+				{
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},
+				},
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
@@ -166,26 +190,26 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New LCL Type');
+			$('.modal-title').text('New Category');
 			$('#name').val("");
 			$('#description').val("");
-			$('#lclModal').modal('show');
+			$('#catModal').modal('show');
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			lcl_id = $(this).val();
-			data = lcltable.row($(this).parents()).data();
+			cat_id = $(this).val();
+			data = cattable.row($(this).parents()).data();
 			$('#name').val(data.name);	
 			$('#description').val(data.description);
 			temp_name = data.name;
 			temp_desc = data.description;
-			$('.modal-title').text('Update LCL Type');
-			$('#lclModal').modal('show');
+			$('.modal-title').text('Update category');
+			$('#catModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			lcl_id = $(this).val();
-			data = lcltable.row($(this).parents()).data();
+			cat_id = $(this).val();
+			data = cattable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
@@ -196,13 +220,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/lcl_type/' + lcl_id,
+		url:  '/admin/category/' + cat_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
+			cattable.ajax.url( '{{ route("cat.data") }}' ).load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -233,7 +257,7 @@ $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
 
-	if(title == "New LCL Type")
+	if(title == "New Category")
 	{
 		if($('#name').valid() && $('#description').valid()){
 			
@@ -241,7 +265,7 @@ $('#btnSave').on('click', function(e){
 
 			$.ajax({
 				type: 'POST',
-				url:  '/admin/lcl_type',
+				url:  '/admin/category',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'name' : $('#name').val(),
@@ -250,10 +274,10 @@ $('#btnSave').on('click', function(e){
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
-						$('#lclModal').modal('hide');
+						cattable.ajax.url( '{{ route("cat.data") }}' ).load();
+						$('#catModal').modal('hide');
 						$('#description').val("");
-						$('.modal-title').text('New LCL Type');
+						$('.modal-title').text('New Category');
 
 					//Show success
 
@@ -275,11 +299,11 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record added successfully");
+					toastr["success"]("Record addded successfully");
 
 					$('#name').val("");
 					$('#description').val("");
-					$('#lclModal').modal('hide');
+					$('#catModal').modal('hide');
 
 					$('#btnSave').removeAttr('disabled');
 				}
@@ -307,14 +331,14 @@ $('#btnSave').on('click', function(e){
 				$('#name').val("");
 				$('#description').val("");
 				$('#btnSave').removeAttr('disabled');
-				$('#lclModal').modal('hide');
+				$('#catModal').modal('hide');
 			}
 			else{
 				$('#btnSave').attr('disabled', 'true');
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/lcl_type/' + lcl_id,
+					url:  '/admin/category/' + cat_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -323,10 +347,10 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
-							$('#lclModal').modal('hide');
+							cattable.ajax.url( '{{ route("cat.data") }}' ).load();
+							$('#catModal').modal('hide');
 							$('#description').val("");
-							$('.modal-title').text('New LCL Type');
+							$('.modal-title').text('New Category');
 
 					//Show success
 
@@ -352,7 +376,7 @@ $('#btnSave').on('click', function(e){
 
 					$('#name').val("");
 					$('#description').val("");
-					$('#lclModal').modal('hide');
+					$('#catModal').modal('hide');
 					$('#btnSave').removeAttr('disabled');
 				}
 				else{

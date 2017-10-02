@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Billing</h2>
+<div class="pull-left">
+	<a href="/billing" class="btn but">Back</a>
+</div>
+<br/>
 <hr>
 <div class="container-fluid">
 	<div class="row">
@@ -64,9 +68,19 @@
 								@endif
 								<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
 							</tr>
+							<tr>
+								<td colspan="2">
+									<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
+								</td>
+							</tr>
 							@empty
 							<tr>
 								<td colspan="2" style="text-align: center;"><strong>No records available.</strong></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button class="btn but pull-right finalize-bill col-sm-4" disabled>Finalize</button>
+								</td>
 							</tr>
 							@endforelse
 							<tr>
@@ -96,11 +110,6 @@
 								<td colspan="2">No records available.</td>
 							</tr>
 							@endforelse
-							<tr>
-								<td colspan="2">
-									<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
-								</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -137,7 +146,7 @@
 							<div class="col-sm-10"> 
 								<div class="input-group">
 									<span class="input-group-addon">Php</span>
-									<input type="number" class="form-control money" id="rev_amount" name="rev_amount" data-rule-required="true" style = "text-align: right" value = "0.00">
+									<input type="number" class="form-control money" id="rev_amount" name="rev_amount" style = "text-align: right" value = "0.00">
 								</div>
 							</div>
 						</div>
@@ -233,7 +242,6 @@
 				rev_amount:
 				{
 					required: true,
-					date: true,
 				},
 			},
 			onkeyup: false, 

@@ -32,6 +32,9 @@ use App\BrokerageServiceOrderDetails;
 use App\CargoType;
 use App\ArrastreFee;
 use App\WharfageFee;
+use App\Section;
+use App\CategoryType;
+use App\Item;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -109,6 +112,45 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $req->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $req->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function sec_datatable(){
+		$secs = Section::select(['id', 'name', 'description', 'created_at']);
+
+		return Datatables::of($secs)
+		->addColumn('action', function ($sec){
+			return
+			'<button value = "'. $sec->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $sec->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function cat_datatable(){
+		$cats =  DB::select("SELECT s.name as 'section' , c.name as 'category', c.id as'id' , c.description as 'description', c.deleted_at as'deleted_at', c.created_at FROM category_types c JOIN sections s ON s.id = c.sections_id where s.deleted_at is null and c.deleted_at is null order by c.name");
+
+		return Datatables::of($cats)
+		->addColumn('action', function ($cat){
+			return
+			'<button value = "'. $cat->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $cat->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function item_datatable(){
+		$items = Item::select(['id', 'name', 'hsCode', 'rate', 'sections_id', 'category_types_id', 'created_at']);
+
+		return Datatables::of($items)
+		->addColumn('action', function ($item){
+			return
+			'<button value = "'. $item->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $item->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);
