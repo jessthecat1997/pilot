@@ -188,7 +188,7 @@ class BillingDetailsController extends Controller
 		$rev_bill = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('charges.name', 'billing_invoice_details.amount', 'billing_invoice_details.description')
+		->select('charges.name', 'billing_invoice_details.amount', 'billing_invoice_details.description','isFinalize')
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $id],
 			['charges.bill_type', '=', 'R']
@@ -569,7 +569,7 @@ class BillingDetailsController extends Controller
             ) dpay
             
             ON t.id = dpay.bi_head_id
-			WHERE t.status = "U" AND t.isVoid = 0 AND t.so_head_id = ?
+			WHERE t.status = "U" AND t.isVoid = 0 AND p.total != 0.00 AND t.so_head_id = ?
 			', [$id]);
 
 		return Datatables::of($total)

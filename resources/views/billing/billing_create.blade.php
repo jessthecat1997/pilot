@@ -13,8 +13,7 @@
 				<div class="panel-heading">Consignee Details</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label>Consignee:</label>
-						<input type="text" class="det" value="{{ $bills[0]->companyName }}" id="companyName" disabled>
+						<h5 id="consignee"><strong>Company Name:</strong> {{ $bills[0]->companyName }}</h5>
 					</div>
 					<div class="form-group">
 						<h5 id="address"><strong>Address:</strong> {{ $bills[0]->address }}</h5>
@@ -68,48 +67,22 @@
 								@endif
 								<td style="text-align: center;">Php&nbsp;{{ $bill->amount }}</td>
 							</tr>
+							@empty
 							<tr>
+								<td colspan="2" style="text-align: center;">No records available.</td>
+							</tr>
+							@endforelse
+							<tr>
+								@if($rev_bill[0]->amount == 0.00)
 								<td colspan="2">
 									<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
 								</td>
-							</tr>
-							@empty
-							<tr>
-								<td colspan="2" style="text-align: center;"><strong>No records available.</strong></td>
-							</tr>
-							<tr>
+								@else
 								<td colspan="2">
 									<button class="btn but pull-right finalize-bill col-sm-4" disabled>Finalize</button>
 								</td>
+								@endif
 							</tr>
-							@endforelse
-							<tr>
-								<td colspan="2">&nbsp;</td>
-							</tr>
-							@forelse($rev_vat as $vr)
-							<tr>
-								<td style="text-align: center;"><strong>{{ $vr->rates }}% VAT</strong></td>
-								<td style="text-align: center;">Php&nbsp;{{ $vr->Total }}</td>
-							</tr>
-							@empty
-							<tr>
-								<td colspan="2">No records available.</td>
-							</tr>
-							@endforelse
-							@forelse($rev_total as $rt)
-							<tr>
-								<td style="text-align: right;">
-									<label for="bal"><strong>TOTAL: &nbsp;</strong></label>
-								</td>
-								<td style="text-align: center;">
-									<h3>Php&nbsp;&nbsp;{{ $rt->Total }}</h3>
-								</td>
-							</tr>
-							@empty
-							<tr>
-								<td colspan="2">No records available.</td>
-							</tr>
-							@endforelse
 						</tbody>
 					</table>
 				</div>
