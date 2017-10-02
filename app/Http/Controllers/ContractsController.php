@@ -62,6 +62,14 @@ class ContractsController extends Controller
 
         return view('trucking.contract_create', compact(['desc_array', 'consignees', 'provinces']));
     }
+
+    public function get_quotations(Request $request)
+    {
+        $quotations = \DB::table('quotation_headers')
+        ->where('consignees_id', '=', $request->consignee_id)
+        ->get();
+        return $quotations;
+    }
     public function create_contract(Request $request){
         $file = fopen('contract.txt', 'r');
         $fileContent = fread($file, filesize('contract.txt'));

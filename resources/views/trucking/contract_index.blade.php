@@ -50,10 +50,10 @@
 								{{ $con_head->companyName }}
 							</td>
 							<td>
-								{{ $con_head->dateEffective ? with(new Carbon\Carbon ($con_head->dateEffective))->toFormattedDateString() : 'Pending' }}
+								{{ $con_head->dateEffective ? with(new Carbon\Carbon ($con_head->dateEffective))->format("F d, Y") : 'Pending' }}
 							</td>
 							<td>
-								{{ $con_head->dateExpiration ? with(new Carbon\Carbon ($con_head->dateExpiration))->toFormattedDateString()  : 'Pending' }}
+								{{ $con_head->dateExpiration ? with(new Carbon\Carbon ($con_head->dateExpiration))->format("F d, Y")  : 'Pending' }}
 							</td>
 							<td>
 								@if($con_head->isFinalize == 1)
@@ -74,7 +74,7 @@
 								@endif
 							</td>
 							<td>
-								{{ Carbon\Carbon::parse($con_head->created_at)->toFormattedDateString() }}
+								{{ Carbon\Carbon::parse($con_head->created_at)->format("F d, Y") }}
 							</td>
 							<td>
 								@if($con_head->isFinalize == 1)

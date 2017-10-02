@@ -657,10 +657,10 @@ class DatatablesController extends Controller
 			Carbon::parse($delivery->created_at)->diffForHumans();
 		})
 		->editColumn('deliveryDateTime', function($deliveries){
-			return Carbon::parse($deliveries->deliveryDateTime)->format('F j, Y h:i:s A');
+			return Carbon::parse($deliveries->deliveryDateTime)->format('F j, Y h:i A');
 		})
 		->editColumn('pickupDateTime', function($deliveries){
-			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i:s A');
+			return Carbon::parse($deliveries->pickupDateTime)->format('F j, Y h:i A');
 		})
 		->addColumn('action', function ($delivery){
 			if($delivery->status == 'P'){
@@ -767,8 +767,8 @@ class DatatablesController extends Controller
 
 			})
 
-			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->diffForHumans() }}')
-			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->toFormattedDateString() }}')
+			->editColumn('dateExpiration', '{{ Carbon\Carbon::parse($dateExpiration)->format("F d, Y") }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 			->make(true);
 			break;
 
