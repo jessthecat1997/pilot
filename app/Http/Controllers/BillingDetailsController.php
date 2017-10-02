@@ -185,6 +185,15 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
+		$rev_sub = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount),2)) as Total'))
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $id],
+			['charges.bill_type', '=', 'R']
+			])
+		->get();
 		$rev_bill = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
@@ -225,7 +234,7 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill']));
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill', 'rev_sub']));
 
 	}
 	public function view_billing(Request $request, $id)
@@ -468,7 +477,7 @@ class BillingDetailsController extends Controller
 		$rev_bill = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('charges.name', 'billing_invoice_details.amount')
+		->select('charges.name', 'billing_invoice_details.amount','billing_invoice_details.description')
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $id],
 			['charges.bill_type', '=', 'R']
@@ -524,8 +533,17 @@ class BillingDetailsController extends Controller
 			['charges.bill_type', '=', 'E']
 			])
 		->get();
+		$rev_sub = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount),2)) as Total'))
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $id],
+			['charges.bill_type', '=', 'R']
+			])
+		->get();
 
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub']));
 		return $pdf->stream();
 	}
 	public function ref_pdf(Request $request, $id)

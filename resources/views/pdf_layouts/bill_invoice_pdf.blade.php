@@ -14,11 +14,6 @@
 			padding: 10px;
 		}
 
-		.page-break
-		{
-			page-break-after: always;
-		}
-
 
 	</style>
 </head>
@@ -46,7 +41,7 @@
 			</div>
 			<hr />
 			@if($bills[0]->isRevenue == 1)
-			<h3><center>Billing Invoice</center></h3>
+			<center>Billing Invoice</center>
 			<table style="width: 100%; border: 1px solid black">
 				<tr>
 					<td style="border:1px solid transparent; text-align: left;" width="20%">
@@ -68,19 +63,11 @@
 					<td style="border:1px solid transparent;" width="20%">
 						Date:
 					</td>
-					@if($bills[0]->date_billed == NULL)
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
 							{{ Carbon\Carbon::parse($bills[0]->date_billed)->toFormattedDateString() }}
 						</strong>
 					</td>
-					@else
-					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						<strong>
-								Not Set
-						</strong>
-					</td>
-					@endif
 				</tr>
 				<tr>
 					<td style="border:1px solid transparent;" width="20%">
@@ -94,19 +81,11 @@
 					<td style="border:1px solid transparent;" width="20%">
 						Due Date:
 					</td>
-					@if($bills[0]->due_date == NULL)
 					<td style="border:1px solid transparent; text-align: left;" width="30%">
 						<strong>
 							{{ Carbon\Carbon::parse($bills[0]->due_date)->toFormattedDateString() }}
 						</strong>
 					</td>
-					@else
-					<td style="border:1px solid transparent; text-align: left;" width="30%">
-						<strong>
-								Not Set
-						</strong>
-					</td>
-					@endif
 				</tr>
 				<tr>
 					<td style="border:1px solid transparent;" width="20%">
@@ -152,33 +131,33 @@
 					@empty
 					@endforelse
 					<tr>
-						<td>
-							&nbsp;
+						<td style="text-align: right;">
+							<label>Subtotal</label>
 						</td>
-						<td>
-							&nbsp;
+						<td style="text-align: right;">
+							<h5><strong>Php {{ $rev_sub[0]->Total }}</strong></h5>
 						</td>
 					</tr>
 					<tr>
-						<td style="text-align: right">
-							<strong>{{ $rev_vat[0]->rates }}%&nbsp;VAT</strong>
+						<td style="text-align: right;">
+							<label>{{ $rev_vat[0]->rates }}% VAT</label>
 						</td>
 						<td style="text-align: right;">
-							Php&nbsp;{{ $rev_vat[0]->Total }}
+							<h5><strong>Php {{ $rev_vat[0]->Total }}</strong></h5>
 						</td>
 					</tr>
 					<tr>
-						<td style="text-align: right">
-							<strong>TOTAL</strong>
+						<td style="text-align: right;">
+							<label>Total</label>
 						</td>
 						<td style="text-align: right;">
-							<h3>Php {{ $rev_total[0]->Total }}</h3>
+							<h4><strong><u>Php {{ $rev_total[0]->Total }}</u></strong></h4>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 			@else
-			<h3><center>Refundable Charges</center></h3>
+			<center>Refundable Charges</center>
 			<table style="width: 100%; border: 1px solid black">
 				<tr>
 					<td style="border:1px solid transparent; text-align: left;" width="20%">
@@ -258,12 +237,12 @@
 				<tbody>
 					@forelse($exp_bill as $pt)
 					<tr>
-						<td style="text-align: center;">
-							{{ $pt->name }}
-						</td>
-						<td style="text-align: right;">
-							Php {{ $pt->amount }}
-						</td>
+						@if($pt->name == "Others (please specify)")
+						<td style="text-align: center;"><h5>Others <i>({{ $pt->description }})</i></h5></td>
+						@else
+						<td style="text-align: center;"><h5>{{ $pt->name }}</h5></td>
+						@endif
+						<td style="text-align: center;"><h5><strong>Php&nbsp;{{ $pt->amount }}</strong></h5></td>
 					</tr>
 					@empty
 					@endforelse
