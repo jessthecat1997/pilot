@@ -370,21 +370,52 @@ class DatatablesController extends Controller
 		return Datatables::of($payment_hist)
 		->addColumn('action', function ($hist) {
 			return
-			'<a href = "/payment/'. $hist->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+			'<button value = "'. $hist->id .'" class = "btn btn-md btn-primary payment_receipt"><span class="fa fa-print"></span></button>';
 		})
 		->make(true);
 	}
 	public function pso_datatable(){
-		$so_heads = DB::table('consignee_service_order_details')
-		->join('service_order_types', 'consignee_service_order_details.service_order_types_id', '=', 'service_order_types.id')
-		->join('consignee_service_order_headers', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('consignee_service_order_headers.id','companyName', 'service_order_types.name')
-		->get();
-		return Datatables::of($so_heads)
-		->addColumn('action', function ($so_head) {
+		$total = DB::select('SELECT t.id, 
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+			pay.totpay,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay)) AS balance,
+			t.status,
+            dpay.totdpay
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+
+			LEFT JOIN
+
+			(
+			SELECT bi_head_id, SUM(amount) totpay
+			FROM payments
+			GROUP BY bi_head_id
+			) pay
+
+			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
+			WHERE t.status = "U" AND t.isVoid = 0
+			');
+
+		return Datatables::of($total)
+		->addColumn('action', function ($b) {
 			return
-			'<a href = "/payment/'. $so_head->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
+			'<a href = "/payment/'. $b->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Select</a>';
 		})
 		->make(true);
 	}
@@ -410,7 +441,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'E']
-		])
+			])
 		->get();
 		return Datatables::of($exp)
 		->make(true);
@@ -427,7 +458,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'R']
-		])
+			])
 		->get();
 		return Datatables::of($rev)
 		->make(true);
@@ -2757,14 +2788,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-					{
-						return 'Active';
-					}
-					else
-					{
-						return 'Expired';
-					}
-				})
+				{
+					return 'Active';
+				}
+				else
+				{
+					return 'Expired';
+				}
+			})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2787,14 +2818,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-					{
-						return 'Active';
-					}
-					else
-					{
-						return 'Expired';
-					}
-				})
+				{
+					return 'Active';
+				}
+				else
+				{
+					return 'Expired';
+				}
+			})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .

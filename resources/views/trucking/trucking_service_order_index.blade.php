@@ -1,68 +1,67 @@
 @extends('layouts.app')
 @section('content')
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "default panel panel">
-			<div class = "panel-heading">
-				<h2>&nbsp;Trucking Service Orders</h2>
-				<hr />
+<h2>&nbsp;Delivery</h2>
+<hr>
+<div class="pull-right">
+	<a href = "{{ route('trucking.create') }}" class = "btn btn-primary btn-md pull-right">Creeate Trucking Service Order</a>
+</div>
+<br/>
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of Trucking Service Orders
 			</div>
-			<a href = "{{ route('trucking.create') }}" class = "btn btn-success btn-md pull-right">New Trucking Service Order </a>
-			<div class = "panel-body">
-				<h4>Trucking Service Orders</h4>
-				<div class = "panel-default panel">
-					<div class = "panel-body">
-						<table class = "table table-responsive table-striped cell-border table-bordered" width="100%" id = "pending_trucking_so_table">
-							<thead>
-								<tr>
-									<td>
-										Consignee
-									</td>
-									<td>
-										Company Name
-									</td>
-									<td>
-										Status
-									</td>
-									<td>
-										Action
-									</td>
-								</tr>
-							</thead>
+			<div class="panel-body">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "pending_trucking_so_table">
+					<thead>
+						<tr>
+							<th>
+								Consignee
+							</th>
+							<th>
+								Company Name
+							</th>
+							<th>
+								Status
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($truckings as $trucking)
+						<tr>
+							<td>
+								{{ $trucking->name }}
+							</td>
+							<td>
+								{{ $trucking->companyName }}
+							</td>
+							<td>
+								@if($trucking->status == 'F')
+								Finished
+								@elseif($trucking->status == 'P')
+								Pending
+								@elseif($trucking->status == 'C')
+								Cancelled
 
-							<tbody>
-								@forelse($truckings as $trucking)
-								<tr>
-									<td>
-										{{ $trucking->name }}
-									</td>
-									<td>
-										{{ $trucking->companyName }}
-									</td>
-									<td>
-										@if($trucking->status == 'F')
-										Finished
-										@elseif($trucking->status == 'P')
-										Pending
-										@elseif($trucking->status == 'C')
-										Cancelled
+								@else
+								Unknown
 
-										@else
-										Unknown
+								@endif
+							</td>
+							<td>
+								<a href = "{{ route('trucking.index') }}/{{ $trucking->id }}/view" class = "btn btn-md but view-service-order">Manage</a>
+							</td>
+						</tr>
+						@empty
 
-										@endif
-									</td>
-									<td>
-										<a href = "{{ route('trucking.index') }}/{{ $trucking->id }}/view" class = "btn btn-md but view-service-order">Manage</a>
-									</td>
-								</tr>
-								@empty
-
-								@endforelse
-							</tbody>
-						</table>
-					</div>
-				</div>
+						@endforelse
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -70,12 +69,12 @@
 @endsection
 @push('styles')
 <style>
-.delivery
-{
-	border-left: 10px solid #2ad4a5;
-	background-color:rgba(128,128,128,0.1);
-	color: #fff;
-}
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 </style>
 @endpush
 @push('scripts')
