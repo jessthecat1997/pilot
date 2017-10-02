@@ -891,8 +891,10 @@
 					},
 					success: function (data)
 					{
+						if(data.length > 0){
+							$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+						}
 						
-						$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);
 						
 					}
 				})
@@ -900,6 +902,10 @@
 			if($(this).val() != "" && $(this).closest('tr').find('.area_to_valid').val() != $(this).val() && $(this).closest('tr').find('.area_to_valid').val() != ""){
 				$(this).css('border-color', 'green');
 				$(this).closest('tr').find('.area_to_valid').css('border-color', 'green');
+			}
+			if($(this).closest('tr').find('.area_to_valid').val() == $(this).val()){
+				$(this).css('border-color', 'red');
+				$(this).closest('tr').find('.area_to_valid').css('border-color', 'red');
 			}
 			$.ajax({
 				type: 'GET',
@@ -910,8 +916,9 @@
 				},
 				success: function (data)
 				{
-					
-					$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+					if(data.length > 0){
+						$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);	
+					}
 					
 				}
 			})
@@ -991,7 +998,11 @@
 					},
 					success: function (data)
 					{
-						$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);	
+						if(data.length > 0)
+						{
+							$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+						}
+
 					}
 				})
 			}
@@ -999,6 +1010,10 @@
 			if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != $(this).val() && $(this).closest('tr').find('.area_from_valid').val() != ""){
 				$(this).css('border-color', 'green');
 				$(this).closest('tr').find('.area_from_valid').css('border-color', 'green');
+			}
+			if($(this).closest('tr').find('.area_from_valid').val() == $(this).val()){
+				$(this).css('border-color', 'red');
+				$(this).closest('tr').find('.area_from_valid').css('border-color', 'red');
 			}
 			$.ajax({
 				type: 'GET',
@@ -1009,7 +1024,9 @@
 				},
 				success: function (data)
 				{
-					$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+					if(data.length > 0){
+						$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);	
+					}
 					
 				}
 			})
