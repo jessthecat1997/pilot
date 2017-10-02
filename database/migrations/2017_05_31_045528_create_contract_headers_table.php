@@ -19,11 +19,13 @@ class CreateContractHeadersTable extends Migration
             $table->date('dateExpiration')->nullable();
             $table->text('specificDetails')->nullable();
             $table->integer('consignees_id')->unsigned();
+            $table->integer('quot_head_id')->unsigned()->nullable();
             $table->boolean('isFinalize');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('consignees_id')->references('id')->on('consignees');
+            $table->foreign('quot_head_id')->references('id')->on('quotation_headers');
         });
     }
 

@@ -551,7 +551,7 @@
 										$('#quotation_table > tbody').html("");
 										$('#quotation_table > tbody').append(table_detail);
 										$('.quotation_status').each(function(i){
-											
+
 										})
 									}
 									else
@@ -823,7 +823,7 @@
 					$('#dateExpiration').css('border-color', 'red');
 				}
 			}
-
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
 			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
@@ -889,6 +889,7 @@
 						'isFinalize': 0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+
 					},
 
 					success: function (data){

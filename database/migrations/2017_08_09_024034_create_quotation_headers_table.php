@@ -17,7 +17,6 @@ class CreateQuotationHeadersTable extends Migration
             $table->increments('id');
             $table->integer('consignees_id')->unsigned();
             $table->text('specificDetails')->nullable();
-            $table->integer('quot_head_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
 
