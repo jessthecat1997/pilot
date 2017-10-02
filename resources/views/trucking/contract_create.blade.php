@@ -824,6 +824,7 @@
 				}
 			}
 			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
+			console.log(quot_id);
 			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
@@ -836,9 +837,30 @@
 						'isFinalize' : 1,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'quot_head_id' : quot_id,
 					},
 
-					success: function (data){
+					success: function (data)
+					{
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Contract saved");
 						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
 						
 					}
@@ -876,7 +898,7 @@
 					$('#dateExpiration').css('border-color', 'red');
 				}
 			}
-
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
 			if(validateDraft() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
@@ -889,6 +911,7 @@
 						'isFinalize': 0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'quot_head_id' : quot_id,
 
 					},
 

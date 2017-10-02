@@ -79,7 +79,8 @@ class ContractsController extends Controller
         $new_contract->dateExpiration = date_create($request->dateExpiration);
         $new_contract->consignees_id = $request->consigneeID;
         $new_contract->specificDetails = $request->specificDetails;
-        $new_contract->isFinalize = $request->isFinalize;
+        $new_contract->isFinalize = $request->isFinalize;;
+        $new_contract->quot_head_id = $request->quot_head_id;
         $new_contract->save();
 
 

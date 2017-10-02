@@ -728,8 +728,8 @@
 			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'PUT',
-					url:  '{{ route("trucking.index")}}/contracts/' + {{ $contract[0]->id }},
-					 :
+					url:  '{{ route("trucking.index")}}/contracts/{{ $contract[0]->id }}',
+					data:
 					{
 						'_token' : $('input[name=_token').val(),
 						'dateEffective' : $('#dateEffective').val(),
@@ -737,11 +737,11 @@
 						'isFinalize': 1,
 						'specificDetails' : terms_and_condition_string,
 						'update_type' : 4,
-						'contract_id' : {{ $contract[0]->id }},
+						'contract_id' : '{{ $contract[0]->id }}',
 					},
 
 					success: function (data){
-						window.location.replace("{{route('contracts.index')}}"+ "/" + {{ $contract[0]->id }} + "/view");
+						window.location.replace("{{route('contracts.index')}}/{{ $contract[0]->id }}/view");
 					}
 
 				})
@@ -783,7 +783,7 @@
 			if(validateDraft() === true && valid_date == true){
 				$.ajax({
 					method: 'PUT',
-					url:  '{{ route("trucking.index")}}/contracts/' + {{ $contract[0]->id }},
+					url:  '{{ route("trucking.index")}}/contracts/{{ $contract[0]->id }}',
 					data: {
 						'_token' : $('input[name=_token').val(),
 						'dateEffective' : $('#dateEffective').val(),

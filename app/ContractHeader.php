@@ -10,7 +10,7 @@ class ContractHeader extends Model
 	use SoftDeletes;
 
     protected $fillable = [
-    	'dateEffective', 'dateExpiration', 'consignees_id', 'specificDetails','isFinalize'
+    	'dateEffective', 'dateExpiration', 'consignees_id', 'specificDetails','isFinalize', 'quot_head_id'
     ];
 
     protected $dates = [
