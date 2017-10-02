@@ -1,95 +1,60 @@
 @extends('layouts.app')
-
 @push('styles')
 <style type="text/css">
-span.control-label {
-	font-size: 20px;
-}
-span.label {
-	font-size: 15px;
-}
-strong {
-	font-size: 15px;
-}
+	span.control-label {
+		font-size: 20px;
+	}
+	span.label {
+		font-size: 15px;
+	}
+	strong {
+		font-size: 15px;
+	}
 </style>
 @endpush
-
 @section('content')
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel-heading">
-			<h2>&nbsp;Manage Trucking</h2>
-			<hr/>
-		</div>
-		<div class = "panel-body panel">
-			<div class="col-md-12">
+<h2>&nbsp;Delivery</h2>
+<hr>
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Trucking Information
+			</div>
+			<div class="panel-body">
 				@if($service_order->status == 'P')
-				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
+				<button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
 				@else
-				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
+				<button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
 				@endif
-				<br />
-				<table class="table table-responsive">
-					<tbody>
-						<tr>
-							<td class="active"><strong>Trucking Service Order #: </strong></td>
-
-							<td class = "success" id="consignee"><strong>{{ $service_order->id }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Consignee: </strong></td>
-							<td class="success" id="address"><strong>{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Company Name: </strong></td>
-
-							<td class="success" id="sotype"><strong>{{ $service_order_details[0]->companyName }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Status: </strong></td>
-							<td class="success">
-								@php
-								switch($service_order->status){
-								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-								@endphp
-							</td>
-							<td class="success">
-							</td>
-						</tr>
-						<tr>
-							<td class="active">
-								<strong>Estimated Delivery Fee: </strong>
-							</td>
-
-							<td class="success" colspan="2">
-								<strong>Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></strong>
-							</td>
-						</tr>
-						<tr>
-							<td class = "active">
-								<strong>Delivery Status: </strong><br><br>
-
-							</td>
-							<td class="success" colspan="2">
-								<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
-								<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
-								<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Trucking Service Order #:</strong> {{ $service_order->id }}</h5>
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Consignee:</strong> {{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</h5>
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Company Name:</strong> {{ $service_order_details[0]->companyName }}</h5>
+				</div>
+				<div class="form-group">
+					<label>Status:</label>
+					@php
+					switch($service_order->status){
+					case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+					case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+					case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+					default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+					@endphp
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Estimated Delivery Fee:</strong> Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></h5>
+				</div>
+				<div class="form-group">
+					<label>Delivery Status:</label>
+					<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
+					<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
+					<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -99,9 +64,9 @@ strong {
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 				@if($service_order->status == 'P' )
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery">New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery">New Delivery</button></h4>
 				@else
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
 				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table" style="width: 100%;">
@@ -152,7 +117,7 @@ strong {
 			</div>
 			<div class="modal-footer">
 
-				<button class = "btn btn-success confirm-create-bill">Confirm</button>
+				<button class = "btn btn-primary confirm-create-bill">Confirm</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
@@ -187,7 +152,7 @@ strong {
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button class = "btn btn-primary confirm-create-deposit">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
@@ -532,7 +497,7 @@ strong {
 			</div>
 
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
+				<button type="button" class="btn btn-primary save-delivery-information" >Save</button>
 				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
 			</div>
 		</div>
@@ -566,7 +531,7 @@ strong {
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-trucking-information">Save</button>
+				<button type="button" class="btn btn-primary save-trucking-information">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -577,7 +542,15 @@ strong {
 
 @endsection
 
-
+@push('styles')
+<style>
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
