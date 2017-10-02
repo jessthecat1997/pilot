@@ -1,7 +1,5 @@
 @extends('layouts.reports')
 @section('content')
-<h2>&nbsp;Reports | Delivery</h2>
-<hr>
 <div class = "container-fluid">
 	<div class="row">
 		<div class = "panel-default panel">

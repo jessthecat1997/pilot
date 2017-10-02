@@ -185,10 +185,19 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
+		$rev_sub = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount),2)) as Total'))
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $id],
+			['charges.bill_type', '=', 'R']
+			])
+		->get();
 		$rev_bill = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('charges.name', 'billing_invoice_details.amount', 'billing_invoice_details.description')
+		->select('charges.name', 'billing_invoice_details.amount', 'billing_invoice_details.description','isFinalize')
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $id],
 			['charges.bill_type', '=', 'R']
@@ -225,7 +234,7 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill']));
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill', 'rev_sub']));
 
 	}
 	public function view_billing(Request $request, $id)
@@ -468,7 +477,7 @@ class BillingDetailsController extends Controller
 		$rev_bill = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('charges.name', 'billing_invoice_details.amount')
+		->select('charges.name', 'billing_invoice_details.amount','billing_invoice_details.description')
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $id],
 			['charges.bill_type', '=', 'R']
@@ -524,13 +533,68 @@ class BillingDetailsController extends Controller
 			['charges.bill_type', '=', 'E']
 			])
 		->get();
+		$rev_sub = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount),2)) as Total'))
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $id],
+			['charges.bill_type', '=', 'R']
+			])
+		->get();
 
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub']));
 		return $pdf->stream();
 	}
 	public function ref_pdf(Request $request, $id)
 	{
 		$pdf = PDF::loadView('pdf_layouts.refundable_charges_pdf');
 		return $pdf->stream();
+	}
+	public function unpaid_invoice(Request $request,$id)
+	{
+		$total = DB::select('SELECT t.id, 
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+			pay.totpay,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay)) AS balance,
+			t.status,
+            dpay.totdpay
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+
+			LEFT JOIN
+
+			(
+			SELECT bi_head_id, SUM(amount) totpay
+			FROM payments
+			GROUP BY bi_head_id
+			) pay
+
+			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
+			WHERE t.status = "U" AND t.isVoid = 0 AND p.total != 0.00 AND t.so_head_id = ?
+			', [$id]);
+
+		return Datatables::of($total)
+		->addColumn('action', function ($b) {
+			return
+			'<a href = "/payment/'. $b->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Make Payment</a>';
+		})
+		->make(true);
 	}
 }

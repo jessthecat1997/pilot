@@ -55,6 +55,33 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Unpaid Invoice</div>
+				<div class="panel-body">
+					<table class = "table table-hover" id = "unpaid_table">
+						<thead>
+							<tr>
+								<th>
+									No.
+								</th>
+								<th>
+									Total
+								</th>
+								<th>
+									Balance
+								</th>
+								<th>
+									Action
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 	<hr>
 </div>
 <div id="billModal" class="modal fade" role="dialog">
@@ -180,7 +207,25 @@
 				return "Posted";
 			}
 		}
+		var unp_table = $('#unpaid_table').DataTable({
+			processing: false,
+			serverSide: false,
+			ajax: "{{ route('unpaid.data',$so_head_id) }}",
+			columns: [
+			{ data: 'id' },
+			{data : 'totall'},
+			{data: 'balance'},
+			{ data: 'action', orderable: false, searchable: false }
+			]
+		})
+		function formatStatus(n) {
 
+			if (n == 'U'){
+				return "Not Paid";
+			}else{
+				return "Paid";
+			}
+		}
 	})
 
 	$(document).on('click', '.updateBill', function(e){

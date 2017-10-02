@@ -275,9 +275,10 @@ Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
 Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
-Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
+Route::get('admin/cheque_confirm', 'ChequesController@cheque_table')->name('chq.data');
 Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
 Route::resource('/cheque', 'ChequesController');
+Route::put('/confirm_cheque/{id?}', 'ChequesController@confirm_cheque')->name('con_cheque');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
@@ -286,6 +287,8 @@ Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
 Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
+Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
+
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
