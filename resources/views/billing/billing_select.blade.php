@@ -30,7 +30,7 @@
 		<div class="col-lg-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					Unpaid Invoice
+					Pending Invoice
 				</div>
 				<div class="panel-body">
 					<table class = "table table-hover" id = "hist_table">

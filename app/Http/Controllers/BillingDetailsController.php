@@ -327,14 +327,22 @@ class BillingDetailsController extends Controller
 			ON t.id = p.bi_head_id
 			JOIN consignee_service_order_headers AS B on t.so_head_id = B.id
 			JOIN consignees AS C on B.consignees_id = C.id
-			WHERE t.isVoid = 0 AND t.isFinalize = 0;
+			WHERE t.isVoid = 0 AND p.total != 0.00;
 			');
 
 		return Datatables::of($bill_hists)
 		->addColumn('action', function ($hist) {
-			return
-			'<a href = "/billing/'. $hist->id .'/view" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>'.
-			'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
+
+			if($hist->isFinalize == 0)
+			{
+				return
+				'<a href = "/billing/'. $hist->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-info bill_inv"><i class="fa fa-eye"></i></a>';
+			}
+			else
+			{
+				return
+				'<a href = "/billing/'. $hist->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
+			}
 		})
 		->make(true);
 	}
