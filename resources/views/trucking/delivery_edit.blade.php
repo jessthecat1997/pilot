@@ -67,7 +67,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}" required />
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control " value = "{{ $container['container']->shippingLine }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -75,7 +75,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}" required />
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control " value = "{{ $container['container']->portOfCfsLocation }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -85,7 +85,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																			<div class="col-sm-8">
-																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}" required />
+																				<input type = "text" name = "containerReturnDate" id = "containerReturnDate " class = "form-control containerReturnDate" value = "" required />
 																			</div>
 																		</div>
 																	</div>
@@ -691,7 +691,7 @@
 		var wodetail_row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label"></label></td><td style="width: 30%;"><input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = ""/></td><td style="width: 20%;"><input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="" /></td><td style="width: 30%;"><input type = "text" name = "wosupplier"  class = "form-control supplier" value="" /></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
-		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button> <button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate"/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>';
+		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button> <button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control ""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control "/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "text" name = "containerReturnDate" id = "containerReturnDate " class = "form-control containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type ="number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>';
 		@if($delivery[0]->withContainer == 1) var container_ctr = "{{ count($container_with_detail) }}" @endif;
 
 		@if($delivery[0]->withContainer == 1)
@@ -781,36 +781,47 @@
 				}
 			}
 		});
+		$('.containerReturnDate').each(function(i){
+			$(this).datetimepicker({
+				mask:'9999/19/39',
+				dayOfWeekStart : 1,
+				timepicker: false,
+				lang:'en',
+				format:'Y/m/d',
+				formatDate:'Y/m/d',
+				value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+				startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			});
+		})
+		Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
 		@endif
 
 		$.datetimepicker.setLocale('en');
 		$('#pickdatecon').datetimepicker({
-			mask:'9999/19/39',
+			mask:'9999/19/39 29:59',
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
 			format:'Y/m/d H:i',
 			formatDate:'Y/m/d H:i',
-			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i') }}",
+			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y-m-d H:i') }}",
 			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i') }}",
 		});
 
 		$('#deldatecon').datetimepicker({
-			mask:'9999/19/39',
+			mask:'9999/19/39 29:59',
 			dayOfWeekStart : 1,
 			lang:'en',
 			step: 5,
 			format:'Y/m/d H:i',
 			formatDate:'Y/m/d H:i',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			value: "{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
 		});
 
 
 		$('#driver').val("{{ $delivery[0]->emp_id_driver }}");
 		$('#helper').val("{{ $delivery[0]->emp_id_helper }}");
-		$('#pickdatecon').val('{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format("Y-m-d") }}');
-		$('#deldatecon').val('{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format("Y-m-d") }}');
 		$('#deliver_id').val("{{ $delivery[0]->locations_id_del }}");
 		$('#pickup_id').val("{{ $delivery[0]->locations_id_pick }}");
 		fill_vehicle();
@@ -1202,6 +1213,19 @@
 			container_array.push(container_ctr);
 			container_ctr++;
 			$('#container_copy').append(new_container);
+			$('.containerReturnDate:last').each(function(i){
+				$(this).datetimepicker({
+					mask:'9999/19/39',
+					dayOfWeekStart : 1,
+					timepicker: false,
+					lang:'en',
+					format:'Y/m/d',
+					formatDate:'Y/m/d',
+					value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+					startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+				});
+			})
+			Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();

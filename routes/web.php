@@ -344,6 +344,8 @@ Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->na
 Route::resource('/quotation', 'QuotationsController');
 Route::get('/quotation/{id}/print', 'QuotationsController@print');
 Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
+Route::get('/admin/get_quotation_location/{location_id?}', 'QuotationsController@get_quotation_location')->name('get_quotation_location');
+Route::get('/admin/get_quotation_rates', 'QuotationsController@get_quotation_rates')->name('get_quotation_rates');
 //vanessa addition
 Route::resource('admin/quotation_template','QuotationTemplateController');
 
@@ -384,8 +386,7 @@ Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsControll
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
 Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
-
-
+Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
 //Vanessa addition
 Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
 Route::resource('/admin/contract_template','ContractTemplatesController');

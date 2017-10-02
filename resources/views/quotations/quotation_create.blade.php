@@ -115,78 +115,148 @@
 										<strong>Warning!</strong> Something is wrong with the rates.
 									</div>
 								</div>
-								<div class = "col-md-12" style="overflow-x: auto;">
-									<div class = "panel-default">
-										<form id = "contract_rates_form">
-											<table class="table responsive table-hover" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
-												<thead>
-													<tr>
-														<th width="25%">
-															<strong>Pickup Point</strong>
-														</th>
-														<th width="25%">
-															<strong>Delivery Point</strong>
-														</th>
-														<th width="20%">
-															<strong>Size</strong>
-														</th>
-														<th width="20%">
-															<strong>Amount</strong>
-														</th>
-														<th width="10%" style="text-align: center;">
-															<strong>Action</strong>
-														</th>
-													</tr>
-												</thead>
-												<tr id = "contract-row">
-													<td>
-														<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
-															<option></option>
-															@forelse($locations as $location)
-															<option value = "{{ $location->id }}">{{ $location->name }}</option>
-															@empty
-
-															@endforelse
-														</select>
-													</td>
-													<td>
-														<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
-															<option></option>
-															@forelse($locations as $location)
-															<option value = "{{ $location->id }}">{{ $location->name }}</option>
-															@empty
-
-															@endforelse
-														</select>
-													</td>
-													<td>
-														<select name = "volume" id = "0_volume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
-
-														</select>
-													</td>
-													<td>
-														<input type = "text" name = "amount" class = "form-control amount_valid money" value = "0.00" style="text-align: right">
-
-													</td>
-													<td style="text-align: center;">
-														<button  type = "button" class = "btn btn-danger btn-md delete-contract-row">x</button>
-													</td>
-												</tr>
-											</table>
-										</form>
-									</div>
-								</div>
 								<div class="row">
-									<div class = "col-md-4">
-										<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
-									</div>
-									<div class = "col-md-4">
+									<div class = "col-md-8">
+										<div class = "panel-default">
+											<form id = "contract_rates_form">
+												<div class="col-md-12">
+													<table class="table responsive table-striped table-bordered cell-border" width="100%" id= "contract_parent_table" style = "overflow-x: scroll;">
+														<thead>
+															<tr>
+																<th width="25%">
+																	<strong>Pickup Point</strong>
+																</th>
+																<th width="25%">
+																	<strong>Delivery Point</strong>
+																</th>
+																<th width="20%">
+																	<strong>Size</strong>
+																</th>
+																<th width="20%">
+																	<strong>Amount</strong>
+																</th>
+																<th width="10%" style="text-align: center;">
+																	<strong>Action</strong>
+																</th>
+															</tr>
+														</thead>
+														<tr id = "contract-row">
+															<td>
+																<input type="hidden" value = "0_rate" class = "rate_index">
+																<select name = "areas_id_from" id = "areas_id_from" class = "form-control area_from_valid" required = "true">
+																	<option></option>
+																	@forelse($locations as $location)
+																	<option value = "{{ $location->id }}">{{ $location->name }}</option>
+																	@empty
 
-									</div>
-									<div class = "col-md-4">
+																	@endforelse
+																</select>
+															</td>
+															<td>
+																<select name = "areas_id_to" id = "areas_id_to" class = "form-control area_to_valid" required="true">
+																	<option></option>
+																	@forelse($locations as $location)
+																	<option value = "{{ $location->id }}">{{ $location->name }}</option>
+																	@empty
 
+																	@endforelse
+																</select>
+															</td>
+															<td>
+																<select name = "volume" id = "0_volume" class = "form-control select2-allow-clear volume" style="width: 100%;" multiple="multiple">
+
+																</select>
+															</td>
+															<td>
+																<input type = "text" name = "amount" class = "form-control amount_valid money" value = "0.00" style="text-align: right">
+
+															</td>
+															<td style="text-align: center;">
+																<button  type = "button" class = "btn btn-danger btn-md delete-contract-row">x</button>
+															</td>
+														</tr>
+													</table>
+												</div>
+												<div class="col-md-12">
+													<div class = "col-md-4">
+														<button  type = "button" style="width: 100%;" class = "btn btn-primary btn-sm new-contract-row pull-left">New Rate</button>
+													</div>
+												</div>
+											</form>
+										</div>
 									</div>
-								</div>
+									<div class="col-md-4">
+										<div class="col-md-12">
+											<div class="row" style="text-align: center;">
+												<label class="control-label">Rate Information:</label>
+											</div>
+											<div class="row">											
+												<label class="control-label">Pickup Point</label>
+											</div>
+											<div class="row">
+												<span class="control-label selected_pickup">No selected.</span>
+											</div>
+											<div class="row">
+
+												<label class="control-label">Delivery Point</label>
+											</div>
+											<div class="row">
+												<span class="control-label selected_delivery">No selected.</span>
+											</div>
+											<br />
+											<div class="row">
+												<label class="control-label">Standard Rate:</label>
+												<table class="table table-responsive table-bordered table-striped" id = "standard_rate_table" style="width: 100%;">
+													<thead>
+														<tr>
+															<td style="width: 40%;">
+																Date
+															</td>
+															<td style="width: 60%; text-align: right;">
+																Amount
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td colspan="2" style="text-align: center;">
+																No records found.
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="row">
+												<label class="control-label">Delivery History:</label>
+												<table class="table table-responsive table-bordered table-striped" id = "delivery_rate_table" style="width: 100%;">
+													<thead>
+														<tr>
+															<td style="width: 40%;">
+																Date
+															</td>
+															<td style="width: 20%;">
+																Del No.
+															</td>
+															<td style="width: 40%; text-align: right;">
+																Amount
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td colspan="3" style="text-align: center;">
+																No records found.
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="row">
+												<label class="control-label">Estimated Delivery Fee:</label><span style="text-align: right;" class="pull-right estimate">Php 0.00</span>
+											</div>
+										</div>
+									</div>
+								</div>	
 							</div>
 						</div>
 					</div>
@@ -469,12 +539,12 @@
 
 @push('styles')
 <style>
-	.quotation
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.quotation
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 
@@ -501,6 +571,8 @@
 	@empty
 	@endforelse
 	];
+
+	var current_rate = 0;
 	
 
 	$(document).ready(function(){
@@ -779,11 +851,21 @@
 			$('#contract_rates_warning').removeClass('fade in');
 			if(validateContractRows() === true){
 				new_contract_append = contract_row.replace('0_volume', row_ctr +'_volume');
+				new_contract_append = new_contract_append.replace('0_rate', row_ctr+ '_rate');
 				$('#contract_parent_table').append(new_contract_append);
 				$('.volume').select2({
 					data: arr_volume ,
 					placeholder: "Select Sizes",
 					allowClear: true
+				});
+				$('.money').inputmask("numeric",
+				{
+					radixPoint: ".",
+					groupSeparator: ",",
+					digits: 2,
+					autoGroup: true,
+					rightAlign: true,
+					removeMaskOnSubmit:true,
 				});
 				row_ctr++;
 				
@@ -792,25 +874,248 @@
 		})
 
 		$(document).on('change', '.area_from_valid', function(e){
+			$('.selected_delivery').text("");
+			$('.selected_pickup').text("");
+			$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");
+			$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");	
+			$('')
+			//Validate all
 			$(".area_from_valid").each(function(){
-				if($(this).val() != ""){
+				if($(this).val() != "" && $(this).closest('tr').find('.area_to_valid').val() != $(this).val()){
 					$(this).css('border-color', 'green');
 				}
 				else{
 					$(this).css('border-color', 'red');
 				}
 			});
+			//One
+			if($(this).closest('tr').find('.area_to_valid').val() != "" && $(this).val() != ""){
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('get_quotation_location') }}/" + $(this).closest('tr').find('.area_to_valid').val(),
+					data:
+					{
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function (data)
+					{
+						if(data.length > 0){
+							$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+						}
+						
+						
+					}
+				})
+			}
+			if($(this).val() != "" && $(this).closest('tr').find('.area_to_valid').val() != $(this).val() && $(this).closest('tr').find('.area_to_valid').val() != ""){
+				$(this).css('border-color', 'green');
+				$(this).closest('tr').find('.area_to_valid').css('border-color', 'green');
+			}
+			if($(this).closest('tr').find('.area_to_valid').val() == $(this).val()){
+				$(this).css('border-color', 'red');
+				$(this).closest('tr').find('.area_to_valid').css('border-color', 'red');
+			}
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_quotation_location') }}/" + $(this).val(),
+				data:
+				{
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function (data)
+				{
+					if(data.length > 0){
+						$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);	
+					}
+					
+				}
+			})
+			if($(this).val() != "" && $(this).closest('tr').find('.area_to_valid').val() != "")
+			{
+				var obj = $(this).closest('tr').find('.amount_valid');
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('get_quotation_rates') }}",
+					data:
+					{
+						'location_from' : $(this).val(),
+						'location_to' : $(this).closest('tr').find('.area_to_valid').val(),
+					},
+					success: function(quot_rate)
+					{
+						var standard_rate_rows = "";
+						var delivery_rate_rows = "";
+
+						//Standard rate
+						for(var i = 0; i < quot_rate[0].length; i++)
+						{
+							standard_rate_rows += "<tr><td><small>"+ quot_rate[0][i].created_at +"</small></td><td style= 'text-align: right;'>Php "+ quot_rate[0][i].amount +"</td></tr>";
+						}
+						if(quot_rate[0].length > 0)
+						{
+
+							$('#standard_rate_table > tbody').html("");
+							$('#standard_rate_table > tbody').append(standard_rate_rows);
+						}
+						else
+						{
+							$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+
+						//Delivery Rate
+						for(var i = 0; i < quot_rate[1].length; i++)
+						{
+							delivery_rate_rows += "<tr><td><small>"+ quot_rate[1][i].new_created_at +"</small></td><td>"+ quot_rate[1][i].id +"</td><td style= 'text-align: right;'>Php "+ quot_rate[1][i].amount +"</td></tr>";
+						}
+						if(quot_rate[1].length > 0)
+						{
+
+							$('#delivery_rate_table > tbody').html("");
+							$('#delivery_rate_table > tbody').append(delivery_rate_rows);
+							$('.estimate').text("Php " +quot_rate[2].toFixed(2));
+							obj.val(quot_rate[2].toFixed(2));
+						}
+						else
+						{
+							$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+						if(quot_rate[1].length > 0 && quot_rate[0].length > 0){
+							obj.val(quot_rate[2].toFixed(2));
+						}
+						if(quot_rate[1].length == 0 && quot_rate[0].length > 0)
+						{
+							obj.val(parseFloat(quot_rate[0][0].amount).toFixed(2));
+						}
+						if(quot_rate[0].length ==0 && quot_rate[1].length == 0)
+						{
+							obj.val("0.00");
+						}
+					}
+				})
+			}
 		})
 
 		$(document).on('change', '.area_to_valid', function(e){
+			$('.selected_delivery').text("");
+			$('.selected_pickup').text("");
+			$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");
+			$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");
+			$('')
+			//All
 			$(".area_to_valid").each(function(){
-				if($(this).val() != ""){
+				if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != $(this).val()){
 					$(this).css('border-color', 'green');
 				}
 				else{
 					$(this).css('border-color', 'red');
 				}
 			});
+			//One
+			if($(this).closest('tr').find('.area_from_valid').val() != "" && $(this).val() != ""){
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('get_quotation_location') }}/" + $(this).closest('tr').find('.area_from_valid').val(),
+					data:
+					{
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function (data)
+					{
+						if(data.length > 0)
+						{
+							$('.selected_pickup').text(data[0].location + " " + data[0].city + ", " + data[0].province);
+						}
+
+					}
+				})
+			}
+
+			if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != $(this).val() && $(this).closest('tr').find('.area_from_valid').val() != ""){
+				$(this).css('border-color', 'green');
+				$(this).closest('tr').find('.area_from_valid').css('border-color', 'green');
+			}
+			if($(this).closest('tr').find('.area_from_valid').val() == $(this).val()){
+				$(this).css('border-color', 'red');
+				$(this).closest('tr').find('.area_from_valid').css('border-color', 'red');
+			}
+			$.ajax({
+				type: 'GET',
+				url: "{{ route('get_quotation_location') }}/" + $(this).val(),
+				data:
+				{
+					'_token' : $('input[name=_token]').val(),
+				},
+				success: function (data)
+				{
+					if(data.length > 0){
+						$('.selected_delivery').text(data[0].location + " " + data[0].city + ", " + data[0].province);	
+					}
+					
+				}
+			})
+
+			if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != "")
+			{
+				var obj = $(this).closest('tr').find('.amount_valid');
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('get_quotation_rates') }}",
+					data:
+					{
+						'location_from' : $(this).closest('tr').find('.area_from_valid').val(),
+						'location_to' : $(this).val(),
+					},
+					success: function(quot_rate)
+					{
+						var standard_rate_rows = "";
+						var delivery_rate_rows = "";
+
+						//Standard rate
+						for(var i = 0; i < quot_rate[0].length; i++)
+						{
+							standard_rate_rows += "<tr><td><small>"+ quot_rate[0][i].created_at +"</small></td><td style= 'text-align: right;'>Php "+ quot_rate[0][i].amount +"</td></tr>";
+						}
+						if(quot_rate[0].length > 0)
+						{
+
+							$('#standard_rate_table > tbody').html("");
+							$('#standard_rate_table > tbody').append(standard_rate_rows);
+						}
+						else
+						{
+							$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+						//Delivery Rate
+						for(var i = 0; i < quot_rate[1].length; i++)
+						{
+							delivery_rate_rows += "<tr><td><small>"+ quot_rate[1][i].new_created_at +"</small></td><td>"+ quot_rate[1][i].id +"</td><td style= 'text-align: right;'>Php "+ quot_rate[1][i].amount +"</td></tr>";
+						}
+						if(quot_rate[1].length > 0)
+						{
+							$('.estimate').text("Php " + quot_rate[2].toFixed(2));
+							$('#delivery_rate_table > tbody').html("");
+							$('#delivery_rate_table > tbody').append(delivery_rate_rows);
+							obj.val(quot_rate[2].toFixed(2));
+
+						}
+						else
+						{
+							$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+						if(quot_rate[1].length > 0 && quot_rate[0].length > 0){
+							obj.val(quot_rate[2].toFixed(2));
+						}
+						if(quot_rate[1].length == 0 && quot_rate[0].length > 0)
+						{
+							obj.val(parseFloat(quot_rate[0][0].amount).toFixed(2));
+						}
+						if(quot_rate[0].length ==0 && quot_rate[1].length == 0)
+						{
+							obj.val("0.00");
+						}
+					}
+				})
+			}
 		})
 
 		$(document).on('keypress', '.amount_valid', function(e){
@@ -947,27 +1252,29 @@ function validateContractRows()
 		rate_pairs.push(pair);
 	}
 
-	// var i, j, n;
-	// found = false;
-	// n = rate_pairs.length;
+	var i, j, n;
+	found = false;
+	n = rate_pairs.length;
 
-	// for (i=0; i<n; i++) {                        
-	// 	for (j=i+1; j<n; j++)
-	// 	{
+	for (i=0; i<n; i++) 
+	{                        
+		for (j=i+1; j<n; j++)
+		{
 
-	// 		if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
-	// 			found = true;
-	// 			from[i].style.borderColor = 'red';
-	// 			to[i].style.borderColor = 'red';
+			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+				console.log(rate_pairs[i].from + " " + rate_pairs[j].from);
+				found = true;
+				from[i].style.borderColor = 'red';
+				to[i].style.borderColor = 'red';
 
-	// 			from[j].style.borderColor = 'red';
-	// 			to[j].style.borderColor = 'red';
-	// 		}
-	// 	}	
-	// }
-	// if(found == true){
-	// 	error+= "Existing rate.";
-	// }
+				from[j].style.borderColor = 'red';
+				to[j].style.borderColor = 'red';
+			}
+		}	
+	}
+	if(found == true){
+		error+= "Existing rate.";
+	}
 
 	//Final validation
 	if(error.length == 0){
@@ -1235,23 +1542,23 @@ function finalvalidateContractRows()
 	found= false;
 	n=rate_pairs.length;
 
-	// for (i=0; i<n; i++) {                        
-	// 	for (j=i+1; j<n; j++)
-	// 	{              
-	// 		if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
-	// 			found = true;
-	// 			from[i].style.borderColor = 'red';
-	// 			to[i].style.borderColor = 'red';
+	for (i=0; i<n; i++) {                        
+		for (j=i+1; j<n; j++)
+		{              
+			if (rate_pairs[i].from === rate_pairs[j].from && rate_pairs[i].to === rate_pairs[j].to){
+				found = true;
+				from[i].style.borderColor = 'red';
+				to[i].style.borderColor = 'red';
 
-	// 			from[j].style.borderColor = 'red';
-	// 			to[j].style.borderColor = 'red';
-	// 		}
-	// 	}	
-	// }
-	// if(found == true){
-	// 	error+= "Existing rate.";
-	// 	$('#contract_rates_warning').addClass('in');
-	// }
+				from[j].style.borderColor = 'red';
+				to[j].style.borderColor = 'red';
+			}
+		}	
+	}
+	if(found == true){
+		error+= "Existing rate.";
+		$('#contract_rates_warning').addClass('in');
+	}
 
 	for (var i = 0; i < terms.length; i++){
 		if(terms[i].value === ""){

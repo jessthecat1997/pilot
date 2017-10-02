@@ -101,12 +101,63 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					2. Consignee Quotations
+				</div>
+				<div class="panel-body">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-9">
+							</div>
+							<div class="col-md-3">
+								<button class="btn btn-md btn-primary new_quotation" style="width: 100%;" disabled>New Quotation</button>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
+									<thead>
+										<tr>
+											<th>
+												Quotation No.
+											</th>
+											<th>
+												Date Created
+											</th>
+											<th>
+												Status
+											</th>
+											<th>
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="4" style="text-align: center;">
+												No records found.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
 			<div class="panel-body">
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">2. Contract Duration</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">3. Contract Duration</a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
@@ -137,7 +188,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">4. Terms &amp; Condition</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
@@ -195,7 +246,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">4. Finalize</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">5. Finalize</a>
 							</h4>
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse">
@@ -385,6 +436,7 @@
 </div> 
 @endsection
 @push('styles')
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 <style>
 .contracts
 {
@@ -397,6 +449,7 @@
 @endpush
 
 @push('scripts')
+<script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	var consigneeID = null;
@@ -409,6 +462,16 @@
 		$('#contract-row').remove();
 
 		$.fn.dataTable.ext.errMode = 'throw';
+
+		//Quotation
+		$(document).on('click', '.view_quotation', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val());
+		})
+		$(document).on('click', '.new_quotation', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('quotation.create') }}";
+		});
 
 		$("#commentForm").validate({
 			rules: 
@@ -468,6 +531,39 @@
 							$('#_ccompanyName').val(data[0].companyName);
 							$('#_cbusinessStyle').val(data[0].businessStyle);
 							$('#_cTIN').val(data[0].TIN);
+
+							$.ajax({
+								type: 'GET',
+								url: "{{ route('trucking.index')}}/contracts/get_quotations/" + $('#consignee_id').val(),
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'consignee_id' : $('#consignee_id').val(),
+								},
+								success: function(new_data)
+								{
+									var table_detail = "";
+									var no_found = "<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>";
+									for(var i = 0; i < new_data.length; i++)
+									{
+										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].new_created_at+"</td><td><input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'></td><td><button class = 'btn btn-md btn-info view_quotation btn-md' value = '" + new_data[i].id +"'><span class = 'fa fa-eye'></span></button></td></tr>"
+									}
+									if(new_data.length > 0){
+										$('#quotation_table > tbody').html("");
+										$('#quotation_table > tbody').append(table_detail);
+										$('.quotation_status').each(function(i){
+											
+										})
+									}
+									else
+									{
+										$('#quotation_table > tbody').append(no_found);
+									}
+									
+									$('.new_quotation').removeAttr('disabled');
+
+								}
+
+							})
 						}
 					},
 					error: function(data) {
@@ -484,10 +580,20 @@
 				$('#_clastName').val("");
 				$('#_ccontactNumber').val("");
 				$('#_cemail').val("");
-				$('#_ccompanyName').val("");
+				$('#_ccompa	nyName').val("");
 				$('#_cbusinessStyle').val("");
 				$('#_cTIN').val("");
+				$('#quotation_table > tbody').html("");
+				$('.new_quotation').attr('disabled', 'true');
+				$('#quotation_table > tbody').html("<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>");
 			}
+		})
+
+		$(document).on('change', '.quotation_status', function(e){
+			var obj = $(this);
+			$('.quotation_status').not(obj).each(function(){
+				$(this).prop('checked', false);
+			})
 		})
 		
 

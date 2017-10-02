@@ -534,17 +534,7 @@
 <link href= "/js/select2/select2.css" rel = "stylesheet">
 @endpush
 
-@push('scripts')
-<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
-<style>
-	.brokerage
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
+
 
 @push('scripts')
 <script src="/js/bootstrap-toggle.min.js"></script>
@@ -559,19 +549,7 @@ var ipfFeeHeader = <?php echo json_encode($ipf_fee_header); ?>;
 var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 	$('#collapse1').addClass('in');
 
-	$('#exchangeRate_toggle').change(function() {
-			var sam = $(this).prop('checked');
-			if(String(sam) == "false")
-			{
-				$('#ExchangeRateModal').modal('show');
-			}
-
-			if(String(sam) == "true")
-			{
-				var currentExchange_id = <?php echo $currentExchange_id; ?>;
-				document.getElementById('exchangeRate').value =  '<?php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') ?>';
-			}
-	  })
+	
 
 		$('#cdsFee_toggle').change(function() {
 				var sam = $(this).prop('checked');
