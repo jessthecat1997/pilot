@@ -533,4 +533,50 @@ class BillingDetailsController extends Controller
 		$pdf = PDF::loadView('pdf_layouts.refundable_charges_pdf');
 		return $pdf->stream();
 	}
+	public function unpaid_invoice(Request $request,$id)
+	{
+		$total = DB::select('SELECT t.id, 
+			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
+			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
+			pay.totpay,
+			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay)) AS balance,
+			t.status,
+            dpay.totdpay
+
+			FROM billing_invoice_headers t LEFT JOIN 
+			(
+			SELECT bi_head_id, SUM(amount) total
+			FROM billing_invoice_details
+			GROUP BY bi_head_id
+			) p 
+			ON t.id = p.bi_head_id
+
+			LEFT JOIN
+
+			(
+			SELECT bi_head_id, SUM(amount) totpay
+			FROM payments
+			GROUP BY bi_head_id
+			) pay
+
+			ON t.id = pay.bi_head_id
+            
+            LEFT JOIN
+            (
+             SELECT bi_head_id, SUM(amount) totdpay
+             FROM deposit_payments
+             GROUP BY bi_head_id
+            ) dpay
+            
+            ON t.id = dpay.bi_head_id
+			WHERE t.status = "U" AND t.isVoid = 0 AND t.so_head_id = ?
+			', [$id]);
+
+		return Datatables::of($total)
+		->addColumn('action', function ($b) {
+			return
+			'<a href = "/payment/'. $b->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Make Payment</a>';
+		})
+		->make(true);
+	}
 }

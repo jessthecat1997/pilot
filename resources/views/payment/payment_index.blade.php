@@ -1,10 +1,14 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Payment</h2>
+<div class="pull-right">
+	<a href="/cheque" class="btn but">Unconfirm Cheques</a>
+</div>
+<br/>
 <hr>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-lg-8">
+		<div class="col-lg-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					Payment History
@@ -22,23 +26,32 @@
 								<th>
 									Payment Mode
 								</th>
+								<th>
+									Action
+								</th>
 							</tr>
 						</thead>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-4">
+		<div class="col-lg-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					Select Service Order
+					Select Billing Invoice
 				</div>
 				<div class="panel-body">
 					<table class = "table-responsive table" id = "so_table">
 						<thead>
 							<tr>
 								<th>
-									Consignee
+									Invoice Number
+								</th>
+								<th>
+									Amount
+								</th>
+								<th>
+									Balance
 								</th>
 								<th>
 									Actions
@@ -47,48 +60,6 @@
 						</thead>
 					</table>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-6">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					List of unconfirm cheques
-				</div>
-				<div class="panel-body">
-					<table class = "table-hover table" id = "chq_table">
-						<thead>
-							<tr>
-								<th>
-									Consignee
-								</th>
-								<th>
-									Bank
-								</th>
-								<th>
-									Actions
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="confirmModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Confirm Cheque Payment</h4>
-			</div>
-			<div class="modal-body">
-				<p>Verify cheque payment?</p>
-			</div>
-			<div class="modal-footer">
-				<button  class="btn but finalize-confirm">Confirm</button>
 			</div>
 		</div>
 	</div>
@@ -123,20 +94,9 @@
 			{ data: 'isCheque', "render" : function( data, type, full ) 
 			{
 				return formatStatus(data); 
-			}
-		},
-		]
-	})
-		var chtable = $('#chq_table').DataTable({
-			processing: false,
-			serverSide: false,
-			deferRender: true,
-			ajax: "{{ route('chq.data') }}",
-			columns: [
-			{ data: 'companyName' },
-			{ data: 'bankName' },
+			}},
 			{ data: 'action', orderable: false, searchable: false }
-			],
+			]
 		})
 		var sptable = $('#so_table').DataTable({
 			processing: false,
@@ -144,7 +104,9 @@
 			deferRender: true,
 			ajax: "{{ route('p_order.data') }}",
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'id' },
+			{ data: 'totall' },
+			{ data: 'balance' },
 			{ data: 'action', orderable: false, searchable: false }
 			],
 			columnDefs: [
@@ -162,21 +124,11 @@
 			}
 		}
 	})
-	$(document).on('click', '.chq_con', function(e){
-		vt_id = $(this).val();
-		console.log(vt_id);
-		$.ajax({
-			method: 'PUT',
-			url: "payment/"+vt_id+"/cheques",
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'id' : vt_id,
-				'isVerify' : 1,
-			},
-			success: function (data){
-				location.reload();
-			}
-		})
+	$(document).on('click', '.payment_receipt', function(e){
+		e.preventDefault();
+		type = $(this).closest('tr').find('.type').val();
+		console.log($(this).val());
+		window.open("{{ route('payment_receipt') }}/" + $(this).val());
 	})
 </script>
 @endpush
