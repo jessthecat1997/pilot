@@ -116,31 +116,33 @@
 						</div>
 						<br />
 						<div class="row">
-							<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
-								<thead>
-									<tr>
-										<th>
-											Quotation No.
-										</th>
-										<th>
-											Date Created
-										</th>
-										<th>
-											Status
-										</th>
-										<th>
-											Action
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td colspan="4" style="text-align: center;">
-											No records found.
-										</td>
-									</tr>
-								</tbody>
-							</table>
+							<div class="col-md-10 col-md-offset-1">
+								<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
+									<thead>
+										<tr>
+											<th>
+												Quotation No.
+											</th>
+											<th>
+												Date Created
+											</th>
+											<th>
+												Status
+											</th>
+											<th>
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="4" style="text-align: center;">
+												No records found.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -434,6 +436,7 @@
 </div> 
 @endsection
 @push('styles')
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 <style>
 .contracts
 {
@@ -446,6 +449,7 @@
 @endpush
 
 @push('scripts')
+<script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	var consigneeID = null;
@@ -458,6 +462,16 @@
 		$('#contract-row').remove();
 
 		$.fn.dataTable.ext.errMode = 'throw';
+
+		//Quotation
+		$(document).on('click', '.view_quotation', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val());
+		})
+		$(document).on('click', '.new_quotation', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('quotation.create') }}";
+		});
 
 		$("#commentForm").validate({
 			rules: 
@@ -531,11 +545,14 @@
 									var no_found = "<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>";
 									for(var i = 0; i < new_data.length; i++)
 									{
-										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].created_at+"</td><td>"+ new_data[i].status+"</td><td><button>Save</button></td></tr>"
+										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].new_created_at+"</td><td><input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'></td><td><button class = 'btn btn-md btn-info view_quotation btn-md' value = '" + new_data[i].id +"'><span class = 'fa fa-eye'></span></button></td></tr>"
 									}
 									if(new_data.length > 0){
 										$('#quotation_table > tbody').html("");
 										$('#quotation_table > tbody').append(table_detail);
+										$('.quotation_status').each(function(i){
+											
+										})
 									}
 									else
 									{
@@ -563,13 +580,20 @@
 				$('#_clastName').val("");
 				$('#_ccontactNumber').val("");
 				$('#_cemail').val("");
-				$('#_ccompanyName').val("");
+				$('#_ccompa	nyName').val("");
 				$('#_cbusinessStyle').val("");
 				$('#_cTIN').val("");
 				$('#quotation_table > tbody').html("");
 				$('.new_quotation').attr('disabled', 'true');
 				$('#quotation_table > tbody').html("<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>");
 			}
+		})
+
+		$(document).on('change', '.quotation_status', function(e){
+			var obj = $(this);
+			$('.quotation_status').not(obj).each(function(){
+				$(this).prop('checked', false);
+			})
 		})
 		
 

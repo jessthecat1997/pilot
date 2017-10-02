@@ -66,25 +66,14 @@ class ContractsController extends Controller
     public function get_quotations(Request $request)
     {
         $quotations = \DB::table('quotation_headers')
+        ->select(\DB::raw('DATE_FORMAT(created_at, "%M %d, %Y") as new_created_at'), 'quotation_headers.id')
         ->where('consignees_id', '=', $request->consignee_id)
+        ->orderBy('quotation_headers.id', 'DESC')
         ->get();
         return $quotations;
     }
     public function create_contract(Request $request){
-        $file = fopen('contract.txt', 'r');
-        $fileContent = fread($file, filesize('contract.txt'));
-        fclose($file);
-
-        $newContent = str_replace("!-_Date_-!", "Date: ", $fileContent);
-        $newContent = str_replace("!-_Consignee_-!", "Consignee: " .$request->consigneeName, $newContent);
-        $newContent = str_replace("!-_Date_Effective_-!", "Date Effective : " . $request->dateEffective, $newContent);
-        $newContent = str_replace("!-_Date_Expiration_-!", "Date Expiration : " . $request->dateExpiration, $newContent);
-        $newContent .= "\n From \t\t To \t\t Amount\n";
-        for($i = 0; $i < count($request->areas_from); $i++)
-        {
-            $newContent .= $request->from_id_descrp[$i] . "\t\t" . $request->to_id_descrp[$i] . "\t\t" . $request->amount[$i] . "\n";
-        }
-
+        
         $new_contract = new ContractHeader;
         $new_contract->dateEffective = date_create($request->dateEffective);
         $new_contract->dateExpiration = date_create($request->dateExpiration);

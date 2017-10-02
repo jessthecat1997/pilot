@@ -62,7 +62,9 @@
 								Active
 
 								@elseif(Carbon\Carbon::parse($con_head->dateEffective)->isPast())
-
+								Expire
+								@elseif(Carbon\Carbon::parse($con_head->dateEffective)->isFuture())
+								Inactive
 								@else
 								Expire
 								@endif

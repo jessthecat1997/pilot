@@ -31,22 +31,22 @@
 				<table class = "table-responsive table table-striped cell-border table-bordered" id = "v_table">
 					<thead>
 						<tr>
-							<td>
+							<td style="width: 15%;">
 								Vehicle
 							</td>
-							<td>
+							<td style="width: 15%;">
 								Plate Number
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Make
 							</td>
-							<td>
+							<td style="width: 15%;">
 								Body Type
 							</td>
-							<td>
-								LTO Date Registered
+							<td style="width: 15%;">
+								LTO Registered
 							</td>
-							<td>
+							<td style="width: 20%;">
 								Actions
 							</td>
 						</tr>

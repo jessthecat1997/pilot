@@ -187,26 +187,34 @@
 									</div>
 									<div class="col-md-4">
 										<div class="col-md-12">
-											<label class="control-label">Rate Information:</label>
-											<div class="row">
-												<label class="control-label col-md-5">Pickup Point:</label>
-												<span class="control-label col-md-7 selected_pickup">No selected.</span>
+											<div class="row" style="text-align: center;">
+												<label class="control-label">Rate Information:</label>
+											</div>
+											<div class="row">											
+												<label class="control-label">Pickup Point</label>
 											</div>
 											<div class="row">
-												<label class="control-label col-md-5">Delivery Point:</label>
-												<span class="control-label col-md-7 selected_delivery">No selected.</span>
+												<span class="control-label selected_pickup">No selected.</span>
 											</div>
+											<div class="row">
+
+												<label class="control-label">Delivery Point</label>
+											</div>
+											<div class="row">
+												<span class="control-label selected_delivery">No selected.</span>
+											</div>
+											<br />
 											<div class="row">
 												<label class="control-label">Standard Rate:</label>
 												<table class="table table-responsive table-bordered table-striped" id = "standard_rate_table" style="width: 100%;">
 													<thead>
 														<tr>
-															<th style="width: 40%;">
-																Date Effective
-															</th>
-															<th style="width: 60%; text-align: right;">
+															<td style="width: 40%;">
+																Date
+															</td>
+															<td style="width: 60%; text-align: right;">
 																Amount
-															</th>
+															</td>
 														</tr>
 													</thead>
 													<tbody>
@@ -244,7 +252,7 @@
 												</table>
 											</div>
 											<div class="row">
-												<label class="control-label">Estimated Delivery Fee:</label><span style="text-align: right;" class="pull-right">Php 0.00</span>
+												<label class="control-label">Estimated Delivery Fee:</label><span style="text-align: right;" class="pull-right estimate">Php 0.00</span>
 											</div>
 										</div>
 									</div>
@@ -924,6 +932,7 @@
 			})
 			if($(this).val() != "" && $(this).closest('tr').find('.area_to_valid').val() != "")
 			{
+				var obj = $(this).closest('tr').find('.amount_valid');
 				$.ajax({
 					type: 'GET',
 					url: "{{ route('get_quotation_rates') }}",
@@ -952,6 +961,7 @@
 						{
 							$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");	
 						}
+
 						//Delivery Rate
 						for(var i = 0; i < quot_rate[1].length; i++)
 						{
@@ -962,10 +972,23 @@
 
 							$('#delivery_rate_table > tbody').html("");
 							$('#delivery_rate_table > tbody').append(delivery_rate_rows);
+							$('.estimate').text("Php " +quot_rate[2].toFixed(2));
+							obj.val(quot_rate[2].toFixed(2));
 						}
 						else
 						{
 							$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+						if(quot_rate[1].length > 0 && quot_rate[0].length > 0){
+							obj.val(quot_rate[2].toFixed(2));
+						}
+						if(quot_rate[1].length == 0 && quot_rate[0].length > 0)
+						{
+							obj.val(parseFloat(quot_rate[0][0].amount).toFixed(2));
+						}
+						if(quot_rate[0].length ==0 && quot_rate[1].length == 0)
+						{
+							obj.val("0.00");
 						}
 					}
 				})
@@ -1033,6 +1056,7 @@
 
 			if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != "")
 			{
+				var obj = $(this).closest('tr').find('.amount_valid');
 				$.ajax({
 					type: 'GET',
 					url: "{{ route('get_quotation_rates') }}",
@@ -1068,13 +1092,26 @@
 						}
 						if(quot_rate[1].length > 0)
 						{
-
+							$('.estimate').text("Php " + quot_rate[2].toFixed(2));
 							$('#delivery_rate_table > tbody').html("");
 							$('#delivery_rate_table > tbody').append(delivery_rate_rows);
+							obj.val(quot_rate[2].toFixed(2));
+
 						}
 						else
 						{
 							$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");	
+						}
+						if(quot_rate[1].length > 0 && quot_rate[0].length > 0){
+							obj.val(quot_rate[2].toFixed(2));
+						}
+						if(quot_rate[1].length == 0 && quot_rate[0].length > 0)
+						{
+							obj.val(parseFloat(quot_rate[0][0].amount).toFixed(2));
+						}
+						if(quot_rate[0].length ==0 && quot_rate[1].length == 0)
+						{
+							obj.val("0.00");
 						}
 					}
 				})
