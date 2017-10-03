@@ -365,7 +365,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->select('payments.id','companyName', 'amount', 'isCheque')
-		->orderBy('companyName')
+		->orderBy('payments.id', 'DESC')
 		->get();
 		return Datatables::of($payment_hist)
 		->addColumn('action', function ($hist) {

@@ -14,7 +14,7 @@
 				List of unconfirm cheques
 			</div>
 			<div class="panel-body">
-				<table class = "table-hover table" id = "chq_table">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "chq_table">
 					<thead>
 						<tr>
 							<th>
@@ -25,6 +25,9 @@
 							</th>
 							<th>
 								Amount
+							</th>
+							<th>
+								Invoice No.
 							</th>
 							<th>
 								Action
@@ -82,6 +85,7 @@
 			{ data: 'companyName' },
 			{ data: 'bankName' },
 			{ data: 'amount'},
+			{ data: 'bi_head_id' },
 			{ data: 'action', orderable: false, searchable: false }
 			],
 		})

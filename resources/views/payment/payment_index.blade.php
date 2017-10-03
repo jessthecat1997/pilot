@@ -18,6 +18,9 @@
 						<thead>
 							<tr>
 								<th>
+									No.
+								</th>
+								<th>
 									Consignee
 								</th>
 								<th>
@@ -45,7 +48,7 @@
 						<thead>
 							<tr>
 								<th>
-									Invoice Number
+									Invoice No.
 								</th>
 								<th>
 									Amount
@@ -88,16 +91,22 @@
 			serverSide: false,
 			deferRender: true,
 			ajax: "{{ route('pso_head.data') }}",
+			
 			columns: [
+			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'amount' },
 			{ data: 'isCheque', "render" : function( data, type, full ) 
 			{
 				return formatStatus(data); 
 			}},
+
 			{ data: 'action', orderable: false, searchable: false }
-			]
-		})
+
+			],	"order": [[ 0, "desc" ]],
+
+			
+		});
 		var sptable = $('#so_table').DataTable({
 			processing: false,
 			serverSide: false,
@@ -108,7 +117,7 @@
 			{ data: 'totall' },
 			{ data: 'balance' },
 			{ data: 'action', orderable: false, searchable: false }
-			],
+			], "order": [[ 0, "desc" ]],
 			columnDefs: [
 
 			{"className": "dt-right", "targets": "1"}

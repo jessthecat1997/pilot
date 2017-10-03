@@ -115,7 +115,7 @@ class ChequesController extends Controller
 		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('cheques.id','companyName','bankName', 'amount')
+		->select('cheques.id','companyName','bankName', 'amount', 'cheques.bi_head_id')
 		->where('isVerify', '=', 0)
 		->where('billing_invoice_headers.status', '=', 'U')
 		->get();
