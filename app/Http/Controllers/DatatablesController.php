@@ -381,7 +381,7 @@ class DatatablesController extends Controller
 			pay.totpay,
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay)) AS balance,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 			FROM billing_invoice_headers t LEFT JOIN 
 			(
@@ -400,15 +400,15 @@ class DatatablesController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
+
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
 			WHERE t.status = "U" AND t.isVoid = 0
 			');
 
@@ -441,7 +441,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'E']
-			])
+		])
 		->get();
 		return Datatables::of($exp)
 		->make(true);
@@ -458,7 +458,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'R']
-			])
+		])
 		->get();
 		return Datatables::of($rev)
 		->make(true);
@@ -2788,14 +2788,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2818,14 +2818,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2907,6 +2907,21 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
+
+	public function order_datatable(){
+
+		$orders = DB::select("SELECT s.id as id, CONCAT( c.firstName, ' ', c.middleName, ' ', c.lastName ) AS consignee, c.companyName, s.created_at, CONCAT(employees.firstName, ' ', employees.lastName ) AS employee FROM consignee_service_order_headers s JOIN consignees c ON s.consignees_id = c.id JOIN employees ON s.employees_id = employees.id");
+		return Datatables::of($orders)
+		->addColumn('action', function ($order){
+			return
+			"<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>".
+			"<input type = 'hidden' value = '{{ ".$order->id." }}' class = 'order-id' />";
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+
+	}
+
 
 	public function get_dutiesandtaxes_table(Request $request){
 

@@ -17,25 +17,38 @@
 			<table class = "table table-responsive table-striped" id = "order_table">
 				<thead>
 					<tr>
-						<td style="width: 70%;">
-							Consignee
+						<td >
+							Consignee Company
+						</td>
+						<td >
+							Consignee Name
 						</td>
 						<td>
 							Created at
+						</td>
+						<td>
+							Processed By
 						</td>
 						<td>
 							Action
 						</td>
 					</tr>
 				</thead>
-				<tbody style="width: ">
+				<tbody>
 					@forelse($orders as $order)
 					<tr>
 						<td>
-							{{ $order->firstName }}
+							{{ $order->companyName }}
 						</td>
 						<td>
+							{{ $order->consignee }}
+						</td>
+						
+						<td>
 							{{ Carbon\Carbon::parse($order->created_at)->toFormattedDateString() }}
+						</td>
+						<td>
+							{{ $order->employee}}
 						</td>
 						<td>
 							<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>
@@ -154,11 +167,13 @@
 			serverSide: false,
 			deferRender: true,
 			columns: [
+			{ data: 'companyName' },
 			{ data: 'consignee' },
 			{ data: 'created_at'},
+			{ data: 'employee' },
 			{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
+			],	"order": [[ 2, "asc" ]],
 		});
 
 		$(document).on('click', '.view_order', function(e){
@@ -232,8 +247,10 @@
 
 					},
 					success: function(data){
+						
 						if(typeof(data) == "object"){
 							$('#ordModal').modal('hide');
+							ordertable.ajax.url( '{{ route("order.data") }}' ).load();
 							toastr.options = {
 								"closeButton": false,
 								"debug": false,
