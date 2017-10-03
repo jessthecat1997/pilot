@@ -16,7 +16,7 @@
 					@forelse($utility as $util)
 					<div class = "form-group required">
 						<label class = "control-label">Logo</label>
-						 <center><img class="img-responsive" id="logo" src="/{{$util->company_logo}}" " /></center>
+						 <center><img class="img-responsive img-circle" id="company_logo" src="/{{$util->company_logo}}" style = "width: 300px; height: 200px"/></center>
 						
 					</div>
 					<div class = "form-group required">
