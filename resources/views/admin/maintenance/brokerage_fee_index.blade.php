@@ -27,7 +27,6 @@
                             <td>
                                 Brokerage Fee Amount
                             </td>
-                            
                             <td>
                                 Actions
                             </td>
@@ -37,7 +36,7 @@
                         @forelse($bfs as $bf)
                         <tr>
                             <td>
-                               {{ Carbon\Carbon::parse($bf->dateEffective)->format("F d, Y") }}
+                                {{ Carbon\Carbon::parse($bf->dateEffective)->format("F d, Y") }}
                             </td>
                             <td>
                                 {{ $bf->minimum}}
@@ -49,8 +48,7 @@
                                 {{ $bf->amount}}
                             </td>
                             <td>
-                                <button value = "{{ $bf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-                                <button value = "{{ $bf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+                                <button value = "{{ $bf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $bf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
                             </td>
                         </tr>
                         @empty
@@ -62,7 +60,6 @@
     </div>
 </div>
 <section class="content">
-
     <form role="form" method = "POST" class="commentForm">
         <div class="modal fade" id="bfModal" role="dialog">
             <div class="form-group">
@@ -130,16 +127,14 @@
                                                 <td>
                                                     <div class = "form-group input-group">
                                                         <span class = "input-group-addon">$</span>
-                                                        <input type = "text" class = "form-control money bf_maximum_valid"  
-                                                        value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" />
+                                                        <input type = "text" class = "form-control money bf_maximum_valid" value ="0.00" name = "maximum" id = "maximum" />
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class = "form-group input-group " >
                                                         <span class = "input-group-addon">Php</span>
-                                                        <input type = "text" class = "form-control money amount_valid"  
-                                                        value ="0.00" name = "amount" id = "amount"  data-rule-required="true" />
+                                                        <input type = "text" class = "form-control money amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true" />
                                                     </div>
 
                                                 </td>
@@ -164,10 +159,8 @@
                     </div>
                 </div>
             </div>
-        </form>
-        <br />
-    </div>
-</div>
+        </div>
+    </form>
 </section>
 <section class="content">
     <form role = "form" method = "POST">
@@ -192,7 +185,6 @@
         </div>
     </form>
 </section>
-</div>
 
 @endsection
 @push('styles')
@@ -237,6 +229,17 @@
     $(document).ready(function(){
         var bf_row = "<tr>" + $('#bf-row').html() + "</tr>";
 
+        $('.money').each(function(){
+            $(this).inputmask("numeric", {
+                radixPoint: ".",
+                groupSeparator: ",",
+                digits: 2,
+                autoGroup: true,
+                rightAlign: true,
+                removeMaskOnSubmit:true,
+            })
+
+        })
         
         //$(minimum).attr("disabled", true);
 
@@ -290,11 +293,22 @@
 
             $('#dateEffective').val(today);
 
-            $("bf_parent_table > tbody").html("");
+            $("#bf_parent_table > tbody").html("");
             $('#bf_parent_table > tbody').html(bf_row);
             $('#minimum').val("0.00");
             $('#maximum').val("0.00");
             $('#amount').val("0.00");
+            $('.money').each(function(){
+                $(this).inputmask("numeric", {
+                    radixPoint: ".",
+                    groupSeparator: ",",
+                    digits: 2,
+                    autoGroup: true,
+                    rightAlign: true,
+                    removeMaskOnSubmit:true,
+                })
+
+            })
             $('#bfModal').modal('show');
         });
 
@@ -318,10 +332,22 @@
                 {
                     var rows = "";
                     for(var i = 0; i < data.length; i++){
-                        rows += '<tr id = "bf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control bf_minimum_valid" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control  bf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-bf-row">x</button></td></tr>';
+                        rows += '<tr id = "bf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control bf_minimum_valid money" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control money bf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid money" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-bf-row">x</button></td></tr>';
                     }
                     $('#bf_parent_table > tbody').html("");
                     $('#bf_parent_table > tbody').append(rows);
+
+                    $('.money').each(function(){
+                        $(this).inputmask("numeric", {
+                            radixPoint: ".",
+                            groupSeparator: ",",
+                            digits: 2,
+                            autoGroup: true,
+                            rightAlign: true,
+                            removeMaskOnSubmit:true,
+                        })
+
+                    })
                     
                 }
 
@@ -339,11 +365,20 @@
             e.preventDefault();
             $('#bf_warning').removeClass('in');
             if($('#bf_parent_table > tbody > tr').length == 1){
-                $(this).closest('tr').remove();
                 $('#bf_table_warning').addClass('fade in');
+
+                var obj = $(this).closest('tr');
+                $(obj).nextAll().each(function(){
+                    $(this).remove();
+                })
+                obj.remove();
             }
             else{
-                $(this).closest('tr').remove();
+                var obj = $(this).closest('tr');
+                $(obj).nextAll('tr').each(function(){
+                    $(this).remove();
+                })
+                obj.remove();
             }
         })
 
@@ -353,10 +388,23 @@
             if(validatebfRows() === true){
 
                 $('#bf_parent_table').append(bf_row);
+                $('.money').each(function(){
+                    $(this).inputmask("numeric", {
+                        radixPoint: ".",
+                        groupSeparator: ",",
+                        digits: 2,
+                        autoGroup: true,
+                        rightAlign: true,
+                        removeMaskOnSubmit:true,
+                    })
 
+                })
+                $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
+                $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
                 for(var i = 0; i < minimum.length; i++){
-                    minimum[i+1].value = parseFloat(maximum[i].value) + 0.01;
+                    minimum[i+1].value = (parseFloat("" +$(maximum[i]).inputmask('unmaskedvalue')) + 0.01).toFixed(2);
                 }
+
             }
 
         })
@@ -614,8 +662,8 @@ function validatebfRows()
         else
         {
             maximum[i].style.borderColor = 'green';
-            maximum_id_descrp.push(maximum[i].value);
-            maximum_id.push(maximum[i].value);
+            maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
+            maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
             $('#bf_warning').removeClass('in');
         }
 
@@ -633,18 +681,18 @@ function validatebfRows()
             }
             else{
                 amount[i].style.borderColor = 'green';
-                amount_value.push(amount[i].value);
+                amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
                 $('#bf_warning').removeClass('in');
             }
         }
 
-        if(minimum[i].value === maximum[i].value){
+        if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
 
             maximum[i].style.borderColor = 'red';
             error += "Same.";
         }
 
-        if(minimum[i].value>maximum[i].value){
+        if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
 
             maximum[i].style.borderColor = 'red';
             error += "Minimum is greater than maximum";
@@ -652,9 +700,11 @@ function validatebfRows()
         }   
 
         pair = {
-            minimum: minimum[i].value,
-            maximum : maximum[i].value
+            minimum: $(minimum[i]).inputmask('unmaskedvalue'),
+            maximum : $(maximum[i]).inputmask('unmaskedvalue')
         };
+        console.log($(minimum[i]).inputmask('unmaskedvalue'));
+        console.log($(maximum[i]).inputmask('unmaskedvalue'));
         range_pairs.push(pair);
     }
     var i, j, n;
@@ -685,6 +735,7 @@ function validatebfRows()
 
         else
         {
+            console.log(error);
             return false;
         }
 
@@ -727,9 +778,9 @@ function validatebfRows()
             else
             {
 
-                minimum_id_descrp.push(minimum[i].value);
-                var min = minimum[i].value
-                minimum_id.push(minimum[i].value);
+                minimum_id_descrp.push($(minimum[i]).inputmask('unmaskedvalue'));
+                var min = $(minimum[i]).inputmask('unmaskedvalue');
+                minimum_id.push($(minimum[i]).inputmask('unmaskedvalue') );
             }
             if(maximum[i].value === ""||maximum[i].value === "0.00"||maximum[i].value === "0")
             {
@@ -741,8 +792,8 @@ function validatebfRows()
             else
             {
                 maximum[i].style.borderColor = 'green';
-                maximum_id_descrp.push(maximum[i].value);
-                maximum_id.push(maximum[i].value);
+                maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
+                maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
                 $('#bf_warning').removeClass('in');
             }
 
@@ -755,33 +806,33 @@ function validatebfRows()
 
             else
             {
-                if(amount[i].value < 0){
+                if($(amount[i]).inputmask('unmaskedvalue') < 0){
                     amount[i].style.borderColor = 'red';
                     error += "Amount Required.";
                 }
                 else{
                     amount[i].style.borderColor = 'green';
-                    amount_value.push(amount[i].value);
+                    amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
                     $('#bf_warning').removeClass('in');
                 }
             }
 
-            if(minimum[i].value === maximum[i].value){
+            if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
 
                 maximum[i].style.borderColor = 'red';
                 error += "Same.";
                 $('#bf_warning').addClass('in');
             }
 
-            if(minimum[i].value>maximum[i].value){
+            if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
 
                 maximum[i].style.borderColor = 'red';
                 error += "Minimum is greater than maximum";
                 $('#bf_warning').addClass('in');
             }   
             pair = {
-                minimum: minimum[i].value,
-                maximum: maximum[i].value
+                minimum: $(minimum[i]).inputmask('unmaskedvalue'),
+                maximum:$(maximum[i]).inputmask('unmaskedvalue')
             };
             range_pairs.push(pair);
         }
