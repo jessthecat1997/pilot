@@ -24,6 +24,10 @@ class UtilitiesBrokerageController extends Controller
 		$utility->other_charges = $request->other_charges;
 		$utility->insurance_gc = $request->insurance_gc;
 		$utility->insurance_c = $request->insurance_c;
+		$utility->company_name = $request->company_name;
+		$utility->company_address = $request->company_address;
+		$utility->company_tin = $request->company_tin;
+		$utility->company_contact = $request->company_contact;
 		$utility->save();
 
 		return $utility;
