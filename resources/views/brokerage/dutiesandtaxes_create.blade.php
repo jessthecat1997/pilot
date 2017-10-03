@@ -196,7 +196,7 @@
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
-		
+
 		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
 		    </form>
 		</div>
@@ -390,6 +390,7 @@
 			x.innerHTML = localStorage.getItem("wharfage");
 
 
+			alert(localStorage.getItem("BankCharges"));
 			if(localStorage.getItem("BankCharges") == "" || localStorage.getItem("BankCharges") == null)
 			{
 				localStorage.setItem("BankCharges", "0.00");

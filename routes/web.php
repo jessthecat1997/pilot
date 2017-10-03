@@ -37,6 +37,7 @@ Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('b
 Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
 Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
 Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
+
 Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');

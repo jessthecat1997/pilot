@@ -23,78 +23,295 @@
 
 
   <div class = "tab-content">
-            <div id = "dutiesandtaxes_details" class="tab-pane fade in active">
+
+          <div id = "dutiesandtaxes_details" class="tab-pane fade in active">
               <div class = "col-md-12">
+                <div class = "col-md-12">
+                  <div class = "col-md-6">
                 <div class = "form-horizontal">
-              <div class="form-group">
-                  <label class="col-md-2 control-label">Exhange Rate*</label>
-                    <div class="col-md-5">
-                        <div class="input-group input-group-lg">
+                  <form data-toggle = "validator">
 
-                          <input  type="text" class="form-control" name = "exchangeRate" id = "exchangeRate" readonly = "true" value = '@php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') @endphp' style="text-align: right;">
-                          <span class="input-group-addon">
-                          <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "exchangeRate_toggle" style="text-align: right;">
-                          </span>
+                  <div class="form-group">
+                    <div class = "col-md-12">
+                      <label class="col-md-4 control-label">Exhange Rate*</label>
+                        <div class="col-md-8">
+                            <div class="input-group input-group-lg">
+
+                              <input  type="text" class="form-control" name = "exchangeRate" id = "exchangeRate" readonly = "true" value = '@php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') @endphp' style="text-align: right;">
+                              <span class="input-group-addon">
+                              <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "exchangeRate_toggle" style="text-align: right;">
+                              </span>
+                            </div>
+                         </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group" id = "validateArrastre">
+                        <div class = "col-md-12">
+                          <label class="col-md-4 control-label">Arrastre*</label>
+                            <div class="col-md-8">
+                                <div class="input-group input-group-lg ">
+                                  <span class="input-group-addon" id="cdsfeeadd">Php</span>
+                                    <input  type="text" class=" form-control" name = "arrastre" id = "arrastre" readonly = "true" style="text-align: right;" required >
+                                    <span class="input-group-addon">
+                                      <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "arrastre_toggle" style="text-align: right;">
+                                    </span>
+                                </div>
+                          </div>
                         </div>
-                  </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class = "col-md-12">
+                          <label class="col-md-4 control-label">Wharfage*</label>
+                            <div class="col-md-8">
+                              <div class="input-group input-group-lg">
+                                <span class="input-group-addon" id="cdsfeeadd">Php</span>
+                                  <input  type="text" class="form-control" name = "wharfage" id = "wharfage" readonly = "true" style="text-align: right;" required>
+                                  <span class="input-group-addon">
+                                    <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "wharfage_toggle" style="text-align: right;">
+                                  </span>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class = "col-md-12">
+                         <label class="col-md-4 control-label">CDS Fee*</label>
+                          <div class = "col-md-8">
+                          <div class="input-group  input-group-lg">
+                            <span class="input-group-addon" id="cdsfeeadd">Php</span>
+                            <input  type="text" class="form-control" name = "CDSFee" id = "CDSFee" readonly = "true" value = "@php echo number_format((float)$cds_fee[$currentCds_id-1]->fee, 2, '.', '') @endphp" style="text-align: right;">
+                            <span class="input-group-addon">
+                              <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "cdsFee_toggle">
+                            </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class = "col-md-12">
+                          <label class="col-md-4 control-label ">IPF Fee*</label>
+                            <div class = "col-md-8">
+                              <div class="input-group  input-group-lg">
+                                @if($currentIpf_id != 0)
+                                <input type="checkbox" checked data-toggle="toggle" data-size="normal" data-on="Current" data-off="Custom" data-onstyle="success"  id = "ipfFee_toggle" style="text-align: right;">
+                                @else
+                                <div > No Ipf Fee's found </div>
+                                @endif
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <input  type="hidden" class=" form-control" name = "wharfage" id = "bankCharges" style="text-align: right;">
+
+                  </form>
+                </div>
               </div>
+              <div class = "col-md-6">
+                <div class="tab-pane">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      Cargo Information
+                    </div>
+                    <div class="panel-body">
+                      <div class = "col-md-12">
+                        @if($withContainer == true)
+                        <table id = "container_table" class = "table table-responsive" style="width: 100%;">
+                          <thead>
+                            <tr>
+                              <td style="width: 5%;">
+
+                              </td>
+                              <td style="width: 25%;">
+                                Container Number
+                              </td>
+                              <td style="width: 20%;">
+                                Volume
+                              </td>
+
+                              <td style="width: 20%;">
+                                Container Return Date
+                              </td>
+                              <td style="width: 20%;">
+                                Action
+                              </td>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @php
+                            $num = 1
+                            @endphp
+
+                            @forelse($brokerage_containers as $delivery_container)
+                            <tr>
+                              <td>
+                                {{ $num++ }}
+                                <input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
+                                <input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
+                                <input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
+                                <input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
+                                <input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
+                                <input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
+                                <input type = "hidden" class = "dateReturned"
+                                value = "@if($delivery_container->dateReturned == null)
+                                @else
+                                {{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
+                                @endif"
+                                />
+                                <input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
+                              </td>
+                              <td>
+                                <span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
+                              </td>
+                              <td>
+                                <span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
+                              </td>
+
+                              <td>
+                                <span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
+                              </td>
+                              @if($delivery_container->dateReturned != null)
+                              <td>
+                                <span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}</span>
+                              </td>
+                              @else
+                              <td>
+                                <button class = "btn btn-info" value = "{{$delivery_container->id}}" onclick = "viewContainerDetails({{$delivery_container->id}})">Select</button>
+                              </td>
+                              @endif
+
+                            </tr>
+                            @empty
+                            <tr>
+                              <td colspan="4">
+                                <h5>No records found.</h5>
+                              </td>
+                            </tr>
+                            @endforelse
+                          </tbody>
+                        </table>
+
+                        <div class = "collapse" id = "container_details_panel" >
+
+                            <table class = "table table-responsive" id = "container_details_table" style="width: 100%;">
+                              <thead>
+                                <tr>
+                                  <td>
+                                    Description of Goods
+                                  </td>
+                                  <td>
+                                    Gross Weight(kg)
+                                  </td>
+                                  <td>
+                                    Supplier/s
+                                  </td>
+                                  <td>
+                                    Actions
+                                  </td>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @forelse($container_with_detail as $container)
+                                    @forelse($container['details'] as $detail)
+                                    <tr>
+                                      <td>
+
+                                      </td>
+                                      <td>
+
+                                      </td>
+                                      <td>
+
+                                      </td>
+                                      <td>
+
+                                      </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                      <td colspan="4">
+                                        <h5 style="text-align: center;">No records found.</h5>
+                                      </td>
+                                    </tr>
+                                    @endforelse
+                                @empty
+                                @endforelse
+                              </tbody>
+                            </table>
 
 
-              <div class="form-group">
-                <label class="col-md-2 control-label">CDS Fee*</label>
-                <div class = "col-md-5">
-                <div class="input-group  input-group-lg">
-                  <input  type="text" class="form-control" name = "CDSFee" id = "CDSFee" readonly = "true" value = "@php echo number_format((float)$cds_fee[$currentCds_id-1]->fee, 2, '.', '') @endphp" style="text-align: right;">
-                  <span class="input-group-addon">
-                    <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "cdsFee_toggle">
-                  </span>
+                        </div>
+                        @endif
+
+                        @if($withContainer == false)
+                        <table id = "detail_table" class = "table table-responsive">
+                          <thead>
+                            <tr>
+
+                              <td>
+                                Description Of Good
+                              </td>
+                              <td>
+                                LCL Type
+                              </td>
+                              <td>
+                                Gross Weight(kg)
+                              </td>
+                              <td>
+                                Supplier/s
+                              </td>
+                              <td>
+                                Action
+                              </td>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @php
+                            $num = 1;
+                            @endphp
+                            @forelse($brokerage_details as $delivery_detail)
+                            <tr>
+
+                              <td>
+                                {{ $delivery_detail->descriptionOfGoods }}
+                              </td>
+                              <td>
+                                {{ $delivery_detail->lcl_type }}
+                              </td>
+                              <td>
+                                {{ $delivery_detail->grossWeight }}
+                              </td>
+                              <td>
+                                {{ $delivery_detail->supplier }}
+                              </td>
+                              <td>
+                                <button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>
+                              </td>
+                            </tr>
+                            @empty
+                            <tr>
+                              <td colspan="4">
+                                <h5>No records found.</h5>
+                              </td>
+                            </tr>
+                            @endforelse
+                          </tbody>
+                        </table>
+                        @endif
+
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div class="form-group">
-                  <label class="col-md-2 control-label ">IPF Fee*</label>
-                <div class = "col-md-5">
-                <div class="input-group  input-group-lg">
-                    @if($currentIpf_id != 0)
-                    <input type="checkbox" checked data-toggle="toggle" data-size="normal" data-on="Current" data-off="Custom" data-onstyle="success"  id = "ipfFee_toggle" style="text-align: right;">
-                    @else
-                    <div > No Ipf Fee's found </div>
-                    @endif
-                  </div>
-                  </div>
-              </div>
-              <form data-toggle = "validator">
-              <div class="form-group" id = "validateArrastre">
-                  <label class="col-md-2 control-label">Arrastre*</label>
-                    <div class="col-md-5">
-                        <div class="input-group ">
-                          <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                            <input  type="number" class=" form-control" name = "arrastre" id = "arrastre" style="text-align: right;" required >
-                        </div>
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  <label class="col-md-2 control-label">Wharfage*</label>
-                    <div class="col-md-5">
-                      <div class="input-group">
-                        <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                          <input  type="number" class="form-control" name = "wharfage" id = "wharfage" style="text-align: right;" required>
-                      </div>
-                  </div>
-              </div>
-
-              <div class="form-group">
-                  <label class="col-md-2 control-label">Bank Charges</label>
-                    <div class="col-md-5">
-                      <div class="input-group">
-                        <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                          <input  type="number" class=" form-control" name = "wharfage" id = "bankCharges" style="text-align: right;">
-                      </div>
-                  </div>
-              </div>
-            </form>
+            </div>
+              <br/>
               <div class="form-group">
                 <div class = "panel panel-default table-responsive">
                   <table id = "itemTable" class = "table table-hover table-responsive">
@@ -118,12 +335,9 @@
                 </button >
               </div>
             </div>
-          </div>
-        </div>
-        </div>
-              <hr>
+      </div>
+</div>
 
-          </div>
             <hr>
           <div class="form-group">
 
@@ -135,9 +349,7 @@
              <p class = "col-md-12">Note: All fields with the '*' are required</p>
            </div>
 
-         </div>
-       </div>
-</div>
+
 
 <!-- New Consignee Modal -->
 <div class="modal fade" id="ConsigneeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -557,6 +769,9 @@ var cdsFee = <?php echo json_encode($cds_fee); ?>;
 var currentIpf_id = <?php echo $currentIpf_id; ?>;
 var ipfFeeHeader = <?php echo json_encode($ipf_fee_header); ?>;
 var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
+var selectedContainerId = "";
+var temp_arrastre, temp_wharfage;
+
 	$('#collapse1').addClass('in');
 
 	$('#exchangeRate_toggle').change(function() {
@@ -572,6 +787,67 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 				document.getElementById('exchangeRate').value =  '<?php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') ?>';
 			}
 	  })
+
+    $('#arrastre_toggle').change(function() {
+  			var sam = $(this).prop('checked');
+
+
+  			if(String(sam) == "false")
+  			{
+               temp_arrastre =  document.getElementById('arrastre').value;
+  			       document.getElementById('arrastre').value = "";
+               $('#arrastre').removeAttr('readonly');
+  			}
+
+
+  			if(String(sam) == "true")
+  			{
+          $('#arrastre').attr('readonly', 'true');
+
+          @if($withContainer == true)
+            if(selectedContainerId == "")
+            {
+              document.getElementById('arrastre').value = "";
+            }
+            if(selectedContainerId != "")
+            {
+              document.getElementById('arrastre').value = temp_arrastre;
+            }
+          @endif
+          @if($withContainer == false)
+              document.getElementById('arrastre').value = temp_arrastre;
+          @endif
+        }
+  	  })
+
+      $('#wharfage_toggle').change(function() {
+          var sam = $(this).prop('checked');
+          if(String(sam) == "false")
+          {
+                 temp_wharfage = document.getElementById('wharfage').value;
+                 document.getElementById('wharfage').value = "";
+                 $('#wharfage').removeAttr('readonly');
+          }
+
+          if(String(sam) == "true")
+          {
+             $('#wharfage').attr('readonly', 'true');
+             @if($withContainer == true)
+             if(selectedContainerId == "")
+             {
+               document.getElementById('wharfage').value = "";
+             }
+             if(selectedContainerId != "")
+             {
+               document.getElementById('wharfage').value = temp_wharfage;
+             }
+            @endif
+            @if($withContainer == false)
+                document.getElementById('wharfage').value = temp_wharfage;
+            @endif
+          }
+        })
+
 
 		$('#cdsFee_toggle').change(function() {
 				var sam = $(this).prop('checked');
@@ -745,7 +1021,7 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
       cell4.contentEditable = true;
       cell5.innerHTML = document.getElementById('Insurance').value;
       cell5.contentEditable = true;
-      cell6.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'clicked(this)' >Delete</button>";
+      cell6.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
 
       $('#ItemModal').modal('hide');
     }
@@ -757,7 +1033,7 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 
 	$('#generateDAT').on('click', function(e){
 
-
+    alert(localStorage.getItem("BankCharges"));
     if(Validations() == true)
     {
 
@@ -786,7 +1062,7 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
     localStorage.setItem("freightNumber", '<?php echo $brokerage_header[0]->freightBillNo?>');
     localStorage.setItem("arrivalDate",  <?php echo $brokerage_header[0]->expectedArrivalDate?>);
     localStorage.setItem("weight", <?php echo $brokerage_header[0]->Weight?>);
-    localStorage.setItem("port",  '<?php echo $brokerage_header[0]->name?>');
+    localStorage.setItem("port",  '<?php echo $brokerage_header[0]->location?>');
     localStorage.setItem("companyName",  '<?php echo $brokerage_header[0]->companyName?>');
     localStorage.setItem("freightType",  '<?php echo $brokerage_header[0]->freightType?>');
     localStorage.setItem("bankCharges", document.getElementById('bankCharges').value);
@@ -1012,6 +1288,269 @@ function decimalsOnly(event) {
     $('#insuranceError').removeClass('in');
     $('#freightError').removeClass('in');
 
+  }
+
+  function RemoveRow(row)
+  {
+    $(row).closest("tr").remove();
+  }
+
+  function viewContainerDetails(id)
+  {
+    var table = document.getElementById('container_table');
+    var containers = [];
+    var container_details = [];
+    var containerized_arrastre = [];
+    var containerized_wharfage = [];
+    var ctr = 1;
+
+
+    @if($withContainer == true)
+        @forelse($brokerage_containers as $delivery_container)
+            containers[0] = '{{ $delivery_container->id }}'
+            containers[1] = '{{ $delivery_container->containerNumber }}';
+            containers[2] = '{{ $delivery_container->containerVolume }}';
+            containers[3] = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
+
+            if(containers[0] == id)
+            {
+              var tableRows = table.getElementsByTagName('tr');
+              var rowCount = tableRows.length;
+
+              for (var x=rowCount-1; x>0; x--) {
+                table.deleteRow(x);
+              }
+
+              var row = table.insertRow();
+              var cell0 = row.insertCell(0);
+              var cell1 = row.insertCell(1);
+              var cell2 = row.insertCell(2);
+              var cell3 = row.insertCell(3);
+              var cell4 = row.insertCell(4);
+
+              cell0.innerHTML = '';
+              cell1.innerHTML = '{{ $delivery_container->containerNumber }}';
+              cell2.innerHTML = '{{ $delivery_container->containerVolume }}';
+              cell3.innerHTML = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
+              cell4.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'resetContainerTable()'>Deselect</button>";
+
+              selectedContainerId = '{{ $delivery_container->id }}';
+              alert(selectedContainerId);
+             @forelse($containerized_arrastre_header as $cont_arrastre_head)
+
+                @forelse($containerized_arrastre_detail as $cont_arrastre_det)
+
+                  containerized_arrastre[0] = '{{$cont_arrastre_det->containerVolume}}';
+                  containerized_arrastre[1] = '{{$cont_arrastre_det->amount}}';
+
+                  if(containerized_arrastre[0] == containers[2])
+                  {
+                    document.getElementById('arrastre').value = '{{$cont_arrastre_det->amount}}';
+
+                  }
+                @empty
+                @endforelse
+
+              @empty
+              @endforelse
+
+              @forelse($containerized_wharfage_header as $cont_wharfage_head)
+
+                @forelse($containerized_wharfage_detail as $cont_wharfage_det)
+
+                  containerized_wharfage[0] = '{{$cont_wharfage_det->containerVolume}}';
+                  containerized_wharfage[1] = '{{$cont_wharfage_det->amount}}';
+
+                  if(containerized_wharfage[0] == containers[2])
+                  {
+                    document.getElementById('wharfage').value =  '{{$cont_wharfage_det->amount}}' ;
+
+                  }
+                @empty
+                @endforelse
+
+              @empty
+              @endforelse
+
+              @forelse($container_with_detail as $container)
+                var table1 = document.getElementById('container_details_table');
+
+                    @forelse($container['details'] as $detail)
+                      container_details[0] = '{{ $container['container']->containerNumber }}'
+                      container_details[1] = '{{ $detail->descriptionOfGoods }}';
+                      container_details[2] = '{{ $detail->grossWeight }}';
+                      container_details[3] = '{{ $detail->supplier }}';
+
+                      if(container_details[0] == containers[1])
+                      {
+                        var tableRows = table1.getElementsByTagName('tr');
+                        var rowCount = tableRows.length;
+
+                        for (var x=rowCount-1; x>0; x--) {
+                          table1.deleteRow(x);
+                        }
+
+                        var row = table1.insertRow();
+                        var cell0 = row.insertCell(0);
+                        var cell1 = row.insertCell(1);
+                        var cell2 = row.insertCell(2);
+                        var cell3 = row.insertCell(3);
+
+                        cell0.innerHTML = '{{ $detail->descriptionOfGoods }}';
+                        cell1.innerHTML = '{{ $detail->grossWeight }}';
+                        cell2.innerHTML = '{{ $detail->supplier }}';
+                        cell3.innerHTML = "<button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>";
+                      }
+                    @empty
+                    @endforelse
+
+              @empty
+              @endforelse
+            }
+        @empty
+
+        @endforelse
+    @endif
+    $('#container_details_panel').addClass('in');
+
+  }
+
+  function resetContainerTable()
+  {
+    var table = document.getElementById('container_table');
+    var num = 1;
+    var tableRows = table.getElementsByTagName('tr');
+    var rowCount = tableRows.length;
+
+    for (var x=rowCount-1; x>0; x--) {
+      table.deleteRow(x);
+    }
+    @if($withContainer == true)
+        @forelse($brokerage_containers as $delivery_container)
+
+              var row = table.insertRow();
+
+              var cell0 = row.insertCell(0);
+              var cell1 = row.insertCell(1);
+              var cell2 = row.insertCell(2);
+              var cell3 = row.insertCell(3);
+              var cell4 = row.insertCell(4);
+
+              cell0.innerHTML = num;
+              cell1.innerHTML = '{{ $delivery_container->containerNumber }}';
+              cell2.innerHTML = '{{ $delivery_container->containerVolume }}';
+              cell3.innerHTML = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
+              cell4.innerHTML = "<button class = 'btn btn-info btn-md' onclick = 'viewContainerDetails({{$delivery_container->id}})' >Select</button>";
+              num++;
+        @empty
+
+        @endforelse
+    @endif
+    selectedContainerId = '';
+    alert(selectedContainerId);
+    document.getElementById('arrastre').value = "";
+    document.getElementById('wharfage').value = "";
+    $('#container_details_panel').removeClass('in');
+  }
+
+  function addContainerItem()
+  {
+      $('#ItemModal').modal('show');
+  }
+
+
+  function resetContainerDetails()
+  {
+
+  }
+
+  function setArrastreWharfage()
+  {
+    @if($withContainer == true)
+
+     @if($delivery_container->containerVolume == 20)
+      document.getElementById('arrastre').value = "3727.00";
+      document.getElementById('wharfage').value =  "519.00";
+     @endif
+     @if($delivery_container->containerVolume == 40)
+      document.getElementById('arrastre').value = "8551.00";
+      document.getElementById('wharfage').value =  "779.00";
+     @endif
+     @if($delivery_container->containerVolume == 45)
+      document.getElementById('arrastre').value = "3727.00";
+      document.getElementById('wharfage').value =  "916.00";
+     @endif
+    @endif
+    @if($withContainer == false)
+
+    document.getElementById('arrastre').value = "149.00";
+
+    document.getElementById('wharfage').value =  "519.00";
+    @endif
+  }
+
+
+  window.onload = function(){
+    @if($withContainer == false)
+
+
+      var arrastre_total = 0.00;
+      var wharfage_total = 0.00;
+
+      @forelse($lcl_arrastre_header as $lcl_arrastre_hed)
+
+        @forelse($lcl_arrastre_detail as $lcl_arrastre_det)
+
+          @if($brokerage_header[0]->basis == $lcl_arrastre_det->basis_name)
+
+            @forelse($brokerage_details as $brokerage_detail)
+              @if($lcl_arrastre_det->lcl_type == $brokerage_detail->lcl_type)
+
+                arrastre_total += parseFloat({{$lcl_arrastre_det->amount}});
+
+              @else
+              @endif
+            @empty
+            @endforelse
+          @else
+
+          @endif
+      @empty
+      @endforelse
+
+
+      @empty
+      @endforelse
+
+      document.getElementById('arrastre').value = arrastre_total.toFixed(2);
+
+      @forelse($lcl_wharfage_header as $lcl_wharfage_hed)
+
+        @forelse($lcl_wharfage_detail as $lcl_wharfage_det)
+
+
+            @if($brokerage_header[0]->basis == $lcl_wharfage_det->basis_name)
+                wharfage_total += parseFloat({{$lcl_wharfage_det->amount}});
+            @else
+
+          @endif
+      @empty
+      @endforelse
+
+
+      @empty
+      @endforelse
+
+      document.getElementById('wharfage').value = wharfage_total.toFixed(2);
+
+    @endif
+
+    @if($brokerage_header[0]->withCO == 1)
+      document.getElementById('bankCharges').value =  "519.00";
+    @endif
+    @if($brokerage_header[0]->withCO == 0)
+      document.getElementById('bankCharges').value =  "0.00";
+    @endif
   }
 </script>
 @endpush
