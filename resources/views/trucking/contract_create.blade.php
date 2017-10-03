@@ -545,7 +545,7 @@
 									var no_found = "<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>";
 									for(var i = 0; i < new_data.length; i++)
 									{
-										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].new_created_at+"</td><td><input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'></td><td><button class = 'btn btn-md btn-info view_quotation btn-md' value = '" + new_data[i].id +"'><span class = 'fa fa-eye'></span></button></td></tr>"
+										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].new_created_at+"</td><td><input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'></td><td><button class = 'btn btn-md btn-info view_quotation btn-md' value = '" + new_data[i].id +"'><span class = 'fa fa-eye'></span></button></td></tr>";
 									}
 									if(new_data.length > 0){
 										$('#quotation_table > tbody').html("");

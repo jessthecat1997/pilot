@@ -30,12 +30,23 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'), 'quot_head_id')
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
+            if($contract[0]->quot_head_id != null)
+            {
+                $quotation = DB::table('quotation_headers')
+                ->select('quotation_headers.id', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+                ->join('consignees AS B', 'consignees_id', '=', 'B.id')
+                ->where('quotation_headers.id', '=', $contract[0]->quot_head_id)
+                ->get();
+
+
+                $quotation_details = DB::select('SELECT h.id, r.id, GROUP_CONCAT(t.name ORDER BY r.id) AS sizes, r.amount, lfrom.name as _from, lto.name as _to FROM quotation_headers h INNER JOIN quotation_details r ON h.id = r.quot_header_id INNER JOIN locations lfrom ON r.locations_id_from = lfrom.id JOIN locations lto ON r.locations_id_to = lto.id  LEFT JOIN container_types t ON t.id = r.container_volume WHERE h.id = ? GROUP BY lfrom.id, lto.id ', [$contract[0]->quot_head_id]);
+            }
             
-            return view('/trucking.contract_view', compact(['contract']));
+            return view('/trucking.contract_view', compact(['contract', 'quotation', 'quotation_details']));
 
         }
         catch(Exception $e){
@@ -73,7 +84,7 @@ class ContractsController extends Controller
         return $quotations;
     }
     public function create_contract(Request $request){
-        
+
         $new_contract = new ContractHeader;
         $new_contract->dateEffective = date_create($request->dateEffective);
         $new_contract->dateExpiration = date_create($request->dateExpiration);
@@ -128,16 +139,13 @@ class ContractsController extends Controller
 
     public function draft_contract(Request $request)
     {
-
         try
         {
-
-
             $consignees = \App\Consignee::all();
             $provinces = \App\LocationProvince::all();
 
             $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails','isFinalize', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails','isFinalize', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'), 'quot_head_id')
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
@@ -145,8 +153,11 @@ class ContractsController extends Controller
             $desc_array = explode('<br /><br />', $contract[0]->specificDetails);
             array_pop($desc_array);
 
+            $quotations = DB::table('quotation_headers')
+            ->where('consignees_id', '=', $contract[0]->consignees_id)
+            ->get();
 
-            return view('/trucking.contract_draft', compact(['contract','desc_array','consignees','provinces']));
+            return view('/trucking.contract_draft', compact(['contract','desc_array','consignees','provinces', 'quotations']));
 
         }
         catch(Exception $e){
@@ -171,11 +182,15 @@ class ContractsController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
+            $quotations = DB::table('quotation_headers')
+            ->where('consignees_id', '=', $contract[0]->consignees_id)
+            ->get();
+
             $terms = explode('<br /><br />', $contract[0]->specificDetails);
             array_pop($terms);
 
 
-            return view('/trucking.contract_amend', compact(['contract', 'areas', 'amendments', 'terms']));
+            return view('/trucking.contract_amend', compact(['contract', 'areas', 'amendments', 'terms', 'quotations']));
 
         }
         catch(Exception $e){
@@ -236,6 +251,7 @@ class ContractsController extends Controller
             $contract->dateExpiration = $request->dateExpiration;
             $contract->specificDetails = $request->specificDetails;
             $contract->isFinalize = $request->isFinalize;
+            $contract->quot_head_id = $request->quot_head_id;
             $contract->save();
 
             return $contract;
