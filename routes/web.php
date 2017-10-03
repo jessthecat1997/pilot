@@ -163,8 +163,8 @@ Route::put('/utilities/exchange_rate_reactivate/{id}','ExchangeRatesController@r
 
 
 Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_deactivated');
-Route::get('/utilities/ipf_fee_data','IpfFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
-Route::put('/utilities/ipf_fee_reactivate/{id}','IpfFeesController@reactivate');
+Route::get('/utilities/ipf_fee_data','ImportProcessingFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
+Route::put('/utilities/ipf_fee_reactivate/{id}','ImportProcessingFeesController@reactivate');
 
 Route::resource('/utilities/receive_type', 'ReceiveTypesController');
 Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
