@@ -16,42 +16,20 @@ class StoreConsignee extends FormRequest
      switch ($this->method()) {
         case 'POST':
         return [
-        'companyName' =>'required',
         'firstName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
         'lastName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
         'email' => 'required| unique:consignees',
-        'address' => 'required|min:1|regex:/^[\p{L}\p{N} .-]+$/',
-        'contactNumber' => 'required',
-        'businessStyle' =>'required',
-        'city'  =>'required',
-        'st_prov'  =>'required',
-        'zip'  =>'required| max:5',
-        'b_address'  =>'required',
-        'b_city'  =>'required',
-        'b_st_prov'  =>'required',
-        'b_zip' =>'required',
-
+        'address' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
         ];
 
         break;
 
         case 'PUT':
         return [
-        'companyName' =>'required',
-        'firstName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
-        'lastName' => 'required| max:45|min:1|regex:/^[\p{L}\p{N} .-]+$/',
-        'email' => 'required| unique:consignees',
-        'address' => 'required|min:1|regex:/^[\p{L}\p{N} .-]+$/',
-        'contactNumber' => 'required',
-        'businessStyle' =>'required',
-        'city'  =>'required',
-        'st_prov'  =>'required',
-        'zip'  =>'required| max:5',
-        'b_address'  =>'required',
-        'b_city'  =>'required',
-        'b_st_prov'  =>'required',
-        'b_zip' =>'required',
-
+        'vehicle_types_id' => 'required',
+        'plateNumber' => 'required| max:20|min:2|unique:vehicles',
+        'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
+        'dateRegistered' => 'required',
         ];
 
         break;

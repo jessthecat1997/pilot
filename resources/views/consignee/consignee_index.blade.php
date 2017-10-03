@@ -43,7 +43,7 @@
 	</div>
 </div>
 <div id="chModal" class="modal fade" role="dialog">
-	<form class="form-horizontal" id = "commentForm">
+	<form class="form-horizontal" id = "cs_form">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
@@ -68,7 +68,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="phy_address">Block/Lot/Street:</label>
 											<div class="col-sm-8">          
-												<textarea type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Block/Lot/Street" rows= "5"></textarea>
+												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
 											</div>
 										</div>
 										<div class="form-group required">
@@ -116,7 +116,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="bill_address">Blk/ Lot/ Street:</label>
 											<div class="col-sm-8">          
-												<textarea type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Blk/Lot/Street"></textarea>
+												<input type="text" class="form-control" name = "bill_address" id="bill_address" placeholder="Enter  Address">
 											</div>
 										</div>
 										<div class="form-group required">
@@ -274,57 +274,36 @@
 
 		Inputmask(" 9{3}-9{3}-9{3}-9{5}").mask($("#TIN"));
 
-		$('#commentForm').validate({
-
-			rules: 
+		$('#cs_form').validate({
+			firstName:
 			{
-				firstName:
-				{
-					required: true,
-				},
-				lastName:
-				{
-					required: true,
-				},
-				email:
-				{
-					email: true,
-					required: true,
-				},
-				contactNumber:
-				{
-					required: true,
-				},
-				companyName:
-				{
-					required: true,
-				},
-				businessStyle:
-				{
-					required: true,
-				},
-				TIN:
-				{
-					required: true,
-				},
-				phy_address:
-				{
-					required: true,
-				},
-				phy_province:
-				{
-					required: true,
-				},
-				phy_city:
-				{
-					required: true,
-				},
-				phy_zip:
-				{
-					required: true,
-				},
-
-			}, onkeyup: function(element) {$(element).valid()}, 
+				required: true,
+			},
+			lastName:
+			{
+				required: true,
+			},
+			email:
+			{
+				email: true,
+				required: true,
+			},
+			contactNumber:
+			{
+				required: true,
+			},
+			companyName:
+			{
+				required: true,
+			},
+			businessStyle:
+			{
+				required: true,
+			},
+			TIN:
+			{
+				required: true,
+			}
 
 		})
 
