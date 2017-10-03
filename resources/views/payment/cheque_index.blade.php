@@ -47,8 +47,11 @@
 				<h4 class="modal-title">Confirm Cheque Payment</h4>
 			</div>
 			<div class="modal-body">
-				<p>Verify cheque payment?</p>
-				<input type="hidden" id="vtID">
+				<form>
+					{{ csrf_field() }}
+					<p>Verify cheque payment?</p>
+					<input type="hidden" id="vtID">
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button  class="btn but finalize-confirm">Save</button>
@@ -97,12 +100,12 @@
 	$(document).on('click', '.finalize-confirm', function(e){
 		console.log(vt_id);
 		$.ajax({
-			method: 'PUT',
-			url: '{{ route("con_cheque") }}/'+vt_id,
+			type: 'PUT',
+			url: '{{ route("cheque.index") }}/' + vt_id,
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'vt_id' : vt_id,
 				'isVerify' : 1,
+				'vt_id' : vt_id,
 			},
 			success: function (data){
 				location.reload();

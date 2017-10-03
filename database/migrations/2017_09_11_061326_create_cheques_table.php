@@ -21,6 +21,7 @@ class CreateChequesTable extends Migration
             $table->boolean('isVerify');
             $table->integer('bi_head_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('bi_head_id')->references('id')->on('billing_invoice_headers');
 

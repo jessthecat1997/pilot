@@ -66,7 +66,7 @@ class ChequesController extends Controller
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -86,15 +86,15 @@ class ChequesController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
+
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
 			WHERE t.id = ?
 			', [$id]);
 
@@ -106,8 +106,7 @@ class ChequesController extends Controller
 		$chq = Cheque::findOrFail($request->vt_id);
 		$chq->isVerify = $request->isVerify;
 		$chq->save();
-
-		return $csh;
+		return $chq;
 	}
 	public function cheque_table(Request $request)
 	{
@@ -115,15 +114,24 @@ class ChequesController extends Controller
 		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('cheques.id','companyName','bankName', 'amount', 'cheques.bi_head_id')
-		->where('isVerify', '=', 0)
+		->select('cheques.id','companyName','bankName', 'amount', 'cheques.bi_head_id', 'isVerify')
 		->where('billing_invoice_headers.status', '=', 'U')
 		->get();
 
 		return Datatables::of($chq)
 		->addColumn('action', function ($ch) {
-			return
-			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con" data-toggle="modal" data-target="#confirmModal">Confirm</button>';
+			if($ch->isVerify == 0)
+			{
+				return
+				'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con" data-toggle="modal" data-target="#confirmModal">Confirm</button>';
+			}
+			else
+			{
+				return
+				'<a href = "/cheque/'. $ch->bi_head_id .'" style="margin-right:10px; width:100;" class = "btn btn-md but">Payment</a>';
+			}
+
+			
 		})
 		->make(true);
 	}
@@ -132,7 +140,6 @@ class ChequesController extends Controller
 		$chq = Cheque::findOrFail($request->vt_id);
 		$chq->isVerify = $request->isVerify;
 		$chq->save();
-
-		return $csh;
+		return $csq;
 	}
 }
