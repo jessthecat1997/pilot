@@ -331,7 +331,6 @@ Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_
 //vanessa addition
 Route::get('/trial_report','TrialController@index');
 
-
 //Jessie
 
 

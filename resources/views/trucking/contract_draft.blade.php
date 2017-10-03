@@ -101,12 +101,69 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Consignee Quotations
+				</div>
+				<div class="panel-body">
+					<div class = "collapse" id = "consignee_warning">
+						<div class="alert alert-danger">
+							<strong>Warning!</strong> No selected consignee.
+						</div>
+					</div>
+					<div class="col-md-12">
+						<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
+							<thead>
+								<tr>
+									<th>
+										Quotation No.
+									</th>
+									<th>
+										Date Created
+									</th>
+									<th>
+										Status
+									</th>
+									<th>
+										Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								@forelse($quotations as $quotation)
+								<tr>
+									<td>
+										{{ $quotation->id }}
+									</td>
+									<td>
+										{{ Carbon\Carbon::parse($quotation->created_at)->format("F d, Y") }}
+									</td>
+									<td>
+										<input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'>
+									</td>
+									<td>
+										<button class = 'btn btn-md btn-info view_quotation btn-md' value = '{{ $quotation->id }}'><span class = 'fa fa-eye'></span></button>
+									</td>
+								</tr>
+								@empty
+
+								@endforelse
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Terms &amp; Condition</a>
 					</h4>
 				</div>
 				<div id="collapseTwo" class="panel-collapse collapse">
@@ -380,6 +437,24 @@
 
 		$.fn.dataTable.ext.errMode = 'throw';
 
+		$(document).on('change', '.quotation_status', function(e){
+			var obj = $(this);
+			$('.quotation_status').not(obj).each(function(){
+				$(this).prop('checked', false);
+			})
+		})
+		@if($contract[0]->quot_head_id != null)
+		$('.quotation_status').each(function(){
+			if($(this).closest('tr').find('.view_quotation').val() == "{{ $contract[0]->quot_head_id }}")
+			{
+				$(this).prop('checked', true);
+			}
+		})
+		@endif
+		$(document).on('click', '.view_quotation', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val());
+		})
 
 		$("#commentForm").validate({
 			rules: 
@@ -724,7 +799,7 @@
 					$('#dateExpiration').css('border-color', 'red');
 				}
 			}
-
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
 			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'PUT',
@@ -738,9 +813,29 @@
 						'specificDetails' : terms_and_condition_string,
 						'update_type' : 4,
 						'contract_id' : '{{ $contract[0]->id }}',
+						'quot_head_id' : quot_id,
 					},
 
 					success: function (data){
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Contract saved");
 						window.location.replace("{{route('contracts.index')}}/{{ $contract[0]->id }}/view");
 					}
 
@@ -779,7 +874,7 @@
 					$('#dateExpiration').css('border-color', 'red');
 				}
 			}
-
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
 			if(validateDraft() === true && valid_date == true){
 				$.ajax({
 					method: 'PUT',
@@ -791,7 +886,8 @@
 						'isFinalize': 0,
 						'specificDetails' : terms_and_condition_string,
 						'update_type' : 4,
-						'contract_id' : {{ $contract[0]->id }},
+						'contract_id' : '{{ $contract[0]->id }}',
+						'quot_head_id' : quot_id,
 					},
 
 					success: function (data){
@@ -813,7 +909,8 @@
 							"showMethod": "fadeIn",
 							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Contract save as draft successfully")
+						toastr["success"]("Contract save as draft successfully");
+						window.location.replace("{{route('contracts.index')}}");
 					}
 
 				})
