@@ -88,7 +88,7 @@
 		})
 	})
 	$(document).on('click', '.chq_con', function(e){
-		$('#confirmModal').modal('show');
+		e.preventDefault();
 		vt_id = $(this).val();
 	})
 	$(document).on('click', '.finalize-confirm', function(e){
