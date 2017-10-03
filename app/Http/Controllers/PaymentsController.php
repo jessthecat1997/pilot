@@ -116,7 +116,7 @@ class PaymentsController extends Controller
 		return Datatables::of($history)
 		->addColumn('action', function ($hist) {
 			return
-			'<button value = "'. $hist->id .'" class = "btn btn-md btn-info payment_receipt"><span class="fa fa-print"></span></button>
+			'<button value = "'. $hist->id .'" class = "btn btn-md btn-primary payment_receipt"><span class="fa fa-print"></span></button>
 			<input type = "hidden" class = "type" value = "' . $hist->type . '" />';
 		})
 		->make(true);
@@ -126,13 +126,13 @@ class PaymentsController extends Controller
 		$billings = DB::table('billing_invoice_details')
 		->join('billing_invoice_headers', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
-		->select('charges.name', 'billing_invoice_details.amount')
+		->select('charges.name', DB::raw('CONCAT(TRUNCATE(billing_invoice_details.amount + (billing_invoice_details.amount * vatRate/100),2)) as Total'))
 		->where('billing_invoice_headers.id', '=', $id)
 		->get();
 		return Datatables::of($billings)
 		->addColumn('action', function ($b) {
 			return
-			'<button value = "'. $b->amount .'" style="margin-right:10px; width:100;" class = "btn but make_payment" data-toggle="modal" data-target="#billModal">Make Payment</button>';
+			'<button value = "'. $b->Total .'" style="margin-right:10px; width:100;" class = "btn but make_payment" data-toggle="modal" data-target="#billModal">Make Payment</button>';
 		})
 		->make(true);
 	}
@@ -302,29 +302,12 @@ class PaymentsController extends Controller
 
 		return $csh;
 	}
-
-	public function cheque_table(Request $request)
-	{
-		$chq = DB::table('cheques')
-		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
-		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
-		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('cheques.id','companyName','bankName')
-		->where('isVerify', '=', 0)
-		->get();
-
-		return Datatables::of($chq)
-		->addColumn('action', function ($ch) {
-			return
-			'<button value = "'. $ch->id .'" style="margin-right:10px; width:100;" class = "btn btn-primary chq_con">Confirm</button>';
-		})
-		->make(true);
-	}
 	public function storeCheque(Request $request)
 	{
 		$new_chq = new Cheque;
 		$new_chq->chequeNumber = $request->chequeNumber;
 		$new_chq->bankName = $request->bankName;
+		$new_chq->amount = $request->amount;
 		$new_chq->isVerify = $request->isVerify;
 		$new_chq->bi_head_id = $request->bi_head_id;
 		$new_chq->save();

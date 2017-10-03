@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Response;
 class StoreRequirements extends FormRequest
 {
    
@@ -19,7 +19,7 @@ class StoreRequirements extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name',
+            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:requirements,name',
            
             ];
 
@@ -28,7 +28,7 @@ class StoreRequirements extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:service_order_types,name,'. $this->segment(3) ,
+            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:requirements,name,'. $this->segment(3) ,
            
             ];
 
@@ -36,5 +36,9 @@ class StoreRequirements extends FormRequest
             
             default: break;
         }
+    }
+     public function response(array $errors)
+    {
+        return Response::make(json_encode($errors), 200);
     }
 }

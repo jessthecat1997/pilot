@@ -153,64 +153,50 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel-body">
-				<div class="panel-group" id="accordion">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">List of Payables</a>
-							</h4>
-						</div>
-						<div id="collapseOne" class="panel-collapse collapse in">
-							<div class="panel-body">
-								<table class = "table-responsive table" id = "bills_table">
-									<thead>
-										<tr>
-											<th>
-												Name
-											</th>
-											<th>
-												Amount
-											</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment History</a>
-							</h4>
-						</div>
-						<div id="collapseTwo" class="panel-collapse collapse">
-							<div class="panel-body">
-								<table class = "table-hover table" id = "hist_table">
-									<thead>
-										<tr>
-											<th style="width: 15%;">
-												Date of Payment
-											</th>
-											<th style="width: 25%:">
-												No.
-											</th>
-											<th style="width: 20%;">
-												Amount
-											</th>
-											<th style="width: 40%;">
-												Remarks
-											</th>
-											<th>
-												Action
-											</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
-						</div>
-					</div>
+		<div class="col-lg-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading">List of Payables</div>
+				<div class="panel-body">
+					<table class = "table-responsive table" id = "bills_table">
+						<thead>
+							<tr>
+								<th>
+									Name
+								</th>
+								<th>
+									Amount
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Payment History</div>
+				<div class="panel-body">
+					<table class = "table-hover table" id = "hist_table">
+						<thead>
+							<tr>
+								<th>
+									Date of Payment
+								</th>
+								<th>
+									No.
+								</th>
+								<th>
+									Amount
+								</th>
+								<th>
+									Remarks
+								</th>
+								<th>
+									Action
+								</th>
+							</tr>
+						</thead>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -308,7 +294,7 @@
 			ajax: "{{ route('paybills.data', $so_head_id) }}",
 			columns: [
 			{ data: 'name' },
-			{ data: 'amount',
+			{ data: 'Total',
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },
 
@@ -338,6 +324,7 @@
 			data: {
 				'_token' : $('input[name=_token]').val(),
 				'bankName' : $('#bank').val(),
+				'amount' : $('#check_amt').val(),
 				'bi_head_id' : {{ $pays[0]->bi_head }},
 				'isVerify' : 1
 			},
@@ -1088,6 +1075,7 @@ $(document).on('click', '.finalize-payment', function(e){
 	}
 })
 $(document).on('click', '.finalize-cheque', function(e){
+	var bi_id = {{ $so_head_id }};
 	$.ajax({
 		method: 'POST',
 		url: '{{ route("postCheque") }}',
@@ -1095,8 +1083,9 @@ $(document).on('click', '.finalize-cheque', function(e){
 			'_token' : $('input[name=_token]').val(),
 			'chequeNumber' : $('#chqNo').val(),
 			'bankName' : $('#bank').val(),
-			'isVerify' : 0
-			'bi_head_id' : {{ $so_head_id }},
+			'amount' : $('#check_amt').val(),
+			'isVerify' : 0,
+			'bi_head_id' : bi_id,
 		},
 		success: function (data){
 			toastr.options = {

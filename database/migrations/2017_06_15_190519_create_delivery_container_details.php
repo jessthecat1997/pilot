@@ -19,6 +19,8 @@ class CreateDeliveryContainerDetails extends Migration
             $table->decimal('grossWeight', 10, 2);
             $table->string('supplier', 100)->nullable();
             $table->integer('container_id')->unsigned();
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('container_id')->references('id')->on('delivery_containers');
         });

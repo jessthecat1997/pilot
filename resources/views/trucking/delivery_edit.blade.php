@@ -13,7 +13,7 @@
 						@if($delivery[0]->withContainer == 1)
 						<div class = "panel">
 							<div class = "">
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" id = "container_form">
 									{{ csrf_field() }}
 									<div class="row">
 										<h4>&nbsp;Container Information</h4>
@@ -44,7 +44,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Number:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}"/>
+																				<input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" value = "{{ $container['container']->containerNumber }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -52,7 +52,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Container Size:</label>
 																			<div class="col-sm-8">
-																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume">
+																				<select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume" required>
 																					<option></option>
 																					@forelse($container_volumes as $container_volume)
 																					<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>
@@ -67,7 +67,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate" value = "{{ $container['container']->shippingLine }}"/>
+																				<input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control " value = "{{ $container['container']->shippingLine }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -75,7 +75,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate" value = "{{ $container['container']->portOfCfsLocation }}"/>
+																				<input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control " value = "{{ $container['container']->portOfCfsLocation }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -85,7 +85,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Date:</label>
 																			<div class="col-sm-8">
-																				<input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate" value = "{{ Carbon\Carbon::parse($container['container']->containerReturnDate)->format('Y-m-d') }}"/>
+																				<input type = "text" name = "containerReturnDate" id = "containerReturnDate " class = "form-control containerReturnDate" value = "" required />
 																			</div>
 																		</div>
 																	</div>
@@ -93,7 +93,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return To:</label>
 																			<div class="col-sm-8">
-																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}"/>
+																				<input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo" value = "{{ $container['container']->containerReturnTo }}" required />
 																			</div>
 																		</div>
 																	</div>
@@ -101,7 +101,7 @@
 																		<div class="form-group required">
 																			<label class="control-label col-sm-4" for="contactNumber">Return Address:</label>
 																			<div class="col-sm-8">
-																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress">{{ $container['container']->containerReturnAddress }}</textarea>
+																				<textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress" required>{{ $container['container']->containerReturnAddress }}</textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -129,10 +129,10 @@
 																		@forelse($container['details'] as $detail)
 																		<tr>
 																			<td width="35%">
-																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}"/>
+																				<input type = "text" name = "{{ $ctr }}_descriptionOfGoods" class = "form-control" value = "{{ $detail->descriptionOfGoods }}" required />
 																			</td>
 																			<td width="20%">
-																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}"/>
+																				<input type = "number" name = "{{ $ctr }}_grossWeight" class = "form-control" value = "{{ $detail->grossWeight }}" required />
 																			</td>
 																			<td width="30%">
 																				<input type = "text" name = "{{ $ctr }}_supplier"  class = "form-control" value="{{ $detail->supplier }}" />
@@ -185,12 +185,15 @@
 						@else
 						<div class = "panel">
 							<div class = "">
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" id = "non_container_detail_form">
 									<div class="form-group">
 										<label class="control-label" for="wodetail_table">Delivery Content:</label>
-										<table class = "table-responsive table table-striped" id = "wodetail_table">
+										<table class = "table-responsive table table-striped table-bordered cell-border" id = "wodetail_table">
 											<thead>
 												<tr>
+													<td style="text-align: center;">
+														Item No.
+													</td>
 													<td>
 														Description of Goods
 													</td>
@@ -200,27 +203,32 @@
 													<td>
 														Supplier/s
 													</td>
-													<td>
+													<td style="text-align: center;">
 														Action
 													</td>
 												</tr>
 											</thead>
 											<tbody>
 												@forelse($delivery_details as $delivery_detail)
+												@if($delivery_detail->deleted_at == null)
 												<tr id = "wodescription_row">
-													<td width="35%">
-														<input type = "text" name = "wodescriptionOfGoods" class = "form-control" value = "{{ $delivery_detail->descriptionOfGoods }}"/>
+													<td style="width: 10%; text-align: center;">
+														<label class="control-label detail_id">{{ $delivery_detail->id }}</label>
 													</td>
-													<td width="20%">
-														<input type = "number" name = "wogrossWeight" class = "form-control" value="{{ $delivery_detail->grossWeight }}" />
+													<td style="width: 30%;">
+														<input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = "{{ $delivery_detail->descriptionOfGoods }}" required />
 													</td>
-													<td width="30%">
-														<input type = "text" name = "wosupplier"  class = "form-control" value="{{ $delivery_detail->supplier }}" />
+													<td style="width: 20%;">
+														<input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="{{ $delivery_detail->grossWeight }}" required />
 													</td>
-													<td width="15%">
-														<button class = "btn btn-md btn-danger woremove-current-detail">x</button>
+													<td style="width: 30%;">
+														<input type = "text" name = "wosupplier"  class = "form-control supplier" value="{{ $delivery_detail->supplier }}" />
+													</td>
+													<td style="width: 10%; text-align: center;">
+														<button  type = "button" class = "btn btn-md btn-danger woremove-current-detail">x</button>
 													</td>
 												</tr>
+												@endif
 												@empty
 												@endforelse
 											</tbody>
@@ -233,6 +241,52 @@
 
 											</div>
 										</div>
+										<br />
+										<label class="control-label" for="wodetail_table">Deleted Content:</label>
+										<table class = "table-responsive table table-striped table-bordered cell-border" id = "deleted_wodetail_table">
+											<thead>
+												<tr>
+													<td style="text-align: center;">
+														Item No.
+													</td>
+													<td>
+														Description of Goods
+													</td>
+													<td>
+														Gross Weight(kg)
+													</td>
+													<td>
+														Supplier/s
+													</td>
+													<td style="text-align: center;">
+														Action
+													</td>
+												</tr>
+											</thead>
+											<tbody>
+												@forelse($delivery_details as $delivery_detail)
+												@if($delivery_detail->deleted_at != null)
+												<tr id = "wodescription_row">
+													<td style="width: 10%; text-align: center;">
+														<label class="control-label del_non_con_id">{{ $delivery_detail->id }}</label>
+													</td>
+													<td style="width: 30%;">
+														<label class = "control-label del_non_con_descrp">{{ $delivery_detail->descriptionOfGoods }}</label>
+													</td>
+													<td style="width: 20%;">
+														<label class= "control-label del_non_gross_weight">{{ $delivery_detail->grossWeight }}</label>
+													</td>
+													<td style="width: 30%;">
+														<label class = "control-label del_non_con_supplier">{{ $delivery_detail->supplier }}</label>
+													</td>
+													<td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-info woback-deleted-non-detail"><</button>
+													</td>
+												</tr>
+												@endif
+												@empty
+												@endforelse
+											</tbody>
+										</table>
 									</div>
 								</form>
 							</div>
@@ -272,7 +326,7 @@
 								<div class = "col-md-12">
 									<div class="form-group">
 										<label class="control-label" for = "deldatecon">Pickup Date:</label>
-										<input type = "date" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
+										<input type = "text" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
 									</div>
 								</div>
 							</div>
@@ -350,7 +404,7 @@
 								<div class = "col-md-12">
 									<div class="form-group">
 										<label class="control-label" for = "deldatecon">Delivery Date:</label>
-										<input type = "date" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
+										<input type = "text" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
 									</div>
 								</div>
 							</div>
@@ -536,18 +590,18 @@
 						<h4 class="modal-title">New Location</h4>
 					</div>
 					<div class="modal-body">
-						<form role="form" method = "POST" id="commentForm" class = "form-horizontal">
-							{{ csrf_field() }}	
+						<form id="loc_form" class = "form-horizontal">
+							{{ csrf_field() }}
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Name: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "name" id = "name" minlength = "3" required />
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Address: </label>
 								<div class = "col-md-9">
-									<textarea class = "form-control" id = "address" name = "address"></textarea>
+									<textarea class = "form-control" id = "address" name = "address" required></textarea>
 								</div>
 							</div>
 							<div class="form-group required">
@@ -562,28 +616,28 @@
 										@empty
 
 										@endforelse
-									</select>     
+									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">City: </label>
 								<div class = "col-md-9">
-									<select name = "loc_city" id="loc_city" class = "form-control">
-										<option value="0"></option>
+									<select name = "loc_city" id="loc_city" class = "form-control" required>
+										<option></option>
 									</select>
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">ZIP: </label>
 								<div class = "col-md-9">
-									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3"/>
+									<input type = "text" class = "form-control" name = "zip" id = "zip" minlength = "3" required />
 								</div>
 							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type = "submit" class="btn btn-success btnSave" >Save</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+						<button type = "button" class="btn btn-success btnSave" >Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -609,8 +663,13 @@
 </div>
 @endsection
 
+@push('styles')
+<link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
+@endpush
+
 
 @push('scripts')
+<script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		var json;
@@ -629,11 +688,11 @@
 		var modal_reset = $('#myModal').html();
 		var delivery_id = 0;
 		var vehicle_type_id = 0;
-		var wodetail_row = '<tr id = "wodescription_row"><td width="35%"><input type = "text" name = "wodescriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "wogrossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "wosupplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
+		var wodetail_row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label"></label></td><td style="width: 30%;"><input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" value = ""/></td><td style="width: 20%;"><input type = "number" name = "wogrossWeight" class = "form-control grossWeight" value="" /></td><td style="width: 30%;"><input type = "text" name = "wosupplier"  class = "form-control supplier" value="" /></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
 		var container_row = "<tr>" + $('#container_row').html() + "</tr>";
 
-		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button> <button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control row_containerReturnDate""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control row_containerReturnDate"/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "date" name = "containerReturnDate" id = "containerReturnDate " class = "form-control row_containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>';
-		@if($delivery[0]->withContainer == 1) var container_ctr = {{ count($container_with_detail) }} @endif;
+		var container_copy = '<div class="panel panel-default" id = "0_panel"><div class="panel-heading"><h4 class="panel-title"><a data-toggle="collapse" href="#0_container ">Container</a><div class="pull-right"><button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button> <button class="remove-container-row btn btn-xs btn-danger" value = "0_panel">&times;</button></div></h4></div><div id="0_container" class="panel-collapse collapse in"><div class="panel-body"><div class = "row"><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Number:</label><div class="col-sm-8"><input type = "text" name = "containerNumber" id = "containerNumber" class = "form-control row_containerNumber" /></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Container Size:</label><div class="col-sm-8"><select class = "form-control row_containerVolume" id = "containerVolume" name = "containerVolume"><option></option>@forelse($container_volumes as $container_volume)<option value = "{{ $container_volume->id }}">{{ $container_volume->name }}</option>@empty @endforelse</select></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="shippingLine">Shipping Line:</label><div class="col-sm-8"><input type = "text" name = "shippingLine" id = "shippingLine " class = "form-control ""/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Port of Cfs Location:</label><div class="col-sm-8"><input type = "text" name = "portOfCfsLocation" id = "portOfCfsLocation " class = "form-control "/></div></div></div></div><div class = "col-md-6"><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Date:</label><div class="col-sm-8"><input type = "text" name = "containerReturnDate" id = "containerReturnDate " class = "form-control containerReturnDate"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return To:</label><div class="col-sm-8"><input type = "text" name = "containerReturnTo" id = "containerReturnTo" class = "form-control row_containerReturnTo"/></div></div></div><div class = "form-horizontal"><div class="form-group required"><label class="control-label col-sm-4" for="contactNumber">Return Address:</label><div class="col-sm-8"><textarea name = "containerReturnAddress" id = "containerReturnAddress " class = "form-control row_containerReturnAddress"></textarea></div></div></div></div></div><div class = "col-md-12"><table class="table table-responsive table-striped" id = "0_details"><thead><tr><td>Description of goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr><td width="35%"><input type = "text" name = "0_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type ="number" name = "0_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "0_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "0">x</button></td></tr></tbody></table></div><div class="row"><div class ="col-md-9"></div><div class= "col-md-3" style="text-align: center;"><button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0">New Good</button></div></div></div></div></div>';
+		@if($delivery[0]->withContainer == 1) var container_ctr = "{{ count($container_with_detail) }}" @endif;
 
 		@if($delivery[0]->withContainer == 1)
 		@php
@@ -656,10 +715,113 @@
 		var selected_from = "{{ $delivery[0]->locations_id_pick }}";
 		var selected_to = "{{ $delivery[0]->locations_id_del }}";
 
+		//EDIT PART
+		@if($delivery[0]->withContainer == 0)
+		var delivery_non_container_array = [];
+		var delivery_non_container_new_array = [];
+		@forelse($delivery_details as $delivery_detail)
+		var non_container = 
+		{ 
+			id: "{{ $delivery_detail->id }}",
+			status: @if($delivery_detail->deleted_at == null) 1 @else 0 @endif,
+			descriptionOfGood: "{{ $delivery_detail->descriptionOfGoods }}",
+			grossWeight: "{{ $delivery_detail->grossWeight }}",
+			supplier: "{{ $delivery_detail->supplier }}",
+		};
+		delivery_non_container_array.push(non_container);
+		$('#non_container_detail_form').validate({
+			rules:
+			{
+				descriptionOfGood:
+				{
+					required: true,
+				},
+				grossWeight:
+				{
+					required: true,
+				}
+			}
+		});
+		@empty
+
+		@endforelse
+		console.log(delivery_non_container_array.length);
+
+		@else
+		$('#container_form').validate({
+			rules:
+			{
+				containerNumber:
+				{
+					required: true,
+				},
+				containerVolume:
+				{
+					required: true,
+				},
+				shippingLine:
+				{
+					required: true,
+				},
+				portOfCfsLocation:
+				{
+					required: true,
+				},
+				containerReturnDate:
+				{
+					required: true,
+				},
+				containerReturnTo:
+				{
+					required: true,
+				},
+				containerReturnAddress:
+				{
+					required: true,
+				}
+			}
+		});
+		$('.containerReturnDate').each(function(i){
+			$(this).datetimepicker({
+				mask:'9999/19/39',
+				dayOfWeekStart : 1,
+				timepicker: false,
+				lang:'en',
+				format:'Y/m/d',
+				formatDate:'Y/m/d',
+				value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+				startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			});
+		})
+		Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
+		@endif
+
+		$.datetimepicker.setLocale('en');
+		$('#pickdatecon').datetimepicker({
+			mask:'9999/19/39 29:59',
+			dayOfWeekStart : 1,
+			lang:'en',
+			step: 5,
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y-m-d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format('Y/m/d H:i') }}",
+		});
+
+		$('#deldatecon').datetimepicker({
+			mask:'9999/19/39 29:59',
+			dayOfWeekStart : 1,
+			lang:'en',
+			step: 5,
+			format:'Y/m/d H:i',
+			formatDate:'Y/m/d H:i',
+			value: "{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format('Y/m/d H:i') }}",
+		});
+
+
 		$('#driver').val("{{ $delivery[0]->emp_id_driver }}");
 		$('#helper').val("{{ $delivery[0]->emp_id_helper }}");
-		$('#pickdatecon').val('{{ Carbon\Carbon::parse($delivery[0]->pickupDateTime)->format("Y-m-d") }}');
-		$('#deldatecon').val('{{ Carbon\Carbon::parse($delivery[0]->deliveryDateTime)->format("Y-m-d") }}');
 		$('#deliver_id').val("{{ $delivery[0]->locations_id_del }}");
 		$('#pickup_id').val("{{ $delivery[0]->locations_id_pick }}");
 		fill_vehicle();
@@ -674,7 +836,7 @@
 				data: {
 					'area_from' : selected_from,
 					'area_to' : selected_to,
-					'consignee_id' : {{ $consignee[0]->id }}
+					'consignee_id' : "{{ $consignee[0]->id }}",
 				},
 				success : function(data) {
 					if(data[1].length == 0){
@@ -812,43 +974,125 @@
 			
 		})
 
+
+		$('#loc_form').validate({
+
+			rules: 
+			{
+				name:
+				{
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				address:
+				{
+					required: true,
+					minlength: 3,
+					normalizer: function(value) {
+						value = value.replace("something", "new thing");
+						return $.trim(value)
+					},	
+
+				},
+				zip:
+				{
+					required: true,
+					minlength: 4,
+					maxlength: 4,
+				},
+				loc_city:
+				{
+					required:true,
+				},
+
+			},onkeyup: function(element) {$(element).valid()}, 
+
+		});
+
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
-			console.log('aw');
-			$.ajax({
-				type: 'POST',
-				url: "{{ route('location.index')}}",
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'address' : $('#address').val(),
-					'cities_id' : $('#loc_city').val(),
-					'zipCode' : $('#zip').val(),
-				},
-				success: function(data){
-					$('#chModal').modal('hide');
-					if(selected_location == 0){	
-						
-						$('#_address').val($('#address').val());
-						$('#_city').val($('#loc_city option:selected').text());
-						$('#_province').val($('#loc_province option:selected').text().trim());
-						$('#_zip').val($('#zip').val());
-					}
-					else{
-						$('#_daddress').val($('#address').val());
-						$('#_dcity').val($('#loc_city option:selected').text());
-						$('#_dprovince').val($('#loc_province option:selected').text().trim());
-						$('#_dzip').val($('#zip').val());
+			$('#zip').valid();
+			$('#name').valid();
+			$('#address').valid();
+			$('#loc_city').valid();
 
+			if($('#zip').valid() && $('#name').valid() && $('#address').valid() && $('#loc_city').valid()){
+				$('.btnSave').attr('disabled', 'true');
+				$.ajax({
+					type: 'POST',
+					url: "{{ route('location.index')}}",
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'name' : $('#name').val(),
+						'address' : $('#address').val(),
+						'cities_id' : $('#loc_city').val(),
+						'zipCode' : $('#zip').val(),
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							if(selected_location == 0){
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#pickup_id').val(data.id);
+
+								$('#_address').val($('#address').val());
+								$('#_city').val($('#loc_city option:selected').text());
+								$('#_province').val($('#loc_province option:selected').text().trim());
+								$('#_zip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+							}
+							else{
+								$('#pickup_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id > option:last').after("<option value = " + data.id +">"+ data.name +"</option>");
+								$('#deliver_id').val(data.id);
+								$('#_daddress').val($('#address').val());
+								$('#_dcity').val($('#loc_city option:selected').text());
+								$('#_dprovince').val($('#loc_province option:selected').text().trim());
+								$('#_dzip').val($('#zip').val());
+
+								$('#address').val("");
+								$('#loc_city').val("0");
+								$('#loc_province').val("0");
+								$('#zip').val("");
+								$('#chModal').modal('hide');
+								$('.btnSave').removeAttr('disabled');
+							}
+						}
+						else{
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v);
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+
+
+							});
+							$('#btnSave').removeAttr('disabled');
+						}
+
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
 					}
-					
-				},
-				error: function(data) {
-					if(data.status == 400){
-						alert("Nothing found");
-					}
-				}
-			})
+				})
+			}
+			else{
+				$('.btnSave').removeAttr('disabled');
+			}
 		})
 
 		function clear_location(){
@@ -951,7 +1195,6 @@
 		$(document).on('click', '.add-new-container', function(e){
 			e.preventDefault();
 			console.log(container_ctr);
-			console.log('ano ba');
 			new_container = container_copy.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
 			new_container = new_container.replace('0_', container_ctr + "_");
@@ -970,6 +1213,19 @@
 			container_array.push(container_ctr);
 			container_ctr++;
 			$('#container_copy').append(new_container);
+			$('.containerReturnDate:last').each(function(i){
+				$(this).datetimepicker({
+					mask:'9999/19/39',
+					dayOfWeekStart : 1,
+					timepicker: false,
+					lang:'en',
+					format:'Y/m/d',
+					formatDate:'Y/m/d',
+					value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+					startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+				});
+			})
+			Inputmask("A{3} A{1} 9{6} 9{1}").mask($("input[name=containerNumber]"));
 		})
 		$(document).on('click', '.remove-container-row', function(e){
 			e.preventDefault();
@@ -1033,10 +1289,61 @@
 		})
 		$(document).on('click', '.woremove-current-detail', function(e){
 			e.preventDefault();
-			if($('#wodetail_table > tbody > tr').length > 1){
+			var row = "<tr> " + $(this).closest('tr').html() + "</tr>";
+
+			var row_descriptionOfGood = $(this).closest('tr').find('.descriptionOfGood').val().trim();
+			var row_grossWeight = $(this).closest('tr').find('.grossWeight').val().trim();
+			var row_supplier = $(this).closest('tr').find('.supplier').val().trim();
+			var row_id = $(this).closest('tr').find('.detail_id').text().trim();
+
+			if(row_id != ""){
+				var row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label del_non_con_id">'+ row_id + '</label></td><td style="width: 30%;"><label class = "control-label del_non_con_descrp">' + row_descriptionOfGood + '</label></td><td style="width: 20%;"><label class= "control-label del_non_gross_weight">' + row_grossWeight +'</label></td><td style="width: 30%;"><label class = "control-label del_non_con_supplier">'+ row_supplier +'</label></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-info woback-deleted-non-detail"><</button></td></tr>';
+				console.log(row_descriptionOfGood + row_grossWeight + row_supplier + row_id);
+				$(this).closest('tr').find('.grossWeight').valid();
+				$(this).closest('tr').find('.descriptionOfGood').valid();
+				if($(this).closest('tr').find('.grossWeight').valid() && $(this).closest('tr').find('.descriptionOfGood').valid()){
+					for(var i = 0; i < delivery_non_container_array.length; i++){
+						if(row_id === delivery_non_container_array[i].id)
+						{
+							delivery_non_container_array[i].status = 0;
+							delivery_non_container_array[i].descriptionOfGood = $(this).closest('tr').find('.descriptionOfGood').val();
+							delivery_non_container_array[i].grossWeight = $(this).closest('tr').find('.grossWeight').val();
+							break;
+						}
+					}
+					$('#deleted_wodetail_table > tbody').append(row);
+					$(this).closest('tr').remove();	
+				}
+				
+			}
+			else{
 				$(this).closest('tr').remove();
 			}
+
 		})
+
+		$(document).on('click', '.woback-deleted-non-detail', function(e){
+			e.preventDefault();
+			var row_descriptionOfGood = $(this).closest('tr').find('.del_non_con_descrp').text().trim();
+			var row_grossWeight = $(this).closest('tr').find('.del_non_gross_weight').text().trim();
+			var row_supplier = $(this).closest('tr').find('.del_non_con_supplier').text().trim();
+			var row_id = $(this).closest('tr').find('.del_non_con_id').text().trim();
+
+			console.log(row_descriptionOfGood + row_grossWeight + row_supplier + row_id);
+
+			var new_row = '<tr id = "wodescription_row"><td style="width: 10%; text-align: center;"><label class="control-label detail_id">' + row_id +'</label></td><td style="width: 30%;"><input type = "text" name = "wodescriptionOfGoods" class = "form-control descriptionOfGood" required value = "'+ row_descriptionOfGood +'"/></td><td style="width: 20%;"><input type = "number" required name = "wogrossWeight" class = "form-control grossWeight" value="'+ row_grossWeight +'" /></td><td style="width: 30%;"><input type = "text" name = "wosupplier"  class = "form-control supplier" value="'+row_supplier +'" /></td><td style="width: 10%; text-align: center;"><button class = "btn btn-md btn-danger woremove-current-detail">x</button></td></tr>';
+
+			$('#wodetail_table > tbody').append(new_row);
+			for(var i = 0; i < delivery_non_container_array.length; i++){
+				if(row_id === delivery_non_container_array[i].id)
+				{
+					delivery_non_container_array[i].status = 1;
+					break;
+				}
+			}
+			$(this).closest('tr').remove();
+		})
+
 		$(document).on('change', '#vehicle_type', function(e){
 			vehicle_type_id = $(this).val();
 			$.ajax({
@@ -1065,8 +1372,8 @@
 		})
 		$(document).on('click', '.save-delivery', function(e){
 			e.preventDefault();
-
-			if($("#choices li.active").text() === "Without Container"){
+			var checkWithoutContainer = "{{ $delivery[0]->withContainer }}";
+			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
 
@@ -1091,16 +1398,16 @@
 			if(checkWithoutContainer == "0"){
 				if(validateDetail() === true){
 					if(validateOrder() == true){
-
+						$('#confirm-save').attr('disabled', 'true');
 						$.ajax({
 							type: 'PUT',
 							url: '{{route("trucking.index")}}/{{ $so_id }}/delivery/{{ $delivery[0]->id}}/update_delivery',
-							data: {
+							data: 
+							{
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
-								'descrp_goods' : descrp_goods,
-								'gross_weights' : gross_weights,
-								'suppliers' : suppliers,
+								'delivery_non_container_new_array' : JSON.stringify(delivery_non_container_new_array),
+								'delivery_non_container_array' : JSON.stringify(delivery_non_container_array),
 								'emp_id_driver' : $('#driver').val(),
 								'emp_id_helper' : $('#helper').val(),
 								'locations_id_pick' : $('#pickup_id').val(),
@@ -1116,11 +1423,21 @@
 							}
 						})
 					}
+					else
+					{
+						$('#confirm-save').removeAttr('disabled');
+					}
+				}
+				else{
+					$('#confirm-save').removeAttr('disabled');
 				}
 			}
 			else{
-				if(validateContainer() == true){
-					if(validateOrder() == true){
+				if(validateContainer() == true)
+				{
+					if(validateOrder() == true)
+					{
+						$('#confirm-save').attr('disabled', true);
 
 						validateContainerDetail();
 						$.ajax({
@@ -1573,6 +1890,7 @@
 			descrp = document.getElementsByName("wodescriptionOfGoods");
 			gw = document.getElementsByName("wogrossWeight");
 			supp = document.getElementsByName("wosupplier");
+			delivery_non_container_new_array = [];
 			
 			for(var i = 0; i < descrp.length; i++){
 				if(descrp[i].value === ""){
@@ -1599,15 +1917,45 @@
 				}
 			}
 			if(error.length === 0){
+				for(var j = 0; j < $('input[name=wodescriptionOfGoods]').length; j++){
+					if($('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.detail_id').text() == "")
+					{
+					//new
+					var new_non_container_record = 
+					{
+						descriptionOfGoods: $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.descriptionOfGood').val(),
+						grossWeight: $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.grossWeight').val(),
+						supplier:  $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.supplier').val()
 
-				return true;
+					};
+					delivery_non_container_new_array.push(new_non_container_record);
+				}
+				else
+				{
+					//update
+					var current_id = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.detail_id').text();
+					for(var k = 0; k < delivery_non_container_array.length; k++)
+					{
+						if(delivery_non_container_array[k].id == current_id)
+						{
+							delivery_non_container_array[k].descriptionOfGood = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.descriptionOfGood').val();
+							delivery_non_container_array[k].grossWeight = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.grossWeight').val();
+							delivery_non_container_array[k].supplier = $('input[name=wodescriptionOfGoods]').eq(j).closest('tr').find('.supplier').val();
+						}
+					}
+				}
 			}
-			else{
-				return false;
-			}
+			console.log(delivery_non_container_array);
+			console.log(delivery_non_container_new_array);
+			return true;
 		}
+		else
+		{
+			return false;
+		}
+	}
 
-	})
+})
 
 </script>
 @endpush

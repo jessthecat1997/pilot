@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @push('styles')
 <style type="text/css">
 	span.control-label {
@@ -13,83 +12,49 @@
 	}
 </style>
 @endpush
-
 @section('content')
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel-heading">
-			<h2>&nbsp;Manage Trucking</h2>
-			<hr/>
-		</div>
-		<div class = "panel-body panel">
-			<div class="col-md-12">
+<h2>&nbsp;Delivery</h2>
+<hr>
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Trucking Information
+			</div>
+			<div class="panel-body">
 				@if($service_order->status == 'P')
-				<h4>Trucking Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
+				<button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
 				@else
-				<h4>Trucking Information <button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button></h4>
+				<button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
 				@endif
-				<br />
-				<table class="table table-responsive">
-					<tbody>
-						<tr>
-							<td class="active"><strong>Trucking Service Order #: </strong></td>
-
-							<td class = "success" id="consignee"><strong>{{ $service_order->id }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Consignee: </strong></td>
-							<td class="success" id="address"><strong>{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Company Name: </strong></td>
-
-							<td class="success" id="sotype"><strong>{{ $service_order_details[0]->companyName }}</strong></td>
-							<td class="success">
-
-							</td>
-						</tr>
-						<tr>
-							<td class="active"><strong>Status: </strong></td>
-							<td class="success">
-								@php
-								switch($service_order->status){
-								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-								@endphp
-							</td>
-							<td class="success">
-							</td>
-						</tr>
-						<tr>
-							<td class="active">
-								<strong>Estimated Delivery Fee: </strong>
-							</td>
-
-							<td class="success" colspan="2">
-								<strong>Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></strong>
-							</td>
-						</tr>
-						<tr>
-							<td class = "active">
-								<strong>Delivery Status: </strong><br><br>
-
-							</td>
-							<td class="success" colspan="2">
-								<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
-								<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
-								<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Trucking Service Order #:</strong> {{ $service_order->id }}</h5>
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Consignee:</strong> {{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</h5>
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Company Name:</strong> {{ $service_order_details[0]->companyName }}</h5>
+				</div>
+				<div class="form-group">
+					<label>Status:</label>
+					@php
+					switch($service_order->status){
+					case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+					case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+					case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+					default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+					@endphp
+				</div>
+				<div class="form-group">
+					<h5 id="consignee"><strong>Estimated Delivery Fee:</strong> Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></h5>
+				</div>
+				<div class="form-group">
+					<label>Delivery Status:</label>
+					<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
+					<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
+					<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -99,9 +64,9 @@
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 				@if($service_order->status == 'P' )
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery">New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery">New Delivery</button></h4>
 				@else
-				<h4>Delivery History <button class = "btn btn-md btn-success col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
+				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
 				@endif
 				<hr />
 				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table" style="width: 100%;">
@@ -152,7 +117,7 @@
 			</div>
 			<div class="modal-footer">
 
-				<button class = "btn btn-success confirm-create-bill">Confirm</button>
+				<button class = "btn btn-primary confirm-create-bill">Confirm</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
@@ -187,7 +152,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button class = "btn btn-primary confirm-create-deposit">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
@@ -205,7 +170,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_rev != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>
@@ -259,7 +224,7 @@
 				@endif
 				<br />
 				@if($service_order->bi_head_id_exp != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
+				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "expense_table">
 					<thead>
 						<tr>
 							<td>
@@ -361,9 +326,9 @@
 					<div class = "col-md-12">
 						<div class="form-horizontal">
 							<div class = "col-md-12">
-								<div class = "form-group">
+								<div class = "form-group required">
 
-									<label class = "control-label col-md-3">Name *</label>
+									<label class = "control-label col-md-3">Name</label>
 									<div class = "col-md-9">
 										<select id = "rev_bill_id" name="rev_bill_id" class = "form-control ">
 											<option value = "0">Select Charges</option>
@@ -387,8 +352,8 @@
 								</div>
 							</div>
 							<div class = "col-md-12">
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Amount *</label>
+								<div class = "form-group required">
+									<label class = "control-label col-md-3">Amount</label>
 									<div class = "col-md-9">
 										<input type = "number" name = "rev_amount" id="rev_amount" class = "form-control money" required style="text-align: right"  data-rule-required="true" value="0.00">
 									</div>
@@ -509,8 +474,8 @@
 						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
 						<div class="col-sm-8">
 							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
-								<option value = "C">Cancelled</option>
 								<option value = "F">Finished</option>
+								<option value = "C">Cancelled</option>
 							</select>
 						</div>
 					</div>
@@ -532,7 +497,7 @@
 			</div>
 
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
+				<button type="button" class="btn btn-primary save-delivery-information" >Save</button>
 				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
 			</div>
 		</div>
@@ -541,32 +506,32 @@
 
 <div id="trModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-
-		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Trucking Information</h4>
 			</div>
 			<div class="modal-body">
-				<div class = "form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-3" for="_status">Status</label>
-						<div class="col-sm-8">
-							<select name = "_status" id = "_status" class = "form-control">
-								<option value = "C">Cancelled</option>
-								@if( $pending_trucking != 0)
-								<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
-								@else
-								<option value = "F" >Finished</option>
-								@endif
-							</select>
+				<form id = "truck_modal">
+					<div class = "form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="_status">Status</label>
+							<div class="col-sm-8">
+								<select name = "_status" id = "_status" class = "form-control" required>
+									<option></option>
+									@if( $pending_trucking != 0)
+									<option value = "F" disabled title="There are still pending deliveries.">Finished</option>
+									@else
+									<option value = "F" >Finished</option>
+									@endif
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal">Save</button>
+				<button type="button" class="btn btn-primary save-trucking-information">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 			</div>
 		</div>
@@ -577,7 +542,15 @@
 
 @endsection
 
-
+@push('styles')
+<style>
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
 @push('scripts')
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -903,30 +876,42 @@
 		})
 
 		$(document).on('click', '.save-trucking-information', function(e){
-			$.ajax({
+			e.preventDefault();
+			$('#_status').valid();
+			var count = "{{ $pending_trucking }}";
 
-				type: 'PUT',
-				url: '{{ route("trucking.store") }}/{{ $so_id }}',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'destination' : $('#_destination').val(),
-					'shippingLine' : $('#_shippingLine').val(),
-					'portOfCfsLocation' : $('#_portOfCfsLocation').val(),
-					'status' : $('#_status').val(),
-				},
-				success: function(data){
-					$('#tr_destination').text($('#_destination').val());
-					$('#tr_shippingLine').text($('#_shippingLine').val());
-					$('#tr_portOfCfsLocation').text($('#_portOfCfsLocation').val());
-					$('#tr_status').text($('#_status > option:selected').text());
+			if(count == 0 ){
+				if($('#_status').valid()){
+					$.ajax({
 
-					$('#_destination').val();
-					$('#_shippingLine').val();
-					$('#_portOfCfsLocation').val();
+						type: 'PUT',
+						url: '{{ route("trucking.store") }}/{{ $so_id }}',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'destination' : $('#_destination').val(),
+							'shippingLine' : $('#_shippingLine').val(),
+							'portOfCfsLocation' : $('#_portOfCfsLocation').val(),
+							'status' : $('#_status').val(),
+						},
+						success: function(data){
+							$('#tr_destination').text($('#_destination').val());
+							$('#tr_shippingLine').text($('#_shippingLine').val());
+							$('#tr_portOfCfsLocation').text($('#_portOfCfsLocation').val());
+							$('#tr_status').text($('#_status > option:selected').text());
 
-					window.location.reload();
+							$('#_destination').val();
+							$('#_shippingLine').val();
+							$('#_portOfCfsLocation').val();
+
+							window.location.reload();
+						}
+					})
 				}
-			})
+			}
+			else{
+
+			}
+			
 		})
 
 		$(document).on('click', '.view-delivery-information', function(e){

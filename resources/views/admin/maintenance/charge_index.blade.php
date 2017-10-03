@@ -32,6 +32,29 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+					@forelse($charges as $ch)
+						<tr>
+							<td>
+								{{ $ch->name }}
+							</td>
+							<td>
+								{{ $ch->description }}
+							</td>
+							<td>
+								{{ $ch->bill_type }}
+							</td>
+							<td>
+								{{ $ch->amount}}
+							</td>
+							<td>
+								<button value = "{{ $ch->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $ch->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -133,6 +156,7 @@
 	$('#collapse2').addClass('in');
 	$('#billingcollapse').addClass('in');
 	var data;
+	var ch_id;
 	var temp_name = null;
 	var temp_desc = null;
 	var temp_amount = null;
@@ -142,7 +166,6 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/chData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -217,7 +240,36 @@
 			onkeyup: function(element) {$(element).valid()}, 
 		});
 
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
 
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 
 
 
@@ -232,10 +284,11 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ch_id = $(this).val();
+			ch_id = $(this).val();
 			data = chtable.row($(this).parents()).data();
 			$('#description').val(data.description);
 			$('#name').val(data.name);
+			$('#amount').val(data.amount);
 			temp_chargeType = data.chargeType;
 			temp_name = data.name;
 			temp_desc = data.description;
@@ -245,7 +298,7 @@
 			$('#chModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ch_id = $(this).val();
+			ch_id = $(this).val();
 			data = chtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -256,13 +309,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/charge/' + data.id,
+				url:  '/admin/charge/' + ch_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					chtable.ajax.reload();
+					chtable.ajax.url( '{{ route("ch.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -298,7 +351,7 @@
 
 			var final_amount;
 			
-				final_amount = $('#amount').inputmask('unmaskedvalue');
+			final_amount = $('#amount').inputmask('unmaskedvalue');
 			
 			if(title == "New Charge")
 			{
@@ -331,7 +384,7 @@
 									success: function (data)
 									{
 										if(typeof(data) === "object"){
-											chtable.ajax.reload();
+											chtable.ajax.url( '{{ route("ch.data") }}' ).load();
 											$('#chModal').modal('hide');
 											$('#name').val("");
 											$('#description').val("");
@@ -401,7 +454,7 @@
 									success: function (data)
 									{
 										if(typeof(data) === "object"){
-											chtable.ajax.reload();
+											chtable.ajax.url( '{{ route("ch.data") }}' ).load();
 											$('#chModal').modal('hide');
 											$('#name').val("");
 											$('#description').val("");
@@ -471,27 +524,22 @@
 					{
 						$('#btnSave').attr('disabled', 'true');
 						type_bill = null;
-						if(document.getElementById('b_type2').checked){
-							type_bill = 'E';
-						}
-						else{
-							type_bill = 'R';
-						}
+		
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/charge/' + data.id,
+							url:  '/admin/charge/' + ch_id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
 								'amount':final_amount,
-								'bill_type' : type_bill,
+								'bill_type' :$('input[name=b_type]:checked').val(),
 								'chargeType': $('input[name=chargeType]:checked').val(),
 							},
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-									chtable.ajax.reload();
+									chtable.ajax.url( '{{ route("ch.data") }}' ).load();
 									$('#chModal').modal('hide');
 									$('#name').val("");
 									$('#description').val("");

@@ -25,9 +25,8 @@ class CreateDeliveryContainers extends Migration
             $table->char('containerReturnStatus', 1);
             $table->dateTime('dateReturned')->nullable();
             $table->string('remarks', 200);
-            $table->integer('del_head_id')->unsigned();
-
-            $table->foreign('del_head_id')->references('id')->on('delivery_receipt_headers');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

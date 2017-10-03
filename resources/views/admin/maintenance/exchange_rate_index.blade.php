@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($exchange_rate as $er)
+						@forelse($exchange_rate as $er)
 						<tr>
 							<td>
 								{{ Carbon\Carbon::parse($er->dateEffective)->format("F d, Y") }}
@@ -50,6 +50,7 @@
 							</td>
 							<td>
 								<button value = "{{ $er->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $er->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($er->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -243,7 +244,7 @@
 			resetErrors();
 			er_id = $(this).val();
 			data = ertable.row($(this).parents()).data();
-			$('#dateEffective').val(data.dateEffective);
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('#description').val(data.description);
 			$('#rate').val(data.rate);
 			$('.modal-title').text('Edit Exchange Rate');
@@ -384,33 +385,45 @@
 						},
 						success: function (data)
 						{
-							ertable.ajax.url('{{ route("er.data") }}').load();
-							//window.location.reload();
-
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
+							if(typeof(data) === "object"){
+								ertable.ajax.url('{{ route("er.data") }}').load();
+								$("#rate").val("0.00");
+								$("#description").val("");
+								$('#erModal').modal('hide');
+								$('.modal-title').text('New Exchange Rate');
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully")
+								$('#btnSave').removeAttr('disabled');
+								window.location.reload();
 							}
-							toastr["success"]("Record updated successfully")
-							$('#erModal').modal('hide');
-							$("#rate").val("0.00");
-							$("#description").val("");
-							$('.modal-title').text('New Exchange Rate');
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+							}
 						}
+
 					})
 				}
 				

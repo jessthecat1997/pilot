@@ -126,216 +126,228 @@
                 <div id="collapse2" class="pane;-collapse collapse">
                     <ul class="list-group" style="list-style-type: circle;">
                         <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a>
+                            <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
                         </li>
-                        <div id="brokeragecollapse" class="pane;-collapse collapse">
+                        <li>
+                            <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
+                        </li>
+                        <li>
+                            <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
+                        </li>
+                        <div id="brokeragecollapse" class="panel-collapse collapse">
 
                             <li>
-                                <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a>
+                                <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
                             </li>
                             <li>
-                                <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a>
+                                <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
                             </li>
                             <li>
-                                <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Import Processing Fee</a>
+                                <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Import Processing Fee</a>
                             </li>
                             <li>
-                                <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage Fee</a>
+                                <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Brokerage Fee</a>
                             </li>
                             <li>
-                                <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Types</a>
+                                <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                             </li>
                             <li>
-                                <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
+                                <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
                             </li>
                             <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Basis Types</a>
+                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
                             </li>
                             <li>
-                                <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Arrastre</a>
+                                <a data-toggle="collapse" class="maintenance-group" href = "#arrastrecollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Arrastre Fee</a>
                             </li>
+                            <div id = "arrastrecollapse" class="panel-collapse collapse" >
+                                <li>
+                                    <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Containerized</a>
+                                </li>
                             <!-- <li>
                                 <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Dangerous Cargo Arrastre</a>
                             </li> -->
                             <li>
-                                <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-af-fee-lcl"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Arrastre</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('wharfage_fee.index') }}"  class = "class-wf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Wharfage</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('wharfage_fee_lcl.index') }}"  class = "class-wf-fee-lcl"><i class="fa fa-circle"></i>&nbsp;&nbsp;LCL Wharfage</a>
+                                <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-af-fee-lcl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load</a>
                             </li>
                         </div>
                         <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#deliverycollapse"><i></i>&nbsp;&nbsp;Delivery</a>
+                            <a data-toggle="collapse" class="maintenance-group" href = "#wharfagecollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Wharfage Fee</a>
                         </li>
-                        <div id="deliverycollapse" class="pane;-collapse collapse">
+                        <div id = "wharfagecollapse" class="panel-collapse collapse">
                             <li>
-                                <a href = "{{ route('location_province.index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a>
+                                <a href = "{{ route('wharfage_fee.index') }}"  class = "class-wf-fee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Containerized</a>
                             </li>
                             <li>
-                                <a href = "{{ route('location_city.index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
+                                <a href = "{{ route('wharfage_fee_lcl.index') }}"  class = "class-wf-fee-lcl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load</a>
                             </li>
                         </div>
+                    </div>
+                    <li>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#deliverycollapse"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery</a>
+                    </li>
+                    <div id="deliverycollapse" class="pane;-collapse collapse">
+
                         <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
-                        </li>
-                        <div id="billingcollapse" class="pane;-collapse collapse">
-                            <li>
-                                <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('charge.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
-                            </li>
-                        </div>
-                        <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#templatescollapse"><i></i>&nbsp;&nbsp;Templates</a>
-                        </li>
-                        <div id="templatescollapse" class="pane;-collapse collapse">
-                            <li>
-                                <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Contract Agreements</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template"><i class="fa fa-circle"></i>&nbsp;&nbsp;Quotation Terms</a>
-                            </li>
-                        </div>
-                    </ul>
-                </div>
-                <li>
-                    <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
-                </li>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <ul class="list-group" style="list-style-type: circle;">
-                        <li>
-                            <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Area Rates </a>
                         </li>
                         <li>
-                            <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                            <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Vehicle Type</a>
                         </li>
-                    </ul>
-                </div>
-                <li> 
-                    <a data-toggle="collapse" href="#collapse4" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a> 
+                        <li>
+                            <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Vehicle</a>
+                        </li>
+
+                    </div>
+                    <li>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i class="fa fa-circle" ></i>&nbsp;&nbsp;Billing</a>
+                    </li>
+                    <div id="billingcollapse" class="panel-collapse collapse">
+                        <li>
+                            <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;VAT Rate</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('charge.index') }}"  class = "class-charges">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Charges</a>
+                        </li>
+                    </div>
+                    <li>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#templatescollapse"><i class="fa fa-circle"></i>&nbsp;&nbsp;Templates</a>
+                    </li>
+                    <div id="templatescollapse" class="panel-collapse collapse">
+                        <li>
+                            <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Contract Agreements</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template">&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Quotation Terms</a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <li>
+                <a href="{{ route('queries.index') }}"><i class="fa fa-list"></i>&nbsp;&nbsp;Queries</a>
+            </li>
+            <li>
+                <a data-toggle="collapse" href="#collapse3" class="class-reports"><i class="fa fa-bar-chart"></i>&nbsp;&nbsp;Reports</a>
+            </li>
+            <div id="collapse3" class="panel-collapse collapse">
+                <ul class="list-group" style="list-style-type: circle;">
+                    <li>
+                        <a href = "{{ route('shipment.index') }}"  class = "class-shipment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Shipment Report</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                    </li>
+                </ul>
+            </div>
+            <li> 
+                <a data-toggle="collapse" href="#collapse4" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a> 
+            </li> 
+            <div id="collapse4" class ="panel-collapse collapse"> 
+                <ul class="list-group" style="list-style-type: circle;"> 
+                 <li> 
+                    <a data-toggle="collapse" class="maintenance-group" href = "#archivecollapse"><i></i>&nbsp;&nbsp;Archive</a> 
                 </li> 
-                <div id="collapse4" class ="panel-collapse collapse"> 
-                    <ul class="list-group" style="list-style-type: circle;"> 
-                     <li> 
-                        <a data-toggle="collapse" class="maintenance-group" href = "#archivecollapse"><i></i>&nbsp;&nbsp;Archive</a> 
+                <div id="archivecollapse" class="pane;-collapse collapse"> 
+
+                    <li> 
+                        <a data-toggle="collapse" class="maintenance-group" href = "#archive_brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a> 
                     </li> 
-                    <div id="archivecollapse" class="pane;-collapse collapse"> 
+                    <div id="archive_brokeragecollapse" class="pane;-collapse collapse"> 
 
                         <li> 
-                            <a data-toggle="collapse" class="maintenance-group" href = "#archive_brokeragecollapse"><i></i>&nbsp;&nbsp;Brokerage</a> 
+                            <a href = "{{ route('cds_fee.utilities_index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a> 
                         </li> 
-                        <div id="archive_brokeragecollapse" class="pane;-collapse collapse"> 
-
-                            <li> 
-                                <a href = "{{ route('cds_fee.utilities_index') }}"  class = "class-cds-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;CDS Fee</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('exchange_rate.utilities_index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('ipf_fee.utilities_index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Import Processing Fee</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('brokerage_fee.utilities_index') }}"  class = "class-brokerage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage Fee</a> 
-                            </li> 
-                        </div> 
                         <li> 
-                            <a data-toggle="collapse" class="maintenance-group" href = "#archive_deliverycollapse"><i></i>&nbsp;&nbsp;Delivery</a> 
+                            <a href = "{{ route('exchange_rate.utilities_index') }}"  class = "class-exchange-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Exchange Rate</a> 
                         </li> 
-                        <div id="archive_deliverycollapse" class="pane;-collapse collapse"> 
-                            <li> 
-                                <a href = "{{ route('location_province.utilities_index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('location_city.utilities_index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('location.utilities_index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('standard_area_rate.utilities_index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('vehicle_type.utilities_index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('vehicle.utilities_index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('container_type.utilities_index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a> 
-                            </li> 
-                        </div> 
                         <li> 
-                            <a data-toggle="collapse" class="maintenance-group" href = "#archive_billingcollapse"><i></i>&nbsp;&nbsp;Billing</a> 
+                            <a href = "{{ route('ipf_fee.utilities_index') }}"  class = "class-ipf-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Import Processing Fee</a> 
                         </li> 
-                        <div id="archive_billingcollapse" class="pane;-collapse collapse"> 
-                            <li> 
-                                <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('charges.utilities_index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a> 
-                            </li> 
-                        </div> 
                         <li> 
-                            <a data-toggle="collapse" class="maintenance-group" href = "#archive_employeecollapse"><i></i>&nbsp;&nbsp;Employee</a> 
+                            <a href = "{{ route('brokerage_fee.utilities_index') }}"  class = "class-brokerage-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage Fee</a> 
                         </li> 
-                        <div id="archive_employeecollapse" class="pane;-collapse collapse"> 
-                            <li> 
-                                <a href = "{{ route('employee_type.utilities_index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee Type</a> 
-                            </li> 
-                            <li> 
-                                <a href = "{{ route('employee.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a> 
-                            </li> 
-                        </div> 
                     </div> 
                     <li> 
-                        <a data-toggle="collapse" class="maintenance-group" href = "#employeecollapse"><i></i>&nbsp;&nbsp;Employee</a> 
+                        <a data-toggle="collapse" class="maintenance-group" href = "#archive_deliverycollapse"><i></i>&nbsp;&nbsp;Delivery</a> 
                     </li> 
-                    <div id="employeecollapse" class="pane;-collapse collapse"> 
+                    <div id="archive_deliverycollapse" class="pane;-collapse collapse"> 
                         <li> 
-                            <a href = "{{ route('employee_type.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee Type</a> 
+                            <a href = "{{ route('location_province.utilities_index') }}"  class = "class-province"><i class="fa fa-circle"></i>&nbsp;&nbsp;Province</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('location_city.utilities_index') }}"  class = "class-city"><i class="fa fa-circle"></i>&nbsp;&nbsp;City</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('location.utilities_index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('standard_area_rate.utilities_index') }}"  class = "class-area-rates"><i class="fa fa-circle"></i>&nbsp;&nbsp;Area Rates </a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('vehicle_type.utilities_index') }}"  class = "class-vehicle-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle Type</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('vehicle.utilities_index') }}"  class = "class-vehicle"><i class="fa fa-circle"></i>&nbsp;&nbsp;Vehicle</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('container_type.utilities_index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a> 
+                        </li> 
+                    </div> 
+                    <li> 
+                        <a data-toggle="collapse" class="maintenance-group" href = "#archive_billingcollapse"><i></i>&nbsp;&nbsp;Billing</a> 
+                    </li> 
+                    <div id="archive_billingcollapse" class="pane;-collapse collapse"> 
+                        <li> 
+                            <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;VAT Rate</a> 
+                        </li> 
+                        <li> 
+                            <a href = "{{ route('charges.utilities_index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a> 
+                        </li> 
+                    </div> 
+                    <li> 
+                        <a data-toggle="collapse" class="maintenance-group" href = "#archive_employeecollapse"><i></i>&nbsp;&nbsp;Employee</a> 
+                    </li> 
+                    <div id="archive_employeecollapse" class="pane;-collapse collapse"> 
+                        <li> 
+                            <a href = "{{ route('employee_type.utilities_index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee Type</a> 
                         </li> 
                         <li> 
                             <a href = "{{ route('employee.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a> 
                         </li> 
                     </div> 
-                    
-                </ul> 
-            </div> 
-        </ul>
-    </div>
+                </div> 
+                <li> 
+                    <a data-toggle="collapse" class="maintenance-group" href = "#employeecollapse"><i></i>&nbsp;&nbsp;Employee</a> 
+                </li> 
+                <div id="employeecollapse" class="pane;-collapse collapse"> 
+                    <li> 
+                        <a href = "{{ route('employee_type.index') }}"  class = "class-vat-rate"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee Type</a> 
+                    </li> 
+                    <li> 
+                        <a href = "{{ route('employee.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a> 
+                    </li> 
+                </div> 
 
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                @yield('content')
-            </div>
+            </ul> 
+        </div> 
+    </ul>
+</div>
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            @yield('content')
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#page-content-wrapper -->
 </div>
 
 

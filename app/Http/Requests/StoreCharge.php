@@ -29,7 +29,7 @@ class StoreCharge extends FormRequest
             return [
             'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:charges,name,'. $this->segment(3) ,
             'bill_type'=> 'required',
-            'amount' => 'required|numeric|between:0,1000000',
+            'amount' => 'required|numeric|between:0,9999999.99',
             ];
 
             break;

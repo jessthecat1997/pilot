@@ -61,6 +61,7 @@
 							</td>
 							<td>
 								<button value = "{{ $cds->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $cds->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($cds->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -228,15 +229,17 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			 cds_id = $(this).val();
+			cds_id = $(this).val();
 			data = cdstable.row($(this).parents()).data();
 			$('#fee').val(data.fee);
-			$('#dateEffective').val(data.dateEffective);
+			console.log($(this).closest('tr').find('.date_Effective').val());
+
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('.modal-title').text('Update CDS Fee');
 			$('#cdsModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			 cds_id = $(this).val();
+			cds_id = $(this).val();
 			data = cdstable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -281,10 +284,7 @@
 
 			var fee_unmask = $('#fee').inputmask('unmaskedvalue');
 			var fee_nocomma = parseFloat(fee_unmask);
-			if (fee_nocomma  == 0){
-				fee_nocomma = "";
-			}
-
+			
 			e.preventDefault();
 			var title = $('.modal-title').text();
 
@@ -342,10 +342,12 @@
 									console.log(i + " => " + v); 
 									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-								});}
-							},
+								});
+							}
 
-						})
+						},
+
+					})
 				}
 			}else{
 				if ($('#dateEffective').valid()){
@@ -360,32 +362,46 @@
 						},
 						success: function (data)
 						{
-							cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
-							toastr.options = {
-								"closeButton": false,
-								"debug": false,
-								"newestOnTop": false,
-								"progressBar": false,
-								"rtl": false,
-								"positionClass": "toast-bottom-right",
-								"preventDuplicates": false,
-								"onclick": null,
-								"showDuration": 300,
-								"hideDuration": 1000,
-								"timeOut": 2000,
-								"extendedTimeOut": 1000,
-								"showEasing": "swing",
-								"hideEasing": "linear",
-								"showMethod": "fadeIn",
-								"hideMethod": "fadeOut"
-							}
-							toastr["success"]("Record updated successfully")	
-							$('#cdsModal').modal('hide');
-							$('#fee').val("0.00");
-							$('#dateEffective').val("");
-							$('.modal-title').text('New CDS Fee');
 
-							//window.location.reload();
+							if(typeof(data) === "object"){
+								cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
+								$('#cdsModal').modal('hide');
+								$('.modal-title').text('New CDS Fee');
+								$('#fee').val('');
+								$('#dateEffective').val('');
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record updated successfully");
+								$('#btnSave').removeAttr('disabled');
+								window.location.reload();
+
+							}else{
+
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v); 
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+							}
 						}
 					})
 

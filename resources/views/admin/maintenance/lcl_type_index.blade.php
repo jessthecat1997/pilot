@@ -275,7 +275,7 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully");
+					toastr["success"]("Record added successfully");
 
 					$('#name').val("");
 					$('#description').val("");

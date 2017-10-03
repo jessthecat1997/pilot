@@ -100,6 +100,9 @@ Route::resource('/admin/wharfage_fee','WharfageFeeController');
 Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
 Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
 Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
+Route::resource('/admin/section','SectionsController');
+Route::resource('/admin/category','CategoryTypesController');
+Route::resource('/admin/item','ItemsController');
 
 
 Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
@@ -114,6 +117,9 @@ Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data'
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 
 //Utilities Routes
+Route::resource('/utilities/brokerage','UtilitiesBrokerageController');
+
+
 Route::resource('/utilities/employee', 'EmployeesController');
 Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
 Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');
@@ -246,8 +252,11 @@ Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.da
 Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
 Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
 Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
-
 Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
+Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
+Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
+
 
 
 
@@ -267,9 +276,10 @@ Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.
 Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
 Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
 Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
-Route::get('admin/cheque_confirm', 'PaymentsController@cheque_table')->name('chq.data');
+Route::get('admin/cheque_confirm', 'ChequesController@cheque_table')->name('chq.data');
 Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
 Route::resource('/cheque', 'ChequesController');
+Route::put('/confirm_cheque/{id?}', 'ChequesController@confirm_cheque')->name('con_cheque');
 //Billing
 Route::resource('/billing', 'BillingDetailsController');
 Route::resource('/billing_header', 'BillingInvoiceHeadersController');
@@ -278,6 +288,8 @@ Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
 Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
 Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
+Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
+
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
 Route::get('billing', 'BillingDetailsController@index')->name('view.index');
@@ -333,6 +345,8 @@ Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->na
 Route::resource('/quotation', 'QuotationsController');
 Route::get('/quotation/{id}/print', 'QuotationsController@print');
 Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
+Route::get('/admin/get_quotation_location/{location_id?}', 'QuotationsController@get_quotation_location')->name('get_quotation_location');
+Route::get('/admin/get_quotation_rates', 'QuotationsController@get_quotation_rates')->name('get_quotation_rates');
 //vanessa addition
 Route::resource('admin/quotation_template','QuotationTemplateController');
 
@@ -348,6 +362,7 @@ Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@updat
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
 Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery', 'TruckingsController@update_delivery_record');
 Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
+Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/reschedule', 'TruckingsController@reschedule_delivery');
 //Delivery Receipt Routes
 Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');
 Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsController@view_delivery')->name('delivery.view');
@@ -372,8 +387,7 @@ Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsControll
 Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
 Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
 Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
-
-
+Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
 //Vanessa addition
 Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
 Route::resource('/admin/contract_template','ContractTemplatesController');

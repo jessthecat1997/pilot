@@ -71,7 +71,49 @@ class QuotationsController extends Controller
         return $new_quotation;
     }
 
-    
+    public function get_quotation_location(Request $request)
+    {
+        $location = \DB::table('locations')
+        ->join('location_cities as A', 'locations.cities_id', '=', 'A.id')
+        ->join('location_provinces as B', 'A.provinces_id', '=', 'B.id')
+        ->select('A.name as city', 'B.name as province', 'locations.address as location')
+        ->where('locations.id', '=', $request->location_id)
+        ->get();
+
+        return $location;
+    }
+
+    public function get_quotation_rates(Request $request)
+    {
+        $location_from = \App\Location::withTrashed()->findOrFail($request->location_from);
+        $location_to = \App\Location::withTrashed()->findOrFail($request->location_to);
+
+        $standard_rate = \DB::table('standard_area_rates')
+        ->select('amount', \DB::raw('DATE_FORMAT(created_at, "%M %d, %Y") as created_at'))
+        ->where('areaTo', '=', $request->location_to)
+        ->where('areaFrom', '=', $request->location_from)
+        ->get();
+
+        $delivery = \DB::table('delivery_receipt_headers')
+        ->select('amount', \DB::raw('DATE_FORMAT(created_at, "%M %d, %Y") as new_created_at'), 'delivery_receipt_headers.id')
+        ->where('locations_id_pick', '=', $request->location_from)
+        ->where('locations_id_del', '=', $request->location_to)
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+        $estimate = 0;
+        foreach ($delivery as $key => $del) {
+            $estimate += $del->amount;
+        }
+        if(count($delivery) > 0)
+        {
+            $estimate = ($estimate / count($delivery));   
+        }
+
+
+        return \Response::make(array($standard_rate, $delivery, $estimate));
+    }
+
     public function show($id)
     {
         $quotation = DB::table('quotation_headers')
@@ -105,7 +147,7 @@ class QuotationsController extends Controller
         }
     }
 
-    
+
     public function edit($id)
     {
         //
@@ -117,7 +159,7 @@ class QuotationsController extends Controller
         //
     }
 
-    
+
     public function destroy($id)
     {
         $quotation = \App\QuotationHeader::findOrFail($id);

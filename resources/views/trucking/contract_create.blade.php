@@ -101,12 +101,63 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					2. Consignee Quotations
+				</div>
+				<div class="panel-body">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-9">
+							</div>
+							<div class="col-md-3">
+								<button class="btn btn-md btn-primary new_quotation" style="width: 100%;" disabled>New Quotation</button>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
+									<thead>
+										<tr>
+											<th>
+												Quotation No.
+											</th>
+											<th>
+												Date Created
+											</th>
+											<th>
+												Status
+											</th>
+											<th>
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="4" style="text-align: center;">
+												No records found.
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
 			<div class="panel-body">
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">2. Contract Duration</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">3. Contract Duration</a>
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
@@ -117,13 +168,13 @@
 									</div>
 								</div>
 								<form class = "form-horizontal">
-									<div class="form-group">
+									<div class="form-group required">
 										<label class="control-label col-sm-3" for="dateEffective">Date Effective:</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date">
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group required">
 										<label class="control-label col-sm-3" for="dateExpiration">Date Expiration:</label>
 										<div class="col-sm-8">
 											<input type="text" class="form-control" name = "dateExpiration" id="dateExpiration" placeholder="Enter Expiration Date">
@@ -137,7 +188,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">4. Terms &amp; Condition</a>
 							</h4>
 						</div>
 						<div id="collapseTwo" class="panel-collapse collapse">
@@ -195,7 +246,7 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">
 							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">4. Finalize</a>
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">5. Finalize</a>
 							</h4>
 						</div>
 						<div id="collapseThree" class="panel-collapse collapse">
@@ -385,18 +436,20 @@
 </div> 
 @endsection
 @push('styles')
+<link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 <style>
-	.contracts
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.contracts
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 @endpush
 
 @push('scripts')
+<script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
 	var consigneeID = null;
@@ -409,6 +462,16 @@
 		$('#contract-row').remove();
 
 		$.fn.dataTable.ext.errMode = 'throw';
+
+		//Quotation
+		$(document).on('click', '.view_quotation', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val());
+		})
+		$(document).on('click', '.new_quotation', function(e){
+			e.preventDefault();
+			window.location.href = "{{ route('quotation.create') }}";
+		});
 
 		$("#commentForm").validate({
 			rules: 
@@ -432,8 +495,8 @@
 			lang:'en',
 			format:'Y/m/d',
 			formatDate:'Y/m/d',
-			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
-			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d') }}",
 		});
 
 		$('#dateExpiration').datetimepicker({
@@ -443,8 +506,6 @@
 			lang:'en',
 			format:'Y/m/d',
 			formatDate:'Y/m/d',
-			value: "{{ Carbon\Carbon::now()->format('Y/m/d') }}",
-			startDate:	"{{ Carbon\Carbon::now()->format('Y/m/d') }}",
 		});
 
 
@@ -470,6 +531,39 @@
 							$('#_ccompanyName').val(data[0].companyName);
 							$('#_cbusinessStyle').val(data[0].businessStyle);
 							$('#_cTIN').val(data[0].TIN);
+
+							$.ajax({
+								type: 'GET',
+								url: "{{ route('trucking.index')}}/contracts/get_quotations/" + $('#consignee_id').val(),
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'consignee_id' : $('#consignee_id').val(),
+								},
+								success: function(new_data)
+								{
+									var table_detail = "";
+									var no_found = "<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>";
+									for(var i = 0; i < new_data.length; i++)
+									{
+										table_detail += "<tr><td>"+ new_data[i].id +"</td><td>"+ new_data[i].new_created_at+"</td><td><input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'></td><td><button class = 'btn btn-md btn-info view_quotation btn-md' value = '" + new_data[i].id +"'><span class = 'fa fa-eye'></span></button></td></tr>"
+									}
+									if(new_data.length > 0){
+										$('#quotation_table > tbody').html("");
+										$('#quotation_table > tbody').append(table_detail);
+										$('.quotation_status').each(function(i){
+
+										})
+									}
+									else
+									{
+										$('#quotation_table > tbody').append(no_found);
+									}
+									
+									$('.new_quotation').removeAttr('disabled');
+
+								}
+
+							})
 						}
 					},
 					error: function(data) {
@@ -486,10 +580,20 @@
 				$('#_clastName').val("");
 				$('#_ccontactNumber').val("");
 				$('#_cemail').val("");
-				$('#_ccompanyName').val("");
+				$('#_ccompa	nyName').val("");
 				$('#_cbusinessStyle').val("");
 				$('#_cTIN').val("");
+				$('#quotation_table > tbody').html("");
+				$('.new_quotation').attr('disabled', 'true');
+				$('#quotation_table > tbody').html("<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>");
 			}
+		})
+
+		$(document).on('change', '.quotation_status', function(e){
+			var obj = $(this);
+			$('.quotation_status').not(obj).each(function(){
+				$(this).prop('checked', false);
+			})
 		})
 		
 
@@ -653,10 +757,6 @@
 			}
 		})
 
-		
-
-		
-
 		$(document).on('click', '.delete-contract-row', function(e){
 			e.preventDefault();
 			$('#contract_rates_warning').removeClass('in');
@@ -702,7 +802,30 @@
 		
 
 		$(document).on('click', '.finalize-contract', function(e){
-			if(finalvalidateContractRows() === true){
+			$('.finalize-contract').attr('disabled', 'true');
+			$('.draft-contract').attr('disabled', 'true');
+			var valid_date = false;
+			if($('#dateExpiration').val() == "____/__/__")
+			{
+				valid_date = false;
+				$('#dateExpiration').css('border-color', 'red');
+			}
+			else
+			{
+				if($('#dateExpiration').val() > $('#dateEffective').val()){
+					valid_date = true;
+					$('#dateEffective').css('border-color', 'green');
+					$('#dateExpiration').css('border-color', 'green');
+				}
+				else{
+					valid_date = false;
+					$('#dateEffective').css('border-color', 'red');
+					$('#dateExpiration').css('border-color', 'red');
+				}
+			}
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
+			console.log(quot_id);
+			if(finalvalidateContractRows() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("create_contract") }}',
@@ -714,20 +837,69 @@
 						'isFinalize' : 1,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'quot_head_id' : quot_id,
 					},
 
-					success: function (data){
+					success: function (data)
+					{
+						toastr.options = {
+							"closeButton": false,
+							"debug": false,
+							"newestOnTop": false,
+							"progressBar": false,
+							"rtl": false,
+							"positionClass": "toast-bottom-right",
+							"preventDuplicates": false,
+							"onclick": null,
+							"showDuration": 300,
+							"hideDuration": 1000,
+							"timeOut": 2000,
+							"extendedTimeOut": 1000,
+							"showEasing": "swing",
+							"hideEasing": "linear",
+							"showMethod": "fadeIn",
+							"hideMethod": "fadeOut"
+						}
+						toastr["success"]("Contract saved");
 						window.location.replace("{{route('contracts.index')}}"+ "/" + data + "/view");
+						
 					}
 
 				})
+			}
+			else
+			{
+				$('.finalize-contract').removeAttr('disabled');
+				$('.draft-contract').removeAttr('disabled');
 			}
 		})
 
 
 
 		$(document).on('click', '.draft-contract', function(e){
-			if(validateDraft() === true){
+			$('.draft-contract').attr('disabled', 'true');
+			$('.finalize-contract').attr('disabled', 'true');
+			var valid_date = false;
+			if($('#dateExpiration').val() == "____/__/__")
+			{
+				valid_date = false;
+				$('#dateExpiration').css('border-color', 'red');
+			}
+			else
+			{
+				if($('#dateExpiration').val() > $('#dateEffective').val()){
+					valid_date = true;
+					$('#dateEffective').css('border-color', 'green');
+					$('#dateExpiration').css('border-color', 'green');
+				}
+				else{
+					valid_date = false;
+					$('#dateEffective').css('border-color', 'red');
+					$('#dateExpiration').css('border-color', 'red');
+				}
+			}
+			var quot_id = $('.quotation_status:checked').closest('tr').find('.view_quotation').val();
+			if(validateDraft() === true && valid_date == true){
 				$.ajax({
 					method: 'POST',
 					url: '{{ route("create_contract") }}',
@@ -736,9 +908,11 @@
 						'consigneeName' : $('#consigneeName').val(),
 						'dateEffective' : $('#dateEffective').val(),
 						'dateExpiration' : $('#dateExpiration').val(),
-						'isFinalize':0,
+						'isFinalize': 0,
 						'consigneeID' : consigneeID,
 						'specificDetails' : terms_and_condition_string,
+						'quot_head_id' : quot_id,
+
 					},
 
 					success: function (data){
@@ -766,11 +940,11 @@
 
 				})
 			}
+			else{
+				$('.draft-contract').removeAttr('disabled');
+				$('.finalize-contract').removeAttr('disabled');
+			}
 		})
-
-
-
-
 	})
 
 
@@ -865,9 +1039,6 @@ function validateConsignee()
 
 function finalvalidateContractRows()
 {
-	
-
-
 	terms_and_condition_string = "";
 
 	rate_pairs = [];
@@ -875,8 +1046,9 @@ function finalvalidateContractRows()
 	terms = document.getElementsByName('specificDetails');
 	error = "";
 
-	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "")
+	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "" )
 	{
+
 		if($('#dateExpiration').val() < $('#dateEffective').val()){
 			error += "Invalid duration";
 			$('#contract_duration_warning').addClass('in');
@@ -884,6 +1056,8 @@ function finalvalidateContractRows()
 		}
 		else{
 			$('#contract_duration_warning').removeClass('in');
+			$('#dateExpiration').css('border-color', 'green');
+			$('#dateEffective').css('border-color', 'green');
 		}
 	}
 	else{
@@ -891,6 +1065,14 @@ function finalvalidateContractRows()
 		$('#contract_duration_warning').addClass('in');
 		location.href = "#contract_duration_title";
 	}
+	if($('#dateExpiration').val() == "____/__/__" || $('#dateExpiration').val() == ""){
+		error += "No date expiration";
+		$('#dateExpiration').css('border-color', 'red');
+	}
+	else{
+		$('#dateExpiration').css('border-color', 'green');
+	}
+
 
 	if(consigneeID == 0 || consigneeID == null)
 	{
@@ -932,13 +1114,39 @@ function finalvalidateContractRows()
 
 function validateDraft()
 {
-	
-
-
 	terms_and_condition_string = "";
+
+	rate_pairs = [];
 
 	terms = document.getElementsByName('specificDetails');
 	error = "";
+
+	if($('#dateEffective').val() != "" && $('#dateExpiration').val() != "" )
+	{
+
+		if($('#dateExpiration').val() < $('#dateEffective').val()){
+			error += "Invalid duration";
+			$('#contract_duration_warning').addClass('in');
+			location.href = "#contract_duration_title";
+		}
+		else{
+			$('#contract_duration_warning').removeClass('in');
+			$('#dateExpiration').css('border-color', 'green');
+			$('#dateEffective').css('border-color', 'green');
+		}
+	}
+	else{
+		error += "No date effective";
+		$('#contract_duration_warning').addClass('in');
+		location.href = "#contract_duration_title";
+	}
+	if($('#dateExpiration').val() == "____/__/__" || $('#dateExpiration').val() == ""){
+		error += "No date expiration";
+		$('#dateExpiration').css('border-color', 'red');
+	}
+	else{
+		$('#dateExpiration').css('border-color', 'green');
+	}
 
 
 	if(consigneeID == 0 || consigneeID == null)
@@ -949,15 +1157,6 @@ function validateDraft()
 	}
 	else{
 		$('#consignee_warning').removeClass('in');
-	}
-
-	if($('#dateExpiration').val() < $('#dateEffective').val()){
-		error += "Invalid duration";
-		$('#contract_duration_warning').addClass('in');
-		location.href = "#contract_duration_title";
-	}
-	else{
-		$('#contract_duration_warning').removeClass('in');
 	}
 	
 	

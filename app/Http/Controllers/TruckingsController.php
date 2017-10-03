@@ -29,7 +29,19 @@ class TruckingsController extends Controller
 
     public function index()
     {
-        return view('trucking.trucking_service_order_index');
+        $truckings = DB::table('trucking_service_orders')
+        ->select(
+            'trucking_service_orders.id',
+            'companyName',
+            'status',
+            DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+        ->join('consignee_service_order_details', 'so_details_id', '=', 'consignee_service_order_details.id')
+        ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
+        ->join('consignees', 'consignees_id', '=', 'consignees.id')
+        ->where('trucking_service_orders.status', '!=', ['F', 'C'])
+        ->get();
+
+        return view('trucking.trucking_service_order_index', compact(['truckings']));
     }
 
 
@@ -135,6 +147,60 @@ class TruckingsController extends Controller
         
         return Response::make(array($quotation , $location));
     }
+    public function reschedule_delivery(Request $request){
+        $delivery = \App\DeliveryReceiptHeader::findOrFail($request->delivery_id);
+        $delivery->status = "C";
+        $delivery->save();
+
+        $new_delivery = new \App\DeliveryReceiptHeader;
+        $new_delivery->emp_id_driver = $delivery->emp_id_driver;
+        $new_delivery->emp_id_helper = $delivery->emp_id_helper;
+        $new_delivery->locations_id_pick = $delivery->locations_id_pick;
+        $new_delivery->locations_id_del = $delivery->locations_id_del;
+        $new_delivery->plateNumber = $delivery->plateNumber;
+        $new_delivery->withContainer = $delivery->withContainer;
+        $new_delivery->status = "P";
+        $new_delivery->amount = $delivery->amount;
+        $new_delivery->deliveryDateTime = $request->deliveryDateTime;
+        $new_delivery->pickupDateTime = $request->pickupDateTime;
+        $new_delivery->tr_so_id = $delivery->tr_so_id;
+        $new_delivery->save();
+
+        if($delivery->withContainer == 0)
+        {
+            $delivery_non_containers = DB::table('delivery_head_non_containers')
+            ->where('del_head_id', '=', $delivery->id)
+            ->get();
+
+
+            foreach ($delivery_non_containers as $key => $detail) 
+            {
+                $new_delivery_head_non_con = new \App\DeliveryHeadNonContainer;
+                $new_delivery_head_non_con->del_head_id = $new_delivery->id;
+                $new_delivery_head_non_con->non_con_id = $detail->non_con_id;
+
+                $new_delivery_head_non_con->save();
+            }
+
+        }
+        else
+        {
+            $delivery_containers = DB::table('delivery_head_containers')
+            ->where('del_head_id', '=', $delivery->id)
+            ->get();
+
+
+            foreach ($delivery_containers as $key => $detail) 
+            {
+                $new_delivery_head_con = new \App\DeliveryHeadContainer;
+                $new_delivery_head_con->del_head_id = $new_delivery->id;
+                $new_delivery_head_con->container_id = $detail->container_id;
+
+                $new_delivery_head_con->save();
+            }
+        }
+        return $new_delivery;
+    }
 
     public function edit_delivery(Request $request)
     {
@@ -177,13 +243,15 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.locations_id_pick',
             'delivery_receipt_headers.withContainer',
             'delivery_receipt_headers.amount'
-            )
+        )
         ->get();
-        
+
         if($delivery[0]->withContainer == 0){
             $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')    
+            ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
+            ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
+            ->select('descriptionOfGoods', 'grossWeight', 'supplier', 'delivery_non_container_details.id', 'delivery_non_container_details.deleted_at')
+            ->where('B.del_head_id', '=', $request->delivery_id)    
             ->get();
         }
 
@@ -191,8 +259,9 @@ class TruckingsController extends Controller
         else{
             $container_with_detail = [];
             $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
+            ->join('delivery_head_containers AS B', 'B.container_id', '=', 'delivery_containers.id')
+            ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+            ->where('del_head_id', '=', $request->delivery_id)
             ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
             ->get();
             foreach ($delivery_containers as $container) {
@@ -215,7 +284,7 @@ class TruckingsController extends Controller
         ->join('consignee_service_order_details as B', 'B.so_headers_id', '=', 'A.id')
         ->join('trucking_service_orders as C', 'C.so_details_id', '=', 'B.id')
         ->get();
-        
+
 
         $container_volumes = ContainerType::all();
         $vehicle_types = VehicleType::all();
@@ -233,7 +302,7 @@ class TruckingsController extends Controller
             return view('trucking.delivery_edit', compact(['container_volumes', 'vehicle_types', 'employees', 'so_id', 'locations', 'provinces', 'delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee']));
         }
         else{
-            return 'Cannot edit finished deliveries';
+            return 'Cannot edit finished/cancelled deliveries';
         }
     }
 
@@ -261,11 +330,11 @@ class TruckingsController extends Controller
             case 0:
             $consignee_header->bi_head_id_exp = $billing_header->id;
             break;
-            
+
             case 1:
             $consignee_header->bi_head_id_rev = $billing_header->id;
             break;
-            
+
             default:
                 # code...
             break;
@@ -273,7 +342,7 @@ class TruckingsController extends Controller
         $consignee_header->save();
 
         return $consignee_header;
-        
+
     }
     public function view_trucking(Request $request){
         try
@@ -299,7 +368,7 @@ class TruckingsController extends Controller
             ->get();
 
             $employees = Employee::all();
-            
+
             $vehicle_types = VehicleType::all();
 
             $container_volumes = ContainerType::all();
@@ -309,7 +378,7 @@ class TruckingsController extends Controller
             ->select('plateNumber', 'name', 'model')
             ->where('vehicles.deleted_at', '=', null)
             ->get();
-            
+
             $deliveries = DB::table('delivery_receipt_headers')
             ->select('id', 'plateNumber', 'created_at', 'status', 'amount')
             ->where('deleted_at', '=', null)
@@ -390,518 +459,558 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             if($request->emp_id_helper == 0){
-                 $new_delivery_head->emp_id_helper = null;
-            }
-            else{
-                $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
-            }
-            $new_delivery_head->locations_id_pick = $request->locations_id_pick;
-            $new_delivery_head->locations_id_del = $request->locations_id_del;
-
-            $new_delivery_head->plateNumber = $request->plateNumber;
-            $new_delivery_head->status = "P";
-            $new_delivery_head->withContainer = 0;
-            $new_delivery_head->deliveryDateTime = $request->deliveryDate;
-            $new_delivery_head->pickupDateTime = $request->pickupDate;
-            $new_delivery_head->tr_so_id = $request->trucking_id;
-            $new_delivery_head->amount = $request->amount;
-
-            $new_delivery_head->save();
-
-            for($i = 0; $i < count($request->descrp_goods); $i++)
-            {
-                $new_noncon_detail = new DeliveryNonContainerDetail;
-                $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
-                $new_noncon_detail->grossWeight = $request->gross_weights[$i];
-                $new_noncon_detail->supplier = $request->suppliers[$i];
-                $new_noncon_detail->del_head_id =  $new_delivery_head->id;
-                $new_noncon_detail->save();
-            }
-
+             $new_delivery_head->emp_id_helper = null;
+         }
+         else{
+            $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
         }
-        else
+        $new_delivery_head->locations_id_pick = $request->locations_id_pick;
+        $new_delivery_head->locations_id_del = $request->locations_id_del;
+
+        $new_delivery_head->plateNumber = $request->plateNumber;
+        $new_delivery_head->status = "P";
+        $new_delivery_head->withContainer = 0;
+        $new_delivery_head->deliveryDateTime = $request->deliveryDate;
+        $new_delivery_head->pickupDateTime = $request->pickupDate;
+        $new_delivery_head->tr_so_id = $request->trucking_id;
+        $new_delivery_head->amount = $request->amount;
+
+        $new_delivery_head->save();
+
+        for($i = 0; $i < count($request->descrp_goods); $i++)
         {
-            $response = ""; 
-            $new_delivery_head = new DeliveryReceiptHeader;
-            $new_delivery_head->emp_id_driver = $request->emp_id_driver;
-            $new_delivery_head->emp_id_helper = $request->emp_id_helper;
+            $new_noncon_detail = new DeliveryNonContainerDetail;
+            $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
+            $new_noncon_detail->grossWeight = $request->gross_weights[$i];
+            $new_noncon_detail->supplier = $request->suppliers[$i];
 
-            $new_delivery_head->locations_id_pick = $request->locations_id_pick;
-            $new_delivery_head->locations_id_del = $request->locations_id_del;
+            $new_noncon_detail->save();
 
-            $new_delivery_head->deliveryDateTime = $request->deliveryDate;
-            $new_delivery_head->pickupDateTime = $request->pickupDate;
-
-            $new_delivery_head->plateNumber = $request->plateNumber;
-            $new_delivery_head->status = "P";
-            $new_delivery_head->withContainer = 1;
-            $new_delivery_head->tr_so_id = $request->trucking_id;
-            
-            $new_delivery_head->amount = $request->amount;
-
-            $new_delivery_head->save();
-
-            $data = json_decode($request->container_data);
-            foreach ($data as $container => $value)
-            {
-                $container = json_decode((string)json_encode($value));
-                foreach ($container as $key => $container_detail)
-                {
-                    $new_delivery_container = new DeliveryContainer;
-
-                    $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
-                    $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
-                    $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
-                    $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
-                    $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
-                    $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
-                    $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
-                    $new_delivery_container->containerReturnStatus = "N";
-                    $new_delivery_container->dateReturned = null;
-                    $new_delivery_container->remarks = "";
-                    $new_delivery_container->del_head_id = $new_delivery_head->id;
-
-                    $new_delivery_container->save();
-
-
-                    foreach ($container_detail->details as $key => $container_detail_data){
-
-                        $new_delivery_container_detail = new DeliveryContainerDetail;
-                        $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
-                        $new_delivery_container_detail->grossWeight = $container_detail_data->grossWeight;
-                        $new_delivery_container_detail->supplier = $container_detail_data->supplier;
-                        $new_delivery_container_detail->container_id = $new_delivery_container->id;
-
-                        $new_delivery_container_detail->save();
-                        $response .= $container_detail_data->descriptionOfGood;
-                    }
-
-                }
-            }
-            return $response;
+            $new_del_non_head = new \App\DeliveryHeadNonContainer;
+            $new_del_non_head->del_head_id = $new_delivery_head->id;
+            $new_del_non_head->non_con_id = $new_noncon_detail->id;
+            $new_del_non_head->save();
         }
+
     }
-    public function update_delivery(Request $request){
-        $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
-        $delivery->status = $request->status;
-        $delivery->remarks = $request->remarks;
-        $delivery->cancelDateTime = $request->cancelDateTime;
+    else
+    {
+        $response = ""; 
+        $new_delivery_head = new DeliveryReceiptHeader;
+        $new_delivery_head->emp_id_driver = $request->emp_id_driver;
+        $new_delivery_head->emp_id_helper = $request->emp_id_helper;
+
+        $new_delivery_head->locations_id_pick = $request->locations_id_pick;
+        $new_delivery_head->locations_id_del = $request->locations_id_del;
+
+        $new_delivery_head->deliveryDateTime = $request->deliveryDate;
+        $new_delivery_head->pickupDateTime = $request->pickupDate;
+
+        $new_delivery_head->plateNumber = $request->plateNumber;
+        $new_delivery_head->status = "P";
+        $new_delivery_head->withContainer = 1;
+        $new_delivery_head->tr_so_id = $request->trucking_id;
+
+        $new_delivery_head->amount = $request->amount;
+
+        $new_delivery_head->save();
+
+        $data = json_decode($request->container_data);
+        foreach ($data as $container => $value)
+        {
+            $container = json_decode((string)json_encode($value));
+            foreach ($container as $key => $container_detail)
+            {
+                $new_delivery_container = new DeliveryContainer;
+
+                $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
+                $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
+                $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
+                $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
+                $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
+                $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
+                $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
+                $new_delivery_container->containerReturnStatus = "N";
+                $new_delivery_container->dateReturned = null;
+                $new_delivery_container->remarks = "";
+
+
+                $new_delivery_container->save();
+
+                $new_del_head_con = new \App\DeliveryHeadContainer;
+                $new_del_head_con->del_head_id = $new_delivery_head->id;
+                $new_del_head_con->container_id = $new_delivery_container->id;
+
+                $new_del_head_con->save();
+
+
+                foreach ($container_detail->details as $key => $container_detail_data){
+
+                    $new_delivery_container_detail = new DeliveryContainerDetail;
+                    $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
+                    $new_delivery_container_detail->grossWeight = $container_detail_data->grossWeight;
+                    $new_delivery_container_detail->supplier = $container_detail_data->supplier;
+                    $new_delivery_container_detail->container_id = $new_delivery_container->id;
+
+                    $new_delivery_container_detail->save();
+                    $response .= $container_detail_data->descriptionOfGood;
+                }
+
+            }
+        }
+        return $response;
+    }
+}
+public function update_delivery(Request $request){
+    $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
+    $delivery->status = $request->status;
+    $delivery->remarks = $request->remarks;
+    $delivery->cancelDateTime = $request->cancelDateTime;
+    $delivery->save();
+    return $delivery;
+}
+
+public function getVehicles(Request $request){
+    $vehicles = DB::table('vehicles')
+    ->where('deleted_at', '=', null)
+    ->where('vehicle_types_id', '=', $request->vehicle_type)
+    ->get();
+
+    return $vehicles;
+}
+
+public function getContainerDetail(Request $request){
+    $container_information = DB::table('delivery_containers')
+    ->where('id', '=', $request->container_id)
+    ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnStatus')
+    ->get();
+
+    $container_details =  DB::table('delivery_container_details')
+    ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+    ->where('container_id', '=', $request->container_id)
+    ->get();
+
+    return Response::make(array($container_details, $container_information));;
+}
+
+public function update_delivery_record(Request $request)
+{
+    if($request->withContainer == "0"){
+
+        $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
+        $delivery->emp_id_driver = $request->emp_id_driver;
+        $delivery->emp_id_helper = $request->emp_id_helper;
+
+        $delivery->locations_id_pick = $request->locations_id_pick;
+        $delivery->locations_id_del = $request->locations_id_del;
+
+        $delivery->deliveryDateTime = $request->deliveryDate;
+        $delivery->pickupDateTime = $request->pickupDate;
+
+        $delivery->plateNumber = $request->plateNumber;
+        $delivery->amount = $request->amount;
+
         $delivery->save();
+
+        $json_record = json_decode($request->delivery_non_container_array);
+
+        for($i = 0; $i < count($json_record); $i++)
+        {
+            $edit_non_con_detail = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+            $edit_non_con_detail->descriptionOfGoods = $json_record[$i]->descriptionOfGood;
+            $edit_non_con_detail->grossWeight = $json_record[$i]->grossWeight;
+            $edit_non_con_detail->supplier = $json_record[$i]->supplier;
+
+            $edit_non_con_detail->save();
+
+            if($json_record[$i]->status != "1")
+            {
+                $deactivate_record = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+                $deactivate_record->delete();
+            }
+            else
+            {
+                $reactivate_record = \App\DeliveryNonContainerDetail::withTrashed()->findOrFail($json_record[$i]->id);
+                $reactivate_record->restore();
+            }
+        }
+        $new_json_record = json_decode($request->delivery_non_container_new_array);
+        for($i = 0; $i < count($new_json_record); $i++)
+        {
+            $new_non_con_detail = new \App\DeliveryNonContainerDetail;
+            $new_non_con_detail->descriptionOfGoods = $new_json_record[$i]->descriptionOfGoods;
+            $new_non_con_detail->grossWeight = $new_json_record[$i]->grossWeight;
+            $new_non_con_detail->supplier = $new_json_record[$i]->supplier;
+
+            $new_non_con_detail->save();
+
+            $new_del_non_head = new \App\DeliveryHeadNonContainer;
+            $new_del_non_head->del_head_id = $delivery->id;
+            $new_del_non_head->non_con_id = $new_non_con_detail->id;
+            $new_del_non_head->save();
+        }
+
         return $delivery;
     }
-
-    public function getVehicles(Request $request){
-        $vehicles = DB::table('vehicles')
-        ->where('deleted_at', '=', null)
-        ->where('vehicle_types_id', '=', $request->vehicle_type)
-        ->get();
-
-        return $vehicles;
-    }
-
-    public function getContainerDetail(Request $request){
-        $container_information = DB::table('delivery_containers')
-        ->where('id', '=', $request->container_id)
-        ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnStatus')
-        ->get();
-
-        $container_details =  DB::table('delivery_container_details')
-        ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
-        ->where('container_id', '=', $request->container_id)
-        ->get();
-
-        return Response::make(array($container_details, $container_information));;
-    }
-
-    public function update_delivery_record(Request $request)
+    else
     {
-        if($request->withContainer == "0"){
-            \DB::table('delivery_non_container_details')
-            ->where('del_head_id', '=', $request->del_head_id)
+        $response = "";
+        $containers = \DB::table('delivery_containers')
+        ->where('del_head_id', '=', $request->del_head_id)
+        ->get();
+
+
+        for($i = 0; $i< count($containers); $i++){
+            \DB::table('delivery_container_details')
+            ->where('container_id', '=', $containers[$i]->id)
             ->delete();
 
-            $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
-            $delivery->emp_id_driver = $request->emp_id_driver;
-            $delivery->emp_id_helper = $request->emp_id_helper;
-
-            $delivery->locations_id_pick = $request->locations_id_pick;
-            $delivery->locations_id_del = $request->locations_id_del;
-
-            $delivery->deliveryDateTime = $request->deliveryDate;
-            $delivery->pickupDateTime = $request->pickupDate;
-
-            $delivery->plateNumber = $request->plateNumber;
-            $delivery->amount = $request->amount;
-
-            $delivery->save();
-
-            for($i = 0; $i < count($request->descrp_goods); $i++)
-            {
-                $new_noncon_detail = new DeliveryNonContainerDetail;
-                $new_noncon_detail->descriptionOfGoods = $request->descrp_goods[$i];
-                $new_noncon_detail->grossWeight = $request->gross_weights[$i];
-                $new_noncon_detail->supplier = $request->suppliers[$i];
-                $new_noncon_detail->del_head_id =  $request->del_head_id;
-                $new_noncon_detail->save();
-            }
-
-            return $delivery;
+            \DB::table('delivery_containers')
+            ->where('id', '=', $containers[$i]->id)
+            ->delete();
         }
-        else
+
+        $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
+        $delivery->emp_id_driver = $request->emp_id_driver;
+        $delivery->emp_id_helper = $request->emp_id_helper;
+
+        $delivery->locations_id_pick = $request->locations_id_pick;
+        $delivery->locations_id_del = $request->locations_id_del;
+
+        $delivery->deliveryDateTime = $request->deliveryDate;
+        $delivery->pickupDateTime = $request->pickupDate;
+
+        $delivery->plateNumber = $request->plateNumber;
+        $delivery->amount = $request->amount;
+
+        $delivery->save();
+
+        $data = json_decode($request->container_data);
+        foreach ($data as $container => $value)
         {
-            $response = "";
-            $containers = \DB::table('delivery_containers')
-            ->where('del_head_id', '=', $request->del_head_id)
-            ->get();
-
-
-            for($i = 0; $i< count($containers); $i++){
-                \DB::table('delivery_container_details')
-                ->where('container_id', '=', $containers[$i]->id)
-                ->delete();
-
-                \DB::table('delivery_containers')
-                ->where('id', '=', $containers[$i]->id)
-                ->delete();
-            }
-
-            $delivery = \App\DeliveryReceiptHeader::findOrFail($request->del_head_id);
-            $delivery->emp_id_driver = $request->emp_id_driver;
-            $delivery->emp_id_helper = $request->emp_id_helper;
-
-            $delivery->locations_id_pick = $request->locations_id_pick;
-            $delivery->locations_id_del = $request->locations_id_del;
-
-            $delivery->deliveryDateTime = $request->deliveryDate;
-            $delivery->pickupDateTime = $request->pickupDate;
-
-            $delivery->plateNumber = $request->plateNumber;
-            $delivery->amount = $request->amount;
-
-            $delivery->save();
-
-            $data = json_decode($request->container_data);
-            foreach ($data as $container => $value)
+            $container = json_decode((string)json_encode($value));
+            foreach ($container as $key => $container_detail)
             {
-                $container = json_decode((string)json_encode($value));
-                foreach ($container as $key => $container_detail)
-                {
-                    $new_delivery_container = new DeliveryContainer;
+                $new_delivery_container = new DeliveryContainer;
 
-                    $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
-                    $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
-                    $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
-                    $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
-                    $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
-                    $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
-                    $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
-                    $new_delivery_container->containerReturnStatus = "N";
-                    $new_delivery_container->dateReturned = null;
-                    $new_delivery_container->remarks = "";
-                    $new_delivery_container->del_head_id = $request->del_head_id;
+                $new_delivery_container->containerNumber = $container_detail->container[0]->containerNumber;
+                $new_delivery_container->containerVolume = $container_detail->container[0]->containerVolume;
+                $new_delivery_container->shippingLine = $container_detail->container[0]->shippingLine;
+                $new_delivery_container->portOfCfsLocation = $container_detail->container[0]->portOfCfsLocation;
+                $new_delivery_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
+                $new_delivery_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
+                $new_delivery_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
+                $new_delivery_container->containerReturnStatus = "N";
+                $new_delivery_container->dateReturned = null;
+                $new_delivery_container->remarks = "";
+                $new_delivery_container->del_head_id = $request->del_head_id;
 
-                    $new_delivery_container->save();
+                $new_delivery_container->save();
 
 
-                    foreach ($container_detail->details as $key => $container_detail_data){
+                foreach ($container_detail->details as $key => $container_detail_data){
 
-                        $new_delivery_container_detail = new DeliveryContainerDetail;
-                        $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
-                        $new_delivery_container_detail->grossWeight = $container_detail_data->grossWeight;
-                        $new_delivery_container_detail->supplier = $container_detail_data->supplier;
-                        $new_delivery_container_detail->container_id = $new_delivery_container->id;
+                    $new_delivery_container_detail = new DeliveryContainerDetail;
+                    $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;
+                    $new_delivery_container_detail->grossWeight = $container_detail_data->grossWeight;
+                    $new_delivery_container_detail->supplier = $container_detail_data->supplier;
+                    $new_delivery_container_detail->container_id = $new_delivery_container->id;
 
-                        $new_delivery_container_detail->save();
-                        $response .= $container_detail_data->descriptionOfGood;
-                    }
-
+                    $new_delivery_container_detail->save();
+                    $response .= $container_detail_data->descriptionOfGood;
                 }
-            }
 
+            }
         }
 
     }
 
-    public function view_delivery(Request $request){
-        $so_id = $request->trucking_id;
+}
 
-        $delivery = DB::table('delivery_receipt_headers')
-        ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
-        ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
-        ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
-        ->join('location_cities AS F', 'E.cities_id', '=','F.id')
-        ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
-        ->join('locations AS H', 'delivery_receipt_headers.locations_id_del', '=','H.id')
-        ->join('location_cities AS I', 'H.cities_id', '=', 'I.id')
-        ->join('location_provinces AS J', 'I.provinces_id', '=', 'J.id')
-        ->join('vehicle_types AS K', 'B.vehicle_types_id', '=', 'K.id')
-        ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
-        ->select(
-            'delivery_receipt_headers.id',
-            'delivery_receipt_headers.plateNumber',
-            'delivery_receipt_headers.status',
-            DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
-            DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
-            'delivery_receipt_headers.withContainer',
-            'E.address as pick_up_address',
-            'F.name as pick_up_city',
-            'G.name as pick_up_province',
-            'H.address as del_address',
-            'I.name as del_city',
-            'J.name as del_province',
-            'delivery_receipt_headers.deliveryDateTime',
-            'delivery_receipt_headers.pickupDateTime',
-            'delivery_receipt_headers.cancelDateTime',
-            'delivery_receipt_headers.remarks',
-            'delivery_receipt_headers.emp_id_helper',
-            DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
-            )
+public function view_delivery(Request $request){
+    $so_id = $request->trucking_id;
 
+    $delivery = DB::table('delivery_receipt_headers')
+    ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
+    ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
+    ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+    ->join('locations AS E', 'delivery_receipt_headers.locations_id_pick', '=','E.id')
+    ->join('location_cities AS F', 'E.cities_id', '=','F.id')
+    ->join('location_provinces AS G', 'F.provinces_id', '=','G.id')
+    ->join('locations AS H', 'delivery_receipt_headers.locations_id_del', '=','H.id')
+    ->join('location_cities AS I', 'H.cities_id', '=', 'I.id')
+    ->join('location_provinces AS J', 'I.provinces_id', '=', 'J.id')
+    ->join('vehicle_types AS K', 'B.vehicle_types_id', '=', 'K.id')
+    ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
+    ->select(
+        'delivery_receipt_headers.id',
+        'delivery_receipt_headers.plateNumber',
+        'delivery_receipt_headers.status',
+        DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
+        DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
+        'delivery_receipt_headers.withContainer',
+        'E.address as pick_up_address',
+        'F.name as pick_up_city',
+        'G.name as pick_up_province',
+        'H.address as del_address',
+        'I.name as del_city',
+        'J.name as del_province',
+        'delivery_receipt_headers.deliveryDateTime',
+        'delivery_receipt_headers.pickupDateTime',
+        'delivery_receipt_headers.cancelDateTime',
+        'delivery_receipt_headers.remarks',
+        'delivery_receipt_headers.emp_id_helper',
+        DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
+    )
+
+    ->get();
+
+    if($delivery[0]->withContainer == 0){
+        $delivery_details = DB::table('delivery_non_container_details')
+        ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
+        ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
+        ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+        ->where('B.del_head_id', '=', $delivery[0]->id)
         ->get();
-        
-        if($delivery[0]->withContainer == 0){
-            $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
-            ->where('del_head_id', '=', $delivery[0]->id)
+    }
+    else{
+        $container_with_detail = [];
+        $delivery_containers = DB::table('delivery_containers')
+        ->join('delivery_head_containers AS B', 'B.container_id', '=', 'delivery_containers.id')
+        ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+        ->where('B.del_head_id', '=', $delivery[0]->id)
+        ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
+        ->get();
+        foreach ($delivery_containers as $container) {
+            $container_details =  DB::table('delivery_container_details')
+            ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('container_id', '=', $container->id)
             ->get();
-        }
-        else{
-            $container_with_detail = [];
-            $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id', 'shippingLine', 'portOfCfsLocation')
-            ->get();
-            foreach ($delivery_containers as $container) {
-                $container_details =  DB::table('delivery_container_details')
-                ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
-                ->where('container_id', '=', $container->id)
-                ->get();
 
-                $new_row['container'] = $container;
-                $new_row['details'] = $container_details;
-                array_push($container_with_detail, $new_row);
-            }
-
+            $new_row['container'] = $container;
+            $new_row['details'] = $container_details;
+            array_push($container_with_detail, $new_row);
         }
+
+    }
         //return $container_with_detail;
-        return view('trucking.delivery_view', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+    return view('trucking.delivery_view', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+}
+
+public function update_container(Request $request){
+    $container = DeliveryContainer::findOrFail($request->containerID);
+    if($container->dateReturned != null)
+    {
+        $container->remarks = $request->remarks;
+        $container->save();
     }
+    else
+    {
+        $container->dateReturned = $request->dateReturned;
+        $container->containerReturnStatus = $request->status;
+        $container->remarks = $request->remarks;
+        $container->save();
 
-    public function update_container(Request $request){
-        $container = DeliveryContainer::findOrFail($request->containerID);
-        if($container->dateReturned != null)
-        {
-            $container->remarks = $request->remarks;
-            $container->save();
-        }
-        else
-        {
-            $container->dateReturned = $request->dateReturned;
-            $container->containerReturnStatus = $request->status;
-            $container->remarks = $request->remarks;
-            $container->save();
-
-        }
-        return $container;
     }
+    return $container;
+}
 
-    public function update_delivery_bill(Request $request){
-        $delivery_receipt = DeliveryReceiptHeader::findOrFail($request->delivery_id);
-        $delivery_receipt->amount = $request->amount;
+public function update_delivery_bill(Request $request){
+    $delivery_receipt = DeliveryReceiptHeader::findOrFail($request->delivery_id);
+    $delivery_receipt->amount = $request->amount;
 
-        $delivery_receipt->save();
+    $delivery_receipt->save();
 
-        return $delivery_receipt;
-    }
+    return $delivery_receipt;
+}
 
-    public function bill_delivery(Request $request){
-        $so_id = $request->trucking_id;
+public function bill_delivery(Request $request){
+    $so_id = $request->trucking_id;
 
-        $charges = Charge::all();
+    $charges = Charge::all();
 
-        $consignee = DB::table('consignees')
-        ->join('consignee_service_order_headers AS A', 'consignees.id', '=' , 'A.consignees_id')
-        ->join('consignee_service_order_details AS B', 'B.so_headers_id', '=', 'A.id')
-        ->join('trucking_service_orders AS C', 'C.so_details_id', '=', 'B.id')
-        ->join('delivery_receipt_headers AS D', 'D.tr_so_id', '=', 'C.id')
-        ->select('consignees.id','firstName', 'middleName', 'lastName', 'companyName')
-        ->where('D.id', '=', $request->delivery_id)
-        ->get();
+    $consignee = DB::table('consignees')
+    ->join('consignee_service_order_headers AS A', 'consignees.id', '=' , 'A.consignees_id')
+    ->join('consignee_service_order_details AS B', 'B.so_headers_id', '=', 'A.id')
+    ->join('trucking_service_orders AS C', 'C.so_details_id', '=', 'B.id')
+    ->join('delivery_receipt_headers AS D', 'D.tr_so_id', '=', 'C.id')
+    ->select('consignees.id','firstName', 'middleName', 'lastName', 'companyName')
+    ->where('D.id', '=', $request->delivery_id)
+    ->get();
 
-        $delivery = DB::table('delivery_receipt_headers')
-        ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
-        ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
-        ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
-        ->select(
-            'delivery_receipt_headers.amount',
-            'delivery_receipt_headers.id',
-            'delivery_receipt_headers.plateNumber',
-            'delivery_receipt_headers.status',
-            DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
-            DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
-            'delivery_receipt_headers.withContainer'
-            )
+    $delivery = DB::table('delivery_receipt_headers')
+    ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
+    ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
+    ->join('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+    ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
+    ->select(
+        'delivery_receipt_headers.amount',
+        'delivery_receipt_headers.id',
+        'delivery_receipt_headers.plateNumber',
+        'delivery_receipt_headers.status',
+        DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
+        DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
+        'delivery_receipt_headers.withContainer'
+    )
 
-        ->get();
+    ->get();
 
-        $delivery_bills = DB::table('delivery_billings')
-        ->join('charges', 'charges_id', '=', 'charges.id')
-        ->orderBy('isBilledTo')
-        ->select('charges.name AS charge_description', 'charges_id', 'amount', 'isBilled', 'isBilledTo', 'remarks')
-        ->where('del_head_id', '=',  $delivery[0]->id)
-        ->get();
+    $delivery_bills = DB::table('delivery_billings')
+    ->join('charges', 'charges_id', '=', 'charges.id')
+    ->orderBy('isBilledTo')
+    ->select('charges.name AS charge_description', 'charges_id', 'amount', 'isBilled', 'isBilledTo', 'remarks')
+    ->where('del_head_id', '=',  $delivery[0]->id)
+    ->get();
 
-        $total_penalty_consignee = 0;
-        $total_penalty_client = 0;
+    $total_penalty_consignee = 0;
+    $total_penalty_client = 0;
 
-        for($i = 0; $i <count($delivery_bills); $i++) 
-        {
-            if($delivery_bills[$i]->isBilledTo == 0){
-                $total_penalty_consignee += $delivery_bills[$i]->amount;
-            }
-            else{
-                $total_penalty_client += $delivery_bills[$i]->amount;
-            }
-        }
-        $total_penalty_consignee = number_format((float)$total_penalty_consignee, 2, '.', '');
-        $total_penalty_client = number_format((float)$total_penalty_client, 2, '.', '');
-
-        if($delivery[0]->withContainer == 0){
-            $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
-            ->where('del_head_id', '=', $delivery[0]->id)
-            ->get();
+    for($i = 0; $i <count($delivery_bills); $i++) 
+    {
+        if($delivery_bills[$i]->isBilledTo == 0){
+            $total_penalty_consignee += $delivery_bills[$i]->amount;
         }
         else{
-            $container_with_detail = [];
-            $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
+            $total_penalty_client += $delivery_bills[$i]->amount;
+        }
+    }
+    $total_penalty_consignee = number_format((float)$total_penalty_consignee, 2, '.', '');
+    $total_penalty_client = number_format((float)$total_penalty_client, 2, '.', '');
+
+    if($delivery[0]->withContainer == 0){
+        $delivery_details = DB::table('delivery_non_container_details')
+        ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
+        ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+        ->where('del_head_id', '=', $delivery[0]->id)
+        ->get();
+    }
+    else{
+        $container_with_detail = [];
+        $delivery_containers = DB::table('delivery_containers')
+        ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
+        ->where('del_head_id', '=', $delivery[0]->id)
+        ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
+        ->get();
+        foreach ($delivery_containers as $container) {
+            $container_details =  DB::table('delivery_container_details')
+            ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('container_id', '=', $container->id)
             ->get();
-            foreach ($delivery_containers as $container) {
-                $container_details =  DB::table('delivery_container_details')
-                ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
-                ->where('container_id', '=', $container->id)
-                ->get();
 
-                $new_row['container'] = $container;
-                $new_row['details'] = $container_details;
-                array_push($container_with_detail, $new_row);
-            }
-
+            $new_row['container'] = $container;
+            $new_row['details'] = $container_details;
+            array_push($container_with_detail, $new_row);
         }
 
-        return view('trucking.delivery_bill', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee', 'charges', 'delivery_bills', 'total_penalty_consignee', 'total_penalty_client']));
     }
 
-    public function get_contract_details(Request $request){
-        $contract = DB::table('contract_headers')
-        ->select('dateEffective', 'dateExpiration', 'specificDetails')
-        ->where('contract_headers.id', '=', $request->contract_id)
+    return view('trucking.delivery_bill', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'consignee', 'charges', 'delivery_bills', 'total_penalty_consignee', 'total_penalty_client']));
+}
+
+public function get_contract_details(Request $request){
+    $contract = DB::table('contract_headers')
+    ->select('dateEffective', 'dateExpiration', 'specificDetails')
+    ->where('contract_headers.id', '=', $request->contract_id)
+    ->get();
+    $contract_details = DB::table('contract_details')
+    ->select('A.description AS from', 'B.description AS to', 'amount')
+    ->join('areas AS A', 'areas_id_from', '=', 'A.id')
+    ->join('areas AS B', 'areas_id_to', '=', 'B.id')
+    ->where('contract_headers_id', '=', $request->contract_id)
+    ->get();
+
+    return Response::make(array($contract, $contract_details));
+}
+
+public function store_delivery_bill(Request $request){
+
+    $delivery_bill = new DeliveryBilling;
+    $delivery_bill->charges_id = $request->charges_id;
+    $delivery_bill->amount = $request->amount;
+    $delivery_bill->isBilled = $request->isBilled;
+    $delivery_bill->isBilledTo = $request->isBilledTo;
+    $delivery_bill->remarks = $request->remarks;
+    $delivery_bill->del_head_id = $request->del_head_id;
+
+    $delivery_bill->save();
+
+    return $delivery_bill;
+}
+
+public function create_pdf(){
+    $data = Vehicle::all();
+    $pdf = PDF::loadView('reports/pdfview', compact(['data']));
+    return $pdf->stream();
+}
+
+public function delivery_pdf(Request $request){
+    $so_id = $request->trucking_id;
+
+    $delivery = DB::table('delivery_receipt_headers')
+    ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
+    ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
+    ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
+    ->join('trucking_service_orders AS E', 'delivery_receipt_headers.tr_so_id', '=', 'E.id')
+    ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
+    ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')
+    ->join('consignees AS H', 'G.consignees_id', '=', 'H.id')
+    ->join('locations AS I', 'locations_id_del', 'I.id')
+    ->join('locations AS J', 'locations_id_pick', 'J.id')
+    ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
+    ->select(
+        'delivery_receipt_headers.id',
+        'delivery_receipt_headers.plateNumber',
+        'delivery_receipt_headers.status',
+        DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
+        DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
+        'delivery_receipt_headers.withContainer',
+        'J.address as deliveryAddress',
+        'H.companyName',
+        'delivery_receipt_headers.deliveryDateTime'
+    )
+    ->get();
+
+    if($delivery[0]->withContainer == 0){
+        $delivery_details = DB::table('delivery_non_container_details')
+        ->join('delivery_head_non_containers AS B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
+        ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+        ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+        ->where('del_head_id', '=', $delivery[0]->id)
         ->get();
-        $contract_details = DB::table('contract_details')
-        ->select('A.description AS from', 'B.description AS to', 'amount')
-        ->join('areas AS A', 'areas_id_from', '=', 'A.id')
-        ->join('areas AS B', 'areas_id_to', '=', 'B.id')
-        ->where('contract_headers_id', '=', $request->contract_id)
+    }
+    else{
+        $container_with_detail = [];
+        $delivery_containers = DB::table('delivery_containers')
+        ->join('delivery_head_containers AS B', 'B.container_id', '=', 'delivery_containers.id')
+        ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
+        ->where('B.del_head_id', '=', $delivery[0]->id)
+        ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
         ->get();
-
-        return Response::make(array($contract, $contract_details));
-    }
-
-    public function store_delivery_bill(Request $request){
-
-        $delivery_bill = new DeliveryBilling;
-        $delivery_bill->charges_id = $request->charges_id;
-        $delivery_bill->amount = $request->amount;
-        $delivery_bill->isBilled = $request->isBilled;
-        $delivery_bill->isBilledTo = $request->isBilledTo;
-        $delivery_bill->remarks = $request->remarks;
-        $delivery_bill->del_head_id = $request->del_head_id;
-
-        $delivery_bill->save();
-
-        return $delivery_bill;
-    }
-
-    public function create_pdf(){
-        $data = Vehicle::all();
-        $pdf = PDF::loadView('reports/pdfview', compact(['data']));
-        return $pdf->stream();
-    }
-
-    public function delivery_pdf(Request $request){
-        $so_id = $request->trucking_id;
-
-        $delivery = DB::table('delivery_receipt_headers')
-        ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
-        ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
-        ->leftJoin('employees AS D', 'delivery_receipt_headers.emp_id_helper', '=', 'D.id')
-        ->join('trucking_service_orders AS E', 'delivery_receipt_headers.tr_so_id', '=', 'E.id')
-        ->join('consignee_service_order_details AS F', 'E.so_details_id', '=', 'F.id')
-        ->join('consignee_service_order_headers AS G', 'F.so_headers_id', '=','G.id')
-        ->join('consignees AS H', 'G.consignees_id', '=', 'H.id')
-        ->join('locations AS I', 'locations_id_del', 'I.id')
-        ->join('locations AS J', 'locations_id_pick', 'J.id')
-        ->where('delivery_receipt_headers.id', '=', $request->delivery_id)
-        ->select(
-            'delivery_receipt_headers.id',
-            'delivery_receipt_headers.plateNumber',
-            'delivery_receipt_headers.status',
-            DB::raw('CONCAT(C.firstName, " ", C.lastName) AS driverName'),
-            DB::raw('CONCAT(D.firstName, " ", D.lastName) AS helperName'),
-            'delivery_receipt_headers.withContainer',
-            'J.address as deliveryAddress',
-            'H.companyName',
-            'delivery_receipt_headers.deliveryDateTime'
-            )
-        ->get();
-
-        if($delivery[0]->withContainer == 0){
-            $delivery_details = DB::table('delivery_non_container_details')
-            ->join('delivery_receipt_headers', 'del_head_id', 'delivery_receipt_headers.id')
-            ->select('descriptionOfGoods', 'grossWeight', 'supplier')
-            ->where('del_head_id', '=', $delivery[0]->id)
+        foreach ($delivery_containers as $container) {
+            $container_details =  DB::table('delivery_container_details')
+            ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+            ->where('container_id', '=', $container->id)
             ->get();
-        }
-        else{
-            $container_with_detail = [];
-            $delivery_containers = DB::table('delivery_containers')
-            ->join('delivery_receipt_headers AS A', 'del_head_id', 'A.id')
-            ->where('del_head_id', '=', $delivery[0]->id)
-            ->select('delivery_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'delivery_containers.remarks', 'del_head_id')
-            ->get();
-            foreach ($delivery_containers as $container) {
-                $container_details =  DB::table('delivery_container_details')
-                ->select('delivery_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
-                ->where('container_id', '=', $container->id)
-                ->get();
 
-                $new_row['container'] = $container;
-                $new_row['details'] = $container_details;
-                array_push($container_with_detail, $new_row);
-            }
-
+            $new_row['container'] = $container;
+            $new_row['details'] = $container_details;
+            array_push($container_with_detail, $new_row);
         }
 
-        $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
-        return $pdf->stream();
     }
 
+    $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+    return $pdf->stream();
+}
 
-    public function show_calendar(){
-        $deliveries = DB::table('delivery_receipt_headers')
-        ->select('deliveryDateTime', 'pickupDateTime', 'trucking_service_orders.id as tr_so_id', 'plateNumber', 'delivery_receipt_headers.id as del_head_id')
-        ->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
-        ->whereRaw('delivery_receipt_headers.status IN("P", "F")')
-        ->get();
 
-        return view('pdf_layouts.calendar', compact(['deliveries']));
-    }
+public function show_calendar(){
+    $deliveries = DB::table('delivery_receipt_headers')
+    ->select('deliveryDateTime', 'pickupDateTime', 'trucking_service_orders.id as tr_so_id', 'plateNumber', 'delivery_receipt_headers.id as del_head_id')
+    ->join('trucking_service_orders', 'delivery_receipt_headers.tr_so_id', '=', 'trucking_service_orders.id')
+    ->whereRaw('delivery_receipt_headers.status IN("P", "F")')
+    ->get();
+
+    return view('pdf_layouts.calendar', compact(['deliveries']));
+}
 }

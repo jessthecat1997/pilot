@@ -640,8 +640,8 @@
 				$('#pickup_id').css('border-color', 'green');
 				$('#deliver_id').css('border-color', 'green');
 			}
-			if($('#amount').val() < 0){
-				$('#amount').css('border-color', 'red');
+			if($('#amount').val() > 0){
+				$('#amount').css('border-color', 'green');
 			}
 			else{
 				$('#amount').css('border-color', 'red');
