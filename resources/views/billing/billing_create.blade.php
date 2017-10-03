@@ -54,12 +54,12 @@
 							</tr>
 						</thead>
 						<tbody>
+							@forelse($rev_bill as $bill)
 							<tr>
 								<td colspan="2" style="text-align: center;">
 									<label id="parts">Particulars</label>
 								</td>
 							</tr>
-							@forelse($rev_bill as $bill)
 							<tr>
 								@if($bill->name == "Others (please specify)")
 								<td style="text-align: center;"><h5>Others <i>({{ $bill->description }})</i></h5></td>
@@ -207,6 +207,11 @@
 				{
 					$('.addBill').attr('disabled','disabled');
 					$('.finalize-bill').attr('disabled','disabled');
+				}
+				else if(st == "Pending" && stat == "Particulars")
+				{
+					$('.addBill').attr('enabled','enabled');
+					$('.finalize-bill').attr('enabled','enabled');
 				}
 
 				var bi_id = document.getElementById("so_head_id").value;

@@ -409,7 +409,7 @@ class DatatablesController extends Controller
 			) dpay
 
 			ON t.id = dpay.bi_head_id
-			WHERE t.status = "U" AND t.isVoid = 0
+			WHERE t.status = "U" AND t.isVoid = 0 AND t.isFinalize = 1
 			');
 
 		return Datatables::of($total)
