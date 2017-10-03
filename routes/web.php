@@ -116,9 +116,6 @@ Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data'
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 
 //Utilities Routes
-Route::resource('/utilities/brokerage','UtilitiesBrokerageController');
-
-
 Route::resource('/utilities/employee', 'EmployeesController');
 Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
 Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');
@@ -405,8 +402,7 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
 
 //Utilities home route
-Route::resource('/admin/utilities', 'UtilitiesController');
-Route::resource('/admin/settings', 'BusinessSettingsController');
+Route::resource('/utilities/settings','UtilityController');
 
 
 //Query

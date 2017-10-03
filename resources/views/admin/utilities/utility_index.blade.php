@@ -244,7 +244,7 @@
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/utilities/brokerage/'+ 1,
+					url:  '/utilities/settings/'+ 1,
 					data: {
 						'_token' : $('input[name=_token').val(),
 						'other_charges' : $('#other_charges').val(),

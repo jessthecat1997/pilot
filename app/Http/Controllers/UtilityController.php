@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\UtilityType;
 use Illuminate\Support\Facades\DB;
-class UtilitiesBrokerageController extends Controller
+class UtilityController extends Controller
 {
     public function index()
 	{
 		$utility = \App\UtilityType::all();
 
-		return view('admin/utilities.brokerage_utility_index', compact(['utility']));
+		return view('admin/utilities.utility_index', compact(['utility']));
 	}
 
 
