@@ -1,38 +1,37 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Unconfirm Cheques</h2>
-<div class="pull-right">
+<hr>
+<div class="pull-left">
 	<a href="/payment" class="btn but">Back to Payment</a>
 </div>
 <br/>
-<hr>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					List of unconfirm cheques
-				</div>
-				<div class="panel-body">
-					<table class = "table-hover table" id = "chq_table">
-						<thead>
-							<tr>
-								<th>
-									Consignee
-								</th>
-								<th>
-									Bank
-								</th>
-								<th>
-									Amount
-								</th>
-								<th>
-									Action
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of unconfirm cheques
+			</div>
+			<div class="panel-body">
+				<table class = "table-hover table" id = "chq_table">
+					<thead>
+						<tr>
+							<th>
+								Consignee
+							</th>
+							<th>
+								Bank
+							</th>
+							<th>
+								Amount
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>

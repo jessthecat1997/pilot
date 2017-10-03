@@ -117,6 +117,7 @@ class ChequesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->select('cheques.id','companyName','bankName', 'amount')
 		->where('isVerify', '=', 0)
+		->where('billing_invoice_headers.status', '=', 'U')
 		->get();
 
 		return Datatables::of($chq)
