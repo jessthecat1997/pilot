@@ -258,7 +258,7 @@ Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item
 
 Route::get('pdfview','PaymentsController@pdfview');
 
-//Skipper
+
 //Orders
 Route::resource('/orders', 'OrdersController');
 
