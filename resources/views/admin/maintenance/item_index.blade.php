@@ -2,17 +2,17 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Category</h3>
+		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Item</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#catModal" style = "width: 100%;">New Category</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#itemModal" style = "width: 100%;">New Item</button>
 		</div>
 	</div>
 	<br />
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table cell-border table-striped table-bordered" id = "cat_table" style="width: 100%;">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "item_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td>
@@ -22,7 +22,13 @@
 								Category Name
 							</td>
 							<td>
-								Description
+								Item
+							</td>
+							<td>
+								HS Code:
+							</td>
+							<td>
+								Rate
 							</td>
 							<td >
 								Actions
@@ -30,21 +36,26 @@
 						</tr>
 					</thead>
 					<tbody>
-						@forelse($category as $cat)
+						@forelse($items as $i)
 						<tr>
 							<td>
-								{{ $cat->section }}
+								{{ $i->section }}
 							</td>
 							<td>
-								{{ $cat->category}}
+								{{ $i->category}}
 							</td>
 							<td>
-								{{ $cat->description }}
+								{{ $i->item }}
 							</td>
-							
 							<td>
-								<button value = "{{ $cat->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-								<button value = "{{ $cat->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								{{ $i->hsCode }}
+							</td>
+							<td>
+								{{ $i->rate }}
+							</td>
+							<td>
+								<button value = "{{ $i->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $i->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 							</td>
 						</tr>
 						@empty
@@ -58,16 +69,16 @@
 	<section class="content">
 		<form role="form" method = "POST" id = "commentForm">
 			{{ csrf_field() }}
-			<div class="modal fade" id="catModal" role="dialog">
+			<div class="modal fade" id="itemModal" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Category</h4>
+							<h4 class="modal-title">New Item</h4>
 						</div>
 						<div class="modal-body">	
 							<div class = "form-group required" >
-								<label class = "control-label">Section: </label>
+								<label class = "control-label">Section</label>
 								<select class = "form-control" id = "sections_id" name="sections_id" >
 									@forelse($sections as $section)
 									<option value = "{{ $section->id }}">{{ $section->name }}</option>
@@ -75,16 +86,34 @@
 									@endforelse
 								</select>
 
+							</div>	
+							<div class = "form-group required" >
+								<label class = "control-label">Category</label>
+								<select class = "form-control" id = "category_types_id" name="category_types_id" >
+									@forelse($category as $cat)
+									<option value = "{{ $cat->id }}">{{ $cat->name }}</option>
+									@empty
+									@endforelse
+								</select>
+
 							</div>		
 							<div class="form-group required">
-								<label class = "control-label">Category Name: </label>
+								<label class = "control-label">Item Name</label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
 							</div>
 
 							<div class="form-group">
-								<label class = "control-label">Description: </label>
-								<input class = "form-control" name = "description" id = "description">
+								<label class = "control-label">HS Code</label>
+								<input class = "form-control hsCode" name = "hsCode" id = "hsCode">
 							</div>
+							<div class = "form-group required">
+								<label class = "control-label">Rate</label>
+								<div class = " input-group " >
+									<input type = "number" class = "form-control money" name = "rate" id = "rate"  data-rule-required="true" max="100" value="0" style="text-align: right" />
+									<span class = "input-group-addon">%</span>
+								</div>
+							</div>
+
 							
 						</div>
 						<div class="modal-footer">
@@ -123,7 +152,7 @@
 @endsection
 @push('styles')
 <style>
-.class-category{
+.class-section{
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
 	color: #fff;
@@ -143,9 +172,11 @@
 	var temp_name = null;
 	var temp_desc = null;
 	var temp_section = null;
-	var cat_id;
+	var temp_rate = null;
+	var temp_hsCode = null;
+	var item_id;
 	$(document).ready(function(){
-		var cattable = $('#cat_table').DataTable({
+		var itemtable = $('#item_table').DataTable({
 			scrollX: true,
 			processing: false,
 			serverSide: false,
@@ -153,7 +184,9 @@
 			columns: [
 			{ data: 'section'},
 			{ data: 'category' },
-			{ data: 'description' },
+			{ data: 'item'},
+			{ data: 'hsCode' },
+			{ data: 'rate'},
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "asc" ]],
@@ -176,7 +209,7 @@
 
 				},
 
-				description:
+				hsCode:
 				{
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
@@ -186,37 +219,62 @@
 				sections_id:
 				{
 					required: true,
+				},
+				category_types_id:
+				{
+					required: true,
+				},
+				rate:
+				{
+					min: 0,
+					max: 100,
+					required: true,
 				}
+
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
 
 		});
 
+		$('.hsCode').keyup(function(){
+			var val = $(this).val();
+			if(isNaN(val)){
+				val = val.replace(/[^0-9\.]/g,'');
+				if(val.split('.').length>2) 
+					val =val.replace(/\.+$/,"");
+			}
+			$(this).val(val); 
+		});
+
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New Category');
+			$('.modal-title').text('New Item');
 			$('#name').val("");
-			$('#description').val("");
-			$('#catModal').modal('show');
+			$('#hsCode').val("");
+			$('#itemModal').modal('show');
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			cat_id = $(this).val();
-			data = cattable.row($(this).parents()).data();
-			$('#name').val(data.category);	
-			$('#description').val(data.description);
+			item_id = $(this).val();
+			data = itemtable.row($(this).parents()).data();
+			$('#name').val(data.item);	
+			$('#hsCode').val(data.hsCode);
+			$('#rate').val(data.rate);
 			$("#sections_id option:contains(" + data.section +")").attr("selected", true);
-			temp_name = data.category;
-			temp_desc = data.description;
+			$("#category_types_id option:contains(" + data.category +")").attr("selected", true);
+			temp_name = data.item;
 			temp_section = $('#sections_id').val();
-			$('.modal-title').text('Update category');
-			$('#catModal').modal('show');
+			temp_hsCode = data.hsCode;
+			temp_rate = data.rate;
+
+			$('.modal-title').text('Update Item');
+			$('#itemModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			cat_id = $(this).val();
-			data = cattable.row($(this).parents()).data();
+			item_id = $(this).val();
+			data = itemtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 
@@ -227,13 +285,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/category/' + cat_id,
+		url:  '/admin/item/' + item_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			cattable.ajax.url( '{{ route("cat.data") }}' ).load();
+			itemtable.ajax.url( '{{ route("item.data") }}' ).load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -243,7 +301,7 @@ $('#btnDelete').on('click', function(e){
 				"progressBar": false,
 				"rtl": false,
 				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
+				"preventDupliitemes": false,
 				"onclick": null,
 				"showDuration": 300,
 				"hideDuration": 1000,
@@ -264,28 +322,30 @@ $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
 
-	if(title == "New Category")
+	if(title == "New Item")
 	{
-		if($('#name').valid() && $('#description').valid()){
+		if($('#name').valid() && $('#hsCode').valid()){
 			
 			$('#btnSave').attr('disabled', 'true');
 
 			$.ajax({
 				type: 'POST',
-				url:  '/admin/category',
+				url:  '/admin/item',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'name' : $('#name').val(),
-					'description' : $('#description').val(),
 					'sections_id': $('#sections_id').val(),
+					'category_types_id':  $('#category_types_id').val(),
+					'name' : $('#name').val(),
+					'hsCode':  $('#hsCode').val(),
+					'rate':  $('#rate').val(),
 				},
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						cattable.ajax.url( '{{ route("cat.data") }}' ).load();
-						$('#catModal').modal('hide');
-						$('#description').val("");
-						$('.modal-title').text('New Category');
+						itemtable.ajax.url( '{{ route("item.data") }}' ).load();
+						$('#itemModal').modal('hide');
+						$('#hsCode').val("");
+						$('.modal-title').text('New Item');
 
 					//Show success
 
@@ -296,7 +356,7 @@ $('#btnSave').on('click', function(e){
 						"progressBar": false,
 						"rtl": false,
 						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
+						"preventDupliitemes": false,
 						"onclick": null,
 						"showDuration": 300,
 						"hideDuration": 1000,
@@ -310,8 +370,9 @@ $('#btnSave').on('click', function(e){
 					toastr["success"]("Record added successfully");
 
 					$('#name').val("");
-					$('#description').val("");
-					$('#catModal').modal('hide');
+					$('#hsCode').val("");
+					$('#itemModal').modal('hide');
+					$('#rate').val("0");
 
 					$('#btnSave').removeAttr('disabled');
 				}
@@ -334,31 +395,35 @@ $('#btnSave').on('click', function(e){
 	}
 	else
 	{
-		if($('#name').valid() && $('#description').valid()){
-			if($('#name').val() === temp_name && $('#description').val() === temp_desc){
+		if($('#name').valid() && $('#hsCode').valid()){
+			if($('#name').val() === temp_name && $('#hsCode').val() === temp_hsCode && $('#rate').val() === temp_rate){
 				$('#name').val("");
-				$('#description').val("");
+				$('#hsCode').val("");
 				$('#btnSave').removeAttr('disabled');
-				$('#catModal').modal('hide');
+				$('#itemModal').modal('hide');
 			}
 			else{
 				$('#btnSave').attr('disabled', 'true');
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/category/' + cat_id,
+					url:  '/admin/item/' + item_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
-						'name' : $('#name').val(),
 						'sections_id': $('#sections_id').val(),
+						'category_types_id':  $('#category_types_id').val(),
+						'name' : $('#name').val(),
+						'hsCode':  $('#hsCode').val(),
+						'rate':  $('#rate').val(),
 					},
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							cattable.ajax.url( '{{ route("cat.data") }}' ).load();
-							$('#catModal').modal('hide');
-							$('#description').val("");
-							$('.modal-title').text('New Category');
+							itemtable.ajax.url( '{{ route("item.data") }}' ).load();
+							$('#itemModal').modal('hide');
+							$('#hsCode').val("");
+							$('#rate').val("0");
+							$('.modal-title').text('New Item');
 
 					//Show success
 
@@ -369,7 +434,7 @@ $('#btnSave').on('click', function(e){
 						"progressBar": false,
 						"rtl": false,
 						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
+						"preventDupliitemes": false,
 						"onclick": null,
 						"showDuration": 300,
 						"hideDuration": 1000,
@@ -383,8 +448,8 @@ $('#btnSave').on('click', function(e){
 					toastr["success"]("Record updated successfully");
 
 					$('#name').val("");
-					$('#description').val("");
-					$('#catModal').modal('hide');
+					$('#hsCode').val("");
+					$('#itemModal').modal('hide');
 					$('#btnSave').removeAttr('disabled');
 				}
 				else{
