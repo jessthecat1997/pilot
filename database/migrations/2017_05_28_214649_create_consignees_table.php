@@ -20,7 +20,7 @@ class CreateConsigneesTable extends Migration
             $table->string('lastName', 45);
             $table->string('companyName', 250);
             $table->string('email', 100);
-            $table->string('address', 100)->nullable();
+            $table->text('address')->nullable();
             $table->string('city', 100)->nullable();
             $table->string('st_prov', 100)->nullable();
             $table->string('zip', 10)->nullable();

@@ -20,7 +20,7 @@ class ConsigneesController extends Controller
 
 		return view('consignee.consignee_index', compact(['provinces']));
 	}
-	public function store(Request $request)
+	public function store(StoreConsignee $request)
 	{
 		if($request->same_billing_address == "true"){
 			$consignee = new Consignee;
