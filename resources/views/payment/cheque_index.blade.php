@@ -1,38 +1,40 @@
 @extends('layouts.app')
 @section('content')
 <h2>&nbsp;Unconfirm Cheques</h2>
-<div class="pull-right">
+<hr>
+<div class="pull-left">
 	<a href="/payment" class="btn but">Back to Payment</a>
 </div>
 <br/>
-<hr>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					List of unconfirm cheques
-				</div>
-				<div class="panel-body">
-					<table class = "table-hover table" id = "chq_table">
-						<thead>
-							<tr>
-								<th>
-									Consignee
-								</th>
-								<th>
-									Bank
-								</th>
-								<th>
-									Amount
-								</th>
-								<th>
-									Action
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of unconfirm cheques
+			</div>
+			<div class="panel-body">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "chq_table">
+					<thead>
+						<tr>
+							<th>
+								Consignee
+							</th>
+							<th>
+								Bank
+							</th>
+							<th>
+								Amount
+							</th>
+							<th>
+								Invoice No.
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -45,8 +47,11 @@
 				<h4 class="modal-title">Confirm Cheque Payment</h4>
 			</div>
 			<div class="modal-body">
-				<p>Verify cheque payment?</p>
-				<input type="hidden" id="vtID">
+				<form>
+					{{ csrf_field() }}
+					<p>Verify cheque payment?</p>
+					<input type="hidden" id="vtID">
+				</form>
 			</div>
 			<div class="modal-footer">
 				<button  class="btn but finalize-confirm">Save</button>
@@ -83,23 +88,24 @@
 			{ data: 'companyName' },
 			{ data: 'bankName' },
 			{ data: 'amount'},
+			{ data: 'bi_head_id' },
 			{ data: 'action', orderable: false, searchable: false }
 			],
 		})
 	})
 	$(document).on('click', '.chq_con', function(e){
-		$('#confirmModal').modal('show');
+		e.preventDefault();
 		vt_id = $(this).val();
 	})
 	$(document).on('click', '.finalize-confirm', function(e){
 		console.log(vt_id);
 		$.ajax({
-			method: 'PUT',
-			url: '{{ route("con_cheque") }}/'+vt_id,
+			type: 'PUT',
+			url: '{{ route("cheque.index") }}/' + vt_id,
 			data: {
 				'_token' : $('input[name=_token]').val(),
-				'vt_id' : vt_id,
 				'isVerify' : 1,
+				'vt_id' : vt_id,
 			},
 			success: function (data){
 				location.reload();

@@ -107,7 +107,7 @@
 						'delivery_id' : $('#delivery_id').val(),
 						'fine' : $('#fine').inputmask('unmaskedvalue'),
 						'description' : $('#description').val(),
-						'employees_id' : {{ $employee->id }},
+						'employees_id' : '{{ $employee->id }}',
 					},
 					success: function (data)
 					{

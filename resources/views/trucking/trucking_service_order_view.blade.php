@@ -59,49 +59,222 @@
 		</div>
 	</div>
 </div>
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel default-panel">
-			<div class = "panel-body">
-				@if($service_order->status == 'P' )
-				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery">New Delivery</button></h4>
-				@else
-				<h4>Delivery History <button class = "btn btn-md btn-primary col-md-5 pull-right new-delivery disabled" disabled >New Delivery</button></h4>
-				@endif
-				<hr />
+<hr>
+<div class="pull-right">
+	@if($service_order->status == 'P' )
+	<button class = "btn btn-md btn-primary new-delivery">New Delivery</button>
+	@else
+	<button class = "btn btn-md btn-primary new-delivery disabled" disabled >New Delivery</button>
+	@endif
+</div>
+<br/>
+<br/>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading" >Delivery History</div>
+			<div class="panel-body">
 				<table class = "table table-responsive table-striped cell-border table-bordered" id = "delivery_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 5%;">
+							<th>
 								ID
-							</td>
-							<td style="width: 10%;">
+							</th>
+							<th>
 								Origin Name
-							</td>
-							<td style="width: 10%;">
+							</th>
+							<th>
 								Origin City
-							</td>
-							<td style="width: 10%;">
+							</th>
+							<th>
 								Pickup Date
-							</td>
-							<td style="width: 15%;">
+							</th>
+							<th>
 								Destination Name
-							</td>
-							<td style="width: 15%;">
+							</th>
+							<th>
 								Destination City
-							</td>
-							<td style="width: 15%;">
+							</th>
+							<th>
 								Delivery Date
-							</td>
-							<td style="width: 5%;">
+							</th>
+							<th>
 								Status
-							</td>
-							<td style="width: 12%;">
+							</th>
+							<th>
 								Actions
-							</td>
+							</th>
 						</tr>
 					</thead>
 				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel-body">
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Billing</h4>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in">
+						<div class="panel-body">
+							<div class="panel-primary">
+								<div class="col-lg-6"> 
+									@if($service_order->bi_head_id_rev != null)
+									<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+									@else
+									<h4>List of Billings</h4>
+									@endif
+									<br />
+									@if($service_order->bi_head_id_rev != null)
+									<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
+										<thead>
+											<tr>
+												<td>
+													Name
+												</td>
+												<td>
+													Amount
+												</td>
+												<td>
+													Description
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									@else
+									<div class = "form-horizontal">
+										<div class = "col-md-10">
+											Create Billing First to Add Payables.
+										</div>
+										<div class="col-md-2">
+											<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
+										</div>
+									</div>
+									@endif
+								</div>
+							</div>
+							<div class="panel-primary">
+								<div class="col-lg-6"> 
+									@if($service_order->bi_head_id_exp != null)
+									<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
+									@else
+									<h4>List of Refundable Charges</h4>
+									@endif
+									<br/>
+									@if($service_order->bi_head_id_exp != null)
+									<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "expense_table">
+										<thead>
+											<tr>
+												<td>
+													Name
+												</td>
+												<td>
+													Amount
+												</td>
+												<td>
+													Description
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									@else
+									<div class = "form-horizontal">
+										<div class = "col-md-10">
+											Create Billing First to Add Payables.
+										</div>
+										<div class="col-md-2">
+											<button class = "btn but new_expense_bill btn-sm">New Bill</button>
+										</div>
+									</div>
+									@endif
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Consignee Deposits</h4>
+					</div>
+					<div id="collapseTwo" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div class="panel-primary">
+								<div class="col-lg-12"> 
+									<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
+									<br />
+									<table class="table table-responsive table-striped table-bordered cell-bordered" style="width: 100%;" id = "deposits_table">
+										<thead>
+											<tr>
+												<td style="width: 15%;">
+													Date Added
+												</td>
+												<td style="width: 25%;">
+													Amount
+												</td>
+												<td style="width: 25%;">
+													Remaining Balance
+												</td>
+												<td style="width: 35%;">
+													Description
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											@forelse($deposits as $deposit)
+											<tr>
+												<td>
+													{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+												</td>
+												<td style="text-align: right;">
+													Php <span class = "money">{{ $deposit->amount }}</span>
+												</td>
+												<td style="text-align: right;">
+													Php <span class = "money">{{ $deposit->currentBalance }}</span>
+												</td>
+												<td>
+													{{ $deposit->description }}
+												</td>
+											</tr>
+											@empty
+											@endforelse
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -123,7 +296,6 @@
 		</div>
 	</div>
 </div>
-
 <div class="modal fade" id="deposit_modal" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -158,158 +330,12 @@
 		</div>
 	</div>
 </div>
-
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel">
-			<div class = "panel-body">
-				@if($service_order->bi_head_id_rev != null)
-				<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
-				@else
-				<h4>List of Billings</h4>
-				@endif
-				<br />
-				@if($service_order->bi_head_id_rev != null)
-				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Amount
-							</td>
-							<td>
-								Description
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				@else
-				<div class = "form-horizontal">
-					<div class = "col-md-10">
-						Create Billing First to Add Payables.
-					</div>
-					<div class="col-md-2">
-						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
-					</div>
-				</div>
-				@endif
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class = "row">
-	<div class = "col-md-10 col-md-offset-1">
-		<div class = "panel">
-			<div class = "panel-body">
-				@if($service_order->bi_head_id_exp != null)
-				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
-				@else
-				<h4>List of Refundable Charges</h4>
-				@endif
-				<br />
-				@if($service_order->bi_head_id_exp != null)
-				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "expense_table">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Amount
-							</td>
-							<td>
-								Description
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				@else
-				<div class = "form-horizontal">
-					<div class = "col-md-10">
-						Create Billing First to Add Payables.
-					</div>
-					<div class="col-md-2">
-						<button class = "btn but new_expense_bill btn-sm">New Bill</button>
-					</div>
-				</div>
-				@endif
-			</div>
-		</div>
-	</div>
-</div>
 <div class = "row">
 	<div class = "col-md-10 col-md-offset-1">
 		<div class = "panel">
 			<div class = "panel-body">
 
-				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
-				<br />
-				<table class="table table-responsive table-striped table-bordered cell-bordered" style="width: 100%;" id = "deposits_table">
-					<thead>
-						<tr>
-							<td style="width: 15%;">
-								Date Added
-							</td>
-							<td style="width: 25%;">
-								Amount
-							</td>
-							<td style="width: 25%;">
-								Remaining Balance
-							</td>
-							<td style="width: 35%;">
-								Description
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						@forelse($deposits as $deposit)
-						<tr>
-							<td>
-								{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-							</td>
-							<td style="text-align: right;">
-								Php <span class = "money">{{ $deposit->amount }}</span>
-							</td>
-							<td style="text-align: right;">
-								Php <span class = "money">{{ $deposit->currentBalance }}</span>
-							</td>
-							<td>
-								{{ $deposit->description }}
-							</td>
-						</tr>
-						@empty
-						@endforelse
-					</tbody>
-				</table>
+				
 			</div>
 		</div>
 	</div>

@@ -508,7 +508,7 @@
 
 		</div>
 		<div class="panel-footer">
-			<button class="btn btn-md btn-success save-delivery" style="width: 100%;">Save</button>
+			<button class="btn btn-md btn-primary save-delivery" style="width: 100%;">Save</button>
 		</div>
 	</div>
 
@@ -593,11 +593,17 @@
 	</div>
 </div>
 @endsection
-
 @push('styles')
 <link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
+<style>
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+</style>
 @endpush
-
 @push('scripts')
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">

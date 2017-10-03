@@ -91,7 +91,7 @@
 							<td> 
 								{{ $quotation_detail->sizes }} 
 							</td> 
-							<td> 
+							<td style="text-align: right;"> 
 								Php {{ $quotation_detail->amount }} 
 							</td> 
 						</tr>

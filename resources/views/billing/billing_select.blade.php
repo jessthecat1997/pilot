@@ -158,7 +158,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<a class="btn btn-success void-header">Confirm</a>
+				<a class="btn btn-primary void-header">Confirm</a>
 			</div>
 		</div>
 	</div>
