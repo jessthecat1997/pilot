@@ -82,47 +82,49 @@
 	<div class  = "col-md-10 col-md-offset-1">
 		<div class = "panel default-panel">
 			<div class = "panel-body">
+				<hr />
 				<h3> Quotations </h3>
 				<br />
 				<div class="col-md-10 col-md-offset-1">
 					<table class="table table-responsive table-striped table-bordered cell-border" id = "quotation_table" style="width: 100%;">
-							<thead>
-								<tr>
-									<th>
-										Quotation No.
-									</th>
-									<th>
-										Date Created
-									</th>
-									<th>
-										Status
-									</th>
-									<th>
-										Action
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								@forelse($quotations as $quotation)
-								<tr>
-									<td>
-										{{ $quotation->id }}
-									</td>
-									<td>
-										{{ Carbon\Carbon::parse($quotation->created_at)->format("F d, Y") }}
-									</td>
-									<td>
-										<input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control'>
-									</td>
-									<td>
-										<button class = 'btn btn-md btn-info view_quotation btn-md' value = '{{ $quotation->id }}'><span class = 'fa fa-eye'></span></button>
-									</td>
-								</tr>
-								@empty
+						<thead>
+							<tr>
+								<th>
+									Quotation No.
+								</th>
+								<th>
+									Date Created
+								</th>
+								<th>
+									Status
+								</th>
+								<th>
+									Action
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($quotations as $quotation)
+							<tr>
+								<td>
+									{{ $quotation->id }}
+								</td>
+								<td>
+									{{ Carbon\Carbon::parse($quotation->created_at)->format("F d, Y") }}
+								</td>
+								<td>
+									<input type='checkbox' data-toggle='toggle' data-size='mini' data-on = ' ' data-off = ' ' data-onstyle='success'  style='text-align: right;' class ='quotation_status form-control' disabled>
+								</td>
+								<td>
+									<button class = 'btn btn-md btn-info view_quotation btn-md' value = '{{ $quotation->id }}'><span class = 'fa fa-eye'></span></button>
+									<button class = 'btn btn-md btn-primary set_quotation btn-md' value = '{{ $quotation->id }}'><span class = 'fa fa-flag'></span></button>
+								</td>
+							</tr>
+							@empty
 
-								@endforelse
-							</tbody>
-						</table>
+							@endforelse
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -217,6 +219,23 @@
 					</div>
 					<div class="modal-footer">
 						<input id = "btnSave" type = "submit" class="btn btn-success update_contract_duration_save" value = "Save" />
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="qrModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Update Contract Duration</h4>
+					</div>
+					<div class="modal-body">			
+						Confirm changing quotation?
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave" type = "submit" class="btn btn-success update_quotation_save" value = "Save" />
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>				
 					</div>
 				</div>
@@ -317,6 +336,7 @@ pre {border: 0; background-color: transparent;}
 <script type="text/javascript">
 	var detail = "";
 	var error = "";
+	var selected_quot = null;
 	var temp_crModal = null;
 	var term_row = "<tr><td><textarea class = 'form-control' name = 'specificDetails'></textarea></td><td><button class = 'btn btn-danger remove_term_row'>x</button></td></tr>";
 	$(document).ready(function(){
@@ -357,6 +377,32 @@ pre {border: 0; background-color: transparent;}
 				}
 			}
 		});
+		@if($contract[0]->quot_head_id != null)
+		$('.quotation_status').each(function(){
+			if($(this).closest('tr').find('.view_quotation').val() == "{{ $contract[0]->quot_head_id }}")
+			{
+				$(this).prop('checked', true);
+			}
+		})
+		@endif
+
+		$(document).on('change', '.quotation_status', function(e){
+			var obj = $(this);
+			$('.quotation_status').not(obj).each(function(){
+				$(this).prop('checked', false);
+			})
+		})
+		$(document).on('click', '.view_quotation', function(e){
+			e.preventDefault();
+			window.open("{{ route('quotation.index') }}/" + $(this).val());
+		})
+
+		$(document).on('click', '.set_quotation', function(e){
+			e.preventDefault();
+			$('#qrModal').modal('show');
+			selected_quot = $(this).val();
+		})
+
 		$(document).on('click', '.generate_pdf', function(e){
 			window.open("{{ route('contracts.index') }}/{{ $contract[0]->id }}/show_pdf");
 		})
@@ -483,6 +529,28 @@ pre {border: 0; background-color: transparent;}
 
 		})
 
+		$(document).on('click', '.update_quotation_save', function(e){
+			e.preventDefault();
+			$('.update_quotation_save').attr('disabled', 'true');
+			$.ajax({
+				type: 'PUT',
+				url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
+				data: {
+					'_token' : $('input[name=_token').val(),
+					'update_type' : 5,
+					'contract_id' : "{{ $contract[0]->id }}",
+					'quot_head_id' : selected_quot,
+
+				},
+				success: function (data)
+				{
+					$('#qrModal').modal('hide');
+					message('Quotation changed successfully');
+					window.location.reload();
+				}
+			})
+		})
+
 		$(document).on('click', '.update_contract_duration_save', function(e){
 			e.preventDefault();
 			$('#dateEffective').valid();
@@ -508,8 +576,8 @@ pre {border: 0; background-color: transparent;}
 						},
 						success: function (data)
 						{
-							message("Updated Contract Duration");
 							$('#drModal').modal('hide');
+							message("Updated Contract Duration");
 							window.location.reload();
 						}
 					});
@@ -524,7 +592,7 @@ pre {border: 0; background-color: transparent;}
 		$(document).on('click', '.update_contract_term_save', function(e){
 			e.preventDefault();
 			if(validate() ===  true){
-
+				$('.update_contract_term_save').attr('disabled', 'true');
 				$.ajax({
 					type: 'PUT',
 					url:  '{{ route("trucking.index")}}/contracts/' + $(this).val(),
@@ -537,10 +605,12 @@ pre {border: 0; background-color: transparent;}
 					},
 					success: function (data)
 					{
+						$('#tcModal').modal('hide');
+						message('Updated terms and condition');
 						window.location.reload();
 						$('.specificDetails').val(data.specificDetails);
 						$('.actualspecificDetails').html(data.specificDetails);
-						$('#tcModal').modal('hide');
+						
 					}
 				});
 			}

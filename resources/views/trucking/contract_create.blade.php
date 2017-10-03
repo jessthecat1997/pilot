@@ -556,6 +556,7 @@
 									}
 									else
 									{
+										$('#quotation_table > tbody').html("");
 										$('#quotation_table > tbody').append(no_found);
 									}
 									

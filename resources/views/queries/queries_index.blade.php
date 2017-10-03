@@ -59,7 +59,7 @@
 				</div>
 				<div class = "collapse" id = "contracts_expired">
 					<br />
-					<table class = "table table-responsive table-bordered table-striped" id = "expired_contracts_table" style="width: 100%;">
+				<table class = "table table-responsive table-bordered table-striped" id = "expired_contracts_table" style="width: 100%;">
 						<thead>
 							<tr>
 								<td>

@@ -101,11 +101,12 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					Consignee Information
+					Consignee Quotations
 				</div>
 				<div class="panel-body">
 					<div class = "collapse" id = "consignee_warning">
@@ -162,7 +163,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">3. Terms &amp; Condition</a>
+						<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Terms &amp; Condition</a>
 					</h4>
 				</div>
 				<div id="collapseTwo" class="panel-collapse collapse">
@@ -454,7 +455,7 @@
 			e.preventDefault();
 			window.open("{{ route('quotation.index') }}/" + $(this).val());
 		})
-		
+
 		$("#commentForm").validate({
 			rules: 
 			{

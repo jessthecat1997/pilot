@@ -171,7 +171,7 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'))
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'), 'quot_head_id')
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
@@ -257,6 +257,18 @@ class ContractsController extends Controller
             return $contract;
 
             break;
+
+            case '5':
+            $contract = ContractHeader::findOrFail($request->contract_id);
+            $contract->quot_head_id = $request->quot_head_id;
+            $contract->save();
+
+            $new_amend = new ContractAmendment;
+            $new_amend->amendment = "Changed quotation";
+            $new_amend->contract_headers_id = $request->contract_id;
+            $new_amend->save();
+
+            return $contract;
 
             default:
 

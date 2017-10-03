@@ -33,7 +33,7 @@
 			</div>
 		</div>
 	</div>
-	@if($contract[0]->quot_head_id != null)
+	@if($contract[0]->quot_head_id != null && count($quotation_details)> 0)
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
