@@ -104,8 +104,7 @@
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">2. Area Rates</a>
+							<h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">2. Area Rates
 							</h4>
 						</div>
 						<div id="collapseOne" class="panel-collapse collapse in">
@@ -539,12 +538,12 @@
 
 @push('styles')
 <style>
-.quotation
-{
-	border-left: 10px solid #8ddfcc;
-	background-color:rgba(128,128,128,0.1);
-	color: #fff;
-}
+	.quotation
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 </style>
 @endpush
 
@@ -995,12 +994,12 @@
 			}
 		})
 
-		$(document).on('change', '.area_to_valid', function(e){
-			$('.selected_delivery').text("");
-			$('.selected_pickup').text("");
-			$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");
-			$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");
-			$('')
+$(document).on('change', '.area_to_valid', function(e){
+	$('.selected_delivery').text("");
+	$('.selected_pickup').text("");
+	$('#standard_rate_table > tbody').html("<tr><td colspan = '2' style = 'text-align:center;'>No records found.</td></tr>");
+	$('#delivery_rate_table > tbody').html("<tr><td colspan = '3' style = 'text-align:center;'>No records found.</td></tr>");
+	$('')
 			//All
 			$(".area_to_valid").each(function(){
 				if($(this).val() != "" && $(this).closest('tr').find('.area_from_valid').val() != $(this).val()){
@@ -1118,62 +1117,62 @@
 			}
 		})
 
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
+$(document).on('keypress', '.amount_valid', function(e){
+	$(".amount_valid").each(function(){
+		try{
+			var amount = parseFloat($(this).val());
+		}
+		catch(err){
 
-				}
-				if(typeof(amount) === "string"){
+		}
+		if(typeof(amount) === "string"){
 
-				}
-				else{
+		}
+		else{
 
-				}
-				if($(this).val() != ""){
-					$(this).css('border-color', 'green');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+		}
+		if($(this).val() != ""){
+			$(this).css('border-color', 'green');
+		}
+		else{
+			$(this).css('border-color', 'red');
+		}
+	});
+})
 
-		$(document).on('click', '.finalize-contract', function(e){
-			$('.finalize-contract').attr('disabled', true);
-			if(finalvalidateContractRows() === true){
-				$.ajax({
-					method: 'POST',
-					url: '{{ route("quotation.index") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'areas_from' : from_id,
-						'areas_to' : to_id,
-						'from_id_descrp' : from_id_descrp,
-						'to_id_descrp' : to_id_descrp,
-						'amount' : amount_value,
-						'consignees_id' : consigneeID,
-						'specificDetails' : terms_and_condition_string,
-						'_data' : results,
-					},
+$(document).on('click', '.finalize-contract', function(e){
+	$('.finalize-contract').attr('disabled', true);
+	if(finalvalidateContractRows() === true){
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("quotation.index") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'areas_from' : from_id,
+				'areas_to' : to_id,
+				'from_id_descrp' : from_id_descrp,
+				'to_id_descrp' : to_id_descrp,
+				'amount' : amount_value,
+				'consignees_id' : consigneeID,
+				'specificDetails' : terms_and_condition_string,
+				'_data' : results,
+			},
 
-					success: function (data){
-						console.log(data);
-						window.location.replace("{{ route('quotation.index') }}/" + data.id);
-					}
-
-				})
-				
+			success: function (data){
+				console.log(data);
+				window.location.replace("{{ route('quotation.index') }}/" + data.id);
 			}
-			else{
-				$('.finalize-contract').removeAttr('disabled');
-			}
+
 		})
+		
+	}
+	else{
+		$('.finalize-contract').removeAttr('disabled');
+	}
+})
 
 
-	})
+})
 
 function validateContractRows()
 {

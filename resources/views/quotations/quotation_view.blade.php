@@ -77,7 +77,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-primary">
-				<div class="panel-heading">Terms & Conditions</div>
+				<div class="panel-heading">Terms &amp; Conditions</div>
 				<div class="panel-body">
 					@if($quotation[0]->specificDetails == null)
 					<h5 style="text-align: center;">No specified details</h5>

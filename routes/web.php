@@ -165,8 +165,8 @@ Route::put('/utilities/exchange_rate_reactivate/{id}','ExchangeRatesController@r
 
 
 Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_deactivated');
-Route::get('/utilities/ipf_fee_data','IpfFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
-Route::put('/utilities/ipf_fee_reactivate/{id}','IpfFeesController@reactivate');
+Route::get('/utilities/ipf_fee_data','ImportProcessingFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
+Route::put('/utilities/ipf_fee_reactivate/{id}','ImportProcessingFeesController@reactivate');
 
 Route::resource('/utilities/receive_type', 'ReceiveTypesController');
 Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
@@ -263,9 +263,10 @@ Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item
 
 Route::get('pdfview','PaymentsController@pdfview');
 
-//Skipper
+
 //Orders
 Route::resource('/orders', 'OrdersController');
+Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
 
 
 //Payments
@@ -332,7 +333,6 @@ Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_
 
 //vanessa addition
 Route::get('/trial_report','TrialController@index');
-
 
 //Jessie
 
@@ -407,8 +407,7 @@ Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
 
 //Utilities home route
-Route::resource('/admin/utilities', 'UtilitiesController');
-Route::resource('/admin/settings', 'BusinessSettingsController');
+Route::resource('/utilities/settings','UtilityController');
 
 
 //Query

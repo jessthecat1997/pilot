@@ -3,7 +3,7 @@
 <h2>&nbsp;Delivery</h2>
 <hr>
 <div class="pull-right">
-	<a href = "{{ route('trucking.create') }}" class = "btn btn-primary btn-md pull-right">Creeate Trucking Service Order</a>
+	<a href = "{{ route('trucking.create') }}" class = "btn btn-primary btn-md pull-right">Create Trucking Service Order</a>
 </div>
 <br/>
 <br/>

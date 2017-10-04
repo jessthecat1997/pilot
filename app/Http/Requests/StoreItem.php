@@ -6,26 +6,41 @@ use Illuminate\Foundation\Http\FormRequest;
 use Response;
 class StoreItem extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+   
     public function rules()
     {
-        return [
-            //
-        ];
+        switch ($this->method()) {
+            case 'POST':
+
+            return [
+                'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:category_types,name',
+                'sections_id' =>'required',
+                'category_types_id' => 'required',
+
+            ];
+
+            break;
+
+            case 'PUT':
+
+            return [
+                'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:category_types,name,'. $this->segment(3) ,
+                'sections_id' =>'required',
+                'category_types_id' => 'required',
+
+
+            ];
+
+            break;
+
+            default: break;
+        }
     }
      public function response(array $errors)
     {

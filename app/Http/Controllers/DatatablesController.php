@@ -144,7 +144,7 @@ class DatatablesController extends Controller
 	}
 
 	public function item_datatable(){
-		$items = Item::select(['id', 'name', 'hsCode', 'rate', 'sections_id', 'category_types_id', 'created_at']);
+		$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is null  order by s.name");
 
 		return Datatables::of($items)
 		->addColumn('action', function ($item){
@@ -365,7 +365,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->select('payments.id','companyName', 'amount', 'isCheque')
-		->orderBy('companyName')
+		->orderBy('payments.id', 'DESC')
 		->get();
 		return Datatables::of($payment_hist)
 		->addColumn('action', function ($hist) {
@@ -381,7 +381,7 @@ class DatatablesController extends Controller
 			pay.totpay,
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay)) AS balance,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 			FROM billing_invoice_headers t LEFT JOIN 
 			(
@@ -400,15 +400,15 @@ class DatatablesController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
+
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
 			WHERE t.status = "U" AND t.isVoid = 0
 			');
 
@@ -441,7 +441,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'E']
-			])
+		])
 		->get();
 		return Datatables::of($exp)
 		->make(true);
@@ -458,7 +458,7 @@ class DatatablesController extends Controller
 		->where([
 			['billing_invoice_details.bi_head_id', '=', $request->id],
 			['charges.bill_type', '=', 'R']
-			])
+		])
 		->get();
 		return Datatables::of($rev)
 		->make(true);
@@ -493,22 +493,22 @@ class DatatablesController extends Controller
 
 		switch($request->frequency){
 			case 1 :
-			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
+			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN delivery_head_containers as Y on Y.del_head_id = B.id left join delivery_containers as A on Y.container_id = A.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
 			return json_encode($deliveries);
 			break;
 
 			case 2 :
-			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, DATE_FORMAT(deliveryDateTime, "%M %Y") as deliveryDateMonth, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
+			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, DATE_FORMAT(deliveryDateTime, "%M %Y") as deliveryDateMonth, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN delivery_head_containers as Y on Y.del_head_id = B.id left join delivery_containers as A on Y.container_id = A.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
 			return json_encode($deliveries);
 			break;
 
 			case 3 :
-			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, DATE_FORMAT(deliveryDateTime, "%Y") as deliveryDateYear, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
+			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE_FORMAT(pickupDateTime, "%M %d, %Y") as pickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as deliveryDateTime, DATE_FORMAT(deliveryDateTime, "%Y") as deliveryDateYear, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN delivery_head_containers as Y on Y.del_head_id = B.id left join delivery_containers as A on Y.container_id = A.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id');
 			return json_encode($deliveries);
 			break;
 
 			case 4 :
-			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE(pickupDateTime) as pickupDateTime, DATE(deliveryDateTime) as deliveryDateTime, DATE_FORMAT(pickupDateTime, "%M %d, %Y") as dpickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as ddeliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN  delivery_containers as A on A.del_head_id = B.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id WHERE DATE(deliveryDateTime) BETWEEN ? AND ?', [$request->date_from, $request->date_to]);
+			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE(pickupDateTime) as pickupDateTime, DATE(deliveryDateTime) as deliveryDateTime, DATE_FORMAT(pickupDateTime, "%M %d, %Y") as dpickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as ddeliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN delivery_head_containers as Y on Y.del_head_id = B.id left join delivery_containers as A on Y.container_id = A.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id WHERE DATE(deliveryDateTime) BETWEEN ? AND ?', [$request->date_from, $request->date_to]);
 			return json_encode($deliveries);
 		}
 
@@ -802,7 +802,7 @@ class DatatablesController extends Controller
 		->get();
 
 		return Datatables::of($quotations)
-		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->format("F d, Y") }}')
 		->addColumn('action', function ($quotation){
 			return
 			'<button value = "'. $quotation->id .'" class = "btn btn-md but view">View</button>
@@ -2788,14 +2788,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2818,14 +2818,14 @@ class DatatablesController extends Controller
 				$to = Carbon::parse($contract->dateExpiration);
 
 				if( Carbon::now()->between($from, $to) == true)
-				{
-					return 'Active';
-				}
-				else
-				{
-					return 'Expired';
-				}
-			})
+					{
+						return 'Active';
+					}
+					else
+					{
+						return 'Expired';
+					}
+				})
 			->addColumn('action', function ($contract){
 				return
 				'<input type = "hidden" value = "' .  $contract->id . '" class = "contract_header_value" />' .
@@ -2907,6 +2907,21 @@ class DatatablesController extends Controller
 		->editColumn('id', '{{ $id }}')
 		->make(true);
 	}
+
+	public function order_datatable(){
+
+		$orders = DB::select("SELECT s.id as id, CONCAT( c.firstName, ' ', c.middleName, ' ', c.lastName ) AS consignee, c.companyName, s.created_at, CONCAT(employees.firstName, ' ', employees.lastName ) AS employee FROM consignee_service_order_headers s JOIN consignees c ON s.consignees_id = c.id JOIN employees ON s.employees_id = employees.id");
+		return Datatables::of($orders)
+		->addColumn('action', function ($order){
+			return
+			"<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>".
+			"<input type = 'hidden' value = '{{ ".$order->id." }}' class = 'order-id' />";
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+
+	}
+
 
 	public function get_dutiesandtaxes_table(Request $request){
 

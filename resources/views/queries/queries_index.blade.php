@@ -32,7 +32,7 @@
 			<div class = "panel-body">
 				<div class = "collapse" id = "contracts_active">
 					<br />
-					<table class = "table table-responsive" id = "active_contracts_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "active_contracts_table" style="width: 100%;">
 						<thead>
 							<tr>
 								<td>
@@ -59,7 +59,7 @@
 				</div>
 				<div class = "collapse" id = "contracts_expired">
 					<br />
-					<table class = "table table-responsive" id = "expired_contracts_table">
+				<table class = "table table-responsive table-bordered table-striped" id = "expired_contracts_table" style="width: 100%;">
 						<thead>
 							<tr>
 								<td>
@@ -86,7 +86,7 @@
 				</div>
 				<div class = "collapse" id = "contracts_draft">
 					<br />
-					<table class = "table table-responsive" id = "draft_contracts_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "draft_contracts_table" style="width: 100%;">
 						<thead>
 							<tr>
 								<td>
@@ -113,7 +113,7 @@
 				</div>
 				<div class = "collapse" id = "pending_delivery">
 					<br />
-					<table class = "table table-responsive" id = "pending_delivery_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "pending_delivery_table" style="width: 100%;">
 						<thead>
 							<td style="width: 10%;">
 								Del No.
@@ -141,7 +141,7 @@
 				</div>
 				<div class = "collapse" id = "cancelled_delivery">
 					<br />
-					<table class = "table table-responsive" id = "cancellled_delivery_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "cancellled_delivery_table" style="width: 100%;">
 						<thead>
 							<td style="width: 10%;">
 								Del No.
@@ -169,7 +169,7 @@
 				</div>
 				<div class = "collapse" id = "today_delivery">
 					<br />
-					<table class = "table table-responsive" id = "today_delivery_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "today_delivery_table" style="width: 100%;">
 						<thead>
 							<td style="width: 10%;">
 								Del No.
@@ -197,7 +197,7 @@
 				</div>
 				<div class = "collapse" id = "unreturned_containers">
 					<br />
-					<table class = "table table-responsive" id = "unreturned_containers_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "unreturned_containers_table" style="width: 100%;">
 						<thead>
 							<td style="width: 15%;">
 								Container Number
@@ -220,7 +220,7 @@
 				</div>
 				<div class = "collapse" id = "near_bills">
 					<br />
-					<table class = "table table-responsive" id = "near_bills_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "near_bills_table" style="width: 100%;">
 						<thead>
 							<td style="width: 13s%;">
 								ID
@@ -242,7 +242,7 @@
 				</div>
 				<div class = "collapse" id = "overdue_bills">
 					<br />
-					<table class = "table table-responsive" id = "overdue_bills_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "overdue_bills_table" style="width: 100%;">
 						<thead>
 							<td style="width: 13s%;">
 								ID
@@ -265,7 +265,7 @@
 
 				<div class = "collapse" id = "exp_registrations">
 					<br />
-					<table class = "table table-responsive" id = "exp_registrations_table">
+					<table class = "table table-responsive table-bordered table-striped" id = "exp_registrations_table" style="width: 100%;">
 						<thead>
 							<td style="width: 10%;">
 								Del No.
@@ -294,7 +294,7 @@
 
 				<div class = "collapse" id = "finished_truckings">
 					<br />
-					<table class = "table table-responsive" id = "finished_truckings_table" style="width: 100%;">
+					<table class = "table table-responsive table-bordered table-striped" id = "finished_truckings_table" style="width: 100%;">
 						<thead>
 							<td style="width: 20%;">
 								ID
@@ -361,7 +361,6 @@
 					chtable = $('#active_contracts_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_active_contract') }}/A",
 						columns: [
@@ -399,7 +398,6 @@
 					chtable = $('#expired_contracts_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_active_contract') }}/E",
 						columns: [
@@ -437,7 +435,6 @@
 					chtable = $('#draft_contracts_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_active_contract') }}/D",
 						columns: [
@@ -475,7 +472,6 @@
 					drtable = $('#pending_delivery_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_pending_deliveries') }}/P",
 						columns: [
@@ -515,7 +511,6 @@
 					drtable = $('#cancellled_delivery_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_pending_deliveries') }}/C",
 						columns: [
@@ -555,7 +550,6 @@
 					drtable = $('#today_delivery_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_pending_deliveries') }}/T",
 						columns: [
@@ -595,7 +589,6 @@
 					drtable = $('#unreturned_containers_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_unreturned_containers') }}",
 						columns: [
@@ -633,7 +626,6 @@
 					drtable = $('#near_bills_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_query_bills') }}/N",
 						columns: [
@@ -670,7 +662,6 @@
 					drtable = $('#overdue_bills_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_query_bills') }}/O",
 						columns: [
@@ -709,7 +700,6 @@
 					drtable = $('#finished_truckings_table').DataTable({
 						processing: false,
 						deferRender: true,
-						scrollX: true,
 						serverSide: false,
 						ajax: "{{ route('get_finished_trucking_orders') }}",
 						columns: [
