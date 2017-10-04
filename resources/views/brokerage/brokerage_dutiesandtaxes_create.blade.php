@@ -266,9 +266,6 @@
                               <td>
                                 Supplier/s
                               </td>
-                              <td>
-                                Action
-                              </td>
                             </tr>
                           </thead>
                           <tbody>
@@ -290,10 +287,7 @@
                               <td>
                                 {{ $delivery_detail->supplier }}
                               </td>
-                              <td>
-                                <button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>
-                              </td>
-                            </tr>
+                              </tr>
                             @empty
                             <tr>
                               <td colspan="4">
@@ -1008,7 +1002,6 @@ var temp_arrastre, temp_wharfage;
 
 	$('#generateDAT').on('click', function(e){
 
-    alert(localStorage.getItem("BankCharges"));
     if(Validations() == true)
     {
 
@@ -1367,18 +1360,15 @@ function decimalsOnly(event) {
                       if(container_details[0] == containers[1])
                       {
 
-                          alert('{{ $detail->descriptionOfGoods }}');
 
                           var row = table1.insertRow();
                           var cell0 = row.insertCell(0);
                           var cell1 = row.insertCell(1);
                           var cell2 = row.insertCell(2);
-                          var cell3 = row.insertCell(3);
 
                           cell0.innerHTML = '{{ $detail->descriptionOfGoods }}';
                           cell1.innerHTML = '{{ $detail->grossWeight }}';
                           cell2.innerHTML = '{{ $detail->supplier }}';
-                          cell3.innerHTML = "<button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>";
                       }
                     @empty
                     @endforelse

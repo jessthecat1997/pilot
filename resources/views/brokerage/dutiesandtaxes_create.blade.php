@@ -312,7 +312,6 @@
 
 				// 0 item Name
 				StoredItemName[r] = storedItems[ctr];
-				alert(storedItems[ctr]);
 				cell0.innerHTML =storedItems[ctr];
 				ctr++;
 
@@ -638,7 +637,6 @@
 		});
 		$('#btnSave').on('click', function(e){
 
-			alert("save");
 
 			console.log(Brokerage_id);
 			console.log($('#processedBy').val());

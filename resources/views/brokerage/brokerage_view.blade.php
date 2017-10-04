@@ -378,7 +378,6 @@ window.onload = function(){
  x = row.insertCell(1);
  x.innerHTML = localStorage.getItem("IPFFee");
 
-alert(localStorage.getItem("IPFFee"));
  var minimum, maximum, amount;
 
  var ipfFeeHeader_str = JSON.stringify(<?php echo json_encode($ipf_fee_header) ?>);
@@ -527,8 +526,6 @@ alert(localStorage.getItem("IPFFee"));
  localStorage.setItem("jsonValue",	JSON.stringify(StoredValue));
  localStorage.setItem("jsonFreight",	JSON.stringify(StoredFreight));
  localStorage.setItem("jsonInsurance",	JSON.stringify(StoredInsurance));
-
-
 }
 
 function objectLength(obj) {

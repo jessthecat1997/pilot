@@ -403,9 +403,9 @@ class BillingDetailsController extends Controller
 		return Datatables::of($bill_history)
 		->addColumn('action', function ($history) {
 			return
-			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv"><i class="fa fa-plus"></i></a>'.
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal" data-target="#updateModal" value="'. $history->id .'"><i class="fa fa-edit"></i></button>'.
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger voidBill" data-toggle="modal" data-target="#voidModal" value="'. $history->id .'"><i class="fa fa-times"></i></button>';
+			'<a href = "/billing/'. $history->id .'/create" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary bill_inv" data-toggle="tooltip" title="Add Payables"><i class="fa fa-plus"></i></a>'.
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateBill" data-toggle="modal tooltip" data-target="#updateModal" value="'. $history->id .'" title="Edit"><i class="fa fa-edit"></i></button>'.
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-danger voidBill" data-toggle="modal tooltip" data-target="#voidModal" value="'. $history->id .'" title="Void"><i class="fa fa-times"></i></button>';
 
 		})
 		->make(true);
