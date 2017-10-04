@@ -53,6 +53,9 @@
 							<input type="hidden" class="txt" id="paid" value="0.00" disabled>
 							@endforelse
 						</div>
+						<div class="form-group">
+							<h5><strong>Payment Allowance:</strong> &nbsp;&nbsp;{{ $allowance[0]->payment_allowance }} days</h5>
+						</div>
 					</form>
 					<ul class="nav nav-pills">
 						<li class="active"><a data-toggle="pill" href="#home">Cash</a></li>
@@ -326,6 +329,7 @@
 				'bankName' : $('#bank').val(),
 				'amount' : $('#check_amt').val(),
 				'bi_head_id' : {{ $pays[0]->bi_head }},
+				'utility_id' : {{ $allowance[0]->id }},
 				'isVerify' : 1
 			},
 			success: function (data){
@@ -359,6 +363,7 @@
 						'deposit_id' : deposit_id,
 						'description' : $('#depositDescription').val(),
 						'bi_head_id' : "{{ $pays[0]->bi_head }}",
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : $('#depositPayment').val(),
 					},
 					success: function (data){
@@ -422,6 +427,7 @@
 						'deposit_id' : deposit_id,
 						'description' : $('#depositDescription').val(),
 						'bi_head_id' : "{{ $pays[0]->bi_head }}",
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : $('#depositPayment').val(),
 					},
 					success: function (data){
@@ -497,6 +503,7 @@
 						'deposit_id' : deposit_id,
 						'description' : $('#depositDescription').val(),
 						'bi_head_id' : "{{ $pays[0]->bi_head }}",
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : $('#depositPayment').val(),
 					},
 					success: function (data){
@@ -653,6 +660,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 						'_token' : $('input[name=_token]').val(),
 						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : amt,
 						'description' : rem
 					},
@@ -716,6 +724,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 						'_token' : $('input[name=_token]').val(),
 						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : amt,
 						'description' : rem
 					},
@@ -790,6 +799,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 					'_token' : $('input[name=_token]').val(),
 					'isCheque' : 0,
 					'bi_head_id' : {{ $so_head_id }},
+					'utility_id' : {{ $allowance[0]->id }},
 					'amount' : amt,
 					'description' : rem
 				},
@@ -874,6 +884,7 @@ $(document).on('click', '.finalize-payment', function(e){
 						'_token' : $('input[name=_token]').val(),
 						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : amt,
 						'description' : rem
 					},
@@ -937,6 +948,7 @@ $(document).on('click', '.finalize-payment', function(e){
 						'_token' : $('input[name=_token]').val(),
 						'isCheque' : 0,
 						'bi_head_id' : {{ $so_head_id }},
+						'utility_id' : {{ $allowance[0]->id }},
 						'amount' : amt,
 						'description' : rem
 					},
@@ -1011,6 +1023,7 @@ $(document).on('click', '.finalize-payment', function(e){
 					'_token' : $('input[name=_token]').val(),
 					'isCheque' : 0,
 					'bi_head_id' : {{ $so_head_id }},
+					'utility_id' : {{ $allowance[0]->id }},
 					'amount' : amt,
 					'description' : rem
 				},
