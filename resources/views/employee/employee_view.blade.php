@@ -73,8 +73,25 @@
               <div class = "form-group">
                 <div class = "col-md-12">
                   @forelse($employee_role as $employee_roles)
+
+                  @php
+                  $found = 0;
+                  @endphp
+
+                  @forelse($emp_roles as $er)
+                  @php
+                  if($employee_roles->id == $er->id)
+                  {
+                    $found = 1;
+                    break;
+                  }
+
+                  @endphp
+                  @empty
+
+                  @endforelse
                   <div class = "col-md-3" id = "employeeRoles">
-                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on="" data-off="" data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  />&nbsp;&nbsp;{{$employee_roles->name }} 
+                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on=" " data-off=" " data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  />&nbsp;&nbsp;{{$employee_roles->name }} 
                   </div>
 
                   @php
