@@ -104,7 +104,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					<h3>Delivery Schedule</h3>
+					<h4>Delivery Schedule</h4>
 				</div>
 				<div class="panel-body">
 					<div class = "col-md-12">
