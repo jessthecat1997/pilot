@@ -252,7 +252,7 @@
 	var arr_basis_type_id = [];
 	var arr_lcl_type_id = [];
 	var af_id;
-	
+
 	$(document).ready(function(){
 		var now = new Date();
 		var day = ("0" + now.getDate()).slice(-2);
@@ -272,15 +272,15 @@
 			{ data: 'location' },
 			{ data: 'lcl_type',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'basis_type',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'amount',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 
 			{ data: 'action', orderable: false, searchable: false }

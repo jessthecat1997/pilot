@@ -426,7 +426,7 @@
 				@endif
 				<br />
 				@if($brokerage_header[0]->bi_head_id_rev != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "revenues_table">
+				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
 					<thead>
 						<tr>
 							<td>

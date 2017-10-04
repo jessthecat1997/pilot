@@ -32,30 +32,6 @@
 							</td>
 						</tr>
 					</thead>
-					<tbody>
-						@forelse($ipfs as $ipf)
-						<tr>
-							<td>
-								{{ Carbon\Carbon::parse($ipf->dateEffective)->format("F d, Y") }}
-							</td>
-							<td>
-								{{ $ipf->minimum}}
-							</td>
-							<td>
-								{{ $ipf->maximum}}
-							</td>
-							<td>
-								{{ $ipf->amount}}
-							</td>
-							<td>
-								<button value = "{{ $ipf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-								<button value = "{{ $ipf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
-								<input type = "hidden" value = "{{ Carbon\Carbon::parse($ipf->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
-							</td>
-						</tr>
-						@empty
-						@endforelse
-					</tbody>
 				</table>
 			</div>
 		</div>
@@ -122,7 +98,7 @@
 
 													<div class = "form-group input-group" >
 														<span class = "input-group-addon">$</span>
-														<input type = "text" class = "form-control ipf_minimum_valid money"
+														<input type = "text" class = "form-control ipf_minimum_valid"
 														value ="0.00" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" />
 													</div>
 
@@ -130,7 +106,7 @@
 												<td>
 													<div class = "form-group input-group">
 														<span class = "input-group-addon">$</span>
-														<input type = "text" class = "money form-control ipf_maximum_valid "
+														<input type = "text" class = "form-control  ipf_maximum_valid"
 														value ="0.00" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" />
 													</div>
 												</td>
@@ -227,18 +203,6 @@
 	var data, tblLength;
 	var jsonMinimum, jsonMaximum, jsonAmount;
 	$(document).ready(function(){
-		$('.money').each(function(){
-			console.log($(this));
-			$(this).inputmask("numeric", {
-				radixPoint: ".",
-				groupSeparator: ",",
-				digits: 2,
-				autoGroup: true,
-				rightAlign: true,
-				removeMaskOnSubmit:true,
-			});
-		})
-		
 		var ipf_row = "<tr>" + $('#ipf-row').html() + "</tr>";
 
 		var ipftable = $('#ipf_table').DataTable({
@@ -251,15 +215,15 @@
 			{ data: 'dateEffective' },
 			{ data: 'minimum',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'maximum',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'amount',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			{ data: 'action', orderable: false, searchable: false }
 			],	"order": [[ 0, "desc" ]],
@@ -322,7 +286,8 @@
 			})
 		});
 		$(document).on('click', '.deactivate', function(e){
-			ipf_id = $(this).val();
+			var ipf_id = $(this).val();
+			data = ipftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
 		$(document).on('click', '.delete-ipf-row', function(e){
@@ -346,7 +311,48 @@
 				}
 			}
 		})
-		
+		$(document).on('change', '.ipf_minimum_valid', function(e){
+			$(".ipf_minimum_valid").each(function(){
+				if($(this).val() != ""){
+					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
+				}
+				else{
+					$(this).css('border-color', 'red');
+				}
+			});
+		})
+		$(document).on('change', '.ipf_minimum_valid', function(e){
+			$(".ipf_minimum_valid").each(function(){
+				if($(this).val() != ""){
+					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
+				}
+				else{
+					$(this).css('border-color', 'red');
+				}
+			});
+		})
+		$(document).on('keypress', '.amount_valid', function(e){
+			$(".amount_valid").each(function(){
+				try{
+					var amount = parseFloat($(this).val());
+				}
+				catch(err){
+				}
+				if(typeof(amount) === "string"){
+				}
+				else{
+				}
+				if($(this).val() != ""){
+					$(this).css('border-color', 'green');
+					$('#ipf_warning').removeClass('in');
+				}
+				else{
+					$(this).css('border-color', 'red');
+				}
+			});
+		})
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
@@ -406,61 +412,35 @@
 						},
 						success: function (data){
 
-						minimum_unmask = [];
-						$.ajax({
-							type: 'POST',
-							url:  '/admin/ipf_fee',
-							data: {
-								'_token' : $('input[name=_token]').val(),
-								'dateEffective' : $('#dateEffective').val(),
-								'minimum' : jsonMinimum,
-								'maximum' : jsonMaximum,
-								'amount' : jsonAmount,
-								'tblLength' : tblLength,
-							},
-							success: function (data){
-
-								if(typeof(data) === "object"){
-									ipftable.ajax.url( '{{ route("ipf.data") }}' ).load();
-									$('#ipfModal').modal('hide');
-									$('.modal-title').text('New Import Processing Fee Range');
-									$('#minimum').val("0.00");
-									$('#maximum').val("0.00");
-									$('#amount').val("0.00");
-									$('#dateEffective').val("");
-									toastr.options = {
-										"closeButton": false,
-										"debug": false,
-										"newestOnTop": false,
-										"progressBar": false,
-										"rtl": false,
-										"positionClass": "toast-bottom-right",
-										"preventDuplicates": false,
-										"onclick": null,
-										"showDuration": 300,
-										"hideDuration": 1000,
-										"timeOut": 2000,
-										"extendedTimeOut": 1000,
-										"showEasing": "swing",
-										"hideEasing": "linear",
-										"showMethod": "fadeIn",
-										"hideMethod": "fadeOut"
-									}
-									toastr["success"]("Record added successfully")
-									$('#btnSave').removeAttr('disabled');
-								}else{
-
-									resetErrors();
-									var invdata = JSON.parse(data);
-									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
-										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-									});
-								}
+							ipftable.ajax.reload();
+							$('#ipfModal').modal('hide');
+							$('.modal-title').text('New Import Processing Fee Range');
+							$('#minimum').val("0.00");
+							$('#maximum').val("0.00");
+							$('#amount').val("0.00");
+							$('#dateEffective').val("");
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
 							}
-						})
-					}
+							toastr["success"]("Record addded successfully")
+
+						}
+					})
 				}else{
 
 
