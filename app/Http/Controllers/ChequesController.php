@@ -98,8 +98,11 @@ class ChequesController extends Controller
 			WHERE t.id = ?
 			', [$id]);
 
+		$allowance = DB::table('utility_types')
+		->select('id','payment_allowance')
+		->get();
 
-		return view('payment/cheque_payment', compact(['pays', 'so_head_id','paid', 'total', 'deposits', 'cheques']));
+		return view('payment/cheque_payment', compact(['pays', 'so_head_id','paid', 'total', 'deposits', 'cheques', 'allowance']));
 	}
 	public function store(Request $request)
 	{
