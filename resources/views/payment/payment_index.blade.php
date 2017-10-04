@@ -30,6 +30,9 @@
 									Payment Mode
 								</th>
 								<th>
+									Allowance (days)
+								</th>
+								<th>
 									Action
 								</th>
 							</tr>
@@ -100,7 +103,7 @@
 			{
 				return formatStatus(data); 
 			}},
-
+			{ data: 'payment_allowance' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],

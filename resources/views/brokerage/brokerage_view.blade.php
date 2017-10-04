@@ -50,20 +50,19 @@
     <div>
       <div class = "col-md-9">
         <div class = "table-responsive">
-      <table class = "table table-bordered table-hover item-table" style="width:100%" id = "itemTable">
+      <table class = "table table-bordered table-hover item-table" style="width:150%" id = "itemTable">
         <tr>
           <td class = "fit"><h5><label>Item Name</label></h5></td>
           <td class = "fit"><h5><label>Value in USD</label></h5></td>
           <td class = "fit"><h5><label>Insurance</label></h5></td>
           <td class = "fit" ><h5><label>Freight&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label></h5></td>
+          <td class = "fit" ><h5><label>Other Charges&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label></h5></td>
           <td class = "fit"><h5><label>Total Value</label></h5></td>
           <td class = "fit"><h5><label>Dutiable Value in Peso</label></h5></td>
           <td><h5><label>HS Code</label></h5></td>
           <td><h5><label>Rate of Duty</label></h5></td>
           <td class = "fit"><h5><label>Customs Duty</label></h5></td>
         </tr>
-
-
       </table>
 
 
@@ -202,7 +201,7 @@ window.onload = function(){
  var tblRowLength = objectLength(items);
 
  var table = document.getElementById('itemTable');
- var ctr = 7;
+ var ctr = 6;
 
  var StoredItemName = new Array();
  var StoredHSCode = new Array();
@@ -210,13 +209,14 @@ window.onload = function(){
  var StoredValue = new Array();
  var StoredInsurance = new Array();
  var StoredFreight = new Array();
+ var StoredOtherCharges = new Array();
  var StoredTotal = new Array();
  var StoredDutiableValue = new Array();
  var StoredCustomsDuty = new Array();
 
- var Value, Insurance, Freight, Total, DutiableValue, CustomsDuty, RateOfDuty;
- var TotalValue = 0, TotalInsurance = 0, TotalFreight = 0, _Total = 0, TotalDutiableValue = 0, TotalCustomsDuty = 0;
- var StrTotalValue, StrTotalInsurance, StrTotalFreight, StrTotal, StrTotalDutiableValue, StrTotalCustomsDuty;
+ var Value, Insurance, Freight, OtherCharges, Total, DutiableValue, CustomsDuty;
+ var TotalValue = 0, TotalInsurance = 0, TotalFreight = 0, TotalOtherCharges = 0, _Total = 0, TotalDutiableValue = 0, TotalCustomsDuty = 0;
+ var StrTotalValue, StrTotalInsurance, StrTotalFreight, StrTotalOtherCharges, StrTotal, StrTotalDutiableValue, StrTotalCustomsDuty;
 
  for(var r = 0, n = tblRowLength; r < n; r++)
  {
@@ -230,7 +230,7 @@ window.onload = function(){
    var cell6 = row.insertCell(6);
    var cell7 = row.insertCell(7);
    var cell8 = row.insertCell(8);
-
+   var cell9 = row.insertCell(9);
 
    // 0 item Name
    StoredItemName[r] = items[r].descriptionOfGoods;
@@ -240,12 +240,12 @@ window.onload = function(){
    // 1 hs code
    StoredHSCode[r] = items[r].hsCode;
 
-   cell6.innerHTML = StoredHSCode[r];
+   cell7.innerHTML = StoredHSCode[r];
 
    // 2 rate of duty
    StoredRateOfDuty[r] = items[r].rateOfDuty;
    RateOfDuty = StoredRateOfDuty[r];
-   cell7.innerHTML = StoredRateOfDuty[r];
+   cell8.innerHTML = StoredRateOfDuty[r];
 
 
    // 3  value
@@ -265,7 +265,23 @@ window.onload = function(){
    cell3.innerHTML = StoredFreight[r];
 
 
-   Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2)
+   @if($brokerage_header[0]->withCO == 1)
+
+       StoredOtherCharges[r] = items[r].otherCharges;
+       OtherCharges =  items[r].otherCharges;
+       Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2) + +parseFloat(OtherCharges).toFixed(2);
+       cell4.innerHTML = "$ " + OtherCharges.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+   @endif
+   @if($brokerage_header[0]->withCO == 0)
+
+       OtherCharges = items[r].otherCharges;
+       StoredOtherCharges[r] = OtherCharges;
+       Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2);
+       cell4.innerHTML = "$    ---   ";
+
+   @endif
+
    StoredTotal[r] = Total;
 
    DutiableValue = +Total * +parseFloat(ExchangeRate).toFixed(3);
@@ -280,26 +296,27 @@ window.onload = function(){
    cell2.innerHTML = "$ " + Insurance.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
    cell3.innerHTML = "$ " + Freight.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
-   cell4.innerHTML = "$ " + Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-   cell5.innerHTML = "Php " + DutiableValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-   cell8.innerHTML = "Php " + CustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+   cell5.innerHTML = "$ " + Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
+   cell6.innerHTML = "Php " + DutiableValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+   cell9.innerHTML = "Php " + CustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
      TotalValue += +parseFloat(StoredValue[r]).toFixed(2);
      TotalInsurance += +parseFloat(StoredInsurance[r]).toFixed(2);
      TotalFreight += +parseFloat(StoredFreight[r]).toFixed(2);
+     TotalOtherCharges += +parseFloat(StoredOtherCharges[r]).toFixed(2);
      _Total += +parseFloat(StoredTotal[r]).toFixed(2);
+
      TotalDutiableValue += +parseFloat(StoredDutiableValue[r]).toFixed(2);
      TotalCustomsDuty += +parseFloat(StoredCustomsDuty[r]).toFixed(2);
 
      StrTotalValue = TotalValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
      StrTotalInsurance = TotalInsurance.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
      StrTotalFreight = TotalFreight.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+     StrTotalOtherCharges = TotalOtherCharges.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
      StrTotal = _Total.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
      StrTotalDutiableValue = TotalDutiableValue.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-     StrTotalCustomDuty = TotalCustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-
+     StrTotalCustomsDuty = TotalCustomsDuty.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
  }
-
 
  var newRow = $("<tr class = 'info table-borderless'>");
  var cols = "";
@@ -308,12 +325,19 @@ window.onload = function(){
  cols += '<td> $ ' + StrTotalValue + '</td>';
  cols += '<td> $ ' + StrTotalInsurance + '</td>';
  cols += '<td> $ ' + StrTotalFreight + '</td>';
+ if(localStorage.getItem("withCO") == 1)
+ {
+     cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
+ }
+ else if(localStorage.getItem("withCO") == 0)
+ {
+     cols += '<td> $ --- </td>';
+ }
  cols += '<td> $ ' + StrTotal + '</td>';
  cols += '<td> Php '  + StrTotalDutiableValue + '</td>';
  cols += '<td>  </td>';
  cols += '<td>  </td>';
- cols += '<td> Php ' + StrTotalCustomDuty + '</td></tr>';
-
+ cols += '<td> Php ' + StrTotalCustomsDuty + '</td></tr>';
  newRow.append(cols);
  $("table.item-table").append(newRow);
 
@@ -328,7 +352,7 @@ window.onload = function(){
 
  row = document.getElementById("CustomsDuty");
  x = row.insertCell(1);
- x.innerHTML = StrTotalCustomDuty;
+ x.innerHTML = StrTotalCustomsDuty;
 
  var Arrastre =  <?php echo $dutiesandtaxes_header[0]->arrastre ?>;
  row = document.getElementById("Arrastre");
@@ -354,7 +378,7 @@ window.onload = function(){
  x = row.insertCell(1);
  x.innerHTML = localStorage.getItem("IPFFee");
 
-
+alert(localStorage.getItem("IPFFee"));
  var minimum, maximum, amount;
 
  var ipfFeeHeader_str = JSON.stringify(<?php echo json_encode($ipf_fee_header) ?>);
@@ -362,6 +386,9 @@ window.onload = function(){
 
  var ipfFeeHeader = JSON.parse(ipfFeeHeader_str);
  var ipfFeeDetail = JSON.parse(ipfFeeDetail_str);
+
+ console.log(ipfFeeHeader_str);
+ console.log(ipfFeeDetail_str);
  for(var x = 0, n = ipfFeeDetail.length; x < n; x++)
  {
 
@@ -477,7 +504,7 @@ window.onload = function(){
 
  row = document.getElementById("SummCustomsDuty");
  x = row.insertCell(1);
- x.innerHTML = StrTotalCustomDuty;
+ x.innerHTML = StrTotalCustomsDuty;
 
  row = document.getElementById("SummIPF");
  x = row.insertCell(1);

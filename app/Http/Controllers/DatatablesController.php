@@ -364,7 +364,8 @@ class DatatablesController extends Controller
 		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('payments.id','companyName', 'amount', 'isCheque')
+		->join('utility_types', 'payments.utility_id', '=', 'utility_types.id')
+		->select('payments.id','companyName', 'amount', 'isCheque', 'payment_allowance')
 		->orderBy('payments.id', 'DESC')
 		->get();
 		return Datatables::of($payment_hist)
@@ -409,7 +410,7 @@ class DatatablesController extends Controller
 			) dpay
 
 			ON t.id = dpay.bi_head_id
-			WHERE t.status = "U" AND t.isVoid = 0
+			WHERE t.status = "U" AND t.isVoid = 0 AND t.isFinalize = 1
 			');
 
 		return Datatables::of($total)

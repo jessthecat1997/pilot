@@ -70,7 +70,6 @@
 									@php
 										$totalBrokerageFee += floatval($brokerageFee->brokerageFee);
 									@endphp
-
 								@empty
 										@php $totalBrokerageFee = 0.00; @endphp
 								@endforelse
@@ -96,23 +95,44 @@
 											<td width = "30%"><strong>Consignee:
 												&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->firstName  . " " . $brokerage_header[0]->lastName }}
 												</td>
-
-											<td >
+											<td width = "30%">
 				                <strong>Company Name: </strong>
 												<strong>&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->companyName }}</strong>
 											</td>
 
+											<td width = "30%">
+												<label  id = "shipper"> Shipper: @php echo $brokerage_header[0]->shipper @endphp </label>
+											</td>
 										</tr>
 										<tr>
 
 											<td width = "30%">
-												<label  id = "shipper"> Shipper: @php echo $brokerage_header[0]->shipper @endphp </label>
+												<label  id = "certificateOfOrigin"> Certificate Of Origin: @php
+													if($brokerage_header[0]->withCO = 1)
+														echo 'Included';
+													else
+														echo 'Not Included'
+													@endphp </label>
 											</td>
+
+											<td width = "30%">
+													<label  id = "weight"> Weight: {{ number_format((float)$brokerage_header[0]->Weight, 2, '.', ',')}} (kgs)</label>
+											</td>
+											<td width = "30%">
+												<label  id = "basis" > Basis.: @php echo $brokerage_header[0]->basis @endphp </label>
+											</td>
+										</tr>
+										<tr>
 											<td width = "30%">
 												<label  id = "blNo" > Bill No.: @php echo $brokerage_header[0]->freightBillNo @endphp </label>
 											</td>
 											<td width = "30%">
-													<label  id = "weight"> Weight: {{ number_format((float)$brokerage_header[0]->Weight, 2, '.', ',')}} (kgs)</label>
+												<label  id = "cargoType" > Cargo Type: @php
+													if($brokerage_header[0]->cargo_type == 'G')
+														echo 'General Cargo';
+													else
+													  echo 'Chemical';
+												@endphp </label>
 											</td>
 										</tr>
 										<tr>
@@ -123,9 +143,8 @@
 														echo $date =  date("F j, Y (l)") @endphp </label>
 											</td>
 											<td>
-												<label class = "control-label" id = "port"> Pickup location: <br/> @php  echo $brokerage_header[0]->name @endphp  </label>
+												<label class = "control-label" id = "port"> Pickup location: <br/> @php  echo $brokerage_header[0]->location @endphp  </label>
 											</td>
-
 										</tr>
 									</table>
 
@@ -149,6 +168,9 @@
 																		Description Of Good
 																	</td>
 																	<td>
+																		LCL Type
+																	</td>
+																	<td>
 																		Gross Weight(kg)
 																	</td>
 																	<td>
@@ -167,6 +189,9 @@
 																	</td>
 																	<td>
 																		{{ $delivery_detail->descriptionOfGoods }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->lcl_type }}
 																	</td>
 																	<td>
 																		{{ $delivery_detail->grossWeight }}
@@ -628,9 +653,8 @@
 	</div>
 </div>
 
-
 <!-- Expenses Modal -->
-<div id="expModal" class="modal fade" role="dialog">
+<div class="modal fade" id="expModal"  role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -702,52 +726,8 @@
 	</div>
 </div>
 
-<div id="deliveryModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Delivery Information</h4>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal" role="form">
-					{{ csrf_field() }}
-					<div class="form-group required">
-						<label class="control-label col-sm-3" for="deliveryStatus">Delivery Status</label>
-						<div class="col-sm-8">
-							<select class = "form-control" name = "deliveryStatus" id = "deliveryStatus">
-								<option value = "P">Pending</option>
-								<option value = "C">Cancelled</option>
-								<option value = "F">Finished</option>
-							</select>
-						</div>
-					</div>
-					<div class = "collapse delivery_remarks_collapse fade">
-						<div class="form-group required">
-							<label class="control-label col-sm-3" for="deliveryCancel">Date Cancelled</label>
-							<div class="col-sm-8">
-								<input type = "date" class = "form-control" name = "deliveryCancel" id = "deliveryCancel" />
-							</div>
-						</div>
-						<div class="form-group required">
-							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
-							<div class="col-sm-8">
-								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success save-delivery-information" >Save</button>
-				<button type="button" class="btn btn-danger close-delivery-information" data-dismiss = "modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="trModal" class="modal fade" role="dialog">
+<!-- Update Brokerage Status -->
+<div class="modal fade" id="trModal"  role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
@@ -780,14 +760,18 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<form role = "form" method = "PATCH">
+						{{ csrf_field() }}
 				<button type="button" class="btn btn-success save-trucking-information" data-dismiss="modal" id = "StatusUpdate">Save</button>
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</form>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="updateModal" class="modal fade" role="dialog">
+<!-- Update Duties And Taxes -->
+<div class="modal fade" id="updateModal"  role="dialog">
 	<div class="modal-dialog">
 
 		<!-- Modal content-->
@@ -819,6 +803,7 @@
 	</div>
 </div>
 
+<!--Update Confirm Create Bill -->
 <div class="modal fade" id="confirm-create" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -837,6 +822,7 @@
 	</div>
 </div>
 
+<!--Update Confirm Create Deposit -->
 <div class="modal fade" id="deposit_modal" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -861,6 +847,92 @@
 			</div>
 			<div class="modal-footer">
 				<button class = "btn btn-success confirm-create-deposit">Save</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Select Container -->
+<div class="modal fade" id="select_container" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				Select Container
+			</div>
+			<div class="modal-body">
+					@if($withContainer == true)
+				<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
+					<thead>
+
+						<tr>
+							<td style="width: 5%;">
+
+							</td>
+							<td style="width: 25%;">
+								Container Number
+							</td>
+							<td style="width: 20%;">
+								Volume
+							</td>
+							<td style="width: 20%;">
+								Container Return Date
+							</td>
+							<td style="width: 20%;">
+								Action
+							</td>
+
+						</tr>
+					</thead>
+					<tbody>
+						@php
+						$num = 1
+						@endphp
+
+						@forelse($brokerage_containers as $delivery_container)
+						<tr>
+							<td>
+								{{ $num++ }}
+								<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
+								<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
+								<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
+								<input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
+								<input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
+								<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
+								<input type = "hidden" class = "dateReturned"
+								value = "@if($delivery_container->dateReturned == null)
+								@else
+								{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
+								@endif"
+								/>
+								<input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
+							</td>
+							<td>
+								<span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
+							</td>
+							<td>
+								<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
+							</td>
+
+							<td>
+								<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
+							</td>
+							<td>
+								<button class = "btn btn-info" value = "{{$delivery_container->id}}" onclick = "">Select</button>
+							</td>
+						</tr>
+						@empty
+						<tr>
+							<td colspan="4">
+								<h5>No records found.</h5>
+							</td>
+						</tr>
+						@endforelse
+					</tbody>
+				</table>
+				@endif
+			</div>
+			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
@@ -1018,8 +1090,15 @@ $(document).on('click', '.finalize-rev', function(e){
 @endif
 
 $('#newDutiesAndTaxes').on('click', function(e){
-	window.location.replace('{{route("brokerage.index")}}/{{ $brokerage_id}}/create_dutiesandtaxes');
+		e.preventDefault();
+		window.location.replace('{{route("brokerage.index")}}/{{$brokerage_id}}/create_dutiesandtaxes');
 });
+
+function redirect_selectedContainer()
+{
+	window.location.replace('{{route("brokerage.index")}}/{{$brokerage_id}}/containerized//create_dutiesandtaxes');
+
+}
 
 $(document).on('change', '#rev_bill_id', function(e){
 	document.getElementById("rev_amount").value = "";
@@ -1084,8 +1163,6 @@ $(document).on('change', '#rev_bill_id', function(e){
 	{
 
 	}
-
-
 })
 
 $(document).on('change', '#exp_bill_id', function(e){

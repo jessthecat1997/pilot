@@ -24,6 +24,7 @@ Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
 
 Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
+Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
 Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
 Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
 Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
@@ -37,6 +38,7 @@ Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('b
 Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
 Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
 Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
+
 Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
 Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
@@ -116,6 +118,9 @@ Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data'
 Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 
 //Utilities Routes
+Route::resource('/utilities/settings','UtilitiesBrokerageController');
+
+
 Route::resource('/utilities/employee', 'EmployeesController');
 Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
 Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');

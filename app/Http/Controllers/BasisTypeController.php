@@ -10,7 +10,7 @@ class BasisTypeController extends Controller
 {
     public function index()
     {
-         $basis_type = \App\VehicleType::all();
+         $basis_type = \App\BasisType::all();
         return view('admin/maintenance.basis_type_index', compact(['basis_type']));
     }
 
@@ -43,7 +43,7 @@ class BasisTypeController extends Controller
         $bt = BasisType::withTrashed()
         ->where('id',$request->id)
         ->restore();
-  
+
     }
 
     public function basis_type_utilities(){

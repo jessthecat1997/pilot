@@ -189,7 +189,7 @@ class BrokerageController extends Controller
           ->get();
 
           $brokerage_header = DB::table('brokerage_service_orders')
-          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'bi_head_id_exp', 'bi_head_id_rev')
+          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'withCO', 'bi_head_id_exp', 'bi_head_id_rev')
           ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
           ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
           ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -214,7 +214,7 @@ class BrokerageController extends Controller
 
           $ipf_fee_details = DB::table('import_processing_fee_details')
             ->select('import_processing_fee_details.id', 'minimum', 'maximum', 'amount')
-            ->where('import_processing_fee_details.id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
+            ->where('import_processing_fee_details.ipf_headers_id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
             ->get();
 
           $dutiesandtaxes_details = DB::table('duties_and_taxes_details')
@@ -268,7 +268,7 @@ class BrokerageController extends Controller
 
           $ipf_fee_details = DB::table('import_processing_fee_details')
             ->select('import_processing_fee_details.id', 'minimum', 'maximum', 'amount')
-            ->where('import_processing_fee_details.id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
+            ->where('import_processing_fee_details.ipf_headers_id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
             ->get();
 
           $dutiesandtaxes_details = DB::table('duties_and_taxes_details')
@@ -411,11 +411,12 @@ class BrokerageController extends Controller
     $brokerage_id = $request->brokerage_id;
 
     $brokerage_header = DB::table('brokerage_service_orders')
-    ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'bi_head_id_rev', 'bi_head_id_exp')
+    ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'locations.name as location', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'basis_types.name as basis', 'withCO', 'cargo_type', 'bi_head_id_rev', 'bi_head_id_exp')
     ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
     ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
     ->join('consignees', 'consignees_id', '=', 'consignees.id')
     ->join('locations', 'location_id', '=', 'locations.id')
+    ->join('basis_types', 'basis', '=', 'basis_types.id')
     ->where('brokerage_service_orders.id','=', $brokerage_id)
     ->get();
 
@@ -440,9 +441,11 @@ class BrokerageController extends Controller
     $delivery_details = [];
     if($withContainer == false){
         $brokerage_details = DB::table('brokerage_non_container_details')
-        ->join('brokerage_service_orders', 'brok_head_id', 'brokerage_service_orders.id')
-        ->select('descriptionOfGoods', 'grossWeight', 'supplier')
+        ->select('brokerage_service_orders.id', 'descriptionOfGoods', 'grossWeight', 'lcl_types.name as lcl_type', 'supplier')
+        ->join('brokerage_service_orders', 'brok_head_id', '=', 'brokerage_service_orders.id')
+        ->join('lcl_types', 'lclType_id', '=', 'lcl_types.id')
         ->where('brok_head_id', '=', $brokerage_id)
+
         ->get();
     }
     else{
@@ -462,7 +465,6 @@ class BrokerageController extends Controller
             $new_row['details'] = $container_details;
             array_push($container_with_detail, $new_row);
         }
-
     }
 
     return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail']));
