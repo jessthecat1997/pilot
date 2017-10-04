@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', 'ConsigneesController@dashboard');
-Route::get('/dashboard', 'ConsigneesController@dashboard')->name('dashboard.index');
+Route::get('/', 'DashboardController@index');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
 
 Auth::routes();
 

@@ -24,8 +24,8 @@ class CreateVehicleTypesTable extends Migration
 
          DB::statement("
             INSERT INTO `vehicle_types` (`id`, `name`, `description`,`withContainer`) VALUES 
-            (NULL, 'truck', 'Usually truck head with chassis', 0),
-            (NULL, 'van', 'Used for delivery of small packages',1)
+            (NULL, 'Truck', 'Usually truck head with chassis', 0),
+            (NULL, 'Van', 'Used for delivery of small packages',1)
            
             ");
     }
