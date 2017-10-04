@@ -210,8 +210,8 @@
 
                           <div class = "form-group">
                             <label  class="col-md-4 control-label">Certificate Of Origin </label>
-                            <div class="col-md-5">
-                              <input type="checkbox" data-toggle="toggle" data-size="normal" data-on="Included" data-off="Not Included" data-onstyle="success"  id = "withCO" width = "100px" >
+                            <div class="col-md-8">
+                                <input class = "form-control" type="checkbox" data-toggle="toggle" data-size="normal" data-on="Included" data-off="Not Included" data-onstyle="success"  id = "withCO" >
                             </div>
                           </div>
                         </div>
@@ -721,7 +721,7 @@
   <!-- Confirm Save -->
   <section class="content">
           <div class="modal fade" id="ProcessedByModal" role="dialog">
-            <div class="modal-dialog">
+            <div class="modal-dialog" role = "document">
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -730,8 +730,10 @@
                 <div class="modal-body">
                   <form role="form" method = "POST" id="commentForm" class = "form-horizontal">
                     {{ csrf_field() }}
-                    <label class="control-label col-sm-4" for="noOfDeliveries" >Processed by:</label>
-                    <div class="col-sm-6">
+
+                    <label class="control-label" for="noOfDeliveries" >Processed by:</label>
+
+
                       <select name = "processedBy" id = "processedBy" class = "form-control" required data-msg="Select a Processor">
                         <option value = "0"></option>
                         @forelse($employees as $employee)
@@ -739,11 +741,10 @@
                           {{ $employee->lastName . ", " . $employee->firstName }}
                         </option>
                         @empty
-
                         @endforelse
                       </select>
-                    </div>
-                  </form>
+                      </form>
+
                 </div>
                 <div class="modal-footer">
                   <button type = "submit" class="btn btn-success" id = "brokerageBtn" >Save</button>
