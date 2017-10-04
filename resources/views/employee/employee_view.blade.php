@@ -91,7 +91,7 @@
 
                   @endforelse
                   <div class = "col-md-3" id = "employeeRoles">
-                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on=" " data-off=" " data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]"  />&nbsp;&nbsp;{{$employee_roles->name }} 
+                    <input type="checkbox"  data-toggle="toggle" data-size="normal" data-on=" " data-off=" " data-onstyle="success"  id = "employeeType_toggle[{{ $checkboxCtr  }}]" @if($found == 1) checked @endif />&nbsp;&nbsp;{{$employee_roles->name }} 
                   </div>
 
                   @php

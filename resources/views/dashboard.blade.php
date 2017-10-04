@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y H:i A') }}</span></h4>
+						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y h:i A') }}</span></h4>
 					</div>
 					<div class="panel-body">
 						<table class="table table-responsive table-striped table-bordered">
