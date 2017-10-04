@@ -115,10 +115,13 @@
               </div>
             </div>
           </div>
+
           <div class="row">
-            <h5>In Case of Emergency:</h5>
+            <br />
+            <br />
             <div class = "col-md-12">
-              <div class="form-group">
+              <div class="form-group required">
+                <label class="control-label">In Case of Emergency:</label>
                 <textarea class="form-control" id = "inCaseOfEmergency" name="inCaseOfEmergency"></textarea>
               </div>
             </div>
@@ -292,9 +295,7 @@
 
       e.preventDefault();
       
-      
-      
-
+      $('#saveRecord').attr('disabled', 'true');
       $('#firstName').valid();
       $('#lastName').valid();
       $('#dob').valid();

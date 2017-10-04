@@ -1234,7 +1234,7 @@ function validateContractRows()
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 			}
 		}
 
@@ -1313,7 +1313,7 @@ function fillVolumes(){
 		child[0]['location'] = [{
 			location_from : from[i].value,
 			location_to : to[i].value,
-			amount : amount[i].value,
+			amount : $(amount[i]).inputmask('unmaskedvalue'),
 		}];
 		child[0]['details'] = [];
 
@@ -1519,7 +1519,7 @@ function finalvalidateContractRows()
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 			}
 		}
 

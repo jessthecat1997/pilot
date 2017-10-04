@@ -6,7 +6,7 @@
 			<h2>&nbsp;New Accident</h2>
 		</div>
 		<div class="panel-body">
-			<form>
+			<form id="commentForm">
 				{{ csrf_field() }}
 				<div class="col-md-5">
 					<div class="row">
@@ -98,29 +98,36 @@
 
 		$(document).on('click','.save-incident', function(e){
 			e.preventDefault();
-			$.ajax({
-				type: 'POST',
-				url:  '{{ route("employees.index") }}/{{ $employee->id }}/accidents',
-				data: {
-					'_token' : $('input[name=_token').val(),
-					'incident_date' : $('#incident_date').val(),
-					'incident_time' : $('#incident_time').val(),
-					'date_opened' : $('#date_opened').val(),
-					'date_closed' : ($('#date_closed') === '____/__/__') ? $('#date_closed').val() : null,
-					'address' : $('#address').val(),
-					'cities_id' : $('#cities_id').val(),
-					'delivery_id' : $('#delivery_id').val(),
-					'numberOfInjuries' : $('#numberOfInjuries').val(),
-					'numberOfFatalities' : $('#numberOfFatalities').val(),
-					'propertyDamage' : $('#propertyDamage').inputmask('unmaskedvalue'),
-					'description' : $('#description').val(),
-					'employees_id' : {{ $employee->id }},
-				},
-				success: function (data)
-				{
-					console.log(data);
-				}
-			})
+			$('#incident_date').valid();
+			$('#incident_time').valid();
+			$('#date_opened').valid();
+			$('#description').valid();
+			if($('#incident_date').valid() && $('#incident_time').valid() && $('#date_opened').valid() && $('#description').valid() && $('#numberOfInjuries').val() >= 0 && $('#numberOfFatalities').val() >= 0){
+				$.ajax({
+					type: 'POST',
+					url:  '{{ route("employees.index") }}/{{ $employee->id }}/accidents',
+					data: {
+						'_token' : $('input[name=_token').val(),
+						'incident_date' : $('#incident_date').val(),
+						'incident_time' : $('#incident_time').val(),
+						'date_opened' : $('#date_opened').val(),
+						'date_closed' : ($('#date_closed') === '____/__/__') ? $('#date_closed').val() : null,
+						'address' : $('#address').val(),
+						'cities_id' : $('#cities_id').val(),
+						'delivery_id' : $('#delivery_id').val(),
+						'numberOfInjuries' : $('#numberOfInjuries').val(),
+						'numberOfFatalities' : $('#numberOfFatalities').val(),
+						'propertyDamage' : $('#propertyDamage').inputmask('unmaskedvalue'),
+						'description' : $('#description').val(),
+						'employees_id' : '{{ $employee->id }}',
+					},
+					success: function (data)
+					{
+						window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/view";
+						console.log(data);
+					}
+				})
+			}
 		})
 
 		$(document).on('keyup keydown keypress', '.money', function (event) {
@@ -152,6 +159,7 @@
 				return false;
 			}			
 		});
+
 
 
 		$.datetimepicker.setLocale('en');
@@ -194,6 +202,40 @@
 			format:'Y/m/d',
 			formatDate:'Y/m/d',
 			
+		});
+
+		$("#commentForm").validate({
+			rules: 
+			{
+				time:
+				{
+					required: true,
+				},
+
+				date_opened:
+				{
+					required: true,
+					date: true,
+				},
+				description:
+				{
+					required: true,
+				},
+				numberOfInjuries:
+				{
+					required: true,
+					number: true,
+				},
+				numberOfFatalities:
+				{
+					required: true,
+					number: true,
+				}
+			},
+			onkeyup: false, 
+			submitHandler: function (form) {
+				return false;
+			}
 		});
 
 
