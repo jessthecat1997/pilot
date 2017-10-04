@@ -288,7 +288,7 @@
 
           @forelse($ipf_fee_details  as $ipf)
             @php
-              $ipfAmmount;
+              $ipfAmmount = 0;
               $minimum = $ipf->minimum;
               $maximum = $ipf->maximum;
               $amount = $ipf->amount;

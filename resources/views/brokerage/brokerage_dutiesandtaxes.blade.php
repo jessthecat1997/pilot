@@ -229,8 +229,7 @@
             <div class="panel-body">
               <div id = "containerInfo" class = "tab-pane">
             <div class = "panel-heading">
-              <h4 id = "containerInformationHeader"><small>3</small> Container Information</h4>
-            </div>
+                  </div>
             <div class = "panel-body">
               <ul class="nav nav-pills nav-justified" id = "choices">
                 <li class="active"><a data-toggle="pill" href="#wcontainer">Container</a></li>
@@ -479,9 +478,8 @@
   </div>
 </div>
 
-
 <!--Add Consignee Modal -->
-<section class = "content">
+
   <div id="chModal" class="modal fade" role="dialog">
 	   <div class="modal-dialog">
 
@@ -652,8 +650,9 @@
   			</div>
 		  </div>
     </div>
+
   </div>
-</section>
+
 
 <!-- Add Location Modal -->
 <section class="content">
@@ -720,7 +719,7 @@
 </section>
 
   <!-- Confirm Save -->
-        <section class="content">
+  <section class="content">
           <div class="modal fade" id="ProcessedByModal" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -754,13 +753,6 @@
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type = "submit" class="btn btn-success" id = "brokerageBtn" >Save</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 @endsection
