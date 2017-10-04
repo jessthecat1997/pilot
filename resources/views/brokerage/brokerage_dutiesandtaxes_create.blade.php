@@ -320,7 +320,6 @@
                       <td>HS Code</td>
                       <td>Rate Of Duty</td>
                       <td>Value in USD</td>
-                      <td>Insurance</td>
                       <td>Freight</td>
                       <td>Action</td>
                     </tr>
@@ -493,21 +492,11 @@
   </div>
 
   <div class="form-group">
-      <label class="col-md-3 control-label">Insurance</label>
-    <div class = "col-md-7">
-    <div class="input-group">
-        <span class="input-group-addon" id="insuranceadd">$</span>
-        <input type="number" class="form-control money"  aria-describedby="insuranceadd" id = "Freight" required>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group">
       <label class="col-md-3 control-label">Freight</label>
     <div class = "col-md-7">
     <div class="input-group">
         <span class="input-group-addon" id="freightadd">$</span>
-        <input type="number" class="form-control money"  aria-describedby="freightadd" id = "Insurance" required>
+        <input type="number" class="form-control money"  aria-describedby="freightadd" id = "Freight" required>
       </div>
     </div>
   </div>
@@ -705,7 +694,7 @@
           $Ipf_ctr++;
         @endphp
         <button type="button" class="btn btn-success" onclick = "$('#IPFModal').modal('hide');
-        currentIpf_id = <?php echo $Ipf_ctr; ?>;
+        currentIpf_id = <?php echo $ipf_fee_headers->id  ?>;
 
 
         if(currentIpf_id == <?php echo $currentIpf_id;?>)
@@ -764,7 +753,19 @@ var temp_arrastre, temp_wharfage;
 
 	$('#collapse1').addClass('in');
 
-	
+  $('#exchangeRate_toggle').change(function() {
+			var sam = $(this).prop('checked');
+			if(String(sam) == "false")
+			{
+				$('#ExchangeRateModal').modal('show');
+			}
+
+			if(String(sam) == "true")
+			{
+				var currentExchange_id = <?php echo $currentExchange_id; ?>;
+				document.getElementById('exchangeRate').value =  '<?php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') ?>';
+			}
+	  })
 
     $('#arrastre_toggle').change(function() {
   			var sam = $(this).prop('checked');
@@ -986,7 +987,7 @@ var temp_arrastre, temp_wharfage;
       var cell3 = row.insertCell(3);
       var cell4 = row.insertCell(4);
       var cell5 = row.insertCell(5);
-      var cell6 = row.insertCell(6);
+
       cell0.innerHTML = document.getElementById('itemName').value;
       cell0.contentEditable = true;
       cell1.innerHTML = document.getElementById('HSCode').value;
@@ -997,14 +998,10 @@ var temp_arrastre, temp_wharfage;
       cell3.contentEditable = true;
       cell4.innerHTML = document.getElementById('Freight').value;
       cell4.contentEditable = true;
-      cell5.innerHTML = document.getElementById('Insurance').value;
-      cell5.contentEditable = true;
-      cell6.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
+      cell5.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
 
       $('#ItemModal').modal('hide');
     }
-
-
 
 
 	});
@@ -1038,13 +1035,20 @@ var temp_arrastre, temp_wharfage;
     localStorage.setItem("wharfage",  document.getElementById('wharfage').value);
     localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');
     localStorage.setItem("freightNumber", '<?php echo $brokerage_header[0]->freightBillNo?>');
-    localStorage.setItem("arrivalDate",  <?php echo $brokerage_header[0]->expectedArrivalDate?>);
+    localStorage.setItem("arrivalDate",  '<?php echo $brokerage_header[0]->expectedArrivalDate?>');
     localStorage.setItem("weight", <?php echo $brokerage_header[0]->Weight?>);
     localStorage.setItem("port",  '<?php echo $brokerage_header[0]->location?>');
     localStorage.setItem("companyName",  '<?php echo $brokerage_header[0]->companyName?>');
     localStorage.setItem("freightType",  '<?php echo $brokerage_header[0]->freightType?>');
     localStorage.setItem("bankCharges", document.getElementById('bankCharges').value);
     localStorage.setItem('brokerage_id', <?php echo $brokerage_id ?>);
+
+    localStorage.setItem('withCO', '<?php echo $brokerage_header[0]->withCO?>');
+    localStorage.setItem('cargo_type', '<?php echo $brokerage_header[0]->cargo_type?>');
+    localStorage.setItem('insurance_gc', <?php echo $utility_types[0]->insurance_gc ?>);
+    localStorage.setItem('insurance_c', <?php echo $utility_types[0]->insurance_c ?>);
+    localStorage.setItem('bank_charges', <?php echo $utility_types[0]->bank_charges ?>);
+    localStorage.setItem('other_charges', <?php echo $utility_types[0]->other_charges ?>);
 
     localStorage.setItem("currentExchange_id", currentExchange_id);
     localStorage.setItem("exchangeRate",  document.getElementById('exchangeRate').value);
@@ -1054,8 +1058,9 @@ var temp_arrastre, temp_wharfage;
     localStorage.setItem("ipfFeeHeader", JSON.stringify(ipfFeeHeader));
     localStorage.setItem("ipfFeeDetail", JSON.stringify(ipfFeeDetail));
 
-
     window.location.replace("/dutiesandtaxes");
+
+
     }
 
 
@@ -1246,14 +1251,7 @@ function decimalsOnly(event) {
         isError = true;
     }
 
-    if($('#Insurance').valid() == false)
-    {
-      $('#Insurance').css('border-color', 'red');
-      $('#item_warning').addClass('in');
-      $('#insuranceError').addClass('in');
 
-        isError = true;
-    }
     return isError;
   }
 
@@ -1263,7 +1261,6 @@ function decimalsOnly(event) {
     $('#HSCodeError').removeClass('in');
 	  $('#rateError').removeClass('in');
     $('#valueError').removeClass('in');
-    $('#insuranceError').removeClass('in');
     $('#freightError').removeClass('in');
 
   }
@@ -1290,6 +1287,7 @@ function decimalsOnly(event) {
             containers[2] = '{{ $delivery_container->containerVolume }}';
             containers[3] = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
 
+
             if(containers[0] == id)
             {
               var tableRows = table.getElementsByTagName('tr');
@@ -1313,7 +1311,7 @@ function decimalsOnly(event) {
               cell4.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'resetContainerTable()'>Deselect</button>";
 
               selectedContainerId = '{{ $delivery_container->id }}';
-              alert(selectedContainerId);
+
              @forelse($containerized_arrastre_header as $cont_arrastre_head)
 
                 @forelse($containerized_arrastre_detail as $cont_arrastre_det)
@@ -1350,9 +1348,16 @@ function decimalsOnly(event) {
               @empty
               @endforelse
 
+
+
               @forelse($container_with_detail as $container)
                 var table1 = document.getElementById('container_details_table');
+                var tableRows = table1.getElementsByTagName('tr');
+                var rowCount = tableRows.length;
 
+                for (var x=rowCount-1; x>0; x--) {
+                  table1.deleteRow(x);
+                }
                     @forelse($container['details'] as $detail)
                       container_details[0] = '{{ $container['container']->containerNumber }}'
                       container_details[1] = '{{ $detail->descriptionOfGoods }}';
@@ -1361,23 +1366,19 @@ function decimalsOnly(event) {
 
                       if(container_details[0] == containers[1])
                       {
-                        var tableRows = table1.getElementsByTagName('tr');
-                        var rowCount = tableRows.length;
 
-                        for (var x=rowCount-1; x>0; x--) {
-                          table1.deleteRow(x);
-                        }
+                          alert('{{ $detail->descriptionOfGoods }}');
 
-                        var row = table1.insertRow();
-                        var cell0 = row.insertCell(0);
-                        var cell1 = row.insertCell(1);
-                        var cell2 = row.insertCell(2);
-                        var cell3 = row.insertCell(3);
+                          var row = table1.insertRow();
+                          var cell0 = row.insertCell(0);
+                          var cell1 = row.insertCell(1);
+                          var cell2 = row.insertCell(2);
+                          var cell3 = row.insertCell(3);
 
-                        cell0.innerHTML = '{{ $detail->descriptionOfGoods }}';
-                        cell1.innerHTML = '{{ $detail->grossWeight }}';
-                        cell2.innerHTML = '{{ $detail->supplier }}';
-                        cell3.innerHTML = "<button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>";
+                          cell0.innerHTML = '{{ $detail->descriptionOfGoods }}';
+                          cell1.innerHTML = '{{ $detail->grossWeight }}';
+                          cell2.innerHTML = '{{ $detail->supplier }}';
+                          cell3.innerHTML = "<button class = 'btn btn-danger btn-md ' onclick = 'addContainerItem()'>Add Item</button>";
                       }
                     @empty
                     @endforelse
@@ -1425,7 +1426,7 @@ function decimalsOnly(event) {
         @endforelse
     @endif
     selectedContainerId = '';
-    alert(selectedContainerId);
+
     document.getElementById('arrastre').value = "";
     document.getElementById('wharfage').value = "";
     $('#container_details_panel').removeClass('in');

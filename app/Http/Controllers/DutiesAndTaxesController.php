@@ -32,7 +32,7 @@ class DutiesAndTaxesController extends Controller
   public function create(Request $request)
   {
 
-  $employees = Employee::all();
+      $employees = Employee::all();
       $brokerage_id = $request->brokerage_id;
 
 
@@ -46,6 +46,9 @@ class DutiesAndTaxesController extends Controller
       ->where('brokerage_service_orders.id','=', $brokerage_id)
       ->get();
 
+      $utility_types = DB::table('utility_types')
+      ->select('bank_charges', 'other_charges', 'insurance_gc', 'insurance_c')
+      ->get();
 
       $containerized_arrastre_header = DB::table('arrastre_headers')
       ->select('arrastre_headers.id', 'locations_id')
@@ -73,8 +76,6 @@ class DutiesAndTaxesController extends Controller
       ->select('arrastre_lcl_headers.id', 'locations_id', 'dateEffective')
       ->where('locations_id', '=',  $brokerage_header[0]->location_id)
       ->get();
-
-
 
       $lcl_arrastre_detail = DB::table('arrastre_lcl_details')
       ->select('arrastre_lcl_details.id', 'lcl_types_id', 'lcl_types.name as lcl_type', 'basis_types_id', 'basis_types.name as basis_name', 'amount')
@@ -222,7 +223,7 @@ class DutiesAndTaxesController extends Controller
           }
 
 
-      return view('brokerage.brokerage_dutiesandtaxes_create',compact(['brokerage_id', 'employees', 'current_date',  'row_count', 'currentExchange_id', 'exchange_rate', 'currentCds_id', 'cds_fee', 'currentIpf_id', 'ipf_fee_header', 'ipf_fee_detail', 'containerized_arrastre_header', 'containerized_arrastre_detail', 'containerized_wharfage_header', 'containerized_wharfage_detail', 'lcl_arrastre_header', 'lcl_arrastre_detail', 'lcl_wharfage_header', 'lcl_wharfage_detail', 'brokerage_header', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail']));//
+      return view('brokerage.brokerage_dutiesandtaxes_create',compact(['brokerage_id', 'employees', 'current_date',  'row_count', 'currentExchange_id', 'exchange_rate', 'currentCds_id', 'cds_fee', 'currentIpf_id', 'ipf_fee_header', 'ipf_fee_detail', 'containerized_arrastre_header', 'containerized_arrastre_detail', 'containerized_wharfage_header', 'containerized_wharfage_detail', 'lcl_arrastre_header', 'lcl_arrastre_detail', 'lcl_wharfage_header', 'lcl_wharfage_detail', 'brokerage_header', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail', 'utility_types']));//
   }
 
   /**
@@ -265,6 +266,9 @@ class DutiesAndTaxesController extends Controller
     $_Insurance = json_decode(stripslashes($request->StoredInsurance), true);
     $Insurance;
 
+    $_OtherCharges = json_decode(stripslashes($request->StoredOtherCharges), true);
+    $Insurance;
+
     $tblRowLength = $request->tblRowLength;
     for ($x = 0; $x < $tblRowLength; $x++) {
       $new_dutiesandtaxes_details = new DutiesAndTaxesDetails;
@@ -273,6 +277,7 @@ class DutiesAndTaxesController extends Controller
       $new_dutiesandtaxes_details->valueInUSD = (string)$_Value[$x];
       $new_dutiesandtaxes_details->insurance = (string)$_Insurance[$x];
       $new_dutiesandtaxes_details->freight = (string)$_Freight[$x];
+      $new_dutiesandtaxes_details->otherCharges = (string)$_OtherCharges[$x];
       $new_dutiesandtaxes_details->hsCode = (string)$_HSCode[$x];
       $new_dutiesandtaxes_details->rateOfDuty = (string)$_RateOfDuty[$x];
       $new_dutiesandtaxes_details->save();
@@ -282,6 +287,24 @@ class DutiesAndTaxesController extends Controller
     $brokerage_id = $new_dutiesandtaxes->id;
     return $brokerage_id;
     //
+  }
+
+
+  public function update_taxstatus(Request $request)
+  {
+      $brokerage_id = $request->brokerage_id;
+      $brokerage_status_update = DB::table('duties_and_taxes_headers')
+      ->where('duties_and_taxes_headers.id', $brokerage_id)
+      ->update(['statusType' =>  $request->status]);
+
+    return $brokerage_id;
+  }
+
+  public function generate_taxes(Request $request)
+  {
+    $consignee = $request->consignee;
+
+    return view('brokerage.dutiesandtaxes_create', compact(['consignee']));
   }
 
   /**
@@ -329,13 +352,5 @@ class DutiesAndTaxesController extends Controller
       //
   }
 
-  public function update_taxstatus(Request $request)
-  {
-      $brokerage_id = $request->brokerage_id;
-      $brokerage_status_update = DB::table('duties_and_taxes_headers')
-      ->where('duties_and_taxes_headers.id', $brokerage_id)
-    ->update(['statusType' =>  $request->status]);
 
-    return $brokerage_id;
-  }
 }

@@ -44,21 +44,21 @@
 								<span class = "input-group-addon">%</span>
 							</div>
 						</div>
-						
+
 					</div>
 					@empty
 					@endforelse
 				</form>
 			</div>
 			<div class="panel-footer ">
-				<div style="padding-left: 70%" > 
+				<div style="padding-left: 70%" >
 					<input id = "btnSave" type = "submit" class="btn btn-success submit " value = "Save" />&nbsp;&nbsp;
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>	
-				</div>			
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
 			</div>
 		</div>
 	</div>
-	
+
 </div>
 @endsection
 @push('styles')
@@ -86,9 +86,9 @@
 
 
 		$("#commentForm").validate({
-			rules: 
+			rules:
 			{
-				
+
 				other_charges:
 				{
 					required: true,
@@ -119,8 +119,8 @@
 				},
 
 			},
-			onkeyup: function(element) {$(element).valid()}, 
-			
+			onkeyup: function(element) {$(element).valid()},
+
 		});
 
 
@@ -138,7 +138,7 @@
 					$('.percentage').val("0.00");
 				}
 				if(parseFloat(value) <= 100.000000){
-					
+
 				}
 				else{
 					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
@@ -152,20 +152,20 @@
 			if(event.keyCode == 189)
 			{
 				return false;
-			}			
+			}
 		});
 
 
 
 		$(document).on('click', '#btnSave', function(e){
 			e.preventDefault();
-			
+
 			if( temp_bank_charges === $('#bank_charges').val() && temp_other_charges === $('#other_charges').val()
 				&& temp_insurance_c === $('#insurance_c').val() && temp_insurance_gc === $('#insurance_gc').val())
 			{
 
 				alert("No fields modified.");
-			
+
 
 
 			}else{
@@ -173,7 +173,7 @@
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/utilities/brokerage/'+ 1,
+					url:  '/utilities/settings/'+ 1,
 					data: {
 						'_token' : $('input[name=_token').val(),
 						'other_charges' : $('#other_charges').val(),
@@ -220,7 +220,7 @@
 							resetErrors();
 							var invdata = JSON.parse(data);
 							$.each(invdata, function(i, v) {
-								console.log(i + " => " + v); 
+								console.log(i + " => " + v);
 								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 							});

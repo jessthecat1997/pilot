@@ -189,7 +189,7 @@ class BrokerageController extends Controller
           ->get();
 
           $brokerage_header = DB::table('brokerage_service_orders')
-          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'bi_head_id_exp', 'bi_head_id_rev')
+          ->select('brokerage_service_orders.id', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'withCO', 'bi_head_id_exp', 'bi_head_id_rev')
           ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
           ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
           ->join('consignees', 'consignees_id', '=', 'consignees.id')
@@ -214,7 +214,7 @@ class BrokerageController extends Controller
 
           $ipf_fee_details = DB::table('import_processing_fee_details')
             ->select('import_processing_fee_details.id', 'minimum', 'maximum', 'amount')
-            ->where('import_processing_fee_details.id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
+            ->where('import_processing_fee_details.ipf_headers_id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
             ->get();
 
           $dutiesandtaxes_details = DB::table('duties_and_taxes_details')
@@ -268,7 +268,7 @@ class BrokerageController extends Controller
 
           $ipf_fee_details = DB::table('import_processing_fee_details')
             ->select('import_processing_fee_details.id', 'minimum', 'maximum', 'amount')
-            ->where('import_processing_fee_details.id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
+            ->where('import_processing_fee_details.ipf_headers_id', '=',$dutiesandtaxes_header[0]->ipfFee_id)
             ->get();
 
           $dutiesandtaxes_details = DB::table('duties_and_taxes_details')
