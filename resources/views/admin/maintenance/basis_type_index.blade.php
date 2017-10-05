@@ -58,7 +58,7 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">New Basis Type</h4>
 						</div>
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="form-group required">
 								<label class = "control-label">Name: </label>
 								<input type = "text" class = "form-control" name = "name" id = "name" required />
@@ -72,7 +72,7 @@
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -142,7 +142,7 @@
 
 
 		var validator = $("#commentForm").validate({
-			rules: 
+			rules:
 			{
 				name:
 				{
@@ -152,7 +152,7 @@
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					alphanumeric:true,
+					lettersonly:true,
 
 				},
 
@@ -164,7 +164,7 @@
 				},
 
 			},
-			onkeyup: function(element) {$(element).valid()}, 
+			onkeyup: function(element) {$(element).valid()},
 
 		});
 
@@ -180,7 +180,7 @@
 			resetErrors();
 			bt_id = $(this).val();
 			data = bttable.row($(this).parents()).data();
-			$('#name').val(data.name);	
+			$('#name').val(data.name);
 			$('#abbreviation').val(data.abbreviation);
 			temp_name = data.name;
 			temp_desc = data.abbreviation;
@@ -240,7 +240,7 @@ $('#btnSave').on('click', function(e){
 	if(title == "New Basis Type")
 	{
 		if($('#name').valid() && $('#abbreviation').valid()){
-			
+
 			$('#btnSave').attr('disabled', 'true');
 
 			$.ajax({
@@ -291,16 +291,16 @@ $('#btnSave').on('click', function(e){
 					resetErrors();
 					var invdata = JSON.parse(data);
 					$.each(invdata, function(i, v) {
-						console.log(i + " => " + v); 
+						console.log(i + " => " + v);
 						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 					});
 
 					$('#btnSave').removeAttr('disabled');
-					
+
 				}
 			},
-			
+
 		})
 		}
 	}
@@ -369,10 +369,10 @@ $('#btnSave').on('click', function(e){
 					});
 
 					$('#btnSave').removeAttr('disabled');
-					
+
 				}
 			},
-			
+
 		})
 			}
 		}
