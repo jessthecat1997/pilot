@@ -333,6 +333,7 @@
                     var rows = "";
                     for(var i = 0; i < data.length; i++){
                         rows += '<tr id = "bf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control bf_minimum_valid money" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control money bf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid money" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-bf-row">x</button></td></tr>';
+                            
                     }
                     $('#bf_parent_table > tbody').html("");
                     $('#bf_parent_table > tbody').append(rows);

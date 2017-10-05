@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2>&nbsp;Utilities | Brokerage Setting</h2>
+<h2>&nbsp;Utilities | Settings</h2>
 <hr>
 <div class="row">
 	<div class="col-md-6">
@@ -16,7 +16,7 @@
 					@forelse($utility as $util)
 					<div class = "form-group required">
 						<label class = "control-label">Logo</label>
-						 <center><img class="img-responsive img-circle" id="company_logo" src="/{{$util->company_logo}}" style = "width: 300px; height: 200px"/></center>
+						<center><img class="img-responsive img-circle" id="company_logo" src="/{{$util->company_logo}}" style = "width: 300px; height: 200px"/></center>
 						
 					</div>
 					<div class = "form-group required">
@@ -43,7 +43,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						Duties and Taxes Computation Setting
@@ -64,7 +64,7 @@
 								<span class = "input-group-addon">%</span>
 							</div>
 						</div>
-						<div class = "form-group required">
+						<div class = "form-group ">
 							<label class = "control-label">Insurance:</label>
 							<div class = "form-group required" style="padding-left: 5%" >
 								<label class = "control-label">General Cargo</label>
@@ -82,19 +82,37 @@
 							</div>
 
 						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						Billing Setting
+					</div>
+					<div class="panel-body">
+						{{ csrf_field() }}
+						<div class = "form-group required">
+							<label class = "control-label">Payment Allowance</label>
+							<div class = " form-group input-group " >
+								<input type = "number" class = "form-control money" name = "payment_allowance" id = "payment_allowance"  data-rule-required="true" max="365" value="{{$util->payment_allowance}}" style="text-align: right" />
+								<span class = "input-group-addon">days</span>
+							</div>
+						</div>
 						@empty
 						@endforelse
 					</form>
 				</div>
-				<div class="panel-footer ">
-					<div style="padding-left: 70%" > 
-						<input id = "btnSave" type = "submit" class="btn btn-success submit " value = "Save" />&nbsp;&nbsp;
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>	
-					</div>			
-				</div>
 			</div>
 		</div>
-
+	</div>
+	<div class="panel-footer ">
+		<div style="padding-left: 70%" > 
+			<input id = "btnSave" type = "submit" class="btn btn-success submit " value = "Save" />&nbsp;&nbsp;
+			<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>	
+		</div>			
 	</div>
 	@endsection
 	@push('styles')
@@ -122,7 +140,7 @@
 	
 	@empty
 	@endforelse
-*/
+	*/
 	$(document).ready(function(){
 
 
@@ -172,6 +190,12 @@
 					min: 0,
 					sevendecimalplaces:true,
 				},
+				payment_allowance:
+				{
+					required: true,
+					min: 1,
+					max: 365,
+				},
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
@@ -179,16 +203,16 @@
 		});
 
 		function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#util-pic')
-                        .attr('src', e.target.result)
-                        .width(180);
-                    };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$('#util-pic')
+					.attr('src', e.target.result)
+					.width(180);
+				};
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
 
 		$(document).on('keyup keydown keypress', '.percentage', function (event) {
 			var len = $('.percentage').val();
@@ -239,7 +263,7 @@
 
 
 			}else{
-*/
+				*/
 				$('#btnSave').attr('disabled', 'true');
 
 				$.ajax({
@@ -256,6 +280,8 @@
 						'company_address': $('#company_address').val(),
 						'company_tin' : $('#company_tin').val(),
 						'company_contact': $('#company_contact').val(),
+
+						'payment_allowance': $('#payment_allowance').val(),
 					},
 					success: function (data)
 					{
@@ -268,6 +294,7 @@
 							$('#company_address').val(data.company_address);
 							$('#company_tin').val(data.company_tin);
 							$('#company_contact').val(data.company_contact);
+							$('#payment_allowance').val(data.payment_allowance);
 							temp_other_charges = data.other_charges;
 							temp_bank_charges = data.bank_charges;
 							temp_insurance_gc = data.insurance_gc;
@@ -310,7 +337,7 @@
 					},
 				})
 //			}
-		});
+});
 
 	});
 </script>

@@ -28,6 +28,7 @@ class UtilityController extends Controller
 		$utility->company_address = $request->company_address;
 		$utility->company_tin = $request->company_tin;
 		$utility->company_contact = $request->company_contact;
+		$utility->payment_allowance = $request->payment_allowance;
 		$utility->save();
 
 		return $utility;

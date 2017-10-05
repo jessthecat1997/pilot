@@ -544,7 +544,8 @@ class TruckingsController extends Controller
                 $new_del_head_con->save();
 
 
-                foreach ($container_detail->details as $key => $container_detail_data){
+                foreach ($container_detail->details as $key => $container_detail_data)
+                {
 
                     $new_delivery_container_detail = new DeliveryContainerDetail;
                     $new_delivery_container_detail->descriptionOfGoods = $container_detail_data->descriptionOfGood;

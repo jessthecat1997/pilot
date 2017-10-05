@@ -19,10 +19,12 @@ class CreatePaymentsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('isCheque');
             $table->integer('bi_head_id')->unsigned();
+            $table->integer('utility_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('bi_head_id')->references('id')->on('billing_invoice_headers');
+            $table->foreign('utility_id')->references('id')->on('utility_types');
         });
     }
 

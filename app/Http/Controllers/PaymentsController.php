@@ -100,7 +100,11 @@ class PaymentsController extends Controller
 			WHERE t.id = ?
 			', [$id]);
 
-		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total', 'deposits']));
+		$allowance = DB::table('utility_types')
+		->select('id','payment_allowance')
+		->get();
+
+		return view('payment/payment_create', compact(['pays', 'so_head_id','paid', 'total', 'deposits', 'allowance']));
 
 	}
 	public function payments_table(Request $request, $id)
@@ -144,6 +148,7 @@ class PaymentsController extends Controller
 		$new_payment->description = $request->description;
 		$new_payment->isCheque = $request->isCheque;
 		$new_payment->bi_head_id = $request->bi_head_id;
+		$new_payment->utility_id = $request->utility_id;
 		$new_payment->save();
 	}
 	public function update(Request $request, $id)
