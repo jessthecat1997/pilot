@@ -53,6 +53,9 @@
 							<input type="hidden" class="txt" id="paid" value="0.00" disabled>
 							@endforelse
 						</div>
+						<div class="form-group">
+							<h5><strong>Payment Allowance:</strong> &nbsp;&nbsp;{{ $allowance[0]->payment_allowance }} days</h5>
+						</div>
 					</form>
 					<ul class="nav nav-pills">
 						<li><a data-toggle="pill" href="#home">Cash</a></li>
@@ -91,7 +94,7 @@
 									<label for="check_amt">*Amount: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" style="text-align: right;" id="amount" name="amount" class="form-control" value="{{ $cheques[0]->amount }}">
 								</div>
-								<button class="btn btn-primary finalize-payment-rev">Save</button>
+								<button type="button" class="btn btn-primary finalize-payment-rev">Save</button>
 							</form>
 						</div>
 						<div id="menu2" class="tab-pane fade">
@@ -654,6 +657,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 						'isCheque' : 1,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
+						'utility_id' : {{ $allowance[0]->id }},
 						'description' : rem
 					},
 					success: function (data){
@@ -717,6 +721,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 						'isCheque' : 1,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
+						'utility_id' : {{ $allowance[0]->id }},
 						'description' : rem
 					},
 					success: function (data){
@@ -791,6 +796,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 					'isCheque' : 1,
 					'bi_head_id' : {{ $so_head_id }},
 					'amount' : amt,
+					'utility_id' : {{ $allowance[0]->id }},
 					'description' : rem
 				},
 				success: function (data){
@@ -875,6 +881,7 @@ $(document).on('click', '.finalize-payment', function(e){
 						'isCheque' : 1,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
+						'utility_id' : {{ $allowance[0]->id }},
 						'description' : rem
 					},
 					success: function (data){
@@ -938,6 +945,7 @@ $(document).on('click', '.finalize-payment', function(e){
 						'isCheque' : 1,
 						'bi_head_id' : {{ $so_head_id }},
 						'amount' : amt,
+						'utility_id' : {{ $allowance[0]->id }},
 						'description' : rem
 					},
 					success: function (data){
@@ -1012,6 +1020,7 @@ $(document).on('click', '.finalize-payment', function(e){
 					'isCheque' : 1,
 					'bi_head_id' : {{ $so_head_id }},
 					'amount' : amt,
+					'utility_id' : {{ $allowance[0]->id }},
 					'description' : rem
 				},
 				success: function (data){

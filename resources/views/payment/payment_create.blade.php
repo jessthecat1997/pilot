@@ -80,7 +80,7 @@
 						</div>
 						<div id="menu1" class="tab-pane fade">
 							<br>
-							<form class="form">
+							<form class="form" onsubmit="this.preventDefault();">
 								{{ csrf_field() }}
 								<div class="form-group">
 									<label for="bank">*Cheque Number: &nbsp;</label>
@@ -94,7 +94,7 @@
 									<label for="check_amt">*Amount: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" id="check_amt" class="form-control">
 								</div>
-								<button class="btn btn-primary finalize-cheque">Save</button>
+								<button type="button" class="btn btn-primary finalize-cheque">Save</button>
 							</form>
 						</div>
 						<div id="menu2" class="tab-pane fade">
@@ -461,7 +461,7 @@
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "{{ route('payment.index') }}";
 							}
 						})
 					}
@@ -535,7 +535,7 @@
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "{{ route('payment.index') }}";
 							}
 						})
 					}
@@ -757,7 +757,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "{{ route('payment.index') }}";
 							}
 						})
 					}
@@ -832,7 +832,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]('Successfully saved');
-							window.location.href = "{{ route('view.index') }}";
+							window.location.href = "{{ route('payment.index') }}";
 						}
 					})
 				}
@@ -981,7 +981,7 @@ $(document).on('click', '.finalize-payment', function(e){
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "{{ route('payment.index') }}";
 							}
 						})
 					}
@@ -1056,7 +1056,7 @@ $(document).on('click', '.finalize-payment', function(e){
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]('Successfully saved');
-							window.location.href = "{{ route('view.index') }}";
+							window.location.href = "{{ route('payment.index') }}";
 						}
 					})
 				}
@@ -1091,7 +1091,7 @@ $(document).on('click', '.finalize-cheque', function(e){
 	var bi_id = {{ $so_head_id }};
 	$.ajax({
 		method: 'POST',
-		url: '{{ route("postCheque") }}',
+		url: '{{ route("cheque.store") }}',
 		data: {
 			'_token' : $('input[name=_token]').val(),
 			'chequeNumber' : $('#chqNo').val(),
@@ -1120,6 +1120,7 @@ $(document).on('click', '.finalize-cheque', function(e){
 				"hideMethod": "fadeOut"
 			}
 			toastr["success"]('Successfully saved');
+			window.location.href = "{{ route('cheque.index') }}";
 		}
 	})
 })
