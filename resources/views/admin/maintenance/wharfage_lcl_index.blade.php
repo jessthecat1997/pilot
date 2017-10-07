@@ -1,3 +1,4 @@
+
 @extends('layouts.maintenance')
 @section('content')
 <div class = "container-fluid">
@@ -5,7 +6,7 @@
 		<h2>&nbsp;Maintenance | Less Cargo Load Wharfage Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Wharfage</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Less Cargo Load Wharfage Fee</button>
 		</div>
 	</div>
 	<br />
@@ -51,6 +52,7 @@
 							<td>
 								<button value = "{{ $w->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $w->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" class = "date_effective" value = "{{$w->dateEffective}}">
 							</td>
 						</tr>
 						@empty
@@ -69,7 +71,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Wharfage Fee Per Pier</h4>
+							<h4 class="modal-title">New Less Cargo Load Wharfage Fee per Location</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
@@ -218,6 +220,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#brokeragecollapse').addClass('in');
+	$('#wharfagecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
 	var basis_type= [];
@@ -283,7 +286,7 @@
 			$('#amount').val("0.00");
 			$('#dateEffective').val(today);
 			$('#wf_parent_table > tbody').html("");
-			$('.modal-title').text('New Wharfage Fee Per Pier');
+			$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
 			$('#wfModal').modal('show');
 			$('#wf_parent_table > tbody').append(wf_row);
 			$('#wf_warning').removeClass('in');
@@ -292,14 +295,14 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update wharfage Fee Per Pier');
+			$('.modal-title').text('Update Less Cargo Load Wharfage Fee per Location');
 			wf_id = $(this).val();
 
 			data = wftable.row($(this).parents()).data();
 			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
-			$('#dateEffective').val(data.dateEffective);
-
+			$('#locations_id').attr('disabled','true');
+			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			$('#wfModal').modal('show');
 
 			$.ajax({
@@ -414,7 +417,7 @@
 
 				var title = $('.modal-title').text();
 				console.log(title);
-				if(title === "New Wharfage Fee Per Pier")
+				if(title === "New Less Cargo Load Wharfage Fee per Location")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
@@ -439,7 +442,7 @@
 
 								wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New wharfage Fee Per Pier');
+								$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
 
 								$('#amount').val("0.00");
 								toastr.options = {
@@ -493,7 +496,7 @@
 
 								wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New wharfage Fee Per Pier');
+								$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
 
 								$('#amount').val("0.00");
 

@@ -1,3 +1,4 @@
+
 @extends('layouts.maintenance')
 @section('content')
 <div class = "container-fluid">
@@ -5,7 +6,7 @@
 		<h2>&nbsp;Maintenance | Containerized Arrastre Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Arrastre</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Containerized Arrastre Fee</button>
 		</div>
 	</div>
 	<br />
@@ -51,6 +52,7 @@
 							<td>
 								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" class = "date_effective" value = "Carbon::parse($a->dateEffective)->format('Y-m-d')">;
 							</td>
 						</tr>
 						@empty
@@ -69,7 +71,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
+							<h4 class="modal-title">New Containerized Arrastre Fee per Location</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
@@ -202,6 +204,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#brokeragecollapse').addClass('in');
+	$('#arrastrecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
 	var container_size= [];
@@ -263,10 +266,7 @@
 				}
 
 			},
-			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
+			onkeyup:  function(element) {$(element).valid()}, 
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -281,7 +281,7 @@
 				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			$('.modal-title').text('New Arrastre Fee Per Pier');
+			$('.modal-title').text('New Containerized Arrastre Fee per Location');
 			$('#afModal').modal('show');
 			
 			$('#af_parent_table > tbody').append(rows);
@@ -290,12 +290,13 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update Arrastre Fee Per Pier');
+			$('.modal-title').text('Update Containerized Arrastre Fee per Location');
 			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
-			$('#dateEffective').val(data.dateEffective);
+			$('#locations_id').attr('disabled','true');
+			 $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			
 			$('#afModal').modal('show');
 
@@ -392,7 +393,7 @@
 			if(finalvalidateAfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New Arrastre Fee Per Pier")
+				if(title == "New Containerized Arrastre Fee per Location")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
@@ -417,7 +418,7 @@
 
 								aftable.ajax.url( '{{ route("af.data") }}' ).load();
 								$('#afModal').modal('hide');
-								$('.modal-title').text('New Arrastre Fee Per Pier');
+								$('.modal-title').text('New Containerized Arrastre Fee per Location');
 
 								$('#amount').val("0.00");
 								toastr.options = {
@@ -438,7 +439,7 @@
 									"showMethod": "fadeIn",
 									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record addded successfully")
+								toastr["success"]("Record added successfully")
 								$('#btnSave').removeAttr('disabled');
 							}
 
@@ -474,7 +475,7 @@
 								console.log(data);
 								aftable.ajax.url( '{{ route("af.data") }}' ).load();
 								$('#afModal').modal('hide');
-								$('.modal-title').text('New Arrastre Fee Per Pier');
+								$('.modal-title').text('New Containerized Arrastre Fee per Location');
 
 								$('#amount').val("0.00");
 

@@ -433,7 +433,6 @@
 </div>
 <div class="modal-body">
 
-
     <div class = "collapse" id = "item_warning">
       <div class="panel-body alert alert-danger">
           <div class = "col-md-12">
@@ -1305,23 +1304,23 @@ function decimalsOnly(event) {
 
               selectedContainerId = '{{ $delivery_container->id }}';
 
-             @forelse($containerized_arrastre_header as $cont_arrastre_head)
+               @forelse($containerized_arrastre_header as $cont_arrastre_head)
 
-                @forelse($containerized_arrastre_detail as $cont_arrastre_det)
+                  @forelse($containerized_arrastre_detail as $cont_arrastre_det)
 
-                  containerized_arrastre[0] = '{{$cont_arrastre_det->containerVolume}}';
-                  containerized_arrastre[1] = '{{$cont_arrastre_det->amount}}';
+                    containerized_arrastre[0] = '{{$cont_arrastre_det->containerVolume}}';
+                    containerized_arrastre[1] = '{{$cont_arrastre_det->amount}}';
 
-                  if(containerized_arrastre[0] == containers[2])
-                  {
-                    document.getElementById('arrastre').value = '{{$cont_arrastre_det->amount}}';
+                    if(containerized_arrastre[0] == containers[2])
+                    {
+                      document.getElementById('arrastre').value = '{{$cont_arrastre_det->amount}}';
 
-                  }
+                    }
+                  @empty
+                  @endforelse
+
                 @empty
                 @endforelse
-
-              @empty
-              @endforelse
 
               @forelse($containerized_wharfage_header as $cont_wharfage_head)
 
@@ -1465,8 +1464,9 @@ function decimalsOnly(event) {
 
       var arrastre_total = 0.00;
       var wharfage_total = 0.00;
-
-      @forelse($lcl_arrastre_header as $lcl_arrastre_hed)
+      var arrastreWeight_Total = 0.00;
+      var currentArrastre = 0.00;
+     @forelse($lcl_arrastre_header as $lcl_arrastre_hed)
 
         @forelse($lcl_arrastre_detail as $lcl_arrastre_det)
 
@@ -1475,7 +1475,16 @@ function decimalsOnly(event) {
             @forelse($brokerage_details as $brokerage_detail)
               @if($lcl_arrastre_det->lcl_type == $brokerage_detail->lcl_type)
 
-                arrastre_total += parseFloat({{$lcl_arrastre_det->amount}});
+                currentArrastre = +parseFloat({{$brokerage_detail->grossWeight}}).toFixed(2) * +parseFloat({{$lcl_arrastre_det->amount}}).toFixed(2);
+
+                arrastreWeight_Total += currentArrastre;
+
+                console.log('arrastre: {{$brokerage_detail->lcl_type}}');
+                console.log('currentArrastre: '+currentArrastre);
+                console.log('total: '+parseFloat(arrastreWeight_Total).toFixed(2));
+
+
+                arrastre_total += parseFloat(parseFloat(arrastreWeight_Total).toFixed(2));
 
               @else
               @endif
