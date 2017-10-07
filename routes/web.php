@@ -292,6 +292,8 @@ Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf'
 Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
 Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
+Route::get('/paid_bill', 'BillingDetailsController@paid_bill')->name('paid.data');
+Route::get('admin/bill_paid', 'BillingDetailsController@paid_bill')->name('paid_bill.data');
 
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
