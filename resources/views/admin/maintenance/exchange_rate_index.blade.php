@@ -5,10 +5,14 @@
 		<h2>&nbsp;Maintenance | Brokerage | Exchange Rate</h2>
 		<hr>
 		<h5>Current Exchange Rate: Php 
+			@if($no_current == "false")
 			@if($exchange_rate_current[0]->rate != null)
 			{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}
 			@else
 			0.000000
+			@endif
+			@else
+			0.00
 			@endif
 		</h5>
 		<div class = "col-md-3 col-md-offset-9">
@@ -76,10 +80,14 @@
 								<label>Current Rate: </label>
 								<input type="hidden" name = "currentRate" value = "0" />
 								<input type = "text" class = "form-control" value = 
-								@if($exchange_rate_current != null)
-								"{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}"
+								@if($no_current == "false")
+								@if($exchange_rate_current[0]->rate != null)
+								{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}
 								@else
-								"0.0000000"
+								0.000000
+								@endif
+								@else
+								0.00
 								@endif
 								style = "text-align: right" readonly = "true" />
 							</div>
@@ -137,17 +145,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-exchange-rate{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-exchange-rate{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
