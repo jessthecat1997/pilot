@@ -29,26 +29,24 @@ class OrdersController extends Controller
 		->where('consignee_service_order_headers.id','=',$id)
 		->get();
 
-		
-		return view('order.order_view', compact(['so_head']));
-
-		/*
-
-
-		$deliveries = DB::table('delivery_receipt_headers')
-		->join('locations as A', 'locations_id_pick', '=', 'A.id')
-		->join('locations as B', 'locations_id_del', '=', 'B.id')
-		->join('location_cities as C', 'A.cities_id', '=', 'C.id')
-		->join('location_cities as D', 'B.cities_id', '=', 'D.id')
-		->select('delivery_receipt_headers.id', 'plateNumber', 'delivery_receipt_headers.created_at', 'status', 'A.name AS pickup_name', 'B.name as deliver_name', 'C.name AS pickup_city', 'D.name AS deliver_city', 'delivery_receipt_headers.deliveryDateTime', 'pickupDateTime')
-		->where('delivery_receipt_headers.deleted_at', '=', null)
-		->where('tr_so_id','=', $request->trucking_id)
+		$details = \DB::table('consignee_service_order_details')
+		->where('so_headers_id', '=', $so_head[0]->id)
 		->get();
+		
+		$brokerage = null;  $trucking = null;
+		for($i = 0; $i < count($details); $i++)
+		{
+			if($details[$i]->service_order_types_id == 1)
+			{
+				$brokerage = \App\BrokerageServiceOrder::findOrFail($details[$i]->id);
 
-
-
-		*/
-
+			}
+			else
+			{
+				$trucking = \App\TruckingServiceOrder::findOrFail($details[$i]->id);
+			}
+		}
+		return view('order.order_view', compact(['so_head', 'trucking', 'brokerage']));
 
 
 	}
