@@ -2960,7 +2960,7 @@ class DatatablesController extends Controller
 			}})
 		->addColumn('action', function ($dutiesandtax){
 			return
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax collapse" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax collapse in" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
 			<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
 			<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
 		})

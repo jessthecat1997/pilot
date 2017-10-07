@@ -127,7 +127,7 @@
 										<div class = "form-group" style = "margin-left:10px">
 											<button    class = "btn btn-primary btn-md new-ipf-row pull-left">New Range</button>
 											<br /><br/>
-											<b style="color:red">*</b>leaving 00.00 on the Maximum field will set the value to "indefinite"
+											
 										</div>
 									</div>
 								</div>
