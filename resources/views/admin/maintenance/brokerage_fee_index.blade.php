@@ -55,6 +55,7 @@
                         </tr>
                         @empty
                         @endforelse
+
                     </tbody>
                 </table>
             </div>
@@ -320,8 +321,9 @@
             bf_id = $(this).val();
             $('.modal-title').text('Update Brokerage Fee Range');
             data = bftable.row($(this).parents()).data();
-
             $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
+            console.log($(this).closest('tr').find('.date_effective').val());
+
             $('#bfModal').modal('show');
 
             $.ajax({
