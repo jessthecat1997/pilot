@@ -23,10 +23,10 @@
 					<thead>
 						<tr>
 							<td>
-								Rate
+								Date Effective
 							</td>
 							<td>
-								Date Effective
+								Rate
 							</td>
 							<td>
 								Remarks
@@ -137,17 +137,17 @@
 @endsection
 @push('styles')
 <style>
-.class-exchange-rate{
-	border-left: 10px solid #8ddfcc;
-	background-color:rgba(128,128,128,0.1);
-	color: #fff;
-}
-.maintenance
-{
-	border-left: 10px solid #8ddfcc;
-	background-color:rgba(128,128,128,0.1);
-	color: #fff;
-}
+	.class-exchange-rate{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
+	.maintenance
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 </style>
 @endpush
 @push('scripts')

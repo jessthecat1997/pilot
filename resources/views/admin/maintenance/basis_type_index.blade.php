@@ -159,7 +159,6 @@
 				abbreviation:
 				{
 					required:true,
-					lettersonly:true,
 					maxlength: 5,
 				},
 
