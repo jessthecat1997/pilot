@@ -196,27 +196,14 @@
 
 
 			$(document).ready(function(){
-				var stat = null;
 				var st = null;
-				stat = document.getElementById("parts").innerText;
 				st = document.getElementById("status").innerText;
-				console.log(stat);
 				console.log(st);
-				if(stat == "No Records")
-				{
-					$('.finalize-bill').attr('disabled','disabled');
-				}
-				if(st == "Posted" && stat == "Particulars")
+				if(st == "Posted")
 				{
 					$('.addBill').attr('disabled','disabled');
 					$('.finalize-bill').attr('disabled','disabled');
 				}
-				else if(st == "Pending" && stat == "Particulars")
-				{
-					$('.addBill').attr('enabled','enabled');
-					$('.finalize-bill').attr('enabled','enabled');
-				}
-
 				var bi_id = document.getElementById("so_head_id").value;
 				console.log(bi_id);
 

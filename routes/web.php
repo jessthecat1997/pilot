@@ -306,6 +306,7 @@ Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
 Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
 Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
+Route::post('/postDetails', 'BillingDetailsController@postBilling_details')->name('bill_details');
 
 //Deposits
 Route::resource('/cdeposit', 'ConsigneeDepositsController');

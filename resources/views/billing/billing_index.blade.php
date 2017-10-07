@@ -4,6 +4,27 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="row">
+	<div class="col-lg-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Select Service Order
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id = "so_table">
+					<thead>
+						<tr>
+							<th>
+								Consignee
+							</th>
+							<th>
+								Actions
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
 	<div class="col-lg-8">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -24,27 +45,6 @@
 							</th>
 							<th>
 								Due Date
-							</th>
-							<th>
-								Actions
-							</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-4">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				Select Service Order
-			</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "so_table">
-					<thead>
-						<tr>
-							<th>
-								Consignee
 							</th>
 							<th>
 								Actions
