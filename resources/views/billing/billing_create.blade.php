@@ -45,11 +45,13 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">New Bills</div>
 				<div class = "panel-body">
+					<button type="button" class="btn but pull-right addBill" data-toggle="modal" data-target="#revModal">Add Bills</button>
+					@if(count($rev_bill) > 0)
 					<table class="table table-hover" id="revenue_table">
 						<thead>
 							<tr>
 								<td colspan="2">
-									<button type="button" class="btn but pull-right addBill" data-toggle="modal" data-target="#revModal">Add Bills</button>
+									
 								</td>
 							</tr>
 						</thead>
@@ -107,6 +109,7 @@
 							<tr>
 							</tbody>
 						</table>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -141,7 +144,7 @@
 								<div class="col-sm-10"> 
 									<div class="input-group">
 										<span class="input-group-addon">Php</span>
-										<input type="number" class="form-control money" id="rev_amount" name="rev_amount" style = "text-align: right" value = "0.00">
+										<input type="text" class="form-control money" id="rev_amount" name="rev_amount" style = "text-align: right" value = "0.00">
 									</div>
 								</div>
 							</div>
@@ -193,27 +196,14 @@
 
 
 			$(document).ready(function(){
-				var stat = null;
 				var st = null;
-				stat = document.getElementById("parts").innerText;
 				st = document.getElementById("status").innerText;
-				console.log(stat);
 				console.log(st);
-				if(stat == "No Records")
-				{
-					$('.finalize-bill').attr('disabled','disabled');
-				}
-				if(st == "Posted" && stat == "Particulars")
+				if(st == "Posted")
 				{
 					$('.addBill').attr('disabled','disabled');
 					$('.finalize-bill').attr('disabled','disabled');
 				}
-				else if(st == "Pending" && stat == "Particulars")
-				{
-					$('.addBill').attr('enabled','enabled');
-					$('.finalize-bill').attr('enabled','enabled');
-				}
-
 				var bi_id = document.getElementById("so_head_id").value;
 				console.log(bi_id);
 

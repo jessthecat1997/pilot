@@ -5,9 +5,9 @@
 		<br />
 		<div class="col-md-6">
 			<div class="row">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y H:i A') }}</span></h4>
+						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y h:i A') }}</span></h4>
 					</div>
 					<div class="panel-body">
 						<table class="table table-responsive table-striped table-bordered">
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h4>Containers</h4>
 					</div>
@@ -95,36 +95,42 @@
 									</td>
 								</tr>
 								@endforelse
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3>Delivery Schedule</h3>
-			</div>
-			<div class="panel-body">
-				<div class = "col-md-12">
-					<div id = "calendar">
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h4>Delivery Schedule</h4>
+				</div>
+				<div class="panel-body">
+					<div class = "col-md-12">
+						<div id = "calendar">
 
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-</div>
 
 @endsection
 
 @push('styles')
 <style type="text/css">
-#calendar h2:first-child{
-	border-left: none;
-}
+	#calendar h2:first-child{
+		border-left: none;
+	}
+	.dashboard
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color: #316b89;
+		color: #fff;
+	}
 </style>
 <link href="/js/fullCalendar/fullcalendar.min.css" rel="stylesheet">
 @endpush

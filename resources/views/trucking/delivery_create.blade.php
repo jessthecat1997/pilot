@@ -1387,6 +1387,13 @@
 		}
 		function validateOrder(){
 			var error = "";
+			if($('#deldatecon').val() < $('#pickdatecon').val()){
+				$('#deldatecon').css('border-color', 'green');
+				$('#pickdatecon').css('border-color', 'green');
+			}
+			else{
+				error+= "Invalid date";
+			}
 			if($('#deldatecon').val() === ""){
 				$('#deldatecon').css("border-color", 'red');
 				error += "Delivery Date";
