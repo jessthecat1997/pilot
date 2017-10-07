@@ -574,13 +574,14 @@ class DatatablesController extends Controller
 
 	public function bf_datatable(){
 		$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at ,
-			GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.amount ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id ORDER by h.dateEffective DESC");
+			GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return Datatables::of($bfs)
 		->addColumn('action', function ($bf){
 			return
 			'<button value = "'. $bf->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" class = "date_effective" = "'. $bf->dateEffective.'">';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
