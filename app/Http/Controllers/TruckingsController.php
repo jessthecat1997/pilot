@@ -772,6 +772,7 @@ public function view_delivery(Request $request){
         ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
         ->select('descriptionOfGoods', 'grossWeight', 'supplier')
         ->where('B.del_head_id', '=', $delivery[0]->id)
+        ->where('delivery_non_container_details.deleted_at', '=', null)
         ->get();
     }
     else{
@@ -977,6 +978,7 @@ public function delivery_pdf(Request $request){
         ->join('delivery_receipt_headers AS A', 'B.del_head_id', 'A.id')
         ->select('descriptionOfGoods', 'grossWeight', 'supplier')
         ->where('del_head_id', '=', $delivery[0]->id)
+        ->where('delivery_non_container_details.deleted_at', '=', null)
         ->get();
     }
     else{
