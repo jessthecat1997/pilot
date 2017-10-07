@@ -267,6 +267,7 @@ Route::get('pdfview','PaymentsController@pdfview');
 //Orders
 Route::resource('/orders', 'OrdersController');
 Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
+Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
 
 
 //Payments
@@ -291,6 +292,8 @@ Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf'
 Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
 Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
 Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
+Route::get('/paid_bill', 'BillingDetailsController@paid_bill')->name('paid.data');
+Route::get('admin/bill_paid', 'BillingDetailsController@paid_bill')->name('paid_bill.data');
 
 // Route::get('/bill/display/{id}', 'BillingDetailsController@display_bill');
 Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
@@ -306,6 +309,7 @@ Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
 Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
 Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
 Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
+Route::post('/postDetails', 'BillingDetailsController@postBilling_details')->name('bill_details');
 
 //Deposits
 Route::resource('/cdeposit', 'ConsigneeDepositsController');

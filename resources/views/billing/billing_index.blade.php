@@ -4,6 +4,27 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="row">
+	<div class="col-lg-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				Select Service Order
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table" id = "so_table">
+					<thead>
+						<tr>
+							<th>
+								Consignee
+							</th>
+							<th>
+								Actions
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
 	<div class="col-lg-8">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
@@ -34,42 +55,28 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-4">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				Select Service Order
-			</div>
-			<div class="panel-body">
-				<table class = "table-responsive table" id = "so_table">
-					<thead>
-						<tr>
-							<th>
-								Consignee
-							</th>
-							<th>
-								Actions
-							</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
 </div>
 @endsection
 @push('styles')
 <style>
-	.class-billing
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.maintenance
+{
+	border-left: 10px solid #2ad4a5;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.class-billing
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#collapse1').addClass('in');
+	$('#maintenancecollapse').addClass('in');
+	$('#billingcollapse').addClass('in');
 	var data;
 	var so_head_id;
 

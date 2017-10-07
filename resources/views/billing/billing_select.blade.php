@@ -114,6 +114,72 @@
 		</div>
 	</div>
 </div>
+<div id="detailsModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">New Bills</h4>
+			</div>
+			<div class="modal-body">
+				<div class="col-sm-12">
+					<form class="form">
+						{{ csrf_field() }}
+						<table class="table responsive table-hover" width="100%" id="billing_parent_table" style = "overflow-x: scroll;">
+							<thead>
+								<tr>
+									<td colspan="4" style="text-align: right;">
+										<button class = "btn btn-info btn-md new-billing-row">Add Bill</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										Description *
+									</td>
+									<td>
+										Amount *
+									</td>
+									<td>
+										Action
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id = "billing-row" name="billing-row">
+									<td>
+										<select name = "bill_id" class = "form-control ">
+											<option>
+
+											</option>
+											@forelse($billings as $bill)
+											<option value = "{{ $bill->id }}">
+												{{ $bill->name }}
+											</option>
+											@empty
+
+											@endforelse
+										</select>
+									</td>
+									<td>
+										<input type = "text" name = "amount" class = "form-control" style="text-align: right">
+
+									</td>
+									<td>
+										<button type="button" class = "btn btn-danger btn-md delete-billing-row"><i class="fa fa-times"></i></button>
+									</td>
+								</tr>
+							</tbody>
+						</table>	
+					</form>
+				</div>
+				<strong>Note:</strong> All fields with * are required.
+			</div>
+			<div class="modal-footer">
+				<a class="btn but details-save">Save</a>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="updateModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -183,6 +249,9 @@
 	var void_id = null;
 	var update_id = null;
 	var data;
+	var bill_id = [];
+	var	amount_value = [];
+	var billing_row = "<tr>" + $('#billing-row').html() + "</tr>";
 	$(document).ready(function(){
 		$(document).on('click', '.new_bill_modal', function(e){
 			e.preventDefault();
@@ -227,6 +296,10 @@
 			}
 		}
 	})
+	$(document).on('click', '.new-billing-row', function(e){
+		e.preventDefault();
+		$('#billing_parent_table > tbody').append(billing_row);
+	})
 
 	$(document).on('click', '.updateBill', function(e){
 		e.preventDefault();
@@ -247,12 +320,33 @@
 				'vatRate' : $('#vat').val(),
 				'status' : 'U',
 				'date_billed' : $('#date_billed').val(),
-				'due_date' : $('#due_date').val()
+				'due_date' : $('#due_date').val(),
 			},
 			success: function (data){
-				location.reload();
+					$('#billModal').modal('hide');
+					$('#detailsModal').modal('show');
 			}
 		})
+	})
+	$(document).on('click', '.details-save', function(e){
+		if(validateContractRows() === true){
+			console.log(bill_id);
+			console.log(amount_value);
+			$.ajax({
+				method: 'POST',
+				url: '/postDetails',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'charge_id' : bill_id,
+					'amount' : amount_value,
+					'description' : "",
+					'tax' : 0,
+				},
+				success: function (data){
+					location.reload();
+				}
+			})
+		}
 	})
 	$(document).on('click', '.update-header', function(e){
 		console.log($('#update_billed').val());
@@ -288,5 +382,51 @@
 		})
 
 	})
+	function validateContractRows()
+	{
+		bill_id = [];
+		amount_value = [];
+
+		billID = document.getElementsByName('bill_id');
+		amount = document.getElementsByName('amount');
+
+
+		error = "";
+
+		for(var i = 0; i < billID.length; i++){
+
+			if(billID[i].value === "")
+			{
+				billID[i].style.color = 'red';	
+				error += "Bill ID Required.";
+			}
+
+			else
+			{
+				bill_id.push(billID[i].value);
+			}
+			if(amount[i].value === "")
+			{
+				amount[i].style.color = 'red';
+				error += "Amount Required.";
+			}
+
+			else
+			{
+				amount_value.push(amount[i].value);
+			}
+
+		}
+
+		if(error.length == 0){
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+
+	}
 </script>
 @endpush

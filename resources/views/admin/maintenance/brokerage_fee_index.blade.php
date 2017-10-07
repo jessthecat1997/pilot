@@ -49,10 +49,13 @@
                             </td>
                             <td>
                                 <button value = "{{ $bf->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $bf->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+                                <input type = "hidden" class = "date_effective" value = "{{$bf->dateEffective}}">
+
                             </td>
                         </tr>
                         @empty
                         @endforelse
+
                     </tbody>
                 </table>
             </div>
@@ -318,7 +321,9 @@
             bf_id = $(this).val();
             $('.modal-title').text('Update Brokerage Fee Range');
             data = bftable.row($(this).parents()).data();
-            $('#dateEffective').val(data.dateEffective);
+            $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
+            console.log($(this).closest('tr').find('.date_effective').val());
+
             $('#bfModal').modal('show');
 
             $.ajax({

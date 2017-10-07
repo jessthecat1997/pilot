@@ -111,10 +111,10 @@
 
 												</td>
 												<td>
-													<div class = "form-group input-group" >
-														<select id = "dc_type" name = "dc_type"   class = "form-control select2-allow-clear dc_type" style = "width:100%;" multiple="multiple" >
-														<option>Hi</option>
-														</select>	
+													<div class = "form-group input-group"  >
+														<select name = "dc_types" id = "dc_types" class = "form-control select2-allow-clear dc_types" style="width: 100%;" multiple="multiple">
+
+														</select>
 													</div>
 												</td>
 												<td>
@@ -172,7 +172,7 @@
 @endsection
 @push('styles')
 <style>
- <link href= "/js/select2/select2.css" rel = "stylesheet">
+<link href= "/js/select2/select2.css" rel = "stylesheet">
 .class-af-fee
 {
 	border-left: 10px solid #8ddfcc;
@@ -255,7 +255,7 @@
 			}
 		});
 
-		$('.dc_type').select2({
+		$('.dc_types').select2({
 			data: arr_dc_types ,
 			placeholder: "Select Dangerous Cargo Types",
 			allowClear: true

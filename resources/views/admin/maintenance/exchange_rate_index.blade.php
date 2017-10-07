@@ -5,10 +5,14 @@
 		<h2>&nbsp;Maintenance | Brokerage | Exchange Rate</h2>
 		<hr>
 		<h5>Current Exchange Rate: Php 
+			@if($no_current == "false")
 			@if($exchange_rate_current[0]->rate != null)
 			{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}
 			@else
 			0.000000
+			@endif
+			@else
+			0.00
 			@endif
 		</h5>
 		<div class = "col-md-3 col-md-offset-9">
@@ -23,10 +27,10 @@
 					<thead>
 						<tr>
 							<td>
-								Rate
+								Date Effective
 							</td>
 							<td>
-								Date Effective
+								Rate
 							</td>
 							<td>
 								Remarks
@@ -76,10 +80,14 @@
 								<label>Current Rate: </label>
 								<input type="hidden" name = "currentRate" value = "0" />
 								<input type = "text" class = "form-control" value = 
-								@if($exchange_rate_current != null)
-								"{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}"
+								@if($no_current == "false")
+								@if($exchange_rate_current[0]->rate != null)
+								{{ number_format((float)$exchange_rate_current[0]->rate, 5) }}
 								@else
-								"0.0000000"
+								0.000000
+								@endif
+								@else
+								0.00
 								@endif
 								style = "text-align: right" readonly = "true" />
 							</div>
@@ -247,7 +255,7 @@
 			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('#description').val(data.description);
 			$('#rate').val(data.rate);
-			$('.modal-title').text('Edit Exchange Rate');
+			$('.modal-title').text('Update Exchange Rate');
 			$('#erModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){

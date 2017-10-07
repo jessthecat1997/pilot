@@ -1,56 +1,76 @@
 @extends('layouts.app')
 @push('styles')
 <style type="text/css">
-	span.control-label {
-		font-size: 20px;
-	}
-	span.label {
-		font-size: 15px;
-	}
-	strong {
-		font-size: 15px;
-	}
+span.control-label {
+	font-size: 20px;
+}
+span.label {
+	font-size: 15px;
+}
+strong {
+	font-size: 15px;
+}
 </style>
 @endpush
 @section('content')
 <h2>&nbsp;Delivery</h2>
 <hr>
 <div class="row">
-	<div class="col-lg-6">
+	<div class="col-md-12">
+		@if($service_order->status == 'P')
+		<button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
+		@else
+		<button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
+		@endif
+		<br />
+	</div>
+	<div class="col-lg-12">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				Trucking Information
 			</div>
 			<div class="panel-body">
-				@if($service_order->status == 'P')
-				<button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
-				@else
-				<button  disabled class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Trucking Status</button>
-				@endif
-				<div class="form-group">
-					<h5 id="consignee"><strong>Trucking Service Order #:</strong> {{ $service_order->id }}</h5>
+				<div class="row">
+					<label class = "control-label col-md-3" style="text-align: right;">Trucking Service Order #:</label>
+					<div class="col-md-9">
+						<label class="control-label">{{ $service_order->id }}</label>
+					</div>
 				</div>
-				<div class="form-group">
-					<h5 id="consignee"><strong>Consignee:</strong> {{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</h5>
+				<div class="row">
+					<label class = "control-label col-md-3" style="text-align: right;">Consignee:</label>
+					<div class="col-md-9">
+						<label class="control-label">{{ $service_order_details[0]->firstName  . " " . $service_order_details[0]->lastName }}</label>
+					</div>
 				</div>
-				<div class="form-group">
-					<h5 id="consignee"><strong>Company Name:</strong> {{ $service_order_details[0]->companyName }}</h5>
+				<div class="row">
+					<label class = "control-label col-md-3" style="text-align: right;">Company Name:</label>
+					<div class="col-md-9">
+						<label class="control-label">{{ $service_order_details[0]->companyName }}</label>
+					</div>
 				</div>
-				<div class="form-group">
-					<label>Status:</label>
-					@php
-					switch($service_order->status){
-					case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
-					case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-					case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-					default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-					@endphp
+				<div class="row">
+					<label class = "control-label col-md-3" style="text-align: right;">Status:</label>
+					<div class="col-md-9">
+						<label class="control-label">
+							@php
+							switch($service_order->status){
+							case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+							case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+							case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+							default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+							@endphp
+						</label>
+					</div>
 				</div>
-				<div class="form-group">
-					<h5 id="consignee"><strong>Estimated Delivery Fee:</strong> Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></h5>
+				<div class="row">
+					<label class = "control-label col-md-3" style="text-align: right;">Estimated Delivery Fee:</label>
+					<div class="col-md-9">
+					</label><label class="control-label">Php <span class="money">{{ number_format((float)$estimate, 3, '.', '') }}</span></label>
 				</div>
-				<div class="form-group">
-					<label>Delivery Status:</label>
+			</div>
+			<div class="row">
+				<label class = "control-label col-md-3" style="text-align: right;">Delivery Status:</label>
+				<div class="col-md-9">
 					<span class = "label label-danger">Cancelled  <span class="badge cancelled_delivery">{{ $cancelled_trucking }}</span></span>
 					<span class = "label label-success">Finished  <span class="badge success_delivery">{{ $success_trucking }}</span></span>
 					<span class = "label label-warning">Pending  <span class="badge pending_delivery">{{ $pending_trucking }}</span></span>
@@ -58,6 +78,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 <hr>
 <div class="pull-right">
@@ -570,12 +591,12 @@
 
 @push('styles')
 <style>
-	.delivery
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.delivery
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @push('scripts')
 <script type="text/javascript">

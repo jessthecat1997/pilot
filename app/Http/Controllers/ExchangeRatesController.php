@@ -11,23 +11,35 @@ class ExchangeRatesController extends Controller
     public function index()
     {
         $ers = \DB::select("SELECT * FROM exchange_rates WHERE deleted_at is null AND  dateEffective < NOW() ORDER BY dateEffective");
-        $current = $ers[count($ers) -1 ];
-      
-        \DB::update('UPDATE exchange_rates SET currentRate = 0 WHERE  id != ' . $current->id);
-        \DB::update('UPDATE exchange_rates SET currentRate = 1 WHERE  id = ' . $current->id);
+        
+        if(count($ers) == 0)
+        {
+            $no_current = "true";
 
-        $exchange_rate_current = \DB::table('exchange_rates')
-        ->select('rate')
-        ->where('currentRate', '=', 1)
-        ->get();
 
-        if(count($exchange_rate_current) == 0){
-            $exchange_rate_current[0]->rate = 0;
+        }
+        else
+        {
+            $no_current = "false";
+
+            $current = $ers[count($ers) -1 ];
+
+            \DB::update('UPDATE exchange_rates SET currentRate = 0 WHERE  id != ' . $current->id);
+            \DB::update('UPDATE exchange_rates SET currentRate = 1 WHERE  id = ' . $current->id);
+
+            $exchange_rate_current = \DB::table('exchange_rates')
+            ->select('rate')
+            ->where('currentRate', '=', 1)
+            ->get();
+
+            if(count($exchange_rate_current) == 0){
+                $exchange_rate_current[0]->rate = 0;
+            }
         }
 
-         $exchange_rate = \App\ExchangeRate::all();
+        $exchange_rate = \App\ExchangeRate::all();
 
-        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate_current', 'exchange_rate']));
+        return view('admin/maintenance.exchange_rate_index', compact(['exchange_rate_current', 'exchange_rate', 'no_current']));
     }
 
 
@@ -62,7 +74,7 @@ class ExchangeRatesController extends Controller
         $exchange_rate = ExchangeRate::withTrashed()
         ->where('id',$request->id)
         ->restore();
-  
+
     }
 
     public function er_utilities(){

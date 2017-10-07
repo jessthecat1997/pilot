@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Less Cargo Load Arrastre Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Arrastre</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Less Cargo Load Arrastre Fee </button>
 		</div>
 	</div>
 	<br />
@@ -57,6 +57,7 @@
 							<td>
 								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" class = "date_effective" value = "{{$a->dateEffective}}">
 							</td>
 						</tr>
 						@empty
@@ -75,7 +76,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
+							<h4 class="modal-title">New Less Cargo Load Arrastre Fee per Location</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
@@ -242,6 +243,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#brokeragecollapse').addClass('in');
+	$('#arrastrecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
 	var basis_type= [];
@@ -314,7 +316,7 @@
 			$('#amount').val("0.00");
 			$('#dateEffective').val(today);
 			$('#af_parent_table > tbody').html("");
-			$('.modal-title').text('New Arrastre Fee Per Pier');
+			$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 			$('#afModal').modal('show');
 			$('#af_parent_table > tbody').append(af_row);
 			$('#af_warning').removeClass('in');
@@ -323,13 +325,14 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			$('.modal-title').text('Update Arrastre Fee Per Pier');
+			$('.modal-title').text('Update Less Cargo Load Arrastre Fee per Location');
 			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
-			$('#dateEffective').val(data.dateEffective);
-
+			$('#locations_id').attr('disabled','true');
+			 $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			$('#afModal').modal('show');
+
 
 			$.ajax({
 				type: 'GET',
@@ -443,7 +446,7 @@
 
 				var title = $('.modal-title').text();
 				console.log(title);
-				if(title === "New Arrastre Fee Per Pier")
+				if(title === "New Less Cargo Load Arrastre Fee per Location")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid() && $('#basis_type').valid())
 					{
@@ -472,7 +475,7 @@
 
 								aftable.ajax.reload();
 								$('#afModal').modal('hide');
-								$('.modal-title').text('New Arrastre Fee Per Pier');
+								$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 
 								$('#amount').val("0.00");
 								toastr.options = {
@@ -530,7 +533,7 @@
 
 								aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
 								$('#afModal').modal('hide');
-								$('.modal-title').text('New Arrastre Fee Per Pier');
+								$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 
 								$('#amount').val("0.00");
 

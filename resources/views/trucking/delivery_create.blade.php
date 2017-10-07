@@ -1387,6 +1387,7 @@
 		}
 		function validateOrder(){
 			var error = "";
+			
 			if($('#deldatecon').val() === ""){
 				$('#deldatecon').css("border-color", 'red');
 				error += "Delivery Date";
@@ -1401,6 +1402,16 @@
 			else{
 				$('#pickdatecon').css("border-color", 'green');
 			}
+			if($('#deldatecon').val() <= $('#pickdatecon').val()){
+				$('#deldatecon').css('border-color', 'red');
+				$('#pickdatecon').css('border-color', 'red');
+				error+= "Invalid date";
+			}
+			else{
+				$('#deldatecon').css('border-color', 'green');
+				$('#pickdatecon').css('border-color', 'green');
+			}
+			
 			if($('#vehicle_type').val() == "0"){
 				$('#vehicle_type').css("border-color", 'red');
 				error += "Delivery Date";
