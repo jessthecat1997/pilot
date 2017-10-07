@@ -144,6 +144,13 @@ class BillingDetailsController extends Controller
 
 	public function show_billing(Request $request, $id)
 	{
+
+		$bill_type = DB::table('billing_invoice_headers')
+		->select('isRevenue')
+		->where('id', '=', $id)
+		->get();
+
+
 		$bill_revs = DB::table('charges')
 		->select('id','name', 'amount')
 		->where('bill_type', '=', 'R')
@@ -238,7 +245,17 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
-		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill', 'rev_sub']));
+		$exp_sub = DB::table('billing_invoice_details')
+		->join('billing_invoice_headers','billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select(DB::raw('CONCAT(TRUNCATE(SUM(billing_invoice_details.amount),2)) as Total'))
+		->where([
+			['billing_invoice_details.bi_head_id', '=', $id],
+			['charges.bill_type', '=', 'E']
+			])
+		->get();
+
+		return view('billing/billing_create', compact(['vat', 'bills','bill_revs', 'bill_exps','so_head_id', 'rev_vat', 'rev_total', 'rev_bill','exp_vat', 'exp_total', 'exp_bill', 'rev_sub', 'bill_type', 'exp_sub']));
 
 	}
 	public function view_billing(Request $request, $id)
@@ -618,5 +635,28 @@ class BillingDetailsController extends Controller
 			'<a href = "/payment/'. $b->id .'" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv">Make Payment</a>';
 		})
 		->make(true);
+	}
+	public function paid_bill(Request $request)
+	{
+		// select distinct(bh.id), isCheque from payments as p join billing_invoice_headers as bh on p.bi_head_id = bh.id where status = 'P'
+		return view('billing/billing_paid');
+	}
+	public function paid_table(Request $request)
+	{
+		$paid = DB::table('payments')
+		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('billing_invoice_details', 'billing_invoice_details.bi_head_id', '=', 'billing_invoice_headers.id')
+		->join('charges', 'billing_invoice_details.charge_id', '=', 'charges.id')
+		->select('billing_invoice_headers.id', 'isCheque', 'bill_type', 'charges.name', 'payments.amount')
+		->where('status', '=', 'P')
+		->get();
+		return Datatables::of($paid)
+		->addColumn('action', function ($pd) {
+			return
+
+			'<a href = "/billing/'. $pd->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
+		})
+		->make(true);
+		
 	}
 }
