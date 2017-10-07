@@ -222,7 +222,7 @@
 							</div>
 							<div id="new_con" class="tab-pane fade in active">
 								<br />
-								<form class="form-horizontal" role="form">
+								<form class="form-horizontal" role="form" id = "cs_form">
 									{{ csrf_field() }}
 									<div class="form-group required">
 										<label class="control-label col-sm-4" for="firstName">First Name:</label>
@@ -289,12 +289,12 @@
 @endsection
 @push('styles')
 <style>
-	.delivery
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.delivery
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 <link href= "/js/select2/select2.css" rel = "stylesheet">
 @push('scripts')
@@ -442,212 +442,335 @@
 
 		})
 
+		Inputmask(" 9{3}-9{3}-9{3}-9{5}").mask($("#TIN"));
+
+		$('#cs_form').validate({
+			firstName:
+			{
+				required: true,
+			},
+			lastName:
+			{
+				required: true,
+			},
+			email:
+			{
+				email: true,
+				required: true,
+			},
+			contactNumber:
+			{
+				required: true,
+			},
+			companyName:
+			{
+				required: true,
+			},
+			businessStyle:
+			{
+				required: true,
+			},
+			TIN:
+			{
+				required: true,
+			}
+
+		})
+
 		$(document).on('click', '.save-consignee-information', function(e){
-			e.preventDefault();
+			$('.save-consignee-information').attr('disabled', 'true');
+			$('#firstName').valid();
+			$('#lastName').valid();
+			$('#email').valid();
+			$('#contactNumber').valid();
+			$('#companyName').valid();
+			$('#businessStyle').valid();
+			$('#TIN').valid();
+
 			var checked = $('.same_billing_address').is(":checked");
+			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid())
+			{
+				if(validateConsignee() == true)
+				{
+					if($('.modal-title').text().trim() === "Consignee Information")
+					{
 
-			if(validateConsignee() == true){
+						$.ajax({
+							type: 'POST',
+							url: '{{ route("consignee.index") }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'firstName' : $('#firstName').val(),
+								'middleName' : $('#middleName').val(),
+								'lastName' : $('#lastName').val(),
+								'companyName' : $('#companyName').val(),
+								'email' : $('#email').val(),
+								'contactNumber' : $('#contactNumber').val(),
+								'businessStyle' : $('#businessStyle').val(),
+								'TIN' : $('#TIN').val(),
 
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("consignee.index") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'firstName' : $('#firstName').val(),
-						'middleName' : $('#middleName').val(),
-						'lastName' : $('#lastName').val(),
-						'companyName' : $('#companyName').val(),
-						'email' : $('#email').val(),
-						'contactNumber' : $('#contactNumber').val(),
-						'businessStyle' : $('#businessStyle').val(),
-						'TIN' : $('#TIN').val(),
-						
-						'address' : $('#phy_address').val(),
-						'city' : $('#phy_city option:selected').text(),
-						'st_prov' : $('#phy_province option:selected').text(),
-						'zip' : $('#phy_zip').val(),
+								'address' : $('#phy_address').val(),
+								'city' : $('#phy_city option:selected').text(),
+								'st_prov' : $('#phy_province option:selected').text(),
+								'zip' : $('#phy_zip').val(),
 
-						'b_address' : $('#bill_address').val(),
-						'b_city' : $('#bill_city option:selected').text(),
-						'b_st_prov' : $('#bill_province option:selected').text(),
-						'b_zip' : $('#bill_zip').val(),
+								'b_address' : $('#bill_address').val(),
+								'b_city' : $('#bill_city option:selected').text(),
+								'b_st_prov' : $('#bill_province option:selected').text(),
+								'b_zip' : $('#bill_zip').val(),
 
-						'same_billing_address' : checked,
+								'same_billing_address' : checked,
+							},
+							success: function (data) {
+								consigneeID = data.id;
+								$('#chModal').modal('hide');
+								$('#collapse_1').removeClass('in');
+								$('#collapse_2').addClass('in');
+								$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
+								$('#_companyName').val($('#companyName').val());
 
+								$('#_email').val($('#email').val());
+								$('#_contactNumber').val($('#contactNumber').val());
 
-
-					},
-					success: function (data) {
-						console.log(data);
-						if(typeof(data) == "object"){
-							consigneeID = data.id;
-							$('#chModal').modal('hide');
-							$('#collapse_1').removeClass('in');
-							$('#collapse_2').addClass('in');
-							$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
-							$('#_companyName').val($('#companyName').val());
-							
-							$('#_email').val($('#email').val());
-							$('#_contactNumber').val($('#contactNumber').val());
-
-							$('#firstName').val("");
-							$('#middleName').val("");
-							$('#lastName').val("");
-							$('#companyName').val("");
-							$('#email').val("");
-							$('#address').val("");
-							$('#contactNumber').val("");
-							$('#TIN').val("");
-							$('#businessStyle').val("");
+								$('#firstName').val("");
+								$('#middleName').val("");
+								$('#lastName').val("");
+								$('#companyName').val("");
+								$('#email').val("");
+								$('#address').val("");
+								$('#contactNumber').val("");
+								$('#TIN').val("");
+								$('#businessStyle').val("");
 
 
-							$('#_cfirstName').val(data.firstName);
-							$('#_cmidddleName').val(data.middleName);
-							$('#_clastName').val(data.lastName);
-							$('#_ccontactNumber').val(data.contactNumber);
-							$('#_cemail').val(data.email);
-							$('#_ccompanyName').val(data.companyName);
-							$('#_cbusinessStyle').val(data.businessStyle);
-							$('#_cTIN').val(data.TIN);
-						}	
+								$('#_cfirstName').val(data.firstName);
+								$('#_cmidddleName').val(data.middleName);
+								$('#_clastName').val(data.lastName);
+								$('#_ccontactNumber').val(data.contactNumber);
+								$('#_cemail').val(data.email);
+								$('#_ccompanyName').val(data.companyName);
+								$('#_cbusinessStyle').val(data.businessStyle);
+								$('#_cTIN').val(data.TIN);
+
+
+								$('.save-consignee-information').removeAttr('disabled');	
+
+							}
+						})
 					}
-				})
+					else
+					{
+						$.ajax({
+							type: 'PUT',
+							url: '{{ route("consignee.index") }}/' + selected_consignee,
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'firstName' : $('#firstName').val(),
+								'middleName' : $('#middleName').val(),
+								'lastName' : $('#lastName').val(),
+								'companyName' : $('#companyName').val(),
+								'email' : $('#email').val(),
+								'contactNumber' : $('#contactNumber').val(),
+								'businessStyle' : $('#businessStyle').val(),
+								'TIN' : $('#TIN').val(),
+
+								'address' : $('#phy_address').val(),
+								'city' : $('#phy_city option:selected').text(),
+								'st_prov' : $('#phy_province option:selected').text(),
+								'zip' : $('#phy_zip').val(),
+
+								'b_address' : $('#bill_address').val(),
+								'b_city' : $('#bill_city option:selected').text(),
+								'b_st_prov' : $('#bill_province option:selected').text(),
+								'b_zip' : $('#bill_zip').val(),
+
+								'same_billing_address' : checked,
+
+							},
+							success: function (data) {
+								console.log(data);
+								if(typeof(data) == "object"){
+									$('#collapse_1').removeClass('in');
+									$('#collapse_2').addClass('in');
+									$('#_firstName').val($('#firstName').val() + " " + $('#middleName').val() + " " + $('#lastName').val());
+									$('#_companyName').val($('#companyName').val());
+
+									cs_id = data.id;
+
+									switch ($('#consigneeType').val()){
+										case "0":
+										$('#_consigneeType').val("Walk-in");
+										break;
+										case "1":
+										$('#_consigneeType').val("Regular");
+									}
+									$('#_email').val($('#email').val());
+									$('#_contactNumber').val($('#contactNumber').val());
+
+									$("#basic-information-heading").html('<h5 id = "basic-information-heading">Basic Information <button class = "btn btn-sm btn-info changeConsignee 	pull-right">Change Consignee</button></h5>');
+
+									$('#chModal').modal('hide');
+									$('#firstName').val("");
+									$('#middleName').val("");
+									$('#lastName').val("");
+									$('#companyName').val("");
+									$('#email').val("");
+									$('#address').val("");
+									$('#contactNumber').val("");
+									$('#TIN').val("");
+									$('#businessStyle').val("");
+
+
+									$('.save-consignee-information').removeAttr('disabled');	
+								}
+							}
+						})	
+					}
+				}
+				else{
+					$('.save-consignee-information').removeAttr('disabled');
+				}
+			}
+			else{
+				$('.save-consignee-information').removeAttr('disabled');
 			}
 		})
 
-		function validateOrder()
-		{
-			error = "";
-			if(consigneeID == null || consigneeID == 0){
-				error += "No selected consignee.\n";
-				$('#consignee_id').css('border-color', 'red');
-			}
-			else{
-				$('#consignee_id').css('border-color', 'green');
-			}
-			if($('#processedBy').val() == "0"){
-				error += "No processedBy";
-				$('#processedBy').css('border-color', 'red');
-			}
-			else{
-				$('#processedBy').css('border-color', 'green');
-			}
-			if(error.length == 0){
-				return true;
-			}
-			else{
-				console.log(error);
-				return false;
-			}
-		}
+function validateOrder()
+{
+	error = "";
+	if(consigneeID == null || consigneeID == 0){
+		error += "No selected consignee.\n";
+		$('#consignee_id').css('border-color', 'red');
+	}
+	else{
+		$('#consignee_id').css('border-color', 'green');
+	}
+	if($('#processedBy').val() == "0"){
+		error += "No processedBy";
+		$('#processedBy').css('border-color', 'red');
+	}
+	else{
+		$('#processedBy').css('border-color', 'green');
+	}
+	if(error.length == 0){
+		return true;
+	}
+	else{
+		console.log(error);
+		return false;
+	}
+}
 
-		
-		$(document).on('click', '.create-trucking-so', function(e){
-			$('.create-trucking-so').attr('disabled', 'true');
-			if(validateOrder() == true){
 
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("trucking.store") }}',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'consignees_id' : consigneeID,
-						'shippingLine' : $('#shippingLine').val(),
-						'destination' : $('#destination').val(),
-						'portOfCfsLocation' : $('#portOfCfsLocation').val(),
-						'processedBy' : $('#processedBy').val(),
 
-					},
-					success: function(data){
-						if(typeof(data) == "object"){
-							window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
-						}
-					}
-				})
-			}
-			else{
-				$('.create-trucking-so').removeAttr('disabled');
+
+$(document).on('click', '.create-trucking-so', function(e){
+	$('.create-trucking-so').attr('disabled', 'true');
+	if(validateOrder() == true){
+
+		$.ajax({
+			type: 'POST',
+			url: '{{ route("trucking.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'consignees_id' : consigneeID,
+				'shippingLine' : $('#shippingLine').val(),
+				'destination' : $('#destination').val(),
+				'portOfCfsLocation' : $('#portOfCfsLocation').val(),
+				'processedBy' : $('#processedBy').val(),
+
+			},
+			success: function(data){
+				if(typeof(data) == "object"){
+					window.location.replace('{{ route("trucking.index") }}' + "/" + data.id + "/view");
+				}
 			}
 		})
-		function validateConsignee()
-		{
-			var error = "";
-			if($('#firstName').val() === ""){
-				$('#firstName').css('border-color', 'red');
-				error += "First name is required. \n";
-			}
-			else
-			{
-				$('#firstName').css('border-color', 'green');
-			}
-			if($('#middleName').val() === ""){
-				$('#middleName').css('border-color', 'green');
-			}
-			else
-			{
-				$('#middleName').css('border-color', 'green');
-			}
-			if($('#lastName').val() === ""){
-				$('#lastName').css('border-color', 'red');
-				error += "Last name is required.\n";
-			}
-			else
-			{
-				$('#lastName').css('border-color', 'green');
-			}
+	}
+	else{
+		$('.create-trucking-so').removeAttr('disabled');
+	}
+})
+function validateConsignee()
+{
+	var error = "";
+	if($('#firstName').val() === ""){
+		$('#firstName').css('border-color', 'red');
+		error += "First name is required. \n";
+	}
+	else
+	{
+		$('#firstName').css('border-color', 'green');
+	}
+	if($('#middleName').val() === ""){
+		$('#middleName').css('border-color', 'green');
+	}
+	else
+	{
+		$('#middleName').css('border-color', 'green');
+	}
+	if($('#lastName').val() === ""){
+		$('#lastName').css('border-color', 'red');
+		error += "Last name is required.\n";
+	}
+	else
+	{
+		$('#lastName').css('border-color', 'green');
+	}
 
-			if($('#companyName').val() === ""){
-				$('#companyName').css('border-color', 'red');
-				error += "Company name is required.\n";
-			}
-			else
-			{
-				$('#companyName').css('border-color', 'green');
-			}
+	if($('#companyName').val() === ""){
+		$('#companyName').css('border-color', 'red');
+		error += "Company name is required.\n";
+	}
+	else
+	{
+		$('#companyName').css('border-color', 'green');
+	}
 
-			if($('#businessStyle').val() === ""){
-				$('#businessStyle').css('border-color', 'red');
-				error += "Business Style is required.\n";
-			}
-			else
-			{
-				$('#businessStyle').css('border-color', 'green');
-			}
+	if($('#businessStyle').val() === ""){
+		$('#businessStyle').css('border-color', 'red');
+		error += "Business Style is required.\n";
+	}
+	else
+	{
+		$('#businessStyle').css('border-color', 'green');
+	}
 
-			if($('#TIN').val() === ""){
-				$('#TIN').css('border-color', 'red');
-				error += "TIN is required.\n";
-			}
-			else
-			{
-				$('#TIN').css('border-color', 'green');
-			}
-			if($('#email').val() === ""){
-				$('#email').css('border-color', 'red');
-				error += "Email is required.\n";
-			}
-			else
-			{
-				$('#email').css('border-color', 'green');
-			}
-			if($('#contactNumber').val() === ""){
-				$('#contactNumber').css('border-color', 'red');
-				error += "Contact Number is required.\n";
-			}
-			else
-			{
-				$('#contactNumber').css('border-color', 'green');
-			}
-			console.log(error);
-			if(error.length == 0){
+	if($('#TIN').val() === ""){
+		$('#TIN').css('border-color', 'red');
+		error += "TIN is required.\n";
+	}
+	else
+	{
+		$('#TIN').css('border-color', 'green');
+	}
+	if($('#email').val() === ""){
+		$('#email').css('border-color', 'red');
+		error += "Email is required.\n";
+	}
+	else
+	{
+		$('#email').css('border-color', 'green');
+	}
+	if($('#contactNumber').val() === ""){
+		$('#contactNumber').css('border-color', 'red');
+		error += "Contact Number is required.\n";
+	}
+	else
+	{
+		$('#contactNumber').css('border-color', 'green');
+	}
+	console.log(error);
+	if(error.length == 0){
 
-				return true;
-			}
-			else{
-				return false;
-			}
+		return true;
+	}
+	else{
+		return false;
+	}
 
-		}
-	})
+}
+})
 </script>
 @endpush
