@@ -129,6 +129,12 @@
 	background-color:rgba(128,128,128,0.1);
 	color: #fff;
 }
+.class-vat-rate
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 
 
@@ -144,6 +150,7 @@
 	var vr_id;
 	$('#collapse2').addClass('in');
 	$('#billingcollapse').addClass('in');
+	
 	$(document).ready(function(){
 
 		var vrtable = $('#vr_table').DataTable({

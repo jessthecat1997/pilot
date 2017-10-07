@@ -204,6 +204,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#brokeragecollapse').addClass('in');
+	$('#wharfagecollapse').addClass('in');
 	$('#collapse2').addClass('in');
 
 	var container_size= [];
