@@ -6,7 +6,7 @@
 		<h2>&nbsp;Maintenance | Containerized Wharfage Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Wharfage</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#wfModal" style = 'width: 100%;'>New Containerized Wharfage Fee</button>
 		</div>
 	</div>
 	<br />
@@ -52,6 +52,7 @@
 							<td>
 								<button value = "{{ $w->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $w->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" class = "date_effective" value = "{{$w->dateEffective}}">
 							</td>
 						</tr>
 						@empty
@@ -70,7 +71,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Wharfage Fee Per Pier</h4>
+							<h4 class="modal-title">New Containerized Wharfage Fee per Location</h4>
 						</div>
 						<div class="modal-body ">
 							<div class="form-group required">
@@ -265,9 +266,7 @@
 				}
 			},
 			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
+		
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -282,7 +281,7 @@
 				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			$('.modal-title').text('New Wharfage Fee Per Pier');
+			$('.modal-title').text('New Containerized Wharfage Fee per Location');
 			$('#wfModal').modal('show');
 			
 			$('#wf_parent_table > tbody').append(rows);
@@ -296,7 +295,9 @@
 			data = wftable.row($(this).parents()).data();
 			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
-			$('#dateEffective').val(data.dateEffective);
+
+			$('#locations_id').attr('disabled','true');
+			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 
 			$('#wfModal').modal('show');
 
@@ -390,7 +391,7 @@
 			if(finalvalidatewfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New Wharfage Fee Per Pier")
+				if(title == "New Containerized Wharfage Fee per Location")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
@@ -415,7 +416,7 @@
 
 								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Wharfage Fee Per Pier');
+								$('.modal-title').text('New Containerized Wharfage Fee per Location');
 
 								$('#amount').val("0.00");
 								toastr.options = {
@@ -471,7 +472,7 @@
 								console.log(data);
 								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
 								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Wharfage Fee Per Pier');
+								$('.modal-title').text('New Containerized Wharfage Fee per Location');
 
 								$('#amount').val("0.00");
 
