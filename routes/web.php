@@ -267,6 +267,7 @@ Route::get('pdfview','PaymentsController@pdfview');
 //Orders
 Route::resource('/orders', 'OrdersController');
 Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
+Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
 
 
 //Payments

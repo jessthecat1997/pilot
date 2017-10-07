@@ -25,15 +25,18 @@
 			</div>
 			<div style="margin-left: 200px;">
 				<br />
-				<small><strong style="text-align: center;">PILOT CARGO CHAIN SOLUTION INC.</strong></small>
+				@forelse($utility as $util)
+				<small><strong style="text-align: center;">{{ $util->company_name }}</strong></small>
 				<br />
-				<small><strong style="text-align: center;">Suite 318 Velco Center Building Port Area Manila</strong></small>
+				<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
 				<br />
 				<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
 				<br />
 				<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
 				<br />
 				<small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
+				@empty
+				@endforelse
 			</div>
 			<br />
 			<div style="text-align: center;">

@@ -543,7 +543,10 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub']));
+
+		$utility = \App\UtilityType::all();
+
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub', 'utility']));
 		return $pdf->stream();
 	}
 	public function ref_pdf(Request $request, $id)
