@@ -247,7 +247,7 @@
 			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('#description').val(data.description);
 			$('#rate').val(data.rate);
-			$('.modal-title').text('Edit Exchange Rate');
+			$('.modal-title').text('Update Exchange Rate');
 			$('#erModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){

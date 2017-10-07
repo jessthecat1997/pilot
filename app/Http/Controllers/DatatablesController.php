@@ -202,8 +202,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($er){
 			return
 			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
-			;
+			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($er->dateEffective)->format("Y-m-d") .'">';
 		})
 		->editColumn('rate', 'Php {{ $rate }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
@@ -581,7 +581,7 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $bf->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" = "'. $bf->dateEffective.'">';
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($bf->dateEffective)->format("Y-m-d") .'">';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
@@ -1089,8 +1089,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($cds){
 			return
 			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
-			;
+			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($cds->dateEffective)->format("Y-m-d") .'">';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
@@ -1132,7 +1132,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($arrastre){
 			return
 			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("Y-m-d") .'">';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d Y") }}')
@@ -1187,7 +1188,8 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($ipf){
 			return
 			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'
+			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($ipf->dateEffective)->format("Y-m-d") .'">';
 			;
 		})
 		->editColumn('id', '{{ $id }}')

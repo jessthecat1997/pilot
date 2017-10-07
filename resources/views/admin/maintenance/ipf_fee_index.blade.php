@@ -262,7 +262,7 @@
 			$('.modal-title').text('Update Import Processing Fee Range');
 			var ipf_id = $(this).val();
 			data = ipftable.row($(this).parents()).data();
-			$('#dateEffective').val(data.dateEffective);
+			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			$('#ipfModal').modal('show');
 
 			$.ajax({
