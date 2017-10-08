@@ -44,7 +44,9 @@
 								{{ $vr->rate }}
 							</td>
 							<td>
-								<button value = "{{ $vr->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button><button value = "{{ $vr->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<button value = "{{ $vr->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $vr->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($vr->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -127,6 +129,12 @@
 	background-color:rgba(128,128,128,0.1);
 	color: #fff;
 }
+.class-vat-rate
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 
 
@@ -142,6 +150,7 @@
 	var vr_id;
 	$('#collapse2').addClass('in');
 	$('#billingcollapse').addClass('in');
+	
 	$(document).ready(function(){
 
 		var vrtable = $('#vr_table').DataTable({
@@ -194,7 +203,7 @@
 			vr_id = $(this).val();
 			data = vrtable.row($(this).parents()).data();
 			$('#rate').val(data.rate);
-			$('#dateEffective').val(data.dateEffective);
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			$('.modal-title').text('Update VAT Rate');
 			$('#vrModal').modal('show');
 		});

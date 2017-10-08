@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\ArrastreHeader;
 use App\ArrastreDetail;
+use App\Http\Requests\StoreArrastreFee;
 
 class ArrastreFeesController extends Controller
 {
@@ -28,7 +29,7 @@ class ArrastreFeesController extends Controller
     }
 
     
-    public function store(Request $request)
+    public function store(StoreArrastreFee $request)
     {
         $af_header = new ArrastreHeader;
         $af_header->dateEffective = $request->dateEffective;
@@ -52,7 +53,7 @@ class ArrastreFeesController extends Controller
 
 
     } 
-    public function update(Request $request, $id)
+    public function update(StoreArrastreFee $request, $id)
     {
 
         \DB::table('arrastre_details')

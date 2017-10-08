@@ -66,6 +66,7 @@
 	      </table>
 			</div>
 
+			<br />
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
 	      <button type="button" class="btn btn-primary" id = "" onclick = "	$('#SaveModal').modal('show');">
@@ -74,10 +75,8 @@
 	      </button>
 
 			</form>
+			<br />
 			<button id = "editButton" class = "btn btn-md but view-service-order">Edit</button>';
-
-
-
 
 	    </div>
 
@@ -433,7 +432,8 @@
 
 			row = document.getElementById("Arrastre");
 			x = row.insertCell(1);
-			x.innerHTML = localStorage.getItem("arrastre");
+			var convertedArrastre = localStorage.getItem("arrastre");
+			x.innerHTML = parseFloat(convertedArrastre).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
 
 			row = document.getElementById("Wharfage");
 			x = row.insertCell(1);
@@ -442,7 +442,6 @@
 			BankCharges = parseFloat(TotalDutiableValue * BankCharges_percent).toFixed(2);
 
 			localStorage.setItem("BankCharges", BankCharges);
-			alert(localStorage.getItem("BankCharges"));
 			row = document.getElementById("BankCharges");
 			x = row.insertCell(1);
 			x.innerHTML = BankCharges;

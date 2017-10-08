@@ -59,17 +59,19 @@
 @endsection
 @push('styles')
 <style>
-	.class-billing
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+
+.class-billing
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse1').addClass('in');
+	$('#billingcollapse').addClass('in');
 	var data;
 	var so_head_id;
 

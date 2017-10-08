@@ -61,7 +61,7 @@
 						</tr>
 						<tr>
 							<td class="active">
-								<strong>Total Brokerage Fee: </strong>
+								<strong>Estimated Total Brokerage Fee: </strong>
 							</td>
 
 							<td class="success" colspan="2">
@@ -108,9 +108,10 @@
 
 											<td width = "30%">
 												<label  id = "certificateOfOrigin"> Certificate Of Origin: @php
-													if($brokerage_header[0]->withCO = 1)
+													if($brokerage_header[0]->withCO == 1)
 														echo 'Included';
-													else
+													if($brokerage_header[0]->withCO == 0)
+
 														echo 'Not Included'
 													@endphp </label>
 											</td>
@@ -385,7 +386,7 @@
 		<div class = "panel default-panel">
 			<div class = "panel-body">
 
-				<h4>Duties and Taxes Declaration <button class = "btn btn-md btn-success col-md-5 pull-right" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
+				<h4>Duties and Taxes Declaration <button class = "btn btn-md btn-success col-md-5 pull-right collapse" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
 				<hr />
 				<table class = "table table-responsive table-striped cell-border table-bordered" id = "dutiesandtaxes_table">
 					<thead>
@@ -420,7 +421,7 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($brokerage_header[0]->bi_head_id_rev)
-				<h4>List of Billings <button class = "btn but new_revenue pull-right">New Revenue</button></h4>
+				<h4>List of Billings <button class = "btn but new_revenue pull-right collapse">New Revenue</button></h4>
 				@else
 				<h4>List of Billings</h4>
 				@endif
@@ -456,11 +457,15 @@
 				</table>
 				@else
 				<div class = "form-horizontal">
-					<div class = "col-md-10">
+					<div class = "col-md-10 collapse" id = "CreateBillingFirst">
 						Create Billing First to Add Payables.
 					</div>
+					<div class = "col-md-10 collapse" id = "NoBillingRecords">
+						No Billing Records Found
+					</div>
+
 					<div class="col-md-2">
-						<button class = "btn but new_revenue_bill btn-sm">New Bill</button>
+						<button class = "btn but new_revenue_bill btn-sm collapse">New Bill</button>
 					</div>
 				</div>
 				@endif
@@ -473,7 +478,7 @@
 		<div class = "panel">
 			<div class = "panel-body">
 				@if($brokerage_header[0]->bi_head_id_exp != null)
-				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right">New Expense</button></h4>
+				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right collapse">New Expense</button></h4>
 				@else
 				<h4>List of Refundable Charges</h4>
 				@endif
@@ -510,11 +515,14 @@
 
 				@else
 				<div class = "form-horizontal">
-					<div class = "col-md-10">
+					<div class = "col-md-10 collapse" id = "CreatePayableFirst">
 						Create Bill First to Add Payables.
 					</div>
+					<div class = "col-md-10 collapse" id = "NoPayableRecords">
+						No Payables Record Found.
+					</div>
 					<div class="col-md-2">
-						<button class = "btn but new_expense_bill btn-sm">New Bill</button>
+						<button class = "btn but new_expense_bill btn-sm collapse">New Bill</button>
 					</div>
 				</div>
 				@endif
@@ -607,16 +615,16 @@
 												<table class="table table-responsive table-striped" style="width: 100%;" id = "declared_dutiesandtaxes">
 													<thead>
 														<tr>
-															<td  style="width: 40%; text-align: center;">
+															<td >
 																	ID
 															</td  >
-															<td style="width: 40%; text-align: center;">
+															<td>
 																Date Created
 															</td>
-															<td style="width: 40%; text-align: center;">
+															<td>
 																Brokerage Fee
 															</td>
-															<td style="width: 40%; text-align: center;">
+															<td >
 																Action
 															</td>
 														</tr>
@@ -1280,7 +1288,7 @@ $(document).ready(function(){
 					"hideMethod": "fadeOut"
 				}
 				toastr["success"]("Update successful");
-
+				window.location.reload();
 
 			},
 			error: function(data) {
@@ -1374,8 +1382,61 @@ function selected_decleration(duty_det_id){
 			isBrokerageFee = 1;
 		}
 	}
+}
+
+window.onload = function(){
+
+	@if($brokerage_header[0]->statusType == 'P')
+		$('#newDutiesAndTaxes').addClass('in');
+
+		$('.new_expense').addClass('in');
+		$('.new_revenue').addClass('in');
+
+		$('.updateTax').addClass('in');
+
+		$('.new_expense_bill').addClass('in');
+		$('.new_revenue_bill').addClass('in');
+	  $('#CreateBillingFirst').addClass('in');
+		$('#CreatePayableFirst').addClass('in');
+		$('#NoBillingRecords').removeClass('in');
+		$('#NoPayableRecords').removeClass('in');
 
 
+	@endif
+	@if($brokerage_header[0]->statusType == 'C')
+		$('#newDutiesAndTaxes').removeClass('in');
+
+		$('.new_expense').removeClass('in');
+		$('.new_revenue').removeClass('in');
+
+		$('.updateTax').removeClass('in');
+
+		$('.new_expense_bill').removeClass('in');
+		$('.new_revenue_bill').removeClass('in');
+		$('#CreateBillingFirst').removeClass('in');
+		$('#CreatePayableFirst').removeClass('in');
+		$('#NoBillingRecords').addClass('in');
+		$('#NoPayableRecords').addClass('in');
+
+
+	@endif
+	@if($brokerage_header[0]->statusType == 'F')
+
+		$('#newDutiesAndTaxes').removeClass('in');
+
+		$('.new_expense').addClass('in');
+		$('.new_revenue').addClass('in');
+
+		$('.updateTax').removeClass('in');
+
+		$('.new_expense_bill').removeClass('in');
+		$('.new_revenue_bill').removeClass('in');
+		$('#CreateBillingFirst').removeClass('in');
+		$('#CreatePayableFirst').removeClass('in');
+		$('#NoBillingRecords').addClass('in');
+		$('#NoPayableRecords').addClass('in');
+
+	@endif
 }
 </script>
 @endpush

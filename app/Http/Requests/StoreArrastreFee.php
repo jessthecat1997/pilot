@@ -4,24 +4,24 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
-class StoreVatRate extends FormRequest
+class StoreArrastreFee extends FormRequest
 {
-    
+   
     public function authorize()
     {
         return true;
     }
 
-   
+    
     public function rules()
     {
-       switch ($this->method()) {
+        switch ($this->method()) {
             case 'POST':
 
             return [
 
-            'rate' => 'required|numeric|between:0,1000000',
-            'dateEffective' => 'required|date|unique:vat_rates,dateEffective',
+            'dateEffective' => 'required|date|unique:arrastre_headers,dateEffective',
+            'locations_id' => 'required|unique:arrastre_headers,locations_id',
 
             ];
             break;
@@ -30,8 +30,8 @@ class StoreVatRate extends FormRequest
 
             return [
 
-            'rate' => 'required|numeric|between:0,1000000',
-            'dateEffective' => 'required|date|unique:vat_rates,dateEffective,' . $this->segment(3),
+            'fee' => 'required|numeric|between:0,1000000000',
+            'dateEffective' => 'required|date|unique:arrastre_fees,dateEffective,' . $this->segment(3),
 
             ];
 
