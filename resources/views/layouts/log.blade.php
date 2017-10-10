@@ -42,14 +42,6 @@
                     <!-- <a class="navbar-brand" style="color: #fff;"><img src="/images/pilotlogo.png" id="logo"></a> -->
                     <a class="navbar-brand" style="color: #fff;">Hauling Services Management System</a>
                 </div>
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
-                        <li><a>&nbsp;</a></li>
-                    </ul>
-                </div>
             </nav>
         </div>
         <br>
