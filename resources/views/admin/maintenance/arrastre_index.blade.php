@@ -51,7 +51,7 @@
 							<td>
 								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
-								<input type = "hidden" class = "date_effective" value = "Carbon::parse($a->dateEffective)->format('Y-m-d')">
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($a->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -79,7 +79,7 @@
 							</div>
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
-								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
+								<select class = "form-control" name = "locations_id" id = "locations_id" placeholder ="Choose a port location" data-rule-required="true">
 									@forelse($locations as $location)
 									<option value = "{{ $location->id }}">{{ $location->name }}</option>
 									@empty
@@ -299,8 +299,9 @@
 			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#locations_id').attr('disabled','true');
-			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			
+			console.log($(this).closest('tr').find('.date_Effective').val());
 			$('#afModal').modal('show');
 
 			$.ajax({
@@ -389,7 +390,7 @@
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
+
 
 						console.log(amount_value);
 						jsonContainerSize = JSON.stringify(container_size_id);
@@ -460,7 +461,7 @@
 
 						jsonContainerSize = JSON.stringify(container_size_id);
 						jsonAmount = JSON.stringify(amount_value);
-						$('#btnSave').attr('disabled', 'true');
+						
 
 						$.ajax({
 							type: 'PUT',
@@ -476,35 +477,47 @@
 
 							},
 							success: function (data){
-								console.log(data);
-								aftable.ajax.url( '{{ route("af.data") }}' ).load();
-								$('#afModal').modal('hide');
-								$('.modal-title').text('New Containerized Arrastre Fee per Location');
+								if(typeof(data) === "object"){
+									aftable.ajax.url( '{{ route("af.data") }}' ).load();
+									$('#afModal').modal('hide');
+									$('.modal-title').text('New Containerized Arrastre Fee per Location');
 
-								$('#amount').val("0.00");
+									$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully")
+									$('#btnSave').removeAttr('disabled');
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+								}else{
+
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 								}
-								toastr["success"]("Record updated successfully")
-								$('#btnSave').removeAttr('disabled');
-							}
+							},
+
 						})
+
 					}
 					
 					
@@ -513,7 +526,7 @@
 				}
 			}
 		});
-	});
+});
 function validateIpfRows()
 {
 	
@@ -620,34 +633,22 @@ function validateIpfRows()
 		range_pairs = [];
 		container_size = document.getElementsByName('container_size');
 		amount = document.getElementsByName('amount');
-
+		var amt;
 		error = "";
-
-
-
 		for(var i = 0; i < container_size.length; i++){
-
 			
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
+			amt = parseFloat(amount[i].value);
+			if (amt < 0){
 				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
 				$('#af_warning').addClass('in');
-			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					container_size_id.push(container_size[i].value);
-					amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-					$('#af_warning').removeClass('in');
-				}
-			}
+				error += "Not Accepting negative values.";
 
+			}else{
+				amount[i].style.borderColor = 'green';
+				container_size_id.push(container_size[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+				$('#af_warning').removeClass('in');
+			}
 
 			pair = {
 				amount: amount[i].value,

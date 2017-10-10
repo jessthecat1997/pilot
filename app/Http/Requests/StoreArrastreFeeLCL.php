@@ -4,9 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
-class StoreArrastreFee extends FormRequest
+class StoreArrastreFeeLCL extends FormRequest
 {
-
+   
     public function authorize()
     {
         return true;
@@ -20,8 +20,8 @@ class StoreArrastreFee extends FormRequest
 
             return [
 
-                'dateEffective' => 'required|date|unique:arrastre_headers,dateEffective',
-                //'locations_id' => 'required|unique:arrastre_headers,locations_id',
+            'dateEffective' => 'required|date|unique:arrastre_lcl_headers,dateEffective',
+            
 
             ];
             break;
@@ -30,8 +30,8 @@ class StoreArrastreFee extends FormRequest
 
             return [
 
-
-                'dateEffective' => 'required|date|unique:arrastre_fees,dateEffective,' . $this->segment(3),
+           
+            'dateEffective' => 'required|date|unique:arrastre_lcl_headers,dateEffective,' . $this->segment(3),
 
             ];
 
@@ -40,15 +40,6 @@ class StoreArrastreFee extends FormRequest
             default: break;
         }
     }
-
-    /*public function messages()
-    {
-        return [
-            'locations_id.unique:arrastre_headers,locations_id' => 'The chosen location is already taken.',
-
-        ];
-    }
-    */
 
     public function response(array $errors)
     {
