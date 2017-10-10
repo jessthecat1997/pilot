@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\WharfageLclHeader;
 use App\WharfageLclDetail;
-
+use App\Http\Requests\StoreWharfageFeeLCL;
 class WharfageFeeLclController extends Controller
 {
  public function index()
@@ -28,7 +28,7 @@ class WharfageFeeLclController extends Controller
 }
 
 
-public function store(Request $request)
+public function store(StoreWharfageFeeLCL $request)
 {
     $wf_header = new WharfageLclHeader;
     $wf_header->dateEffective = $request->dateEffective;
@@ -52,7 +52,7 @@ public function store(Request $request)
 
 
 } 
-public function update(Request $request, $id)
+public function update(StoreWharfageFeeLCL $request, $id)
 {
 
     \DB::table('wharfage_lcl_details')

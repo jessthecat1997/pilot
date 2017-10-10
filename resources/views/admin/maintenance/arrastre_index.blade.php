@@ -222,6 +222,7 @@
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	var af_id;
+	var data;
 	$(document).ready(function(){
 
 		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
@@ -231,6 +232,7 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
+			"bSort": false,
 			columns: [
 			{ data: 'dateEffective'},
 			{ data: 'location' },
@@ -244,7 +246,7 @@
 			},
 			
 			{ data: 'action', orderable: false, searchable: false }
-			],	"order": [[ 0, "desc" ]],
+			],	
 		});
 		$("#commentForm").validate({
 			rules:
@@ -304,6 +306,7 @@
 			console.log($(this).closest('tr').find('.date_Effective').val());
 			$('#afModal').modal('show');
 
+
 			$.ajax({
 				type: 'GET',
 				url:  '{{ route("af_maintain_data") }}',
@@ -321,19 +324,20 @@
 					}
 					$('#af_parent_table > tbody').html("");
 					$('#af_parent_table > tbody').append(rows);
+					$('.money').inputmask("numeric", {
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
 
 				}
 
 			})
 
-			$('.money').inputmask("numeric", {
-				radixPoint: ".",
-				groupSeparator: ",",
-				digits: 2,
-				autoGroup: true,
-				rightAlign: true,
-				removeMaskOnSubmit:true,
-			});
+			
 		});
 		$(document).on('click', '.deactivate', function(e){
 			af_id = $(this).val();
@@ -414,8 +418,8 @@
 									aftable.ajax.url( '{{ route("af.data") }}' ).load();
 									$('#afModal').modal('hide');
 									$('.modal-title').text('New Containerized Arrastre Fee per Location');
-
 									$('#amount').val("0.00");
+
 									toastr.options = {
 										"closeButton": false,
 										"debug": false,
@@ -432,7 +436,7 @@
 										"showEasing": "swing",
 										"hideEasing": "linear",
 										"showMethod": "fadeIn",
-										"hideMethod": "fadeOut"
+										"hideMethod": "fadeOut",
 									}
 									toastr["success"]("Record added successfully")
 									$('#btnSave').removeAttr('disabled');
@@ -501,7 +505,7 @@
 										"showMethod": "fadeIn",
 										"hideMethod": "fadeOut"
 									}
-									toastr["success"]("Record added successfully")
+									toastr["success"]("Record updated successfully")
 									$('#btnSave').removeAttr('disabled');
 
 								}else{
@@ -668,9 +672,7 @@ function validateIpfRows()
 		}
 
 	}
-	function numberWithCommas(x) {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
+	
 
 	function resetErrors() {
 		$('form input, form select').removeClass('inputTxtError');

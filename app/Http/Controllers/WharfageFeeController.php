@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\WharfageHeader;
 use App\WharfageDetail;
+use App\Http\Requests\StoreWharfageFee;
 class WharfageFeeController extends Controller
 {
     public function index()
@@ -21,7 +22,7 @@ class WharfageFeeController extends Controller
     }
 
     
-    public function store(Request $request)
+    public function store(StoreWharfageFee $request)
     {
         $wf_header = new WharfageHeader;
         $wf_header->dateEffective = $request->dateEffective;
@@ -45,7 +46,7 @@ class WharfageFeeController extends Controller
 
 
     } 
-    public function update(Request $request, $id)
+    public function update(StoreWharfageFee $request, $id)
     {
         \DB::table('wharfage_details')
         ->where('wharfage_header_id','=', $request->wf_head_id)

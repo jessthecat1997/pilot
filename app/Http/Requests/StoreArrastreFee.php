@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 use Response;
 class StoreArrastreFee extends FormRequest
@@ -31,7 +30,7 @@ class StoreArrastreFee extends FormRequest
             return [
 
 
-                'dateEffective' => 'required|date|unique:arrastre_fees,dateEffective,' . $this->segment(3),
+                'dateEffective' => 'required|date|unique:arrastre_headers,dateEffective,' . $this->segment(3),
 
             ];
 

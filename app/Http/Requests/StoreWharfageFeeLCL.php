@@ -18,8 +18,8 @@ class StoreWharfageFeeLCL extends FormRequest
 
             return [
 
-                'dateEffective' => 'required|date|unique:arrastre_headers,dateEffective',
-                'locations_id' => 'required|unique:arrastre_headers,locations_id',
+                'dateEffective' => 'required|date|unique:wharfage_lcl_headers,dateEffective',
+               
 
             ];
             break;
@@ -29,7 +29,7 @@ class StoreWharfageFeeLCL extends FormRequest
             return [
 
                
-                'dateEffective' => 'required|date|unique:arrastre_fees,dateEffective,' . $this->segment(3),
+                'dateEffective' => 'required|date|unique:wharfage_lcl_headers,dateEffective,' . $this->segment(3),
 
             ];
 
