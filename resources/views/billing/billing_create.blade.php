@@ -361,7 +361,7 @@
 							'isFinalize' : 1
 						},
 						success: function (data){
-							location.reload();
+							window.location.href = "/billing/{{ $so_head_id }}/show_pdf";
 						}
 					})
 				})

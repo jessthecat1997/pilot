@@ -211,9 +211,6 @@
                                   <td>
                                     Supplier/s
                                   </td>
-                                  <td>
-                                    Actions
-                                  </td>
                                 </tr>
                               </thead>
                               <tbody>
