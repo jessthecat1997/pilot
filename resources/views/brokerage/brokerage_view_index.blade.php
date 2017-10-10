@@ -1396,7 +1396,7 @@ window.onload = function(){
 
 		$('.new_expense_bill').addClass('in');
 		$('.new_revenue_bill').addClass('in');
-	  $('#CreateBillingFirst').addClass('in');
+	  		$('#CreateBillingFirst').addClass('in');
 		$('#CreatePayableFirst').addClass('in');
 		$('#NoBillingRecords').removeClass('in');
 		$('#NoPayableRecords').removeClass('in');
