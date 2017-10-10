@@ -93,7 +93,7 @@ Route::resource('/admin/bank_account','BankAccountsController');
 Route::resource('/admin/location_province','LocationProvincesController');
 Route::resource('/admin/location_city','LocationCitiesController');
 Route::resource('/admin/requirement','RequirementsController');
-Route::resource('/admin/arrastre_fee','ArrastreFeesController');
+
 Route::resource('/admin/lcl_type','LclTypesController');
 Route::resource('/admin/basis_type','BasisTypeController');
 Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');

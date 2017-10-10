@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\ArrastreLclHeader;
 use App\ArrastreLclDetail;
+use App\Http\Requests\StoreArrastreFeeLCL;
 class ArrastreFeeLclController extends Controller
 {
 	public function index()
@@ -32,7 +33,7 @@ class ArrastreFeeLclController extends Controller
 	}
 
 
-	public function store(Request $request)
+	public function store(StoreArrastreFeeLCL $request)
 	{
 		$af_header = new ArrastreLclHeader;
 		$af_header->dateEffective = $request->dateEffective;
@@ -57,7 +58,7 @@ class ArrastreFeeLclController extends Controller
 
 
 	} 
-	public function update(Request $request, $id)
+	public function update(StoreArrastreFeeLCL $request, $id)
 	{
 
 		\DB::table('arrastre_lcl_details')

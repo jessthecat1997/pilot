@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($arrastres as $a)
+						@forelse($arrastres as $a)
 						<tr>
 							<td>
 								{{ Carbon\Carbon::parse($a->dateEffective)->format("F d, Y") }}
@@ -168,7 +168,7 @@
 												<td width = "40%">
 													<div class = "input-group " >
 														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = "form-control amount_valid "
+														<input type = "text" class = " money form-control amount_valid "
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
@@ -320,6 +320,14 @@
 			$('#afModal').modal('show');
 			$('#af_parent_table > tbody').append(af_row);
 			$('#af_warning').removeClass('in');
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 
 
 		});
@@ -330,10 +338,17 @@
 			data = aftable.row($(this).parents()).data();
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#locations_id').attr('disabled','true');
-			 $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
+			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			$('#afModal').modal('show');
 
-
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 			$.ajax({
 				type: 'GET',
 				url:  '{{ route("af_lcl_maintain_data") }}',
@@ -346,7 +361,7 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
 
 					}
 					$('#af_parent_table > tbody').html("");
@@ -355,6 +370,7 @@
 				}
 
 			})
+			w
 		});
 		$(document).on('click', '.deactivate', function(e){
 			af_id = $(this).val();
@@ -364,27 +380,7 @@
 
 
 
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-				}
-				if(typeof(amount) === "string"){
-				}
-				else{
-				}
-
-				if($(this).val() > 0){
-					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+		
 
 		$(document).on('click', '.delete-af-row', function(e){
 			e.preventDefault();
@@ -496,7 +492,7 @@
 									"showMethod": "fadeIn",
 									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record addded successfully")
+								toastr["success"]("Record added successfully")
 								$('#btnSave').removeAttr('disabled');
 
 							}
@@ -617,7 +613,7 @@ function validateafRows()
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 				$('#af_warning').removeClass('in');
 			}
 		}
@@ -695,13 +691,10 @@ function validateafRows()
 				}
 				else{
 					amount[i].style.borderColor = 'green';
-					var amounty = amount[i].value;
-					console.log('amounty is' +amounty);
-					//var temp = $('amounty').inputmask('unmaskedvalue');
-					var temp = amounty;
+					
 					lcl_type_id.push(lcl_type[i].value);
 					basis_type_id.push(basis_type[i].value);
-					amount_value.push(temp);
+					amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 					$('#af_warning').removeClass('in');
 				}
 			}
