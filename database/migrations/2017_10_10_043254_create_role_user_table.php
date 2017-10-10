@@ -18,10 +18,13 @@ class CreateRoleUserTable extends Migration
         $table->integer('role_id')->unsigned();
         $table->integer('user_id')->unsigned();
         $table->timestamps();
-    });
-  }
-  public function down()
-  {
+
+        $table->foreign('role_id')->references('id')->on('roles');
+        $table->foreign('user_id')->references('id')->on('users');
+      });
+    }
+    public function down()
+    {
       Schema::dropIfExists('role_user');
+    }
   }
-}
