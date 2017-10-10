@@ -25,7 +25,7 @@
            <div class="form-group">
             <div class="col-md-12">
               <label class="control-label">Select Role</label>
-              <select class="form-control" name="role_id">
+              <select class="form-control" id="role_id">
                @forelse($roles as $r)
                <option value="{{ $r->id }}">{{ $r->name }}</option>
                @empty
@@ -50,6 +50,7 @@
 @push('scripts')
 <script type="text/javascript">
   var us_id = null;
+  var rl_id = null;
   $(document).ready(function(){
 
     $(document).on('change', '#user_id', function(e){
@@ -59,16 +60,17 @@
 
       $(document).on('click', '.save-user', function(e){
         console.log(us_id);
+        console.log($('#role_id').val());
         $.ajax({
-          type: 'PUT',
-          url: '{{ route("roles.index") }}/' + us_id,
+          type: 'POST',
+          url: '{{ route("roles.store") }}',
           data: {
             '_token' : $('input[name=_token]').val(),
             'role_id' : $('#role_id').val(),
             'user_id' : us_id,
           },
           success: function (data){
-            location.reload();
+          window.location.href = "/dashboard";
           }
         })
       })
