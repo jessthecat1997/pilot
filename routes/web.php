@@ -13,7 +13,8 @@
 
 Route::get('/', 'DashboardController@index');
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-
+Route::get('/roles', 'RolesController@index')->name('roles.index');
+Route::get('/admin/usersData', 'RolesController@users_table')->name('users.data');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
