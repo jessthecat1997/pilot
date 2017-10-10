@@ -5,7 +5,7 @@
     <div class="col-lg-11">
             <div class="panel-body">
                 <div class="alert alert-success">
-                    You have successfully logged in!
+                    You have successfully logged in
                 </div>
             </div>
         </div>
