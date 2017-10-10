@@ -30,11 +30,11 @@ class RolesController extends Controller
 		return view('auth/roles', compact('user', 'roles'));
 	}
 	public function store(Request $request)
-	{
-		$r = new RoleUser;
-		$r->role_id = $request->role_id;
-		$r->user_id = $request->user_id;
-		$r->save();
+	{   
+		$check = DB::table('role_user')->insertGetId(array(
+			'role_id'      => $request->role_id,
+			'user_id'      => $request->user_id,
+			));
 	}
 
 }
