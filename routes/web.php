@@ -333,8 +333,10 @@ Route::group(['middleware' => ['auth']], function() {
 //Reports
 	Route::resource('/reports/shipment', 'ShipmentReportsController');
 	Route::resource('/reports/delivery', 'DeliveryReportsController');
+	Route::resource('/reports/billing_rep', 'BillingReportsController');
 	Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
 	Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
+	Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
 
 //vanessa addition
 	Route::get('/trial_report','TrialController@index');

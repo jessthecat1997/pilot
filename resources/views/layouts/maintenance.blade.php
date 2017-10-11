@@ -141,7 +141,7 @@
                             <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <div id="brokeragecollapse" class="panel-collapse collapse">
-                         <li>
+                           <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
                             <!--<li>
@@ -240,6 +240,9 @@
                     </li>
                     <li>
                         <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('billing_rep.index') }}"  class = "class-bill_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Unpaid Billing Report</a>
                     </li>
                 </ul>
             </div>
