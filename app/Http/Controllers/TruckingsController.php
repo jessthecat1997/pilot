@@ -134,8 +134,10 @@ class TruckingsController extends Controller
         ->join('locations AS C', 'quotation_details.locations_id_from', '=', 'C.id')
         ->join('locations AS D', 'quotation_details.locations_id_to', '=', 'D.id')
         ->join('container_types AS E', 'quotation_details.container_volume', '=','E.id')
+        ->join('contract_headers as F', 'F.quot_head_id', '=', 'A.id')
         ->select('C.name as from', 'D.name as to', 'E.name as volume', 'amount')
         ->where('B.id' ,'=', $request->consignee_id)
+        ->whereRaw('DATE(NOW()) BETWEEN dateEffective AND dateExpiration')
         ->where('quotation_details.locations_id_from', '=', $request->area_from)
         ->where('quotation_details.locations_id_to', '=', $request->area_to)
         ->get();

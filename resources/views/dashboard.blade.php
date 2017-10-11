@@ -10,7 +10,7 @@
 						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y h:i A') }}</span></h4>
 					</div>
 					<div class="panel-body">
-						<table class="table table-responsive table-striped table-bordered">
+						<table class="table table-responsive table-striped table-bordered" id = "today_deliveries_table">
 							<thead>
 								<tr>
 									<td>
@@ -169,6 +169,8 @@
 				}
 			},
 		})
+
+		$('#today_deliveries_table').DataTable();
 	});
 </script>
 
