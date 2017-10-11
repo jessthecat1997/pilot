@@ -161,7 +161,7 @@
 										</select>
 									</td>
 									<td>
-										<input type = "text" name = "amount" class = "form-control" style="text-align: right">
+										<input type = "number" name = "amount" class = "form-control money" style="text-align: right">
 
 									</td>
 									<td>
@@ -300,7 +300,36 @@
 		e.preventDefault();
 		$('#billing_parent_table > tbody').append(billing_row);
 	})
+	$(document).on('keyup keydown keypress', '.money', function (event) {
+		var len = $('.money').val();
+		var value = $('.money').inputmask('unmaskedvalue');
+		if (event.keyCode == 8) {
+			if(parseFloat(value) == 0 || value == ""){
+				$('.money').val("0.00");
+			}
+		}
+		else
+		{
+			if(value == ""){
+				$('.money').val("0.00");
+			}
+			if(parseFloat(value) <= 9999999999999999.99){
 
+			}
+			else{
+				if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+				}
+				else{
+					return false;
+				}
+			}
+		}
+		if(event.keyCode == 189)
+		{
+			return false;
+		}			
+	});
 	$(document).on('click', '.updateBill', function(e){
 		e.preventDefault();
 		update_id = $(this).val();
@@ -323,8 +352,8 @@
 				'due_date' : $('#due_date').val(),
 			},
 			success: function (data){
-					$('#billModal').modal('hide');
-					$('#detailsModal').modal('show');
+				$('#billModal').modal('hide');
+				$('#detailsModal').modal('show');
 			}
 		})
 	})

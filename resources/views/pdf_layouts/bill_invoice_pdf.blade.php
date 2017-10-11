@@ -277,10 +277,10 @@
 			</table>
 			@endif
 			<br />
-			<br />
 			<strong>JAY CASTILLO, LCB/MCA.</strong>
-			<br>
 			President
+			<br/>
+			Printed by: {{ $printedby[0]->empname }}
 		</div>
 	</div>
 </body>

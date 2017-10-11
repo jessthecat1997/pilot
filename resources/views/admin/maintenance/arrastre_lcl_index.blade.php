@@ -168,7 +168,7 @@
 												<td width = "40%">
 													<div class = "input-group " >
 														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = " money form-control amount_valid "
+														<input type = "text" class = "form-control money amount_valid "
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
@@ -254,6 +254,7 @@
 	var arr_basis_type_id = [];
 	var arr_lcl_type_id = [];
 	var af_id;
+	var data;
 
 	$(document).ready(function(){
 		var now = new Date();
@@ -268,7 +269,7 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/af_lcl_Data',
+			"bSort": false,
 			columns: [
 			{ data: 'dateEffective'},
 			{ data: 'location' },
@@ -286,7 +287,8 @@
 			},
 
 			{ data: 'action', orderable: false, searchable: false }
-			],	"order": [[ 0, "desc" ]],
+
+			],
 		});
 		$("#commentForm").validate({
 			rules:
@@ -310,16 +312,19 @@
 				return false;
 			}
 		});
+
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
+			$('#af_warning').removeClass('in');
 			$('#amount').val("0.00");
 			$('#dateEffective').val(today);
 			$('#af_parent_table > tbody').html("");
 			$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 			$('#afModal').modal('show');
 			$('#af_parent_table > tbody').append(af_row);
-			$('#af_warning').removeClass('in');
+			
+			
 			$('.money').inputmask("numeric", {
 				radixPoint: ".",
 				groupSeparator: ",",
@@ -331,6 +336,10 @@
 
 
 		});
+
+
+
+
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			$('.modal-title').text('Update Less Cargo Load Arrastre Fee per Location');
@@ -341,14 +350,6 @@
 			$('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
 			$('#afModal').modal('show');
 
-			$('.money').inputmask("numeric", {
-				radixPoint: ".",
-				groupSeparator: ",",
-				digits: 2,
-				autoGroup: true,
-				rightAlign: true,
-				removeMaskOnSubmit:true,
-			});
 			$.ajax({
 				type: 'GET',
 				url:  '{{ route("af_lcl_maintain_data") }}',
@@ -361,16 +362,24 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "lcl_type" name = "lcl_type" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_types_id+'" ><input   class = "form-control" id = "lcl_type_name" name = "lcl_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].lcl_type+'" ></div><div class = "form-group input-group" ></td></div><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="'+numberWithCommas(data[i].amount)+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-af-row">x</button></td></tr>';
 
 					}
 					$('#af_parent_table > tbody').html("");
 					$('#af_parent_table > tbody').append(rows);
+					$('.money').inputmask("numeric", {
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
 
 				}
 
 			})
-			w
+			
 		});
 		$(document).on('click', '.deactivate', function(e){
 			af_id = $(this).val();
@@ -396,9 +405,10 @@
 
 		$(document).on('click', '.new-af-row', function(e){
 			e.preventDefault();
-			$('#af_table_warning').removeClass('fade in');
+			
 			if(validateafRows() === true){
 				$('#af_parent_table').append(af_row);
+				$('#af_table_warning').removeClass('fade in');
 
 			}
 		})
@@ -437,7 +447,9 @@
 			})
 		});
 		$(document).on('click', '.finalize-af', function(e){
+			
 			e.preventDefault();
+
 			if(finalvalidateafRows() === true){
 
 				var title = $('.modal-title').text();
@@ -446,7 +458,7 @@
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid() && $('#basis_type').valid())
 					{
-						$('#btnSave').attr('disabled', 'true');
+						
 						console.log("lcl is "+lcl_type_id);
 						console.log("basis is "+basis_type_id);
 						console.log("amount is "+amount_value);
@@ -468,32 +480,46 @@
 								'tblLength' : tblLength,
 							},
 							success: function (data){
+								console.log(typeof(data));
+								if(typeof(data) === "object"){
 
-								aftable.ajax.reload();
-								$('#afModal').modal('hide');
-								$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
+									aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
+									$('#afModal').modal('hide');
+									$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 
-								$('#amount').val("0.00");
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record pd successfully")
+									$('#btnSave').removeAttr('disabled');
+								}else{
+									e.preventDefault();
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v);
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
 								}
-								toastr["success"]("Record added successfully")
-								$('#btnSave').removeAttr('disabled');
 
 							}
 						})
@@ -504,7 +530,7 @@
 
 					if($('#dateEffective').valid() && $('#locations_id').valid() && $('#basis_type').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
+						
 
 						jsonBasisType = JSON.stringify(basis_type_id);
 						jsonAmount = JSON.stringify(amount_value);
@@ -514,6 +540,7 @@
 						$.ajax({
 							type: 'PUT',
 							url:  '/admin/arrastre_fee_lcl/'+ af_id,
+
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'af_head_id': af_id,
@@ -525,34 +552,47 @@
 								'tblLength' : tblLength,
 
 							},
+							
 							success: function (data){
+								console.log(typeof(data));
+								if(typeof(data) == "object"){
+									aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
+									$('#afModal').modal('hide');
+									$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
 
-								aftable.ajax.url( '{{ route("af_lcl.data") }}' ).load();
-								$('#afModal').modal('hide');
-								$('.modal-title').text('New Less Cargo Load Arrastre Fee per Location');
+									$('#amount').val("0.00");
 
-								$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully")
+									$('#btnSave').removeAttr('disabled');
+								}else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v);
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									$('#btnSave').removeAttr('disabled');
 								}
-								toastr["success"]("Record updated successfully")
-								$('#btnSave').removeAttr('disabled');
 
 							}
 						})
@@ -565,7 +605,7 @@
 				}
 			}
 		});
-	});
+
 
 function validateafRows()
 {
@@ -578,7 +618,7 @@ function validateafRows()
 	basis_type = document.getElementsByName('basis_type');
 	amount = document.getElementsByName('amount');
 	error = "";
-
+	var amt;
 
 	if($(locations_id).val() === 0){
 		dateEffective.style.borderColor = 'red';
@@ -599,29 +639,23 @@ function validateafRows()
 			$('#af_warning').removeClass('in');
 
 		}
+		amt = parseFloat(amount[i].value);
 
-		if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-		{
+		if(amt < 0){
 			amount[i].style.borderColor = 'red';
 			error += "Amount Required.";
 		}
-		else
-		{
-			if(amount[i].value < 0){
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-			}
-			else{
-				amount[i].style.borderColor = 'green';
-				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-				$('#af_warning').removeClass('in');
-			}
+		else{
+			amount[i].style.borderColor = 'green';
+			amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+			$('#af_warning').removeClass('in');
 		}
 
+
 		pair = {
-			amount: amount[i].value,
+
+			lcl_type: lcl_type[i].value,
 			basis_type: basis_type[i].value,
-			lcl_type: lcl_type[i].value
 		};
 		range_pairs.push(pair);
 
@@ -633,19 +667,23 @@ function validateafRows()
 	for (i=0; i<n; i++) {
 		for (j=i+1; j<n; j++)
 		{
-			if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type && range_pairs[i].lcl_type === range_pairs[j].lcl_type){
+			if (range_pairs[i].lcl_type === range_pairs[j].lcl_type && range_pairs[i].basis_type === range_pairs[j].basis_type){
 				found = true;
 
 				lcl_type[i].style.borderColor = 'red';
 				lcl_type[j].style.borderColor = 'red';
 				basis_type[i].style.borderColor = 'red';
 				basis_type[j].style.borderColor = 'red';
-				amount[i].style.borderColor = 'red';
-				amount[j].style.borderColor = 'red';
-				$('#af_warning').addClass('in');
 
+				$('#af_warning').addClass('in');
+				error += "Same LCL";
 			}else{
 				$('#af_warning').removeClass('in');
+				lcl_type[i].style.borderColor = 'green';
+				lcl_type[j].style.borderColor = 'green';
+				basis_type[i].style.borderColor = 'green';
+				basis_type[j].style.borderColor = 'green';
+
 			}
 		}
 	}
@@ -671,39 +709,32 @@ function validateafRows()
 		lcl_type = document.getElementsByName('lcl_type');
 		basis_type = document.getElementsByName('basis_type');
 		amount = document.getElementsByName('amount');
-
+		var amt;
 		error = "";
 
 		for(var i = 0; i < amount.length; i++){
 
-
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
+			amt = parseFloat(amount[i].value);
+			if(amt < 0){
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
 				$('#af_warning').addClass('in');
 			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					
-					lcl_type_id.push(lcl_type[i].value);
-					basis_type_id.push(basis_type[i].value);
-					amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-					$('#af_warning').removeClass('in');
-				}
+			else{
+				amount[i].style.borderColor = 'green';
+
+				lcl_type_id.push(lcl_type[i].value);
+				basis_type_id.push(basis_type[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+				$('#af_warning').removeClass('in');
 			}
+			
 
 
 			pair = {
-				amount: amount[i].value,
+				
 				lcl_type: lcl_type[i].value,
-				basis_type: basis_type[i].value
+				
 			};
 			range_pairs.push(pair);
 		}
@@ -713,19 +744,23 @@ function validateafRows()
 		for (i=0; i<n; i++) {
 			for (j=i+1; j<n; j++)
 			{
-				if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type && range_pairs[i].lcl_type === range_pairs[j].lcl_type){
+				if(range_pairs[i].lcl_type === range_pairs[j].lcl_type && range_pairs[i].basis_type === range_pairs[j].basis_type){
 					found = true;
 
 					lcl_type[i].style.borderColor = 'red';
 					lcl_type[j].style.borderColor = 'red';
 					basis_type[i].style.borderColor = 'red';
 					basis_type[j].style.borderColor = 'red';
-					amount[i].style.borderColor = 'red';
-					amount[j].style.borderColor = 'red';
-					$('#af_warning').addClass('in');
 
+					$('#af_warning').addClass('in');
+					error += "Same LCL";
 				}else{
 					$('#af_warning').removeClass('in');
+					lcl_type[i].style.borderColor = 'green';
+					lcl_type[j].style.borderColor = 'green';
+					basis_type[i].style.borderColor = 'green';
+					basis_type[j].style.borderColor = 'green';
+
 				}
 			}
 		}
@@ -741,9 +776,10 @@ function validateafRows()
 		}
 
 	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+});
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush

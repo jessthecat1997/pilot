@@ -236,10 +236,9 @@
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	var wf_id;
+	var data;
+
 	$(document).ready(function(){
-
-
-
 		var wf_row = "<tr>" + $('#wf-row').html() + "</tr>";
 
 		var wftable = $('#wf_table').DataTable({
@@ -260,7 +259,7 @@
 			},
 			
 			{ data: 'action', orderable: false, searchable: false }
-			],	"order": [[ 0, "desc" ]],
+			],
 		});
 		$("#commentForm").validate({
 			rules:
@@ -276,9 +275,6 @@
 
 			},
 			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -290,6 +286,14 @@
 			$('#wfModal').modal('show');
 			$('#wf_parent_table > tbody').append(wf_row);
 			$('#wf_warning').removeClass('in');
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 
 
 		});
@@ -317,15 +321,32 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "money form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "money form-control amount_valid" name = "amount" id = "amount" value ="'+numberWithCommas(data[i].amount)+'"   data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
 
 					}
 					$('#wf_parent_table > tbody').html("");
 					$('#wf_parent_table > tbody').append(rows);
+					$('.money').inputmask("numeric", {
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
 
 				}
 
 			})
+		});
+
+		$('.money').inputmask("numeric", {
+			radixPoint: ".",
+			groupSeparator: ",",
+			digits: 2,
+			autoGroup: true,
+			rightAlign: true,
+			removeMaskOnSubmit:true,
 		});
 		$(document).on('click', '.deactivate', function(e){
 			wf_id = $(this).val();
@@ -334,28 +355,6 @@
 		});
 		
 		
-		
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-				}
-				if(typeof(amount) === "string"){
-				}
-				else{
-				}
-
-				if($(this).val() > 0){
-					$(this).css('border-color', 'green');
-					$('#wf_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
 
 		$(document).on('click', '.delete-wf-row', function(e){
 			e.preventDefault();
@@ -421,7 +420,7 @@
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
+						
 						console.log("basis is "+basis_type_id);
 						console.log("amount is "+amount_value);
 						jsonBasisType = JSON.stringify(basis_type_id);
@@ -439,32 +438,42 @@
 								'tblLength' : tblLength,
 							},
 							success: function (data){
+								if(typeof(data) === "object"){
+									wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
+									$('#wfModal').modal('hide');
+									$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
 
-								wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
-								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
+									$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully")
+									$('#btnSave').removeAttr('disabled');
+								}else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 
-								$('#amount').val("0.00");
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record added successfully")
-								$('#btnSave').removeAttr('disabled');
 							}
 						})
 					}
@@ -473,7 +482,6 @@
 
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
 
 						jsonBasisType = JSON.stringify(basis_type_id);
 						jsonAmount = JSON.stringify(amount_value);
@@ -493,33 +501,44 @@
 
 							},
 							success: function (data){
+								if(typeof(data) === "object"){
+									wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
+									$('#wfModal').modal('hide');
+									$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
 
-								wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
-								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
+									$('#amount').val("0.00");
 
-								$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully")
+									$('#btnSave').removeAttr('disabled');
+								}else{
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
 								}
-								toastr["success"]("Record updated successfully")
-								$('#btnSave').removeAttr('disabled');
 							}
 						})
 					}
@@ -527,7 +546,6 @@
 				}
 			}
 		});
-	});
 
 function validatewfRows()
 {
@@ -539,18 +557,21 @@ function validatewfRows()
 	basis_type = document.getElementsByName('basis_type');
 	amount = document.getElementsByName('amount');
 	error = "";
-
+	var amt;
 
 	if($(locations_id).val() === 0){
 		dateEffective.style.borderColor = 'red';
 		error += "Location is required.";
 	}
+
+
 	for(var i = 0; i < basis_type.length; i++){
 		var temp;
 
 		if(basis_type[i].value === "0")
 		{
 			basis_type[i].style.borderColor ='red';
+
 			error+= "Basis required";
 		}else
 		{
@@ -560,23 +581,18 @@ function validatewfRows()
 
 		}
 		
-		if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-		{
+		amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
+		if(amt < 0){
 			amount[i].style.borderColor = 'red';
+			$('#wf_warning').addClass('in');
 			error += "Amount Required.";
 		}
-		else
-		{
-			if(amount[i].value < 0){
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-			}
-			else{
-				amount[i].style.borderColor = 'green';
-				amount_value.push(amount[i].value);
-				$('#wf_warning').removeClass('in');
-			}
+		else{
+			amount[i].style.borderColor = 'green';
+			amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+			$('#wf_warning').removeClass('in');
 		}
+		
 		
 		pair = {
 			amount: amount[i].value,
@@ -600,9 +616,14 @@ function validatewfRows()
 				amount[i].style.borderColor = 'red';
 				amount[j].style.borderColor = 'red';
 				$('#wf_warning').addClass('in');
+				error += "Same pair.";
 
 			}else{
 				$('#wf_warning').removeClass('in');
+				basis_type[i].style.borderColor = 'green';
+				basis_type[j].style.borderColor = 'green';
+				amount[i].style.borderColor = 'green';
+				amount[j].style.borderColor = 'green';
 			}
 		}
 	}
@@ -627,78 +648,80 @@ function validatewfRows()
 		range_pairs = [];
 		basis_type = document.getElementsByName('basis_type');
 		amount = document.getElementsByName('amount');
-
+		var amt;
 		error = "";
 
 		for(var i = 0; i < amount.length; i++){
 
 
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
+			
+			amt  = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
+			if(amt < 0){
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
-				$('#wf_warning').addClass('in');
 			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					var amounty = amount[i].value;
-					console.log('amounty is' +amounty);
+			else{
+				amount[i].style.borderColor = 'green';
+				var amounty = amount[i].value;
+				console.log('amounty is' +amounty);
 					//var temp = $('amounty').inputmask('unmaskedvalue');
 					var temp = amounty;
 					basis_type_id.push(basis_type[i].value);
 					amount_value.push(temp);
 					$('#wf_warning').removeClass('in');
 				}
+
+
+
+				pair = {
+					amount: amount[i].value,
+					basis_type: basis_type[i].value
+				};
+				range_pairs.push(pair);
 			}
+			var i, j, n;
+			found= false;
+			n=range_pairs.length;
+			for (i=0; i<n; i++) {
+				for (j=i+1; j<n; j++)
+				{
+					if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
+						found = true;
 
+						basis_type[i].style.borderColor = 'red';
+						basis_type[j].style.borderColor = 'red';
+						amount[i].style.borderColor = 'red';
+						amount[j].style.borderColor = 'red';
+						$('#wf_warning').addClass('in');
+						error += "Same  Pair.";
 
-			pair = {
-				amount: amount[i].value,
-				basis_type: basis_type[i].value
-			};
-			range_pairs.push(pair);
-		}
-		var i, j, n;
-		found= false;
-		n=range_pairs.length;
-		for (i=0; i<n; i++) {
-			for (j=i+1; j<n; j++)
-			{
-				if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
-					found = true;
-
-					basis_type[i].style.borderColor = 'red';
-					basis_type[j].style.borderColor = 'red';
-					amount[i].style.borderColor = 'red';
-					amount[j].style.borderColor = 'red';
-					$('#wf_warning').addClass('in');
-
-				}else{
-					$('#wf_warning').removeClass('in');
+					}else{
+						$('#wf_warning').removeClass('in');
+						basis_type[i].style.borderColor = 'green';
+						basis_type[j].style.borderColor = 'green';
+						amount[i].style.borderColor = 'green';
+						amount[j].style.borderColor = 'green';
+					}
 				}
 			}
-		}
-		
-		if(error.length == 0){
-			tblLength = basis_type.length;
-			return true;
-		}
-		else
-		{
-			return false;
-			btnSave.disabled('true');
-		}
 
-	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+			if(error.length == 0){
+				tblLength = basis_type.length;
+				return true;
+			}
+			else
+			{
+				return false;
+				btnSave.disabled('true');
+			}
+
+		}
+	});
+
+
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush

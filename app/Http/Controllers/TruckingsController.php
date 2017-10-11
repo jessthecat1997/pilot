@@ -245,7 +245,7 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.locations_id_pick',
             'delivery_receipt_headers.withContainer',
             'delivery_receipt_headers.amount'
-        )
+            )
         ->get();
 
         if($delivery[0]->withContainer == 0){
@@ -461,9 +461,9 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             if($request->emp_id_helper == 0){
-             $new_delivery_head->emp_id_helper = null;
-         }
-         else{
+               $new_delivery_head->emp_id_helper = null;
+           }
+           else{
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
         }
         $new_delivery_head->locations_id_pick = $request->locations_id_pick;
@@ -764,7 +764,7 @@ public function view_delivery(Request $request){
         'delivery_receipt_headers.remarks',
         'delivery_receipt_headers.emp_id_helper',
         DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
-    )
+        )
 
     ->get();
 
@@ -855,7 +855,7 @@ public function bill_delivery(Request $request){
         DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
         DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
         'delivery_receipt_headers.withContainer'
-    )
+        )
 
     ->get();
 
@@ -971,7 +971,7 @@ public function delivery_pdf(Request $request){
         'J.address as deliveryAddress',
         'H.companyName',
         'delivery_receipt_headers.deliveryDateTime'
-    )
+        )
     ->get();
 
     if($delivery[0]->withContainer == 0){
@@ -1003,8 +1003,13 @@ public function delivery_pdf(Request $request){
         }
 
     }
+    $printedby = DB::table('consignee_service_order_headers')
+    ->join('employees', 'consignee_service_order_headers.employees_id', '=', 'employees.id')
+    ->select(DB::raw('CONCAT(firstName, ", ", lastName) AS empname'))
+    ->where('consignee_service_order_headers.id', '=', $so_id)
+    ->get();
 
-    $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail']));
+    $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'printedby']));
     return $pdf->stream();
 }
 

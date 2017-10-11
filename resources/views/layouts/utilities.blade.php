@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Pilot Cargo Chain</title>
+    <title>Hauling Services</title>
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
@@ -53,7 +53,7 @@
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -68,6 +68,10 @@
                                 </form>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="
+                        #">&nbsp;</a>
                     </li>
                     @endif
                 </ul>
@@ -244,6 +248,9 @@
                     </li>
                     <li>
                         <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('billing_rep.index') }}"  class = "class-bill_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Unpaid Billing Report</a>
                     </li>
                 </ul>
             </div>
