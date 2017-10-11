@@ -29,7 +29,7 @@
 <div class = "row">
 
 		<div class = "panel-heading">
-			<h2>&nbsp;Brokerage / Order</h2>
+			<h2>&nbsp;Brokerage | Order</h2>
 		</div>
 		<div class = "panel-body panel">
 			<div class="col-md-12">
@@ -120,21 +120,9 @@
 													<label  id = "weight"> Weight: {{ number_format((float)$brokerage_header[0]->Weight, 2, '.', ',')}} (kgs)</label>
 											</td>
 											<td width = "30%">
-												<label  id = "basis" > Basis.: @php echo $brokerage_header[0]->basis @endphp </label>
-											</td>
-										</tr>
-										<tr>
-											<td width = "30%">
 												<label  id = "blNo" > Bill No.: @php echo $brokerage_header[0]->freightBillNo @endphp </label>
 											</td>
-											<td width = "30%">
-												<label  id = "cargoType" > Cargo Type: @php
-													if($brokerage_header[0]->cargo_type == 'G')
-														echo 'General Cargo';
-													else
-													  echo 'Chemical';
-												@endphp </label>
-											</td>
+
 										</tr>
 										<tr>
 											<td>
@@ -146,7 +134,9 @@
 											<td>
 												<label class = "control-label" id = "port"> Pickup location: <br/> @php  echo $brokerage_header[0]->location @endphp  </label>
 											</td>
+
 										</tr>
+
 									</table>
 
 
@@ -172,6 +162,12 @@
 																		LCL Type
 																	</td>
 																	<td>
+																		Basis
+																	</td>
+																	<td>
+																		Cubic Meters
+																	</td>
+																	<td>
 																		Gross Weight(kg)
 																	</td>
 																	<td>
@@ -190,6 +186,15 @@
 																	</td>
 																	<td>
 																		{{ $delivery_detail->descriptionOfGoods }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->lcl_type }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->basis }}
+																	</td>
+																	<td>
+																		{{ $delivery_detail->cubicMeters }}
 																	</td>
 																	<td>
 																		{{ $delivery_detail->lcl_type }}
@@ -234,9 +239,13 @@
 																	<td style="width: 25%;">
 																		Container Number
 																	</td>
+																	<td>
+																		Cargo Type
+																	</td>
 																	<td style="width: 20%;">
 																		Volume
 																	</td>
+
 																	<td style="width: 20%;">
 																		Status
 																	</td>
@@ -274,6 +283,15 @@
 																	</td>
 																	<td>
 																		<span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
+																	</td>
+																	<td>
+																		@php
+																		switch($delivery_container->cargoType){
+																			case 'G':  echo "General Cargo"; break;
+																			case 'C':  echo "Chemical"; break;
+																			case 'D':  echo "Dangerous Cargo"; break;
+																		default : echo "Unknown"; break; }
+																		@endphp
 																	</td>
 																	<td>
 																		<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
@@ -325,14 +343,27 @@
 											<div class = "panel-body">
 												<div class = "col-md-10 col-md-offset-1">
 													<form class="form-horizontal" role="form">
+														@php $cont_ctr = 0; @endphp
 														@forelse($container_with_detail as $container)
 														<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
-														<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;">
+														<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;"
+
+															>
 															<thead>
 																<tr>
 																	<td>
 																		Description of Goods
 																	</td>
+																	@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
+																		<td>
+																			Class
+																		</td>
+																	@else
+																		<Td>
+
+																		</td>
+																	@endif
+
 																	<td>
 																		Gross Weight(kg)
 																	</td>
@@ -347,6 +378,26 @@
 																	<td>
 																		{{ $detail->descriptionOfGoods }}
 																	</td>
+
+																	@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
+																		<td >
+
+																			@forelse($dangerous_cargo_types as $dct)
+
+																				@if($dct->id == $detail->class_id)
+																					{{$dct->name}}
+																				@endif
+
+																			@empty
+																			@endforelse
+																		</td>
+																	@else
+																		<Td>
+
+																		</td>
+																	@endif
+
+
 																	<td>
 																		{{ $detail->grossWeight }}
 																	</td>
@@ -362,6 +413,7 @@
 																</tr>
 																@endforelse
 															</tbody>
+															@php $cont_ctr++ @endphp
 														</table>
 														@empty
 														@endforelse

@@ -23,6 +23,7 @@ class CreateBrokerageContainers extends Migration
           $table->text('containerReturnAddress', 300);
           $table->dateTime('containerReturnDate');
           $table->char('containerReturnStatus', 1);
+          $table->char('cargoType', 1);
           $table->dateTime('dateReturned')->nullable();
           $table->string('remarks', 200);
           $table->integer('brok_so_id')->unsigned();
