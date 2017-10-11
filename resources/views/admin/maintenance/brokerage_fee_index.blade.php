@@ -361,10 +361,10 @@
         });
 
         $(document).on('click', '.deactivate', function(e){
-         bf_id = $(this).val();
-         data = bftable.row($(this).parents()).data();
-         $('#confirm-delete').modal('show');
-     });
+           bf_id = $(this).val();
+           data = bftable.row($(this).parents()).data();
+           $('#confirm-delete').modal('show');
+       });
 
 
         $(document).on('click', '.delete-bf-row', function(e){
@@ -395,13 +395,13 @@
             e.preventDefault();
             $('#bf_table_warning').removeClass('fade in');
             if(validatebfRows() === true){
-             $('input[name=maximum]').each(function(){
+               $('input[name=maximum]').each(function(){
                 $(this).attr("readonly", "true");
 
             });
 
-             $('#bf_parent_table').append(bf_row);
-             $('.money').each(function(){
+               $('#bf_parent_table').append(bf_row);
+               $('.money').each(function(){
                 $(this).inputmask("numeric", {
                     radixPoint: ".",
                     groupSeparator: ",",
@@ -413,9 +413,9 @@
 
             })
 
-             $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
-             $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
-             for(var i = 0; i < minimum.length; i++){
+               $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
+               $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
+               for(var i = 0; i < minimum.length; i++){
                 minimum[i+1].value = (parseFloat("" +$(maximum[i]).inputmask('unmaskedvalue')) + 0.01).toFixed(2);
             }
 
@@ -523,7 +523,7 @@
                 
                 if(title == "New Brokerage Fee Range"){
 
-                 if ($('#dateEffective').valid()){
+                   if ($('#dateEffective').valid()){
                     console.log('min' + minimum_id);    
                     console.log(maximum_id);    
                     jsonMinimum = JSON.stringify(minimum_id);
@@ -682,9 +682,9 @@ function validatebfRows()
         var temp;
 
 
-        min = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
+        amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
-        amt = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
+        min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
 
         if(max < 0)
         {
@@ -795,106 +795,106 @@ function validatebfRows()
         }
 
         for(var i = 0; i < minimum.length; i++){
-            min = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
-            max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
-            amt = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
+         amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
+         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
+         min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
 
-            if(min < 0)
-            {
+         if(min < 0)
+         {
 
-                error += "Minimum Required.";
-                $('#bf_warning').addClass('in');
-            }
-
-            else
-            {
-
-                minimum_id_descrp.push($(minimum[i]).inputmask('unmaskedvalue'));
-                var min = $(minimum[i]).inputmask('unmaskedvalue');
-                minimum_id.push($(minimum[i]).inputmask('unmaskedvalue') );
-            }
-            if(max < 0 )
-            {
-                maximum[i].style.borderColor = 'red';
-                error += "Maximum Required.";
-                $('#bf_warning').addClass('in');
-            }
-
-            else
-            {
-                maximum[i].style.borderColor = 'green';
-                maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
-                maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
-                $('#bf_warning').removeClass('in');
-            }
-
-            if(amt < 0)
-            {
-                amount[i].style.borderColor = 'red';
-                error += "Amount Required.";
-                $('#contract_rates_warning').addClass('in');
-            }
-
-            else
-            {
-
-                amount[i].style.borderColor = 'green';
-                amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-                $('#bf_warning').removeClass('in');
-
-            }
-
-            if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
-
-                maximum[i].style.borderColor = 'red';
-                error += "Same.";
-                $('#bf_warning').addClass('in');
-            }
-
-            if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
-
-                maximum[i].style.borderColor = 'red';
-                error += "Minimum is greater than maximum";
-                $('#bf_warning').addClass('in');
-            }   
-            pair = {
-                minimum: $(minimum[i]).inputmask('unmaskedvalue'),
-                maximum:$(maximum[i]).inputmask('unmaskedvalue')
-            };
-            range_pairs.push(pair);
-        }
-        var i, j, n;
-        found= false;
-        n=range_pairs.length;
-        for (i=0; i<n; i++) {                        
-            for (j=i+1; j<n; j++)
-            {              
-                if (range_pairs[i].minimum === range_pairs[j].minimum && range_pairs[i].maximum === range_pairs[j].maximum){
-                    found = true;
-                    
-                    maximum[i].style.borderColor = 'red';
-
-
-                    maximum[j].style.borderColor = 'red';
-                }
-            }   
-        }
-        if(found == true){
-            error+= "Existing rate.";
+            error += "Minimum Required.";
             $('#bf_warning').addClass('in');
         }
 
-        if(error.length == 0){
-            return true;
-        }
         else
         {
-            return false;
+
+            minimum_id_descrp.push($(minimum[i]).inputmask('unmaskedvalue'));
+            var min = $(minimum[i]).inputmask('unmaskedvalue');
+            minimum_id.push($(minimum[i]).inputmask('unmaskedvalue') );
         }
+        if(max < 0 )
+        {
+            maximum[i].style.borderColor = 'red';
+            error += "Maximum Required.";
+            $('#bf_warning').addClass('in');
+        }
+
+        else
+        {
+            maximum[i].style.borderColor = 'green';
+            maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
+            maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
+            $('#bf_warning').removeClass('in');
+        }
+
+        if(amt < 0)
+        {
+            amount[i].style.borderColor = 'red';
+            error += "Amount Required.";
+            $('#contract_rates_warning').addClass('in');
+        }
+
+        else
+        {
+
+            amount[i].style.borderColor = 'green';
+            amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+            $('#bf_warning').removeClass('in');
+
+        }
+
+        if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
+
+            maximum[i].style.borderColor = 'red';
+            error += "Same.";
+            $('#bf_warning').addClass('in');
+        }
+
+        if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
+
+            maximum[i].style.borderColor = 'red';
+            error += "Minimum is greater than maximum";
+            $('#bf_warning').addClass('in');
+        }   
+        pair = {
+            minimum: $(minimum[i]).inputmask('unmaskedvalue'),
+            maximum:$(maximum[i]).inputmask('unmaskedvalue')
+        };
+        range_pairs.push(pair);
     }
-    function resetErrors() {
-        $('form input, form select').removeClass('inputTxtError');
-        $('label.error').remove();
+    var i, j, n;
+    found= false;
+    n=range_pairs.length;
+    for (i=0; i<n; i++) {                        
+        for (j=i+1; j<n; j++)
+        {              
+            if (range_pairs[i].minimum === range_pairs[j].minimum && range_pairs[i].maximum === range_pairs[j].maximum){
+                found = true;
+                
+                maximum[i].style.borderColor = 'red';
+
+
+                maximum[j].style.borderColor = 'red';
+            }
+        }   
     }
+    if(found == true){
+        error+= "Existing rate.";
+        $('#bf_warning').addClass('in');
+    }
+
+    if(error.length == 0){
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+function resetErrors() {
+    $('form input, form select').removeClass('inputTxtError');
+    $('label.error').remove();
+}
 </script>
 @endpush
