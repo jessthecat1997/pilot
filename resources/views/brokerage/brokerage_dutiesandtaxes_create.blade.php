@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class = "panel-heading">
-  <h2 id = "DutiesAndTaxesHeader">&nbsp;Brokerage / Create Duties And Taxes </h2>
+  <h2 id = "DutiesAndTaxesHeader">&nbsp;Brokerage | Create Duties And Taxes </h2>
   <hr />
 </div>
 <div class="panel-body">
@@ -21,7 +21,6 @@
     </div>
   </div>
 
-
   <div class = "tab-content">
 
           <div id = "dutiesandtaxes_details" class="tab-pane fade in active">
@@ -39,7 +38,7 @@
 
                               <input  type="text" class="form-control" name = "exchangeRate" id = "exchangeRate" readonly = "true" value = '@php echo number_format((float)$exchange_rate[$currentExchange_id-1]->rate, 3, '.', '') @endphp' style="text-align: right;">
                               <span class="input-group-addon">
-                              <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "exchangeRate_toggle" style="text-align: right;">
+                                <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "exchangeRate_toggle" style="text-align: right;">
                               </span>
                             </div>
                          </div>
@@ -52,7 +51,7 @@
                             <div class="col-md-8">
                                 <div class="input-group input-group-lg ">
                                   <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                                    <input  type="text" class=" form-control" name = "arrastre" id = "arrastre" readonly = "true" style="text-align: right;" required >
+                                    <input  type="text" class=" form-control money" name = "arrastre" id = "arrastre" readonly = "true" style="text-align: right;" required >
                                     <span class="input-group-addon">
                                       <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "arrastre_toggle" style="text-align: right;">
                                     </span>
@@ -67,7 +66,7 @@
                             <div class="col-md-8">
                               <div class="input-group input-group-lg">
                                 <span class="input-group-addon" id="cdsfeeadd">Php</span>
-                                  <input  type="text" class="form-control" name = "wharfage" id = "wharfage" readonly = "true" style="text-align: right;" required>
+                                  <input  type="text" class="form-control money" name = "wharfage" id = "wharfage" readonly = "true" style="text-align: right;" required>
                                   <span class="input-group-addon">
                                     <input type="checkbox" checked data-toggle="toggle" data-size="mini" data-on="Current" data-off="Custom" data-onstyle="success"  id = "wharfage_toggle" style="text-align: right;">
                                   </span>
@@ -137,9 +136,6 @@
                               <td style="width: 20%;">
                                 Container Return Date
                               </td>
-                              <td style="width: 20%;">
-                                Action
-                              </td>
 
                             </tr>
                           </thead>
@@ -185,7 +181,6 @@
                                 <button class = "btn btn-info" value = "{{$delivery_container->id}}" onclick = "viewContainerDetails({{$delivery_container->id}})">Select</button>
                               </td>
                               @endif
-
                             </tr>
                             @empty
                             <tr>
@@ -214,31 +209,7 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                @forelse($container_with_detail as $container)
-                                    @forelse($container['details'] as $detail)
-                                    <tr>
-                                      <td>
 
-                                      </td>
-                                      <td>
-
-                                      </td>
-                                      <td>
-
-                                      </td>
-                                      <td>
-
-                                      </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                      <td colspan="4">
-                                        <h5 style="text-align: center;">No records found.</h5>
-                                      </td>
-                                    </tr>
-                                    @endforelse
-                                @empty
-                                @endforelse
                               </tbody>
                             </table>
 
@@ -740,6 +711,7 @@ var ipfFeeHeader = <?php echo json_encode($ipf_fee_header); ?>;
 var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 var selectedContainerId = "";
 var temp_arrastre, temp_wharfage;
+var cargoType;
 
 	$('#collapse1').addClass('in');
 
@@ -1020,8 +992,17 @@ var temp_arrastre, temp_wharfage;
     localStorage.setItem("addedItems", JSON.stringify(addedItems));
     localStorage.setItem("itemCtr", ctr);
 
-    localStorage.setItem("arrastre",  document.getElementById('arrastre').value);
-    localStorage.setItem("wharfage",  document.getElementById('wharfage').value);
+    var arrastre_unmasked = document.getElementById('arrastre').value;
+    arrastre_unmasked   =  arrastre_unmasked.replace(/\,/g,'');
+    arrastre_unmasked = parseFloat(arrastre_unmasked).toFixed(2);
+
+    var wharfage_unmasked = document.getElementById('arrastre').value;
+    wharfage_unmasked  = wharfage_unmasked.replace(/\,/g,'');
+    wharfage_unmasked = parseFloat(wharfage_unmasked).toFixed(2);
+
+
+    localStorage.setItem("arrastre",  arrastre_unmasked);
+    localStorage.setItem("wharfage",  wharfage_unmasked);
     localStorage.setItem("shipper", '<?php echo $brokerage_header[0]->shipper ?>');
     localStorage.setItem("freightNumber", '<?php echo $brokerage_header[0]->freightBillNo?>');
     localStorage.setItem("arrivalDate",  '<?php echo $brokerage_header[0]->expectedArrivalDate?>');
@@ -1033,7 +1014,7 @@ var temp_arrastre, temp_wharfage;
     localStorage.setItem('brokerage_id', <?php echo $brokerage_id ?>);
 
     localStorage.setItem('withCO', '<?php echo $brokerage_header[0]->withCO?>');
-    localStorage.setItem('cargo_type', '<?php echo $brokerage_header[0]->cargo_type?>');
+    localStorage.setItem('cargo_type', cargoType);
     localStorage.setItem('insurance_gc', <?php echo $utility_types[0]->insurance_gc ?>);
     localStorage.setItem('insurance_c', <?php echo $utility_types[0]->insurance_c ?>);
     localStorage.setItem('bank_charges', <?php echo $utility_types[0]->bank_charges ?>);
@@ -1275,6 +1256,7 @@ function decimalsOnly(event) {
             containers[1] = '{{ $delivery_container->containerNumber }}';
             containers[2] = '{{ $delivery_container->containerVolume }}';
             containers[3] = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
+            containers[4] = '{{ $delivery_container->cargoType }}';
 
 
             if(containers[0] == id)
@@ -1285,13 +1267,14 @@ function decimalsOnly(event) {
               for (var x=rowCount-1; x>0; x--) {
                 table.deleteRow(x);
               }
-
+                cargoType = '{{ $delivery_container->cargoType }}'
               var row = table.insertRow();
               var cell0 = row.insertCell(0);
               var cell1 = row.insertCell(1);
               var cell2 = row.insertCell(2);
               var cell3 = row.insertCell(3);
               var cell4 = row.insertCell(4);
+
 
               cell0.innerHTML = '';
               cell1.innerHTML = '{{ $delivery_container->containerNumber }}';
@@ -1310,8 +1293,14 @@ function decimalsOnly(event) {
 
                     if(containerized_arrastre[0] == containers[2])
                     {
-                      document.getElementById('arrastre').value = '{{$cont_arrastre_det->amount}}';
-
+                      if(containers[4] != 'D')
+                      {
+                        document.getElementById('arrastre').value = '{{$cont_arrastre_det->amount}}';
+                      }
+                      if(containers[4] == 'D')
+                      {
+                        document.getElementById('arrastre').value = '5590.50'
+                      }
                     }
                   @empty
                   @endforelse
@@ -1326,8 +1315,10 @@ function decimalsOnly(event) {
                   containerized_wharfage[0] = '{{$cont_wharfage_det->containerVolume}}';
                   containerized_wharfage[1] = '{{$cont_wharfage_det->amount}}';
 
+
                   if(containerized_wharfage[0] == containers[2])
                   {
+
                     document.getElementById('wharfage').value =  '{{$cont_wharfage_det->amount}}' ;
 
                   }
@@ -1337,24 +1328,26 @@ function decimalsOnly(event) {
               @empty
               @endforelse
 
-
-
+              var table1 = document.getElementById('container_details_table');
+              var tableRows = table1.getElementsByTagName('tr');
+              var rowCount = tableRows.length;
+              for (var x=rowCount-1; x>0; x--) {
+                table1.deleteRow(x);
+              }
               @forelse($container_with_detail as $container)
-                var table1 = document.getElementById('container_details_table');
-                var tableRows = table1.getElementsByTagName('tr');
-                var rowCount = tableRows.length;
 
-                for (var x=rowCount-1; x>0; x--) {
-                  table1.deleteRow(x);
-                }
+
+
                     @forelse($container['details'] as $detail)
                       container_details[0] = '{{ $container['container']->containerNumber }}'
                       container_details[1] = '{{ $detail->descriptionOfGoods }}';
                       container_details[2] = '{{ $detail->grossWeight }}';
                       container_details[3] = '{{ $detail->supplier }}';
 
+
                       if(container_details[0] == containers[1])
                       {
+
 
 
                           var row = table1.insertRow();
@@ -1365,6 +1358,8 @@ function decimalsOnly(event) {
                           cell0.innerHTML = '{{ $detail->descriptionOfGoods }}';
                           cell1.innerHTML = '{{ $detail->grossWeight }}';
                           cell2.innerHTML = '{{ $detail->supplier }}';
+
+
                       }
                     @empty
                     @endforelse
@@ -1431,43 +1426,23 @@ function decimalsOnly(event) {
 
   function setArrastreWharfage()
   {
-    @if($withContainer == true)
 
-     @if($delivery_container->containerVolume == 20)
-      document.getElementById('arrastre').value = "3727.00";
-      document.getElementById('wharfage').value =  "519.00";
-     @endif
-     @if($delivery_container->containerVolume == 40)
-      document.getElementById('arrastre').value = "8551.00";
-      document.getElementById('wharfage').value =  "779.00";
-     @endif
-     @if($delivery_container->containerVolume == 45)
-      document.getElementById('arrastre').value = "3727.00";
-      document.getElementById('wharfage').value =  "916.00";
-     @endif
-    @endif
-    @if($withContainer == false)
-
-    document.getElementById('arrastre').value = "149.00";
-
-    document.getElementById('wharfage').value =  "519.00";
-    @endif
   }
 
 
   window.onload = function(){
     @if($withContainer == false)
 
-
       var arrastre_total = 0.00;
       var wharfage_total = 0.00;
       var arrastreWeight_Total = 0.00;
       var currentArrastre = 0.00;
+      var computed_total = 0.00;
      @forelse($lcl_arrastre_header as $lcl_arrastre_hed)
 
         @forelse($lcl_arrastre_detail as $lcl_arrastre_det)
 
-          @if($brokerage_header[0]->basis == $lcl_arrastre_det->basis_name)
+
 
             @forelse($brokerage_details as $brokerage_detail)
               @if($lcl_arrastre_det->lcl_type == $brokerage_detail->lcl_type)
@@ -1480,22 +1455,22 @@ function decimalsOnly(event) {
                 console.log('currentArrastre: '+currentArrastre);
                 console.log('total: '+parseFloat(arrastreWeight_Total).toFixed(2));
 
-
                 arrastre_total += parseFloat(parseFloat(arrastreWeight_Total).toFixed(2));
 
               @else
               @endif
             @empty
             @endforelse
-          @else
 
-          @endif
-      @empty
-      @endforelse
 
 
       @empty
       @endforelse
+
+
+      @empty
+      @endforelse
+
 
       document.getElementById('arrastre').value = arrastre_total.toFixed(2);
 
@@ -1503,14 +1478,29 @@ function decimalsOnly(event) {
 
         @forelse($lcl_wharfage_detail as $lcl_wharfage_det)
 
+          @forelse($brokerage_details as $brokerage_detail)
 
-            @if($brokerage_header[0]->basis == $lcl_wharfage_det->basis_name)
-                wharfage_total += parseFloat({{$lcl_wharfage_det->amount}});
-            @else
 
-          @endif
-      @empty
-      @endforelse
+                    @if($brokerage_detail->basis == 'Metric Ton')
+                        computed_total = +parseFloat({{$lcl_wharfage_det->amount}}).toFixed(2) * +parseFloat({{$brokerage_detail->grossWeight}}).toFixed(2);
+                        wharfage_total += parseFloat(computed_total);
+                    @else
+                    @endif
+                    @if($brokerage_detail->basis == 'Revenue Ton')
+                      computed_total = +parseFloat({{$lcl_wharfage_det->amount}}) * +parseFloat({{$brokerage_detail->cubicMeters}});
+                        wharfage_total += parseFloat(computed_total);
+                    @else
+                    @endif
+                    @if($brokerage_detail->basis == $lcl_wharfage_det->basis_name)
+
+                        wharfage_total += parseFloat({{$lcl_wharfage_det->amount}});
+                    @else
+                    @endif
+          @empty
+          @endforelse
+
+        @empty
+        @endforelse
 
 
       @empty

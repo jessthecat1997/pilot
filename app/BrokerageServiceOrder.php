@@ -11,7 +11,7 @@ class BrokerageServiceOrder extends Model
     public $timestamps = false;
 
   protected $fillable = [
-     'shipper', 'expectedArrivalDate' , 'arrivalArea', 'freightType', 'freightBillNo', 'Weight', 'statusType', 'cargo_type', 'basis', 'withCO', 'consigneeSODetails_id', 'bi_head_id_rev', 'bi_head_id_exp'
+     'shipper', 'expectedArrivalDate' , 'arrivalArea', 'freightType', 'freightBillNo', 'Weight', 'statusType', 'withCO', 'consigneeSODetails_id', 'bi_head_id_rev', 'bi_head_id_exp'
   ];
 
 	protected $dates = [

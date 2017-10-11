@@ -295,6 +295,11 @@ class BrokerageController extends Controller
 
     $locations = \App\Location::all();
 
+    $dangerous_types = DB::table('dangerous_cargo_types')
+    ->select('id', 'name')
+    ->where('deleted_at', '=', null)
+    ->get();
+
     $lcl_types = DB::table('lcl_types')
 		->select('id', 'name')
 		->where('deleted_at', '=', null)
@@ -306,7 +311,7 @@ class BrokerageController extends Controller
 		->get();
 
     $container_volumes = \App\ContainerType::all();
-      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis']));
+      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis', 'dangerous_types']));
   }
 
   public function save_neworder(Request $request)
@@ -331,8 +336,7 @@ class BrokerageController extends Controller
     $new_brokerage_so->Weight = $request->weight;
     $new_brokerage_so->freightType = $request->freightType;
     $new_brokerage_so->statusType = 'P';
-    $new_brokerage_so->cargo_type = $request->cargoType;
-    $new_brokerage_so->basis = $request->basis;
+
     $new_brokerage_so->withCO = $request->withCO;
     $new_brokerage_so->bi_head_id_rev = null;
     $new_brokerage_so->bi_head_id_exp = null;
@@ -345,9 +349,12 @@ class BrokerageController extends Controller
           $new_nonbro_detail = new BrokerageNonContainerDetails;
           $new_nonbro_detail->descriptionOfGoods = $request->descrp_goods[$i];
           $new_nonbro_detail->grossWeight = $request->gross_weights[$i];
+          $new_nonbro_detail->cubicMeters = $request->cbm[$i];
           $new_nonbro_detail->supplier = $request->suppliers[$i];
-            $new_nonbro_detail->lclType_id = $request->lcl_types[$i];
+          $new_nonbro_detail->lclType_id = $request->lcl_types[$i];
+          $new_nonbro_detail->basis = $request->basis[$i];
           $new_nonbro_detail->brok_head_id = $new_brokerage_so->id;
+
           $new_nonbro_detail->save();
       }
     }
@@ -369,13 +376,13 @@ class BrokerageController extends Controller
                 $new_brokerage_container->containerReturnTo = $container_detail->container[0]->containerReturnTo;
                 $new_brokerage_container->containerReturnAddress = $container_detail->container[0]->containerReturnAddress;
                 $new_brokerage_container->containerReturnDate = $container_detail->container[0]->containerReturnDate;
+                $new_brokerage_container->cargoType = $container_detail->container[0]->cargoType;
                 $new_brokerage_container->containerReturnStatus = "N";
                 $new_brokerage_container->dateReturned = null;
                 $new_brokerage_container->remarks = "";
                 $new_brokerage_container->brok_so_id = $new_brokerage_so->id;
 
                 $new_brokerage_container->save();
-
 
                 foreach ($container_detail->details as $key => $container_detail_data){
 
@@ -385,6 +392,10 @@ class BrokerageController extends Controller
                     $new_brokerage_container_detail->supplier = $container_detail_data->supplier;
                     $new_brokerage_container_detail->container_id = $new_brokerage_container->id;
 
+                    if($container_detail->container[0]->cargoType == 'D')
+                    {
+                      $new_brokerage_container_detail->class_id = $container_detail_data->class;
+                    }
                     $new_brokerage_container_detail->save();
                     $response .= $container_detail_data->descriptionOfGood;
                 }
@@ -411,12 +422,12 @@ class BrokerageController extends Controller
     $brokerage_id = $request->brokerage_id;
 
     $brokerage_header = DB::table('brokerage_service_orders')
-    ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'locations.name as location', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'basis_types.name as basis', 'withCO', 'cargo_type', 'bi_head_id_rev', 'bi_head_id_exp')
+    ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'locations.name as location', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'withCO', 'bi_head_id_rev', 'bi_head_id_exp')
     ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
     ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
     ->join('consignees', 'consignees_id', '=', 'consignees.id')
     ->join('locations', 'location_id', '=', 'locations.id')
-    ->join('basis_types', 'basis', '=', 'basis_types.id')
+
     ->where('brokerage_service_orders.id','=', $brokerage_id)
     ->get();
 
@@ -438,12 +449,17 @@ class BrokerageController extends Controller
       $withContainer = false;
     }
 
+    $dangerous_cargo_types = DB::table('dangerous_cargo_types')
+    ->select('dangerous_cargo_types.id', 'name')
+    ->get();
+
     $delivery_details = [];
     if($withContainer == false){
         $brokerage_details = DB::table('brokerage_non_container_details')
-        ->select('brokerage_service_orders.id', 'descriptionOfGoods', 'grossWeight', 'lcl_types.name as lcl_type', 'supplier')
+        ->select('brokerage_service_orders.id', 'descriptionOfGoods', 'grossWeight', 'cubicMeters', 'lcl_types.name as lcl_type',  'basis_types.name as basis', 'supplier')
         ->join('brokerage_service_orders', 'brok_head_id', '=', 'brokerage_service_orders.id')
         ->join('lcl_types', 'lclType_id', '=', 'lcl_types.id')
+        ->join('basis_types', 'basis', '=', 'basis_types.id')
         ->where('brok_head_id', '=', $brokerage_id)
 
         ->get();
@@ -453,11 +469,12 @@ class BrokerageController extends Controller
         $brokerage_containers = DB::table('brokerage_containers')
         ->join('brokerage_service_orders AS A', 'brok_so_id', 'A.id')
         ->where('brok_so_id', '=', $brokerage_id)
-        ->select('brokerage_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'brokerage_containers.remarks', 'brok_so_id', 'shippingLine', 'portOfCfsLocation')
+        ->select('brokerage_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'brokerage_containers.remarks', 'cargoType', 'brok_so_id', 'shippingLine', 'portOfCfsLocation')
+
         ->get();
         foreach ($brokerage_containers as $container) {
             $container_details =  DB::table('brokerage_container_details')
-            ->select('brokerage_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+            ->select('brokerage_container_details.id', 'descriptionOfGoods', 'grossWeight', 'class_id', 'supplier')
             ->where('container_id', '=', $container->id)
             ->get();
 
@@ -467,7 +484,7 @@ class BrokerageController extends Controller
         }
     }
 
-    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail']));
+    return view('brokerage/brokerage_view_index', compact(['brokerage_id', 'brokerage_header', 'dutiesandtaxes_header', 'bill_revs', 'bill_exps', 'brokerage_fees', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail', 'dangerous_cargo_types']));
   }
 
   public function get_approveddutiesandtaxes(Request $request)

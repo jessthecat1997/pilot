@@ -37,12 +37,11 @@ class DutiesAndTaxesController extends Controller
 
 
       $brokerage_header = DB::table('brokerage_service_orders')
-      ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'locations.name as location', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'freightType', 'basis_types.name as basis', 'withCO', 'cargo_type', 'bi_head_id_rev', 'bi_head_id_exp')
+      ->select('brokerage_service_orders.id', 'companyName', 'consignees.id as consigneeid', 'locations.name as location', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'location_id', 'firstName', 'middleName', 'lastName', 'statusType', 'freightType', 'withCO',  'bi_head_id_rev', 'bi_head_id_exp')
       ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
       ->join('consignee_service_order_headers', 'so_headers_id', '=', 'consignee_service_order_headers.id')
       ->join('consignees', 'consignees_id', '=', 'consignees.id')
       ->join('locations', 'location_id', '=', 'locations.id')
-      ->join('basis_types', 'basis', '=', 'basis_types.id')
       ->where('brokerage_service_orders.id','=', $brokerage_id)
       ->get();
 
@@ -193,12 +192,17 @@ class DutiesAndTaxesController extends Controller
             $withContainer = false;
           }
 
+          $dangerous_cargo_types = DB::table('dangerous_cargo_types')
+          ->select('dangerous_cargo_types.id', 'name')
+          ->get();
+
           $delivery_details = [];
           if($withContainer == false){
               $brokerage_details = DB::table('brokerage_non_container_details')
-              ->select('brokerage_service_orders.id', 'descriptionOfGoods', 'grossWeight', 'lcl_types.name as lcl_type', 'supplier')
+              ->select('brokerage_service_orders.id', 'descriptionOfGoods', 'grossWeight', 'cubicMeters', 'lcl_types.name as lcl_type',  'basis_types.name as basis', 'supplier')
               ->join('brokerage_service_orders', 'brok_head_id', '=', 'brokerage_service_orders.id')
               ->join('lcl_types', 'lclType_id', '=', 'lcl_types.id')
+              ->join('basis_types', 'basis', '=', 'basis_types.id')
               ->where('brok_head_id', '=', $brokerage_id)
 
               ->get();
@@ -208,11 +212,12 @@ class DutiesAndTaxesController extends Controller
               $brokerage_containers = DB::table('brokerage_containers')
               ->join('brokerage_service_orders AS A', 'brok_so_id', 'A.id')
               ->where('brok_so_id', '=', $brokerage_id)
-              ->select('brokerage_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'brokerage_containers.remarks', 'brok_so_id', 'shippingLine', 'portOfCfsLocation')
+              ->select('brokerage_containers.id', 'containerNumber', 'containerVolume', 'containerReturnTo', 'containerReturnAddress', 'containerReturnDate', 'containerReturnStatus', 'dateReturned', 'brokerage_containers.remarks', 'cargoType', 'brok_so_id', 'shippingLine', 'portOfCfsLocation')
+
               ->get();
               foreach ($brokerage_containers as $container) {
                   $container_details =  DB::table('brokerage_container_details')
-                  ->select('brokerage_container_details.id', 'descriptionOfGoods', 'grossWeight', 'supplier')
+                  ->select('brokerage_container_details.id', 'descriptionOfGoods', 'grossWeight', 'class_id', 'supplier')
                   ->where('container_id', '=', $container->id)
                   ->get();
 
@@ -221,7 +226,6 @@ class DutiesAndTaxesController extends Controller
                   array_push($container_with_detail, $new_row);
               }
           }
-
 
       return view('brokerage.brokerage_dutiesandtaxes_create',compact(['brokerage_id', 'employees', 'current_date',  'row_count', 'currentExchange_id', 'exchange_rate', 'currentCds_id', 'cds_fee', 'currentIpf_id', 'ipf_fee_header', 'ipf_fee_detail', 'containerized_arrastre_header', 'containerized_arrastre_detail', 'containerized_wharfage_header', 'containerized_wharfage_detail', 'lcl_arrastre_header', 'lcl_arrastre_detail', 'lcl_wharfage_header', 'lcl_wharfage_detail', 'brokerage_header', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail', 'utility_types']));//
   }

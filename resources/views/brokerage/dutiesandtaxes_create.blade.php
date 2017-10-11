@@ -4,7 +4,7 @@
 	<div class = "row">
 			<div class = "panel default-panel">
 				<div class = "panel-heading">
-					<h2>&nbsp;Brokerage / Duties And Taxes</h2>
+					<h2>&nbsp;Brokerage | Duties And Taxes</h2>
 					<hr />
 	  <div class = "panel-body form-horizontal">
 
@@ -134,7 +134,7 @@
 
 	        <table class = "table table-condensed">
 	          <tr>
-	            <td>Summary of Duties and taxes</td>
+	            <td>Summary of Duties and Taxes</td>
 	          </tr>
 	          <tr class = "info" id = "SummCustomsDuty">
 	            <td>Customs Duty </td>
