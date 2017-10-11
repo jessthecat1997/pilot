@@ -1,4 +1,3 @@
-
 @extends('layouts.maintenance')
 @section('content')
 <div class = "container-fluid">
@@ -35,7 +34,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($arrastres as $a)
+						@forelse($arrastres as $a)
 						<tr>
 							<td>
 								{{ Carbon\Carbon::parse($a->dateEffective)->format("F d, Y") }}
@@ -52,7 +51,7 @@
 							<td>
 								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
 								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
-								<input type = "hidden" class = "date_effective" value = "Carbon::parse($a->dateEffective)->format('Y-m-d')">;
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($a->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
 						</tr>
 						@empty
@@ -64,7 +63,7 @@
 	</div>
 </div>
 <section class="content">
-	<form role="form" method = "POST" class="commentForm">
+	<form role="form" method = "POST" id="commentForm">
 		<div class="modal fade" id="afModal" role="dialog">
 			<div class="form-group">
 				<div class="modal-dialog ">
@@ -80,30 +79,28 @@
 							</div>
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
-								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
+								<select class = "form-control" name = "locations_id" id = "locations_id" placeholder ="Choose a port location" data-rule-required="true">
 									@forelse($locations as $location)
 									<option value = "{{ $location->id }}">{{ $location->name }}</option>
 									@empty
 									@endforelse
 								</select>
 							</div>
-						</form>
-						<br />
-						<div class = "collapse" id = "af_table_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Requires at least one arrastre free per container.
+							<br />
+							<div class = "collapse" id = "af_table_warning">
+								<div class="alert alert-danger">
+									<strong>Warning!</strong> Requires at least one arrastre free per container.
+								</div>
 							</div>
-						</div>
-						<div class = "collapse" id = "af_warning">
-							<div class="alert alert-danger">
-								<strong>Warning!</strong> Something is wrong with the arrastre fees.
+							<div class = "collapse" id = "af_warning">
+								<div class="alert alert-danger">
+									<strong>Warning!</strong> Something is wrong with the arrastre fees.
+								</div>
 							</div>
-						</div>
-						<div class = "panel panel-default">
-							<div  style="overflow-x: auto;">
-								<div class = "panel-default">
-									{{ csrf_field() }}
-									<form id = "arrastre_form" class = "commentForm">
+							<div class = "panel panel-default">
+								<div  style="overflow-x: auto;">
+									<div class = "panel-default">
+										{{ csrf_field() }}
 										<table class="table responsive table-hover" width="100%" id= "af_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
@@ -135,7 +132,7 @@
 												<td>
 													<div class = "form-group input-group " >
 														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = "form-control money amount_valid"
+														<input type = "text" class = " money form-control  amount_valid"
 														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
 													</div>
 
@@ -225,9 +222,8 @@
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 
 	var af_id;
+	var data;
 	$(document).ready(function(){
-
-
 
 		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
 
@@ -236,6 +232,7 @@
 			serverSide: false,
 			deferRender: true,
 			'scrollx': true,
+			"bSort": false,
 			columns: [
 			{ data: 'dateEffective'},
 			{ data: 'location' },
@@ -249,7 +246,7 @@
 			},
 			
 			{ data: 'action', orderable: false, searchable: false }
-			],	"order": [[ 0, "desc" ]],
+			],	
 		});
 		$("#commentForm").validate({
 			rules:
@@ -278,13 +275,21 @@
 			var rows = "";
 			for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = " money  form-control  amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
 			$('.modal-title').text('New Containerized Arrastre Fee per Location');
 			$('#afModal').modal('show');
 			
 			$('#af_parent_table > tbody').append(rows);
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 
 
 		});
@@ -293,12 +298,13 @@
 			$('.modal-title').text('Update Containerized Arrastre Fee per Location');
 			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
-			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#locations_id').attr('disabled','true');
-			 $('#dateEffective').val($(this).closest('tr').find('.date_effective').val());
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			
+			console.log($(this).closest('tr').find('.date_Effective').val());
 			$('#afModal').modal('show');
+
 
 			$.ajax({
 				type: 'GET',
@@ -312,15 +318,25 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "  money  form-control amount_valid" value ="'+numberWithCommas(data[i].amount)+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 					}
 					$('#af_parent_table > tbody').html("");
 					$('#af_parent_table > tbody').append(rows);
+					$('.money').inputmask("numeric", {
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
 
 				}
 
 			})
+
+			
 		});
 		$(document).on('click', '.deactivate', function(e){
 			af_id = $(this).val();
@@ -330,27 +346,7 @@
 		
 		
 		
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-				}
-				if(typeof(amount) === "string"){
-				}
-				else{
-				}
-
-				if($(this).val() > 0){
-					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+		
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
@@ -397,13 +393,14 @@
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
+
 
 						console.log(amount_value);
 						jsonContainerSize = JSON.stringify(container_size_id);
 						jsonAmount = JSON.stringify(amount_value);
 
 						$.ajax({
+							
 							type: 'POST',
 							url:  '/admin/arrastre_fee',
 							data: {
@@ -415,34 +412,45 @@
 								'tblLength' : tblLength,
 							},
 							success: function (data){
+								
+								if(typeof(data) === "object"){
+									aftable.ajax.url( '{{ route("af.data") }}' ).load();
+									$('#afModal').modal('hide');
+									$('.modal-title').text('New Containerized Arrastre Fee per Location');
+									$('#amount').val("0.00");
 
-								aftable.ajax.url( '{{ route("af.data") }}' ).load();
-								$('#afModal').modal('hide');
-								$('.modal-title').text('New Containerized Arrastre Fee per Location');
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut",
+									}
+									toastr["success"]("Record added successfully")
+									$('#btnSave').removeAttr('disabled');
 
-								$('#amount').val("0.00");
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+								}else{
+
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 								}
-								toastr["success"]("Record added successfully")
-								$('#btnSave').removeAttr('disabled');
-							}
-
+							},
 
 						})
 
@@ -456,7 +464,7 @@
 
 						jsonContainerSize = JSON.stringify(container_size_id);
 						jsonAmount = JSON.stringify(amount_value);
-						$('#btnSave').attr('disabled', 'true');
+						
 
 						$.ajax({
 							type: 'PUT',
@@ -472,35 +480,47 @@
 
 							},
 							success: function (data){
-								console.log(data);
-								aftable.ajax.url( '{{ route("af.data") }}' ).load();
-								$('#afModal').modal('hide');
-								$('.modal-title').text('New Containerized Arrastre Fee per Location');
+								if(typeof(data) === "object"){
+									aftable.ajax.url( '{{ route("af.data") }}' ).load();
+									$('#afModal').modal('hide');
+									$('.modal-title').text('New Containerized Arrastre Fee per Location');
 
-								$('#amount').val("0.00");
+									$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully")
+									$('#btnSave').removeAttr('disabled');
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+								}else{
+
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 								}
-								toastr["success"]("Record updated successfully")
-								$('#btnSave').removeAttr('disabled');
-							}
+							},
+
 						})
+
 					}
 					
 					
@@ -509,7 +529,7 @@
 				}
 			}
 		});
-	});
+});
 function validateIpfRows()
 {
 	
@@ -567,6 +587,47 @@ function validateIpfRows()
 		}
 	}
 
+/*	$(document).on('keyup keydown keypress', '.money', function (event) {
+
+		var len;
+		var value;
+		var container_size = document.getElementsByName('container_size');
+		var amount = document.getElementsByName('amount');
+
+		for(var i = 0; i < container_size.length; i++){
+
+			
+			value = $(amount[i]).inputmask('unmaskedvalue');
+
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					amount[i].value = "0.00";
+				}
+			}
+			else
+			{
+				if(value == ""){
+					amount[i].value = "0.00";
+				}
+				if(parseFloat(value) <= 9999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}	
+		}		
+	});*/
+
 	function finalvalidateAfRows()
 	{
 
@@ -575,38 +636,22 @@ function validateIpfRows()
 		range_pairs = [];
 		container_size = document.getElementsByName('container_size');
 		amount = document.getElementsByName('amount');
-
+		var amt;
 		error = "";
-
-
-
 		for(var i = 0; i < container_size.length; i++){
-
 			
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
+			amt = parseFloat(amount[i].value);
+			if (amt < 0){
 				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
 				$('#af_warning').addClass('in');
-			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					var amounty = amount[i].value;
-					console.log('amounty is' +amounty);
-					//var temp = $('amounty').inputmask('unmaskedvalue');
-					var temp = amounty;
-					container_size_id.push(container_size[i].value);
-					amount_value.push(temp);
-					$('#af_warning').removeClass('in');
-				}
-			}
+				error += "Not Accepting negative values.";
 
+			}else{
+				amount[i].style.borderColor = 'green';
+				container_size_id.push(container_size[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+				$('#af_warning').removeClass('in');
+			}
 
 			pair = {
 				amount: amount[i].value,
@@ -626,6 +671,8 @@ function validateIpfRows()
 		}
 
 	}
+	
+
 	function resetErrors() {
 		$('form input, form select').removeClass('inputTxtError');
 		$('label.error').remove();

@@ -1127,14 +1127,14 @@ class DatatablesController extends Controller
 	}
 
 	public function af_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY dateEffective");
+		$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
 			return
 			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
 			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("Y-m-d") .'">';
+			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("m-d-Y") .'">';
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d Y") }}')
@@ -1171,7 +1171,7 @@ class DatatablesController extends Controller
 	}
 
 	public function af_lcl_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+		$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
 		return Datatables::of($arrastres)
 		->addColumn('action', function ($arrastre){
@@ -2960,7 +2960,7 @@ class DatatablesController extends Controller
 			}})
 		->addColumn('action', function ($dutiesandtax){
 			return
-			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax collapse" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
+			'<button type="button" style="margin-right:10px; width:100;" class="btn btn-md btn-info updateTax collapse in" data-toggle="modal" data-target="#updateModal" value="'. $dutiesandtax->id .'"><i class="fa fa-edit"></i>Update Status</button>
 			<a href = "/brokerage/'. $dutiesandtax->id .'/view" class = "btn btn-md but view-service-order">View</a>
 			<a href = "http://localhost:8000/brokerage/'.$dutiesandtax->id.'/print" class = "btn btn-md but view-service-order"> Print</a>';
 		})

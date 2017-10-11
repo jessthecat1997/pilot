@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -25,7 +26,29 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected function authenticated(Request $request)
+    {
+     $request->user()->authorizeRoles('Admin', 'Broker', 'Billing Manager', 'Trucking Manager');
+     return redirect('/dashboard');
+
+     if($request->user()->authorizeRoles == 'Admin')
+     {
+        return redirect('/dashboard');
+    }
+    else if($request->user()->authorizeRoles == 'Broker')
+    {
+        return redirect('/brokerage');
+    }
+    else if($request->user()->authorizeRoles == 'Billing Manager')
+    {
+        return redirect('/billing');
+    }
+    else if($request->user()->authorizeRoles == 'Trucking Manager')
+    {
+        return redirect('/trucking');
+    }
+
+}
 
     /**
      * Create a new controller instance.

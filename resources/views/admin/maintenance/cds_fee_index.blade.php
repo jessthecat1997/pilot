@@ -22,10 +22,15 @@
 		<h2>&nbsp;Maintenance | Brokerage | Customs Documentary Stamp Fee</h2>
 		<hr>
 		<h5>Current CDS Fee: Php 
+			@if($no_current == "false")
 			@if($cds_fee_current[0]->fee != null)
 			{{ number_format((float)$cds_fee_current[0]->fee, 2) }}
 			@else
 			0.000000
+			@endif
+
+			@else
+			Php 0.00
 			@endif
 		</h5>
 		<div class = "col-md-3 col-md-offset-9">

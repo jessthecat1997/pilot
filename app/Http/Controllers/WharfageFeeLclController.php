@@ -6,30 +6,32 @@ use Illuminate\Http\Request;
 use DB;
 use App\WharfageLclHeader;
 use App\WharfageLclDetail;
-
+use App\Http\Requests\StoreWharfageFeeLCL;
 class WharfageFeeLclController extends Controller
 {
- public function index()
- {
-  $basis_types = DB::table('basis_types')
-  ->select('id', 'abbreviation')
-  ->where('deleted_at', '=', null)
-  ->get();
-  
-
-  $locations = DB::table('locations')
-  ->select('id', 'locations.name')
-  ->where('deleted_at', '=', null)
-  ->get();
-
-  $wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
-
-  return view('admin/maintenance.wharfage_lcl_index', compact(['basis_types','locations','wharfages']));
-}
+   public function index()
+   {
+      $basis_types = DB::table('basis_types')
+      ->select('id', 'abbreviation')
+      ->where('deleted_at', '=', null)
+      ->get();
 
 
-public function store(Request $request)
-{
+      $locations = DB::table('locations')
+      ->select('id', 'locations.name')
+      ->where('deleted_at', '=', null)
+      ->get();
+
+      $wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+
+      return view('admin/maintenance.wharfage_lcl_index', compact(['basis_types','locations','wharfages']));
+  }
+
+
+  public function store(StoreWharfageFeeLCL $request)
+  {
+   DB::beginTransaction();
+   try{
     $wf_header = new WharfageLclHeader;
     $wf_header->dateEffective = $request->dateEffective;
     $wf_header->locations_id = $request->locations_id;
@@ -49,11 +51,19 @@ public function store(Request $request)
         $wf_detail->amount = (string)$_amount[$x];
         $wf_detail->save();
     }
+    DB::commit();
+    return $wf_header;
+
+}catch(\Exception  $e){
+    DB::rollback();
+}
 
 
 } 
-public function update(Request $request, $id)
+public function update(StoreWharfageFeeLCL $request, $id)
 {
+   DB::beginTransaction();
+   try{
 
     \DB::table('wharfage_lcl_details')
     ->where('wharfage_lcl_headers_id','=', $request->wf_head_id)
@@ -78,6 +88,12 @@ public function update(Request $request, $id)
         $wf_detail->amount = (string)$_amount[$x];
         $wf_detail->save();
     }
+    DB::commit();
+    return $wf_header;
+
+}catch(\Exception  $e){
+    DB::rollback();
+}
 }
 
 public function destroy($id)

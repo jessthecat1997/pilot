@@ -35,7 +35,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($wharfages as $w)
+						@forelse($wharfages as $w)
 						<tr>
 							<td>
 								{{ Carbon\Carbon::parse($w->dateEffective)->format("F d, Y") }}
@@ -226,6 +226,7 @@
 
 
 	var wf_id;
+	var data;
 
 	$(document).ready(function(){
 
@@ -267,7 +268,7 @@
 				}
 			},
 			onkeyup: false,
-		
+
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -279,13 +280,21 @@
 			var rows = "";
 			for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control wf_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control wf_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
 			$('.modal-title').text('New Containerized Wharfage Fee per Location');
 			$('#wfModal').modal('show');
 			
 			$('#wf_parent_table > tbody').append(rows);
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 
 
 		});
@@ -314,12 +323,20 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="'+numberWithCommas(data[i].amount)+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 					}
 					$('#wf_parent_table > tbody').html("");
 					$('#wf_parent_table > tbody').append(rows);
 
+					$('.money').inputmask("numeric", {
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
 				}
 
 			})
@@ -332,27 +349,7 @@
 		
 		
 		
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-				}
-				if(typeof(amount) === "string"){
-				}
-				else{
-				}
-
-				if($(this).val() > 0){
-					$(this).css('border-color', 'green');
-					$('#wf_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+		
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
@@ -395,9 +392,6 @@
 				if(title == "New Containerized Wharfage Fee per Location")
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
-
-						$('#btnSave').attr('disabled', 'true');
-
 						console.log(amount_value);
 						jsonContainerSize = JSON.stringify(container_size_id);
 						jsonAmount = JSON.stringify(amount_value);
@@ -414,32 +408,41 @@
 								'tblLength' : tblLength,
 							},
 							success: function (data){
+								if(typeof(data) === "object"){
+									wftable.ajax.url( '{{ route("wf.data") }}' ).load();
+									$('#wfModal').modal('hide');
+									$('.modal-title').text('New Containerized Wharfage Fee per Location');
 
-								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
-								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Containerized Wharfage Fee per Location');
-
-								$('#amount').val("0.00");
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									$('#amount').val("0.00");
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record added successfully")
+									$('#btnSave').removeAttr('disabled');
+								}else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 								}
-								toastr["success"]("Record addded successfully")
-								$('#btnSave').removeAttr('disabled');
 							}
 						})
 
@@ -450,7 +453,7 @@
 
 					if($('#dateEffective').valid() && $('#locations_id').valid()){
 
-						$('#btnSave').attr('disabled', 'true');
+
 
 						jsonContainerSize = JSON.stringify(container_size_id);
 						jsonAmount = JSON.stringify(amount_value);
@@ -470,83 +473,85 @@
 
 							},
 							success: function (data){
-								console.log(data);
-								wftable.ajax.url( '{{ route("wf.data") }}' ).load();
-								$('#wfModal').modal('hide');
-								$('.modal-title').text('New Containerized Wharfage Fee per Location');
+								if(typeof(data) === "object"){
+									wftable.ajax.url( '{{ route("wf.data") }}' ).load();
+									$('#wfModal').modal('hide');
+									$('.modal-title').text('New Containerized Wharfage Fee per Location');
 
-								$('#amount').val("0.00");
+									$('#amount').val("0.00");
 
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]("Record updated successfully")
+									$('#btnSave').removeAttr('disabled');
+
+								}else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
 								}
-								toastr["success"]("Record updated successfully")
-								$('#btnSave').removeAttr('disabled');
 							}
 						})
 					}
 
-					
-
-
 				}
 			}
 		});
-	});
+
 function validateIpfRows()
 {
-	
+
 	container_size_id = [];
 	amount_value = [];
 	range_pairs = [];
-	
+
 	container_size = document.getElementsByName('container_size');
 	amount = document.getElementsByName('amount');
 	error = "";
 
-
+	var amt;
 	if($(locations_id).val() === 0){
 		dateEffective.style.borderColor = 'red';
 		error += "Location is required.";
 	}
 	for(var i = 0; i < container_size.length; i++){
 		var temp;
-		
-		if(amount[i].value === "")
-		{
+
+		amt = parseFloat(amount[i].value);
+		if(amt<0){
 			amount[i].style.borderColor = 'red';
+			$('#wf_warning').addClass('in');
 			error += "Amount Required.";
 		}
-		else
-		{
-			if(amount[i].value < 1){
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-			}
-			else{
-				amount[i].style.borderColor = 'green';
+		else{
+			amount[i].style.borderColor = 'green';
 
-				
-				container_size_id.push(container_size[i].value);
-				$('#wf_warning').removeClass('in');
-			}
+
+			container_size_id.push(container_size[i].value);
+			$('#wf_warning').removeClass('in');
 		}
-		
+
+
 		pair = {
 			amount: amount[i].value,
 			container_size: container_size[i].value
@@ -575,45 +580,30 @@ function validateIpfRows()
 		amount = document.getElementsByName('amount');
 
 		error = "";
-
+		var amt;
 
 
 		for(var i = 0; i < container_size.length; i++){
-
+			amt = parseFloat(amount[i].value);
 			
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
+			
+			if(amt < 0){
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
-				$('#wf_warning').addClass('in');
+				$('#wf_warning').removeClass('in');
 			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					var amounty = amount[i].value;
-					console.log('amounty is' +amounty);
-					//var temp = $('amounty').inputmask('unmaskedvalue');
-					var temp = amounty;
-					container_size_id.push(container_size[i].value);
-					amount_value.push(temp);
-					$('#wf_warning').removeClass('in');
-				}
+			else{
+				amount[i].style.borderColor = 'green';
+				container_size_id.push(container_size[i].value);
+				amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+				$('#wf_warning').removeClass('in');
 			}
-
-
-			pair = {
-				amount: amount[i].value,
-				container_size: container_size[i].value
-			};
-			range_pairs.push(pair);
 		}
-		var i, j, n;
+
+
 		
+
+
 		if(error.length == 0){
 			tblLength = container_size.length;
 			return true;
@@ -624,9 +614,10 @@ function validateIpfRows()
 		}
 
 	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+});
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush
