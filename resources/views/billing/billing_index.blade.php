@@ -84,7 +84,7 @@
 			deferRender: true,
 			ajax: "{{ route('invoice.data') }}",
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'consignee' },
 			{ data: 'totall',
 			"render" : function( data, type, full ) {
 				return formatNumber(data); } },
@@ -109,7 +109,7 @@
 			deferRender: true,
 			ajax: '{{ route("brso_head.data") }}',
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'consignee' },
 			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
 		})
