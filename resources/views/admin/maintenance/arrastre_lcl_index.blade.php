@@ -393,7 +393,7 @@
 
 		$(document).on('click', '.delete-af-row', function(e){
 			e.preventDefault();
-			$('#af_warning').removeClass('in');
+			
 			if($('#af_parent_table > tbody > tr').length == 1){
 				$(this).closest('tr').remove();
 				$('#af_table_warning').addClass('fade in');

@@ -190,7 +190,7 @@
 			temp_name = data.name;
 			temp_desc = data.description;
 			
-			$('.modal-title').text('Edit Vehicle Type');
+			$('.modal-title').text('Update Vehicle Type');
 			$('#vtModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){

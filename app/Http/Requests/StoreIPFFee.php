@@ -16,10 +16,32 @@ class StoreIPFFee extends FormRequest
     public function rules()
     {
 
+       switch ($this->method()) {
+        case 'POST':
 
         return [
-            'dateEffective' => 'required|date|unique:import_processing_fee_headers,dateEffective' 
+
+            'dateEffective' => 'required|date|unique:import_processing_fee_headers,dateEffective',
+                //'locations_id' => 'required|unique:arrastre_headers,locations_id',
+
         ];
+        break;
+
+        case 'PUT':
+
+        return [
+
+
+            'dateEffective' => 'required|date|unique:import_processing_fee_headers,dateEffective,' . $this->segment(3),
+
+        ];
+
+        break;
+
+        default: break;
+    }
+
+}
 
     //Overriding the response 422
 public function response(array $errors)

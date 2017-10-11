@@ -11,12 +11,12 @@ class ImportProcessingFeesController extends Controller
 {
 	public function index()
 	{
-		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
+		$ipfs = DB::select("SELECT h.id, h.dateEffective , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL  AND d.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return view('admin/maintenance.ipf_fee_index', compact(['ipfs']));
 	}
 
-	public function store(Request $request)
+	public function store(StoreIPFFee $request)
 	{
 		$ipf_header = new ImportProcessingFeeHeader;
 		$ipf_header->dateEffective = $request->dateEffective;
@@ -37,15 +37,23 @@ class ImportProcessingFeesController extends Controller
 			$ipf_detail->amount = (string)$_amount[$x];
 			$ipf_detail->save();
 		}
+		return $ipf_header;
 
 
 	}
 
-	public function update(Request $request, $id)
+	public function update(StoreIPFFee $request, $id)
 	{
-		\DB::table('import_processing_fee_details')
+		$ipf = \DB::table('import_processing_fee_details')
 		->where('ipf_headers_id','=', $request->ipf_head_id)
-		->delete();
+		->where('deleted_at', '=', NULL)
+		->get();
+
+		for($i = 0; $i < count($ipf); $i ++)
+		{
+			$del_ipf = ImportProcessingFeeDetail::findOrFail($ipf[$i]->id);
+			$del_ipf->delete();
+		}
 
 		$new_ipf= ImportProcessingFeeHeader::findOrFail($id);
 		$new_ipf->dateEffective = $request->dateEffective;
@@ -66,6 +74,7 @@ class ImportProcessingFeesController extends Controller
 			$ipf_detail->amount = (string)$_amount[$x];
 			$ipf_detail->save();
 		}
+		return $new_ipf;
 	}
 
 
@@ -79,6 +88,7 @@ class ImportProcessingFeesController extends Controller
 	public function ipf_maintain_data(Request $request){
 		$rates = DB::table('import_processing_fee_details')
 		->where('ipf_headers_id', '=', $request->ipf_id)
+		->where('deleted_at', '=', NULL)
 		->get();
 
 		return $rates;

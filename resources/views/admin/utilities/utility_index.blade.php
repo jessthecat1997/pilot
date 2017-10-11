@@ -252,8 +252,8 @@
 			
 	/*		if( temp_bank_charges === $('#bank_charges').val() && temp_other_charges === $('#other_charges').val()
 				&& temp_insurance_c === $('#insurance_c').val() && temp_insurance_gc === $('#insurance_gc').val()
-				&& temp_company_name === $('#company_name').val() && temp_company_address === $('company_address').val() 
-				&& temp_company_tin === $('#company_tin').val() && temp_company_contact === $('company_contact').val()
+				&& temp_company_name === $('#company_name').val() && temp_company_address === $('#company_address').val() 
+				&& temp_company_tin === $('#company_tin').val() && temp_company_contact === $('#company_contact').val()
 
 				)
 			{
