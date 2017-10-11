@@ -45,7 +45,7 @@ class User extends Authenticatable
       if ($this->hasAnyRole($roles)) {
         return true;
     }
-    abort(401, 'You dont have any roles yet');
+    return view('auth.login');
 }
 public function hasAnyRole($roles)
 {
