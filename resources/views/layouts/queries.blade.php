@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Pilot Cargo Chain</title>
+    <title>Hauling Services</title>
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
@@ -53,7 +53,7 @@
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -68,6 +68,10 @@
                                 </form>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="
+                        #">&nbsp;</a>
                     </li>
                     @endif
                 </ul>
@@ -141,7 +145,7 @@
                             <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <div id="brokeragecollapse" class="panel-collapse collapse">
-                           <li>
+                         <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
                             <!--<li>
@@ -239,6 +243,9 @@
                     </li>
                     <li>
                         <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('billing_rep.index') }}"  class = "class-bill_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Unpaid Billing Report</a>
                     </li>
                 </ul>
             </div>
@@ -365,33 +372,33 @@
 
 
 
-    <!-- Scripts -->
-    <script src="/js/app.js"></script>
-    <script type="text/javascript" src = "/js/jquery.validate.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
-    <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script type="text/javascript" src = "/js/jquery.validate.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
-    <script>
+<script>
 
-        $(document).on('show.bs.modal', '.modal', function () {
-            var zIndex = 1040 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-            setTimeout(function() {
-                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-            }, 0);
-        });
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-    </script>
-    @stack('scripts')
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+@stack('scripts')
 </body>
 </html>
