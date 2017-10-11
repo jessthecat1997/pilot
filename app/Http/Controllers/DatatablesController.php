@@ -798,8 +798,9 @@ class DatatablesController extends Controller
 
 	public function get_quotations(){
 		$quotations = DB::table('quotation_headers')
-		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at')
+		->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at', 'contract_headers.id as con_head', 'quotation_headers.created_at')
 		->join('consignees', 'consignees_id', '=', 'consignees.id')
+		->leftjoin('contract_headers', 'quotation_headers.id', '=', 'quot_head_id')
 		->where('quotation_headers.deleted_at', '=', null)
 		->get();
 

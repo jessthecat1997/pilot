@@ -11,8 +11,14 @@ class QuotationsController extends Controller
 
     public function index()
     {
+        $quotations = DB::table('quotation_headers')
+        ->select(DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.id', 'quotation_headers.created_at', 'contract_headers.id as con_head')
+        ->join('consignees', 'consignees_id', '=', 'consignees.id')
+        ->leftjoin('contract_headers', 'quotation_headers.id', '=', 'quot_head_id')
+        ->where('quotation_headers.deleted_at', '=', null)
+        ->get();
 
-        return view('quotations.quotation_index');
+        return view('quotations.quotation_index', compact(['quotations']));
     }
 
     
