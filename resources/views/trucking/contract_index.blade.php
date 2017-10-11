@@ -14,7 +14,7 @@
 				List of Contracts
 			</div>
 			<div class="panel-body">
-				<table class = "table-responsive table" id="contracts_table">
+				<table class = "table-responsive table table-bordered" id="contracts_table">
 					<thead>
 						<tr>
 							<th>

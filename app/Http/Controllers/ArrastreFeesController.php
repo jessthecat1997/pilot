@@ -50,6 +50,7 @@ class ArrastreFeesController extends Controller
             $af_detail->amount = (string)$_amount[$x];
             $af_detail->save();
         }
+        return $af_header;
 
 
     } 
