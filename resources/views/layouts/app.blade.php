@@ -223,9 +223,7 @@
                         <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i class="fa fa-circle" ></i>&nbsp;&nbsp;Billing</a>
                     </li>
                     <div id="billingcollapse" class="panel-collapse collapse">
-                        <li>
-                            <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;VAT Rate</a>
-                        </li>
+                       
                         <li>
                             <a href = "{{ route('charge.index') }}"  class = "class-charges">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Charges</a>
                         </li>
