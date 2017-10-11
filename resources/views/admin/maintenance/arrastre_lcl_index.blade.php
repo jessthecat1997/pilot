@@ -458,7 +458,7 @@
 				{
 					if($('#dateEffective').valid() && $('#locations_id').valid() && $('#basis_type').valid())
 					{
-						$('#btnSave').attr('disabled', 'true');
+						
 						console.log("lcl is "+lcl_type_id);
 						console.log("basis is "+basis_type_id);
 						console.log("amount is "+amount_value);
@@ -654,7 +654,8 @@ function validateafRows()
 
 		pair = {
 
-			lcl_type: lcl_type[i].value
+			lcl_type: lcl_type[i].value,
+			basis_type: basis_type[i].value,
 		};
 		range_pairs.push(pair);
 
@@ -666,12 +667,13 @@ function validateafRows()
 	for (i=0; i<n; i++) {
 		for (j=i+1; j<n; j++)
 		{
-			if (range_pairs[i].lcl_type === range_pairs[j].lcl_type){
+			if (range_pairs[i].lcl_type === range_pairs[j].lcl_type && range_pairs[i].basis_type === range_pairs[j].basis_type){
 				found = true;
 
 				lcl_type[i].style.borderColor = 'red';
 				lcl_type[j].style.borderColor = 'red';
-
+				basis_type[i].style.borderColor = 'red';
+				basis_type[j].style.borderColor = 'red';
 
 				$('#af_warning').addClass('in');
 				error += "Same LCL";
@@ -679,6 +681,9 @@ function validateafRows()
 				$('#af_warning').removeClass('in');
 				lcl_type[i].style.borderColor = 'green';
 				lcl_type[j].style.borderColor = 'green';
+				basis_type[i].style.borderColor = 'green';
+				basis_type[j].style.borderColor = 'green';
+
 			}
 		}
 	}
@@ -739,18 +744,23 @@ function validateafRows()
 		for (i=0; i<n; i++) {
 			for (j=i+1; j<n; j++)
 			{
-				if (  range_pairs[i].lcl_type === range_pairs[j].lcl_type){
+				if(range_pairs[i].lcl_type === range_pairs[j].lcl_type && range_pairs[i].basis_type === range_pairs[j].basis_type){
 					found = true;
+
 					lcl_type[i].style.borderColor = 'red';
 					lcl_type[j].style.borderColor = 'red';
-					
-					error += "Same LCL";
-					$('#af_warning').addClass('in');
+					basis_type[i].style.borderColor = 'red';
+					basis_type[j].style.borderColor = 'red';
 
+					$('#af_warning').addClass('in');
+					error += "Same LCL";
 				}else{
 					$('#af_warning').removeClass('in');
 					lcl_type[i].style.borderColor = 'green';
 					lcl_type[j].style.borderColor = 'green';
+					basis_type[i].style.borderColor = 'green';
+					basis_type[j].style.borderColor = 'green';
+
 				}
 			}
 		}
