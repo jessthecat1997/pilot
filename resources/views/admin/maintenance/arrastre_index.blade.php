@@ -298,7 +298,6 @@
 			$('.modal-title').text('Update Containerized Arrastre Fee per Location');
 			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
-			
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#locations_id').attr('disabled','true');
 			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());

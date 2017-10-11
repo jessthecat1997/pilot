@@ -35,56 +35,69 @@ class ArrastreFeeLclController extends Controller
 
 	public function store(StoreArrastreFeeLCL $request)
 	{
-		$af_header = new ArrastreLclHeader;
-		$af_header->dateEffective = $request->dateEffective;
-		$af_header->locations_id = $request->locations_id;
-		$af_header->save();
+		DB::beginTransaction();
+		try{
+			$af_header = new ArrastreLclHeader;
+			$af_header->dateEffective = $request->dateEffective;
+			$af_header->locations_id = $request->locations_id;
+			$af_header->save();
 
-		$_lcl_types_id = json_decode(stripslashes($request->lcl_types_id), true);
-		$_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
-		$_amount = json_decode(stripslashes($request->amount), true);
+			$_lcl_types_id = json_decode(stripslashes($request->lcl_types_id), true);
+			$_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
+			$_amount = json_decode(stripslashes($request->amount), true);
 
-		$tblRowLength = $request->tblLength;
+			$tblRowLength = $request->tblLength;
 
-		for($x = 0; $x < $tblRowLength; $x++)
-		{
-			$af_detail = new ArrastreLclDetail;
-			$af_detail->arrastre_lcl_headers_id = $af_header->id;
-			$af_detail->lcl_types_id = (string)$_lcl_types_id[$x];
-			$af_detail->basis_types_id = (string)$_basis_types_id[$x];
-			$af_detail->amount = (string)$_amount[$x];
-			$af_detail->save();
+			for($x = 0; $x < $tblRowLength; $x++)
+			{
+				$af_detail = new ArrastreLclDetail;
+				$af_detail->arrastre_lcl_headers_id = $af_header->id;
+				$af_detail->lcl_types_id = (string)$_lcl_types_id[$x];
+				$af_detail->basis_types_id = (string)$_basis_types_id[$x];
+				$af_detail->amount = (string)$_amount[$x];
+				$af_detail->save();
+			}
+			DB::commit();
+			return $af_header;
+		}catch(\Exception  $e){
+			DB::rollback();
 		}
 
 
 	} 
 	public function update(StoreArrastreFeeLCL $request, $id)
 	{
+		DB::beginTransaction();
+		try{
+			\DB::table('arrastre_lcl_details')
+			->where('arrastre_lcl_headers_id','=', $request->af_head_id)
+			->delete();
 
-		\DB::table('arrastre_lcl_details')
-		->where('arrastre_lcl_headers_id','=', $request->af_head_id)
-		->delete();
-
-		$af_header= ArrastreLclHeader::findOrFail($id);
-		$af_header->dateEffective = $request->dateEffective;
-		$af_header->locations_id = $request->locations_id;
-		$af_header->save();
+			$af_header= ArrastreLclHeader::findOrFail($id);
+			$af_header->dateEffective = $request->dateEffective;
+			$af_header->locations_id = $request->locations_id;
+			$af_header->save();
 
 
-		$_lcl_types_id = json_decode(stripslashes($request->lcl_types_id), true);
-		$_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
-		$_amount = json_decode(stripslashes($request->amount), true);
+			$_lcl_types_id = json_decode(stripslashes($request->lcl_types_id), true);
+			$_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
+			$_amount = json_decode(stripslashes($request->amount), true);
 
-		$tblRowLength = $request->tblLength;
+			$tblRowLength = $request->tblLength;
 
-		for($x = 0; $x < $tblRowLength; $x++)
-		{
-			$af_detail = new ArrastreLclDetail;
-			$af_detail->arrastre_lcl_headers_id = $af_header->id;
-			$af_detail->lcl_types_id = (string)$_lcl_types_id[$x];
-			$af_detail->basis_types_id = (string)$_basis_types_id[$x];
-			$af_detail->amount = (string)$_amount[$x];
-			$af_detail->save();
+			for($x = 0; $x < $tblRowLength; $x++)
+			{
+				$af_detail = new ArrastreLclDetail;
+				$af_detail->arrastre_lcl_headers_id = $af_header->id;
+				$af_detail->lcl_types_id = (string)$_lcl_types_id[$x];
+				$af_detail->basis_types_id = (string)$_basis_types_id[$x];
+				$af_detail->amount = (string)$_amount[$x];
+				$af_detail->save();
+			}
+			DB::commit();
+			return $af_header;
+		}catch(\Exception  $e){
+			DB::rollback();
 		}
 	}
 

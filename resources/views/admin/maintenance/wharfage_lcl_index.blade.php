@@ -275,9 +275,6 @@
 
 			},
 			onkeyup: false,
-			submitHandler: function (form) {
-				return false;
-			}
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -290,13 +287,13 @@
 			$('#wf_parent_table > tbody').append(wf_row);
 			$('#wf_warning').removeClass('in');
 			$('.money').inputmask("numeric", {
-						radixPoint: ".",
-						groupSeparator: ",",
-						digits: 2,
-						autoGroup: true,
-						rightAlign: true,
-						removeMaskOnSubmit:true,
-					});
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 
 
 		});
@@ -324,7 +321,7 @@
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type_name" name = "basis_type_name" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "money form-control amount_valid" value ="'+numberWithCommas(data[i].amount)+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
+						rows += '<tr id = "wf-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_types_id+'" ><input   class = "form-control" id = "basis_type" name = "basis_type" data-rule-required="true"  disabled = "true" value ="'+data[i].basis_type+'" ></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "money form-control amount_valid" name = "amount" id = "amount" value ="'+numberWithCommas(data[i].amount)+'"   data-rule-required="true"  style="text-align: right;"/></div></td><td width = "10%" style="text-align: center;"><button class = "btn btn-danger btn-md delete-wf-row">x</button></td></tr>';
 
 					}
 					$('#wf_parent_table > tbody').html("");
@@ -344,13 +341,13 @@
 		});
 
 		$('.money').inputmask("numeric", {
-						radixPoint: ".",
-						groupSeparator: ",",
-						digits: 2,
-						autoGroup: true,
-						rightAlign: true,
-						removeMaskOnSubmit:true,
-					});
+			radixPoint: ".",
+			groupSeparator: ",",
+			digits: 2,
+			autoGroup: true,
+			rightAlign: true,
+			removeMaskOnSubmit:true,
+		});
 		$(document).on('click', '.deactivate', function(e){
 			wf_id = $(this).val();
 			data = wftable.row($(this).parents()).data();
@@ -549,7 +546,6 @@
 				}
 			}
 		});
-});
 
 function validatewfRows()
 {
@@ -567,12 +563,15 @@ function validatewfRows()
 		dateEffective.style.borderColor = 'red';
 		error += "Location is required.";
 	}
+
+
 	for(var i = 0; i < basis_type.length; i++){
 		var temp;
 
 		if(basis_type[i].value === "0")
 		{
 			basis_type[i].style.borderColor ='red';
+
 			error+= "Basis required";
 		}else
 		{
@@ -582,16 +581,15 @@ function validatewfRows()
 
 		}
 		
-
-		amt = parseFloat(amount[i].value);
-		
+		amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
 		if(amt < 0){
 			amount[i].style.borderColor = 'red';
+			$('#wf_warning').addClass('in');
 			error += "Amount Required.";
 		}
 		else{
 			amount[i].style.borderColor = 'green';
-			amount_value.push(amount[i].value);
+			amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 			$('#wf_warning').removeClass('in');
 		}
 		
@@ -657,7 +655,7 @@ function validatewfRows()
 
 
 			
-			amt  = parseFloat(amount[i]);
+			amt  = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
 			if(amt < 0){
 				amount[i].style.borderColor = 'red';
 				error += "Amount Required.";
@@ -718,9 +716,12 @@ function validatewfRows()
 			}
 
 		}
-		function resetErrors() {
-			$('form input, form select').removeClass('inputTxtError');
-			$('label.error').remove();
-		}
-	</script>
-	@endpush
+	});
+
+
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
+</script>
+@endpush

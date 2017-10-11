@@ -24,6 +24,8 @@ class WharfageFeeController extends Controller
     
     public function store(StoreWharfageFee $request)
     {
+     DB::beginTransaction();
+     try{
         $wf_header = new WharfageHeader;
         $wf_header->dateEffective = $request->dateEffective;
         $wf_header->locations_id = $request->locations_id;
@@ -43,50 +45,64 @@ class WharfageFeeController extends Controller
             $wf_detail->amount = (string)$_amount[$x];
             $wf_detail->save();
         }
+        DB::commit();
+        return $wf_header;
+
+    }catch(\Exception  $e){
+        DB::rollback();
+    }
 
 
-    } 
-    public function update(StoreWharfageFee $request, $id)
+} 
+public function update(StoreWharfageFee $request, $id)
+{
+ DB::beginTransaction();
+ try{
+    \DB::table('wharfage_details')
+    ->where('wharfage_header_id','=', $request->wf_head_id)
+    ->delete();
+
+    $wf_header= WharfageHeader::findOrFail($id);
+    $wf_header->dateEffective = $request->dateEffective;
+    $wf_header->locations_id = $request->locations_id;
+    $wf_header->save();
+
+    $_container_sizes_id = json_decode(stripslashes($request->container_sizes_id), true);
+    $_amount = json_decode(stripslashes($request->amount), true);
+
+    $tblRowLength = $request->tblLength;
+
+    for($x = 0; $x < $tblRowLength; $x++)
     {
-        \DB::table('wharfage_details')
-        ->where('wharfage_header_id','=', $request->wf_head_id)
-        ->delete();
-
-        $wf_header= WharfageHeader::findOrFail($id);
-        $wf_header->dateEffective = $request->dateEffective;
-        $wf_header->locations_id = $request->locations_id;
-        $wf_header->save();
-
-        $_container_sizes_id = json_decode(stripslashes($request->container_sizes_id), true);
-        $_amount = json_decode(stripslashes($request->amount), true);
-
-        $tblRowLength = $request->tblLength;
-
-        for($x = 0; $x < $tblRowLength; $x++)
-        {
-            $wf_detail = new WharfageDetail;
-            $wf_detail->wharfage_header_id = $wf_header->id;
-            $wf_detail->container_sizes_id = (string)$_container_sizes_id[$x];
-            $wf_detail->amount = (string)$_amount[$x];
-            $wf_detail->save();
-        }
-        
+        $wf_detail = new WharfageDetail;
+        $wf_detail->wharfage_header_id = $wf_header->id;
+        $wf_detail->container_sizes_id = (string)$_container_sizes_id[$x];
+        $wf_detail->amount = (string)$_amount[$x];
+        $wf_detail->save();
     }
 
-    public function destroy($id)
-    {
-        $new_wf = WharfageHeader::findOrFail($id);
-        $new_wf->delete();
+    DB::commit();
+    return $wf_header;
+}catch(\Exception  $e){
+    DB::rollback();
+}
 
-    }
+}
 
-    public function wf_maintain_data(Request $request){
-        $rates = DB::table('wharfage_details')
-        ->join ('container_types', 'container_types.id','=','container_sizes_id') 
-        -> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
-        ->where('wharfage_header_id', '=', $request->wf_id)
-        ->get();
+public function destroy($id)
+{
+    $new_wf = WharfageHeader::findOrFail($id);
+    $new_wf->delete();
 
-        return $rates;
-    }
+}
+
+public function wf_maintain_data(Request $request){
+    $rates = DB::table('wharfage_details')
+    ->join ('container_types', 'container_types.id','=','container_sizes_id') 
+    -> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
+    ->where('wharfage_header_id', '=', $request->wf_id)
+    ->get();
+
+    return $rates;
+}
 }
