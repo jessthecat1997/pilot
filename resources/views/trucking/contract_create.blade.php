@@ -16,83 +16,106 @@
 						</div>
 					</div>
 					<div class = "panel-default">
-						<div class = "col-md-12">
-							<div class = "col-md-6 col-md-offset-2">
+						<div class="col-md-9">
+							<div class = "col-md-12">
+								<div class = "col-md-6 col-md-offset-2">
+									<div class = "form-horizontal">
+										<div class = "form-group">
+											<label class = "control-label col-md-3">Consignee: </label>
+											<div class = "input-group col-md-9">
+												<select id = "consignee_id" class = "form-control select2-allow-clear select2">
+													<option value = "0">Select Consignee</option>
+													@forelse($consignees as $consignee)
+													<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
+
+													@empty
+
+													@endforelse
+												</select>
+
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class = "col-md-4">
+									<button class = "btn but add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
+								</div>
+							</div>
+							<div class="col-md-12">
 								<div class = "form-horizontal">
 									<div class = "form-group">
-										<label class = "control-label col-md-3">Consignee: </label>
-										<div class = "input-group col-md-9">
-											<select id = "consignee_id" class = "form-control select2-allow-clear select2">
-												<option value = "0">Select Consignee</option>
-												@forelse($consignees as $consignee)
-												<option value = "{{ $consignee->id }}">{{ $consignee->firstName . " " . $consignee->lastName . " - " . $consignee->companyName }}</option>
-
-												@empty
-
-												@endforelse
-											</select>
-
+										<label class = "control-label col-md-3">Name: </label>
+										<div class = "col-md-9">
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
+											</div>
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
+											</div>
+											<div class = "col-md-4">
+												<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
+											</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Contact Number: </label>
+										<div class = "col-md-3">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
+											</div>
+										</div>
+										<label class = "control-label col-md-2">Email: </label>
+										<div class = "col-md-4">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
+											</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Company Name</label>
+										<div class = "col-md-9">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
+											</div>
+										</div>
+									</div>
+									<div class = "form-group">
+										<label class = "control-label col-md-3">Business Style: </label>
+										<div class = "col-md-3">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
+											</div>
+										</div>
+										<label class = "control-label col-md-2">TIN: </label>
+										<div class = "col-md-4">
+											<div class = "col-md-12">
+												<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class = "col-md-4">
-								<button class = "btn but add_new_consignee" style="line-height: 10px; height: 28px;">New Consignee</button>
 							</div>
 						</div>
-						<div class="col-md-12">
-							<div class = "form-horizontal">
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Name: </label>
-									<div class = "col-md-9">
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cfirstName" disabled placeholder="First Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_cmidddleName" disabled placeholder="Middle Name" />
-										</div>
-										<div class = "col-md-4">
-											<input type = "text"  class = "form-control" id = "_clastName" disabled placeholder="Last Name" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Contact Number: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccontactNumber" disabled placeholder="Contact Number" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">Email: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cemail" disabled placeholder="Email" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Company Name</label>
-									<div class = "col-md-9">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_ccompanyName" disabled placeholder="Company" />
-										</div>
-									</div>
-								</div>
-								<div class = "form-group">
-									<label class = "control-label col-md-3">Business Style: </label>
-									<div class = "col-md-3">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cbusinessStyle" disabled placeholder="Business Style" />
-										</div>
-									</div>
-									<label class = "control-label col-md-2">TIN: </label>
-									<div class = "col-md-4">
-										<div class = "col-md-12">
-											<input type = "text"  class = "form-control" id = "_cTIN" disabled placeholder="TIN" />
-										</div>
-									</div>
-								</div>
-							</div>
+						<div class="col-md-3">
+							<table class="table table-responsive table-striped table-bordered" id = "contract_table">
+								<thead>
+									<tr>
+										<td>
+											Active Contracts
+										</td>
+										<td>
+											Action
+										</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td colspan="2" style="text-align: center;">
+											No records.
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -484,8 +507,6 @@
 				},
 
 			},
-
-
 		});
 
 		$('#dateEffective').datetimepicker({
@@ -573,6 +594,32 @@
 						}
 					}
 				})
+
+				$.ajax({
+					type: 'GET',
+					url: "{{ route('trucking.index') }}/contracts/get_con_contracts/" + $(this).val(),
+					data: 
+					{
+						'_token' : $('input[name=_token]').val(),
+					},
+					success: function(data)
+					{
+						rows = "";
+						for(var i = 0; i < data.length; i ++)
+						{
+							rows += "<tr><td>" + data[i].id + "</td><td style = 'text-align: center;'><button class = 'view_contract btn btn-sm btn-info' value ='"+data[i].id +"'>View</button></td></tr>";
+						}
+						$('#contract_table > tbody').html("");
+						if(data.length == 0)
+						{
+							$('#contract_table > tbody').html("<tr><td colspan = '2'>No records found.</td></tr>");
+						}
+						else
+						{
+							$('#contract_table > tbody').append(rows);
+						}
+					}
+				})
 			}
 			else
 			{
@@ -581,13 +628,19 @@
 				$('#_clastName').val("");
 				$('#_ccontactNumber').val("");
 				$('#_cemail').val("");
-				$('#_ccompa	nyName').val("");
+				$('#_ccompanyName').val("");
 				$('#_cbusinessStyle').val("");
 				$('#_cTIN').val("");
 				$('#quotation_table > tbody').html("");
 				$('.new_quotation').attr('disabled', 'true');
 				$('#quotation_table > tbody').html("<tr><td colspan = '4' style = 'text-align:center;'>No records found.</td></tr>");
+				$('#contract_table > tbody').html("<tr><td colspan = '2' style = 'text-align: center;'>No records found.</td></tr>");
+
 			}
+		})
+		$(document).on('click', '.view_contract', function(e){
+			e.preventDefault();
+			window.open("{{ route('trucking.index') }}/contracts/" + $(this).val() + "/view");
 		})
 
 		$(document).on('change', '.quotation_status', function(e){

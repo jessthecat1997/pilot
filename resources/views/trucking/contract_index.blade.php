@@ -149,6 +149,8 @@
 			e.preventDefault();
 			window.open("{{ route('trucking.index') }}/contracts/" + $(this).val() + "/agreement_pdf");
 		})
+
+
 	})
 </script>
 @endpush

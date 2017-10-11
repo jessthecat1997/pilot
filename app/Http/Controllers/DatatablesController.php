@@ -627,16 +627,16 @@ class DatatablesController extends Controller
 		})
 		->editColumn('id', '{{ $id }}')
 		->editColumn('dateEffective', function($contract_header){
-			return $contract_header->dateEffective ? with(new Carbon ($contract_header->dateEffective))->toFormattedDateString() : 'Pending';
+			return $contract_header->dateEffective ? with(new Carbon ($contract_header->dateEffective))->format("F d, Y") : 'Pending';
 		})
 		->editColumn('dateExpiration', function($contract_header){
 
-			return $contract_header->dateExpiration ? with(new Carbon ($contract_header->dateExpiration))->toFormattedDateString()  : 'Pending';
+			return $contract_header->dateExpiration ? with(new Carbon ($contract_header->dateExpiration))->format("F d, Y")  : 'Pending';
 
 
 
 		})
-		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->toFormattedDateString() }}')
+		->editColumn('created_at', '{{ Carbon\Carbon::parse($created_at)->format("F d, Y") }}')
 		->make(true);
 	}
 
