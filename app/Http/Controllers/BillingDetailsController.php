@@ -579,10 +579,16 @@ class BillingDetailsController extends Controller
 			])
 		->get();
 
+		$printedby = DB::table('billing_invoice_headers')
+		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
+		->join('employees', 'consignee_service_order_headers.employees_id', '=', 'employees.id')
+		->select(DB::raw('CONCAT(firstName, ", ", lastName) AS empname'))
+		->where('billing_invoice_headers.id', '=', $id)
+		->get();
 
 		$utility = \App\UtilityType::all();
 
-		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub', 'utility']));
+		$pdf = PDF::loadView('pdf_layouts.bill_invoice_pdf', compact(['rev_bill', 'bills', 'number', 'rev_total','rev_vat','exp_bill', 'exp_total', 'exp_total', 'exp_vat', 'rev_sub', 'utility', 'printedby']));
 		return $pdf->stream();
 	}
 	public function ref_pdf(Request $request, $id)
@@ -626,7 +632,7 @@ class BillingDetailsController extends Controller
 			) dpay
 
 			ON t.id = dpay.bi_head_id
-			WHERE t.status = "U" AND t.isVoid = 0 AND p.total != 0.00 AND t.so_head_id = ?
+			WHERE t.status = "U" AND t.isVoid = 0 AND p.total != 0.00 AND t.isFinalize = 1 AND t.so_head_id = ?
 			', [$id]);
 
 		return Datatables::of($total)

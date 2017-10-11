@@ -28,16 +28,24 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request)
     {
-       $request->user()->authorizeRoles('Admin', 'Broker', 'Billing Manager', 'Trucking Manager');
-       return redirect('/dashboard');
+     $request->user()->authorizeRoles('Admin', 'Broker', 'Billing Manager', 'Trucking Manager');
+     return redirect('/dashboard');
 
-       if($request->user() == 'Admin')
-       {
+     if($request->user()->authorizeRoles == 'Admin')
+     {
         return redirect('/dashboard');
     }
-    else if($request->user() == 'Broker')
+    else if($request->user()->authorizeRoles == 'Broker')
     {
         return redirect('/brokerage');
+    }
+    else if($request->user()->authorizeRoles == 'Billing Manager')
+    {
+        return redirect('/billing');
+    }
+    else if($request->user()->authorizeRoles == 'Trucking Manager')
+    {
+        return redirect('/trucking');
     }
 
 }
