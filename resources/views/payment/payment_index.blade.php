@@ -97,7 +97,7 @@
 			
 			columns: [
 			{ data: 'id' },
-			{ data: 'companyName' },
+			{ data: 'consignee' },
 			{ data: 'amount' },
 			{ data: 'isCheque', "render" : function( data, type, full ) 
 			{
