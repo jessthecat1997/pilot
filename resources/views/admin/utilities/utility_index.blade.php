@@ -103,6 +103,18 @@
 						</div>
 						@empty
 						@endforelse
+						
+						<div class = "form-group required">
+							<label class = "control-label">Vat Rate</label>
+							<div class = " form-group input-group " >
+								@forelse($vat as $v)
+								<input type = "number" class = "form-control percentage" name = "vat_rate" 
+								id = "vat_rate"  data-rule-required="true"  value="{{$v->rate}}" style="text-align: right" />
+								<span class = "input-group-addon">%</span>
+								@empty
+								@endforelse
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -143,7 +155,7 @@
 	*/
 	$(document).ready(function(){
 
-
+		var data;
 		$("#commentForm").validate({
 			rules: 
 			{
@@ -196,6 +208,14 @@
 					min: 1,
 					max: 365,
 				},
+				vat_rate:
+				{
+					required: true,
+					max: 100,
+					min: 0,
+					sevendecimalplaces:true,
+				},
+
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
@@ -249,11 +269,12 @@
 
 		$(document).on('click', '#btnSave', function(e){
 			e.preventDefault();
+			$('#vat_rate').valid();
 			
 	/*		if( temp_bank_charges === $('#bank_charges').val() && temp_other_charges === $('#other_charges').val()
 				&& temp_insurance_c === $('#insurance_c').val() && temp_insurance_gc === $('#insurance_gc').val()
-				&& temp_company_name === $('#company_name').val() && temp_company_address === $('company_address').val() 
-				&& temp_company_tin === $('#company_tin').val() && temp_company_contact === $('company_contact').val()
+				&& temp_company_name === $('#company_name').val() && temp_company_address === $('#company_address').val() 
+				&& temp_company_tin === $('#company_tin').val() && temp_company_contact === $('#company_contact').val()
 
 				)
 			{
@@ -264,7 +285,7 @@
 
 			}else{
 				*/
-				$('#btnSave').attr('disabled', 'true');
+				
 
 				$.ajax({
 					type: 'PUT',
@@ -282,10 +303,12 @@
 						'company_contact': $('#company_contact').val(),
 
 						'payment_allowance': $('#payment_allowance').val(),
+						'rate': $('#vat_rate').val(),
 					},
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
+							window.location.reload();
 							$('#other_charges').val(data.other_charges);
 							$('#bank_charges').val(data.bank_charges);
 							$('#insurance_c').val(data.insurance_c);
@@ -295,6 +318,7 @@
 							$('#company_tin').val(data.company_tin);
 							$('#company_contact').val(data.company_contact);
 							$('#payment_allowance').val(data.payment_allowance);
+							$('#vat_rate').val(data.rate);
 							temp_other_charges = data.other_charges;
 							temp_bank_charges = data.bank_charges;
 							temp_insurance_gc = data.insurance_gc;

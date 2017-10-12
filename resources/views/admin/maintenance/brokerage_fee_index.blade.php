@@ -81,7 +81,7 @@
                             <br />
                             <div class = "collapse" id = "bf_table_warning">
                                 <div class="alert alert-danger">
-                                    <strong>Warning!</strong> Requires at least one import processing fee rate.
+                                    <strong>Warning!</strong> Requires at least one brokerage fee.
                                 </div>
                             </div>
                             <div class = "collapse" id = "bf_warning">
@@ -338,7 +338,7 @@
                     var rows = "";
                     for(var i = 0; i < data.length; i++){
                         rows += '<tr id = "bf-row"><td><div class = "form-group input-group" ><span class = "input-group-addon">$</span><input type = "text" class = "form-control bf_minimum_valid money" value ="' + data[i].minimum + '" name = "minimum" id = "minimum"  data-rule-required="true" readonly="true"  style="text-align: right" /></div></td><td><div class = "form-group input-group"><span class = "input-group-addon">$</span><input type = "text" class = "form-control money bf_maximum_valid" value ="'+ data[i].maximum+'" name = "maximum" id = "maximum"  data-rule-required="true" style="text-align: right;" /></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid money" value ="'+ data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td><td style="text-align: center;"><button class = "btn btn-danger btn-md delete-bf-row">x</button></td></tr>';
-                            
+
                     }
                     $('#bf_parent_table > tbody').html("");
                     $('#bf_parent_table > tbody').append(rows);
@@ -361,23 +361,24 @@
         });
 
         $(document).on('click', '.deactivate', function(e){
-         bf_id = $(this).val();
-         data = bftable.row($(this).parents()).data();
-         $('#confirm-delete').modal('show');
-     });
+           bf_id = $(this).val();
+           data = bftable.row($(this).parents()).data();
+           $('#confirm-delete').modal('show');
+       });
 
 
         $(document).on('click', '.delete-bf-row', function(e){
             e.preventDefault();
-            $('#bf_warning').removeClass('in');
+
             if($('#bf_parent_table > tbody > tr').length == 1){
-                $('#bf_table_warning').addClass('fade in');
 
                 var obj = $(this).closest('tr');
                 $(obj).nextAll().each(function(){
                     $(this).remove();
                 })
                 obj.remove();
+                $('#bf_table_warning').addClass('fade in');
+
             }
             else{
                 var obj = $(this).closest('tr');
@@ -385,6 +386,8 @@
                     $(this).remove();
                 })
                 obj.remove();
+                $('#bf_table_warning').removeClass('fade in');
+
             }
         })
 
@@ -392,28 +395,33 @@
             e.preventDefault();
             $('#bf_table_warning').removeClass('fade in');
             if(validatebfRows() === true){
+               $('input[name=maximum]').each(function(){
+                $(this).attr("readonly", "true");
 
-                $('#bf_parent_table').append(bf_row);
-                $('.money').each(function(){
-                    $(this).inputmask("numeric", {
-                        radixPoint: ".",
-                        groupSeparator: ",",
-                        digits: 2,
-                        autoGroup: true,
-                        rightAlign: true,
-                        removeMaskOnSubmit:true,
-                    })
+            });
 
+               $('#bf_parent_table').append(bf_row);
+               $('.money').each(function(){
+                $(this).inputmask("numeric", {
+                    radixPoint: ".",
+                    groupSeparator: ",",
+                    digits: 2,
+                    autoGroup: true,
+                    rightAlign: true,
+                    removeMaskOnSubmit:true,
                 })
-                $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
-                $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
-                for(var i = 0; i < minimum.length; i++){
-                    minimum[i+1].value = (parseFloat("" +$(maximum[i]).inputmask('unmaskedvalue')) + 0.01).toFixed(2);
-                }
 
+            })
+
+               $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
+               $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
+               for(var i = 0; i < minimum.length; i++){
+                minimum[i+1].value = (parseFloat("" +$(maximum[i]).inputmask('unmaskedvalue')) + 0.01).toFixed(2);
             }
 
-        })
+        }
+
+    })
 
         $(document).on('change', '.bf_minimum_valid', function(e){
             $(".bf_minimum_valid").each(function(){
@@ -507,14 +515,15 @@
         $(document).on('click', '.finalize-bf', function(e){
             e.preventDefault();
 
-            if(finalvalidatebfRows() === true){
+
+            if(finalvalidatebfRows() === true && $('#bf_parent_table > tbody > tr').length > 0 ){
 
                 var title = $('.modal-title').text();
 
-                $('#btnSave').attr('disabled', 'true');
+                
                 if(title == "New Brokerage Fee Range"){
 
-                 if ($('#dateEffective').valid()){
+                   if ($('#dateEffective').valid()){
                     console.log('min' + minimum_id);    
                     console.log(maximum_id);    
                     jsonMinimum = JSON.stringify(minimum_id);
@@ -533,33 +542,46 @@
                         },
 
                         success: function (data){
-                            bftable.ajax.url( '{{ route("bf.data") }}' ).load();
-                            $('#bfModal').modal('hide');
-                            $('.modal-title').text('New Brokerage Fee Range');
-                            $('#minimum').val("0.00");
-                            $('#maximum').val("0.00"); 
-                            $('#amount').val("0.00");
 
-                            toastr.options = {
-                                "closeButton": false,
-                                "debug": false,
-                                "newestOnTop": false,
-                                "progressBar": false,
-                                "rtl": false,
-                                "positionClass": "toast-bottom-right",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": 300,
-                                "hideDuration": 1000,
-                                "timeOut": 2000,
-                                "extendedTimeOut": 1000,
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
+                            if(typeof(data) === "object"){
+                                bftable.ajax.url( '{{ route("bf.data") }}' ).load();
+                                $('#bfModal').modal('hide');
+                                $('.modal-title').text('New Brokerage Fee Range');
+                                $('#minimum').val("0.00");
+                                $('#maximum').val("0.00"); 
+                                $('#amount').val("0.00");
+
+                                toastr.options = {
+                                    "closeButton": false,
+                                    "debug": false,
+                                    "newestOnTop": false,
+                                    "progressBar": false,
+                                    "rtl": false,
+                                    "positionClass": "toast-bottom-right",
+                                    "preventDuplicates": false,
+                                    "onclick": null,
+                                    "showDuration": 300,
+                                    "hideDuration": 1000,
+                                    "timeOut": 2000,
+                                    "extendedTimeOut": 1000,
+                                    "showEasing": "swing",
+                                    "hideEasing": "linear",
+                                    "showMethod": "fadeIn",
+                                    "hideMethod": "fadeOut"
+                                }
+                                toastr["success"]("Record added successfully")
+                                $('#btnSave').removeAttr('disabled');
+                            }else{
+
+                                e.preventDefault();
+                                resetErrors();
+                                var invdata = JSON.parse(data);
+                                $.each(invdata, function(i, v) {
+                                    console.log(i + " => " + v);
+                                    var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+                                    $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+                                });
                             }
-                            toastr["success"]("Record added successfully")
-                            $('#btnSave').removeAttr('disabled');
                         }
                     })
                     
@@ -644,6 +666,9 @@ function validatebfRows()
     maximum =   document.getElementsByName('maximum');
     amount =  document.getElementsByName('amount');
     error = "";
+    var min;
+    var max;
+    var amt;
 
     if(dateEffective === ""){
 
@@ -652,14 +677,16 @@ function validatebfRows()
 
     } 
 
-
+    
     for(var i = 0; i < minimum.length; i++){
         var temp;
 
 
+        amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
+        max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
+        min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
 
-
-        if(maximum[i].value === "")
+        if(max < 0)
         {
             maximum[i].style.borderColor = 'red';
             error += "Maximum Required.";
@@ -673,7 +700,7 @@ function validatebfRows()
             $('#bf_warning').removeClass('in');
         }
 
-        if(amount[i].value === "")
+        if(amt < 0)
         {
             amount[i].style.borderColor = 'red';
             error += "Amount Required.";
@@ -681,15 +708,11 @@ function validatebfRows()
 
         else
         {
-            if(amount[i].value < 1){
-                amount[i].style.borderColor = 'red';
-                error += "Amount Required.";
-            }
-            else{
-                amount[i].style.borderColor = 'green';
-                amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-                $('#bf_warning').removeClass('in');
-            }
+
+            amount[i].style.borderColor = 'green';
+            amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+            $('#bf_warning').removeClass('in');
+
         }
 
         if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
@@ -762,7 +785,7 @@ function validatebfRows()
         minimum = document.getElementsByName('minimum');
         maximum = document.getElementsByName('maximum');
         amount = document.getElementsByName('amount');
-        
+        var min, max, amt;
         error = "";
 
         if($('#dateEffective').val() == ""){
@@ -772,108 +795,106 @@ function validatebfRows()
         }
 
         for(var i = 0; i < minimum.length; i++){
+         amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
+         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
+         min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
 
+         if(min < 0)
+         {
 
-            if(minimum[i].value === "")
-            {
-
-                error += "Minimum Required.";
-                $('#bf_warning').addClass('in');
-            }
-
-            else
-            {
-
-                minimum_id_descrp.push($(minimum[i]).inputmask('unmaskedvalue'));
-                var min = $(minimum[i]).inputmask('unmaskedvalue');
-                minimum_id.push($(minimum[i]).inputmask('unmaskedvalue') );
-            }
-            if(maximum[i].value === ""||maximum[i].value === "0.00"||maximum[i].value === "0")
-            {
-                maximum[i].style.borderColor = 'red';
-                error += "Maximum Required.";
-                $('#bf_warning').addClass('in');
-            }
-
-            else
-            {
-                maximum[i].style.borderColor = 'green';
-                maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
-                maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
-                $('#bf_warning').removeClass('in');
-            }
-
-            if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-            {
-                amount[i].style.borderColor = 'red';
-                error += "Amount Required.";
-                $('#contract_rates_warning').addClass('in');
-            }
-
-            else
-            {
-                if($(amount[i]).inputmask('unmaskedvalue') < 0){
-                    amount[i].style.borderColor = 'red';
-                    error += "Amount Required.";
-                }
-                else{
-                    amount[i].style.borderColor = 'green';
-                    amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
-                    $('#bf_warning').removeClass('in');
-                }
-            }
-
-            if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
-
-                maximum[i].style.borderColor = 'red';
-                error += "Same.";
-                $('#bf_warning').addClass('in');
-            }
-
-            if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
-
-                maximum[i].style.borderColor = 'red';
-                error += "Minimum is greater than maximum";
-                $('#bf_warning').addClass('in');
-            }   
-            pair = {
-                minimum: $(minimum[i]).inputmask('unmaskedvalue'),
-                maximum:$(maximum[i]).inputmask('unmaskedvalue')
-            };
-            range_pairs.push(pair);
-        }
-        var i, j, n;
-        found= false;
-        n=range_pairs.length;
-        for (i=0; i<n; i++) {                        
-            for (j=i+1; j<n; j++)
-            {              
-                if (range_pairs[i].minimum === range_pairs[j].minimum && range_pairs[i].maximum === range_pairs[j].maximum){
-                    found = true;
-                    
-                    maximum[i].style.borderColor = 'red';
-
-
-                    maximum[j].style.borderColor = 'red';
-                }
-            }   
-        }
-        if(found == true){
-            error+= "Existing rate.";
+            error += "Minimum Required.";
             $('#bf_warning').addClass('in');
         }
 
-        if(error.length == 0){
-            return true;
-        }
         else
         {
-            return false;
+
+            minimum_id_descrp.push($(minimum[i]).inputmask('unmaskedvalue'));
+            var min = $(minimum[i]).inputmask('unmaskedvalue');
+            minimum_id.push($(minimum[i]).inputmask('unmaskedvalue') );
         }
+        if(max < 0 )
+        {
+            maximum[i].style.borderColor = 'red';
+            error += "Maximum Required.";
+            $('#bf_warning').addClass('in');
+        }
+
+        else
+        {
+            maximum[i].style.borderColor = 'green';
+            maximum_id_descrp.push($(maximum[i]).inputmask('unmaskedvalue'));
+            maximum_id.push($(maximum[i]).inputmask('unmaskedvalue'));
+            $('#bf_warning').removeClass('in');
+        }
+
+        if(amt < 0)
+        {
+            amount[i].style.borderColor = 'red';
+            error += "Amount Required.";
+            $('#contract_rates_warning').addClass('in');
+        }
+
+        else
+        {
+
+            amount[i].style.borderColor = 'green';
+            amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
+            $('#bf_warning').removeClass('in');
+
+        }
+
+        if($(minimum[i]).inputmask('unmaskedvalue') === $(maximum[i]).inputmask('unmaskedvalue')){
+
+            maximum[i].style.borderColor = 'red';
+            error += "Same.";
+            $('#bf_warning').addClass('in');
+        }
+
+        if($(minimum[i]).inputmask('unmaskedvalue') > $(maximum[i]).inputmask('unmaskedvalue')){
+
+            maximum[i].style.borderColor = 'red';
+            error += "Minimum is greater than maximum";
+            $('#bf_warning').addClass('in');
+        }   
+        pair = {
+            minimum: $(minimum[i]).inputmask('unmaskedvalue'),
+            maximum:$(maximum[i]).inputmask('unmaskedvalue')
+        };
+        range_pairs.push(pair);
     }
-    function resetErrors() {
-        $('form input, form select').removeClass('inputTxtError');
-        $('label.error').remove();
+    var i, j, n;
+    found= false;
+    n=range_pairs.length;
+    for (i=0; i<n; i++) {                        
+        for (j=i+1; j<n; j++)
+        {              
+            if (range_pairs[i].minimum === range_pairs[j].minimum && range_pairs[i].maximum === range_pairs[j].maximum){
+                found = true;
+                
+                maximum[i].style.borderColor = 'red';
+
+
+                maximum[j].style.borderColor = 'red';
+            }
+        }   
     }
+    if(found == true){
+        error+= "Existing rate.";
+        $('#bf_warning').addClass('in');
+    }
+
+    if(error.length == 0){
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+function resetErrors() {
+    $('form input, form select').removeClass('inputTxtError');
+    $('label.error').remove();
+}
 </script>
 @endpush

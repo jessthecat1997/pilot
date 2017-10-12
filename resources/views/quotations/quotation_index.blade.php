@@ -14,7 +14,7 @@
 				List of Quotations
 			</div>
 			<div class="panel-body">
-				<table class = "table-responsive table" id="quotation_table">
+				<table class = "table-responsive table table-striped table-bordered" id="quotation_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<th>
@@ -24,6 +24,9 @@
 								Consignee
 							</th>
 							<th>
+								Status
+							</th>
+							<th>
 								Created At
 							</th>
 							<th>
@@ -31,6 +34,35 @@
 							</th>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($quotations as $quot)
+						<tr>
+							<td>
+								{{ $quot->id }}
+							</td>
+							<td>
+								{{ $quot->name }}
+							</td>
+							<td>
+								@if( $quot->con_head != null)
+								<a href = "{{ route('trucking.index') }}/contracts/{{ $quot->con_head }}/view">Contract : {{ $quot->con_head }}</a>
+								@else
+								Not Accepted
+								@endif
+							</td>
+							<td>
+								{{ Carbon\Carbon::parse($quot->created_at)->format('F d, Y') }}
+							</td>
+							<td>
+								<button value = "{{ $quot->id }}" class = "btn btn-md but view">View</button>
+								<button value = "{{ $quot->id }}" class = "btn btn-md btn-success print">Print</button>
+								<button value = "{{ $quot->id }}" class = "btn btn-md btn-danger archive">Archive</button>
+							</td>
+						</tr>
+						@empty
+
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -56,12 +88,12 @@
 @endsection
 @push('styles')
 <style>
-	.quotation
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.quotation
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 
@@ -74,12 +106,13 @@
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			ajax: '{{ route("quotation_data") }}',
+			//ajax: '{{ route("quotation_data") }}',
 			columns: [
 			
 			{ data: 'id' },
 			{ data: 'name' },
 			{ data: 'created_at' },
+			{ data: 'con_head' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],

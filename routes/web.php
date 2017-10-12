@@ -395,6 +395,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
 	Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
 	Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
+	Route::get('/trucking/contracts/get_con_contracts/{consignee_id}', 'ContractsController@get_con_contracts');
 //Vanessa addition
 	Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
 	Route::resource('/admin/contract_template','ContractTemplatesController');

@@ -14,12 +14,30 @@ class StoreBrokerageFee extends FormRequest
 
     public function rules()
     {
-        return [
-        'minimum' => 'required|',
-        'maximum' => 'required|',
-        'amount' => 'required|',
-        'dateEffective' =>'required|date'
-        ];
+         switch ($this->method()) {
+            case 'POST':
+
+            return [
+
+                'dateEffective' => 'required|date|unique:brokerage_fee_headers,dateEffective',
+                //'locations_id' => 'required|unique:arrastre_headers,locations_id',
+
+            ];
+            break;
+            
+            case 'PUT':
+
+            return [
+
+
+                'dateEffective' => 'required|date|unique:brokerage_fee_headers,dateEffective,' . $this->segment(3),
+
+            ];
+
+            break;
+            
+            default: break;
+        }
     }
 
     //Overriding the response 422

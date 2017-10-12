@@ -111,8 +111,8 @@
                         <div class = "col-md-12">
                           <div class = "form-horizontal">
 
-                          <div class = "form-group">
-                            <label class= "col-md-4 control-label">Expected Arrival Date*</label>
+                          <div class = "form-group required">
+                            <label class= "col-md-4 control-label">Expected Arrival Date</label required>
                              <div class = "col-md-5">
                               <div class = "input-group">
                                   <input type="text" class = "form-control" name="expect" id = "expectedArrivalDate" data-msg="Please fill this field" disabled required>
@@ -123,8 +123,8 @@
                             </div>
                           </div>
 
-                          <div class = "form-group">
-                            <label  class="col-md-4 control-label">Freight Type*</label>
+                          <div class = "form-group required">
+                            <label  class="col-md-4 control-label">Freight Type</label>
                             <div class="col-md-5">
                               <div class="input-group">
                                 <input id = "FreightType" type="text" class="form-control" aria-label="..." name = "freightType" data-msg="Please fill this field"  readonly required>
@@ -140,8 +140,8 @@
                             </div>
                           </div>
 
-                          <div class="form-group">
-                              <label for="email" class="col-md-4 control-label">BL\AWL Number*</label>
+                          <div class="form-group required">
+                              <label for="email" class="col-md-4 control-label">BL\AWL Number</label>
                               <div class="col-md-5">
                                     <input  type="text" class="form-control" name = "freightnumber" id = "freightNumber" data-msg="Please fill this field" required>
                               </div>
@@ -167,14 +167,14 @@
                           </div>
                           </div>
 
-                          <div class="form-group">
-                              <label  class="col-md-4 control-label">Shipper*</label>
+                          <div class="form-group required">
+                              <label  class="col-md-4 control-label">Shipper</label>
                               <div class="col-md-5">
                                     <input  type="text" class="form-control" name = "shipper" id = "shipper" required data-msg="Please fill this field">
                               </div>
                           </div>
 
-                          <div class = "form-group">
+                          <div class = "form-group required">
                             <label  class="col-md-4 control-label">Weight </label>
                             <div class="col-md-5">
                               <div class="input-group">
@@ -186,27 +186,6 @@
                             </div>
                           </div>
 
-                          <div class = "form-group">
-                            <label  class="col-md-4 control-label">Basis </label>
-                            <div class="col-md-5">
-                                <select class = "form-control" id = "basis" name="basis" >
-                                  @forelse($basis as $basis_types)
-                                  <option value = "{{ $basis_types->id }}">{{ $basis_types->name }}</option>
-                                  @empty
-                                  <option value = "No Cargo">No Basis Found</option>
-                                  @endforelse
-                                </select>
-                            </div>
-                          </div>
-                          <div class = "form-group">
-                            <label  class="col-md-4 control-label">Cargo Type </label>
-                            <div class="col-md-5">
-                                <select class = "form-control" id = "cargoType" name="cargoType" >
-                                  <option value = "G">General Cargo</option>
-                                  <option value = "C">Chemical</option>
-                                </select>
-                            </div>
-                          </div>
 
                           <div class = "form-group">
                             <label  class="col-md-4 control-label">Certificate Of Origin </label>
@@ -300,7 +279,24 @@
                                                 </div>
                                               </div>
                                             </div>
+
+                                            <div class = "form-horizontal">
+                                              <div class = "form-group">
+                                                <label  class="col-md-4 control-label">Cargo Type </label>
+                                                  <div class="col-md-8">
+                                                    <select class = "form-control" id = "0_cargoType" name="cargoType" onchange = "getCargoType(this)">
+                                                      <option value = "G">General Cargo</option>
+                                                      <option value = "C">Chemical</option>
+                                                      <option value = "D">Dangerous Cargo</option>
+                                                    </select>
+                                                </div>
+                                              </div>
+                                            </div>
+
                                           </div>
+
+
+
                                           <div class = "col-md-6">
                                             <div class = "form-horizontal">
                                               <div class="form-group required">
@@ -336,6 +332,9 @@
                                                   Description of goods
                                                 </td>
                                                 <td>
+                                                  Class
+                                                </td>
+                                                <td>
                                                   Gross Weight(kg)
                                                 </td>
                                                 <td>
@@ -351,8 +350,18 @@
                                                 <td width="35%">
                                                   <input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
                                                 </td>
+                                                <td width="35%">
+                                                  <select class = "form-control" name = "0_class">
+                                                    @forelse($dangerous_types as $dangerous_type)
+                                                    <option value = "{{ $dangerous_type->id }}">{{  $dangerous_type->name }}</option>
+                                                    @empty
+                                                    <option value = "No Cargo">No Dangerous Cargo Type Found</option>
+                                                    @endforelse
+                                                  </select>
+
+                                                </td>
                                                 <td width="20%">
-                                                  <input type = "number" name = "0_grossWeight" class = "form-control"/>
+                                                  <input type = "text" name = "0_grossWeight" class = "form-control" />
                                                 </td>
                                                 <td width="30%">
                                                   <input type = "text" name = "0_supplier"  class = "form-control" />
@@ -412,6 +421,12 @@
                                           Less Cargo Load Type
                                         </td>
                                         <td>
+                                          Basis
+                                        </td>
+                                        <td>
+                                            CBM
+                                        </td>
+                                        <td>
                                           Gross Weight(kg)
                                         </td>
                                         <td>
@@ -424,10 +439,10 @@
                                     </thead>
                                     <tbody>
                                       <tr id = "wodescription_row">
-                                        <td width="35%">
+                                        <td width="22%">
                                           <input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
                                         </td>
-                                        <td width="35%">
+                                        <td width="20%">
                                           <select class = "form-control" id = "lcl_type" name="wolclTypes" >
                                             @forelse($lcl_types as $lcl_type)
                                             <option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
@@ -437,9 +452,21 @@
                                           </select>
                                         </td>
                                         <td width="20%">
-                                          <input type = "number" name = "wogrossWeight" class = "form-control"/>
+                                          <select class = "form-control" id = "basis" name="basis" >
+                                            @forelse($basis as $lcl_type)
+                                            <option value = "{{ $lcl_type->id }}">{{ $lcl_type->name }}</option>
+                                            @empty
+                                            <option value = "No Cargo">No Basis Type Found</option>
+                                            @endforelse
+                                          </select>
                                         </td>
-                                        <td width="30%">
+                                        <td width = "12%">
+                                            <input type = "text" name = "cbm" class = "form-control" />
+                                        </td>
+                                        <td width="12%">
+                                          <input type = "text" name = "wogrossWeight" class = "form-control"/>
+                                        </td>
+                                        <td width="35%">
                                           <input type = "text" name = "wosupplier"  class = "form-control" />
                                         </td>
                                         <td width="15%">
@@ -797,11 +824,38 @@
   var con_ReturnTo = [];
   var con_ReturnAddress = [];
   var con_ReturnDate = [];
+  var con_Cargotype = [];
   var descrp_goods = [];
   var gross_weights = [];
+  var suppliers = [];
 	var lcl_types = [];
+  var basis_types = [];
+  var cbm = [];
+
+  window.onload = function(){
+    $('#0_details td:nth-child(2)').hide();
+  }
+
+    function getCargoType(selectObject) {
+    var id = selectObject.id;
+    var value = selectObject.value;
+
+    console.log(value);
+    console.log(id[0]);
+
+    if(value == 'D')
+    {
+        $('#'+id[0]+'_details td:nth-child(2)').show();
+    }
+    if(value != 'D')
+    {
+       $('#'+id[0]+'_details td:nth-child(2)').hide();
+    }
+
+  }
 
 	$(document).ready(function(){
+
 
 
 
@@ -1302,6 +1356,11 @@
 		})
 	}
 
+
+
+
+
+
   // Container
   $(document).on('click', '.add-new-container', function(e){
     e.preventDefault();
@@ -1315,9 +1374,16 @@
     new_container = new_container.replace('0_', container_ctr + "_");
     new_container = new_container.replace('0_', container_ctr + "_");
     new_container = new_container.replace('0_', container_ctr + "_");
+    new_container = new_container.replace('0_', container_ctr + "_");
+    new_container = new_container.replace('0_', container_ctr + "_");
+    console.log(new_container);
     container_array.push(container_ctr);
-    container_ctr++;
+    console.log()
     $('#container_copy:last-child').append(new_container);
+    $('#'+container_ctr+'_details td:nth-child(2)').hide();
+
+    container_ctr++;
+
   })
   $(document).on('click', '.remove-container-row', function(e){
     e.preventDefault();
@@ -1336,7 +1402,7 @@
     e.preventDefault();
     var id = $(this).closest("tr").find('.row_containerNumber').val() + '_table';
     if($('#' + id).length === 0){
-      $('#cargo_delivery_details').append('<table class = "table-responsive table" id = "' + $(this).closest("tr").find('.row_containerNumber').val() + '_table"><thead><tr><td>Container Number: '+ $(this).closest("tr").find('.row_containerNumber').val() +'</tr></td><tr><td>Description of Goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr id = "description_row"><td width="35%"><input type = "text" name = "'+ id +'_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "'+ id +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+ id +'_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  id + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "' + id +'">x</button></td></tr></tbody></table>');
+      $('#cargo_delivery_details').append('<table class = "table-responsive table" id = "' + $(this).closest("tr").find('.row_containerNumber').val() + '_table"><thead><tr><td>Container Number: '+ $(this).closest("tr").find('.row_containerNumber').val() +'</tr></td><tr><td>Description of Goods</td><td>Gross Weight(kg)</td><td>Supplier/s</td><td>Action</td></tr></thead><tbody><tr id = "description_row"><td width="35%"><input type = "text" name = "'+ id +'_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "number" name = "'+ id +'_grossWeight" class = "form-control money-form"/></td><td width="30%"><input type = "text" name = "'+ id +'_supplier"  class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-primary add-container-detail" value = "'+  id + '">+</button><button class = "btn btn-md btn-danger remove-container-detail" value = "' + id +'">x</button></td></tr></tbody></table>');
     }
   })
 
@@ -1344,11 +1410,27 @@
     e.preventDefault();
     var id = $(this).val();
     selected_container = id[0];
+
+
     if(validateCurrentContainerDetail() == true){
 
-      console.log(id);
-      var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
+
+
+      var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td>  <td> <select class = "form-control" name = "'+ id[0] + '_class" > @forelse($dangerous_types as $dangerous_type)<option value = "{{ $dangerous_type->id }}">{{  $dangerous_type->name }}</option>@empty<option value = "No Cargo">No Dangerous Cargo Type Found</option>@endforelse</select></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control money-form" /></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
       $('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+
+      console.log(detail_row);
+
+    }
+
+    if($('#'+id[0]+'_cargoType').val() == 'D')
+    {
+      $('#'+id[0]+'_details td:nth-child(2)').show();
+
+    }
+    if($('#'+id[0]+'_cargoType').val() != 'D')
+    {
+      $('#'+id[0]+'_details td:nth-child(2)').hide();
     }
 
   })
@@ -1386,11 +1468,43 @@
     }
   })
 
+  $(document).on('keyup keydown keypress', '.money', function (event) {
+    var len = $('.money').val();
+    var value = $('.money').inputmask('unmaskedvalue');
+    if (event.keyCode == 8) {
+      if(parseFloat(value) == 0 || value == ""){
+        $('.money').val("0.00");
+      }
+    }
+    else
+    {
+      if(value == ""){
+        $('.money').val("0.00");
+      }
+      if(parseFloat(value) <= 999999999.99){
+
+      }
+      else{
+        if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+        }
+        else{
+          return false;
+        }
+      }
+    }
+    if(event.keyCode == 189)
+    {
+      return false;
+    }
+  });
+
   function validateCurrentContainerDetail()
   {
     error = "";
     con_descrp = document.getElementsByName(selected_container + '_descriptionOfGoods');
     con_gw = document.getElementsByName(selected_container + '_grossWeight');
+    con_class = document.getElementsByName(selected_container + '_class');
     con_supp = document.getElementsByName(selected_container + '_supplier');
     for (var j = 0; j < con_descrp.length; j++) {
       if(con_descrp[j].value === "")
@@ -1434,15 +1548,17 @@
         portOfCfsLocation : con_PortOfCfsLocation[i],
         containerReturnTo : con_ReturnTo[i],
         containerReturnAddress : con_ReturnAddress[i],
-        containerReturnDate : con_ReturnDate[i]
+        containerReturnDate : con_ReturnDate[i],
+        cargoType : con_CargoType[i]
       }];
       child[0]['details'] = [];
       table_detail_row_count = $('#' + container_array[i] + "_details > tbody > tr").length;
 
       var name = container_array[i];
 
-
+      console.log("container_array: " +container_array);
       con_descrp = document.getElementsByName(name + '_descriptionOfGoods');
+      con_class = document.getElementsByName(name + '_class');
       con_gw = document.getElementsByName(name + '_grossWeight');
       con_supp = document.getElementsByName(name + '_supplier');
       for (var j = 0; j < table_detail_row_count; j++) {
@@ -1464,10 +1580,18 @@
         {
           con_gw[j].style.borderColor = 'green';
         }
+
+        var sample = con_gw[j].value;
+        sample  = sample.replace(/\,/g,'');
+        sample = parseFloat(sample).toFixed(2);
+        console.log(sample);
+
         child[0].details.push({
           descriptionOfGood : con_descrp[j].value,
-          grossWeight : con_gw[j].value,
+          class : con_class[j].value,
+          grossWeight : sample,
           supplier : con_supp[j].value
+
         });
       }
       json.push(child);
@@ -1494,6 +1618,7 @@
     con_ReturnDate = [];
     con_ShippingLine = [];
     con_PortOfCfsLocation = [];
+    con_CargoType = [];
     var error = "";
     con_number = document.getElementsByName("containerNumber");
     con_volume = document.getElementsByName("containerVolume");
@@ -1502,6 +1627,7 @@
     con_date = document.getElementsByName("containerReturnDate");
     con_ship = document.getElementsByName('shippingLine');
     con_port = document.getElementsByName('portOfCfsLocation');
+    con_cargotype = document.getElementsByName('cargoType');
     for(var i = 0; i < con_number.length; i++)
     {
       if(con_number[i].value === ""){
@@ -1562,6 +1688,9 @@
         con_ship[i].style.borderColor = 'green';
       }
 
+      con_CargoType.push(con_cargotype[i].value);
+
+
     }
     console.log(error);
     if(error.length === 0){
@@ -1573,16 +1702,21 @@
   }
   function validateDetail(){
     descrp_goods = [];
+    cbm = [];
     gross_weights = [];
     suppliers = [];
 		lcl_types = [];
+    basis_types = [];
 		var error = "";
+
 
     if($("#choices li.active").text() === "Without Container"){
       descrp = document.getElementsByName("wodescriptionOfGoods");
       gw = document.getElementsByName("wogrossWeight");
       supp = document.getElementsByName("wosupplier");
-	 lcl = document.getElementsByName("wolclTypes");
+	    lcl = document.getElementsByName("wolclTypes");
+      basis = document.getElementsByName("basis");
+      cbm_value = document.getElementsByName("cbm");
 		}
     for(var i = 0; i < descrp.length; i++){
       if(descrp[i].value === ""){
@@ -1598,7 +1732,11 @@
         gw[i].style.borderColor = 'red';
       }
       else{
-        gross_weights.push(gw[i].value);
+        var sample = gw[i].value;
+        sample  = sample.replace(/\,/g,'');
+        sample = parseFloat(sample).toFixed(2);
+        console.log(sample);
+        gross_weights.push(sample);
         gw[i].style.borderColor = 'green';
       }
       if(supp[i].value === ""){
@@ -1615,6 +1753,26 @@
 			else{
 				lcl_types.push(lcl[i].value);
 			}
+      if(basis[i].value === "")
+			{
+				basis[i].style.borderColor = 'red';
+				error += "No basis Type"
+			}
+			else{
+				basis_types.push((basis[i].value));
+			}
+      if(cbm_value[i].value === "")
+			{
+				cbm_value[i].style.borderColor = 'red';
+				error += "No cbm input"
+			}
+			else{
+        var sample = cbm_value[i].value;
+        sample  = sample.replace(/\,/g,'');
+        sample = parseFloat(sample).toFixed(2);
+        console.log(sample);
+				cbm.push(sample);
+			}
     }
     if(error.length === 0){
       return true;
@@ -1628,9 +1786,8 @@
   $('#brokerageBtn').on('click', function(e){
 
 		var loc = document.getElementById("pickup_id");
-		var basis = document.getElementById("basis");
+
 		var strloc = loc.options[loc.selectedIndex].value;
-		var strbasis = basis.options[basis.selectedIndex].value;
 		var withCOToggle;
 
 		if(document.getElementById("withCO").checked == true)
@@ -1642,15 +1799,23 @@
 			withCOToggle = 0;
 		}
 
+    console.log("descrp_goods: "+descrp_goods);
+    console.log("cbm: "+cbm);
+    console.log("basis"+basis_types);
+    console.log("suppliers: "+suppliers);
+    console.log("lcl_types: "+lcl_types);
+    console.log("gross_weights: "+gross_weights);
+
         if($("#choices li.active").text() === "Without Container"){
           if(validateDetail() === true){
           console.log("without continer");
 
-					console.log("basis: "+strbasis);
-					console.log("cargoType: "+document.getElementById('cargoType').value,);
-					console.log("withCO: "+withCOToggle);
+
+				console.log("withCO: "+withCOToggle);
 
           console.log("descrp_goods: "+descrp_goods);
+          console.log("cbm: "+ cbm);
+          console.log("basis"+ basis_types);
           console.log("suppliers: "+suppliers);
 					console.log("lcl_types: "+lcl_types);
 					console.log("gross_weights: "+gross_weights);
@@ -1658,20 +1823,24 @@
         }
         else {
           if(validateContainer() == true){
-            console.log("with continer");
+            validateContainerDetail() == true
 
-						console.log("basis: "+strbasis);
-						console.log("cargoType: "+document.getElementById('cargoType').value,);
-						console.log("withCO: "+withCOToggle);
+              console.log("with continer");
 
-            console.log('containerNumber: ' + con_Number);
-            console.log('containerVolume: ' + con_Volume);
-            console.log('containerReturnTo: ' + con_ReturnTo);
-            console.log('containerReturnAddress: ' + con_ReturnAddress);
-            console.log('containerReturnDate: ' + con_ReturnDate);
-            console.log('shippingLine: ' + con_ShippingLine);
-            console.log('portOfCfsLocation: ' + con_PortOfCfsLocation);
-          console.log('container_data: ' + results);
+
+
+  						console.log("withCO: "+withCOToggle);
+
+              console.log('containerNumber: ' + con_Number);
+              console.log('containerVolume: ' + con_Volume);
+              console.log('containerReturnTo: ' + con_ReturnTo);
+              console.log('containerReturnAddress: ' + con_ReturnAddress);
+              console.log('containerReturnDate: ' + con_ReturnDate);
+              console.log('shippingLine: ' + con_ShippingLine);
+              console.log('portOfCfsLocation: ' + con_PortOfCfsLocation);
+              console.log('cargo type: ' +con_CargoType);
+              console.log('container_data: ' + results);
+
         }
       }
 
@@ -1699,11 +1868,11 @@
                   'arrivalDate' : document.getElementById('expectedArrivalDate').value,
                   'freightNumber' : document.getElementById('freightNumber').value,
                   'weight' : document.getElementById('weight').value,
-									'basis' : strbasis,
-									'cargoType' : document.getElementById('cargoType').value,
 									'withCO' : withCOToggle,
                   'descrp_goods' : descrp_goods,
 									'lcl_types' : lcl_types,
+                  'basis' : basis_types,
+                  'cbm' : cbm,
                   'gross_weights' : gross_weights,
                   'suppliers' : suppliers,
                 },
@@ -1732,7 +1901,6 @@
           }
           }
         else {
-
             if(validateContainer() == true){
               validateContainerDetail();
               $.ajax({
@@ -1749,8 +1917,6 @@
                   'arrivalDate' : document.getElementById('expectedArrivalDate').value,
                   'freightNumber' : document.getElementById('freightNumber').value,
                   'weight' : document.getElementById('weight').value,
-									'basis' : strbasis,
-									'cargoType' : document.getElementById('cargoType').value,
 									'withCO' : withCOToggle,
                   'containerNumber' : con_Number,
   								'containerVolume' : con_Volume,
@@ -1759,6 +1925,7 @@
   								'containerReturnDate' : con_ReturnDate,
   								'shippingLine' : con_ShippingLine,
   								'portOfCfsLocation' : con_PortOfCfsLocation,
+                  'cargoType': con_CargoType,
   								'container_data' : results,
                 },
                 success: function(data){
@@ -1785,6 +1952,7 @@
         }
       }
     });
+
 
 
 
@@ -1894,6 +2062,56 @@
 
 		$('#processedBy').valid();
   }
+
+  $('input.money-form').on('keydown',function(e){
+    // tab, esc, enter
+    if ($.inArray(e.keyCode, [9, 27, 13]) !== -1 ||
+        // Ctrl+A
+        (e.keyCode == 65 && e.ctrlKey === true) ||
+        // home, end, left, right, down, up
+        (e.keyCode >= 35 && e.keyCode <= 40)) {
+        return;
+    }
+
+    e.preventDefault();
+
+    // backspace & del
+    if($.inArray(e.keyCode,[8,46]) !== -1){
+        $(this).val('');
+        return;
+    }
+
+    var a = ["a","b","c","d","e","f","g","h","i","`"];
+    var n = ["1","2","3","4","5","6","7","8","9","0"];
+
+    var value = $(this).val();
+    var clean = value.replace(/\./g,'').replace(/,/g,'').replace(/^0+/, '');
+
+    var charCode = String.fromCharCode(e.keyCode);
+    var p = $.inArray(charCode,a);
+
+    if(p !== -1)
+    {
+        value = clean + n[p];
+
+        if(value.length == 2) value = '0' + value;
+        if(value.length == 1) value = '00' + value;
+
+        var formatted = '';
+        for(var i=0;i<value.length;i++)
+        {
+            var sep = '';
+            if(i == 2) sep = '.';
+            if(i > 3 && (i+1) % 3 == 0) sep = ',';
+            formatted = value.substring(value.length-1-i,value.length-i) + sep + formatted;
+        }
+
+        $(this).val(formatted);
+    }
+
+    return;
+
+});
 
 </script>
 @endpush

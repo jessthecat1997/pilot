@@ -39,6 +39,7 @@ class BrokerageFeesController extends Controller
             $bf_detail->brokerage_fee_headers_id = $new_bf->id;
             $bf_detail->save();
         }
+        return $new_bf;
 
     }
 
@@ -66,6 +67,7 @@ class BrokerageFeesController extends Controller
             $bf_detail->amount = (string)$_amount[$x];
             $bf_detail->save();
         }
+          return $new_bf;
     }
 
 
