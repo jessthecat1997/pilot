@@ -32,6 +32,9 @@ class OrdersController extends Controller
 	}
 
 	public function show($id){
+
+
+		$reqs = \App\Requirement::all();
 		
 		$so_head = \DB::table('consignee_service_order_headers')
 		->select('*')
@@ -62,7 +65,7 @@ class OrdersController extends Controller
 				
 			}
 		}
-		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries']));
+		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs']));
 		
 	}
 
