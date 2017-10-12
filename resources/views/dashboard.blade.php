@@ -76,8 +76,9 @@
 								</tr>
 							</thead>
 							<tbody>
+								@forelse($unreturned_containers as $uc)
 								<tr>
-									@forelse($unreturned_containers as $uc)
+									
 									<td>
 										{{ $uc->containerNumber }}
 									</td>
@@ -122,15 +123,15 @@
 
 @push('styles')
 <style type="text/css">
-	#calendar h2:first-child{
-		border-left: none;
-	}
-	.dashboard
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color: #316b89;
-		color: #fff;
-	}
+#calendar h2:first-child{
+	border-left: none;
+}
+.dashboard
+{
+	border-left: 10px solid #8ddfcc;
+	background-color: #316b89;
+	color: #fff;
+}
 </style>
 <link href="/js/fullCalendar/fullcalendar.min.css" rel="stylesheet">
 @endpush
@@ -169,8 +170,6 @@
 				}
 			},
 		})
-
-		$('#today_deliveries_table').DataTable();
 	});
 </script>
 

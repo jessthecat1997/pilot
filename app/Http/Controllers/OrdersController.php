@@ -33,30 +33,35 @@ class OrdersController extends Controller
 		->where('so_headers_id', '=', $so_head[0]->id)
 		->get();
 		
-		$brokerage = null;  $trucking = null;
+		$brokerages = null;  $trucking = null;
 		for($i = 0; $i < count($details); $i++)
 		{
 			if($details[$i]->service_order_types_id == 1)
 			{
-				$brokerage = \App\BrokerageServiceOrder::findOrFail($details[$i]->id);
+				$brokerages =  \DB::table('brokerage_service_orders')
+				->where('consigneeSODetails_id', '=', $details[$i]->id)
+				->get();
 
 			}
 			else
 			{
-				$trucking = \App\TruckingServiceOrder::findOrFail($details[$i]->id);
+				$truckings = \DB::table('trucking_service_orders')
+				->where('so_details_id', '=', $details[$i]->id)
+				->get();
+
+				
 			}
 		}
-		return view('order.order_view', compact(['so_head', 'trucking', 'brokerage']));
-
-
+		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries']));
+		
 	}
 
 	public function create_so_detail (Request $request) 
 	{
 		switch ($request->sot_type) {
-			
+
 			case '1':
-			
+
 			$new_so_detail = new ConsigneeServiceOrderDetail;
 			$new_so_detail->so_headers_id = $request->so_headers_id;
 			$new_so_detail->service_order_types_id = 1;
@@ -64,12 +69,20 @@ class OrdersController extends Controller
 			break;
 
 			case '2':
-			
+
 			$new_so_detail = new ConsigneeServiceOrderDetail;
 			$new_so_detail->so_headers_id = $request->so_headers_id;
 			$new_so_detail->service_order_types_id = 2;
 			$new_so_detail->save();
 
+			$new_trucking  = new TruckingServiceOrder;
+			$new_trucking->status = "P";
+			$new_trucking->bi_head_id_rev = null;
+			$new_trucking->bi_head_id_exp = null;
+			$new_trucking->so_details_id = $new_so_detail->id;
+			$new_trucking->save();
+
+			return $new_trucking;
 
 
 			break;
@@ -79,7 +92,7 @@ class OrdersController extends Controller
 			break;
 		}
 	}
-	
+
 
 	public function store(Request $request)
 	{
@@ -90,9 +103,9 @@ class OrdersController extends Controller
 		return $new_so_head;
 
 		switch ($request->sot_type) {
-			
+
 			case '1':
-			
+
 			$new_so_detail = new ConsigneeServiceOrderDetail;
 			$new_so_detail->so_headers_id = $request->so_headers_id;
 			$new_so_detail->service_order_types_id = 1;
@@ -100,7 +113,7 @@ class OrdersController extends Controller
 			break;
 
 			case '2':
-			
+
 			$new_so_detail = new ConsigneeServiceOrderDetail;
 			$new_so_detail->so_headers_id = $request->so_headers_id;
 			$new_so_detail->service_order_types_id = 2;
@@ -114,10 +127,10 @@ class OrdersController extends Controller
 
 			break;
 		}
-		
-		
+
+
 
 
 	}
-	
+
 }

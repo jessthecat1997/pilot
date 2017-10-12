@@ -214,6 +214,7 @@
 </style>
 @endpush
 @push('scripts')
+<script type="text/javascript" src="/js/DatatableRowGroup/dataTables.rowGroup.min.js"></script>
 <script type="text/javascript">
 	$('#collapse3').addClass('in');
 	var data;
