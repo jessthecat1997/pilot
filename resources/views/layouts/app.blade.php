@@ -150,12 +150,12 @@
                               <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
 
                           </li>
-                         <li>
+                          <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
-                            <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                            </li>
+                        <li>
+                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                        </li>
                             <!--
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
@@ -224,7 +224,7 @@
                         <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i class="fa fa-circle" ></i>&nbsp;&nbsp;Billing</a>
                     </li>
                     <div id="billingcollapse" class="panel-collapse collapse">
-                       
+                     
                         <li>
                             <a href = "{{ route('charge.index') }}"  class = "class-charges">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Charges</a>
                         </li>
@@ -375,16 +375,16 @@
 
 
 
-    <!-- Scripts -->
-    <script src="/js/app.js"></script>
-    <script type="text/javascript" src = "/js/jquery.validate.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-        <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
-    <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script type="text/javascript" src = "/js/jquery.validate.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
@@ -392,52 +392,52 @@
 
 <script>
 
-        $(document).on('show.bs.modal', '.modal', function () {
-            var zIndex = 1040 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-            setTimeout(function() {
-                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-            }, 0);
-        });
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-        $('.money').inputmask("numeric",
-        {
-            radixPoint: ".",
-            groupSeparator: ",",
-            digits: 2,
-            autoGroup: true,
-            rightAlign: true,
-            removeMaskOnSubmit:true,
-        });
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $('.money').inputmask("numeric",
+    {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+    });
 
-        $('.myMoneyMask').inputmask("numeric", {
-    radixPoint: ".",
-    groupSeparator: ",",
-    digits: 2,
-    autoGroup: true,
+    $('.myMoneyMask').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
     prefix: '$', //No Space, this will truncate the first character
     rightAlign: false,
     oncleared: function () { self.Value(''); }
- });
+});
 
 
 
-        function formatNumber(n) {
-            var currency = "Php ";
-            return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-        }
+    function formatNumber(n) {
+        var currency = "Php ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
 
 
-            function formatNumber_s(n) {
-                var currency = "$ ";
-                return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-            }
+    function formatNumber_s(n) {
+        var currency = "$ ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
 
 
-    </script>
-    @stack('scripts')
+</script>
+@stack('scripts')
 </body>
 </html>
