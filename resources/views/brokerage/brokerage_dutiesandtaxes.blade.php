@@ -856,7 +856,13 @@
 
 	$(document).ready(function(){
 
+    //vanessa's addition
 
+    @if($consignee_id != null)
+      $('#consignee_id').val("{{$consignee_id}}");
+    @endif
+
+    //end of vanessa's addition
 
 
 		$('#exitPrompt').on('click', function(e){
@@ -886,6 +892,8 @@
     $(document).on('click', '.ConfirmBut', function(e){
       e.preventDefault();
     })
+
+
 
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();

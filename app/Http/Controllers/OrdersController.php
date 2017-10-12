@@ -20,8 +20,21 @@ class OrdersController extends Controller
 
 		return view('order.order_index', compact(['orders','employees', 'consignees']));
 	}
+	public function setConsigneeID(){
+
+		$so_head = \DB::table('consignee_service_order_headers')
+		->select('*')
+		->join('consignees as A', 'consignee_service_order_headers.consignees_id', '=', 'A.id')
+		->where('consignee_service_order_headers.id','=',$id)
+		->get();
+
+		session(['consignees_id' => '{{$so_head[0]->consignees_id}}' ]);
+	}
 
 	public function show($id){
+
+
+		$reqs = \App\Requirement::all();
 		
 		$so_head = \DB::table('consignee_service_order_headers')
 		->select('*')
@@ -52,7 +65,7 @@ class OrdersController extends Controller
 				
 			}
 		}
-		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries']));
+		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs']));
 		
 	}
 

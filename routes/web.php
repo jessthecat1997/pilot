@@ -268,6 +268,8 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('/orders', 'OrdersController');
 	Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
+	Route::resource('/attachment', 'ServiceOrderAttachmentsController');
+	Route::get('/orders/attachmentData', 'DatatablesController@attach_datatable')->name('attach.data');
 
 
 //Payments
