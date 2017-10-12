@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\UtilityType;
+use App\VatRate;
 use Illuminate\Support\Facades\DB;
 class UtilityController extends Controller
 {
-    public function index()
+	public function index()
 	{
 		$utility = \App\UtilityType::all();
+		$vat = \DB::table('vat_rates')
+		->where('currentRate', '=', 1)
+		->get();
 
 		return view('admin/utilities.utility_index', compact(['utility']));
 	}
@@ -31,6 +35,13 @@ class UtilityController extends Controller
 		$utility->payment_allowance = $request->payment_allowance;
 		$utility->save();
 
+		
+
+		$vat = VatRate::findOrFail(1);
+		$vat->rate = $request->rate;
+		$vat->save();
+
 		return $utility;
+		
 	}
 }

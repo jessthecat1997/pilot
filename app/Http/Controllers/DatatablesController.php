@@ -40,16 +40,42 @@ use Carbon\Carbon;
 
 class DatatablesController extends Controller
 {
-	public function vt_datatable(){
-		$vtypes = VehicleType::select(['id', 'name','description', 'withContainer', 'created_at']);
-		return Datatables::of($vtypes)
-		->addColumn('action', function ($vtype) {
-			return
-			'<button value = "'. $vtype->id .'" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $vtype->id .'" class="btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{$id}}')
-		->make(true);
+	public function vt_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$vtypes = VehicleType::select(['id', 'name','description', 'withContainer', 'created_at']);
+			return Datatables::of($vtypes)
+			->addColumn('action', function ($vtype) {
+				return
+				'<button value = "'. $vtype->id .'" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $vtype->id .'" class="btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{$id}}')
+			->make(true);
+		}else{
+			$vts = DB::table('vehicle_types')
+			->select('id', 'name','withContainer', 'description', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($vts)
+			->addColumn('status', function ($vts){
+				if ($vts->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($vts){
+				return
+				'<button value = "'. $vts->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
 	}
 	public function sot_datatable(){
 		$sots = service_order_type::select(['id', 'name', 'description', 'created_at']);
@@ -1186,7 +1212,7 @@ class DatatablesController extends Controller
 	}
 
 	public function ipf_datatable(){
-		$ipfs = DB::select("SELECT h.id, h.dateEffective  , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
+		$ipfs = DB::select("SELECT h.id, h.dateEffective  , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
 
 		return Datatables::of($ipfs)
 		->addColumn('action', function ($ipf){

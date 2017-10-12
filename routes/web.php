@@ -11,14 +11,13 @@
 |
 */
 
-Route::get('/', 'DashboardController@index');
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
 Route::resource('/roles', 'RolesController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => ['auth']], function() {
+	Route::get('/', 'DashboardController@index');
 	Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
 	// Brokerage Routes
 	Route::resource('/brokerage', 'BrokerageController');

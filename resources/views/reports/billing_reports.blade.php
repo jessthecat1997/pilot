@@ -2,12 +2,12 @@
 @section('content')
 <div class = "container-fluid">
 	<div class="row">
-		<div class = "panel-default panel">
+		<div class = "panel-primary panel">
 			<div class = "panel-body">
 				<h3>Unpaid Billing Report</h3>
 				
 				<div class = "form-horizontal">
-					<div class = "form-group">
+					<!-- <div class = "form-group">
 						<label class = "control-label col-md-3">Select Frequency: </label>
 						<div class = "col-md-6 col-md-offset-1">
 							<select class = "form-control" id = "frequency_select">
@@ -18,7 +18,7 @@
 								<option value = "4">Custom</option>
 							</select>
 						</div>
-					</div>
+					</div> -->
 					<div class = "collapse" id = "custom_collapse">
 						<div class = "form-group">
 							<div class = "col-md-2">
@@ -47,7 +47,7 @@
 				</div>
 				<div class = "collapse" id = "daily_collapse">
 					<br />
-					<table class = "table-responsive table" id = "daily_table">
+					<table class = "table-responsive table table-striped" id = "daily_table">
 						<thead>
 							<tr>
 								<td>
@@ -64,9 +64,6 @@
 								</td>
 							</tr>
 						</thead>
-						<tbody>
-
-						</tbody>
 					</table>
 				</div>
 				<div id = "monthly_collapse">

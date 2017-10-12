@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Pilot Cargo Chain</title>
+    <title>Hauling Services</title>
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
@@ -53,7 +53,7 @@
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -68,6 +68,10 @@
                                 </form>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="
+                        #">&nbsp;</a>
                     </li>
                     @endif
                 </ul>
@@ -219,9 +223,6 @@
                         <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i class="fa fa-circle" ></i>&nbsp;&nbsp;Billing</a>
                     </li>
                     <div id="billingcollapse" class="panel-collapse collapse">
-                        <li>
-                            <a href = "{{ route('vat_rate.index') }}"  class = "class-vat-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;VAT Rate</a>
-                        </li>
                         <li>
                             <a href = "{{ route('charge.index') }}"  class = "class-charges">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Charges</a>
                         </li>
