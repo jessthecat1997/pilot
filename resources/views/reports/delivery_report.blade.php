@@ -62,9 +62,12 @@
 <link rel="stylesheet" type="text/css" href="/js/dateRangePicker/daterangepicker.css" />
 
 <script type="text/javascript">
+	var startDate = "{{ $now }}";
+	var endDate = "{{ $now }}";
 	$(document).ready(function(){
 		$('#daterange').daterangepicker({
 			"showDropdowns": true,
+			"applyClass" : "select_date_range btn-success",
 			"showWeekNumbers": true,
 			"ranges": {
 				"Today": [
@@ -97,18 +100,27 @@
 			"endDate": "{{ $now }}",
 			"drops": "down"
 		}, function(start, end, label) {
-			//Do something
+			startDate = start;
+			endDate = end;
 		});
 
+		$(document).on('click', '.select_date_range', function(e)
+		{
+			e.preventDefault();
+			console.log(startDate.format('D MMMM YYYY') + ' - ' + endDate.format('D MMMM YYYY'));
+		})
+
 		$(document).on('click', '.generate', function(e){
+			e.preventDefault();
 			date_from = $('#daterange').val();
 			date_to = $('#daterange').val();
 			frequency = $('#frequency').val();
 			status = $('input[name=status_filter]:checked').val();
 			console.log(date_from)
-
-			$('#iframe').attr('src', "{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/");
+			console.log("{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-d") + "/" + endDate.format("Y-M-d"));
+			$('#iframe').attr('src', "{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-d") + "/" + endDate.format("Y-M-d"));
 		})
+
 
 	})
 </script>

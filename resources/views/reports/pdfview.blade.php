@@ -1,13 +1,26 @@
-<style type="text/css">
-	table td, table th{
-		border:1px solid black;
-	}
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User list - PDF</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
 <div class="container">
-	@forelse($data as $dt)
-	<h1>{{ $dt->plateNumber }}</h1>
-	@empty
-
-	@endforelse
-	<hr />
+	<a href="{{ route('generate-pdf',['download'=>'pdf']) }}">Download PDF</a>
+	<table class="table table-bordered">
+		<thead>
+			<th>Name</th>
+			<th>Email</th>
+		</thead>
+		<tbody>
+			@foreach ($users as $key => $value)
+			<tr>
+				<td>{{ $value->name }}</td>
+				<td>{{ $value->email }}</td>
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
 </div>
+</body>
+</html>
