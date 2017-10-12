@@ -165,6 +165,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         MaddHatter\LaravelFullcalendar\ServiceProvider::class,
+        Jimmyjs\ReportGenerator\ServiceProvider::class,
 
         /*
          * Package Service Providers...

@@ -85,7 +85,7 @@
 			deferRender: true,
 			ajax: "{{ route('chq.data') }}",
 			columns: [
-			{ data: 'companyName' },
+			{ data: 'consignee' },
 			{ data: 'bankName' },
 			{ data: 'amount'},
 			{ data: 'bi_head_id' },

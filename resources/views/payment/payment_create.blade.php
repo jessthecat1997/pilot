@@ -69,7 +69,7 @@
 								{{ csrf_field() }}
 								<div class="form-group">
 									<label>*Amount</label>
-									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+									<input type = "number" name="amount" id="amount" class="form-control col-sm-2 money" style="text-align: right" required>
 								</div>
 								<div class="form-group">
 									<label for="remarks">Remarks:</label>
@@ -92,7 +92,7 @@
 								</div>
 								<div class="form-group">
 									<label for="check_amt">*Amount: &nbsp;</label>
-									&nbsp;&nbsp;<input type="text" id="check_amt" class="form-control">
+									&nbsp;&nbsp;<input type="number" id="check_amt" class="form-control money" style="text-align: right;">
 								</div>
 								<button type="button" class="btn btn-primary finalize-cheque">Save</button>
 							</form>
@@ -290,6 +290,36 @@
 			{data : 'action'}
 			]
 		})
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999999999999.99){
+
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 		var p_table = $('#bills_table').DataTable({
 			processing: false,
 			serverSide: false,

@@ -361,7 +361,7 @@ class DatatablesController extends Controller
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('consignee_service_order_details', 'consignee_service_order_details.so_headers_id', '=', 'consignee_service_order_headers.id')
 		->join('service_order_types','service_order_types.id','=','consignee_service_order_details.service_order_types_id')
-		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at')
+		->select('consignee_service_order_headers.id', 'companyName','service_order_types.name', 'consignee_service_order_details.created_at', DB::raw('CONCAT(firstName, " ", lastName) AS consignee'))
 		->get();
 		return Datatables::of($so_heads)
 		->addColumn('action', function ($so_head) {
@@ -391,7 +391,7 @@ class DatatablesController extends Controller
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
 		->join('utility_types', 'payments.utility_id', '=', 'utility_types.id')
-		->select('payments.id','companyName', 'amount', 'isCheque', 'payment_allowance')
+		->select('payments.id',DB::raw('CONCAT(firstName, " ", lastName) AS consignee'), 'amount', 'isCheque', 'payment_allowance')
 		->orderBy('payments.id', 'DESC')
 		->get();
 		return Datatables::of($payment_hist)
