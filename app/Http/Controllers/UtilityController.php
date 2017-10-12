@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\UtilityType;
 use App\VatRate;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreUtility;
 class UtilityController extends Controller
 {
 	public function index()
@@ -15,7 +16,7 @@ class UtilityController extends Controller
 		->where('currentRate', '=', 1)
 		->get();
 
-		return view('admin/utilities.utility_index', compact(['utility']));
+		return view('admin/utilities.utility_index', compact(['utility' , 'vat']));
 	}
 
 
@@ -37,7 +38,7 @@ class UtilityController extends Controller
 
 		
 
-		$vat = VatRate::findOrFail(1);
+		$vat = VatRate::findOrFail($id);
 		$vat->rate = $request->rate;
 		$vat->save();
 
