@@ -3,7 +3,7 @@
 <h2>&nbsp;Order <small><strong>{{ $so_head[0]->id }}</strong></small>.</h2>
 <hr>
 <div class="container-fluid">
-	<form>
+	<form role="form" method = "POST" id ="commentForm">
 		<div class = "row">
 			<div class = "col-md-4">
 				<div class="panel panel-primary">
@@ -104,6 +104,12 @@
 						List of Attachments
 					</div>
 					<div class="panel-body">
+						<div class = "form-horizontal col-md-12 ">
+							<br>
+							<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
+							<br>
+							<br>
+						</div>
 						<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table">
 							<thead>
 								<tr>
@@ -212,7 +218,7 @@
 				</div>
 			</div>
 		</div>
-	</form>
+	
 	<div class="modal fade" id="confirm-create-t" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -248,6 +254,42 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="new-attachment" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				New Attachment
+			</div>
+			<div class="modal-body">
+					{{ csrf_field() }}
+				<div class="form-group required">
+					<label class = "control-label">Attachment Type: </label>
+					<select class = "form-control" name = "req_type_id" id = "req_type_id">
+						@forelse($reqs as $req)
+						<option value="{{ $req->id }}">{{ $req->name }}</option>
+						@empty
+						@endforelse
+					</select>
+				</div>
+				<div class="form-group required">
+					<label class = "control-label">Upload file: </label>
+					<input type = "file" class = "form-control" name = "file_path" id = "file_path" required />
+				</div>
+
+				<div class="form-group">
+					<label class = "control-label">Description: </label>
+					<textarea class = "form-control" name = "description" id = "description"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input id = "btnSave" type = "submit" class="btn btn-success submit-attachment" value = "Save" />
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</form>
 @endsection
 @push('styles')
 <style>
@@ -267,12 +309,29 @@
 	var so_id = {{ $so_head[0]->id }};
 
 	$(document).ready(function(){
+
+
+		var attachmentstable = $('#attachments_table').DataTable({
+			processing: false,
+			serverSide: false,
+			deferRender:true,
+			columns: [
+			{ data: 'file_path' },
+			{ data: 'req_type_id'},
+			{ data: 'description' },                              
+			{ data: 'action', orderable: false, searchable: false }
+
+			],	"order": [[ 0, "desc" ]],
+		});
+
+
 		console.log('consignee is ' + {{$so_head[0]->consignees_id}});
 		$(document).on('click', '.new_trucking', function(e){
 			e.preventDefault();
 			$('#confirm-create-t').modal('show');
 			service_type = 2;
 		});
+
 
 		$(document).on('click', '.new_brokerage', function(e){
 			e.preventDefault();
@@ -290,6 +349,12 @@
 		$(document).on('click', '.confirm-create-so-b', function(e){
 			e.preventDefault();
 			window.location.replace('{{route("brokerageOrder")}}');
+		});
+
+		$(document).on('click', '.new_attachment', function(e){
+			e.preventDefault();
+			$('#new-attachment').modal('show');
+			
 		});
 
 
@@ -374,6 +439,47 @@
 					}
 					toastr["success"]("Trucking service order created successfully");
 					window.location.reload();
+				}
+			})
+		});
+
+
+		$(document).on('click', '.submit-attachment', function(e){
+			e.preventDefault();
+			$.ajax({
+
+				type: 'POST',
+				url: '/attachment/',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'req_type_id' : req_type_id,
+					'file_path' : file_path,
+					'description' : description,
+				},
+				success: function(data){
+					$('#confirm-create-t').modal('hide');
+					
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Attachment added successfully");
+					attachmentstable.ajax.url('{{ route("attach.data") }}').load();
+					
 				}
 			})
 		});

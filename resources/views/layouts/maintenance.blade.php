@@ -50,7 +50,7 @@
                         <!-- Authentication Links -->
                         <li>
                         <form name="clockForm" style="margin-top: 10px;">
-                                <input type="button" name="clockButton" value="Loading..." style="background-color: transparent; border-style: none;" />
+                                <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
                             </form>
                         </li>
                         @if (Auth::guest())

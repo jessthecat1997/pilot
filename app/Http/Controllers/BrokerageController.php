@@ -32,6 +32,15 @@ class BrokerageController extends Controller
 
     try
     {
+
+
+      //vanessa's addition
+
+       $consignee_id = $request->session()->get('consignees_id');
+       return $consignee_id;
+
+      //end of vanessa's addition
+
         $current_date = date("Y-m-d");
 
         $exchange_rate = DB::table('exchange_rates')

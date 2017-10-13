@@ -9,33 +9,33 @@ use App\Requirement;
 class RequirementsController extends Controller
 {
 
-    public function index()
-    {
-        return view('admin/maintenance.requirement_index');
-    }
+  public function index()
+  {
+    return view('admin/maintenance.requirement_index');
+  }
 
 
-    public function store(StoreRequirements $request)
-    {
-        $req = Requirement::create($request->all());
-        return $req;
-    }
+  public function store(StoreRequirements $request)
+  {
+    $req = Requirement::create($request->all());
+    return $req;
+  }
 
-    public function update(StoreRequirements $request, $id)
-    {
-       $req = Requirement::findOrFail($id);
-       $req->name = $request->name;
-       $req->description = $request->description;
-       $req->save();
+  public function update(StoreRequirements $request, $id)
+  {
+   $req = Requirement::findOrFail($id);
+   $req->name = $request->name;
+   $req->description = $request->description;
+   $req->save();
 
-       return $req;
-   }
+   return $req;
+ }
 
 
-   public function destroy($id)
-   {
-    $req = Requirement::findOrFail($id);
-    $req->delete();
+ public function destroy($id)
+ {
+  $req = Requirement::findOrFail($id);
+  $req->delete();
 }
 
 

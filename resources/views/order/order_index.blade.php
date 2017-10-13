@@ -14,7 +14,7 @@
 	<br />
 	<div class="row">
 		<div class="col-md-12">
-			<table class = "table table-responsive table-striped" id = "order_table">
+			<table class = "table-responsive table cell-border table-striped table-bordered" id = "order_table">
 				<thead>
 					<tr>
 						<td >

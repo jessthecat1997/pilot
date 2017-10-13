@@ -35,6 +35,7 @@ use App\WharfageFee;
 use App\Section;
 use App\CategoryType;
 use App\Item;
+use App\ServiceOrderAttachment;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -151,6 +152,19 @@ class DatatablesController extends Controller
 			return
 			'<button value = "'. $sec->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
 			'<button value = "'. $sec->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
+
+	public function attach_datatable(){
+		$attaches =  DB::select("SELECT * FROM service_order_attachments");
+
+		return Datatables::of($attaches)
+		->addColumn('action', function ($attach){
+			return
+			'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+			'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

@@ -82,6 +82,9 @@
 							<br>
 							<form class="form" onsubmit="this.preventDefault();">
 								{{ csrf_field() }}
+								<div class="checkbox">
+									<label><input type="checkbox" id="mng_cheque">Manager's Cheque</label>
+								</div>
 								<div class="form-group">
 									<label for="bank">*Cheque Number: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" id="chqNo" class="form-control">
@@ -1118,43 +1121,97 @@ $(document).on('click', '.finalize-payment', function(e){
 	}
 })
 $(document).on('click', '.finalize-cheque', function(e){
-	var bi_id = {{ $so_head_id }};
-	$.ajax({
-		method: 'POST',
-		url: '{{ route("cheque.store") }}',
-		data: {
-			'_token' : $('input[name=_token]').val(),
-			'chequeNumber' : $('#chqNo').val(),
-			'bankName' : $('#bank').val(),
-			'amount' : $('#check_amt').val(),
-			'isVerify' : 0,
-			'bi_head_id' : bi_id,
-		},
-		success: function (data){
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
+	if(document.getElementById('mng_cheque').checked == true)
+	{
+		var bi_id = {{ $so_head_id }};
+		console.log('cheked');
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("payment.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'isCheque' : 0,
+				'bi_head_id' : {{ $so_head_id }},
+				'utility_id' : {{ $allowance[0]->id }},
+				'amount' : $('#check_amt').val(),
+				'description' : null
+			},
+			success: function (data){
 			}
-			toastr["success"]('Successfully saved');
-			window.location.href = "{{ route('cheque.index') }}";
-		}
-	})
+		})
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("cheque.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'chequeNumber' : $('#chqNo').val(),
+				'bankName' : $('#bank').val(),
+				'amount' : $('#check_amt').val(),
+				'isVerify' : 1,
+				'bi_head_id' : bi_id,
+			},
+			success: function (data){
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]('Successfully saved');
+			}
+		})
+	}
+	else(document.getElementById('mng_cheque').checked == false)
+	{
+		var bi_id = {{ $so_head_id }};
+		console.log('uncheked');
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("cheque.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'chequeNumber' : $('#chqNo').val(),
+				'bankName' : $('#bank').val(),
+				'amount' : $('#check_amt').val(),
+				'isVerify' : 0,
+				'bi_head_id' : bi_id,
+			},
+			success: function (data){
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]('Successfully saved');
+				window.location.href = "{{ route('cheque.index') }}";
+			}
+		})
+	}
 })
-
-
 </script>
 @endpush
