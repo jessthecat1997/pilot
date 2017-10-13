@@ -761,7 +761,7 @@ class DatatablesController extends Controller
 		->join('locations as B', 'locations_id_del', '=', 'B.id')
 		->join('location_cities as C', 'A.cities_id', '=', 'C.id')
 		->join('location_cities as D', 'B.cities_id', '=', 'D.id')
-		->select('delivery_receipt_headers.id', 'plateNumber', 'delivery_receipt_headers.created_at', 'status', 'A.name AS pickup_name', 'B.name as deliver_name', 'C.name AS pickup_city', 'D.name AS deliver_city', 'delivery_receipt_headers.deliveryDateTime', 'pickupDateTime')
+		->select('delivery_receipt_headers.id', 'plateNumber', 'delivery_receipt_headers.created_at', 'status', 'A.name AS pickup_name', 'B.name as deliver_name', 'C.name AS pickup_city', 'D.name AS deliver_city', 'delivery_receipt_headers.deliveryDateTime', 'pickupDateTime', 'amount')
 		->where('delivery_receipt_headers.deleted_at', '=', null)
 		->where('tr_so_id','=', $request->trucking_id)
 		->get();
@@ -783,6 +783,7 @@ class DatatablesController extends Controller
 				"<button class = 'btn btn-info view_delivery' title = 'View'><span class = 'fa fa-eye'></span></button>
 				<button class = 'btn btn-primary edit_delivery' title = 'Edit'><span class = 'fa fa-edit'></span></button>
 				<button class = 'btn but select-delivery' data-toggle = 'modal' data-target = '#deliveryModal' title = 'Status'><span class = 'fa-flag-o fa'></span></button>" .
+				"<input type = 'hidden' value = '" . $delivery->amount . "' class = 'delivery_amount' />" .
 				"<input type = 'hidden' value = '" . $delivery->id . "' class = 'delivery-id' />";
 			}
 			if($delivery->status == 'F' || $delivery->status == 'C'){
