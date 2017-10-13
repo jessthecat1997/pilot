@@ -164,7 +164,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New Container Volume');
+			$('.modal-title').text('New Container Size');
 			$('#description').val("");
 			$('#name').val("0");
 			$('#maxWeight').val("");
@@ -243,7 +243,7 @@
 
 
 
-			if(title == "New Container Volume")
+			if(title == "New Container Size")
 			{
 				if($('#name').valid() && $('#description').valid() ){
 
@@ -267,7 +267,7 @@
 								$('#description').val("");
 								$('#maxWeight').val("");
 
-								$('.modal-title').text('New Container Volume');
+								$('.modal-title').text('New Container Size');
 
 
 								toastr.options = {
@@ -349,7 +349,7 @@
 									$('#description').val("");
 									//$('#maxWeight').val("");
 
-									$('.modal-title').text('New Container Volume');
+									$('.modal-title').text('New Container Size');
 
 
 
