@@ -5,7 +5,7 @@ use Auth;
 
 use Closure;
 
-class AdminMiddleware
+class BrokerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 1){
+        if(Auth::guard($guard)->check() && Auth::user()->role_id == 2){
             return $next($request);
         }
         else
