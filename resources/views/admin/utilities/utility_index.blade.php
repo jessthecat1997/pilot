@@ -17,7 +17,7 @@
 					@forelse($utility as $util)
 					<div class = "form-group required">
 						<label class = "control-label">Logo</label>
-						<center><img class="img-responsive img-circle" id="company_logo" src="/images/pilotlogo.png" style = "width: 300px; height: 200px"/></center>
+						<center><img class="img-responsive img-circle" id="company_logo" src="{{ $util->company_logo }}" style = "width: 300px; height: 200px"/></center>
 						<br/>
 						<br />
 						<input type="file" name="logo" id = "logo" class="form-control" style="width: 100%;">
@@ -221,14 +221,18 @@
 		function readURL(input) {
 			if (input.files && input.files[0]) {
 				var reader = new FileReader();
+
 				reader.onload = function (e) {
-					$('#util-pic')
-					.attr('src', e.target.result)
-					.width(180);
-				};
+					$('#company_logo').attr('src', e.target.result);
+				}
+
 				reader.readAsDataURL(input.files[0]);
 			}
 		}
+		$("#logo").change(function(){
+			readURL(this);
+		});
+
 
 		$(document).on('keyup keydown keypress', '.percentage', function (event) {
 			var len = $('.percentage').val();

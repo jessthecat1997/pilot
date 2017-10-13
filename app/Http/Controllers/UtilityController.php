@@ -24,14 +24,17 @@ class UtilityController extends Controller
 
 	public function update(StoreUtility $request, $id)
 	{
+		$utility = UtilityType::findOrFail($id);
 		if($request->logo != null){
 			$input = $request->all();
-			$input['image'] = "pilotlogo.".$request->logo->getClientOriginalExtension();
+			$input['image'] = "pilotlogo.". $request->logo->getClientOriginalExtension();
+			$utility->company_logo = "/images/pilotlogo." . $request->logo->getClientOriginalExtension();
 			$request->logo->move(public_path('images'), $input['image']);
 		}
 		
 
-		$utility = UtilityType::findOrFail($id);
+
+		
 		$utility->bank_charges = $request->bank_charges;
 		$utility->other_charges = $request->other_charges;
 		$utility->insurance_gc = $request->insurance_gc;
