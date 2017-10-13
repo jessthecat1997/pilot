@@ -4,8 +4,9 @@
 
 <h2>&nbsp;Utilities | Settings</h2>
 <hr>
-<form id = "commentForm" enctype="multipart/form-data">
+<form id = "commentForm" enctype="multipart/form-data" action = "{{ route('settings.index') }}/1" method="POST">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+	<input type="hidden" name="_method" value="PUT">
 	<div class="row">
 		<div class="col-md-6">
 			<div class="panel panel-primary">
@@ -16,8 +17,9 @@
 					@forelse($utility as $util)
 					<div class = "form-group required">
 						<label class = "control-label">Logo</label>
-						<center><img class="img-responsive img-circle" id="company_logo" src="/{{$util->company_logo}}" style = "width: 300px; height: 200px"/></center>
+						<center><img class="img-responsive img-circle" id="company_logo" src="/images/pilotlogo.png" style = "width: 300px; height: 200px"/></center>
 						<br/>
+						<br />
 						<input type="file" name="logo" id = "logo" class="form-control" style="width: 100%;">
 						
 					</div>
@@ -117,7 +119,7 @@
 	</div>
 	<div class="panel-footer ">
 		<div style="padding-left: 70%" > 
-			<input id = "btnSave" type = "button" class="btn btn-success submit " value = "Save" />&nbsp;&nbsp;
+			<input id = "btnSave" type = "submit" class="btn btn-success submit " value = "Save" />&nbsp;&nbsp;
 		</div>			
 	</div>
 </form>
@@ -133,6 +135,7 @@
 </style>
 @endpush
 @push('scripts')
+<script src="/js/jquery.form.js"></script>
 <script type="text/javascript">
 
 	/*@forelse($utility as $util)
@@ -258,76 +261,64 @@
 			}			
 		});
 
-
-
-		$(document).on('click', '#btnSave', function(e){
-			e.preventDefault();
-			$('#vat_rate').valid();
-
-			$.ajax({
-				type: 'PUT',
-				url:  '/utilities/settings/'+ 1,
-				data: new FormData($("#commentForm")[0]),
-				dataType:'json',
-				async:false,
-				processData: false,
-				contentType: false,
-				success: function (data)
-				{
-					if(typeof(data) === "object"){
-						window.location.reload();
-						$('#other_charges').val(data.other_charges);
-						$('#bank_charges').val(data.bank_charges);
-						$('#insurance_c').val(data.insurance_c);
-						$('#insurance_gc').val(data.insurance_gc);
-						$('#company_name').val(data.company_name);
-						$('#company_address').val(data.company_address);
-						$('#company_tin').val(data.company_tin);
-						$('#company_contact').val(data.company_contact);
-						$('#payment_allowance').val(data.payment_allowance);
-						$('#vat_rate').val(data.rate);
-						temp_other_charges = data.other_charges;
-						temp_bank_charges = data.bank_charges;
-						temp_insurance_gc = data.insurance_gc;
-						temp_insurance_c = data.insurance_c;
-
-						$('#btnSave').removeAttr('disabled');
-
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Successfully updated settings")
-
-					}else{
-
-						resetErrors();
-						var invdata = JSON.parse(data);
-						$.each(invdata, function(i, v) {
-							console.log(i + " => " + v); 
-							var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-							$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-						});
-					}
-
-
-				},
-			})
+		$("body").on("click",".submit",function(e){
+			$(this).parents("form").ajaxForm(options);
 		});
+
+		var options = { 
+			success: function(data)
+			{
+				if(typeof(data) === "object"){ 
+					window.location.reload(); 
+					$('#other_charges').val(data.other_charges); 
+					$('#bank_charges').val(data.bank_charges); 
+					$('#insurance_c').val(data.insurance_c); 
+					$('#insurance_gc').val(data.insurance_gc); 
+					$('#company_name').val(data.company_name); 
+					$('#company_address').val(data.company_address); 
+					$('#company_tin').val(data.company_tin); 
+					$('#company_contact').val(data.company_contact); 
+					$('#payment_allowance').val(data.payment_allowance); 
+					$('#vat_rate').val(data.rate); 
+					temp_other_charges = data.other_charges; 
+					temp_bank_charges = data.bank_charges; 
+					temp_insurance_gc = data.insurance_gc; 
+					temp_insurance_c = data.insurance_c; 
+
+					$('#btnSave').removeAttr('disabled'); 
+
+					toastr.options = { 
+						"closeButton": false, 
+						"debug": false, 
+						"newestOnTop": false, 
+						"progressBar": false, 
+						"rtl": false, 
+						"positionClass": "toast-bottom-right", 
+						"preventDuplicates": false, 
+						"onclick": null, 
+						"showDuration": 300, 
+						"hideDuration": 1000, 
+						"timeOut": 2000, 
+						"extendedTimeOut": 1000, 
+						"showEasing": "swing", 
+						"hideEasing": "linear", 
+						"showMethod": "fadeIn", 
+						"hideMethod": "fadeOut" 
+					} 
+					toastr["success"]("Successfully updated settings") 
+
+				}else{ 
+
+					resetErrors(); 
+					var invdata = JSON.parse(data); 
+					$.each(invdata, function(i, v) { 
+						console.log(i + " => " + v);  
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>'; 
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg); 
+					}); 
+				}	
+			}
+		};
 
 	});
 	function resetErrors() {

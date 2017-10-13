@@ -24,33 +24,32 @@ class UtilityController extends Controller
 
 	public function update(StoreUtility $request, $id)
 	{
-		if(Input::hasFile('logo'))
-			{
-				return "file present";
-			}
-			else{
-				return "file not present";
-			}
-
-			$utility = UtilityType::findOrFail($id);
-			$utility->bank_charges = $request->bank_charges;
-			$utility->other_charges = $request->other_charges;
-			$utility->insurance_gc = $request->insurance_gc;
-			$utility->insurance_c = $request->insurance_c;
-			$utility->company_name = $request->company_name;
-			$utility->company_address = $request->company_address;
-			$utility->company_tin = $request->company_tin;
-			$utility->company_contact = $request->company_contact;
-			$utility->payment_allowance = $request->payment_allowance;
-			$utility->save();
-
-
-
-			$vat = VatRate::findOrFail($id);
-			$vat->rate = $request->rate;
-			$vat->save();
-
-			return $utility;
-
+		if($request->logo != null){
+			$input = $request->all();
+			$input['image'] = "pilotlogo.".$request->logo->getClientOriginalExtension();
+			$request->logo->move(public_path('images'), $input['image']);
 		}
+		
+
+		$utility = UtilityType::findOrFail($id);
+		$utility->bank_charges = $request->bank_charges;
+		$utility->other_charges = $request->other_charges;
+		$utility->insurance_gc = $request->insurance_gc;
+		$utility->insurance_c = $request->insurance_c;
+		$utility->company_name = $request->company_name;
+		$utility->company_address = $request->company_address;
+		$utility->company_tin = $request->company_tin;
+		$utility->company_contact = $request->company_contact;
+		$utility->payment_allowance = $request->payment_allowance;
+		$utility->save();
+
+
+
+		$vat = VatRate::findOrFail($id);
+		$vat->rate = $request->rate;
+		$vat->save();
+
+		return $utility;
+
 	}
+}
