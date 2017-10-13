@@ -5,7 +5,8 @@
 		
 	</title>
 	<style type="text/css">	</style>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="/css/app.css" rel="stylesheet">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="/js/jqueryDatatable/dataTables.bootstrap.min.css">
 	<script src="/js/app.js"></script>
 	<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
@@ -30,9 +31,6 @@
 		@empty
 		@endforelse
 		<br />
-		<div style="text-align: center;">
-			<small style="text-align: center;">Freight Forwarding, Customs Clearance (Air &amp; Sea), Project &amp; Heavy Equipment</small>
-		</div>
 		<hr />
 	</div>
 	<h2>Delivery Report</h2>
@@ -64,7 +62,7 @@
 					Remarks
 				</td>
 				<td>
-					Delivery Year
+					Status
 				</td>	
 			</tr>
 		</thead>
@@ -96,6 +94,11 @@
 					{{ $dr->remarks }}
 				</td>
 				<td>
+					@php
+					if($dr->status == 'P'){ echo('Pending'); }
+					else if ( $dr->status == 'F' ) { echo('Finished'); }
+					else if ( $dr->status == 'C' ) { echo('Cancelled'); }
+					@endphp
 				</td>
 			</tr>
 			@empty
