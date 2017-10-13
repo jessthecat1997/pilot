@@ -568,7 +568,9 @@ public function update_delivery(Request $request){
     $delivery = DeliveryReceiptHeader::findOrFail($request->delivery_head_id);
     $delivery->status = $request->status;
     $delivery->remarks = $request->remarks;
-    $delivery->amount = $request->amount;
+    if($request->status == 'C'){
+        $delivery->amount = $request->amount;
+    }
     $delivery->cancelDateTime = $request->cancelDateTime;
     $delivery->save();
     return $delivery;

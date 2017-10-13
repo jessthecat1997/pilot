@@ -22,9 +22,19 @@ class UtilityController extends Controller
 
 
 
-	public function update(Request $request, $id)
+	public function update(StoreUtility $request, $id)
 	{
 		$utility = UtilityType::findOrFail($id);
+		if($request->logo != null){
+			$input = $request->all();
+			$input['image'] = "pilotlogo.". $request->logo->getClientOriginalExtension();
+			$utility->company_logo = "/images/pilotlogo." . $request->logo->getClientOriginalExtension();
+			$request->logo->move(public_path('images'), $input['image']);
+		}
+		
+
+
+		
 		$utility->bank_charges = $request->bank_charges;
 		$utility->other_charges = $request->other_charges;
 		$utility->insurance_gc = $request->insurance_gc;
@@ -36,13 +46,13 @@ class UtilityController extends Controller
 		$utility->payment_allowance = $request->payment_allowance;
 		$utility->save();
 
-		
+
 
 		$vat = VatRate::findOrFail($id);
 		$vat->rate = $request->rate;
 		$vat->save();
 
 		return $utility;
-		
+
 	}
 }
