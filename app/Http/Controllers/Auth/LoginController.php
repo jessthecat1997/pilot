@@ -30,8 +30,8 @@ class LoginController extends Controller
     protected function authenticated(Request $request)
     {
        // $request->user()->authorizeRoles(['Admin', 'Broker', 'Billing Manager', 'Trucking Manager']);
-    return redirect('/login');
-}
+       return redirect('/login');
+   }
 
     /**
      * Create a new controller instance.

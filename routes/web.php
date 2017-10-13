@@ -16,25 +16,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-//ADMIN SIDE
-Route::group(['middleware' => ['admin']], function() {
+Route::group(['middleware' => ['auth']], function() {
 	Route::get('/', 'DashboardController@index');
 	Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
-	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
-	Route::resource('/employees', 'EmployeesController');
-	Route::resource('/employees/newemployee', 'EmployeesController');
-	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
-	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
-		return $from_new;
-	});
-	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
-
-	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
-});
-
-//BROKER SIDE
-Route::group(['middleware' => ['admin']], function() {
+	// Brokerage Routes
 	Route::resource('/brokerage', 'BrokerageController');
 	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
@@ -64,11 +49,20 @@ Route::group(['middleware' => ['admin']], function() {
 
 	Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
 	Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
-});
 
+	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
+	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
+	Route::resource('/employees', 'EmployeesController');
+	Route::resource('/employees/newemployee', 'EmployeesController');
+	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
+	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
+		return $from_new;
+	});
+	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
 
-Route::group(['middleware' => ['admin']], function() {
+	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
 
+//Consignee
 	Route::resource('consignee', 'ConsigneesController');
 	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 	Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
