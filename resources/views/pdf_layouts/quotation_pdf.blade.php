@@ -25,7 +25,7 @@
 	<div class="row">
 		<div class = "container">
 			<div style="float: left;">
-				<img src="{{ public_path() }}\images\pilotlogo.png" style = "width: 225px; height: 150px"/>
+				<img src="{{ public_path() }}\images\pilotlogo.png" style = "width: 225px; height: 150px; margin-right: 10px;"/>
 			</div>
 			<div style="margin-left: 200px;">
 				<br />
