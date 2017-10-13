@@ -50,7 +50,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         <li>
-                        <form name="clockForm" style="margin-top: 10px;">
+                            <form name="clockForm" style="margin-top: 10px;">
                                 <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
                             </form>
                         </li>
@@ -60,7 +60,7 @@
                         @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                            @if( Auth::user()->role_id == 1 ) Admin @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>

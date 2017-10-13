@@ -534,6 +534,12 @@ strong {
 							</div>
 						</div>
 						<div class="form-group required">
+							<label class="control-label col-sm-3">Delivery Fee:</label>
+							<div class="col-sm-8">
+								<input type = "text" class="form-control money" value = "0.00" id = "deliveryCancelFee" />
+							</div>
+						</div>
+						<div class="form-group required">
 							<label class="control-label col-sm-3" for="deliveryRemarks">Remarks</label>
 							<div class="col-sm-8">
 								<textarea class = "form-control" name = "deliveryRemarks" id = "deliveryRemarks"></textarea>
@@ -968,6 +974,7 @@ strong {
 		$(document).on('click', '.select-delivery', function(e){
 			e.preventDefault();
 			selected_delivery = $(this).closest("tr").find('.delivery-id').val();
+			$('#deliveryCancelFee').val($(this).closest('tr').find('.delivery_amount').val());
 		})
 
 		// Container
@@ -1084,6 +1091,7 @@ strong {
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'status' : $('#deliveryStatus').val(),
+					'amount' : $('#deliveryCancelFee').inputmask('unmaskedvalue'),
 					'remarks' : $('#deliveryRemarks').val(),
 					'cancelDateTime' : $('#deliveryCancel').val(),
 					'delivery_head_id' : selected_delivery,

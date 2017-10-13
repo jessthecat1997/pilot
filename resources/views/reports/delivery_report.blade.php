@@ -62,8 +62,8 @@
 <link rel="stylesheet" type="text/css" href="/js/dateRangePicker/daterangepicker.css" />
 
 <script type="text/javascript">
-	var startDate = "{{ $now }}";
-	var endDate = "{{ $now }}";
+	var startDate = null;
+	var endDate = null;
 	$(document).ready(function(){
 		$('#daterange').daterangepicker({
 			"showDropdowns": true,
@@ -112,13 +112,21 @@
 
 		$(document).on('click', '.generate', function(e){
 			e.preventDefault();
-			date_from = $('#daterange').val();
-			date_to = $('#daterange').val();
+			if(startDate == null)
+			{
+				frequency = $('#frequency').val();
+				status = $('input[name=status_filter]:checked').val();
+				$('#iframe').attr('src', "{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency +"/{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y-m-d') }}/{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y-m-d') }}");
+			}
+			else
+			{
+
+			}
 			frequency = $('#frequency').val();
 			status = $('input[name=status_filter]:checked').val();
-			console.log(date_from)
-			console.log("{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-d") + "/" + endDate.format("Y-M-d"));
-			$('#iframe').attr('src', "{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-d") + "/" + endDate.format("Y-M-d"));
+			
+			console.log("{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-D") + "/" + endDate.format("Y-M-D"));
+			$('#iframe').attr('src', "{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("YYYY-MM-D") + "/" + endDate.format("YYYY-MM-D"));
 		})
 
 
