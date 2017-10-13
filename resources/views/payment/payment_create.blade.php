@@ -97,7 +97,8 @@
 									<label for="check_amt">*Amount: &nbsp;</label>
 									&nbsp;&nbsp;<input type="number" id="check_amt" class="form-control money" style="text-align: right;">
 								</div>
-								<button type="button" class="btn btn-primary finalize-cheque">Save</button>
+								<button type="button" class="btn btn-primary finalize-cheque collapse in">Save</button>
+								<button type="button" class="btn btn-primary finalize-cheque collapse">Save</button>
 							</form>
 						</div>
 						<div id="menu2" class="tab-pane fade">
@@ -1128,7 +1129,7 @@ $(document).on('click', '.finalize-cheque', function(e){
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
-			data: {
+			data: {	Q
 				'_token' : $('input[name=_token]').val(),
 				'isCheque' : 0,
 				'bi_head_id' : {{ $so_head_id }},

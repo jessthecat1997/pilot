@@ -24,7 +24,7 @@ class CreateExchangeRatesTable extends Migration
 
         });
 
-        DB::statement('INSERT INTO exchange_rates (`rate`, `currentRate`, `dateEffective`, `created_at`, `updated_at`) VALUES (0.0, 1, NOW(), NOW(), NOW())');
+        DB::statement('INSERT INTO exchange_rates (`rate`, `currentRate`, `dateEffective`, `created_at`, `updated_at`) VALUES (47.777, 1, NOW(), NOW(), NOW())');
     }
 
     /**

@@ -19,10 +19,6 @@
 								Size
 							</td>
 							<td >
-								Maximum Weight Capacity
-								(kgs)
-							</td>
-							<td >
 								Description
 							</td>
 							<td>
@@ -59,11 +55,11 @@
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
 
-							<div class="form-group required">
+							<div class="form-group required hidden">
 								<label class = "control-label">Maximum Weight Capacity: </label>
 								<div class = "form-group input-group">
 									<input type = "text" class = "form-control money" style= "text-align: right"
-									value ="0" name = "maxWeight" id = "maxWeight"  data-rule-required="true" /><span class = "input-group-addon">kgs</span>
+									value ="0" name = "maxWeight" id = "maxWeight"   /><span class = "input-group-addon">kgs</span>
 								</div>
 								<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
 							</div>
@@ -105,24 +101,24 @@
 @endsection
 @push('styles')
 <style>
-	.class-container-type
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-container-type
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
 <script type="text/javascript">
 	$('#deliverycollapse').addClass('in');
-    $('#collapse2').addClass('in');
+	$('#collapse2').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
@@ -136,13 +132,11 @@
 			ajax: 'http://localhost:8000/admin/ctData',
 			columns: [
 			{ data: 'name'},
-				{ data: 'maxWeight'
-				},
-					{ data: 'description' },
-					{ data: 'action', orderable: false, searchable: false }
+			{ data: 'description' },
+			{ data: 'action', orderable: false, searchable: false }
 
-					],	"order": [[ 0, "asc" ]],
-				});
+			],	"order": [[ 0, "asc" ]],
+		});
 
 		$("#commentForm").validate({
 			rules:
@@ -155,31 +149,24 @@
 				},
 				description:
 				{
-				
+
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
 					regex: /^[A-Za-z0-9'-.,  ]+$/,
 				},
-				maxWeight:
-				{
-					required:true,
-
-				},
-
-
 			},
-	
+
 			onkeyup: function(element) {$(element).valid()},
 		});
 
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New Container Volume');
+			$('.modal-title').text('New Container Size');
 			$('#description').val("");
-			$('#name').val("0.00");
+			$('#name').val("0");
 			$('#maxWeight').val("");
 
 			$('#ctModal').modal('show');
@@ -256,9 +243,9 @@
 
 
 
-			if(title == "New Container Volume")
+			if(title == "New Container Size")
 			{
-				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() ){
+				if($('#name').valid() && $('#description').valid() ){
 
 					$('#btnSave').attr('disabled', 'true');
 					$.ajax({
@@ -268,7 +255,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'name' : $('#name').inputmask('unmaskedvalue'),
 							'description' : $('#description').val(),
-							'maxWeight' : $('#maxWeight').inputmask('unmaskedvalue'),
+							'maxWeight' : "0.00",
 
 						},
 						success: function (data)
@@ -276,11 +263,11 @@
 							if(typeof(data) === "object"){
 								cttable.ajax.reload();
 								$('#ctModal').modal('hide');
-								$('#name').val("0.00");
+								$('#name').val("0");
 								$('#description').val("");
 								$('#maxWeight').val("");
 
-								$('.modal-title').text('New Container Volume');
+								$('.modal-title').text('New Container Size');
 
 
 								toastr.options = {
@@ -325,16 +312,16 @@
 			}
 			else
 			{
-				if($('#name').valid() && $('#description').valid() && $('#maxWeight').valid() )
+				if($('#name').valid() && $('#description').valid() )
 				{
 
 					if($('#name').val() === temp_name &&
-						$('#description').val() === temp_desc &&
-						$('#maxWeight').inputmask("unmaskedvalue") === temp_maxWeight  )
+						$('#description').val() === temp_desc
+						 )
 					{
 						$('#name').val("");
 						$('#description').val("");
-						$('#maxWeight').val("");
+						
 
 						$('#btnSave').removeAttr('disabled');
 						$('#ctModal').modal('hide');
@@ -350,7 +337,7 @@
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').val(),
 								'description' : $('#description').val(),
-								'maxWeight' : $('#maxWeight').inputmask("unmaskedvalue"),
+								'maxWeight' : "0.00",
 
 
 							},
@@ -360,9 +347,9 @@
 									cttable.ajax.reload();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
-									$('#maxWeight').val("");
+									//$('#maxWeight').val("");
 
-									$('.modal-title').text('New Container Volume');
+									$('.modal-title').text('New Container Size');
 
 
 
@@ -384,7 +371,7 @@
 										"showMethod": "fadeIn",
 										"hideMethod": "fadeOut"
 									}
-									toastr["success"]("Record addded successfully");
+									toastr["success"]("Record added successfully");
 
 									$('#btnSave').removeAttr('disabled');
 

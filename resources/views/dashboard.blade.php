@@ -123,15 +123,15 @@
 
 @push('styles')
 <style type="text/css">
-#calendar h2:first-child{
-	border-left: none;
-}
-.dashboard
-{
-	border-left: 10px solid #8ddfcc;
-	background-color: #316b89;
-	color: #fff;
-}
+	#calendar h2:first-child{
+		border-left: none;
+	}
+	.dashboard
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color: #316b89;
+		color: #fff;
+	}
 </style>
 <link href="/js/fullCalendar/fullcalendar.min.css" rel="stylesheet">
 @endpush
@@ -141,7 +141,6 @@
 <script type="text/javascript" charset="utf8" src="/js/fullCalendar/moment.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/fullCalendar/fullcalendar.min.js"></script>
 <script>
-
 
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({

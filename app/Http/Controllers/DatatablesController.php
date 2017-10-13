@@ -91,122 +91,368 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function dct_datatable(){
-		$dcts = DangerousCargoType::select(['id', 'name', 'description', 'created_at']);
+	public function dct_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$dcts = DangerousCargoType::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($dcts)
-		->addColumn('action', function ($dct){
-			return
-			'<button value = "'. $dct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $dct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($dcts)
+			->addColumn('action', function ($dct){
+				return
+				'<button value = "'. $dct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $dct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$dcts = DB::table('DangerousCargoType')
+			->select('id', 'name', 'description', 'created_at','deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($dcts)
+			->addColumn('status', function ($dcts){
+				if ($dcts->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($dcts){
+				return
+				'<button value = "'. $dcts->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function  bt_datatable(){
-		$bts = BasisType::select(['id', 'name', 'abbreviation', 'created_at']);
+	public function  bt_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$bts = BasisType::select(['id', 'name', 'abbreviation', 'created_at']);
 
-		return Datatables::of($bts)
-		->addColumn('action', function ($bt){
-			return
-			'<button value = "'. $bt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $bt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($bts)
+			->addColumn('action', function ($bt){
+				return
+				'<button value = "'. $bt->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $bt->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			
+			$bts = DB::table('BasisType')
+			->select('id', 'name', 'abbreviation', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($bts)
+			->addColumn('status', function ($bts){
+				if ($bts->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($bts){
+				return
+				'<button value = "'. $bts->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
 
-	public function lcl_datatable(){
-		$lcls = LclType::select(['id', 'name', 'description', 'created_at']);
+	public function lcl_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$lcls = LclType::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($lcls)
-		->addColumn('action', function ($lcl){
-			return
-			'<button value = "'. $lcl->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $lcl->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($lcls)
+			->addColumn('action', function ($lcl){
+				return
+				'<button value = "'. $lcl->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $lcl->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$lcls = DB::table('LclType')
+			->select('id', 'name', 'description', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($lcls)
+
+			->addColumn('status', function ($lcls){
+				if ($lcls->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($lcls){
+				return
+				'<button value = "'. $lcls->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
 	}
 
-	public function req_datatable(){
-		$reqs = Requirement::select(['id', 'name', 'description', 'created_at']);
+	public function req_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$reqs = Requirement::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($reqs)
-		->addColumn('action', function ($req){
-			return
-			'<button value = "'. $req->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $req->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($reqs)
+			->addColumn('action', function ($req){
+				return
+				'<button value = "'. $req->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $req->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$reqs =  DB::table('Requirement')
+			->select('id', 'name', 'description', 'created_at' , 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($reqs)
+
+			->addColumn('status', function ($reqs){
+				if ($reqs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($reqs){
+				return
+				'<button value = "'. $reqs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function sec_datatable(){
-		$secs = Section::select(['id', 'name', 'description', 'created_at']);
+	public function sec_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$secs = Section::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($secs)
-		->addColumn('action', function ($sec){
-			return
-			'<button value = "'. $sec->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $sec->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($secs)
+			->addColumn('action', function ($sec){
+				return
+				'<button value = "'. $sec->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $sec->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$secs = DB::table('Section')
+			->select('id', 'name', 'description', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($secs)
+
+			->addColumn('status', function ($secs){
+				if ($secs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($secs){
+				return
+				'<button value = "'. $secs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function attach_datatable(){
-		$attaches =  DB::select("SELECT * FROM service_order_attachments");
+	public function attach_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$attaches =  DB::select("SELECT * FROM service_order_attachments");
 
-		return Datatables::of($attaches)
-		->addColumn('action', function ($attach){
-			return
-			'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($attaches)
+			->addColumn('action', function ($attach){
+				return
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$attaches =  DB::select("SELECT * FROM service_order_attachments WHERE deleted_at is not null");
+			return Datatables::of($attaches)
+
+			->addColumn('status', function ($attaches){
+				if ($attaches->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($attaches){
+				return
+				'<button value = "'. $attaches->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
-	public function cat_datatable(){
-		$cats =  DB::select("SELECT s.name as 'section' , c.name as 'category', c.id as'id' , c.description as 'description', c.deleted_at as'deleted_at', c.created_at FROM category_types c JOIN sections s ON s.id = c.sections_id where s.deleted_at is null and c.deleted_at is null order by c.name");
+	public function cat_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$cats =  DB::select("SELECT s.name as 'section' , c.name as 'category', c.id as'id' , c.description as 'description', c.deleted_at as'deleted_at', c.created_at FROM category_types c JOIN sections s ON s.id = c.sections_id where s.deleted_at is null and c.deleted_at is null order by c.name");
 
-		return Datatables::of($cats)
-		->addColumn('action', function ($cat){
-			return
-			'<button value = "'. $cat->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $cat->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($cats)
+			->addColumn('action', function ($cat){
+				return
+				'<button value = "'. $cat->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $cat->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$cats =  DB::select("SELECT s.name as 'section' , c.name as 'category', c.id as'id' , c.description as 'description', c.deleted_at as'deleted_at', c.created_at FROM category_types c JOIN sections s ON s.id = c.sections_id where s.deleted_at is null and c.deleted_at is not null order by c.name");
+			return Datatables::of($cats)
+
+			->addColumn('status', function ($cats){
+				if ($cats->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($cats){
+				return
+				'<button value = "'. $cats->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
-	public function item_datatable(){
-		$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is null  order by s.name");
+	public function item_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is null  order by s.name");
 
-		return Datatables::of($items)
-		->addColumn('action', function ($item){
-			return
-			'<button value = "'. $item->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $item->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($items)
+			->addColumn('action', function ($item){
+				return
+				'<button value = "'. $item->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $item->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is not null  order by s.name");
+			return Datatables::of($items)
+
+			->addColumn('status', function ($items){
+				if ($items->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($items){
+				return
+				'<button value = "'. $items->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function ch_datatable(){
-		$charges = Charge::select(['id', 'name', 'description','bill_type','chargeType','amount','created_at']);
+	public function ch_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$charges = Charge::select(['id', 'name', 'description','bill_type','chargeType','amount','created_at']);
 
-		return Datatables::of($charges)
-		->addColumn('action', function ($ch){
-			return
-			'<button value = "'. $ch->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $ch->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($charges)
+			->addColumn('action', function ($ch){
+				return
+				'<button value = "'. $ch->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $ch->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$chs = DB::table('charges')
+			->select('id', 'name','description', 'chargeType','amount', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($chs)
+			->addColumn('status', function ($chs){
+				if ($chs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($chs){
+				return
+				'<button value = "'. $chs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 	public function bst_datatable(){
@@ -222,32 +468,89 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function ct_datatable(){
-		$cts = ContainerType::select(['id', 'name','description','maxWeight', 'created_at']);
+	public function ct_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$cts = ContainerType::select(['id', 'name','description','maxWeight', 'created_at']);
 
-		return Datatables::of($cts)
-		->addColumn('action', function ($ct){
-			return
-			'<button value = "'. $ct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $ct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($cts)
+			->addColumn('action', function ($ct){
+				return
+				'<button value = "'. $ct->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $ct->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}else{
+
+			$cts = DB::table('container_types')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($cts)
+			->addColumn('status', function ($cts){
+				if ($cts->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($cts){
+				return
+				'<button value = "'. $cts->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function er_datatable(){
-		$ers = ExchangeRate::select(['id', 'description', 'rate', 'dateEffective', 'created_at']);
+	public function er_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$ers = DB::select("SELECT *, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM exchange_rates ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($ers)
-		->addColumn('action', function ($er){
-			return
-			'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($er->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('rate', 'Php {{ $rate }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($ers)
+			->addColumn('action', function ($er){
+				return
+				'<button value = "'. $er->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $er->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($er->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('rate', 'Php {{ $rate }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+
+			$ers = DB::table('exchange_rates')
+			->select('id', 'description', 'rate', 'dateEffective', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($ers)
+			->addColumn('status', function ($ers){
+				if ($ers->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($ers){
+				return
+				'<button value = "'. $ers->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 	public function rt_datatable(){
@@ -276,40 +579,72 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function et_datatable(){
-		$ets = EmployeeType::select(['id', 'name', 'description', 'created_at']);
+	public function et_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$ets = EmployeeType::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($ets)
-		->addColumn('action', function ($et){
-			return
-			'<button value = "'. $et->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $et->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($ets)
+			->addColumn('action', function ($et){
+				return
+				'<button value = "'. $et->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $et->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$ets = DB::table('employee_types')
+			->select('id','name', 'description', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($ets)
+			->addColumn('status', function ($ets){
+				if ($ets->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($ets){
+				return
+				'<button value = "'. $ets->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
 	}
 
-	public function consignee_datatable(){
-		$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at']);
+	public function consignee_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
 
-		return Datatables::of($consignees)
+			$consignees = consignee::select(['id', 'firstName', 'middleName','lastName','companyName', 'email', 'contactNumber','created_at']);
 
-		->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
-		->removeColumn('middleName')
-		->removeColumn('lastName')
-		->addColumn('action', function ($consignee){
-			return
-			'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">Select</button>';
-		})
-		->editColumn('consigneeType', function($consignee){
-			if( $consignee->consigneeType == 0){
-				return 'Walk-in';
-			}
-			else{
-				return 'Regular';
-			}
-		})
-		->make(true);
+			return Datatables::of($consignees)
+
+			->editColumn('firstName', '{{ $firstName . " " .$middleName . " ". $lastName }}')
+			->removeColumn('middleName')
+			->removeColumn('lastName')
+			->addColumn('action', function ($consignee){
+				return
+				'<button value = "'. $consignee->id .'" class = "btn btn-md btn-primary selectConsignee ">Select</button>';
+			})
+			->editColumn('consigneeType', function($consignee){
+				if( $consignee->consigneeType == 0){
+					return 'Walk-in';
+				}
+				else{
+					return 'Regular';
+				}
+			})
+			->make(true);
+		}else{
+
+		}
 	}
 
 	public function consignee_datatable_main(){
@@ -354,21 +689,51 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function v_datatable(){
-		$vs = DB::table('vehicles')
-		->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
-		->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
-		->where('vehicles.deleted_at', '=', null)
-		->get();
+	public function v_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$vs = DB::table('vehicles')
+			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at')
+			->where('vehicles.deleted_at', '=', null)
+			->get();
 
 
-		return Datatables::of($vs)
-		->addColumn('action', function ($v) {
-			return
-			'<button value = "'. $v->plateNumber .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $v->plateNumber .'" style="width:100;" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->make(true);
+			return Datatables::of($vs)
+			->addColumn('action', function ($v) {
+				return
+				'<button value = "'. $v->plateNumber .'" style="margin-right:10px; width:100;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $v->plateNumber .'" style="width:100;" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->make(true);
+		}else{
+
+			$vs = DB::table('vehicles')
+			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
+			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at','vehicles.deleted_at')
+			->where('vehicles.deleted_at', '!=', null)
+			->orderBy('deleted_at', 'desc')
+			->get();
+
+			return Datatables::of($vs)
+			->addColumn('status', function ($vs){
+				if ($vs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($vs){
+				return
+				'<button value = "'. $vs->plateNumber .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('plateNumber', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 	public function brso_head_datatable(){
 		$so_heads = DB::table('consignee_service_order_headers')
@@ -569,64 +934,162 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function lp_datatable(){
-		$lps = LocationProvince::select(['id', 'name', 'created_at']);
+	public function lp_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
 
-		return Datatables::of($lps)
-		->addColumn('action', function ($lp){
-			return
-			'<button value = "'. $lp->id .'"   style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $lp->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			$lps = LocationProvince::select(['id', 'name', 'created_at']);
+
+			return Datatables::of($lps)
+			->addColumn('action', function ($lp){
+				return
+				'<button value = "'. $lp->id .'"   style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $lp->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$lps = DB::table('location_provinces')
+			->select('id', 'name', 'created_at', 'deleted_at')
+			->where('deleted_at','!=',null)
+			->get();
+
+			return Datatables::of($lps)
+			->addColumn('action', function ($lps){
+				if ($lps->deleted_at == null){
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lps->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lps){
+				if ($lps->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 
-	public function lc_datatable(){
-		$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
+	public function lc_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is null  and p.deleted_at is null order by p.name");
 
-		return Datatables::of($lcs)
-		->addColumn('action', function ($lc){
-			return
-			'<button value = "'. $lc->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
-			'<button value = "'. $lc->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($lcs)
+			->addColumn('action', function ($lc){
+				return
+				'<button value = "'. $lc->id .'" style="margin-right:10px;" class = "btn btn-md btn-info edit">Update</button>'.
+				'<button value = "'. $lc->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+			$lcs = DB::select("SELECT p.name as 'province' , c.name as 'city', c.id as'id',c.deleted_at as 'deleted_at'  FROM location_provinces p INNER JOIN location_cities c ON p.id = c.provinces_id where c.deleted_at is not null  and p.deleted_at is null order by p.name");
+
+			return Datatables::of($lcs)
+			->addColumn('action', function ($lcs){
+				if ($lcs->deleted_at == null){
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $lcs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($lcs){
+				if ($lcs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 
 
 
-	public function bl_datatable(){
-		$bills = Billing::select(['id', 'name', 'description', 'created_at']);
+	public function bl_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$bills = Billing::select(['id', 'name', 'description', 'created_at']);
 
-		return Datatables::of($bills)
-		->addColumn('action', function ($bill){
-			return
-			'<button value = "'. $bill->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $bill->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($bills)
+			->addColumn('action', function ($bill){
+				return
+				'<button value = "'. $bill->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $bill->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+		}
 	}
 
-	public function bf_datatable(){
-		$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at ,
-			GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null GROUP BY h.id ORDER by h.dateEffective DESC");
+	public function bf_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff ,
+				GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is null AND d.deleted_at is null GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($bfs)
-		->addColumn('action', function ($bf){
-			return
-			'<button value = "'. $bf->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($bf->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($bfs)
+			->addColumn('action', function ($bf){
+				return
+				'<button value = "'. $bf->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $bf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($bf->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+
+			$bfs = DB::select("SELECT h.id, h.dateEffective, h.deleted_at , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff ,
+				GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2)) ORDER BY d.minimum ASC  SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS amount FROM brokerage_fee_headers h INNER JOIN brokerage_fee_details d ON h.id = d.brokerage_fee_headers_id where h.deleted_at is not null AND d.deleted_at is null GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+
+
+			return Datatables::of($bfs)
+			->addColumn('status', function ($bfs){
+				if ($bfs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($bfs){
+				return
+				'<button value = "'. $bfs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
+	
 
 	public function contracts_datatable(){
 		$contract_headers = DB::table('contract_headers')
@@ -680,37 +1143,76 @@ class DatatablesController extends Controller
 		->make(true);
 	}
 
-	public function employees_datatable(){
-		$employees = DB::table('employees')
-		->select('employees.id', 'firstName', 'middleName', 'lastName','employees.created_at')
-		->where('deleted_at', '=', null)
-		->get();
-		return Datatables::of($employees)
-		->addColumn('action', function ($employee){
-			return
-			'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn but btn-md">View</a>' .
-			'<button value = "'. $employee->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
-			'<button value = "'. $employee->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+	public function employees_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$employees = DB::table('employees')
+			->select('employees.id', 'firstName', 'middleName', 'lastName','employees.created_at')
+			->where('deleted_at', '=', null)
+			->get();
+			return Datatables::of($employees)
+			->addColumn('action', function ($employee){
+				return
+				'<a href = "/utilities/employee/' . $employee->id . '/view" class = "btn but btn-md">View</a>' .
+				'<button value = "'. $employee->id .'" class = "btn btn-md btn-primary edit">Update</button>'.
+				'<button value = "'. $employee->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$employees = DB::table('employees')
+			->select('id', 'firstName', 'middleName', 'lastName','created_at','deleted_at')
+			->where('deleted_at', '!=', null)
+			->get();
+
+
+			return Datatables::of($employees)
+			->addColumn('action', function ($employees){
+				if ($employees->deleted_at == null){
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $employees->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($employees){
+				if ($employees->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
 	public function emp_role_datatable(Request $request){
-		$id = $request->employee_id;
-		$employee_roles = DB::table('employee_roles')
-		->join('employees', 'employee_id', '=', 'employees.id')
-		->join('employee_types', 'employee_type_id', '=', 'employee_types.id')
-		->select('employee_roles.id', 'name','employee_roles.created_at')
-		->where('employee_id', '=', $id)
-		->where('employee_roles.deleted_at', '=', null)
-		->get();
-		return Datatables::of($employee_roles)
-		->addColumn('action', function ($employee_role){
-			return
-			'<button value = "'. $employee_role->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->make(true);
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$id = $request->employee_id;
+			$employee_roles = DB::table('employee_roles')
+			->join('employees', 'employee_id', '=', 'employees.id')
+			->join('employee_types', 'employee_type_id', '=', 'employee_types.id')
+			->select('employee_roles.id', 'name','employee_roles.created_at')
+			->where('employee_id', '=', $id)
+			->where('employee_roles.deleted_at', '=', null)
+			->get();
+			return Datatables::of($employee_roles)
+			->addColumn('action', function ($employee_role){
+				return
+				'<button value = "'. $employee_role->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->make(true);
+		}else{
+
+		}
 	}
 
 
@@ -815,26 +1317,64 @@ class DatatablesController extends Controller
 	}
 
 
-	public function location_datatable(){
-		$locations = DB::table('locations')
-		->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
-		->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
-		->select('locations.id as location_id', 'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
-		->where('locations.deleted_at', '=', null)
-		->orderBy('location_name')
-		->get();
+	public function location_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$locations = DB::table('locations')
+			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+			->select('locations.id as location_id', 'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+			->where('locations.deleted_at', '=', null)
+			->orderBy('location_name')
+			->get();
 
-		return Datatables::of($locations)
-		->addColumn('action', function ($location){
-			return
-			'<input type = "hidden" class = "location_id"  value = "' . $location->location_id . '"/>'.
-			'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
-			'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' .
-			'<button value = "'. $location->location_id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $location->location_id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			return Datatables::of($locations)
+			->addColumn('action', function ($location){
+				return
+				'<input type = "hidden" class = "location_id"  value = "' . $location->location_id . '"/>'.
+				'<input type = "hidden" class = "province_id"  value = "' . $location->province_id . '"/>' .
+				'<input type = "hidden" class = "city_id" value = "' . $location->city_id . '"/>' .
+				'<button value = "'. $location->location_id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $location->location_id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
 
-		})
-		->make(true);
+			})
+			->make(true);
+		}else{
+
+			$locations = DB::table('locations')
+			->join('location_cities AS B', 'locations.cities_id', '=', 'B.id')
+			->join('location_provinces AS C', 'B.provinces_id', '=', 'C.id')
+			->select('locations.id as id','locations.deleted_at AS deleted_at',
+				'locations.name AS location_name', 'locations.address AS location_address', 'B.name AS city_name', 'C.name AS province_name', 'B.id AS city_id', 'C.id AS province_id', 'locations.zipCode')
+			->where('locations.deleted_at', '!=', null)
+			->orderBy('location_name')
+			->get();
+
+
+			return Datatables::of($locations)
+			->addColumn('action', function ($locations){
+				if ($locations->deleted_at == null){
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $locations->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($locations){
+				if ($locations->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 	public function get_quotations(){
@@ -1124,139 +1664,344 @@ class DatatablesController extends Controller
 		}
 	}
 
-	public function cds_datatable(){
-		$cdss = CdsFee::select(['id',  'fee', 'dateEffective', 'created_at']);
+	public function cds_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$cdss = DB::select("SELECT * , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM cds_fees where deleted_at is null ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($cdss)
-		->addColumn('action', function ($cds){
-			return
-			'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($cds->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($cdss)
+			->addColumn('action', function ($cds){
+				return
+				'<button value = "'. $cds->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $cds->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($cds->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+
+			$cdss = DB::select("SELECT * , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM cds_fees where deleted_at is not null ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+
+			return Datatables::of($cds)
+			->addColumn('status', function ($cds){
+				if ($cds->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($cds){
+				return
+				'<button value = "'. $cds->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function vr_datatable(){
-		$vrs = VatRate::select(['id',  'rate', 'dateEffective', 'created_at']);
+	public function vr_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$vrs = VatRate::select(['id',  'rate', 'dateEffective', 'created_at']);
 
-		return Datatables::of($vrs)
-		->addColumn('action', function ($vrs){
-			return
-			'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($vrs->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($vrs)
+			->addColumn('action', function ($vrs){
+				return
+				'<button value = "'. $vrs->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $vrs->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($vrs->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+
+		}
 	}
 
-	public function af_dc_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type,
-			GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id");
+	public function af_dc_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size,DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($arrastres)
-		->addColumn('action', function ($arrastre){
-			return
-			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($arrastres)
+			->addColumn('action', function ($arrastre){
+				return
+				'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+			$arrastres = DB::select("SELECT DISTINCT h.id,locations.name AS location, GROUP_CONCAT(container_types.name) AS container_size,DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(dangerous_cargo_types.name) AS dc_type, GROUP_CONCAT(CONCAT('Php ' , d.amount) ORDER BY d.container_sizes_id ASC ) AS amount FROM dangerous_cargo_types, container_types,locations,arrastre_dc_headers h JOIN arrastre_dc_details d ON h.id = d.arrastre_dc_headers_id WHERE container_types.id = container_sizes_id AND dangerous_cargo_types.id = dc_types_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL AND dangerous_cargo_types.description IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			return Datatables::of($arrastres)
+			->addColumn('status', function ($arrastres){
+				if ($arrastres->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($arrastres){
+				return
+				'<button value = "'. $arrastres->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function af_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+	public function af_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($arrastres)
-		->addColumn('action', function ($arrastre){
-			return
-			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("m-d-Y") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d Y") }}')
-		->make(true);
+			return Datatables::of($arrastres)
+			->addColumn('action', function ($arrastre){
+				return
+				'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("m-d-Y") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d Y") }}')
+			->make(true);
+		}else{
+
+			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+
+			return Datatables::of($arrastres)
+
+			->addColumn('status', function ($arrastres){
+				if ($arrastres->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($arrastres){
+				return
+				'<button value = "'. $arrastres->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function wf_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+	public function wf_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective,DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($wharfages)
-		->addColumn('action', function ($wharfage){
-			return
-			'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($wharfage->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($wharfages)
+			->addColumn('action', function ($wharfage){
+				return
+				'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($wharfage->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+			$wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective,DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			return Datatables::of($wharfages)
+
+			->addColumn('status', function ($wharfages){
+				if ($wharfages->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($wharfages){
+				return
+				'<button value = "'. $wharfages->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
-	public function wf_lcl_datatable(){
-		$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+	public function wf_lcl_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($wharfages)
-		->addColumn('action', function ($wharfage){
-			return
-			'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($wharfage->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($wharfages)
+			->addColumn('action', function ($wharfage){
+				return
+				'<button value = "'. $wharfage->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $wharfage->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($wharfage->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$wharfages = DB::select("SELECT DISTINCT h.id,h.dateEffective,locations.name AS location, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount ,2)) SEPARATOR '\n') AS amount FROM basis_types,locations, wharfage_lcl_headers h JOIN wharfage_lcl_details d ON h.id = d.wharfage_lcl_headers_id WHERE locations_id = locations.id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			return Datatables::of($wharfages)
+
+			->addColumn('status', function ($wharfages){
+				if ($wharfages->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($wharfages){
+				return
+				'<button value = "'. $wharfages->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+
+		}
 	}
 
-	public function af_lcl_datatable(){
-		$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+	public function af_lcl_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($arrastres)
-		->addColumn('action', function ($arrastre){
-			return
-			'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("Y-m-d") .'">';
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($arrastres)
+			->addColumn('action', function ($arrastre){
+				return
+				'<button value = "'. $arrastre->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $arrastre->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($arrastre->dateEffective)->format("Y-m-d") .'">';
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			return Datatables::of($arrastres)
+
+			->addColumn('status', function ($arrastres){
+				if ($arrastres->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($arrastres){
+				return
+				'<button value = "'. $arrastres->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
-	public function ipf_datatable(){
-		$ipfs = DB::select("SELECT h.id, h.dateEffective  , GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER by h.dateEffective DESC");
+	public function ipf_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-		return Datatables::of($ipfs)
-		->addColumn('action', function ($ipf){
-			return
-			'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($ipf->dateEffective)->format("Y-m-d") .'">';
-			;
-		})
-		->editColumn('id', '{{ $id }}')
-		->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
-		->make(true);
+			return Datatables::of($ipfs)
+			->addColumn('action', function ($ipf){
+				return
+				'<button value = "'. $ipf->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $ipf->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" class = "date_effective" value = "'. Carbon::parse($ipf->dateEffective)->format("Y-m-d") .'">';
+				;
+			})
+			->editColumn('id', '{{ $id }}')
+			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
+			->make(true);
+		}else{
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			return Datatables::of($ipfs)
+
+			->addColumn('status', function ($ipfs){
+				if ($ipfs->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->addColumn('action', function ($ipfs){
+				return
+				'<button value = "'. $ipfs->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+			})
+
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+
+		}
 	}
 
 
-	public function sar_datatable(){
-		$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
+	public function sar_datatable(Request $request){
+		$isActive = $request->isActive;
+		if ($isActive == null){
+			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is null and l.deleted_at is null");
 
-		return Datatables::of($sars)
-		->addColumn('action', function ($sar){
-			return
-			'<button value = "'. $sar->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
-			'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
-			'<input type = "hidden" value = "'. $sar->pickup_id .'" class = "pickup_id"/>
-			<input type = "hidden" value = "'. $sar->deliver_id .'"class = "deliver_id"/>';
-		})
-		->editColumn('id', '{{ $id }}')
-		->make(true);
+			return Datatables::of($sars)
+			->addColumn('action', function ($sar){
+				return
+				'<button value = "'. $sar->id .'" style="margin-right:10px;" class = "btn btn-md but edit">Update</button>'.
+				'<button value = "'. $sar->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>'.
+				'<input type = "hidden" value = "'. $sar->pickup_id .'" class = "pickup_id"/>
+				<input type = "hidden" value = "'. $sar->deliver_id .'"class = "deliver_id"/>';
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}else{
+			$sars = DB::select("select s.id , f.id as'pickup_id', l.id as 'deliver_id', l.name as 'areaTo' ,f.name as 'areaFrom' ,s.amount, s.deleted_at as 'deleted_at' from standard_area_rates s  JOIN locations as l on s.areaTo = l.id join locations as f on s.areaFrom = f.id  where s.deleted_at is not null and l.deleted_at is null");
+
+
+			return Datatables::of($sars)
+			->addColumn('action', function ($sars){
+				if ($sars->deleted_at == null){
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				}else{
+
+					return
+					'<button value = "'. $sars->id .'" class = "btn btn-md btn-success activate">Activate</button>';
+				}
+			})
+			->addColumn('status', function ($sars){
+				if ($sars->deleted_at == null)
+				{
+					return 'Active';
+				}else{
+					return  'Inactive';
+				}
+
+			})
+			->editColumn('id', '{{ $id }}')
+			->make(true);
+		}
 	}
 
 	public function get_finished_trucking_orders(Request $request){

@@ -22,7 +22,7 @@ class CreateCdsFeesTable extends Migration
             $table->softDeletes();
         });
 
-        DB::statement('INSERT INTO cds_fees (`fee`, `currentFee`, `dateEffective`, `created_at`, `updated_at`) VALUES (0.0, 1, NOW(), NOW(), NOW())');
+        DB::statement('INSERT INTO cds_fees (`fee`, `currentFee`, `dateEffective`, `created_at`, `updated_at`) VALUES (225.00, 1, NOW(), NOW(), NOW())');
     }
 
     /**
