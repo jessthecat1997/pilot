@@ -416,34 +416,50 @@
 
 
 
-		@if(count($truckings)>0)
-		var delivery_table = $('#delivery_table').DataTable({
-			processing: false,
-			deferRender: true,
-			serverSide: false,
-			ajax: '{{ route("trucking.index") }}/{{$truckings[0]->id}}/get_deliveries',
-			columns: [
+		// @if(count($truckings)>0)
+		// var delivery_table = $('#delivery_table').DataTable({
+		// 	processing: false,
+		// 	deferRender: true,
+		// 	serverSide: false,
+		// 	ajax: '{{ route("trucking.index") }}/{{$truckings[0]->id}}/get_deliveries',
+		// 	columns: [
 
 			
-			{ data: 'pickup_name' },
-			{ data: 'pickup_city'},
-			{ data: 'pickupDateTime'},
-			{ data: 'deliver_name' },
-			{ data: 'deliver_city' },
-			{ data: 'deliveryDateTime'},
-			{ data: 'status' },
+		// 	{ data: 'pickup_name' },
+		// 	{ data: 'pickup_city'},
+		// 	{ data: 'pickupDateTime'},
+		// 	{ data: 'deliver_name' },
+		// 	{ data: 'deliver_city' },
+		// 	{ data: 'deliveryDateTime'},
+		// 	{ data: 'status' },
 
 
-			],	"order": [[ 0, "desc" ]],
-		});
+		// 	],	"order": [[ 0, "desc" ]],
+		// });
 
-		$(document).on('click', '.view_trucking', function(e){
+		// $(document).on('click', '.view_trucking', function(e){
+		// 	e.preventDefault();
+		// 	window.location.replace('{{ route("trucking.index") }}/{{$truckings[0]->id}}/view');
+
+		// });
+
+		// @endif
+
+		$(document).on('click', '.download', function(e){
 			e.preventDefault();
-			window.location.replace('{{ route("trucking.index") }}' + "/" + {{$truckings[0]->id}} + "/view");
-
-		});
-
-		@endif
+			$.ajax({
+				type: 'GET',
+				url: '{{ route("orders.index") }}/{{ $so_head[0]->id }}/getAttachment/' + $(this).val(),
+				data:
+				{
+					'_token': $('input[name=_token]').val(),
+				},
+				success: function (data)
+				{
+					console.log(data);
+				}
+			})
+		})
 
 		@if(count($brokerages)>0)
 		var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({

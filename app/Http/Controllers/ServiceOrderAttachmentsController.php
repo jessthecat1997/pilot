@@ -8,6 +8,11 @@ use App\Http\Requests\StoreServiceOrderAttachments;
 class ServiceOrderAttachmentsController extends Controller
 {
 
+	public function download_file(Request $request)
+	{
+		$attachment = ServiceOrderAttachment::findOrFail($request->attach_id);
+		return response()->download(public_path('attach'). "/" .$attachment);
+	}
 
 	public function store(StoreServiceOrderAttachments $request)
 	{
@@ -21,7 +26,7 @@ class ServiceOrderAttachmentsController extends Controller
 		if($request->file_path != null){
 			$input = $request->all();
 			$input['image'] = time().'.' . $request->file_path->getClientOriginalExtension();
-			$attachment->file_path = $request->file_path->getClientOriginalName();
+			$attachment->file_path = time() . $request->file_path->getClientOriginalName();
 			$request->file_path->move(public_path('attach'), $input['image']);
 			
 			$attachment->save();
