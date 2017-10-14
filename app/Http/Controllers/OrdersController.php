@@ -43,7 +43,7 @@ class OrdersController extends Controller
 		->get();
 
 		$details = \DB::table('consignee_service_order_details')
-		->where('so_headers_id', '=', $so_head[0]->id)
+		->where('so_headers_id', '=', $id)
 		->get();
 		
 		$brokerages = null;  $truckings = null;

@@ -114,7 +114,7 @@
 					<br>
 					<br>
 				</div>
-				<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table">
+				<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td >
@@ -330,7 +330,7 @@
 								/>
 							</center>
 							<label class = "control-label">Upload file: </label>
-							<input type = "file" class = "form-control" name = "file_path" id = "file_path"  />
+							<input required type = "file" class = "form-control" name = "file_path" id = "file_path"  />
 
 						</div>
 
@@ -348,6 +348,23 @@
 			</div>
 		</div>
 	</form>
+	<div class="modal fade" id="confirm-deactivate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Deactivate record
+				</div>
+				<div class="modal-body">
+					Confirm Deactivating
+				</div>
+				<div class="modal-footer">
+
+					<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
@@ -366,7 +383,8 @@
 	$('#collapse1').addClass('in');
 
 	var service_type = null;
-	var so_id = {{ $so_head[0]->id }};
+	var so_id = '{{ $so_head[0]->id }}';
+	var selected_id = null;
 
 	$(document).ready(function(){
 
@@ -386,7 +404,7 @@
 		});
 
 
-		console.log('consignee is ' + {{$so_head[0]->consignees_id}});
+		console.log('consignee is ' + '{{$so_head[0]->consignees_id}}');
 		$(document).on('click', '.new_trucking', function(e){
 			e.preventDefault();
 			$('#confirm-create-t').modal('show');
@@ -415,50 +433,64 @@
 		});
 
 
+		$(document).on('click', '.deactivate', function(e){
+			e.preventDefault();
+			$('#confirm-deactivate').modal('show');
+			selected_id = $(this).val();
+		})
 
-		// @if(count($truckings)>0)
-		// var delivery_table = $('#delivery_table').DataTable({
-		// 	processing: false,
-		// 	deferRender: true,
-		// 	serverSide: false,
-		// 	ajax: '{{ route("trucking.index") }}/{{$truckings[0]->id}}/get_deliveries',
-		// 	columns: [
-
-			
-		// 	{ data: 'pickup_name' },
-		// 	{ data: 'pickup_city'},
-		// 	{ data: 'pickupDateTime'},
-		// 	{ data: 'deliver_name' },
-		// 	{ data: 'deliver_city' },
-		// 	{ data: 'deliveryDateTime'},
-		// 	{ data: 'status' },
-
-
-		// 	],	"order": [[ 0, "desc" ]],
-		// });
-
-		// $(document).on('click', '.view_trucking', function(e){
-		// 	e.preventDefault();
-		// 	window.location.replace('{{ route("trucking.index") }}/{{$truckings[0]->id}}/view');
-
-		// });
-
-		// @endif
-
-		$(document).on('click', '.download', function(e){
+		$(document).on('click', '#btnDeactivate', function(e)
+		{
+			$(this).attr('disabled', 'true');
 			e.preventDefault();
 			$.ajax({
-				type: 'GET',
-				url: '{{ route("orders.index") }}/{{ $so_head[0]->id }}/getAttachment/' + $(this).val(),
+				type: 'DELETE',
+				url: '{{ route("attachment.index") }}/' + selected_id,
 				data:
 				{
-					'_token': $('input[name=_token]').val(),
+					'_token' : $('input[name=_token]').val(),
 				},
 				success: function (data)
 				{
-					console.log(data);
+					message('Deactivated successfully');
+					$('#confirm-deactivate').modal('hide');
+					$('#btnDeactivate').removeAttr('disabled');
 				}
 			})
+		})
+
+		@if(count($truckings)>0)
+		var delivery_table = $('#delivery_table').DataTable({
+			processing: false,
+			deferRender: true,
+			serverSide: false,
+			ajax: '{{ route("trucking.index") }}/{{$truckings[0]->id}}/get_deliveries',
+			columns: [
+
+
+			{ data: 'pickup_name' },
+			{ data: 'pickup_city'},
+			{ data: 'pickupDateTime'},
+			{ data: 'deliver_name' },
+			{ data: 'deliver_city' },
+			{ data: 'deliveryDateTime'},
+			{ data: 'status' },
+
+
+			],	"order": [[ 0, "desc" ]],
+		});
+
+		$(document).on('click', '.view_trucking', function(e){
+			e.preventDefault();
+			window.location.replace('{{ route("trucking.index") }}/{{$truckings[0]->id}}/view');
+
+		});
+
+		@endif
+
+		$(document).on('click', '.download', function(e){
+			e.preventDefault();
+			window.open("{{ route('orders.index') }}/{{ $so_head[0]->id }}/getAttachment/" + $(this).val());
 		})
 
 		@if(count($brokerages)>0)
@@ -478,8 +510,6 @@
 			],	"order": [[ 0, "desc" ]],
 		});
 		@endif
-
-
 
 		function readURL(input) {
 			if (input.files && input.files[0]) {
@@ -544,6 +574,8 @@
 			success: function(data)
 			{
 				if(typeof(data) === "object"){ 
+					$('.submit-attachment').removeAttr('disabled');
+					$('#new-attachment').modal('hide');
 					toastr.options = { 
 						"closeButton": false, 
 						"debug": false, 
@@ -562,7 +594,7 @@
 						"showMethod": "fadeIn", 
 						"hideMethod": "fadeOut" 
 					} 
-					toastr["success"]("Successfully added attachment") 
+					toastr["success"]("Successfully added attachment");
 
 				}else{ 
 
@@ -572,7 +604,9 @@
 						console.log(i + " => " + v);  
 						var msg = '<label class="error" for="'+i+'">'+v+'</label>'; 
 						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg); 
-					}); 
+					});
+					$('.submit-attachment').removeAttr('disabled');
+
 				}	
 			}
 		};

@@ -308,9 +308,7 @@ class DatatablesController extends Controller
 			return Datatables::of($attaches)
 			->addColumn('action', function ($attach){
 				return
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-info view"><span class = "fa fa-eye"></span></button>'.
 				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-success download"><span class = "fa fa-download"></span></button>'.
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit"><span class = "fa fa-edit"></span></button>'.
 				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate"><span class = "fa fa-trash"></span></button>';
 			})
 			->editColumn('id', '{{ $id }}')

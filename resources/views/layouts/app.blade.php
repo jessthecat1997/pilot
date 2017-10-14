@@ -470,6 +470,29 @@
         return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
 
+    function message(mess)
+    {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "rtl": false,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": 300,
+            "hideDuration": 1000,
+            "timeOut": 2000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        toastr["success"](mess);
+    }
+
 
 </script>
 @stack('scripts')
