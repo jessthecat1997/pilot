@@ -49,7 +49,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         <li>
-                        <form name="clockForm" style="margin-top: 10px;">
+                            <form name="clockForm" style="margin-top: 10px;">
                                 <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
                             </form>
                         </li>
@@ -57,45 +57,35 @@
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                @if( Auth::user()->role_id == 1 ) Admin @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ url('/logout') }}"
-                                    onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="
-                        #">&nbsp;</a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </nav>
-    </div>
-    <br>
-    <br>
-    <div id="wrapper" id="sidebar">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+                        <li>
+                            <a href="
+                            #">&nbsp;</a>
+                        </li>
+                        @endif
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <br>
+        <br>
+        <div id="wrapper" id="sidebar">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
                 <!-- <li class="sidebar-brand" id="sidebrand">
                     <a href="#">
                         <img src="/images/pilotlogo.png" id="logo">
                     </a>
                 </li> -->
+                <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
+                    @if( Auth::user()->role_id == 1 )Admin<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 2 ){{ Auth::user()->name }} | Broker<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 3 ){{ Auth::user()->name }} | Trucking Manager<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 4 ){{ Auth::user()->name }} | Billing Manager<i class="fa fa-check-circle"></i>
+                    @else{{ Auth::user()->name }}<i class="fa fa-check-circle"></i>
+                    @endif
+                </li>
                 <li>
-                    <br>
                     <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
@@ -132,7 +122,7 @@
                         </li>
                     </ul>
                 </div>
-               <li>
+                <li>
                     <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
                 </li>
                 <div id="collapse2" class="panel-collapse collapse">
@@ -157,13 +147,13 @@
                               <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
 
                           </li>
-                         <li>
+                          <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
 
-                            <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                            </li>
+                        <li>
+                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                        </li>
                             <!--
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
@@ -396,7 +386,7 @@
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 <script>
-function clock(){
+    function clock(){
         var time = new Date()
         var hr = time.getHours()
         var min = time.getMinutes()
