@@ -1129,7 +1129,7 @@ $(document).on('click', '.finalize-cheque', function(e){
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
-			data: {	Q
+			data: {	
 				'_token' : $('input[name=_token]').val(),
 				'isCheque' : 0,
 				'bi_head_id' : {{ $so_head_id }},
