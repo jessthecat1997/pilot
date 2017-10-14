@@ -1297,7 +1297,6 @@ $(document).ready(function(){
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{ route("brokerage.index") }}/{{  $brokerage_id }}/get_approveddutiesandtaxes',
 			columns: [
 

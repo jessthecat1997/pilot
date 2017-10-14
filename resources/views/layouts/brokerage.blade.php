@@ -111,15 +111,16 @@
                         <li>
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
+                            <li>
+                            <a href="{{ route('orders.index') }}" class = "orders"><i class="fa fa-id-card-o"></i>&nbsp;&nbsp;Orders</a>
+                        </li>
                         <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
                             <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
                         </li>
-                      <!--   <li>
-                            <a href="{{ route('orders.index') }}" class = "orders"><i class="fa fa-id-card-o"></i>&nbsp;&nbsp;Orders</a>
-                        </li> -->
+                    
                         <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>

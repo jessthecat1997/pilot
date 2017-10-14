@@ -107,6 +107,9 @@
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
+                            <a href = "{{ route('orders.index') }}"  class = "order"><i class="fa fa-server"></i>&nbsp;&nbsp;Order</a>
+                        </li>
+                        <li>
                             <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                         </li>
                         <li>
