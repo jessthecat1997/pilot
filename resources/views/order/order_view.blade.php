@@ -393,7 +393,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender:true,
-			ajax: '{{ route("orders.index") }}/{{ $so_head[0]->id }}/getAttachments',
+			ajax: '{{ route("orders.index") }}/{{ $so_head[0]->id }}/get_atts',
 			columns: [
 			{ data: 'file_path' },
 			{ data: 'req_type_id'},
@@ -453,13 +453,14 @@
 				success: function (data)
 				{
 					message('Deactivated successfully');
+					attachmentstable.ajax.reload();
 					$('#confirm-deactivate').modal('hide');
 					$('#btnDeactivate').removeAttr('disabled');
 				}
 			})
 		})
 
-		@if(count($truckings)>0)
+		@if(count($truckings) > 0)
 		var delivery_table = $('#delivery_table').DataTable({
 			processing: false,
 			deferRender: true,
@@ -493,7 +494,7 @@
 			window.open("{{ route('orders.index') }}/{{ $so_head[0]->id }}/getAttachment/" + $(this).val());
 		})
 
-		@if(count($brokerages)>0)
+		@if(count($brokerages) > 0)
 		var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({
 			processing: false,
 			deferRender: true,
@@ -576,6 +577,7 @@
 				if(typeof(data) === "object"){ 
 					$('.submit-attachment').removeAttr('disabled');
 					$('#new-attachment').modal('hide');
+					attachmentstable.ajax.reload();
 					toastr.options = { 
 						"closeButton": false, 
 						"debug": false, 

@@ -275,6 +275,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
 	Route::resource('/attachment', 'ServiceOrderAttachmentsController');
 	Route::get('/orders/{order_id?}/getAttachments', 'DatatablesController@attach_datatable')->name('attach.data');
+	Route::get('/orders/{order_id?}/get_atts', 'DatatablesController@atts_datatable');
 	Route::post('/orders/create_so_billing_header', 'OrdersController@create_so_billing_header')->name('create_so_billing_header');
 	Route::get('/orders/{order_id?}/getAttachment/{attach_id?}', 'ServiceOrderAttachmentsController@download_file');
 
