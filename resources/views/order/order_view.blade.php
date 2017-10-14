@@ -110,7 +110,7 @@
 			<div class="panel-body">
 				<div class = "form-horizontal col-md-12 ">
 					<br>
-					<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
+					<button class = "btn but  btn-sm pull-right new_attachment">New Document</button>
 					<br>
 					<br>
 				</div>
@@ -312,11 +312,11 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						New Attachment
+						New Document
 					</div>
 					<div class="modal-body">
 						<div class="form-group required">
-							<label class = "control-label">Attachment Type: </label>
+							<label class = "control-label">Document Type: </label>
 							<select class = "form-control" name = "req_type_id" id = "req_type_id">
 								@forelse($reqs as $req)
 								<option value="{{ $req->id }}">{{ $req->name }}</option>
