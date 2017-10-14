@@ -142,12 +142,12 @@
 @endsection
 @push('styles')
 <style>
-.brokerage
-{
-  border-left: 10px solid #2ad4a5;
-  background-color:rgba(128,128,128,0.1);
-  color: #fff;
-}
+  .brokerage
+  {
+    border-left: 10px solid #2ad4a5;
+    background-color:rgba(128,128,128,0.1);
+    color: #fff;
+  }
 </style>
 <link href="/css/bootstrap-toggle.min.css" rel="stylesheet">
 @endpush

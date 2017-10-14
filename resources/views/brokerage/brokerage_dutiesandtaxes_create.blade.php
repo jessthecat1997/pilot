@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.brokerage')
 @section('content')
 <div class = "panel-heading">
   <h2 id = "DutiesAndTaxesHeader">&nbsp;Brokerage | Create Duties And Taxes </h2>

@@ -7,6 +7,7 @@ use App\Employee;
 use App\EmployeeRole;
 use App\EmployeeDetails;
 use App\Http\Requests\StoreEmployee;
+use App\User;
 
 use Illuminate\Support\Facades\DB;
 
@@ -134,6 +135,11 @@ class EmployeesController extends Controller
         ->where('employees_id', '=', $employee->id)
         ->get();
 
+        $role = DB::table('employee_roles')
+        ->join('employee_types', 'employee_roles.employee_type_id', '=', 'employee_types.id')
+        ->select('employee_types.id')
+        ->where('employee_id', '=', $employee_id)->get();
+
         $employee_accidents = \DB::table('employee_accidents')
         ->where('employees_id', '=', $employee->id)
         ->get();
@@ -145,12 +151,22 @@ class EmployeesController extends Controller
         ->get();
         
 
-        return view('employee/employee_view', compact(['employee_id', 'employee', 'location', 'employee_role', 'employee_accidents', 'employee_incidents', 'emp_roles']));
+        return view('employee/employee_view', compact(['employee_id', 'employee', 'location', 'employee_role', 'employee_accidents', 'employee_incidents', 'emp_roles', 'role']));
     }
 
     catch(ModelNotFoundException $e)
     {
         return 'No service order';
     }
+}
+public function store_user(Request $request)
+{
+    $user = new User;
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->emp_id = $request->emp_id;
+    $user->role_id = $request->role_id;
+    $user->save();
 }
 }
