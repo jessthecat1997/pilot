@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 
 class BillingMiddleware
@@ -13,8 +14,12 @@ class BillingMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
-        return $next($request);
+        if(Auth::guard($guard)->check() && Auth::user()->role_id == 4){
+            return $next($request);
+        }
+        else
+            return redirect()->back();
     }
 }
