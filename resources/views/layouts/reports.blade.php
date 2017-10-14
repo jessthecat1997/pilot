@@ -57,23 +57,7 @@
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                @if( Auth::user()->role_id == 1 ) Admin @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ url('/logout') }}"
-                                    onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
+                        
                     <li>
                         <a href="
                         #">&nbsp;</a>
@@ -94,8 +78,16 @@
                         <img src="/images/pilotlogo.png" id="logo">
                     </a>
                 </li> -->
+                <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
+                    @if( Auth::user()->role_id == 1 )Admin<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 2 ){{ Auth::user()->name }} | Broker<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 3 ){{ Auth::user()->name }} | Trucking Manager<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 4 ){{ Auth::user()->name }} | Billing Manager<i class="fa fa-check-circle"></i>
+                    @else{{ Auth::user()->name }}<i class="fa fa-check-circle"></i>
+                    @endif
+                </li>
                 <li>
-                    <br>
+                    
                     <a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
