@@ -346,6 +346,9 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
 	Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
 	Route::get('/reports/delivery/del_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'DeliveryReportsController@delivery_pdf_report');
+	Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
+
+	Route::get('reports/shipments/print/{frequency}', 'ShipmentReportsController@print');
 //vanessa addition
 	Route::get('/trial_report','TrialController@index');
 
@@ -421,7 +424,6 @@ Route::group(['middleware' => ['admin']], function() {
 //FullCalendar
 	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
-
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
 
@@ -438,7 +440,7 @@ Route::group(['middleware' => ['admin']], function() {
 });
 
 //BROKER SIDE
-Route::group(['middleware' => ['broker']], function() {
+Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/brokerage', 'BrokerageController');
 	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
@@ -496,7 +498,7 @@ Route::group(['middleware' => ['broker']], function() {
 });
 
 
-Route::group(['middleware' => ['trucking']], function() {
+Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/cdeposit', 'ConsigneeDepositsController');
 	Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
 
@@ -574,7 +576,7 @@ Route::group(['middleware' => ['trucking']], function() {
 	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 });
 
-Route::group(['middleware' => ['billing']], function() {
+Route::group(['middleware' => ['admin']], function() {
 
 	//Payments
 	Route::resource('/payment', 'PaymentsController');
