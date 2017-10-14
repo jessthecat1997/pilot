@@ -49,7 +49,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         <li>
-                        <form name="clockForm" style="margin-top: 10px;">
+                            <form name="clockForm" style="margin-top: 10px;">
                                 <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
                             </form>
                         </li>
@@ -107,6 +107,9 @@
                         <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                     </li>
                     <li>
+                        <a href = "{{ route('orders.index') }}"  class = "order"><i class="fa fa-server"></i>&nbsp;&nbsp;Order</a>
+                    </li>
+                    <li>
                         <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
                     </li>
                     <li>
@@ -154,13 +157,13 @@
                               <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
 
                           </li>
-                         <li>
+                          <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
 
-                            <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                            </li>
+                        <li>
+                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                        </li>
                             <!--<li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
                             </li>
@@ -389,7 +392,7 @@
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 <script>
-function clock(){
+    function clock(){
         var time = new Date()
         var hr = time.getHours()
         var min = time.getMinutes()
