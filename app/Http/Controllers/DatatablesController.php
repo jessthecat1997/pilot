@@ -303,13 +303,15 @@ class DatatablesController extends Controller
 	public function attach_datatable(Request $request){
 		$isActive = $request->isActive;
 		if ($isActive == null){
-			$attaches =  DB::select("SELECT * FROM service_order_attachments");
+			$attaches =  DB::select("SELECT * FROM service_order_attachments where so_head_id = ?", [$request->order_id]);
 
 			return Datatables::of($attaches)
 			->addColumn('action', function ($attach){
 				return
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-info view"><span class = "fa fa-eye"></span></button>'.
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-success download"><span class = "fa fa-download"></span></button>'.
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit"><span class = "fa fa-edit"></span></button>'.
+				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate"><span class = "fa fa-trash"></span></button>';
 			})
 			->editColumn('id', '{{ $id }}')
 			->make(true);
@@ -917,9 +919,9 @@ class DatatablesController extends Controller
 			$deliveries = DB::select('SELECT CONCAT(firstName, " ", lastName) as name, companyName, B.created_at, shippingLine, portOfCfsLocation, containerVolume,  containerNumber,  DATE(pickupDateTime) as pickupDateTime, DATE(deliveryDateTime) as deliveryDateTime, DATE_FORMAT(pickupDateTime, "%M %d, %Y") as dpickupDateTime, DATE_FORMAT(deliveryDateTime, "%M %d, %Y") as ddeliveryDateTime, B.remarks FROM  delivery_receipt_headers AS B LEFT JOIN delivery_head_containers as Y on Y.del_head_id = B.id left join delivery_containers as A on Y.container_id = A.id JOIN trucking_service_orders AS C ON B.tr_so_id = C.id JOIN consignee_service_order_details as D ON C.so_details_id = D.id JOIN consignee_service_order_headers AS E ON D.so_headers_id = E.id JOIN consignees AS F ON E.consignees_id = F.id WHERE DATE(deliveryDateTime) BETWEEN ? AND ?', [$request->date_from, $request->date_to]);
 			return json_encode($deliveries);
 		}
-
-
 	}
+
+	
 
 	public function ar_datatable(){
 		$ars = Area::select(['id', 'description', 'created_at']);

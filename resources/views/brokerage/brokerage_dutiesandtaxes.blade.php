@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.brokerage')
 @section('content')
 <h2>&nbsp;Brokerage</h2>
 <hr>
@@ -858,9 +858,6 @@
 
     //vanessa's addition
 
-    @if($consignee_id != null)
-      $('#consignee_id').val("{{$consignee_id}}");
-    @endif
 
     //end of vanessa's addition
 

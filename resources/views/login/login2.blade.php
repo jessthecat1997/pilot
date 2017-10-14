@@ -9,7 +9,7 @@
                     Login
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="/login/prelogin">
+                    <form class="form-horizontal" role="form" method="POST" action="/login/tvalidateUsers">
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label for="email" class="col-md-4 control-label">Username</label>
