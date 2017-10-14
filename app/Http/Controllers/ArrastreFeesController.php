@@ -59,6 +59,7 @@ class ArrastreFeesController extends Controller
         }catch(\Exception  $e){
             DB::rollback();
         }
+        return $af_header;
 
 
     } 

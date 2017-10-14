@@ -48,13 +48,18 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
+                        <li>
+                        <form name="clockForm" style="margin-top: 10px;">
+                                <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
+                            </form>
+                        </li>
                         @if (Auth::guest())
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                @if( Auth::user()->role_id == 1 ) Admin @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
@@ -384,6 +389,31 @@
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 <script>
+function clock(){
+        var time = new Date()
+        var hr = time.getHours()
+        var min = time.getMinutes()
+        var sec = time.getSeconds()
+        var ampm = " PM "
+        if (hr < 12){
+            ampm = " AM "
+        }
+        if (hr > 12){
+            hr -= 12
+        }
+        if (hr < 10){
+            hr = " " + hr
+        }
+        if (min < 10){
+            min = "0" + min
+        }
+        if (sec < 10){
+            sec = "0" + sec
+        }
+        document.clockForm.clockButton.value = hr + ":" + min + ":" + sec + ampm
+        setTimeout("clock()", 1000)
+    }
+    window.onload=clock;
 
     $(document).on('show.bs.modal', '.modal', function () {
         var zIndex = 1040 + (10 * $('.modal:visible').length);

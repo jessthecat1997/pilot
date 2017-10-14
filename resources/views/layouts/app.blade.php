@@ -49,13 +49,22 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
+                        <li>
+                            <form name="clockForm" style="margin-top: 15px;">
+                                <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
+                            </form>
+                        </li>
                         @if (Auth::guest())
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                {{ Auth::user()->name }} <span class="caret"></span>
+                                @if( Auth::user()->role_id == 1 ) Admin
+                                @elseif( Auth::user()->role_id == 2 ) Broker
+                                @elseif( Auth::user()->role_id == 3 ) Trucking Manager
+                                @elseif( Auth::user()->role_id == 4 ) Billing Manager
+                                @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
@@ -150,12 +159,12 @@
                               <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
 
                           </li>
-                         <li>
+                          <li>
                             <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
                         </li>
-                            <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                            </li>
+                        <li>
+                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                        </li>
                             <!--
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
@@ -224,7 +233,7 @@
                         <a data-toggle="collapse" class="maintenance-group" href = "#billingcollapse"><i class="fa fa-circle" ></i>&nbsp;&nbsp;Billing</a>
                     </li>
                     <div id="billingcollapse" class="panel-collapse collapse">
-                       
+
                         <li>
                             <a href = "{{ route('charge.index') }}"  class = "class-charges">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Charges</a>
                         </li>
@@ -375,69 +384,94 @@
 
 
 
-    <!-- Scripts -->
-    <script src="/js/app.js"></script>
-    <script type="text/javascript" src = "/js/jquery.validate.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-        <script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
-    <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
-    <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
-    <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
-    <script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+<script type="text/javascript" src = "/js/jquery.validate.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/jqueryValidate/additional-methods.js"></script>
+<script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
+<script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
+<script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
+<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 
 <script>
+    function clock(){
+        var time = new Date()
+        var hr = time.getHours()
+        var min = time.getMinutes()
+        var sec = time.getSeconds()
+        var ampm = " PM "
+        if (hr < 12){
+            ampm = " AM "
+        }
+        if (hr > 12){
+            hr -= 12
+        }
+        if (hr < 10){
+            hr = " " + hr
+        }
+        if (min < 10){
+            min = "0" + min
+        }
+        if (sec < 10){
+            sec = "0" + sec
+        }
+        document.clockForm.clockButton.value = hr + ":" + min + ":" + sec + ampm
+        setTimeout("clock()", 1000)
+    }
+    window.onload=clock;
 
-        $(document).on('show.bs.modal', '.modal', function () {
-            var zIndex = 1040 + (10 * $('.modal:visible').length);
-            $(this).css('z-index', zIndex);
-            setTimeout(function() {
-                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-            }, 0);
-        });
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-        $('.money').inputmask("numeric",
-        {
-            radixPoint: ".",
-            groupSeparator: ",",
-            digits: 2,
-            autoGroup: true,
-            rightAlign: true,
-            removeMaskOnSubmit:true,
-        });
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $('.money').inputmask("numeric",
+    {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        rightAlign: true,
+        removeMaskOnSubmit:true,
+    });
 
-        $('.myMoneyMask').inputmask("numeric", {
-    radixPoint: ".",
-    groupSeparator: ",",
-    digits: 2,
-    autoGroup: true,
+    $('.myMoneyMask').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
     prefix: '$', //No Space, this will truncate the first character
     rightAlign: false,
     oncleared: function () { self.Value(''); }
- });
+});
 
 
 
-        function formatNumber(n) {
-            var currency = "Php ";
-            return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-        }
+    function formatNumber(n) {
+        var currency = "Php ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
 
 
-            function formatNumber_s(n) {
-                var currency = "$ ";
-                return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-            }
+    function formatNumber_s(n) {
+        var currency = "$ ";
+        return currency +  n.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    }
 
 
-    </script>
-    @stack('scripts')
+</script>
+@stack('scripts')
 </body>
 </html>

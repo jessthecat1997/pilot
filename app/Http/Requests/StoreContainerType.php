@@ -19,7 +19,7 @@ class StoreContainerType extends FormRequest
 
             return [
             'name' => 'required|unique:container_types,name|numeric|between:1,1000000',
-            'maxWeight' =>'required|numeric|between:1,1000000'
+            //'maxWeight' =>'required|numeric|between:1,1000000'
             ];
 
             break;
@@ -28,7 +28,7 @@ class StoreContainerType extends FormRequest
 
             return [
             'name' => 'required|numeric|between:0,1000000| unique:container_types,name,'. $this->segment(3) ,
-            'maxWeight' => 'required|numeric|between:1,1000000'
+           // 'maxWeight' => 'required|numeric|between:1,1000000'
            
             ];
 

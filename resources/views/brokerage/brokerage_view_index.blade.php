@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.brokerage')
 @push('styles')
 <style type="text/css">
 	span.control-label {

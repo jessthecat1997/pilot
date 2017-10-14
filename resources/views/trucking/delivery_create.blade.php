@@ -106,35 +106,51 @@
 																	</div>
 																</div>
 																<div class = "col-md-12">
-																	<table class="table table-responsive table-striped" id = "0_details">
+																	<table class="table table-responsive table-striped table-bordered" id = "0_details">
 																		<thead>
 																			<tr>
-																				<td>
-																					Description of goods
+																				<td style="text-align: center;">
+																					<div class="row">
+																						<div class="form-group required">
+																							<label class = "control-label">Description of goods</label>
+																						</div>
+																					</div>
 																				</td>
-																				<td>
-																					Gross Weight(kg)
+																				<td style="text-align: center;">
+																					<div class="row">
+																						<div class="form-group required">
+																							<label class = "control-label">Gross Weight (kg)</label>
+																						</div>
+																					</div>
 																				</td>
-																				<td>
-																					Supplier/s
+																				<td style="text-align: center;">
+																					<div class="row">
+																						<div class="form-group">
+																							<label class = "control-label">Supplier/s</label>
+																						</div>
+																					</div>
 																				</td>
-																				<td>
-																					Action
+																				<td style="text-align: center;">
+																					<div class="row">
+																						<div class="form-group">
+																							<label class = "control-label">Action</label>
+																						</div>
+																					</div>
 																				</td>
 																			</tr>
 																		</thead>
 																		<tbody>
 																			<tr>
-																				<td width="35%">
+																				<td width="40%">
 																					<input type = "text" name = "0_descriptionOfGoods" class = "form-control"/>
 																				</td>
 																				<td width="20%">
-																					<input type = "number" name = "0_grossWeight" class = "form-control"/>
+																					<input type = "text" name = "0_grossWeight" style = "text-align: right;" class = "form-control money"/ >
 																				</td>
 																				<td width="30%">
 																					<input type = "text" name = "0_supplier"  class = "form-control" />
 																				</td>
-																				<td width="15%">
+																				<td width="10%" style="text-align: center;">
 																					<button class = "btn btn-md btn-danger remove-container-detail" value = "0">
 																						x
 																					</button>
@@ -148,7 +164,7 @@
 
 																	</div>
 																	<div class= "col-md-3" style="text-align: center;">
-																		<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Good</button>
+																		<button class = "btn btn-primary btn-sm new-container-detail" style="width: 80%;" value = "0_add">New Item</button>
 																	</div>
 																</div>
 															</div>
@@ -177,46 +193,62 @@
 									<form class="form-horizontal" role="form">
 										<div class="form-group">
 											<label class="control-label" for="wodetail_table">Delivery Content:</label>
-											<table class = "table-responsive table table-striped" id = "wodetail_table">
+											<table class = "table-responsive table table-striped table-bordered" id = "wodetail_table">
 												<thead>
 													<tr>
-														<td>
-															Description of Goods
+														<td style="text-align: center;">
+															<div class="row">
+																<div class="form-group required">
+																	<label class = "control-label">Description of goods</label>
+																</div>
+															</div>
 														</td>
-														<td>
-															Gross Weight(kg)
+														<td style="text-align: center;">
+															<div class="row">
+																<div class="form-group required">
+																	<label class = "control-label">Gross Weight (kg)</label>
+																</div>
+															</div>
 														</td>
-														<td>
-															Supplier/s
+														<td style="text-align: center;">
+															<div class="row">
+																<div class="form-group">
+																	<label class = "control-label">Supplier/s</label>
+																</div>
+															</div>
 														</td>
-														<td>
-															Action
+														<td style="text-align: center;">
+															<div class="row">
+																<div class="form-group">
+																	<label class = "control-label">Action</label>
+																</div>
+															</div>
 														</td>
-													</tr>
+													</tr>	
 												</thead>
 												<tbody>
 													<tr id = "wodescription_row">
-														<td width="35%">
+														<td width="40%">
 															<input type = "text" name = "wodescriptionOfGoods" class = "form-control"/>
 														</td>
 														<td width="20%">
-															<input type = "number" name = "wogrossWeight" class = "form-control"/>
+															<input type = "text" name = "wogrossWeight" class = "form-control money" style = "text-align: right;" />
 														</td>
 														<td width="30%">
 															<input type = "text" name = "wosupplier"  class = "form-control" />
 														</td>
-														<td width="15%">
+														<td width="10%" style="text-align: center;">
 															<button class = "btn btn-md btn-danger woremove-current-detail">x</button>
 														</td>
 													</tr>
 												</tbody>
 											</table>
 											<div class="row">
-												<div class="col-md-4">
-													<button class = "btn btn-md btn-primary woadd-new-detail" style="width: 80%;">Add good</button>
-												</div>
-												<div class="col-md-8">
+												<div class="col-md-9">
 
+												</div>
+												<div class="col-md-3">
+													<button class = "btn btn-sm btn-primary woadd-new-detail" style="width: 80%;">New item</button>
 												</div>
 											</div>
 										</div>
@@ -255,7 +287,7 @@
 								</div>
 								<div class = "col-md-12">
 									<div class="form-group">
-										<label class="control-label" for = "deldatecon">Pickup Date:</label>
+										<label class="control-label" for = "deldatecon">Pickup Date &amp; Time:</label>
 										<input type = "text" name = "pickdatecon" id = "pickdatecon" class = "form-control pickaddcon" />
 									</div>
 								</div>
@@ -333,7 +365,7 @@
 								</div>
 								<div class = "col-md-12">
 									<div class="form-group">
-										<label class="control-label" for = "deldatecon">Delivery Date:</label>
+										<label class="control-label" for = "deldatecon">Delivery Date &amp; Time:</label>
 										<input type = "text" name = "deldatecon" id = "deldatecon" class = "form-control deladdcon" />
 									</div>
 								</div>
@@ -596,12 +628,12 @@
 @push('styles')
 <link rel="stylesheet" type="text/css" href="/js/jqueryDateTimePicker/jquery.datetimepicker.css">
 <style>
-	.delivery
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.delivery
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -681,7 +713,36 @@
 		});
 
 
+		$(document).on('keyup keydown keypress', '#deliveryFee', function (event) {
+			var len = $('#deliveryFee').val();
+			var value = $('#deliveryFee').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('#deliveryFee').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('#deliveryFee').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999999999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
 
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 
 		$.datetimepicker.setLocale('en');
 		$('#pickdatecon').datetimepicker({
@@ -702,8 +763,8 @@
 			step: 5,
 			format:'Y/m/d H:i',
 			formatDate:'Y/m/d H:i',
-			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
-			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(1)->format('Y/m/d H:i') }}",
+			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(1)->format('Y/m/d H:i') }}",
 		});
 
 		$('.containerReturnDate').datetimepicker({
@@ -828,6 +889,39 @@
 
 		$(document).on('change', '#loc_province', function(e){
 			fill_cities(0);
+		})
+
+		$(document).on('change', '#driver', function(e)
+		{
+			e.preventDefault();
+			if($(this).val() == 0 || $(this).val() == $('#helper').val())
+			{
+				$(this).css('border-color', 'red');
+				$('#helper').css('border-color', 'red');
+			}
+			else
+			{
+				$(this).css('border-color', 'green');
+				$('#helper').css('border-color', 'green');
+			}
+		})
+		$(document).on('change', '#helper', function(e)
+		{
+			e.preventDefault();
+			if($(this).val() == $('#driver').val())
+			{
+				$(this).css('border-color', 'red');
+				$('#driver').css('border-color', 'red');
+			}
+			else
+			{
+				$(this).css('border-color', 'green');
+			}
+			if($(this).val() == "")
+			{
+				$(this).css('border-color', 'green');
+				$('#driver').css('border-color', 'green');
+			}
 		})
 
 		function fill_cities(num)
@@ -961,8 +1055,21 @@
 			if(validateCurrentContainerDetail() == true){
 
 				console.log(id);
-				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
+				var detail_row = '<tr id = "description_row"><td width="35%"><input type = "text" name =   "'+ id[0] + '_descriptionOfGoods" class = "form-control"/></td><td width="20%"><input type = "text" name = "'+ id[0] +'_grossWeight" class = "form-control money"/></td><td width="30%"><input type = "text" name = "'+id[0] +'_supplier" class = "form-control" /></td><td width="15%" style = "text-align: center;"><button class = "btn btn-md btn-danger remove-container-detail" value = "'+ $(this).val() + '">x</button></td></tr>';
 				$('#'+ id[0] + '_details' + ":last-child").append(detail_row);
+
+				$('.money').each(function(i)
+				{
+					$(this).inputmask("numeric",
+					{
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
+				})
 			}
 
 		})
@@ -991,6 +1098,18 @@
 
 			if(validateDetail() === true){
 				$('#wodetail_table:last').append(wodetail_row);
+				$('.money').each(function(i)
+				{
+					$(this).inputmask("numeric",
+					{
+						radixPoint: ".",
+						groupSeparator: ",",
+						digits: 2,
+						autoGroup: true,
+						rightAlign: true,
+						removeMaskOnSubmit:true,
+					});
+				})
 			}
 		})
 		$(document).on('click', '.woremove-current-detail', function(e){
@@ -999,31 +1118,51 @@
 				$(this).closest('tr').remove();
 			}
 		})
+		$(document).on('change', '#vehicle', function(e){
+			e.preventDefault();
+			if($(this).val() == 0)
+			{
+				$(this).css('border-color', 'red');
+			}
+			else
+			{
+				$(this).css('border-color', 'green');
+			}
+		})
 		$(document).on('change', '#vehicle_type', function(e){
 			vehicle_type_id = $(this).val();
-			$.ajax({
-				type: 'GET',
-				url: 'http://localhost:8000/admin/' + vehicle_type_id +'/getVehicles',
-				data: {
-					'_token' : $('input[name=_token]').val(),
-					'vehicle_type' : vehicle_type_id,
-				},
-				success: function(data){
-					if(typeof(data) == "object"){
-						var new_rows = "<option value = '0'></option>";
-						for(var i = 0; i < data.length; i++){
-							new_rows += "<option value = '"+ data[i].plateNumber+"'>"+ data[i].plateNumber+ " - " + data[i].model +"</option>";
+			if(vehicle_type_id != 0)
+			{
+				$(this).css('border-color', 'green');
+				$.ajax({
+					type: 'GET',
+					url: 'http://localhost:8000/admin/' + vehicle_type_id +'/getVehicles',
+					data: {
+						'_token' : $('input[name=_token]').val(),
+						'vehicle_type' : vehicle_type_id,
+					},
+					success: function(data){
+						if(typeof(data) == "object"){
+							var new_rows = "<option value = '0'></option>";
+							for(var i = 0; i < data.length; i++){
+								new_rows += "<option value = '"+ data[i].plateNumber+"'>"+ data[i].plateNumber+ " - " + data[i].model +"</option>";
+							}
+							$('#vehicle').find('option').not(':first').remove();
+							$('#vehicle').html(new_rows);
 						}
-						$('#vehicle').find('option').not(':first').remove();
-						$('#vehicle').html(new_rows);
+					},
+					error: function(data) {
+						if(data.status == 400){
+							alert("Nothing found");
+						}
 					}
-				},
-				error: function(data) {
-					if(data.status == 400){
-						alert("Nothing found");
-					}
-				}
-			})
+				})
+			}
+			else
+			{
+				$(this).css('border-color', 'red');
+			}
+			
 		})
 		$(document).on('click', '.save-delivery', function(e){
 			e.preventDefault();
@@ -1117,6 +1256,20 @@
 			selected_from = $(this).val();
 			if(pickup_id != 0)
 			{
+				if($(this).val() == $('#deliver_id').val())
+				{
+					$(this).css('border-color', 'red');
+					$('#deliver_id').css('border-color', 'red');
+				}
+				else
+				{
+					$(this).css('border-color', 'green');
+					$('#deliver_id').css('border-color', 'green');
+					if($('#deliver_id').val() == 0)
+					{
+						$('#deliver_id').css('border-color', 'red');
+					}
+				}
 				$.ajax({
 					type: 'GET',
 					url: '{{ route("location.index") }}/' + pickup_id + '/getLocation',
@@ -1144,6 +1297,8 @@
 				$('#_city').val("");
 				$('#_province').val("");
 				$('#_zip').val("");
+
+				$(this).css('border-color', 'red');
 			}
 
 			if(selected_from != 0 && selected_to != 0){
@@ -1200,6 +1355,21 @@
 			selected_to = $(this).val();
 			if(deliver_id != 0)
 			{
+				if($(this).val() == $('#pickup_id').val())
+				{
+					$(this).css('border-color', 'red');
+					$('#pickup_id').css('border-color', 'red');
+				}
+				else
+				{
+					$(this).css('border-color', 'green');
+					$('#pickup_id').css('border-color', 'green');
+					if($('#pickup_id').val() == 0)
+					{
+						$('#pickup_id').css('border-color', 'red');
+					}
+				}
+
 				if($('#deliver_id').val() != $('#pickup_id').val())
 				{
 					$.ajax({
@@ -1235,6 +1405,7 @@
 				$('#_dcity').val("");
 				$('#_dprovince').val("");
 				$('#_dzip').val("");
+				$(this).css('border-color', 'red');
 			}
 			if(selected_from != 0 && selected_to != 0){
 				$('#rate_header').html("Rate/s for <strong>" + $('#pickup_id option:selected').text() + "</strong> to <strong>" + $('#deliver_id option:selected').text());
@@ -1301,7 +1472,7 @@
 				{
 					con_descrp[j].style.borderColor = 'green';
 				}
-				if(con_gw[j].value === "")
+				if(con_gw[j].value === "" || $(con_gw[j]).inputmask('unmaskedvalue') < 0)
 				{
 					error+= "Weight is required";
 					con_gw[j].style.borderColor = 'red';
@@ -1354,7 +1525,7 @@
 					{
 						con_descrp[j].style.borderColor = 'green';
 					}
-					if(con_gw[j].value === "")
+					if(con_gw[j].value === "" || $(con_gw[j]).inputmask('unmaskedvalue') < 0)
 					{
 						error+= "Weight is required";
 						con_gw[j].style.borderColor = 'red';
@@ -1365,7 +1536,7 @@
 					}
 					child[0].details.push({
 						descriptionOfGood : con_descrp[j].value,
-						grossWeight : con_gw[j].value,
+						grossWeight : $(con_gw[j]).inputmask('unmaskedvalue'),
 						supplier : con_supp[j].value
 					});
 				}
@@ -1387,7 +1558,14 @@
 		}
 		function validateOrder(){
 			var error = "";
-			
+			if($('#deliveryFee').val() == "" || $('#deliveryFee').inputmask('unmaskedvalue') < 0)
+			{
+				$('#deliveryFee').css('border-color', 'red');
+			}
+			else
+			{
+				$('#deliveryFee').css('border-color', 'green');
+			}
 			if($('#deldatecon').val() === ""){
 				$('#deldatecon').css("border-color", 'red');
 				error += "Delivery Date";
@@ -1578,12 +1756,12 @@
 					descrp_goods.push(descrp[i].value);
 					descrp[i].style.borderColor = 'green';
 				}
-				if(gw[i].value === ""){
+				if(gw[i].value === "" || $(gw[i]).inputmask('unmaskedvalue') < 0 ){
 					error += "No gross weight";
 					gw[i].style.borderColor = 'red';
 				}
 				else{
-					gross_weights.push(gw[i].value);
+					gross_weights.push($(gw[i]).inputmask('unmaskedvalue'));
 					gw[i].style.borderColor = 'green';
 				}
 				if(supp[i].value === ""){

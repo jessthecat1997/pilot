@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -27,11 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected function authenticated(Request $request)
-    {
-       $request->user()->authorizeRoles(['Admin', 'Broker', 'Billing Manager', 'Trucking Manager']);
-       return redirect('/dashboard');
-   }
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.

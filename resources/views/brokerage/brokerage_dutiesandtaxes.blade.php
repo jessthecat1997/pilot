@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.brokerage')
 @section('content')
 <h2>&nbsp;Brokerage</h2>
 <hr>
@@ -856,7 +856,10 @@
 
 	$(document).ready(function(){
 
+    //vanessa's addition
 
+
+    //end of vanessa's addition
 
 
 		$('#exitPrompt').on('click', function(e){
@@ -886,6 +889,8 @@
     $(document).on('click', '.ConfirmBut', function(e){
       e.preventDefault();
     })
+
+
 
 		$(document).on('change', '#consignee_id', function(e){
 			consigneeID = $('#consignee_id').val();

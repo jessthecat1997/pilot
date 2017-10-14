@@ -10,7 +10,7 @@
 						<h4>Deliveries Today<span class="pull-right">{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('F d, Y h:i A') }}</span></h4>
 					</div>
 					<div class="panel-body">
-						<table class="table table-responsive table-striped table-bordered">
+						<table class="table table-responsive table-striped table-bordered" id = "today_deliveries_table">
 							<thead>
 								<tr>
 									<td>
@@ -76,8 +76,9 @@
 								</tr>
 							</thead>
 							<tbody>
+								@forelse($unreturned_containers as $uc)
 								<tr>
-									@forelse($unreturned_containers as $uc)
+									
 									<td>
 										{{ $uc->containerNumber }}
 									</td>
@@ -140,7 +141,6 @@
 <script type="text/javascript" charset="utf8" src="/js/fullCalendar/moment.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/fullCalendar/fullcalendar.min.js"></script>
 <script>
-
 
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({

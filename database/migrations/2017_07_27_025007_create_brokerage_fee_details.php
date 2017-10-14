@@ -20,6 +20,7 @@ class CreateBrokerageFeeDetails extends Migration
             $table->decimal('amount', 19, 2);
             $table->integer('brokerage_fee_headers_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('brokerage_fee_headers_id')->references('id')->on('brokerage_fee_headers');
         });

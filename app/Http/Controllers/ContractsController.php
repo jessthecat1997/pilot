@@ -83,6 +83,15 @@ class ContractsController extends Controller
         ->get();
         return $quotations;
     }
+
+    public function get_con_contracts(Request $request)
+    {
+        $contracts = \DB::table('contract_headers')
+        ->where('consignees_id', '=', $request->consignee_id)
+        ->whereRaw('( NOW() BETWEEN dateEffective AND dateExpiration ) OR (dateExpiration is null AND DATE(NOW()) >= dateEffective) OR (DATE(NOW()) < dateEffective)')
+        ->get();
+        return $contracts;
+    }
     public function create_contract(Request $request){
 
         $new_contract = new ContractHeader;

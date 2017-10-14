@@ -69,7 +69,7 @@
 								{{ csrf_field() }}
 								<div class="form-group">
 									<label>*Amount</label>
-									<input type = "number" name="amount" id="amount" class="form-control col-sm-2" style="text-align: right" required>
+									<input type = "number" name="amount" id="amount" class="form-control col-sm-2 money" style="text-align: right" required>
 								</div>
 								<div class="form-group">
 									<label for="remarks">Remarks:</label>
@@ -82,6 +82,9 @@
 							<br>
 							<form class="form" onsubmit="this.preventDefault();">
 								{{ csrf_field() }}
+								<div class="checkbox">
+									<label><input type="checkbox" id="mng_cheque">Manager's Cheque</label>
+								</div>
 								<div class="form-group">
 									<label for="bank">*Cheque Number: &nbsp;</label>
 									&nbsp;&nbsp;<input type="text" id="chqNo" class="form-control">
@@ -92,9 +95,10 @@
 								</div>
 								<div class="form-group">
 									<label for="check_amt">*Amount: &nbsp;</label>
-									&nbsp;&nbsp;<input type="text" id="check_amt" class="form-control">
+									&nbsp;&nbsp;<input type="number" id="check_amt" class="form-control money" style="text-align: right;">
 								</div>
-								<button type="button" class="btn btn-primary finalize-cheque">Save</button>
+								<button type="button" class="btn btn-primary finalize-cheque collapse in">Save</button>
+								<button type="button" class="btn btn-primary finalize-cheque collapse">Save</button>
 							</form>
 						</div>
 						<div id="menu2" class="tab-pane fade">
@@ -290,6 +294,36 @@
 			{data : 'action'}
 			]
 		})
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999999999999.99){
+
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 		var p_table = $('#bills_table').DataTable({
 			processing: false,
 			serverSide: false,
@@ -1088,43 +1122,97 @@ $(document).on('click', '.finalize-payment', function(e){
 	}
 })
 $(document).on('click', '.finalize-cheque', function(e){
-	var bi_id = {{ $so_head_id }};
-	$.ajax({
-		method: 'POST',
-		url: '{{ route("cheque.store") }}',
-		data: {
-			'_token' : $('input[name=_token]').val(),
-			'chequeNumber' : $('#chqNo').val(),
-			'bankName' : $('#bank').val(),
-			'amount' : $('#check_amt').val(),
-			'isVerify' : 0,
-			'bi_head_id' : bi_id,
-		},
-		success: function (data){
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
+	if(document.getElementById('mng_cheque').checked == true)
+	{
+		var bi_id = {{ $so_head_id }};
+		console.log('cheked');
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("payment.store") }}',
+			data: {	Q
+				'_token' : $('input[name=_token]').val(),
+				'isCheque' : 0,
+				'bi_head_id' : {{ $so_head_id }},
+				'utility_id' : {{ $allowance[0]->id }},
+				'amount' : $('#check_amt').val(),
+				'description' : null
+			},
+			success: function (data){
 			}
-			toastr["success"]('Successfully saved');
-			window.location.href = "{{ route('cheque.index') }}";
-		}
-	})
+		})
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("cheque.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'chequeNumber' : $('#chqNo').val(),
+				'bankName' : $('#bank').val(),
+				'amount' : $('#check_amt').val(),
+				'isVerify' : 1,
+				'bi_head_id' : bi_id,
+			},
+			success: function (data){
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]('Successfully saved');
+			}
+		})
+	}
+	else(document.getElementById('mng_cheque').checked == false)
+	{
+		var bi_id = {{ $so_head_id }};
+		console.log('uncheked');
+		$.ajax({
+			method: 'POST',
+			url: '{{ route("cheque.store") }}',
+			data: {
+				'_token' : $('input[name=_token]').val(),
+				'chequeNumber' : $('#chqNo').val(),
+				'bankName' : $('#bank').val(),
+				'amount' : $('#check_amt').val(),
+				'isVerify' : 0,
+				'bi_head_id' : bi_id,
+			},
+			success: function (data){
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]('Successfully saved');
+				window.location.href = "{{ route('cheque.index') }}";
+			}
+		})
+	}
 })
-
-
 </script>
 @endpush
