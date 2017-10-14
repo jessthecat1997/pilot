@@ -19,6 +19,7 @@ class StoreUtility extends FormRequest
             'bank_charges' => 'required|max:100|min:0',
             'other_charges' => 'required|max:100|min:0',
             'vat_rate' =>'required|max:100|min:0',
+            'logo' => 'nullable|image|mimes:jpeg,bmp,png'
         ];
     }
 
