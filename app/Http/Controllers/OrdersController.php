@@ -30,14 +30,22 @@ class OrdersController extends Controller
 
 		session(['consignees_id' => '{{$so_head[0]->consignees_id}}' ]);
 	}
-
-	public function show($id){
-
-
+	
+	public function show(Request $request, $id){
 		$reqs = \App\Requirement::all();
 		
 		$so_head = \DB::table('consignee_service_order_headers')
-		->select('*')
+		->select(
+			'consignee_service_order_headers.id',
+			'A.firstName',
+			'A.middleName',
+			'A.lastName',
+			'A.companyName',
+			'A.b_address',
+			'A.b_city',
+			'A.b_st_prov',
+			'consignees_id'
+		)
 		->join('consignees as A', 'consignee_service_order_headers.consignees_id', '=', 'A.id')
 		->where('consignee_service_order_headers.id','=',$id)
 		->get();

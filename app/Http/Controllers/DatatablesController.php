@@ -303,7 +303,15 @@ class DatatablesController extends Controller
 	{
 
 		$attaches =  \DB::table('service_order_attachments')
-		->where('so_head_id', '=', $request->order_id)
+		->select(
+		'service_order_attachments.id',
+		'A.name',
+		'file_path',
+		'service_order_attachments.description'
+		)
+		->join('requirements as A', 'service_order_attachments.req_type_id', '=', 'A.id')
+		->where('so_head_id', '=', $request->or_id)
+		->where('service_order_attachments.deleted_at', '=', null)
 		->get();
 
 		return Datatables::of($attaches)

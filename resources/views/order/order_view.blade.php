@@ -110,7 +110,7 @@
 			<div class="panel-body">
 				<div class = "form-horizontal col-md-12 ">
 					<br>
-					<button class = "btn but  btn-sm pull-right new_attachment">New Document</button>
+					<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
 					<br>
 					<br>
 				</div>
@@ -312,7 +312,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						New Document
+						New Attachment
 					</div>
 					<div class="modal-body">
 						<div class="form-group required">
@@ -395,8 +395,8 @@
 			deferRender:true,
 			ajax: '{{ route("orders.index") }}/{{ $so_head[0]->id }}/get_atts',
 			columns: [
+			{ data: 'name'},
 			{ data: 'file_path' },
-			{ data: 'req_type_id'},
 			{ data: 'description' },                              
 			{ data: 'action', orderable: false, searchable: false }
 
@@ -567,6 +567,8 @@
 			})
 
 		});
+
+		
 		$("body").on("click",".submit-attachment",function(e){
 			$(this).parents("#commentForm").ajaxForm(options);
 		});
@@ -575,28 +577,10 @@
 			success: function(data)
 			{
 				if(typeof(data) === "object"){ 
-					$('.submit-attachment').removeAttr('disabled');
 					$('#new-attachment').modal('hide');
+					$('.submit-attachment').removeAttr('disabled');
 					attachmentstable.ajax.reload();
-					toastr.options = { 
-						"closeButton": false, 
-						"debug": false, 
-						"newestOnTop": false, 
-						"progressBar": false, 
-						"rtl": false, 
-						"positionClass": "toast-bottom-right", 
-						"preventDuplicates": false, 
-						"onclick": null, 
-						"showDuration": 300, 
-						"hideDuration": 1000, 
-						"timeOut": 2000, 
-						"extendedTimeOut": 1000, 
-						"showEasing": "swing", 
-						"hideEasing": "linear", 
-						"showMethod": "fadeIn", 
-						"hideMethod": "fadeOut" 
-					} 
-					toastr["success"]("Successfully added attachment");
+					message("Successfully added attachment");
 
 				}else{ 
 
