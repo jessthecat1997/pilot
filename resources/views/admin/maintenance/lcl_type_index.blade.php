@@ -5,7 +5,7 @@
 		<h3><img src="/images/bar.png"> Maintenance | Less Cargo Load Types</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New LCL type</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New Less Cargo Load type</button>
 		</div>
 	</div>
 	<br />
