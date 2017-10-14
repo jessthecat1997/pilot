@@ -337,6 +337,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
 	Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
 
+	Route::get('reports/shipments/print/{frequency}', 'ShipmentReportsController@print');
 //vanessa addition
 	Route::get('/trial_report','TrialController@index');
 
@@ -411,7 +412,6 @@ Route::group(['middleware' => ['auth']], function() {
 //FullCalendar
 	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
-
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
 
@@ -428,4 +428,3 @@ Route::group(['middleware' => ['auth']], function() {
 });
 
 //Employees
-
