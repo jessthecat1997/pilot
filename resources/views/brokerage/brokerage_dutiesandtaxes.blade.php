@@ -858,9 +858,6 @@
 
     //vanessa's addition
 
-    @if($consignee_id != null)
-      $('#consignee_id').val("{{$consignee_id}}");
-    @endif
 
     //end of vanessa's addition
 

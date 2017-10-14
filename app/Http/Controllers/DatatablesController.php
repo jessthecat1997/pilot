@@ -303,13 +303,15 @@ class DatatablesController extends Controller
 	public function attach_datatable(Request $request){
 		$isActive = $request->isActive;
 		if ($isActive == null){
-			$attaches =  DB::select("SELECT * FROM service_order_attachments");
+			$attaches =  DB::select("SELECT * FROM service_order_attachments where so_head_id = ?", [$request->order_id]);
 
 			return Datatables::of($attaches)
 			->addColumn('action', function ($attach){
 				return
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit">Update</button>'.
-				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate">Deactivate</button>';
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-info view"><span class = "fa fa-eye"></span></button>'.
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-success download"><span class = "fa fa-download"></span></button>'.
+				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit"><span class = "fa fa-edit"></span></button>'.
+				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate"><span class = "fa fa-trash"></span></button>';
 			})
 			->editColumn('id', '{{ $id }}')
 			->make(true);

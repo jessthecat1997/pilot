@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ServiceOrderAttachment;
+use App\Http\Requests\StoreServiceOrderAttachments;
 class ServiceOrderAttachmentsController extends Controller
 {
 
 
-	public function store(Request $request)
+	public function store(StoreServiceOrderAttachments $request)
 	{
 		$attachment = new ServiceOrderAttachment;
 
@@ -16,15 +17,15 @@ class ServiceOrderAttachmentsController extends Controller
 		$attachment->req_type_id = $request->req_type_id;
 		$attachment->description = $request->description;
 		
-		if($request->hasFile('file_path')){
 
-			$filename = $request->file_path->getClientOriginalName();
-			$request->file->storeAs('public/attachments',$filename);
-			$attachment->file_path = $request->file_path;
+		if($request->file_path != null){
+			$input = $request->all();
+			$input['image'] = time().'.' . $request->file_path->getClientOriginalExtension();
+			$attachment->file_path = $request->file_path->getClientOriginalName();
+			$request->file_path->move(public_path('attach'), $input['image']);
+			
+			$attachment->save();
 		}
-
-		
-		$attachment->save();
 
 		return $attachment;
 	}
@@ -35,7 +36,7 @@ class ServiceOrderAttachmentsController extends Controller
 		$attachment->so_head_id = $request->so_head_id;
 		$attachment->req_type_id = $request->req_type_id;
 		$attachment->description = $request->description;
-		
+
 		if($request->hasFile('file_path')){
 
 			$filename = $request->file_path->getClientOriginalName();
@@ -43,7 +44,7 @@ class ServiceOrderAttachmentsController extends Controller
 			$attachment->file_path = $request->file_path;
 		}
 
-		
+
 		$attachment->save();
 
 		return $attachment;

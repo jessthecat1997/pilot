@@ -18,7 +18,8 @@ class CreateServiceOrderAttachments extends Migration
             $table->integer('so_head_id')->unsigned();
             $table->text('file_path');
             $table->integer('req_type_id')->unsigned();
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('so_head_id')->references('id')->on('consignee_service_order_headers');
