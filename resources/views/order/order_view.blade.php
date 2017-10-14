@@ -467,7 +467,7 @@
 			deferRender: true,
 			serverSide: false,
 			scrollX: true,
-			ajax: '{{route("brokerage.index")}}/{{ brokerages[0]->id }}/get_dutiesandtaxes',
+			ajax: '{{route("brokerage.index")}}/{{ $brokerages[0]->id }}/get_dutiesandtaxes',
 			columns: [
 			{ data: 'rate'},
 			{ data: 'brokerageFee'},
