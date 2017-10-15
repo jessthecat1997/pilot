@@ -30,6 +30,10 @@ class CreateEmployeesTable extends Migration
 
             $table->foreign('cities_id')->references('id')->on('location_cities');
         });
+
+        DB::statement("
+            INSERT INTO `employees` (`id`, `firstName`, `middleName`, `lastName`, `dob`, `address`, `zipCode`, `cities_id`, `SSSNo`, `contactNumber`, `inCaseOfEmergency`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'adminn', NULL, 'admin', '', 'admin address', '1111', '324', '1111', '0935322655', 'call the number', NULL, NULL, NULL);
+            ");
     }
 
     /**
