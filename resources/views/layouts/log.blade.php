@@ -34,7 +34,7 @@
         </script>
 
     </head>
-    <body style="background-image: url('/images/bg.png');">
+    <body style="background-image: url('/images/bg4.png');">
         <div id="app" style="opacity: 0.9;">
             <nav class="navbar navbar-default navbar-fixed-top" id="navtop">
                 <div class="navbar-header">
