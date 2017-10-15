@@ -42,11 +42,24 @@ class ConsigneesController extends Controller
 			$consignee->b_zip = $request->zip;
 
 			$consignee->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Registered consignee id: " . $consignee->id;
+			$audit->save();
+
 			return $consignee;
 		}
 		else
 		{
+
 			$consignee = Consignee::create($request->all());
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Registered consignee id: " . $consignee->id;
+			$audit->save();
+
 			return $consignee;
 		}
 		
@@ -103,6 +116,12 @@ class ConsigneesController extends Controller
 			$consignee->b_zip = $request->zip;
 
 			$consignee->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Registered consignee id: " . $consignee->id;
+			$audit->save();
+
 			
 			return $consignee;
 		}
@@ -128,6 +147,11 @@ class ConsigneesController extends Controller
 
 			$consignee->save();
 
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Registered consignee id: " . $consignee->id;
+			$audit->save();
+
 			return $consignee;
 		}
 	}
@@ -138,8 +162,13 @@ class ConsigneesController extends Controller
 		$consignee = Consignee::findOrFail($id);
 		$consignee->delete();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Deactivated consignee id: " . $consignee->id;
+		$audit->save();
+
 		return $consignee;
-	
+
 	}
 
 	public function home(){
