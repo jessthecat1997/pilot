@@ -64,8 +64,12 @@ Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item
 
 //ADMIN SIDE
 Route::group(['middleware' => ['admin']], function() {
+
+	//Dashboard
 	Route::get('/', 'DashboardController@index');
 	Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
+
+	//Consignee
 	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
 	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
 	Route::resource('/employees', 'EmployeesController');

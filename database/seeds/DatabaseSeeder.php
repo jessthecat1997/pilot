@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use database\seeds\EmployeesTableSeeder;
+use database\seeds\EmployeeTypesTableSeeder;
+use database\seeds\UsersTableSeeder;
 class DatabaseSeeder extends Seeder
+
 {
     /**
      * Run the database seeds.
