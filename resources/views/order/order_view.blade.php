@@ -49,6 +49,44 @@
 			@else
 			<div class="panel panel-primary" >
 				<div class="panel-heading heading">
+					List of Attachments
+				</div>
+				<div class="panel-body">
+					<div class = "form-horizontal col-md-12 ">
+						<br>
+						<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
+						<br>
+						<br>
+					</div>
+					<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;">
+						<thead>
+							<tr>
+								<td >
+									File
+								</td>
+								<td>
+									File Name
+								</td>
+								<td >
+									Remarks
+								</td>
+								<td >
+									Action
+								</td>
+
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+			
+		</div>
+	</form>
+</div>
+<div class = "row">
+	<div class = "col-md-12">
+		<div class="panel panel-primary" >
+				<div class="panel-heading heading">
 					List of Deliveries
 				</div>
 				<div class="panel-body">
@@ -93,43 +131,6 @@
 					@endif
 				</div>
 			</div>
-		</div>
-	</form>
-</div>
-<div class = "row">
-	<div class = "col-md-12">
-		<div class="panel panel-primary" >
-			<div class="panel-heading heading">
-				List of Attachments
-			</div>
-			<div class="panel-body">
-				<div class = "form-horizontal col-md-12 ">
-					<br>
-					<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
-					<br>
-					<br>
-				</div>
-				<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;">
-					<thead>
-						<tr>
-							<td >
-								File
-							</td>
-							<td>
-								File Name
-							</td>
-							<td >
-								Remarks
-							</td>
-							<td >
-								Action
-							</td>
-
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
 	</div>
 	<div class = "col-md-12">
 		@if( count($brokerages) < 1)
@@ -181,58 +182,16 @@
 	</div>
 	<div class = "col-md-12">
 	</div>
-	<div class = "col-md-12">
+	<div class = "col-md-6">
 		<div class="panel panel-primary" >
 			<div class="panel-heading heading">
 				List of Billings
 			</div>
 			<div class="panel-body">
-				<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table">
-					<thead>
-						<tr>
-
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div class = "col-md-12">
-
-	</div>
-	<div class = "col-md-12">
-		<div class="panel panel-primary" >
-			<div class="panel-heading heading">
-				List of Refundable Charges
-			</div>
-			@if((count($brokerages) < 1) && (count($truckings) < 1) )
-			<div class="panel-body">
-				<div class = "form-horizontal col-md-12 ">
-					<br>
-					<!-- <button class = "btn but  btn-sm pull-right new_expense">New Expense</button> -->
-					Create a Trucking or Brokerage Service Order first.
-					<br>
-					<br>
-				</div>
-			</div>
-			@endif
-			@if ((count($brokerages) > 0) || (count($truckings) > 0) )
-			<div class="panel-body">
-				<div class = "form-horizontal col-md-12 ">
-					<br>
-					<button class = "btn but  btn-sm pull-right new_expense">New Expense</button> 
-					<br>
-					<br>
-				</div>
-				<br/>
-				<div class = "form-horizontal col-md-12 ">
-					<br>
-					<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "expense_table">
+				<div class="col-md-12">
+					<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
 						<thead>
 							<tr>
-								<td>
-									Service Order Type
-								</td>
 								<td>
 									Name
 								</td>
@@ -245,23 +204,76 @@
 							</tr>
 						</thead>
 						<tbody>
+							@forelse($billings as $bill)
 							<tr>
 								<td>
-
+									{{ $bill->name }}
+								</td>
+								<td style="text-align: right;">
+									Php <span class="money">{{ $bill->amount }}</span>
 								</td>
 								<td>
-
-								</td>
-								<td>
-
-								</td>
-								<td>
-
+									{{ $bill->description }}
 								</td>
 							</tr>
+							@empty
+							<tr>
+								<td colspan="3" style="text-align: center;">
+									No records found.
+								</td>
+							</tr>
+							@endforelse
 						</tbody>
 					</table>
-					@endif
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class = "col-md-6">
+		<div class="panel panel-primary" >
+			<div class="panel-heading heading">
+				List of Refundable Charges
+			</div>
+			
+			<div class="panel-body">
+				<div class="col-md-12">
+					<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
+						<thead>
+							<tr>
+								<td>
+									Name
+								</td>
+								<td>
+									Amount
+								</td>
+								<td>
+									Description
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($expenses as $exp)
+							<tr>
+								<td>
+									{{ $exp->name }}
+								</td>
+								<td style="text-align: right;">
+									Php <span class="money">{{ $exp->amount }}</span>
+								</td>
+								<td>
+									{{ $exp->description }}
+								</td>
+							</tr>
+							@empty
+							<tr>
+								<td colspan="3" style="text-align: center;">
+									No records found.
+								</td>
+							</tr>
+							@endforelse
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

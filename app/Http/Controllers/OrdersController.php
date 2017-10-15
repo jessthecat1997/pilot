@@ -53,6 +53,30 @@ class OrdersController extends Controller
 		$details = \DB::table('consignee_service_order_details')
 		->where('so_headers_id', '=', $id)
 		->get();
+
+		$billings = \DB::table('billing_invoice_details')
+		->select(
+			'billing_invoice_details.amount',
+			'billing_invoice_details.description',
+			'A.name'
+		)
+		->join('charges as A', 'billing_invoice_details.charge_id', '=', 'A.id')
+		->join('billing_invoice_headers as B', 'billing_invoice_details.bi_head_id', '=', 'B.id')
+		->where('A.bill_type', '=', 'R')
+		->where('so_head_id', '=', $so_head[0]->id)
+		->get();
+	
+		$expenses = \DB::table('billing_invoice_details')
+		->select(
+			'billing_invoice_details.amount',
+			'billing_invoice_details.description',
+			'A.name'
+		)
+		->join('charges as A', 'billing_invoice_details.charge_id', '=', 'A.id')
+		->join('billing_invoice_headers as B', 'billing_invoice_details.bi_head_id', '=', 'B.id')
+		->where('A.bill_type', '=', 'E')
+		->where('so_head_id', '=', $so_head[0]->id)
+		->get();		
 		
 		$brokerages = null;  $truckings = null;
 		for($i = 0; $i < count($details); $i++)
@@ -75,7 +99,7 @@ class OrdersController extends Controller
 				
 			}
 		}
-		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs']));
+		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs', 'billings' ,'expenses']));
 		
 	}
 
