@@ -795,9 +795,9 @@ function validatebfRows()
         }
 
         for(var i = 0; i < minimum.length; i++){
-         amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'))
-         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'))
-         min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'))
+         amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
+         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'));
+         min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'));
 
          if(min < 0)
          {

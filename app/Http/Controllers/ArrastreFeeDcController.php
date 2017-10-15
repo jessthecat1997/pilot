@@ -31,18 +31,19 @@ class ArrastreFeeDcController extends Controller
 	}
 
 
+
 	public function store(Request $request)
 	{
 		$af_header = new ArrastreDcHeader;
 		$af_header->locations_id = $request->locations_id;
 		$af_header->save();
 
-		$_dc_types_id = json_decode(stripslashes($request->dangerous_cargo_types), true);
+		$_dc_types_id = json_decode(stripslashes($request->dc_types_id), true);
 		$_container_sizes_id = json_decode(stripslashes($request->container_sizes_id), true);
 		$_amount = json_decode(stripslashes($request->amount), true);
 
 		$tblRowLength = $request->tblLength;
-
+		
 		for($x = 0; $x < $tblRowLength; $x++)
 		{
 			$af_detail = new ArrastreDcDetail;
