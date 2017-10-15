@@ -429,10 +429,10 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/utilities/settings','UtilityController');
 
 //Backup and recovery
-	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
+	Route::resource('/utilities/backup_and_recovery', 'BackupRecoveryController');
 
 //Audit Trail
-	Route::resource('/admin/audit_trail', 'AuditTrailController');
+	Route::resource('/utilities/audit_trail', 'AuditTrailController');
 
 
 //Query

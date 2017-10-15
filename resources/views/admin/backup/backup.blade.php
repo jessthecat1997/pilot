@@ -11,31 +11,6 @@
 
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade in active">
-				<div class = "col-md-8 col-md-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Recover
-						</div>
-						<div class="panel-body">
-							This will restore the system to the latest copy of the backup. {{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(-1)->format('F d, Y h:i:s A') }}
-							<br />
-							<br />
-							<button class="btn btn-success">Start System Recovery</button>
-							<br />
-							<br />
-							<div class="row">
-								<div class="col-md-12">
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="menu1" class="tab-pane fade">
 				<br />
 				<div class="col-md-4">
 					<div class="row">
@@ -109,6 +84,32 @@
 									</div>
 								</div>
 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="menu1" class="tab-pane fade">
+				<br />
+				<div class = "col-md-8 col-md-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Recover
+						</div>
+						<div class="panel-body">
+							This will restore the system to the latest copy of the backup. {{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(-1)->format('F d, Y h:i:s A') }}
+							<br />
+							<br />
+							<button class="btn btn-success">Start System Recovery</button>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-md-12">
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

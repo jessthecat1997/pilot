@@ -12,24 +12,19 @@
 					</div>
 					<div class="panel-body">
 						<div class = "form-group">
-							<label class="control-label col-md-4">Name</label>
-							<div class = "col-md-8">
-								{{ $so_head[0]->firstName }} {{ $so_head[0]->middleName }} {{ $so_head[0]->lastName }}
-							</div>
+							<label class="control-label">Name: </label>
+							<br/>
+							{{ $so_head[0]->firstName }} {{ $so_head[0]->middleName }} {{ $so_head[0]->lastName }}
 						</div>
-						<br />
 						<div class = "form-group">
-							<label class="control-label col-md-4">Company Name</label>
-							<div class = "col-md-8">
-								{{ $so_head[0]->companyName }}
-							</div>
+							<label class="control-label">Company Name:</label>
+							<br />
+							{{ $so_head[0]->companyName }}
 						</div>
-						<br />
 						<div class = "form-group">
-							<label class="control-label col-md-4">Billing Address</label>
-							<div class = "col-md-8">
-								{{ $so_head[0]->b_address }} {{ $so_head[0]->b_city }} {{ $so_head[0]->b_st_prov }}
-							</div>
+							<label class="control-label">Billing Address:</label>
+							<br />
+							{{ $so_head[0]->b_address }} {{ $so_head[0]->b_city }} {{ $so_head[0]->b_st_prov }}
 						</div>
 					</div>
 				</div>
@@ -316,7 +311,7 @@
 					</div>
 					<div class="modal-body">
 						<div class="form-group required">
-							<label class = "control-label">Document Type: </label>
+							<label class = "control-label">Attachment Type: </label>
 							<select class = "form-control" name = "req_type_id" id = "req_type_id">
 								@forelse($reqs as $req)
 								<option value="{{ $req->id }}">{{ $req->name }}</option>
