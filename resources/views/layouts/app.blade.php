@@ -656,7 +656,7 @@
                 {{ csrf_field() }}
             </form>
         </ul>
-        @lseif( Auth::user()->role_id == 4 )
+        @elseif( Auth::user()->role_id == 4 )
         <ul class="sidebar-nav">
             <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
                 Billing Manager<i class="fa fa-check-circle"></i>
@@ -715,7 +715,7 @@
                     <li>
                         <a href = "{{ route('settings.index') }}"  class = "class-utility-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Settings</a>
                     </li>
-                    
+
                     <li>
                         <a data-toggle="collapse" class="maintenance-group" href = "#employeecollapse"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a>
                     </li>
@@ -732,7 +732,7 @@
                     </li>
                     <div id="archivecollapse" class="panel-collapse collapse">
 
-                       
+
                         <li>
                             <a data-toggle="collapse" class="maintenance-group" href = "#archive_billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
                         </li>
@@ -744,7 +744,7 @@
                                 <a href = "{{ route('charges.utilities_index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Charges</a>
                             </li>
                         </div>
-                        
+
                     </div>
                 </ul>
             </div>
