@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Pilot Cargo Chain</title>
+    <title>Hauling Services</title>
 
     <!-- Styles -->
     <link rel="icon" href="/images/icon.ico">
@@ -34,8 +34,8 @@
         </script>
 
     </head>
-    <body style="background-image: url('/images/bg.png');">
-        <div id="app">
+    <body style="background-image: url('/images/bg4.png');">
+        <div id="app" style="opacity: 0.9;">
             <nav class="navbar navbar-default navbar-fixed-top" id="navtop">
                 <div class="navbar-header">
                     <!-- Branding Image -->
