@@ -1,4 +1,4 @@
-@extends('layouts.brokerage')
+@extends('layouts.app')
 @section('content')
 <h2>&nbsp;Brokerage</h2>
 <hr>

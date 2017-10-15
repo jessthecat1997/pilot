@@ -34,7 +34,7 @@
         </script>
 
     </head>
-    <body>
+    <body style="background-image: url('/images/bg.png');">
         <div id="app">
             <nav class="navbar navbar-default navbar-fixed-top" id="navtop">
                 <div class="navbar-header">
@@ -48,7 +48,7 @@
         <br>
         <br>
         <br>
-        <div class="container-fluid">
+        <div class="container-fluid" style="opacity: none;">
             <div class="row">
                 @yield('content')
             </div>
