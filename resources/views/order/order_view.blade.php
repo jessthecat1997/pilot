@@ -5,87 +5,96 @@
 <div class="container-fluid">
 	<form role="form" method = "POST" id ="orderForm">
 		<div class = "row">
-			<div class = "col-md-4">
+			<div class = "col-md-12">
 				<div class="panel panel-primary">
 					<div class="panel-heading heading">
 						Order Information
 					</div>
 					<div class="panel-body">
-						<div class = "form-group">
-							<label class="control-label">Name: </label>
-							<br/>
-							{{ $so_head[0]->firstName }} {{ $so_head[0]->middleName }} {{ $so_head[0]->lastName }}
+						<div class="col-md-6">
+							<div class = "form-group">
+								<label class="control-label">Name: </label>
+								<br/>
+								{{ $so_head[0]->firstName }} {{ $so_head[0]->middleName }} {{ $so_head[0]->lastName }}
+							</div>
+							<div class = "form-group">
+								<label class="control-label">Company Name:</label>
+								<br />
+								{{ $so_head[0]->companyName }}
+							</div>
+							<div class = "form-group">
+								<label class="control-label">Billing Address:</label>
+								<br />
+								{{ $so_head[0]->b_address }} {{ $so_head[0]->b_city }} {{ $so_head[0]->b_st_prov }}
+							</div>
 						</div>
-						<div class = "form-group">
-							<label class="control-label">Company Name:</label>
-							<br />
-							{{ $so_head[0]->companyName }}
-						</div>
-						<div class = "form-group">
-							<label class="control-label">Billing Address:</label>
-							<br />
-							{{ $so_head[0]->b_address }} {{ $so_head[0]->b_city }} {{ $so_head[0]->b_st_prov }}
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="control-label">Billing Total:</label>
+								<br />
+								Php <span class="money">{{ $bill_total }}</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Refundable Total:</label>
+								<br />
+								Php <span class="money">{{ $exp_total }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class = "col-md-8">
-				@if( count($truckings) < 1)
-				<div class="panel panel-primary" >
+		</div>
+	</form>
 
-					<div class="panel-heading heading">
-						New Trucking Service Order
-					</div>
-					<div class="panel-body">
-						<div class = "form-horizontal col-md-12 ">
-							<br>
-							<button class = "btn but  btn-sm pull-right new_trucking">New Trucking Service Order</button>
-							<br>
-							<br>
-						</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading heading">
+					List of attachments
+				</div>
+				<div class="panel-body">
+					<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;"> 
+						<thead> 
+							<tr> 
+								<td > 
+									File 
+								</td> 
+								<td> 
+									File Name 
+								</td> 
+								<td > 
+									Remarks 
+								</td> 
+								<td > 
+									Action 
+								</td> 
+
+							</tr> 
+						</thead> 
+					</table> 
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class = "col-md-12">
+			@if( count($truckings) < 1)
+			<div class="panel panel-primary" >
+
+				<div class="panel-heading heading">
+					New Trucking Service Order
+				</div>
+				<div class="panel-body">
+					<div class = "form-horizontal col-md-12 ">
+						<br>
+						<button class = "btn but  btn-sm pull-right new_trucking">New Trucking Service Order</button>
+						<br>
+						<br>
 					</div>
 				</div>
 			</div>
 			@else
 			<div class="panel panel-primary" >
-				<div class="panel-heading heading">
-					List of Attachments
-				</div>
-				<div class="panel-body">
-					<div class = "form-horizontal col-md-12 ">
-						<br>
-						<button class = "btn but  btn-sm pull-right new_attachment">New Attachment</button>
-						<br>
-						<br>
-					</div>
-					<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;">
-						<thead>
-							<tr>
-								<td >
-									File
-								</td>
-								<td>
-									File Name
-								</td>
-								<td >
-									Remarks
-								</td>
-								<td >
-									Action
-								</td>
-
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-			
-		</div>
-	</form>
-</div>
-<div class = "row">
-	<div class = "col-md-12">
-		<div class="panel panel-primary" >
 				<div class="panel-heading heading">
 					List of Deliveries
 				</div>
@@ -125,249 +134,248 @@
 								</tr>
 							</thead>
 						</table>
-						<div>
-						</div>
 					</div>
 					@endif
 				</div>
 			</div>
+		</div>
 	</div>
-	<div class = "col-md-12">
-		@if( count($brokerages) < 1)
-		<div id = "table-new-brokerage">
-			<div class="panel panel-primary" >
+	<div class = "row">
+		<div class = "col-md-12">
+			@if( count($brokerages) < 1)
+			<div id = "table-new-brokerage">
+				<div class="panel panel-primary" >
 
+					<div class="panel-heading heading">
+						New Brokerage Service Order
+					</div>
+					<div class="panel-body">
+						<div class = "form-horizontal col-md-12 ">
+							<br>
+							<button class = "btn but  btn-sm pull-right new_brokerage">New Brokerage Service Order</button>
+							<br>
+							<br>
+						</div>
+					</div>
+				</div>
+			</div>
+			@else
+			<div id = "new_brokerage">
+				<div class="panel panel-primary" >
+					<div class="panel-heading heading">
+						List of Brokerage
+					</div>
+					<div class="panel-body">
+						<table class = "table table-responsive table-striped cell-border table-bordered"  id = "dutiesandtaxes_table">
+							<thead>
+								<tr>
+									<td>
+										Exchange Rate
+									</td>
+									<td >
+										Brokerage Fee
+									</td>
+									<td >
+										Processed By
+									</td>
+									<td >
+										Status
+									</td>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+			@endif
+		</div>
+		<div class = "col-md-6">
+			<div class="panel panel-primary" >
 				<div class="panel-heading heading">
-					New Brokerage Service Order
+					List of Billings
 				</div>
 				<div class="panel-body">
-					<div class = "form-horizontal col-md-12 ">
-						<br>
-						<button class = "btn but  btn-sm pull-right new_brokerage">New Brokerage Service Order</button>
-						<br>
-						<br>
+					<div class="col-md-12">
+						<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
+							<thead>
+								<tr>
+									<td>
+										Name
+									</td>
+									<td>
+										Amount
+									</td>
+									<td>
+										Description
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								@forelse($billings as $bill)
+								<tr>
+									<td>
+										{{ $bill->name }}
+									</td>
+									<td style="text-align: right;">
+										Php <span class="money">{{ $bill->amount }}</span>
+									</td>
+									<td>
+										{{ $bill->description }}
+									</td>
+								</tr>
+								@empty
+								<tr>
+									<td colspan="3" style="text-align: center;">
+										No records found.
+									</td>
+								</tr>
+								@endforelse
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
 		</div>
-		@else
-		<div id = "new_brokerage">
+
+		<div class = "col-md-6">
 			<div class="panel panel-primary" >
 				<div class="panel-heading heading">
-					List of Brokerage
+					List of Refundable Charges
 				</div>
+
 				<div class="panel-body">
-					<table class = "table table-responsive table-striped cell-border table-bordered"  id = "dutiesandtaxes_table">
-						<thead>
-							<tr>
-								<td>
-									Exchange Rate
-								</td>
-								<td >
-									Brokerage Fee
-								</td>
-								<td >
-									Processed By
-								</td>
-								<td >
-									Status
-								</td>
-							</tr>
-						</thead>
-					</table>
+					<div class="col-md-12">
+						<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
+							<thead>
+								<tr>
+									<td>
+										Name
+									</td>
+									<td>
+										Amount
+									</td>
+									<td>
+										Description
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								@forelse($expenses as $exp)
+								<tr>
+									<td>
+										{{ $exp->name }}
+									</td>
+									<td style="text-align: right;">
+										Php <span class="money">{{ $exp->amount }}</span>
+									</td>
+									<td>
+										{{ $exp->description }}
+									</td>
+								</tr>
+								@empty
+								<tr>
+									<td colspan="3" style="text-align: center;">
+										No records found.
+									</td>
+								</tr>
+								@endforelse
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
-		@endif
-	</div>
-	<div class = "col-md-12">
-	</div>
-	<div class = "col-md-6">
-		<div class="panel panel-primary" >
-			<div class="panel-heading heading">
-				List of Billings
-			</div>
-			<div class="panel-body">
-				<div class="col-md-12">
-					<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
-						<thead>
-							<tr>
-								<td>
-									Name
-								</td>
-								<td>
-									Amount
-								</td>
-								<td>
-									Description
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							@forelse($billings as $bill)
-							<tr>
-								<td>
-									{{ $bill->name }}
-								</td>
-								<td style="text-align: right;">
-									Php <span class="money">{{ $bill->amount }}</span>
-								</td>
-								<td>
-									{{ $bill->description }}
-								</td>
-							</tr>
-							@empty
-							<tr>
-								<td colspan="3" style="text-align: center;">
-									No records found.
-								</td>
-							</tr>
-							@endforelse
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class = "col-md-6">
-		<div class="panel panel-primary" >
-			<div class="panel-heading heading">
-				List of Refundable Charges
-			</div>
-			
-			<div class="panel-body">
-				<div class="col-md-12">
-					<table class = "table table-responsive table-striped cell-border table-bordered" id = "billing_table" style="width: 100%;">
-						<thead>
-							<tr>
-								<td>
-									Name
-								</td>
-								<td>
-									Amount
-								</td>
-								<td>
-									Description
-								</td>
-							</tr>
-						</thead>
-						<tbody>
-							@forelse($expenses as $exp)
-							<tr>
-								<td>
-									{{ $exp->name }}
-								</td>
-								<td style="text-align: right;">
-									Php <span class="money">{{ $exp->amount }}</span>
-								</td>
-								<td>
-									{{ $exp->description }}
-								</td>
-							</tr>
-							@empty
-							<tr>
-								<td colspan="3" style="text-align: center;">
-									No records found.
-								</td>
-							</tr>
-							@endforelse
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<div class="modal fade" id="confirm-create-t" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					Create Trucking Service Order
-				</div>
-				<div class="modal-body">
-					Confirm creating trucking service order
-				</div>
-				<div class="modal-footer">
-
-					<button class = "btn btn-primary confirm-create-so-t">Confirm</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="confirm-create-b" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					Create Brokerage Service Order
-				</div>
-				<div class="modal-body">
-					Confirm creating brokerage service order
-				</div>
-				<div class="modal-footer">
-
-					<button class = "btn btn-primary confirm-create-so-b">Confirm</button>
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<form id = "commentForm" enctype="multipart/form-data" action = "{{ route('attachment.store') }}" method="POST">
-		<input type="hidden" name="_token" value="{{ csrf_token() }}">
-		<div class="modal fade" id="new-attachment" role="dialog">
+		<div class="modal fade" id="confirm-create-t" role="dialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						New Attachment
+						Create Trucking Service Order
 					</div>
 					<div class="modal-body">
-						<div class="form-group required">
-							<label class = "control-label">Attachment Type: </label>
-							<select class = "form-control" name = "req_type_id" id = "req_type_id">
-								@forelse($reqs as $req)
-								<option value="{{ $req->id }}">{{ $req->name }}</option>
-								@empty
-								@endforelse
-							</select>
-						</div>
-						<div class="form-group required">
-							<center>
-								<img class="img-responsive img-square" id="attachment_img"  style = "width: 300px; height: 200px"  this.onerror=null;
-								/>
-							</center>
-							<label class = "control-label">Upload file: </label>
-							<input required type = "file" class = "form-control" name = "file_path" id = "file_path"  />
-
-						</div>
-
-						<div class="form-group">
-							<label class = "control-label">Description: </label>
-							<textarea class = "form-control" name = "description" id = "description"></textarea>
-						</div>
-						<input type ="hidden" value = "{{ $so_head[0]->id }}" id= "so_head_id" name = "so_head_id"/>
+						Confirm creating trucking service order
 					</div>
 					<div class="modal-footer">
-						<input id = "btnSave" type = "submit" class="btn btn-success submit-attachment" value = "Save" />
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+
+						<button class = "btn btn-primary confirm-create-so-t">Confirm</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
-	<div class="modal fade" id="confirm-deactivate" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					Deactivate record
-				</div>
-				<div class="modal-body">
-					Confirm Deactivating
-				</div>
-				<div class="modal-footer">
+		<div class="modal fade" id="confirm-create-b" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Create Brokerage Service Order
+					</div>
+					<div class="modal-body">
+						Confirm creating brokerage service order
+					</div>
+					<div class="modal-footer">
 
-					<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button class = "btn btn-primary confirm-create-so-b">Confirm</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form id = "commentForm" enctype="multipart/form-data" action = "{{ route('attachment.store') }}" method="POST">
+			<input type="hidden" name="_token" value="{{ csrf_token() }}">
+			<div class="modal fade" id="new-attachment" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							New Attachment
+						</div>
+						<div class="modal-body">
+							<div class="form-group required">
+								<label class = "control-label">Attachment Type: </label>
+								<select class = "form-control" name = "req_type_id" id = "req_type_id">
+									@forelse($reqs as $req)
+									<option value="{{ $req->id }}">{{ $req->name }}</option>
+									@empty
+									@endforelse
+								</select>
+							</div>
+							<div class="form-group required">
+								<center>
+									<img class="img-responsive img-square" id="attachment_img"  style = "width: 300px; height: 200px"  this.onerror=null;
+									/>
+								</center>
+								<label class = "control-label">Upload file: </label>
+								<input required type = "file" class = "form-control" name = "file_path" id = "file_path"  />
+
+							</div>
+
+							<div class="form-group">
+								<label class = "control-label">Description: </label>
+								<textarea class = "form-control" name = "description" id = "description"></textarea>
+							</div>
+							<input type ="hidden" value = "{{ $so_head[0]->id }}" id= "so_head_id" name = "so_head_id"/>
+						</div>
+						<div class="modal-footer">
+							<input id = "btnSave" type = "submit" class="btn btn-success submit-attachment" value = "Save" />
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="modal fade" id="confirm-deactivate" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Deactivate record
+					</div>
+					<div class="modal-body">
+						Confirm Deactivating
+					</div>
+					<div class="modal-footer">
+
+						<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					</div>
 				</div>
 			</div>
 		</div>

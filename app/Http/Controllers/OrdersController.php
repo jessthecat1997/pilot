@@ -77,7 +77,19 @@ class OrdersController extends Controller
 		->where('A.bill_type', '=', 'E')
 		->where('so_head_id', '=', $so_head[0]->id)
 		->get();		
+
+		$bill_total = 0;
+		for($i = 0; $i < count($billings); $i++)
+		{
+			$bill_total += $billings[0]->amount;
+		}
 		
+		$exp_total = 0;
+		for($i = 0; $i < count($expenses); $i++)
+		{
+			$exp_total += $expenses[0]->amount;
+		}
+
 		$brokerages = null;  $truckings = null;
 		for($i = 0; $i < count($details); $i++)
 		{
@@ -99,7 +111,7 @@ class OrdersController extends Controller
 				
 			}
 		}
-		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs', 'billings' ,'expenses']));
+		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs', 'billings' ,'expenses', 'exp_total', 'bill_total']));
 		
 	}
 
