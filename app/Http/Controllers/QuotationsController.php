@@ -73,6 +73,11 @@ class QuotationsController extends Controller
             }
         }
 
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Created new quotation id: " . $new_quotation->id;
+        $audit->save();
+
 
         return $new_quotation;
     }
@@ -138,12 +143,17 @@ class QuotationsController extends Controller
         try
         {
             $quotation = DB::table('quotation_headers')
-            ->select('specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.created_at')
+            ->select('specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'quotation_headers.created_at', 'quotation_headers.id')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
             ->where('quotation_headers.id', '=', $request->id)
             ->get();
 
             $quotation_details = DB::select('SELECT h.id, r.id, GROUP_CONCAT(t.name ORDER BY r.id) AS sizes, r.amount, lfrom.name as _from, lto.name as _to FROM quotation_headers h INNER JOIN quotation_details r ON h.id = r.quot_header_id INNER JOIN locations lfrom ON r.locations_id_from = lfrom.id JOIN locations lto ON r.locations_id_to = lto.id  LEFT JOIN container_types t ON t.id = r.container_volume WHERE h.id = ? GROUP BY lfrom.id, lto.id ', [$request->id]);
+
+            $audit = new \App\AuditTrail;
+            $audit->user_id = \Auth::user()->id;
+            $audit->description = "Printed quotation id: " . $quotation[0]->id;
+            $audit->save();
 
             $pdf = PDF::loadView('pdf_layouts.quotation_pdf', compact(['quotation', 'quotation_details']));
             return $pdf->stream();
@@ -170,5 +180,10 @@ class QuotationsController extends Controller
     {
         $quotation = \App\QuotationHeader::findOrFail($id);
         $quotation->delete();
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Deactivated quotation id: " . $quotation->id;
+        $audit->save();
     }
 }

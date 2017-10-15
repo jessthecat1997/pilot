@@ -6,13 +6,21 @@ use Illuminate\Http\Request;
 
 class AuditTrailController extends Controller
 {
-   
+
     public function index()
     {
-        return view('admin.audit.audit');
+        $audit = \DB::table('audit_trails')
+        ->select(
+            'name',
+            'description',
+            'audit_trails.created_at'
+        )
+        ->join('users as A', 'audit_trails.user_id', '=', 'A.id')
+        ->get();
+        return view('admin.audit.audit', compact(['audit']));
     }
 
-   
+
     public function create()
     {
         //
@@ -29,7 +37,7 @@ class AuditTrailController extends Controller
         //
     }
 
-   
+
     public function edit($id)
     {
         //

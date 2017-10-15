@@ -81,6 +81,7 @@ class ContractsController extends Controller
         ->where('consignees_id', '=', $request->consignee_id)
         ->orderBy('quotation_headers.id', 'DESC')
         ->get();
+
         return $quotations;
     }
 
@@ -106,6 +107,11 @@ class ContractsController extends Controller
 
         $new_contract =  ContractHeader::all()->last();
 
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Created new contract id: " . $new_contract->id;
+        $audit->save();
+
         return $new_contract->id;
     }
 
@@ -114,10 +120,15 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'contract_headers.created_at')
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'contract_headers.created_at', 'contract_headers.id')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
+
+            $audit = new \App\AuditTrail;
+            $audit->user_id = \Auth::user()->id;
+            $audit->description = "Printed contract id: " . $contract[0]->id;
+            $audit->save();
 
             $pdf = PDF::loadView('pdf_layouts.contract_pdf', compact(['contract']));
             return $pdf->stream();
@@ -132,11 +143,15 @@ class ContractsController extends Controller
         try
         {
             $contract = DB::table('contract_headers')
-            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at')
+            ->select('dateEffective', 'dateExpiration', 'specificDetails', 'companyName', DB::raw('CONCAT(firstName, " ", lastName) as name'), 'consignees.address', 'contract_headers.created_at', 'contract_headers.id')
             ->join('consignees', 'consignees_id', '=', 'consignees.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
 
+            $audit = new \App\AuditTrail;
+            $audit->user_id = \Auth::user()->id;
+            $audit->description = "Printed contract id: " . $contract[0]->id;
+            $audit->save();
 
             $pdf = PDF::loadView('pdf_layouts.agreement_pdf', compact(['contract']));
             return $pdf->stream();
@@ -154,7 +169,7 @@ class ContractsController extends Controller
             $provinces = \App\LocationProvince::all();
 
             $contract = DB::table('contract_headers')
-            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails','isFinalize', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'), 'quot_head_id')
+            ->select('contract_headers.id', 'dateEffective', 'dateExpiration', 'specificDetails','isFinalize', 'consignees_id', 'companyName' , DB::raw('CONCAT(firstName, " ", lastName) AS name'), 'quot_head_id', 'contract_headers.id')
             ->join('consignees AS B', 'consignees_id', '=', 'B.id')
             ->where('contract_headers.id', '=', $request->contract_id)
             ->get();
@@ -165,6 +180,11 @@ class ContractsController extends Controller
             $quotations = DB::table('quotation_headers')
             ->where('consignees_id', '=', $contract[0]->consignees_id)
             ->get();
+
+            $audit = new \App\AuditTrail;
+            $audit->user_id = \Auth::user()->id;
+            $audit->description = "Updated contract draft id: " . $contract[0]->id;
+            $audit->save();
 
             return view('/trucking.contract_draft', compact(['contract','desc_array','consignees','provinces', 'quotations']));
 

@@ -53,25 +53,38 @@
 					List of attachments
 				</div>
 				<div class="panel-body">
-					<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;"> 
-						<thead> 
-							<tr> 
-								<td > 
-									File 
-								</td> 
-								<td> 
-									File Name 
-								</td> 
-								<td > 
-									Remarks 
-								</td> 
-								<td > 
-									Action 
-								</td> 
+					<div class = "form-horizontal ">
+						<div class="row">
+							<div class="col-md-12">
+								<button class = "btn but new_attachment btn-sm pull-right">New Attachment</button>
 
-							</tr> 
-						</thead> 
-					</table> 
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;"> 
+								<thead> 
+									<tr> 
+										<td > 
+											File 
+										</td> 
+										<td> 
+											File Name 
+										</td> 
+										<td > 
+											Remarks 
+										</td> 
+										<td > 
+											Action 
+										</td> 
+
+									</tr> 
+								</thead> 
+							</table> 
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

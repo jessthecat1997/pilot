@@ -30,6 +30,11 @@ class ServiceOrderAttachmentsController extends Controller
 			$request->file_path->move(public_path('attach'), $input['image']);
 			
 			$attachment->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Created new attachment id: " . $attachment->id;
+			$audit->save();
 		}
 
 		return $attachment;
@@ -60,5 +65,10 @@ class ServiceOrderAttachmentsController extends Controller
 	{
 		$attachment = ServiceOrderAttachment::findOrFail($id);
 		$attachment->delete();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Deactivated attachment id: " . $attachment->id;
+		$audit->save();
 	}
 }

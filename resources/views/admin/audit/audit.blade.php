@@ -5,7 +5,7 @@
 		<h2>&nbsp;Audit Trail</h2>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						Settings
 					</div>
@@ -22,14 +22,47 @@
 				</div>
 			</div>
 			<div class="col-md-8">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						Results
 					</div>
 					<div class="panel-body">
-						<p>
-							<pre class = "form-control">ASSJAPOSJOJ	</pre>
-						</p>
+						<table class="table table-responsive table-striped table-bordered" style="width: 100%;" id = "audit_table">
+							<thead>
+								<tr>
+									<td>
+										Time
+									</td>
+									<td>
+										User
+									</td>
+									<td>
+										Action
+									</td>
+								</tr>
+							</thead>
+							<tbody>
+								@forelse($audit as $at)
+								<tr>
+									<td>
+										{{ $at->created_at }}
+									</td>
+									<td>
+										{{ $at->name }}
+									</td>
+									<td>
+										{{ $at->description }}
+									</td>
+								</tr>
+								@empty
+								<tr>
+									<td colspan="3" style="text-align: center;">
+										No records found.
+									</td>
+								</tr>
+								@endforelse
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -67,6 +100,10 @@
 			formatDate:'Y/m/d H:i',
 			value: "{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
 			startDate:	"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('Y/m/d H:i') }}",
+		});
+
+		$('#audit_table').DataTable({
+
 		});
 	})
 </script>

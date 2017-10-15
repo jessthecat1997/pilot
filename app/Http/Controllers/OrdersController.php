@@ -65,7 +65,7 @@ class OrdersController extends Controller
 		->where('A.bill_type', '=', 'R')
 		->where('so_head_id', '=', $so_head[0]->id)
 		->get();
-	
+
 		$expenses = \DB::table('billing_invoice_details')
 		->select(
 			'billing_invoice_details.amount',
@@ -81,13 +81,13 @@ class OrdersController extends Controller
 		$bill_total = 0;
 		for($i = 0; $i < count($billings); $i++)
 		{
-			$bill_total += $billings[0]->amount;
+			$bill_total += $billings[$i]->amount;
 		}
 		
 		$exp_total = 0;
 		for($i = 0; $i < count($expenses); $i++)
 		{
-			$exp_total += $expenses[0]->amount;
+			$exp_total += $expenses[$i]->amount;
 		}
 
 		$brokerages = null;  $truckings = null;
@@ -125,6 +125,12 @@ class OrdersController extends Controller
 			$new_so_detail->so_headers_id = $request->so_headers_id;
 			$new_so_detail->service_order_types_id = 1;
 			$new_so_detail->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Created new service order id: " . $new_so_detail->id;
+			$audit->save();
+
 			break;
 
 			case '2':
@@ -134,12 +140,22 @@ class OrdersController extends Controller
 			$new_so_detail->service_order_types_id = 2;
 			$new_so_detail->save();
 
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Created new service order id: " . $new_so_detail->id;
+			$audit->save();
+
 			$new_trucking  = new TruckingServiceOrder;
 			$new_trucking->status = "P";
 			$new_trucking->bi_head_id_rev = null;
 			$new_trucking->bi_head_id_exp = null;
 			$new_trucking->so_details_id = $new_so_detail->id;
 			$new_trucking->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Created new trucking id: " . $new_trucking->id;
+			$audit->save();
 
 			return $new_trucking;
 
@@ -159,7 +175,14 @@ class OrdersController extends Controller
 		$new_so_head->consignees_id = $request->consignees_id;
 		$new_so_head->employees_id = $request->processedBy;
 		$new_so_head->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new order id: " . $new_so_head->id;
+		$audit->save();
+
 		return $new_so_head;
+
 
 		switch ($request->sot_type) {
 
@@ -170,6 +193,8 @@ class OrdersController extends Controller
 			$new_so_detail->service_order_types_id = 1;
 			$new_so_detail->save();
 			break;
+
+
 
 			case '2':
 
@@ -297,6 +322,12 @@ class OrdersController extends Controller
 		}
 		
 		$attachment->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new attachment id: " . $attachment->id;
+		$audit->save();
+
 
 		return $attachment;
 	}
