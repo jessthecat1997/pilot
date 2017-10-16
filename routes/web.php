@@ -104,7 +104,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/item','ItemsController');
 
 
-	
+
 
 //Utilities Routes
 	Route::resource('/utilities/settings','UtilitiesBrokerageController');
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 	Route::resource('/utilities/employee', 'EmployeesController');
 	Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
-	
+
 
 	Route::get('/utilities/cds_fee_deactivated/{filter}','DatatablesController@cds_deactivated');
 	Route::get('/utilities/cds_fee_data','CdsFeesController@cds_utilities')->name('cds_fee.utilities_index');
@@ -219,7 +219,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
 	Route::resource('/attachment', 'ServiceOrderAttachmentsController');
 	Route::get('/orders/{order_id?}/getAttachments', 'DatatablesController@attach_datatable')->name('attach.data');
-	Route::get('/orders/{or_id?}/get_atts', 'DatatablesController@atts_datatable'); 
+	Route::get('/orders/{or_id?}/get_atts', 'DatatablesController@atts_datatable');
 	Route::post('/orders/create_so_billing_header', 'OrdersController@create_so_billing_header')->name('create_so_billing_header');
 	Route::get('/orders/{order_id?}/getAttachment/{attach_id?}', 'ServiceOrderAttachmentsController@download_file');
 
@@ -293,7 +293,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/reports/delivery/del_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'DeliveryReportsController@delivery_pdf_report');
 	Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
 
-	Route::get('reports/shipments/print/{frequency}', 'ShipmentReportsController@print');
+	Route::get('reports/shipment/print/{frequency}', 'ShipmentReportsController@print');
 //vanessa addition
 	Route::get('/trial_report','TrialController@index');
 
@@ -344,7 +344,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
 	Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
 	Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
-	
+
 
 
 
