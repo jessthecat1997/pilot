@@ -85,31 +85,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-lg-12">
-		<div class="panel panel-primary">
-			<div class="panel-heading">Trucking Information</div>
-			<div class="panel-body">
-				<form class="form-horizontal" role="form">
-					{{ csrf_field() }}
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="noOfDeliveries">Processed by:</label>
-						<div class="col-sm-6">          
-							<select name = "processedBy" id = "processedBy" class = "form-control">
-								<option value = "0"></option>
-								@forelse($employees as $employee)
-								<option value = "{{ $employee->id }}">
-									{{ $employee->lastName . ", " . $employee->firstName }}
-								</option>
-								@empty
-
-								@endforelse
-							</select>
-						</div>
-					</div>
-				</form>
+				<input type="hidden" value="{{ Auth::user()->emp_id }}" id="emp_id" disabled>
 				<button class = "btn btn-md btn-primary create-trucking-so" style="width: 100%;">Create Trucking Service Order</button>
 			</div>
 		</div>
@@ -289,12 +265,12 @@
 @endsection
 @push('styles')
 <style>
-.delivery
-{
-	border-left: 10px solid #8ddfcc;
-	background-color:rgba(128,128,128,0.1);
-	color: #fff;
-}
+	.delivery
+	{
+		border-left: 10px solid #8ddfcc;
+		background-color:rgba(128,128,128,0.1);
+		color: #fff;
+	}
 </style>
 <link href= "/js/select2/select2.css" rel = "stylesheet">
 @push('scripts')
@@ -646,13 +622,7 @@ function validateOrder()
 	else{
 		$('#consignee_id').css('border-color', 'green');
 	}
-	if($('#processedBy').val() == "0"){
-		error += "No processedBy";
-		$('#processedBy').css('border-color', 'red');
-	}
-	else{
-		$('#processedBy').css('border-color', 'green');
-	}
+	
 	if(error.length == 0){
 		return true;
 	}
@@ -678,7 +648,7 @@ $(document).on('click', '.create-trucking-so', function(e){
 				'shippingLine' : $('#shippingLine').val(),
 				'destination' : $('#destination').val(),
 				'portOfCfsLocation' : $('#portOfCfsLocation').val(),
-				'processedBy' : $('#processedBy').val(),
+				'processedBy' : $('#emp_id').val(),
 
 			},
 			success: function(data){
