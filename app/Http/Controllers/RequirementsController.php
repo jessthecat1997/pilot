@@ -11,7 +11,12 @@ class RequirementsController extends Controller
 
   public function index()
   {
-    return view('admin/maintenance.requirement_index');
+    $reqs =  DB::table('Requirement')
+      ->select('id', 'name', 'description', 'created_at' , 'deleted_at')
+      ->where('deleted_at','=',null)
+      ->get();
+
+    return view('admin/maintenance.requirement_index', compact(["reqs"]));
   }
 
 
