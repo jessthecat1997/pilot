@@ -25,8 +25,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/employees/newemployee', 'EmployeesController');
 	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
 	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
-		return $from_new;
-	});
+		return $from_new;});
 	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
 
 	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
