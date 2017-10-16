@@ -1139,7 +1139,7 @@
 				$(this).css('border-color', 'green');
 				$.ajax({
 					type: 'GET',
-					url: 'http://localhost:8000/admin/' + vehicle_type_id +'/getVehicles',
+					url: '{{ route("trucking.index") }}/0/' + vehicle_type_id +'/getVehicles',
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'vehicle_type' : vehicle_type_id,
