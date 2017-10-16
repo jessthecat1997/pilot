@@ -280,7 +280,7 @@
 			<strong>JAY CASTILLO, LCB/MCA.</strong>
 			President
 			<br/>
-			Printed by: {{ $printedby[0]->empname }}
+			Printed by: {{ Auth::user()->name }}
 		</div>
 	</div>
 </body>

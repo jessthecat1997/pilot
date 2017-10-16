@@ -99,6 +99,7 @@
 							</tr>
 							<tr>
 								<td colspan="2">
+									<button class="btn but pull-left invoice col-sm-4 collapse">Generate Invoice</button>
 									<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
 								</td>
 							</tr>
@@ -165,6 +166,7 @@
 								</tr>
 								<tr>
 									<td colspan="2">
+										<button class="btn but pull-left invoice col-sm-4 collapse">Generate Invoice</button>
 										<button class="btn but pull-right finalize-bill col-sm-4">Finalize</button>
 									</td>
 								</tr>
@@ -266,6 +268,7 @@
 					{
 						$('.addBill').attr('disabled','disabled');
 						$('.finalize-bill').attr('disabled','disabled');
+						$('.invoice').addClass('in');
 					}
 					var bi_id = document.getElementById("so_head_id").value;
 					console.log(bi_id);
@@ -341,6 +344,9 @@
 						return false;
 					}			
 				});
+				$(document).on('click', '.invoice', function(e){
+					window.location.href = "/billing/{{ $so_head_id }}/show_pdf";
+				});
 				$(document).on('click', '.new-rev-row', function(e){
 					e.preventDefault();
 					$('#rev_table > tbody').append(rev_row);
@@ -361,7 +367,8 @@
 							'isFinalize' : 1
 						},
 						success: function (data){
-							window.location.href = "/billing/{{ $so_head_id }}/show_pdf";
+							location.reload();
+							
 						}
 					})
 				})
