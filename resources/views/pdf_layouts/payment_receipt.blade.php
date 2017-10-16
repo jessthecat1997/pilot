@@ -85,9 +85,9 @@
 			</table>
 			<br />
 			<br />
-			<strong>JAY CASTILLO, LCB/MCA.</strong>
-			<br>
-			President
+			<strong>JAY CASTILLO, LCB/MCA.</strong>President
+			<br/>
+			Printed by: {{ Auth::user()->name }}
 		</div>
 	</div>
 </body>
