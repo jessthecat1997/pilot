@@ -65,16 +65,9 @@ public function update(StoreWharfageFeeLCL $request, $id)
  DB::beginTransaction();
  try{
 
-  $wf = \DB::table('wharfage_lcl_details')
+  \DB::table('wharfage_lcl_details')
   ->where('wharfage_lcl_headers_id','=', $request->wf_head_id)
-  ->where('deleted_at', '=', NULL)
-  ->get();
-
-  for($i = 0; $i < count($wf); $i ++)
-  {
-    $del_wf =  WharfageLclDetail::findOrFail($wf[$i]->id);
-    $del_wf->delete();
-  }
+  ->delete();
 
   $wf_header= WharfageLclHeader::findOrFail($id);
   $wf_header->dateEffective = $request->dateEffective;
@@ -82,7 +75,7 @@ public function update(StoreWharfageFeeLCL $request, $id)
   $wf_header->save();
 
 
- $_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
+  $_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
   $_amount = json_decode(stripslashes($request->amount), true);
 
   $tblRowLength = $request->tblLength;
@@ -95,8 +88,6 @@ public function update(StoreWharfageFeeLCL $request, $id)
     $wf_detail->amount = (string)$_amount[$x];
     $wf_detail->save();
   }
-
-
   DB::commit();
   return $wf_header;
 

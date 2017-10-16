@@ -64,7 +64,8 @@
 	</div>
 </div>
 <section class="content">
-	<form role="form" method = "POST" class="commentForm">
+	<form role="form" method = "POST" id="commentForm">
+		{{ csrf_field() }}
 		<div class="modal fade" id="wfModal" role="dialog">
 			<div class="form-group">
 				<div class="modal-dialog ">
@@ -102,8 +103,8 @@
 						<div class = "panel panel-default">
 							<div  ">
 								<div class = "panel-default">
-									{{ csrf_field() }}
-									<form id = "wharfage_form" class = "commentForm">
+									<form id = "wharfage_form" >
+										{{ csrf_field() }}
 										<table class="table responsive table-hover"  id= "wf_parent_table" style = "overflow-x: scroll; left-margin: 5px; right-margin: 5px;">
 											<thead>
 												<tr>
@@ -261,7 +262,7 @@
 			{ data: 'action', orderable: false, searchable: false }
 			],
 		});
-		$("#commentForm").validate({
+		/*$("#commentForm").validate({
 			rules:
 			{
 				dateEffective:
@@ -275,7 +276,7 @@
 
 			},
 			onkeyup: false,
-		});
+		});*/
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
 			resetErrors();
@@ -493,15 +494,15 @@
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'wf_head_id': wf_id,
-								'dateEffective':$('#dateEffective').val(),
 								'locations_id' : $('#locations_id').val(),
+								'dateEffective':$('#dateEffective').val(),
 								'basis_types_id' : jsonBasisType,
 								'amount' : jsonAmount,
 								'tblLength' : tblLength,
-
 							},
 							success: function (data){
-								if(typeof(data) === "object"){
+								console.log(data);
+								
 									wftable.ajax.url( '{{ route("wf_lcl.data") }}' ).load();
 									$('#wfModal').modal('hide');
 									$('.modal-title').text('New Less Cargo Load Wharfage Fee per Location');
@@ -528,17 +529,7 @@
 									}
 									toastr["success"]("Record updated successfully")
 									$('#btnSave').removeAttr('disabled');
-								}else{
-
-									resetErrors();
-									var invdata = JSON.parse(data);
-									$.each(invdata, function(i, v) {
-										console.log(i + " => " + v); 
-										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-									});
-
-								}
+								
 							}
 						})
 					}
