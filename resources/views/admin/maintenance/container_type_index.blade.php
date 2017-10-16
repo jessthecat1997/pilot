@@ -95,6 +95,22 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Activating
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</section>
 </div>
@@ -126,16 +142,71 @@
 
 	$(document).ready(function(){
 		var cttable = $('#ch_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/ctData',
+			ajax: '{{ route("ct.data") }}',
 			columns: [
 			{ data: 'name'},
 			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "asc" ]],
+		});
+
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				cttable.ajax.url( '{{ route("ct.data") }}/1').load();
+			}
+			else{
+				cttable.ajax.url( '{{ route("ct.data") }}').load();
+			}
+		})
+
+		$(document).on('click', '.activate', function(e){
+			var ct_id = $(this).val();
+			data = cttable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/container_type_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					cttable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 		$("#commentForm").validate({
@@ -317,7 +388,7 @@
 
 					if($('#name').val() === temp_name &&
 						$('#description').val() === temp_desc
-						 )
+						)
 					{
 						$('#name').val("");
 						$('#description').val("");

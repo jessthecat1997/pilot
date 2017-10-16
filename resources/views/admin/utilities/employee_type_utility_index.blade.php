@@ -107,6 +107,7 @@
 	var filter;
 	$(document).ready(function(){
 		var ettable = $('#et_table').DataTable({
+		"dom": '<"toolbar">frtip',
 			processing: true,
 			serverSide: true,
 			ajax: '/utilities/employee_type_deactivated/' + filter,

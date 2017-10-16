@@ -46,9 +46,17 @@ class BrokerageFeesController extends Controller
 
 public function update(StoreBrokerageFee $request, $id)
 {
-    \DB::table('brokerage_fee_details')
+    $bf = \DB::table('brokerage_fee_details')
     ->where('brokerage_fee_headers_id','=', $request->bf_head_id)
-    ->delete();
+    ->where('deleted_at', '=', NULL)
+    ->get();
+
+
+    for($i = 0; $i < count($bf); $i ++)
+    {
+        $del_bf = BrokerageFeeDetail::findOrFail($bf[$i]->id);
+        $del_bf->delete();
+    }
 
     $new_bf= BrokerageFeeHeader::findOrFail($id);
     $new_bf->dateEffective = $request->dateEffective;
@@ -94,6 +102,7 @@ public function bf_utilities(){
 public function bf_maintain_data(Request $request){
     $rates = DB::table('brokerage_fee_details')
     ->where('brokerage_fee_headers_id', '=', $request->bf_id)
+    ->where('deleted_at', '=', NULL)
     ->get();
 
     return $rates;

@@ -98,12 +98,12 @@
 @endsection
 @push('styles')
 <style>
-	.utilities
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.utilities
+{
+	border-left: 10px solid #2ad4a5;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -112,9 +112,9 @@
 	var filter = 0;
 
 	$('#collapse4').addClass('in');
-    $('#archivecollapse').addClass('in');
-    $('#archive_brokeragecollapse').addClass('in');
-    
+	$('#archivecollapse').addClass('in');
+	$('#archive_brokeragecollapse').addClass('in');
+	
 	$(document).ready(function(){
 		var ertable = $('#er_table').DataTable({
 			processing: true,
@@ -150,42 +150,41 @@
 		});
 
 
-// Confirm Deactivate Button
-$('#btnDeactivate').on('click', function(e){
-	e.preventDefault();
-	$.ajax({
-		type: 'DELETE',
-		url:  '/admin/exchange_rate/' + data.id,
-		data: {
-			'_token' : $('input[name=_token').val()
-		},
-		success: function (data)
-		{
-			ertable.ajax.reload();
-			$('#confirm-deactivate').modal('hide');
+		$('#btnDeactivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/exchange_rate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					ertable.ajax.reload();
+					$('#confirm-deactivate').modal('hide');
 
-			toastr.options = {
-				"closeButton": false,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": false,
-				"rtl": false,
-				"positionClass": "toast-bottom-right",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": 300,
-				"hideDuration": 1000,
-				"timeOut": 2000,
-				"extendedTimeOut": 1000,
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
-			toastr["success"]("Record deactivated successfully")
-		}
-	})
-});
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record deactivated successfully")
+				}
+			})
+		});
 
 
 // Confirm Activate Button

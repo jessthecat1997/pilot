@@ -737,7 +737,6 @@ class DatatablesController extends Controller
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
 			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at','vehicles.deleted_at')
 			->where('vehicles.deleted_at', '!=', null)
-			->orderBy('deleted_at', 'desc')
 			->get();
 
 			return Datatables::of($vs)
@@ -755,7 +754,7 @@ class DatatablesController extends Controller
 				'<button value = "'. $vs->plateNumber .'" class = "btn btn-md btn-success activate">Activate</button>';
 			})
 
-			->editColumn('plateNumber', '{{ $id }}')
+			->editColumn('plateNumber', '{{ $plateNumber }}')
 			->make(true);
 
 		}

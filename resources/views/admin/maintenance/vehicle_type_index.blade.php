@@ -28,7 +28,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($vehicle_type as $vt)
+						@forelse($vehicle_type as $vt)
 						<tr>
 							<td>
 								{{ $vt->name }}
@@ -81,6 +81,22 @@
 			</div>
 		</form>
 	</section>
+	<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<section class="content">
 		<form role = "form" method = "POST">
 			{{ csrf_field() }}
@@ -109,17 +125,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-vehicle-type{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-vehicle-type{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -133,6 +149,7 @@
 	
 	$(document).ready(function(){
 		var vtable = $('#vtype_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -143,7 +160,17 @@
 
 			],	"order": [[ 0, "asc" ]],
 		});
-
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				vtable.ajax.url( '{{ route("vt.data") }}/1').load();
+			}
+			else{
+				vtable.ajax.url( '{{ route("vt.data") }}').load();
+			}
+		})
 
 		$("#commentForm").validate({
 			rules: 
@@ -197,6 +224,46 @@
 			vt_id = $(this).val();
 			data = vtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
+		});
+		$(document).on('click', '.activate', function(e){
+			var vt_id = $(this).val();
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/vehicle_type_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					vtable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 

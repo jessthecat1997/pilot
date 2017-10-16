@@ -65,9 +65,16 @@ public function update(StoreWharfageFeeLCL $request, $id)
  DB::beginTransaction();
  try{
 
-  \DB::table('wharfage_lcl_details')
+  $wf = \DB::table('wharfage_lcl_details')
   ->where('wharfage_lcl_headers_id','=', $request->wf_head_id)
-  ->delete();
+  ->where('deleted_at', '=', NULL)
+  ->get();
+
+  for($i = 0; $i < count($wf); $i ++)
+  {
+    $del_wf =  WharfageLclDetail::findOrFail($wf[$i]->id);
+    $del_wf->delete();
+  }
 
   $wf_header= WharfageLclHeader::findOrFail($id);
   $wf_header->dateEffective = $request->dateEffective;
@@ -75,7 +82,7 @@ public function update(StoreWharfageFeeLCL $request, $id)
   $wf_header->save();
 
 
-  $_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
+ $_basis_types_id = json_decode(stripslashes($request->basis_types_id), true);
   $_amount = json_decode(stripslashes($request->amount), true);
 
   $tblRowLength = $request->tblLength;
@@ -88,6 +95,8 @@ public function update(StoreWharfageFeeLCL $request, $id)
     $wf_detail->amount = (string)$_amount[$x];
     $wf_detail->save();
   }
+
+
   DB::commit();
   return $wf_header;
 
@@ -106,8 +115,9 @@ public function destroy($id)
 public function wf_lcl_maintain_data(Request $request){
   $rates = DB::table('wharfage_lcl_details')
   ->join ('basis_types', 'basis_types.id','=','basis_types_id') 
-  ->select('basis_types.abbreviation AS basis_type', 'amount', 'basis_types_id')
+  ->select('basis_types.abbreviation AS basis_type', 'amount', 'basis_types_id', 'wharfage_lcl_details.deleted_at')
   ->where('wharfage_lcl_headers_id', '=', $request->wf_id)
+  ->where('wharfage_lcl_details.deleted_at', '=', null)
   ->get();
 
   return $rates;

@@ -33,7 +33,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($charges as $ch)
+						@forelse($charges as $ch)
 						<tr>
 							<td>
 								{{ $ch->name }}
@@ -110,6 +110,22 @@
 				</div>
 			</form>
 		</section>
+		<div class="modal fade" id="confirm-activate" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Activate Record
+					</div>
+					<div class="modal-body">
+						Confirm Activating
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<section class="content">
 			<form role = "form" method = "POST">
 				{{ csrf_field() }}
@@ -163,6 +179,7 @@
 	var temp_chargeType = null;
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -172,26 +189,65 @@
 			{ data: 'bill_type',
 			"render" : function( data, type, full ) {
 				return formatWithBillType(data); }},
-				/*{ data: 'chargeType',
-				"render" : function( data, type, full ) {
-					return formatWithChargeType(data); }},
-					*/
-					{ data: 'amount' },
-					{ data: 'action', orderable: false, searchable: false }
+				
+				{ data: 'amount' },
+				{ data: 'action', orderable: false, searchable: false }
 
-					],	"order": [[ 0, "desc" ]],
-				});
-		/*
-		function formatWithChargeType(n) { 
-
-			if (n == 1){
-				return "Rate";
-			}else{
-				return "Fixed";
+				],	"order": [[ 0, "desc" ]],
+			});
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				chtable.ajax.url( '{{ route("ch.data") }}/1' ).load();
 			}
+			else{
+				chtable.ajax.url( '{{ route("ch.data") }}' ).load();
+			}
+		})
 
-		} 
-		*/
+		$(document).on('click', '.activate', function(e){
+			var ch_id = $(this).val();
+			data = chtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/charge_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					chtable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
+		});
+
 
 		function formatWithBillType(e) { 
 
@@ -524,7 +580,7 @@
 					{
 						$('#btnSave').attr('disabled', 'true');
 						type_bill = null;
-		
+
 						$.ajax({
 							type: 'PUT',
 							url:  '/admin/charge/' + ch_id,

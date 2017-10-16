@@ -139,6 +139,22 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Activating
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</section>
 </div>
@@ -166,6 +182,7 @@
 	var er_id;
 	$(document).ready(function(){
 		var ertable = $('#er_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -176,6 +193,60 @@
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 2, "desc" ]],
+		});
+
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				ertable.ajax.url( '{{ route("er.data") }}/1').load();
+			}
+			else{
+				ertable.ajax.url( '{{ route("er.data") }}').load();
+			}
+		})
+
+		$(document).on('click', '.activate', function(e){
+			var ct_id = $(this).val();
+			data = ertable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/exchange_rate_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					ertable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 
@@ -275,7 +346,7 @@
 				},
 				success: function (data)
 				{
-					ertable.ajax.url('{{ route("er.data") }}').load();
+					ertable.ajax.url('{{ route("er.data") }}/1').load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -296,7 +367,7 @@
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record deactivated successfully")
+					toastr["success"]("Record deactivated successfully");
 				}
 			})
 		});

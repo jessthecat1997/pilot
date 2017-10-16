@@ -1,18 +1,18 @@
 @extends('layouts.maintenance')
 @push('styles')
 <style>
-	.class-vehicle
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-vehicle
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @section('content')
@@ -212,6 +212,7 @@
 	{
 
 		var vtable = $('#v_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -225,6 +226,53 @@
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 1, "asc" ]],
+		});
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				vtable.ajax.url( '{{ route("v.data") }}/1').load();
+			}
+			else{
+				vtable.ajax.url( '{{ route("v.data") }}').load();
+			}
+		})
+		$('#btnDeactivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'DELETE',
+				url:  '/admin/vehicle/' + data.plateNumber,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					vtable.ajax.url( '{{ route("v.data") }}').load();
+					$('#confirm-deactivate').modal('hide');
+				}
+			})
+		});
+
+		$(document).on('click', '.activate', function(e){
+			data = vtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/vehicle_reactivate/' + data.plateNumber,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					vtable.ajax.url( '{{ route("v.data") }}/1').load();
+					$('#confirm-activate').modal('hide');
+				}
+			})
 		});
 
 		
@@ -278,7 +326,7 @@
 		});
 		$(document).on('click', '.deactivate', function(e){
 			data = vtable.row($(this).parents()).data();
-			$('#confirm-delete').modal('show');
+			$('#confirm-deactivate').modal('show');
 		});
 
 		$(document).on('click', '.new_vehicle_type', function(e){
