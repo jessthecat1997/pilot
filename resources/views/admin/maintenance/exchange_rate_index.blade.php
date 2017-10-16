@@ -376,12 +376,6 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 
-			var rate_unmask = $('#rate').inputmask("unmaskedvalue");
-			var rate_nocomma = parseFloat(rate_unmask);
-			if (rate_nocomma  == 0){
-				rate_nocomma = "";
-			}
-
 			var title = $('.modal-title').text();
 			if(title == "New Exchange Rate")
 			{
@@ -393,7 +387,7 @@
 						url:  '/admin/exchange_rate',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'rate' : rate_nocomma,
+							'rate' : $('#rate').inputmask("unmaskedvalue"),
 							'dateEffective' : $('input[name=dateEffective]').val(),
 							'description' : $('input[name=description]').val(),
 							'currentRate' : $('input[name=currentRate]').val(),
@@ -458,7 +452,7 @@
 						data: {
 							'_token' : $('input[name=_token]').val(),
 							'description' : $('input[name=description]').val(),
-							'rate' : rate_nocomma,
+							'rate' : $('#rate').inputmask("unmaskedvalue"),
 							'dateEffective' : $('input[name=dateEffective]').val(),
 							'currentRate' : $('input[name=currentRate]').val(),
 						},
