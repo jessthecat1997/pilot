@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilites | Archive | Exchange Rate</h3>
+		<h3> Utilites | Archive | Exchange Rate</h3>
 		<hr>
 		<div class="form-group col-md-3 col-md-offset-9">
 			<label>Filter</label>
@@ -114,12 +114,12 @@
 	$('#collapse4').addClass('in');
 	$('#archivecollapse').addClass('in');
 	$('#archive_brokeragecollapse').addClass('in');
-	
+
 	$(document).ready(function(){
 		var ertable = $('#er_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: 'http://localhost:8000/utilities/exchange_rate_deactivated/' + filter,
+			ajax: '{{ route("utilities_index") }}/exchange_rate_deactivated/' + filter,
 			columns: [
 			{ data: 'id' },
 			{ data: 'description' },
@@ -233,7 +233,7 @@ $(document).on('change', '.change-filter', function(e)
 	var ertable = $('#er_table').DataTable({
 		processing: true,
 		serverSide: true,
-		ajax: 'http://localhost:8000//utilities/exchange_rate_deactivated/' + filter,
+		ajax: 'h{{ route("utilities_index") }}/exchange_rate_deactivated/' + filter,
 		columns: [
 		{ data: 'id' },
 		{ data: 'description' },
