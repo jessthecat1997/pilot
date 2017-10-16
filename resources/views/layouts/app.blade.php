@@ -118,7 +118,7 @@
                     <div id="collapse2" class="panel-collapse collapse">
                         <ul class="list-group" style="list-style-type: circle;">
                          <li>
-                            <a href = "{{ route('attachment_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Attachment</a>
+                            <a href = "{{ route('attachment_type.index') }}"  class = "class-attachment"><i class="fa fa-circle"></i>&nbsp;&nbsp;Attachment</a>
                         </li>
                         <li>
                             <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
