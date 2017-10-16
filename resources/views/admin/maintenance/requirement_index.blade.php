@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Attachment Type</h3>
+		<h3> Maintenance | Attachment Type</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#reqModal" style = "width: 100%;">New Attachment Type</button>
@@ -36,8 +36,8 @@
 								{{ $req->description }}
 							</td>
 							<td>
-								<button value = "{{ $cds->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-								<button value = "{{ $cds->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<button value = "{{ $req->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $req->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 								
 							</td>
 						</tr>
@@ -324,7 +324,7 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							rreqtable.ajax.url( '{{ route("req.data") }}').load();
+							reqtable.ajax.url( '{{ route("req.data") }}').load();
 							$('#reqModal').modal('hide');
 							$('#description').val("");
 							$('.modal-title').text('New Attachment Type');

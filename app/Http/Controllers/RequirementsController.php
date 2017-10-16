@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreRequirements;
 use App\Requirement;
 
+
 class RequirementsController extends Controller
 {
 
   public function index()
   {
-    $reqs =  DB::table('Requirement')
-      ->select('id', 'name', 'description', 'created_at' , 'deleted_at')
-      ->where('deleted_at','=',null)
-      ->get();
+    $reqs = \App\Requirement::all();
 
     return view('admin/maintenance.requirement_index', compact(["reqs"]));
   }
@@ -46,10 +44,10 @@ class RequirementsController extends Controller
 
 public function reactivate(Request $request)
 {
-    $req = Requirement::withTrashed()
-    ->where('id',$request->id)
-    ->restore();
-    
+  $req = Requirement::withTrashed()
+  ->where('id',$request->id)
+  ->restore();
+
 }
 
 public function req_utilities(){
