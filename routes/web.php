@@ -490,7 +490,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/item','ItemsController');
 	Route::resource('/cdeposit', 'ConsigneeDepositsController');
 	Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
-});
+;
 
 
 Route::group(['middleware' => ['admin']], function() {
