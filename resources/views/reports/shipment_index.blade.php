@@ -1,349 +1,56 @@
 @extends('layouts.app')
 @section('content')
-<h2>&nbsp;Reports | Shipment</h2>
-<hr>
-<div class = "container-fluid">
-	<div class="row">
-		<div class = "panel-default panel">
-			<div class = "panel-body">
-
-				<h3>Shipment Report</h3>
-
-				<div class = "form-horizontal">
-				<div class = "form-group">
-					<label class = "control-label col-md-3">Select Frequency: </label>
-					<div class = "col-md-6 col-md-offset-1">
-						<select class = "form-control" id = "frequency_select">
-							<option value = "0"></option>
-							<option value = "1">Daily</option>
-							<option value = "2">Monthly</option>
-							<option value = "3">Yearly</option>
-							<option value = "4">Custom</option>
-						</select>
+<div class="container-fluid">
+	<div class="col-md-3">
+		<h2>&nbsp;Shipment Reports</h2>
+		<hr />
+		<div class="row">
+			<div class="form-group">
+				<label class="control-label">Range</label>
+				<input type="text" id = "daterange" class="form-control" required/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				<label class="control-label" >Frequency</label>
+				<select class="form-control" id = "frequency">
+					<option value="0">Daily</option>
+					<option value="1">Weekly</option>
+					<option value="2">Monthly</option>
+					<option value="3">Yearly</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				<label class="control-label">Filter by Status</label>
+				<div class="col-md-8 col-md-offset-2">
+					<div class="row">
+						<input type = "radio" name = "status_filter" value = "0" checked> <label class = "control-label">All</label>
 					</div>
-				</div>
-
-				<div class = "collapse" id = "custom_collapse">
-					<div class = "form-group">
-						<div class = "col-md-2">
-						</div>
-						<div class = "col-md-8">
-							<div class = "col-md-5">
-								<label class = "control-label col-md-2">From: </label>
-								<div class = "col-md-9 col-md-offset-1">
-									<input type = "date"  class = "form-control" id = "from_date" style="width: 100%;" />
-								</div>
-							</div>
-							<div class = "col-md-5">
-								<label class = "control-label col-md-2">To: </label>
-								<div class = "col-md-9 col-md-offset-1">
-									<input type = "date"  class = "form-control" id = "to_date" sstyle="width: 100%;" />
-								</div>
-							</div>
-							<div class = "col-md-2">
-								<button class = "btn but custom_date">Go</button>
-							</div>
-						</div>
-						<div class = "col-md-2">
-						</div>
+					<div class="row">
+						<input type = "radio" name = "status_filter" value = "1"> <label class = "control-label">Pending</label>
 					</div>
-				</div>
-				<button type="button" class="btn btn-primary print-report collapse">
-					Print Reports <span class="fa fa-print" aria-hidden="true"></span>
-				</button>
-
-		</br>
-
-
-	</br>
-
-				<table class = "table table-responsive table-bordered table-hover collapse" style = "width: 150%" id = "shipment_table">
-							<thead>
-								<tr>
-									<th>
-										Date
-									</th>
-									<th>
-										File No.
-									</th>
-									<th>
-										Processor
-									</th>
-									<th>
-										Consignee
-									</th>
-									<th>
-										Supplier
-									</th>
-									<th>
-										No. Of Containers
-									</th>
-									<th>
-										Port
-									</th>
-									<th>
-										Shipping Line
-									</th>
-
-									<th>
-										Request
-									</th>
-									<th>
-										Amount
-									</th>
-
-								</tr>
-							</thead>
-							<tbody>
-								@forelse($brokerage_header as $bh)
-								<tr>
-									<td>
-										@php
-										$date = $bh->dateCreated;
-											echo $date =  date("F j, Y") @endphp
-									</td>
-									<td>
-										{{$bh->order_no}}
-									</td>
-									<td>
-										@php
-										$fullName = $bh->firstName ." ". $bh->lastName;
-											echo $fullName @endphp
-									</td>
-									<td>
-										{{$bh->companyName}}
-									</td>
-									<td>
-										{{$bh->shipper}}
-									</td>
-									<td>
-										@php
-											foreach($brokerage_containers as $bc)
-											{
-													if($bc->brok_so_id == $bh->order_no)
-													{
-															echo "1x".$bc->containerVolume."</br>";
-															echo $bc->containerNumber;
-													}
-											}
-											foreach(  $brokerage_details as $nc)
-											{
-													if($nc->brok_head_id == $bh->order_no)
-														{
-															echo $nc->lcl_type."</br>";
-															echo $nc->grossWeight." KGS. </br>";
-															echo $nc->cubicMeters." CBM </br>";
-														}
-											}
-										@endphp
-									</td>
-									<td>
-										{{$bh->name}}
-									</td>
-									<td>
-										@php
-											foreach($brokerage_containers as $bc)
-											{
-													if($bc->brok_so_id == $bh->order_no)
-													{
-															echo $bc->shippingLine;
-
-													}
-											}
-											foreach(  $brokerage_details as $nc)
-											{
-													if($nc->brok_head_id == $bh->order_no)
-														{
-															echo "Loose Cargo";
-
-														}
-											}
-										@endphp
-									</td>
-
-									<td>
-										<table>
-
-					 						<tr>
-												<td>
-							 						Processing
-												</td>
-					 						</tr>
-
-											<tr>
-												<td>
-							 						 THC
-												 </td>
-					 						</tr>
-
-											<tr>
-												<td>
-							 						 Deposit
-												 </td>
-					 						</tr>
-
-											<tr>
-						 						<td>
-							 						 Arrastre
-						 						</td>
-					 						</tr>
-
-											<tr>
-						 						<td>
-							 						 Demmurage
-						 						</td>
-					 						</tr>
-
-											<tr>
-						 						<td>
-							 						 Other
-						 						</td>
-					 						</tr>
-
-											<tr>
-						 						<td>
-							 						 Total
-						 						</td>
-					 						</tr>
-
-				 			  		</table>
-									</td>
-
-									<td>
-										<table>
-
-											<tr>
-												<td>
-													@php
-														$total = 0.00;
-														foreach($payments as $payment)
-														{
-															if($payment->so_head_id)
-															{
-																if($payment->charge_name == 'Processing')
-																{
-																	$payment_format = number_format((float)$payment->charge_payment, 2, '.', ',');
-																	echo $payment_format;
-																	$total += $payment->charge_payment;
-																}
-															}
-														}
-													@endphp
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													@php
-														foreach($payments as $payment)
-														{
-															if($payment->so_head_id)
-															{
-																if($payment->charge_name == 'Terminal Handling Charges')
-																{
-																	$payment_format = number_format((float)$payment->charge_payment, 2, '.', ',');
-																	echo $payment_format;
-																	$total += $payment->charge_payment;
-																	break;
-
-																}
-																else
-																{
-																	$payment_format = number_format((float)2300, 2, '.', ',');
-																	$total += 2300;
-																	echo $payment_format;
-																	break;
-																}
-															}
-														}
-
-													@endphp
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-												 --
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													@php
- 													 foreach($arrastres as $arrastre)
- 													 {
- 														 if($arrastre->so_head_id == $bh->order_no)
- 														 {
-
-															 $arrastre_format = number_format((float) $arrastre->arrastre_sum, 2, '.', ',');
-																echo $arrastre_format;
-																$total +=  $arrastre->arrastre_sum;
-
- 														 }
- 													 }
- 												 @endphp
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													@php
-														foreach($payments as $payment)
-														{
-															if($payment->so_head_id )
-															{
-																if($payment->charge_name == 'Demurrage')
-																{
-
-																	$payment_format = number_format((float)$payment->charge_payment, 2, '.', ',');
-																	echo $payment_format;
-																	$total += $payment->charge_payment;
-																	break;
-																}
-																else
-																{
-																	$payment_format = number_format((float)800, 2, '.', ',');
-																	$total += 800;
-																	echo $payment_format;
-																	break;
-																}
-															}
-
-														}
-													@endphp
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													--
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													@php
-																$total = number_format((float)$total, 2, '.', ',');
-															echo $total;
-													@endphp
-												</td>
-											</tr>
-
-										</table>
-									</td>
-								</tr>
-
-								@empty
-								<tr>
-									No Records Found
-								</tr>
-								@endforelse
-
-							</tbody>
-					</table>
+					<div class="row">
+						<input type = "radio" name = "status_filter" value = "2"> <label class = "control-label">Finished</label>
+					</div>
+					<div class="row">
+						<input type = "radio" name = "status_filter" value = "3"> <label class = "control-label">Cancelled</label>
+					</div>
 				</div>
 			</div>
 		</div>
+		<hr />
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-md but generate" style="width: 100%;">Generate Report</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<iframe src="http://localhost:8000/reports/shipments/print/Daily")  +"" id = "iframe" style="width: 100%; height: 680px;">
+
+		</iframe>
 	</div>
 </div>
 @endsection
@@ -364,8 +71,15 @@
 	}
 </style>
 @endpush
+
 @push('scripts')
+
+<script src="/js/dateRangePicker/moment.min.js"></script>
+<script src="/js/dateRangePicker/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/js/dateRangePicker/daterangepicker.css" />
+
 <script type="text/javascript">
+
 	$('#collapse3').addClass('in');
 	var data;
 	var frequency;
@@ -419,6 +133,76 @@
 			frequency = "Report: "+$('#from_date').val()+" to "+$('#to_date').val();
 		}
 	});
+
+	var startDate = null;
+	var endDate = null;
+	$(document).ready(function(){
+		$('#daterange').daterangepicker({
+			"showDropdowns": true,
+			"applyClass" : "select_date_range btn-success",
+			"showWeekNumbers": true,
+			"ranges": {
+				"Today": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y') }}",
+				],
+				"Yesterday": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(-1)->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y') }}"
+				],
+				"Last 7 Days": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(-7)->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y') }}"
+				],
+				"Last 30 Days": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addDays(-30)->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y') }}"
+				],
+				"This Month": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->startOfMonth()->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->endOfMonth()->format('m/d/Y') }}"
+				],
+				"Last Month": [
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addMonths(-1)->startOfMonth()->format('m/d/Y') }}",
+				"{{ Carbon\Carbon::now('Asia/Hong_Kong')->addMonths(-1)->endOfMonth()->format('m/d/Y') }}"
+				]
+			},
+			"alwaysShowCalendars": true,
+			"startDate": "{{ $now }}",
+			"endDate": "{{ $now }}",
+			"drops": "down"
+		}, function(start, end, label) {
+			startDate = start;
+			endDate = end;
+		});
+
+		$(document).on('click', '.select_date_range', function(e)
+		{
+			e.preventDefault();
+			console.log(startDate.format('D MMMM YYYY') + ' - ' + endDate.format('D MMMM YYYY'));
+		})
+
+		$(document).on('click', '.generate', function(e){
+			e.preventDefault();
+			if(startDate == null)
+			{
+				frequency = $('#frequency').val();
+				status = $('input[name=status_filter]:checked').val();
+				$('#iframe').attr('src', "");
+			}
+			else
+			{
+
+			}
+			frequency = $('#frequency').val();
+			status = $('input[name=status_filter]:checked').val();
+
+			//console.log("{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-D") + "/" + endDate.format("Y-M-D"));
+			$('#iframe').attr('src', "http://localhost:8000/reports/shipments/print/"+ startDate.format("Y-M-D") + " to " + endDate.format("Y-M-D") + " ");
+		})
+
+
+	})
 		//->brokerage_service_order_details.created_at','consignee_service_order_header.id',DB::raw('CONCAT(employees.firstName, employees.lastName) as Employee'), 'companyName', 'supplier', DB::raw('CONCAT(container_types.description,  containerNumber) as CONTRS'), 'docking', 'awb', 'deposit')
 </script>
 @endpush

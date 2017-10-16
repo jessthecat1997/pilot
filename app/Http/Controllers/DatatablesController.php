@@ -737,7 +737,6 @@ class DatatablesController extends Controller
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')
 			->select('name', 'plateNumber', 'model','bodyType','dateRegistered', 'vehicles.created_at','vehicles.deleted_at')
 			->where('vehicles.deleted_at', '!=', null)
-			->orderBy('deleted_at', 'desc')
 			->get();
 
 			return Datatables::of($vs)
@@ -755,7 +754,7 @@ class DatatablesController extends Controller
 				'<button value = "'. $vs->plateNumber .'" class = "btn btn-md btn-success activate">Activate</button>';
 			})
 
-			->editColumn('plateNumber', '{{ $id }}')
+			->editColumn('plateNumber', '{{ $plateNumber }}')
 			->make(true);
 
 		}
@@ -1708,7 +1707,7 @@ class DatatablesController extends Controller
 
 			$cdss = DB::select("SELECT * , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM cds_fees where deleted_at is not null ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
-			return Datatables::of($cds)
+			return Datatables::of($cdss)
 			->addColumn('status', function ($cds){
 				if ($cds->deleted_at == null)
 				{

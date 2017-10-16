@@ -10,7 +10,6 @@ class ShipmentReportsController extends Controller
 {
     public function index()
     {
-
       $brokerage_header = DB::table('brokerage_service_orders')
       ->select('brokerage_service_orders.id as order_no', 'employees.firstName as firstName', 'employees.lastName as lastName', 'companyName', 'name', 'expectedArrivalDate', 'shipper', 'freightBillNo', 'Weight', 'withCO', 'consignee_service_order_headers.created_at as dateCreated', 'bi_head_id_exp', 'bi_head_id_rev')
       ->join('consignee_service_order_details', 'consigneeSODetails_id', '=', 'consignee_service_order_details.id')
@@ -46,16 +45,18 @@ class ShipmentReportsController extends Controller
           }
 
 
-        $payments = DB::table('payments')
-        ->select('payments.id', 'payments.amount as payment_amount', 'payments.bi_head_id', 'so_head_id', 'billing_invoice_details.amount as charge_payment', 'charges.name as charge_name')
-        ->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-        ->join('billing_invoice_details', 'payments.bi_head_id', '=', 'billing_invoice_details.id')
-        ->join('charges', 'charge_id', '=', 'charges.id')
-        ->get();
+          $payments = DB::table('payments')
+          ->select('payments.id', 'payments.amount as payment_amount', 'payments.bi_head_id', 'so_head_id', 'billing_invoice_details.amount as charge_payment', 'charges.name as charge_name')
+          ->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
+          ->join('billing_invoice_details', 'billing_invoice_headers.id', '=', 'billing_invoice_details.bi_head_id')
+          ->join('charges', 'charge_id', '=', 'charges.id')
+          ->get();
 
         $arrastres = DB::select('SELECT SUM(dt_hed.arrastre) as arrastre_sum, brok_ord.id as so_head_id from brokerage_service_orders brok_ord INNER JOIN duties_and_taxes_headers dt_hed ON dt_hed.brokerageServiceOrders_id = brok_ord.id where dt_hed.statusType = "A" GROUP BY brok_ord.id');
 
-      return view('reports/shipment_index', compact(['brokerage_header', 'brokerage_details', 'brokerage_containers', 'container_details', 'payments', 'arrastres']));
+        $current = \Carbon\Carbon::now('Asia/Hong_Kong');
+    		$now = \Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y');
+      return view('reports/shipment_index', compact(['brokerage_header', 'brokerage_details', 'brokerage_containers', 'container_details', 'payments', 'arrastres', 'current', 'now']));
     }
 
     public function print(Request $request){
@@ -100,7 +101,7 @@ class ShipmentReportsController extends Controller
             $payments = DB::table('payments')
             ->select('payments.id', 'payments.amount as payment_amount', 'payments.bi_head_id', 'so_head_id', 'billing_invoice_details.amount as charge_payment', 'charges.name as charge_name')
             ->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-            ->join('billing_invoice_details', 'billing_invoice_headers.bi_head_id', '=', 'billing_invoice_details.id')
+            ->join('billing_invoice_details', 'billing_invoice_headers.id', '=', 'billing_invoice_details.bi_head_id')
             ->join('charges', 'charge_id', '=', 'charges.id')
             ->get();
 

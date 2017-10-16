@@ -4,7 +4,7 @@
 <h2>&nbsp;Billing</h2>
 <hr>
 <div class="row">
-	<div class="col-lg-4">
+	<div class="col-lg-5">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				Select Service Order
@@ -17,6 +17,9 @@
 								Consignee
 							</th>
 							<th>
+								Service Order
+							</th>
+							<th>
 								Actions
 							</th>
 						</tr>
@@ -25,7 +28,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-8">
+	<div class="col-lg-7">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				List of Invoice
@@ -110,6 +113,7 @@
 			ajax: '{{ route("brso_head.data") }}',
 			columns: [
 			{ data: 'consignee' },
+			{ data: 'name' },
 			{ data: 'action', orderable: false, searchable: false, processing:false }
 			]
 		})

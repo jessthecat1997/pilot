@@ -165,7 +165,7 @@ $('#btnDeactivate').on('click', function(e){
 $('#btnActivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
-		type: 'DELETE',
+		type: 'POST',
 		url:  '/utilities/vehicle_reactivate/' + data.plateNumber,
 		data: {
 			'_token' : $('input[name=_token').val()

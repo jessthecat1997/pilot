@@ -209,14 +209,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
 
 
-
-
 //Maintenance Datas
-
-	
-
-
-
 
 	Route::get('pdfview','PaymentsController@pdfview');
 
@@ -320,26 +313,26 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');
 	Route::get('/utilities/emData', 'DatatablesController@employees_datatable')->name('em.data');
 	Route::get('/admin/sotData', 'DatatablesController@sot_datatable')->name('sot.data');
-	Route::get('/admin/vtData', 'DatatablesController@vt_datatable')->name('vt.data');
-	Route::get('/admin/chData', 'DatatablesController@ch_datatable')->name('ch.data');
-	Route::get('/admin/bstData', 'DatatablesController@bst_datatable')->name('bst.data');
-	Route::get('/admin/ctData', 'DatatablesController@ct_datatable')->name('ct.data');
-	Route::get('/admin/erData', 'DatatablesController@er_datatable')->name('er.data');
+	Route::get('/admin/vtData/{isActive?}', 'DatatablesController@vt_datatable')->name('vt.data');
+	Route::get('/admin/chData/{isActive?}', 'DatatablesController@ch_datatable')->name('ch.data');
+	Route::get('/admin/bstData/', 'DatatablesController@bst_datatable')->name('bst.data');
+	Route::get('/admin/ctData/{isActive?}', 'DatatablesController@ct_datatable')->name('ct.data');
+	Route::get('/admin/erData/{isActive?}', 'DatatablesController@er_datatable')->name('er.data');
 	Route::get('/admin/rtData', 'DatatablesController@rt_datatable')->name('rt.data');
-	Route::get('/admin/etData', 'DatatablesController@et_datatable')->name('et.data');
-	Route::get('/admin/vData','DatatablesController@v_datatable')->name('v.data');
+	Route::get('/admin/etData/{isActive?}', 'DatatablesController@et_datatable')->name('et.data');
+	Route::get('/admin/vData/{isActive?}','DatatablesController@v_datatable')->name('v.data');
 	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
 	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
 	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
-	Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
+	Route::get('/admin/cdsData/{isActive?}', 'DatatablesController@cds_datatable')->name('cds.data');
 	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
 	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
 	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
 	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
-	Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
-	Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
-	Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
+	Route::get('/admin/sarData/{isActive?}', 'DatatablesController@sar_datatable')->name('sar.data');
+	Route::get('/admin/lpData/{isActive?}', 'DatatablesController@lp_datatable')->name('lp.data');
+	Route::get('/admin/lcData/{isActive?}', 'DatatablesController@lc_datatable')->name('lc.data');
 	Route::get('/admin/atData', 'DatatablesController@req_datatable')->name('req.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
 	Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
