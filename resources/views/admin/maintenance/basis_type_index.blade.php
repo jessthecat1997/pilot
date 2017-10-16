@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance |Basis Types</h3>
+		<h3> Maintenance |Basis Types</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#btModal" style = "width: 100%;">New Basis Type</button>
@@ -15,13 +15,13 @@
 				<table class = "table-responsive table cell-border table-striped table-bordered" id = "bt_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td>
 								Abbreviation
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
@@ -122,13 +122,13 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
+	$('#brokeragecollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
 	var bt_id;
 	$(document).ready(function(){
 		var bttable = $('#bt_table').DataTable({
-			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
