@@ -25,8 +25,9 @@ class VehiclesController extends Controller
 
     public function update(Request $request)
     {
+        $plate = str_replace('%', ' ', $request->id);
         $vehicle = \DB::table('vehicles')
-        ->where('plateNumber', $request->plateNumber)
+        ->where('plateNumber', $request->plate)
         ->update([
             'model' => $request->model,
             'bodyType' => $request->bodyType
@@ -44,9 +45,15 @@ class VehiclesController extends Controller
 
     public function reactivate(Request $request)
     {
-        $vehicle = Vehicle::withTrashed()
-        ->where('id',$request->id)
-        ->restore();
+
+        $plate = str_replace('%', ' ', $request->id);
+       
+        $vehicle = \DB::table('vehicles')
+        ->where('plateNumber', '=', $plate)
+        ->update([
+            'deleted_at' => null,
+        ]);
+        
 
     }
 

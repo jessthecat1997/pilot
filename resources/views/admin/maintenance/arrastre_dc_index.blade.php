@@ -5,7 +5,7 @@
 		<h2>&nbsp;Maintenance | Containerized Dangerous Arrastre Fee</h2>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Arrastre</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#afModal" style = 'width: 100%;'>New Containerized Dangerous Cargo Arrastre Fee </button>
 		</div>
 	</div>
 	<br />
@@ -15,6 +15,9 @@
 				<table class = "table-responsive table  table-striped cell-border table-bordered" id = "af_table">
 					<thead>
 						<tr>
+							<td>
+								Date Effective
+							</td>
 							<td>
 								Location Pier
 							</td>
@@ -33,6 +36,33 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($arrastres as $a)
+						<tr>
+							<td>
+								{{ Carbon\Carbon::parse($a->dateEffective)->format("F d, Y") }}
+							</td>
+							<td>
+								{{ $a->location}}
+							</td>
+							<td>
+								{{ $a->container_size}}
+							</td>
+							<td>
+								{{ $a->dc_type}}
+							</td>
+							<td>
+								{{ $a->amount}}
+							</td>
+							<td>
+								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								<input type = "hidden" value = "{{ Carbon\Carbon::parse($a->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -46,9 +76,13 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Arrastre Fee Per Pier</h4>
+							<h4 class="modal-title">New Containerized Dangerous Cargo Arrastre Fee per Location</h4>
 						</div>
 						<div class="modal-body  ">
+							<div class="form-group required">
+								<label class="control-label " for="dateEffective">Date Effective:</label>
+								<input type="date" class="form-control" name = "dateEffective" id="dateEffective" placeholder="Enter Effective Date" data-rule-required="true">
+							</div>
 							<div class="form-group required">
 								<label class="control-label " for="dateEffective">Location Pier:</label>
 								<select class = "form-control" id = "locations_id" placeholder ="Choose a pier location">
@@ -112,7 +146,8 @@
 												</td>
 												<td>
 													<div class = "form-group input-group"  >
-														<select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" style="width: 100%;" multiple="multiple">
+														<select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" 
+														style="width: 150px;" multiple="multiple">
 															@forelse($dc_types as $dc)
 															<option value="{{ $dc->id }}">{{ $dc->name }}</option>
 															@empty
@@ -203,7 +238,7 @@
 	var jsonContainerSize, jsonAmount, jsonDC;
 	var arr_container_size_id = [];
 	var arr_container_size_name = [];
-	var dc_arr;
+	var dc_arr, af_id;
 	@forelse($sizes as $size)
 	arr_container_size_name.push({{ $size->name }});
 	arr_container_size_id.push({{ $size->id }});
@@ -217,10 +252,15 @@
 	@endforelse  
 	]; 
 
-	
+	var now = new Date();
+	var day = ("0" + now.getDate()).slice(-2);
+	var month = ("0" + (now.getMonth() + 1)).slice(-2);
+	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+
 
 
 	$(document).ready(function(){
+
 
 		$('.money').inputmask("numeric", {
 			radixPoint: ".",
@@ -242,9 +282,8 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/af_dc_Data',
 			columns: [
+			{ data: 'dateEffective'},
 			{ data: 'location' },
 			{ data: 'container_size',
 			"render": function(data, type, row){
@@ -256,7 +295,7 @@
 			},
 			{ data: 'amount',
 			"render": function(data, type, row){
-				return data.split(",").join("<br/>");}
+				return data.split("\n").join("<br/>");}
 			},
 			
 			{ data: 'action', orderable: false, searchable: false }
@@ -298,14 +337,14 @@
 			var rows = "";
 			for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span> </div></td><td><div class = "form-group input-group"  ><select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" style="width: 100%;" multiple="multiple"></select></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span> </div></td><td><div class = "form-group input-group"  ><select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" style="width: 150px;" multiple="multiple"></select></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
 			
 
-			$('.modal-title').text('New Arrastre Fee Per Pier');
+			$('.modal-title').text('New Containerized Dangerous Cargo Arrastre Fee per Location');
 			$('#afModal').modal('show');
-			
+			$('#dateEffective').val(today);
 			$('#af_parent_table > tbody').append(rows);
 
 			$('.money').inputmask("numeric", {
@@ -335,8 +374,11 @@
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
 			$('.modal-title').text('Update Arrastre Fee Per Pier');
-			var af_id = $(this).val();
+			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
+			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
+			$('#locations_id').attr('disabled','true');
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
 			
 			$('#afModal').modal('show');
 
@@ -372,7 +414,7 @@
 			});
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var af_id = $(this).val();
+			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -384,13 +426,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/arrastre_fee/' + data.id,
+				url:  '/admin/arrastre_fee_dc/' +af_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					aftable.ajax.reload();
+					aftable.ajax.url( '{{ route("af_dc.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 					toastr.options = {
 						"closeButton": false,
@@ -419,7 +461,7 @@
 			if(finalvalidateAfRows() === true){
 
 				var title = $('.modal-title').text();
-				if(title == "New Arrastre Fee Per Pier")
+				if(title == "New Containerized Dangerous Cargo Arrastre Fee per Location")
 				{
 					console.log(amount_value);
 					console.log("dc is " + dangerous_cargo_type);
@@ -429,9 +471,10 @@
 
 					$.ajax({
 						type: 'POST',
-						url:  '/admin/arrastre_fee',
+						url:  '/admin/arrastre_fee_dc',
 						data: {
 							'_token' : $('input[name=_token]').val(),
+							'dateEffective': $('#dateEffective').val(),
 							'locations_id' : $('#locations_id').val(),
 							'container_sizes_id' : jsonContainerSize,
 							'dc_types_id': jsonDC,
@@ -439,10 +482,9 @@
 							'tblLength' : tblLength,
 						},
 						success: function (data){
-
-							aftable.ajax.reload();
+							aftable.ajax.url( '{{ route("af_dc.data") }}' ).load();
 							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Pier');
+							$('.modal-title').text('New Containerized Dangerous Cargo Arrastre Fee per Location');
 
 							$('#amount').val("0.00");
 							toastr.options = {
@@ -463,7 +505,7 @@
 								"showMethod": "fadeIn",
 								"hideMethod": "fadeOut"
 							}
-							toastr["success"]("Record addded successfully")
+							toastr["success"]("Record added successfully")
 
 						}
 					})
@@ -474,16 +516,17 @@
 
 					jsonContainerSize = JSON.stringify(container_size_id);
 					jsonAmount = JSON.stringify(amount_value);
-					jsonDC = JSON.stringify(dangerous_cargo_type_id);
+					jsonDC = JSON.stringify(dc_arr);
 
 					$.ajax({
 						type: 'PUT',
-						url:  '/admin/arrastre_fee/'+ data.id,
+						url:  '/admin/arrastre_fee_dc/'+ af_id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'af_head_id': data.id,
+							'dateEffective': $('#dateEffective').val(),
+							'af_head_id': af_id,
 							'locations_id' : $('#locations_id').val(),
-							'dc_types': jsonDC,
+							'dc_types_id': jsonDC,
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
@@ -491,9 +534,9 @@
 						},
 						success: function (data){
 							console.log(data);
-							aftable.ajax.reload();
+							aftable.ajax.url( '{{ route("af_dc.data") }}' ).load();
 							$('#afModal').modal('hide');
-							$('.modal-title').text('New Arrastre Fee Per Pier');
+							$('.modal-title').text('New Containerized Dangerous Cargo Arrastre Fee per Location');
 
 							$('#amount').val("0.00");
 
@@ -548,7 +591,7 @@
 				dateEffective.style.borderColor = 'red';
 				error += "Location is required.";
 			}
-			 dc_arr = [];
+			dc_arr = [];
 			for(var i = 0; i < container_size.length; i++){
 
 				console.log('dc issss' + dangerous_cargo_type[i].value);
@@ -558,8 +601,9 @@
 
 				$(dangerous_cargo_type[i]).each(function(j){
 					selected = [];
-					$(this).find(':selected').each(function(k){
-						selected.push(k);
+					var obj = $(this);
+					$(obj).find(':selected').each(function(k){
+						selected.push($(this).val());
 					})
 					dc_arr.push(selected);
 				})
@@ -573,9 +617,8 @@
 				else
 				{
 					amount[i].style.borderColor = 'green';
-
-
 					container_size_id.push(container_size[i].value);
+					amount_value.push(amount[i].value);
 					$('#af_warning').removeClass('in');
 
 				}

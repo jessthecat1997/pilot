@@ -662,61 +662,57 @@ function validatewfRows()
 			}
 			else{
 				amount[i].style.borderColor = 'green';
-				var amounty = amount[i].value;
-				console.log('amounty is' +amounty);
-					//var temp = $('amounty').inputmask('unmaskedvalue');
-					var temp = amounty;
-					basis_type_id.push(basis_type[i].value);
-					amount_value.push(temp);
-					$('#wf_warning').removeClass('in');
-				}
-
-
-
-				pair = {
-					amount: amount[i].value,
-					basis_type: basis_type[i].value
-				};
-				range_pairs.push(pair);
-			}
-			var i, j, n;
-			found= false;
-			n=range_pairs.length;
-			for (i=0; i<n; i++) {
-				for (j=i+1; j<n; j++)
-				{
-					if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
-						found = true;
-
-						basis_type[i].style.borderColor = 'red';
-						basis_type[j].style.borderColor = 'red';
-						amount[i].style.borderColor = 'red';
-						amount[j].style.borderColor = 'red';
-						$('#wf_warning').addClass('in');
-						error += "Same  Pair.";
-
-					}else{
-						$('#wf_warning').removeClass('in');
-						basis_type[i].style.borderColor = 'green';
-						basis_type[j].style.borderColor = 'green';
-						amount[i].style.borderColor = 'green';
-						amount[j].style.borderColor = 'green';
-					}
-				}
+				basis_type_id.push(basis_type[i].value);
+				amount_value.push(amt);
+				$('#wf_warning').removeClass('in');
 			}
 
-			if(error.length == 0){
-				tblLength = basis_type.length;
-				return true;
-			}
-			else
-			{
-				return false;
-				btnSave.disabled('true');
-			}
 
+
+			pair = {
+				amount: amount[i].value,
+				basis_type: basis_type[i].value
+			};
+			range_pairs.push(pair);
 		}
-	});
+		var i, j, n;
+		found= false;
+		n=range_pairs.length;
+		for (i=0; i<n; i++) {
+			for (j=i+1; j<n; j++)
+			{
+				if (range_pairs[i].amount === range_pairs[j].amount && range_pairs[i].basis_type === range_pairs[j].basis_type){
+					found = true;
+
+					basis_type[i].style.borderColor = 'red';
+					basis_type[j].style.borderColor = 'red';
+					amount[i].style.borderColor = 'red';
+					amount[j].style.borderColor = 'red';
+					$('#wf_warning').addClass('in');
+					error += "Same  Pair.";
+
+				}else{
+					$('#wf_warning').removeClass('in');
+					basis_type[i].style.borderColor = 'green';
+					basis_type[j].style.borderColor = 'green';
+					amount[i].style.borderColor = 'green';
+					amount[j].style.borderColor = 'green';
+				}
+			}
+		}
+
+		if(error.length == 0){
+			tblLength = basis_type.length;
+			return true;
+		}
+		else
+		{
+			return false;
+			btnSave.disabled('true');
+		}
+
+	}
+});
 
 
 function resetErrors() {

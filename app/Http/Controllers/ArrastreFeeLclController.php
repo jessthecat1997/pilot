@@ -69,9 +69,16 @@ class ArrastreFeeLclController extends Controller
 	{
 		DB::beginTransaction();
 		try{
-			\DB::table('arrastre_lcl_details')
+			$af = \DB::table('arrastre_lcl_details')
 			->where('arrastre_lcl_headers_id','=', $request->af_head_id)
-			->delete();
+			->where('deleted_at', '=', NULL)
+			->get();
+
+			for($i = 0; $i < count($af); $i ++)
+			{
+				$del_af =  ArrastreLCLDetail::findOrFail($af[$i]->id);
+				$del_af->delete();
+			}
 
 			$af_header= ArrastreLclHeader::findOrFail($id);
 			$af_header->dateEffective = $request->dateEffective;

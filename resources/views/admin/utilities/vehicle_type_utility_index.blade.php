@@ -92,12 +92,12 @@
 @endsection
 @push('styles')
 <style>
-	.utilities
-	{
-		border-left: 10px solid #2ad4a5;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.utilities
+{
+	border-left: 10px solid #2ad4a5;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -197,7 +197,6 @@ $('#btnDeactivate').on('click', function(e){
 	})
 });
 
-// Confirm Activate Button
 $('#btnActivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({

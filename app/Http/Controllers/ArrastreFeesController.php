@@ -69,9 +69,16 @@ class ArrastreFeesController extends Controller
       DB::beginTransaction();
       try{
 
-        \DB::table('arrastre_details')
+        $af = \DB::table('arrastre_details')
         ->where('arrastre_header_id','=', $request->af_head_id)
-        ->delete();
+        ->where('deleted_at', '=', NULL)
+        ->get();
+
+        for($i = 0; $i < count($af); $i ++)
+        {
+            $del_af =  ArrastreDetail::findOrFail($af[$i]->id);
+            $del_af->delete();
+        }
         
 
         $af_header= ArrastreHeader::findOrFail($id);
@@ -109,8 +116,9 @@ public function destroy($id)
 public function af_maintain_data(Request $request){
     $rates = DB::table('arrastre_details')
     ->join ('container_types', 'container_types.id','=','container_sizes_id') 
-    -> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
+    -> select('container_types.name AS container_size', 'amount', 'container_sizes_id', 'arrastre_details.deleted_at')
     ->where('arrastre_header_id', '=', $request->af_id)
+
     ->get();
 
     return $rates;

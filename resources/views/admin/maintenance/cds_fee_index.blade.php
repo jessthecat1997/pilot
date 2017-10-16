@@ -141,6 +141,23 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Data Activation
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</section>
 </div>
@@ -155,6 +172,7 @@
 	$(document).ready(function(){
 
 		var cdstable = $('#cds_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender:true,
@@ -168,6 +186,59 @@
 
 				],	"order": [[ 0, "desc" ]],
 			});
+
+		$(document).on('click', '.activate', function(e){
+			var ct_id = $(this).val();
+			data = cdstable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				cdstable.ajax.url( '{{ route("cds.data") }}/1').load();
+			}
+			else{
+				cdstable.ajax.url( '{{ route("cds.data") }}').load();
+			}
+		})
+
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/cds_fee_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					cdstable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record Activated successfully")
+				}
+			})
+		});
 		$("#commentForm").validate({
 			rules: 
 			{

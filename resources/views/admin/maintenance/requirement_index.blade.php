@@ -2,10 +2,10 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Requirement</h3>
+		<h3><img src="/images/bar.png"> Maintenance | Attachment Type</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#reqModal" style = "width: 100%;">New Requirement</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#reqModal" style = "width: 100%;">New Attachment Type</button>
 		</div>
 	</div>
 	<br />
@@ -15,13 +15,13 @@
 				<table class = "table-responsive table table-striped cell-border table-bordered" id = "req_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td >
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
@@ -39,7 +39,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Requirement</h4>
+							<h4 class="modal-title">New Attachment Type</h4>
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
@@ -89,7 +89,7 @@
 @endsection
 @push('styles')
 <style>
-	.class-requirement-order{
+	.class-attachment{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
@@ -114,7 +114,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/reqData',
+			ajax: 'http://localhost:8000/admin/atData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -149,7 +149,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New Requirement');
+			$('.modal-title').text('New Attachment Type');
 			$('#name').val("");
 			$('#description').val("");
 			$('#reqModal').modal('show');
@@ -163,7 +163,7 @@
 			$('#description').val(data.description);
 			temp_name = data.name;
 			temp_desc = data.description;
-			$('.modal-title').text('Update Requirement');
+			$('.modal-title').text('Update Attachment Type');
 			$('#reqModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -179,7 +179,7 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/requirement/' + data.id,
+		url:  '/admin/attachment_type/' + data.id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
@@ -216,7 +216,7 @@ $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
 
-	if(title == "New Requirement")
+	if(title == "New Attachment Type")
 	{
 		if($('#name').valid() && $('#description').valid()){
 			
@@ -224,7 +224,7 @@ $('#btnSave').on('click', function(e){
 
 			$.ajax({
 				type: 'POST',
-				url:  '/admin/requirement',
+				url:  '/admin/attachment_type',
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'name' : $('#name').val(),
@@ -236,7 +236,7 @@ $('#btnSave').on('click', function(e){
 						reqtable.ajax.reload();
 						$('#reqModal').modal('hide');
 						$('#description').val("");
-						$('.modal-title').text('New Requirement');
+						$('.modal-title').text('New Attachment Type');
 
 					//Show success
 
@@ -297,7 +297,7 @@ $('#btnSave').on('click', function(e){
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/requirement/' + data.id,
+					url:  '/admin/attachment_type/' + data.id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -309,7 +309,7 @@ $('#btnSave').on('click', function(e){
 							reqtable.ajax.reload();
 							$('#reqModal').modal('hide');
 							$('#description').val("");
-							$('.modal-title').text('New Requirement');
+							$('.modal-title').text('New Attachment Type');
 
 					//Show success
 
