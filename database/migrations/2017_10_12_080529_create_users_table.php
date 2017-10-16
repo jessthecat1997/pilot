@@ -27,6 +27,9 @@ class CreateUsersTable extends Migration
             $table->foreign('emp_id')->references('id')->on('employees');
             $table->foreign('role_id')->references('id')->on('employee_types');
         });
+        DB::statement("
+            INSERT INTO `users` (`id`, `name`, `email`, `password`, `emp_id`, `role_id`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'admin', 'admin', '$2b$10$DOSDk/VfwYtoIBqWcmcZT.MR26WTBAU/hSxDSxL2RgzUU/OA11xlW', '1', '1', NULL, NULL, NULL, NULL);
+            ");
     }
 
     /**

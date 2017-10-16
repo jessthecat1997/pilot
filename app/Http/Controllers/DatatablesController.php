@@ -299,6 +299,30 @@ class DatatablesController extends Controller
 
 		}
 	}
+	public function atts_datatable(Request $request)
+	{
+
+		$attaches =  \DB::table('service_order_attachments')
+		->select(
+		'service_order_attachments.id',
+		'A.name',
+		'file_path',
+		'service_order_attachments.description'
+		)
+		->join('requirements as A', 'service_order_attachments.req_type_id', '=', 'A.id')
+		->where('so_head_id', '=', $request->or_id)
+		->where('service_order_attachments.deleted_at', '=', null)
+		->get();
+
+		return Datatables::of($attaches)
+		->addColumn('action', function ($attach){
+			return
+			'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-success download"><span class = "fa fa-download"></span></button>'.
+			'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate"><span class = "fa fa-trash"></span></button>';
+		})
+		->editColumn('id', '{{ $id }}')
+		->make(true);
+	}
 
 	public function attach_datatable(Request $request){
 		$isActive = $request->isActive;
@@ -308,14 +332,13 @@ class DatatablesController extends Controller
 			return Datatables::of($attaches)
 			->addColumn('action', function ($attach){
 				return
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-info view"><span class = "fa fa-eye"></span></button>'.
 				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-success download"><span class = "fa fa-download"></span></button>'.
-				'<button value = "'. $attach->id .'" style="margin-right:10px;" class = "btn btn-md btn-primary edit"><span class = "fa fa-edit"></span></button>'.
 				'<button value = "'. $attach->id .'" class = "btn btn-md btn-danger deactivate"><span class = "fa fa-trash"></span></button>';
 			})
 			->editColumn('id', '{{ $id }}')
 			->make(true);
-		}else{
+		}
+		else{
 			$attaches =  DB::select("SELECT * FROM service_order_attachments WHERE deleted_at is not null");
 			return Datatables::of($attaches)
 
@@ -3712,7 +3735,7 @@ class DatatablesController extends Controller
 		->addColumn('action', function ($order){
 			return
 			"<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>".
-			"<input type = 'hidden' value = '{{ ".$order->id." }}' class = 'order-id' />";
+			"<input type = 'hidden' value = '".$order->id."' class = 'order-id' />";
 		})
 		->editColumn('id', '{{ $id }}')
 		->make(true);

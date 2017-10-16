@@ -79,6 +79,11 @@ class TruckingsController extends Controller
         $new_trucking->so_details_id = $new_so_detail->id;
         $new_trucking->save();
 
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Created new trucking id: " . $new_trucking->id;
+        $audit->save();
+
         return $new_trucking;
     }
 
@@ -89,6 +94,11 @@ class TruckingsController extends Controller
         $trucking_so->status = $request->status;
 
         $trucking_so->save();
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Updated trucking status id: " . $trucking_so->id;
+        $audit->save();
     }
 
     public function destroy($id)
@@ -201,6 +211,11 @@ class TruckingsController extends Controller
                 $new_delivery_head_con->save();
             }
         }
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Rescheduled delivery id : " . $delivery->id;
+        $audit->save();
+
         return $new_delivery;
     }
 
@@ -245,7 +260,7 @@ class TruckingsController extends Controller
             'delivery_receipt_headers.locations_id_pick',
             'delivery_receipt_headers.withContainer',
             'delivery_receipt_headers.amount'
-            )
+        )
         ->get();
 
         if($delivery[0]->withContainer == 0){
@@ -341,7 +356,14 @@ class TruckingsController extends Controller
                 # code...
             break;
         }
+
+
         $consignee_header->save();
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Added billing for trucking id: " . $consignee_header->id;
+        $audit->save();
 
         return $consignee_header;
 
@@ -561,6 +583,12 @@ class TruckingsController extends Controller
 
             }
         }
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Created new delivery id: " . $new_delivery_head->id;
+        $audit->save();
+
         return $response;
     }
 }
@@ -573,6 +601,12 @@ public function update_delivery(Request $request){
     }
     $delivery->cancelDateTime = $request->cancelDateTime;
     $delivery->save();
+
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Updated delivery status id: " . $new_delivery_head->id;
+    $audit->save();
+
     return $delivery;
 }
 
@@ -655,6 +689,12 @@ public function update_delivery_record(Request $request)
             $new_del_non_head->non_con_id = $new_non_con_detail->id;
             $new_del_non_head->save();
         }
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Updated delivery id: " . $delivery->id;
+        $audit->save();
+
+
 
         return $delivery;
     }
@@ -767,7 +807,7 @@ public function view_delivery(Request $request){
         'delivery_receipt_headers.remarks',
         'delivery_receipt_headers.emp_id_helper',
         DB::raw('CONCAT(delivery_receipt_headers.plateNumber, " - ", K.name) as plateNumber')
-        )
+    )
 
     ->get();
 
@@ -810,6 +850,11 @@ public function update_container(Request $request){
     {
         $container->remarks = $request->remarks;
         $container->save();
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Updated container remarks and status container id: " . $container->id;
+        $audit->save();
     }
     else
     {
@@ -818,6 +863,10 @@ public function update_container(Request $request){
         $container->remarks = $request->remarks;
         $container->save();
 
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Updated container remarks and status container id: " . $container->id;
+        $audit->save();
     }
     return $container;
 }
@@ -827,6 +876,11 @@ public function update_delivery_bill(Request $request){
     $delivery_receipt->amount = $request->amount;
 
     $delivery_receipt->save();
+
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Updated delivery fee id: " . $delivery_receipt->id;
+    $audit->save();
 
     return $delivery_receipt;
 }
@@ -858,7 +912,7 @@ public function bill_delivery(Request $request){
         DB::raw('CONCAT(C.firstName, ", ", C.lastName) AS driverName'),
         DB::raw('CONCAT(D.firstName, ", ", D.lastName) AS helperName'),
         'delivery_receipt_headers.withContainer'
-        )
+    )
 
     ->get();
 
@@ -974,7 +1028,7 @@ public function delivery_pdf(Request $request){
         'J.address as deliveryAddress',
         'H.companyName',
         'delivery_receipt_headers.deliveryDateTime'
-        )
+    )
     ->get();
 
     if($delivery[0]->withContainer == 0){
@@ -1011,6 +1065,11 @@ public function delivery_pdf(Request $request){
     ->select(DB::raw('CONCAT(firstName, ", ", lastName) AS empname'))
     ->where('consignee_service_order_headers.id', '=', $so_id)
     ->get();
+
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Delivery receipt printed id : " . $delivery[0]->id;
+    $audit->save();
 
     $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'printedby']));
     return $pdf->stream();

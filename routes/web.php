@@ -1,15 +1,6 @@
 <?php
+//LOGIN
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are taded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 Route::get('/login','LoginController@home');
 Route::post('/login/prelogin','LoginController@validateUsers');
 Route::get('/login/postlogin','LoginController@postLogin');
@@ -18,8 +9,11 @@ Route::post('/login/validateUsers','LoginController@validateUsers');
 Route::get('/tlogin','LoginController@thome');
 Route::post('/login/tvalidateUsers','LoginController@tvalidateUsers');
 Route::resource('/roles', 'RolesController');
-
 Route::get('/home', 'HomeController@index');
+
+//DATA
+
+
 
 //ADMIN SIDE
 Route::group(['middleware' => ['admin']], function() {
@@ -73,10 +67,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 	Route::resource('consignee', 'ConsigneesController');
 	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
-	Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
-	Route::get('admin/csDatamain', 'DatatablesController@consignee_datatable_main')->name('consignee_get_data');
-	Route::get('admin/getCities/{province_id?}', 'ConsigneesController@get_cities')->name('get_prov_cities');
-	Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
+
 
 
 //Maintenance Routes
@@ -114,16 +105,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/item','ItemsController');
 
 
-	Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
-	Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
-	Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
-	Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
-	Route::get('/wf_lcl_maintain_data', 'WharfageFeeLclController@wf_lcl_maintain_data')->name('wf_lcl_maintain_data');
-	Route::get('/af_lcl_maintain_data', 'ArrastreFeeLclController@af_lcl_maintain_data')->name('af_lcl_maintain_data');
-	Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data')->name('af_dc_maintain_data');
-
-//Sub maintenance
-	Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
+	
 
 //Utilities Routes
 	Route::resource('/utilities/settings','UtilitiesBrokerageController');
@@ -131,8 +113,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 	Route::resource('/utilities/employee', 'EmployeesController');
 	Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
-	Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');
-	Route::get('/utilities/emData', 'DatatablesController@employees_datatable')->name('em.data');
+	
 
 	Route::get('/utilities/cds_fee_deactivated/{filter}','DatatablesController@cds_deactivated');
 	Route::get('/utilities/cds_fee_data','CdsFeesController@cds_utilities')->name('cds_fee.utilities_index');
@@ -232,39 +213,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 //Maintenance Datas
 
-	Route::get('/admin/sotData', 'DatatablesController@sot_datatable')->name('sot.data');
-	Route::get('/admin/vtData', 'DatatablesController@vt_datatable')->name('vt.data');
-	Route::get('/admin/chData', 'DatatablesController@ch_datatable')->name('ch.data');
-	Route::get('/admin/bstData', 'DatatablesController@bst_datatable')->name('bst.data');
-	Route::get('/admin/ctData', 'DatatablesController@ct_datatable')->name('ct.data');
-	Route::get('/admin/erData', 'DatatablesController@er_datatable')->name('er.data');
-	Route::get('/admin/rtData', 'DatatablesController@rt_datatable')->name('rt.data');
-	Route::get('/admin/etData', 'DatatablesController@et_datatable')->name('et.data');
-	Route::get('/admin/vData','DatatablesController@v_datatable')->name('v.data');
-	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
-	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
-	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
-	Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
-	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
-	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
-	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
-	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
-	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
-	Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
-	Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
-	Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
-	Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
-	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
-	Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
-	Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
-	Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
-	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
-	Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
-	Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
-	Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
-	Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
-	Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
-	Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
+	
 
 
 
@@ -278,6 +227,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
 	Route::resource('/attachment', 'ServiceOrderAttachmentsController');
 	Route::get('/orders/{order_id?}/getAttachments', 'DatatablesController@attach_datatable')->name('attach.data');
+	Route::get('/orders/{or_id?}/get_atts', 'DatatablesController@atts_datatable'); 
 	Route::post('/orders/create_so_billing_header', 'OrdersController@create_so_billing_header')->name('create_so_billing_header');
 	Route::get('/orders/{order_id?}/getAttachment/{attach_id?}', 'ServiceOrderAttachmentsController@download_file');
 
@@ -355,7 +305,54 @@ Route::group(['middleware' => ['admin']], function() {
 //vanessa addition
 	Route::get('/trial_report','TrialController@index');
 
-//Jessie
+	Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
+	Route::get('admin/csDatamain', 'DatatablesController@consignee_datatable_main')->name('consignee_get_data');
+	Route::get('admin/getCities/{province_id?}', 'ConsigneesController@get_cities')->name('get_prov_cities');
+	Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
+	Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
+	Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
+	Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
+	Route::get('/wf_maintain_data', 'WharfageFeeController@wf_maintain_data')->name('wf_maintain_data');
+	Route::get('/wf_lcl_maintain_data', 'WharfageFeeLclController@wf_lcl_maintain_data')->name('wf_lcl_maintain_data');
+	Route::get('/af_lcl_maintain_data', 'ArrastreFeeLclController@af_lcl_maintain_data')->name('af_lcl_maintain_data');
+	Route::get('/af_dc_maintain_data', 'ArrastreFeeDcController@af_dc_maintain_data')->name('af_dc_maintain_data');
+	Route::get('/admin/location_city/new_province', 'LocationCitiesController@new_province');
+	Route::get('/admin/emp_roleData/{employee_id}/data', 'DatatablesController@emp_role_datatable');
+	Route::get('/utilities/emData', 'DatatablesController@employees_datatable')->name('em.data');
+	Route::get('/admin/sotData', 'DatatablesController@sot_datatable')->name('sot.data');
+	Route::get('/admin/vtData', 'DatatablesController@vt_datatable')->name('vt.data');
+	Route::get('/admin/chData', 'DatatablesController@ch_datatable')->name('ch.data');
+	Route::get('/admin/bstData', 'DatatablesController@bst_datatable')->name('bst.data');
+	Route::get('/admin/ctData', 'DatatablesController@ct_datatable')->name('ct.data');
+	Route::get('/admin/erData', 'DatatablesController@er_datatable')->name('er.data');
+	Route::get('/admin/rtData', 'DatatablesController@rt_datatable')->name('rt.data');
+	Route::get('/admin/etData', 'DatatablesController@et_datatable')->name('et.data');
+	Route::get('/admin/vData','DatatablesController@v_datatable')->name('v.data');
+	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
+	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
+	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
+	Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
+	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
+	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
+	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
+	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
+	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
+	Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
+	Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
+	Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
+	Route::get('/admin/reqData', 'DatatablesController@req_datatable')->name('req.data');
+	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
+	Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
+	Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
+	Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
+	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
+	Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
+	Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
+	Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+	Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
+	Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
+	Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
+
 
 
 //Locations
@@ -442,11 +439,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
 });
 
-//BROKER SIDE
-Route::group(['middleware' => ['admin']], function() {
-	Route::resource('/brokerage', 'BrokerageController');
-	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
-	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
 
 	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
 	Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');

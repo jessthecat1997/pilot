@@ -162,6 +162,7 @@
 	var consigneeID;
 
 	$(document).ready(function(){
+		$('#collapse1').addClass('in');
 		var ordertable = $('#order_table').DataTable({
 			processing: false,
 			serverSide: false,

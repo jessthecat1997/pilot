@@ -42,7 +42,7 @@
 	<form role="form" method = "POST" class="commentForm">
 		<div class="modal fade" id="afModal" role="dialog">
 			<div class="form-group">
-				<div class="modal-dialog modal-lg ">
+				<div class="modal-dialog ">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -112,8 +112,11 @@
 												</td>
 												<td>
 													<div class = "form-group input-group"  >
-														<select name = "dc_types" id = "dc_types" class = "form-control select2-allow-clear dc_types" style="width: 100%;" multiple="multiple">
-
+														<select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" style="width: 100%;" multiple="multiple">
+															@forelse($dc_types as $dc)
+															<option value="{{ $dc->id }}">{{ $dc->name }}</option>
+															@empty
+															@endforelse
 														</select>
 													</div>
 												</td>
@@ -193,26 +196,45 @@
 	$('#collapse2').addClass('in');
 
 	var container_size= [];
+	var dc_types_id = [];
 	var amount_value = [];
+	var dangerous_cargo_type = [];
 	var data, tblLength;
-	var jsonContainerSize, jsonAmount;
+	var jsonContainerSize, jsonAmount, jsonDC;
 	var arr_container_size_id = [];
 	var arr_container_size_name = [];
+	var dc_arr;
 	@forelse($sizes as $size)
 	arr_container_size_name.push({{ $size->name }});
 	arr_container_size_id.push({{ $size->id }});
 	@empty
 	@endforelse
 
-	var arr_dc_types = [
-	@forelse($dc_types as $dc_type)
-	{ id: '{{ $dc_type->id }}', text:'{{ $dc_type->name }}' },
-	@empty
-	@endforelse 
-	];
+	var arr_dc_types = [ 
+	@forelse($dc_types as $dc_type) 
+	{ id: '{{ $dc_type->id }}', text:'{{ $dc_type->name }}' }, 
+	@empty 
+	@endforelse  
+	]; 
+
+	
+
 
 	$(document).ready(function(){
 
+		$('.money').inputmask("numeric", {
+			radixPoint: ".",
+			groupSeparator: ",",
+			digits: 2,
+			autoGroup: true,
+			rightAlign: true,
+			removeMaskOnSubmit:true,
+		});
+
+		$('.dc_types').select2({
+			placeholder: "Select Dangerous Cargo Types",
+			allowClear: true
+		});
 
 		var af_row = "<tr>" + $('#af-row').html() + "</tr>";
 
@@ -247,6 +269,11 @@
 				{
 					required: true,
 				},
+				dc_types_id:
+				{
+
+					required:true,
+				}
 
 			},
 			onkeyup: false,
@@ -255,7 +282,7 @@
 			}
 		});
 
-		$('.dc_types').select2({
+		$('.dc_types_id').select2({
 			data: arr_dc_types ,
 			placeholder: "Select Dangerous Cargo Types",
 			allowClear: true
@@ -269,17 +296,39 @@
 
 			$('#af_parent_table > tbody').html("");
 			var rows = "";
-			/*for(var i = 0; i < arr_container_size_id.length; i++){
+			for(var i = 0; i < arr_container_size_id.length; i++){
 
-				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group" ><select multiple= "multiple" id = "dc_type" name = "dc_type" class = "form-control select2-allow-clear dc_type" style="width: 100%;"></select>	</div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+				rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input  type = "hidden" class = "form-control af_container_size_valid" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_id[i]+'" ><input class = "form-control af_container_size_valid" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true "value ="'+arr_container_size_name[i]+'" ><span class = "input-group-addon">-footer</span> </div></td><td><div class = "form-group input-group"  ><select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" style="width: 100%;" multiple="multiple"></select></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control money amount_valid" value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 			}
-			*/
+			
 
 			$('.modal-title').text('New Arrastre Fee Per Pier');
 			$('#afModal').modal('show');
 			
-			$('#af_parent_table > tbody').append(af_row);
+			$('#af_parent_table > tbody').append(rows);
+
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
+
+			var arr_dc_types = [ 
+			@forelse($dc_types as $dc_type) 
+			{ id: '{{ $dc_type->id }}', text:'{{ $dc_type->name }}' }, 
+			@empty 
+			@endforelse  
+			]; 
+
+			$('.dc_types_id').select2({
+				data: arr_dc_types ,
+				placeholder: "Select Dangerous Cargo Types",
+				allowClear: true
+			});
 
 
 		});
@@ -312,36 +361,25 @@
 				}
 
 			})
+
+			$('.money').inputmask("numeric", {
+				radixPoint: ".",
+				groupSeparator: ",",
+				digits: 2,
+				autoGroup: true,
+				rightAlign: true,
+				removeMaskOnSubmit:true,
+			});
 		});
 		$(document).on('click', '.deactivate', function(e){
 			var af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
-		
-		
-		
-		$(document).on('keypress', '.amount_valid', function(e){
-			$(".amount_valid").each(function(){
-				try{
-					var amount = parseFloat($(this).val());
-				}
-				catch(err){
-				}
-				if(typeof(amount) === "string"){
-				}
-				else{
-				}
 
-				if($(this).val() > 0){
-					$(this).css('border-color', 'green');
-					$('#af_warning').removeClass('in');
-				}
-				else{
-					$(this).css('border-color', 'red');
-				}
-			});
-		})
+
+
+		
 		$('#btnDelete').on('click', function(e){
 			e.preventDefault();
 			$.ajax({
@@ -384,8 +422,10 @@
 				if(title == "New Arrastre Fee Per Pier")
 				{
 					console.log(amount_value);
+					console.log("dc is " + dangerous_cargo_type);
 					jsonContainerSize = JSON.stringify(container_size_id);
 					jsonAmount = JSON.stringify(amount_value);
+					jsonDC = JSON.stringify(dc_arr);
 
 					$.ajax({
 						type: 'POST',
@@ -394,6 +434,7 @@
 							'_token' : $('input[name=_token]').val(),
 							'locations_id' : $('#locations_id').val(),
 							'container_sizes_id' : jsonContainerSize,
+							'dc_types_id': jsonDC,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
 						},
@@ -402,7 +443,7 @@
 							aftable.ajax.reload();
 							$('#afModal').modal('hide');
 							$('.modal-title').text('New Arrastre Fee Per Pier');
-							
+
 							$('#amount').val("0.00");
 							toastr.options = {
 								"closeButton": false,
@@ -430,10 +471,10 @@
 
 
 
-					
+
 					jsonContainerSize = JSON.stringify(container_size_id);
 					jsonAmount = JSON.stringify(amount_value);
-
+					jsonDC = JSON.stringify(dangerous_cargo_type_id);
 
 					$.ajax({
 						type: 'PUT',
@@ -442,17 +483,18 @@
 							'_token' : $('input[name=_token]').val(),
 							'af_head_id': data.id,
 							'locations_id' : $('#locations_id').val(),
+							'dc_types': jsonDC,
 							'container_size_id' : jsonContainerSize,
 							'amount' : jsonAmount,
 							'tblLength' : tblLength,
-							
+
 						},
 						success: function (data){
 							console.log(data);
 							aftable.ajax.reload();
 							$('#afModal').modal('hide');
 							$('.modal-title').text('New Arrastre Fee Per Pier');
-							
+
 							$('#amount').val("0.00");
 
 							toastr.options = {
@@ -482,54 +524,70 @@
 				}
 			}
 		});
-	});
-function validateIpfRows()
-{
-	
-	container_size_id = [];
-	dc_type_id = [];
-	amount_value = [];
-	range_pairs = [];
-	
-	dc_type = document.getElementsByName('dc_type');
-	container_size = document.getElementsByName('container_size');
-	amount = document.getElementsByName('amount');
-	error = "";
 
 
-	if($(locations_id).val() === 0){
-		dateEffective.style.borderColor = 'red';
-		error += "Location is required.";
-	}
-	for(var i = 0; i < container_size.length; i++){
-		var temp;
-		
-		if(amount[i].value === "")
+		function finalvalidateAfRows()
 		{
-			amount[i].style.borderColor = 'red';
-			error += "Amount Required.";
-		}
-		else
-		{
-			if(amount[i].value < 1){
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
+
+
+			container_size_id = [];
+			dangerous_cargo_type_id = [];
+			amount_value = [];
+			range_pairs = [];
+
+
+
+			dangerous_cargo_type = document.getElementsByName('dc_types_id');
+			container_size = document.getElementsByName('container_size');
+			amount = document.getElementsByName('amount');
+			error = "";
+			var temp;
+			var amt;
+
+			if($(locations_id).val() === 0){
+				dateEffective.style.borderColor = 'red';
+				error += "Location is required.";
 			}
-			else{
-				amount[i].style.borderColor = 'green';
+			 dc_arr = [];
+			for(var i = 0; i < container_size.length; i++){
 
+				console.log('dc issss' + dangerous_cargo_type[i].value);
+
+				amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
 				
-				container_size_id.push(container_size[i].value);
-				$('#af_warning').removeClass('in');
+
+				$(dangerous_cargo_type[i]).each(function(j){
+					selected = [];
+					$(this).find(':selected').each(function(k){
+						selected.push(k);
+					})
+					dc_arr.push(selected);
+				})
+				
+				
+				if(amt < 0)
+				{
+					amount[i].style.borderColor = 'red';
+					error += "Amount Required.";
+				}
+				else
+				{
+					amount[i].style.borderColor = 'green';
+
+
+					container_size_id.push(container_size[i].value);
+					$('#af_warning').removeClass('in');
+
+				}
+
+				pair = {
+					amount: amount[i].value,
+					container_size: container_size[i].value
+				};
+				range_pairs.push(pair);
 			}
-		}
-		
-		pair = {
-			amount: amount[i].value,
-			container_size: container_size[i].value
-		};
-		range_pairs.push(pair);
-	}
+			console.log(dc_arr);
+			console.log(dc_arr[0][0]);
 
 		//Final validation
 		if(error.length == 0){
@@ -542,68 +600,13 @@ function validateIpfRows()
 		}
 	}
 
-	function finalvalidateAfRows()
-	{
 
-		container_size_id = [];
-		amount_value = [];
-		range_pairs = [];
-		container_size = document.getElementsByName('container_size');
-		amount = document.getElementsByName('amount');
-
-		error = "";
+});
 
 
-
-		for(var i = 0; i < container_size.length; i++){
-
-			
-			if(amount[i].value === ""||amount[i].value === "0.00"||amount[i].value === "0")
-			{
-				amount[i].style.borderColor = 'red';
-				error += "Amount Required.";
-				$('#af_warning').addClass('in');
-			}
-			else
-			{
-				if(amount[i].value < 0){
-					amount[i].style.borderColor = 'red';
-					error += "Amount Required.";
-				}
-				else{
-					amount[i].style.borderColor = 'green';
-					var amounty = amount[i].value;
-					console.log('amounty is' +amounty);
-					//var temp = $('amounty').inputmask('unmaskedvalue');
-					var temp = amounty;
-					container_size_id.push(container_size[i].value);
-					amount_value.push(temp);
-					$('#af_warning').removeClass('in');
-				}
-			}
-
-
-			pair = {
-				amount: amount[i].value,
-				container_size: container_size[i].value
-			};
-			range_pairs.push(pair);
-		}
-		var i, j, n;
-		
-		if(error.length == 0){
-			tblLength = container_size.length;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-	}
-	function resetErrors() {
-		$('form input, form select').removeClass('inputTxtError');
-		$('label.error').remove();
-	}
+function resetErrors() {
+	$('form input, form select').removeClass('inputTxtError');
+	$('label.error').remove();
+}
 </script>
 @endpush

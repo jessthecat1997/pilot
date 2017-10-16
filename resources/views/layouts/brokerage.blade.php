@@ -58,49 +58,35 @@
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="useracc">
-                                @if( Auth::user()->role_id == 1 ) Admin
-                                @elseif( Auth::user()->role_id == 2 ) Broker
-                                @elseif( Auth::user()->role_id == 3 ) Trucking Manager
-                                @elseif( Auth::user()->role_id == 4 ) Billing Manager
-                                @else User @endif {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ url('/logout') }}"
-                                    onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="
-                        #">&nbsp;</a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </nav>
-    </div>
-    <br>
-    <br>
-    <div id="wrapper" id="sidebar">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+                        <li>
+                            <a href="
+                            #">&nbsp;</a>
+                        </li>
+                        @endif
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <br>
+        <br>
+        <div id="wrapper" id="sidebar">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
                 <!-- <li class="sidebar-brand" id="sidebrand">
                     <a href="#">
                         <img src="/images/pilotlogo.png" id="logo">
                     </a>
                 </li> -->
+                <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
+                    @if( Auth::user()->role_id == 1 )Admin<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 2 ){{ Auth::user()->name }} | Broker<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 3 ){{ Auth::user()->name }} | Trucking Manager<i class="fa fa-check-circle"></i>
+                    @elseif( Auth::user()->role_id == 4 ){{ Auth::user()->name }} | Billing Manager<i class="fa fa-check-circle"></i>
+                    @else{{ Auth::user()->name }}<i class="fa fa-check-circle"></i>
+                    @endif
+                </li>
                 <li>
-                    <br>
                     <a href="{{ route('dashboard.index') }}" class="dashboard"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
                 </li>
                 <li>
@@ -112,25 +98,10 @@
                             <a href = "{{ route('consignee.index') }}"  class = "consignee"><i class="fa fa-user"></i>&nbsp;&nbsp;Consignee</a>
                         </li>
                         <li>
-                            <a href="{{ route('contracts.index') }}" class = "contracts"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Contract</a>
+                            <a href = "{{ route('orders.index') }}"  class = "order"><i class="fa fa-server"></i>&nbsp;&nbsp;Order</a>
                         </li>
-                        <li>
-                            <a href = "{{ route('quotation.index') }}"  class = "quotation"><i class="fa fa-print"></i>&nbsp;&nbsp;Quotation</a>
-                        </li>
-                      <!--   <li>
-                            <a href="{{ route('orders.index') }}" class = "orders"><i class="fa fa-id-card-o"></i>&nbsp;&nbsp;Orders</a>
-                        </li> -->
                         <li>
                             <a href = "{{ route('brokerage.index') }}"  class = "brokerage"><i class="fa fa-table"></i>&nbsp;&nbsp;Brokerage</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>
                         </li>
                     </ul>
                 </div>
@@ -360,25 +331,34 @@
                             <li>
                                 <a href = "{{ route('employee.index') }}"  class = "class-charges"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a>
                             </li>
-                        </div>
+
+                        </li>
                     </div>
+                </div>
+            </ul>
+        </div>
+        <br>
+        <li>
+            <a href="{{ url('/logout') }}"
+            onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+            <i class="fa fa-sign-out"></i>&nbsp;&nbsp;Logout
+        </a>
+        <form id="logout-form" action="{{ url('/logout') }}" style="display: none;">
+            {{ csrf_field() }}
+        </form>
+    </ul>
+</div>
 
-
-                </ul>
-            </div>
-
-        </ul>
-    </div>
-
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <div class="row">
-                @yield('content')
-            </div>
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            @yield('content')
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#page-content-wrapper -->
 </div>
 
 

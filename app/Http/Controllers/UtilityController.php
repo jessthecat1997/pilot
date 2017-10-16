@@ -32,9 +32,6 @@ class UtilityController extends Controller
 			$request->logo->move(public_path('images'), $input['image']);
 		}
 		
-
-
-		
 		$utility->bank_charges = $request->bank_charges;
 		$utility->other_charges = $request->other_charges;
 		$utility->insurance_gc = $request->insurance_gc;

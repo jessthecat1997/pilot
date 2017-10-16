@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use database\seeds\EmployeesTableSeeder;
+use database\seeds\EmployeeTypesTableSeeder;
+use database\seeds\UsersTableSeeder;
 class DatabaseSeeder extends Seeder
+
 {
     /**
      * Run the database seeds.
@@ -11,9 +14,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-    	$this->call(EmployeeTypesTableSeeder::class);
-    	$this->call(EmployeesTableSeeder::class);
+    	$this->call('EmployeeTypesTableSeeder');
+    	$this->call('EmployeesTableSeeder');
   // User seeder will use the roles above created.
-    	$this->call(UsersTableSeeder::class);
+    	$this->call('UsersTableSeeder');
     }
 }
