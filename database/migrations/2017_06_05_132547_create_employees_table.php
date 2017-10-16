@@ -15,6 +15,7 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('emp_pic')->nullable();
             $table->string('firstName', 100);
             $table->string('middleName', 100)->nullable();
             $table->string('lastName', 100);
@@ -31,9 +32,9 @@ class CreateEmployeesTable extends Migration
             $table->foreign('cities_id')->references('id')->on('location_cities');
         });
 
-        DB::statement("
-            INSERT INTO `employees` (`id`, `firstName`, `middleName`, `lastName`, `dob`, `address`, `zipCode`, `cities_id`, `SSSNo`, `contactNumber`, `inCaseOfEmergency`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'admin', NULL, 'admin', '', 'admin address', '1111', '324', '1111', '0935322655', 'call the number', NULL, NULL, NULL);
-            ");
+        // DB::statement("
+        //     INSERT INTO `employees` (`id`, `emp_pic`,`firstName`, `middleName`, `lastName`, `dob`, `address`, `zipCode`, `cities_id`, `SSSNo`, `contactNumber`, `inCaseOfEmergency`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL,'/images/user.png', 'admin', NULL, 'admin', '', 'admin address', '1111', '324', '1111', '0935322655', 'call the number', NULL, NULL, NULL);
+        //     ");
     }
 
     /**

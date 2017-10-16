@@ -20,6 +20,8 @@
               <button class="btn btn-primary col-sm-4 pull-right new_user_modal" data-toggle="modal" data-target="#userModal">Create User Account</button>
               <h4>&nbsp;Basic Information</h4>
               <div class = "col-md-8">
+                <center><img class="" src="{{ $employee->emp_pic }}" style="width: 100px; height: 100px; border-radius: 50px;"></center>
+                <br>
                 <div class = "form-group">
                   <label class="control-label col-md-3">Name:</label>
                   <span class="col-md-9">{{ $employee->firstName }} {{ $employee->middleName }} {{ $employee->lastName }}</span>
@@ -276,6 +278,7 @@
             <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
             <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
             <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }}" disabled>
+            <input type="hidden" class="form-control" id="emp_pic" value="{{ $employee->emp_pic }}" disabled>
           </form>
         </div>
         <strong>Note:</strong> All fields with * are required.
@@ -365,11 +368,11 @@
   })
   $(document).on('click', '.save-user', function(e){
 
-console.log($('#username').val());
-console.log($('#password').val());
-console.log($('#role_id').val());
-console.log($('#emp_id').val());
-console.log($('#user').val());
+    console.log($('#username').val());
+    console.log($('#password').val());
+    console.log($('#role_id').val());
+    console.log($('#emp_id').val());
+    console.log($('#user').val());
     $.ajax({
       method: 'POST',
       url: '/storeUser',
@@ -378,6 +381,7 @@ console.log($('#user').val());
         'name' : $('#user').val(),
         'email' : $('#username').val(),
         'password' : $('#password').val(),
+        'emp_pic' : $('#emp_pic').val(),
         'emp_id' : $('#emp_id').val(),
         'role_id' : $('#role_id').val(),
       },

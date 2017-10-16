@@ -21,10 +21,10 @@ class CreateEmployeeTypesTable extends Migration
             $table->softDeletes();
         });
 
-        DB::statement("
+        // DB::statement("
 
-            INSERT INTO `employee_types` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Admin', NULL, NULL, NULL, NULL), (NULL, 'Broker', NULL, NULL, NULL, NULL), (NULL, 'Trucking Manager', NULL, NULL, NULL, NULL), (NULL, 'Billing manager', NULL, NULL, NULL, NULL);
-            ");
+        //     INSERT INTO `employee_types` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Admin', NULL, NULL, NULL, NULL), (NULL, 'Broker', NULL, NULL, NULL, NULL), (NULL, 'Trucking Manager', NULL, NULL, NULL, NULL), (NULL, 'Billing manager', NULL, NULL, NULL, NULL);
+        //     ");
     }
 
     /**
