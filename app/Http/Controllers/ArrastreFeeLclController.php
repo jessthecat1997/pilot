@@ -27,7 +27,7 @@ class ArrastreFeeLclController extends Controller
 		->where('deleted_at', '=', null)
 		->get();
 
-			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+		$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff , h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(lcl_types.name SEPARATOR '\n') AS lcl_type, GROUP_CONCAT(basis_types.abbreviation SEPARATOR '\n') AS basis_type, GROUP_CONCAT(CONCAT('Php ' , FORMAT( d.amount, 2)) SEPARATOR '\n' ) AS amount FROM lcl_types, basis_types,locations, arrastre_lcl_headers h JOIN arrastre_lcl_details d ON h.id = d.arrastre_lcl_headers_id WHERE locations_id = locations.id AND lcl_types.id = d.lcl_types_id AND basis_types.id = d.basis_types_id AND basis_types.deleted_at IS NULL AND locations.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
 		return view('admin/maintenance.arrastre_lcl_index', compact(['basis_types','locations','lcl_types', 'arrastres']));
 	}
@@ -69,9 +69,16 @@ class ArrastreFeeLclController extends Controller
 	{
 		DB::beginTransaction();
 		try{
-			\DB::table('arrastre_lcl_details')
+			$af = \DB::table('arrastre_lcl_details')
 			->where('arrastre_lcl_headers_id','=', $request->af_head_id)
-			->delete();
+			->where('deleted_at', '=', NULL)
+			->get();
+
+			for($i = 0; $i < count($af); $i ++)
+			{
+				$del_af =  ArrastreLCLDetail::findOrFail($af[$i]->id);
+				$del_af->delete();
+			}
 
 			$af_header= ArrastreLclHeader::findOrFail($id);
 			$af_header->dateEffective = $request->dateEffective;
