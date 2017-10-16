@@ -209,14 +209,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
 
 
-
-
 //Maintenance Datas
-
-	
-
-
-
 
 	Route::get('pdfview','PaymentsController@pdfview');
 
@@ -331,15 +324,15 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
 	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
 	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
-	Route::get('/admin/cdsData', 'DatatablesController@cds_datatable')->name('cds.data');
+	Route::get('/admin/cdsData/{isActive?}', 'DatatablesController@cds_datatable')->name('cds.data');
 	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
 	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
 	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
 	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
-	Route::get('/admin/sarData', 'DatatablesController@sar_datatable')->name('sar.data');
-	Route::get('/admin/lpData', 'DatatablesController@lp_datatable')->name('lp.data');
-	Route::get('/admin/lcData', 'DatatablesController@lc_datatable')->name('lc.data');
+	Route::get('/admin/sarData/{isActive?}', 'DatatablesController@sar_datatable')->name('sar.data');
+	Route::get('/admin/lpData/{isActive?}', 'DatatablesController@lp_datatable')->name('lp.data');
+	Route::get('/admin/lcData/{isActive?}', 'DatatablesController@lc_datatable')->name('lc.data');
 	Route::get('/admin/atData', 'DatatablesController@req_datatable')->name('req.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
 	Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');

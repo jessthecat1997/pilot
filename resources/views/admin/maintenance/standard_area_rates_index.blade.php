@@ -181,6 +181,23 @@
 					</div>
 				</div>
 			</div>
+			<div class="modal fade" id="confirm-activate" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							Activate record
+						</div>
+						<div class="modal-body">
+							Confirm Activating
+						</div>
+						<div class="modal-footer">
+
+							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</section>
 
@@ -252,18 +269,18 @@
 @endsection
 @push('styles')
 <style>
-	.class-area-rates
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-area-rates
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 
 </style>
 @endpush
@@ -279,6 +296,7 @@
 		var sar_row = "<tr>" + $('#sar-row').html() + "</tr>";
 
 		var sartable = $('#sar_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			deferRender: true,
 			serverSide: false,
@@ -298,6 +316,57 @@
 
 
 			});
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				sartable.ajax.url( '{{ route("sar.data") }}/1').load();
+			}
+			else{
+				sartable.ajax.url( '{{ route("sar.data") }}').load();
+			}
+		})
+		$(document).on('click', '.activate', function(e){
+			var sar_id = $(this).val();
+			data = sartable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/standard_arearates_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					sartable.ajax.reload();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
+		});
 
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
@@ -383,7 +452,7 @@
 			selected_location = 1;
 		})
 
-	
+
 		$(document).on('change', '#pickup_id', function(e){
 			pickup_id = $(this).val();
 			temp_pickup_id = $(this).val();
@@ -706,90 +775,90 @@
 				else
 				{
 					if($('#pickup_id').valid() && $('#deliver_id').valid() && $('#amount').valid() )
-					{	$('#btnSave').attr('disabled', 'true');
+						{	$('#btnSave').attr('disabled', 'true');
 
-						if($('#pickup_id').val() === temp_pickup_id &&
-							$('#deliver_id').val() === temp_deliver_id && 
-							$('#amount').inputmask("unmaskedvalue") === temp_amount  )
-						{
-							$('#amount').val("0.00");
-							$('#btnSave').removeAttr('disabled');
-							$('#sarModal').modal('hide');
-						}
-						else
-						{
-							$('#btnSave').attr('disabled', 'true');
+					if($('#pickup_id').val() === temp_pickup_id &&
+						$('#deliver_id').val() === temp_deliver_id && 
+						$('#amount').inputmask("unmaskedvalue") === temp_amount  )
+					{
+						$('#amount').val("0.00");
+						$('#btnSave').removeAttr('disabled');
+						$('#sarModal').modal('hide');
+					}
+					else
+					{
+						$('#btnSave').attr('disabled', 'true');
 
-							$.ajax({
-								type: 'PUT',
-								url:  '/admin/standard_arearates/' + data.id,
-								data: {
-									'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
-									'areaTo' : $('#deliver_id').val(),
-									'amount' : $('#amount').inputmask('unmaskedvalue'),
-								},
+						$.ajax({
+							type: 'PUT',
+							url:  '/admin/standard_arearates/' + data.id,
+							data: {
+								'_token' : $('input[name=_token]').val(),'areaFrom' : $('#pickup_id').val(),
+								'areaTo' : $('#deliver_id').val(),
+								'amount' : $('#amount').inputmask('unmaskedvalue'),
+							},
 
-								success: function (data){
+							success: function (data){
 
-									if(typeof(data) === "object"){
-										sartable.ajax.reload();
-										$('#sarModal').modal('hide');
-										$('.modal-title').text('New Standard Area Rate');
-										$('#amount').val("0.00");
-										$('#_address').val("");
-										$('#_city').val("");
-										$('#_province').val("");
-										$('#_zip').val("");
+								if(typeof(data) === "object"){
+									sartable.ajax.reload();
+									$('#sarModal').modal('hide');
+									$('.modal-title').text('New Standard Area Rate');
+									$('#amount').val("0.00");
+									$('#_address').val("");
+									$('#_city').val("");
+									$('#_province').val("");
+									$('#_zip').val("");
 
-										$('#_daddress').val("");
-										$('#_dcity').val("");
-										$('#_dprovince').val("");
-										$('#_dzip').val("");
+									$('#_daddress').val("");
+									$('#_dcity').val("");
+									$('#_dprovince').val("");
+									$('#_dzip').val("");
 
-										toastr.options = {
-											"closeButton": false,
-											"debug": false,
-											"newestOnTop": false,
-											"progressBar": false,
-											"rtl": false,
-											"positionClass": "toast-bottom-right",
-											"preventDuplicates": false,
-											"onclick": null,
-											"showDuration": 300,
-											"hideDuration": 1000,
-											"timeOut": 2000,
-											"extendedTimeOut": 1000,
-											"showEasing": "swing",
-											"hideEasing": "linear",
-											"showMethod": "fadeIn",
-											"hideMethod": "fadeOut"
-										}
-										toastr["success"]("Record updated successfully")
-
-										
-										$('#btnSave').removeAttr('disabled');
-
-
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
 									}
-									else{
-										resetErrors();
-										var invdata = JSON.parse(data);
-										$.each(invdata, function(i, v) {
-											console.log(i + " => " + v); 
-											var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-											$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-										});
+									toastr["success"]("Record updated successfully")
 
-										$('#btnSave').removeAttr('disabled');
 
-									}
+									$('#btnSave').removeAttr('disabled');
+
+
 								}
-							})
-						}
+								else{
+									resetErrors();
+									var invdata = JSON.parse(data);
+									$.each(invdata, function(i, v) {
+										console.log(i + " => " + v); 
+										var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+										$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+									});
+
+									$('#btnSave').removeAttr('disabled');
+
+								}
+							}
+						})
 					}
 				}
 			}
-		});
+		}
+	});
 
 
 function resetErrors() {
