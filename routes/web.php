@@ -420,7 +420,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
-
+	Route::get('/utilities', 'UtilityController@util_index')->name('utilities_index');
 
 //Query
 # Active Contracts
