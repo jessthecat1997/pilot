@@ -236,7 +236,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			'scrollx': true,
+			bSort: false,
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'minimum',

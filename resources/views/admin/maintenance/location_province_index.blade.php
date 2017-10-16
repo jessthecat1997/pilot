@@ -3,7 +3,7 @@
 
 <div class = "container-fluid">
 	<div class = "row">
-		<h2>&nbsp;Maintenance | Delivery | Province</h2>
+		<h3>&nbsp;Maintenance | Delivery | Province</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#sotModal" style = "width: 100%;">New Province</button>
@@ -19,10 +19,10 @@
 						<table class = "table-responsive table table-striped cell-border table-bordered" id = "lp_table">
 							<thead>
 								<tr>
-									<td style="width: 40%;">
+									<td >
 										Province Name
 									</td>
-									<td style="width: 20%;">
+									<td >
 										Actions
 									</td>
 								</tr>
@@ -342,7 +342,7 @@
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully")
+					toastr["success"]("Record added successfully")
 				}
 				else{
 					resetErrors();
