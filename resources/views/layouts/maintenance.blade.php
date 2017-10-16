@@ -115,6 +115,9 @@
                     </li>
                     <div id="collapse2" class="panel-collapse collapse">
                         <ul class="list-group" style="list-style-type: circle;">
+                             <li>
+                                <a href = "{{ route('attachment_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Attachment</a>
+                            </li>
                             <li>
                                 <a href = "{{ route('container_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Container Size</a>
                             </li>
@@ -141,7 +144,7 @@
                             <li>
                                 <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
                             </li>
-                            <!--
+                            
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
                             </li>
@@ -150,7 +153,7 @@
                             </li>
                             <li>
                                 <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Item</a>
-                            </li>-->
+                            </li>
                             <li>
                                 <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
                             </li>
