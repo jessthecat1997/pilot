@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Attachment Type</h3>
+		<h3> Maintenance | Attachment Type</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#reqModal" style = "width: 100%;">New Attachment Type</button>
@@ -26,6 +26,24 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($reqs as $req)
+						<tr>
+							<td>
+								{{ $req->name}}
+							</td>
+							<td>
+								{{ $req->description }}
+							</td>
+							<td>
+								<button value = "{{ $req->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $req->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -89,17 +107,17 @@
 @endsection
 @push('styles')
 <style>
-	.class-attachment{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-attachment{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -108,13 +126,13 @@
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
+	var req_id;
 	$(document).ready(function(){
 		var reqtable = $('#req_table').DataTable({
 			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/atData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'description' },
@@ -136,7 +154,7 @@
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-				
+
 
 				},
 
@@ -157,7 +175,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var vt_id = $(this).val();
+			req_id = $(this).val();
 			data = reqtable.row($(this).parents()).data();
 			$('#name').val(data.name);	
 			$('#description').val(data.description);
@@ -167,7 +185,7 @@
 			$('#reqModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var vt_id = $(this).val();
+			req_id = $(this).val();
 			data = reqtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -179,13 +197,13 @@ $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
 		type: 'DELETE',
-		url:  '/admin/attachment_type/' + data.id,
+		url:  '/admin/attachment_type/' + req_id,
 		data: {
 			'_token' : $('input[name=_token').val()
 		},
 		success: function (data)
 		{
-			reqtable.ajax.reload();
+			reqtable.ajax.url( '{{ route("req.data") }}').load();
 			$('#confirm-delete').modal('hide');
 
 			toastr.options = {
@@ -233,7 +251,7 @@ $('#btnSave').on('click', function(e){
 				success: function (data)
 				{
 					if(typeof(data) === "object"){
-						reqtable.ajax.reload();
+						reqtable.ajax.url( '{{ route("req.data") }}').load();
 						$('#reqModal').modal('hide');
 						$('#description').val("");
 						$('.modal-title').text('New Attachment Type');
@@ -297,7 +315,7 @@ $('#btnSave').on('click', function(e){
 
 				$.ajax({
 					type: 'PUT',
-					url:  '/admin/attachment_type/' + data.id,
+					url:  '/admin/attachment_type/' + req_id,
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
@@ -306,7 +324,7 @@ $('#btnSave').on('click', function(e){
 					success: function (data)
 					{
 						if(typeof(data) === "object"){
-							reqtable.ajax.reload();
+							reqtable.ajax.url( '{{ route("req.data") }}').load();
 							$('#reqModal').modal('hide');
 							$('#description').val("");
 							$('.modal-title').text('New Attachment Type');
