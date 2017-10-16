@@ -13,7 +13,7 @@ class EmployeesTableSeeder extends Seeder
     public function run()
     {
         DB::table('employees')->insert([
-            'emp_pic' => '/images/emp/user_def.png'
+            'emp_pic' => '/images/emp/user_def.png',
             'firstName' => 'Admin',
             'middleName' => 'admin',
             'lastName' => 'Admin',
