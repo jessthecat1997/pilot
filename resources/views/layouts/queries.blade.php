@@ -661,7 +661,7 @@
                 {{ csrf_field() }}
             </form>
         </ul>
-        @lseif( Auth::user()->role_id == 4 )
+        @elseif( Auth::user()->role_id == 4 )
         <ul class="sidebar-nav">
             <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
                 Billing Manager<i class="fa fa-check-circle"></i>

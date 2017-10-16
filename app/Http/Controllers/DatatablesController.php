@@ -220,7 +220,10 @@ class DatatablesController extends Controller
 	public function req_datatable(Request $request){
 		$isActive = $request->isActive;
 		if ($isActive == null){
-			$reqs = Requirement::select(['id', 'name', 'description', 'created_at']);
+			$reqs =  DB::table('Requirement')
+			->select('id', 'name', 'description', 'created_at' , 'deleted_at')
+			->where('deleted_at','=',null)
+			->get();
 
 			return Datatables::of($reqs)
 			->addColumn('action', function ($req){

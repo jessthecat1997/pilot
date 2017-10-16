@@ -515,7 +515,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/trucking', 'TruckingsController');
 	Route::get('/trucking/{trucking_id}/view', 'TruckingsController@view_trucking');
 	Route::get('admin/{trucking_id}/deliveryData', 'DatatablesController@trucking_delivery');
-	Route::get('admin/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
+	Route::get('/trucking/{trucking_id}/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
 	Route::post('/trucking/{trucking_id}/store_delivery', 'TruckingsController@store_delivery');
 	Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@update_delivery');
 	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
