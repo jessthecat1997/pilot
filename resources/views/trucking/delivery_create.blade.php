@@ -852,7 +852,7 @@
 
 
 							});
-							$('#btnSave').removeAttr('disabled');
+							$('.btnSave').removeAttr('disabled');
 						}
 
 					},
