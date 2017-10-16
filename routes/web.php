@@ -420,6 +420,11 @@ Route::group(['middleware' => ['admin']], function() {
 
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
+	//Backup and recovery 
+	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController'); 
+
+//Audit Trail 
+	Route::resource('/admin/audit_trail', 'AuditTrailController'); 
 
 
 //Query
@@ -431,7 +436,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
 	Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
 	Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
-});
 
 
 	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
@@ -484,10 +488,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/item','ItemsController');
 	Route::resource('/cdeposit', 'ConsigneeDepositsController');
 	Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
-;
 
-
-Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/cdeposit', 'ConsigneeDepositsController');
 	Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
 
@@ -563,9 +564,6 @@ Route::group(['middleware' => ['admin']], function() {
 
 //FullCalendar
 	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
-});
-
-Route::group(['middleware' => ['admin']], function() {
 
 	//Payments
 	Route::resource('/payment', 'PaymentsController');
