@@ -11,6 +11,13 @@
           {{ csrf_field() }}
           <div class="row">
             <h5>Basic Information</h5>
+            
+            <div class="col-md-12">
+              <div class="form-group">
+                <label class="control-label" for="com_image">Display Picture:</label>        
+                <input type="file" class="form-control" id ="com_image" name="com_image" accept="image/*">
+              </div>
+            </div>
             <div class = "col-md-4">
               <div class = "form-group required">
                 <label class="control-label">First Name</label>
@@ -159,6 +166,9 @@
 <script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript" src = "/js/jqueryDateTimePicker/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
+  function formSubmit() {
+
+  }
   $(document).ready(function(){
     Inputmask("9{4}").mask($("#zip"));
 
@@ -216,10 +226,10 @@
 
         document.getElementById('age').value = age;
       }
-    }); 
+    });
 
     $("#commentForm").validate({
-      rules: 
+      rules:
       {
         firstName:
         {
@@ -245,7 +255,7 @@
         }
 
       },
-      onkeyup: false, 
+      onkeyup: false,
       submitHandler: function (form) {
         return false;
       }
@@ -261,9 +271,17 @@
       function(){
         return this.value;
       }).get();
+    $('input[type=file]').change(function (e) {
 
+    });
     $(document).on('click', '#saveRecord', function(e){
       e.preventDefault();
+
+      var fullpath = document.getElementById("com_image").value;
+      var backslash=fullpath.lastIndexOf("\\");
+      var filename = fullpath.substr(backslash+1);
+
+      console.log(filename);
       var trueToggle = new Array();
       var ctr = 0; ctr1 = 0;
 
@@ -294,7 +312,7 @@
       var dob = document.getElementById("dob").value;
 
       e.preventDefault();
-      
+
       $('#saveRecord').attr('disabled', 'true');
       $('#firstName').valid();
       $('#lastName').valid();
@@ -309,6 +327,7 @@
           url: '{{ route("EmployeeSave" )}}',
           data: {
             '_token' : $('input[name=_token]').val(),
+            'emp_pic' : '/images/emp/'+filename,
             'firstName' : $('#firstName').val(),
             'middleName': $('#middleName').val(),
             'lastName' : $('#lastName').val(),
@@ -328,7 +347,7 @@
 
           },
 
-        })  
+        })
       }
 
     })

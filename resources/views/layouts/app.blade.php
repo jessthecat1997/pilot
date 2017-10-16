@@ -74,8 +74,9 @@
             <div id="sidebar-wrapper">
                 @if( Auth::user()->role_id == 1 )
                 <ul class="sidebar-nav">
-                    <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
-                        Admin<i class="fa fa-check-circle"></i>
+                    <li  style="height: 120px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff; text-align: center;">
+                        <a><img src ="/images/user_def.png" style="width: 60px; height: 60px; border-radius: 50px;"></a>
+                        <i class="fa fa-check-circle"></i> Admin
                     </li>
                     <li>
                         <a href="{{ route('dashboard.index') }}" class="dashboard"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
@@ -135,14 +136,14 @@
                               <li>
                                   <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
 
-                              </li>
-                              <li>
-                                <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
-                            </li>
-                            <li>
-                                <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                            </li>
-                            <!--
+                          </li>
+                          <li>
+                            <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
+                        </li>
+                        <li>
+                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                        </li>
+                            
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
                             </li>
@@ -151,7 +152,7 @@
                             </li>
                             <li>
                                 <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Item</a>
-                            </li>-->
+                            </li>
                             <li>
                                 <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
                             </li>
@@ -354,7 +355,8 @@
         </ul>
         @elseif( Auth::user()->role_id == 2 )
         <ul class="sidebar-nav">
-            <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
+            <li  style="height: 120px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff; text-align: center;">
+                <a><img src ="/images/user.png" style="width: 60px; height: 60px;"></a>
                 Broker<i class="fa fa-check-circle"></i>
             </li>
             <li>
@@ -517,7 +519,9 @@
         </ul>
         @elseif( Auth::user()->role_id == 3 )
         <ul class="sidebar-nav">
-            <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
+            <li  style="height: 120px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff; text-align: center;">
+                <a style="text-align: left;"><img src ="{{ Auth::user()->emp_pic }}" style="width: 60px; height: 60px;"> {{ Auth::user()->name }}</a>
+
                 Trucking Manager<i class="fa fa-check-circle"></i>
             </li>
             <li>
@@ -658,8 +662,10 @@
         </ul>
         @elseif( Auth::user()->role_id == 4 )
         <ul class="sidebar-nav">
-            <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
-                Billing Manager<i class="fa fa-check-circle"></i>
+            <li  style="height: 120px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff; text-align: center;">
+                <a style="text-align: left;"><img src ="{{ Auth::user()->emp_pic }}" style="width: 60px; height: 60px; border-radius: 50px;"><i class="fa fa-check-circle"></i> Skipper Igcasenza</a>
+
+                Billing Manager
             </li>
             <li>
                 <a href="{{ route('dashboard.index') }}" class="dashboard"><i class="fa fa-dashboard"></i>&nbsp;&nbsp;Dashboard</a>
@@ -768,8 +774,12 @@
             <div class="row">
                 @yield('content')
             </div>
+            <div class="panel-footer">
+                <strong>Copyright © 2017 <a href="#">Pilot Cargo Chain Solution Inc.</a></strong> All rights reserved.
+            </div>
         </div>
     </div>
+
     <!-- /#page-content-wrapper -->
 </div>
 
