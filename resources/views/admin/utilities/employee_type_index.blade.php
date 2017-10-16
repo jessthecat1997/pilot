@@ -133,7 +133,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/etData',
+			ajax: '{{ route("et.data") }}',
 			columns: [
 			{ data: 'name'},
 			{ data: 'description' },
