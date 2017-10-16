@@ -790,6 +790,7 @@
 
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#zip').valid();
 			$('#name').valid();
 			$('#address').valid();
@@ -877,12 +878,14 @@
 
 		$(document).on('click', '.pick_add_new_location', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#chModal').modal('show');
 			selected_location = 0;
 		})
 
 		$(document).on('click', '.del_add_new_location', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#chModal').modal('show');
 			selected_location = 1;
 		})
