@@ -16,7 +16,7 @@ class WharfageFeeController extends Controller
         ->select('id', 'locations.name')
         ->where('deleted_at', '=', null)
         ->get();
-        $wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id");
+        $wharfages = DB::select("SELECT DISTINCT h.id,locations.name AS location, h.dateEffective,DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(container_types.name ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT (d.amount, 2) ) ORDER BY d.container_sizes_id ASC SEPARATOR '\n' ) AS amount FROM container_types,locations,wharfage_headers h JOIN wharfage_details d ON h.id = d.wharfage_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
         return view('admin/maintenance.wharfage_index', compact(['sizes','locations', 'wharfages']));
     }
@@ -24,8 +24,8 @@ class WharfageFeeController extends Controller
     
     public function store(StoreWharfageFee $request)
     {
-     DB::beginTransaction();
-     try{
+       DB::beginTransaction();
+       try{
         $wf_header = new WharfageHeader;
         $wf_header->dateEffective = $request->dateEffective;
         $wf_header->locations_id = $request->locations_id;
@@ -56,8 +56,8 @@ class WharfageFeeController extends Controller
 } 
 public function update(StoreWharfageFee $request, $id)
 {
- DB::beginTransaction();
- try{
+   DB::beginTransaction();
+   try{
     \DB::table('wharfage_details')
     ->where('wharfage_header_id','=', $request->wf_head_id)
     ->delete();

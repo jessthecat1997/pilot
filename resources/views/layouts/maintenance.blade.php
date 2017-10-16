@@ -174,7 +174,7 @@
                                 <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Containerized</a>
                             </li>
                             <li>
-                                <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Dangerous Cargo </a>
+                                <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Containerized Dangerous Cargo</a>
                             </li>
                             <li>
                                 <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-af-fee-lcl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Less Cargo Load</a>

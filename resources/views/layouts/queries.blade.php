@@ -49,7 +49,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         <li>
-                        <form name="clockForm" style="margin-top: 10px;">
+                            <form name="clockForm" style="margin-top: 10px;">
                                 <input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
                             </form>
                         </li>
@@ -57,21 +57,21 @@
                         <li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
                         <li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
                         @else
-                    <li>
-                        <a href="
-                        #">&nbsp;</a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </nav>
-    </div>
-    <br>
-    <br>
-    <div id="wrapper" id="sidebar">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            @if( Auth::user()->role_id == 1 )
+                        <li>
+                            <a href="
+                            #">&nbsp;</a>
+                        </li>
+                        @endif
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <br>
+        <br>
+        <div id="wrapper" id="sidebar">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                @if( Auth::user()->role_id == 1 )
                 <ul class="sidebar-nav">
                     <li  style="height: 60px; border-bottom: 1px solid #8ffdcc; padding-top: 15px; padding-left: -20px; color: #fff;">
                         Admin<i class="fa fa-check-circle"></i>
@@ -113,9 +113,9 @@
                     <li>
                         <a data-toggle="collapse" href="#collapse2" class="maintenance"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Maintenance</a>
                     </li>
-                     <div id="collapse2" class="panel-collapse collapse">
+                    <div id="collapse2" class="panel-collapse collapse">
                         <ul class="list-group" style="list-style-type: circle;">
-                           <li>
+                         <li>
                             <a href = "{{ route('attachment_type.index') }}"  class = "class-container-type"><i class="fa fa-circle"></i>&nbsp;&nbsp;Attachment</a>
                         </li>
                         <li>
@@ -174,7 +174,7 @@
                                 <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Containerized</a>
                             </li>
                             <li>
-                                <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc"><i class="fa fa-circle"></i>&nbsp;&nbsp;Containerized Dangerous Cargo </a>
+                                <a href = "{{ route('arrastre_fee_dc.index') }}"  class = "class-arrastre-dc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Containerized Dangerous Cargo</a>
                             </li>
                             <li>
                                 <a href = "{{ route('arrastre_fee_lcl.index') }}"  class = "class-af-fee-lcl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Less Cargo Load</a>
@@ -734,7 +734,7 @@
                     </li>
                     <div id="archivecollapse" class="panel-collapse collapse">
 
-                       
+                     
                         <li>
                             <a data-toggle="collapse" class="maintenance-group" href = "#archive_billingcollapse"><i></i>&nbsp;&nbsp;Billing</a>
                         </li>
@@ -791,7 +791,7 @@
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 
 <script>
-function clock(){
+    function clock(){
         var time = new Date()
         var hr = time.getHours()
         var min = time.getMinutes()

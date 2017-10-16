@@ -10,7 +10,8 @@ class ExchangeRatesController extends Controller
 {
     public function index()
     {
-        $ers = \DB::select("SELECT * FROM exchange_rates WHERE deleted_at is null AND  dateEffective < NOW() ORDER BY dateEffective");
+       $ers = DB::select("SELECT *, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM exchange_rates ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+
         
         if(count($ers) == 0)
         {
