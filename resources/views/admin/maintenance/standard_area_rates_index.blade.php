@@ -301,7 +301,7 @@
 			deferRender: true,
 			serverSide: false,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/admin/sarData',
+			ajax: '{{ route("sar.data") }}',
 			columns: [
 
 			{ data: 'areaFrom'},
