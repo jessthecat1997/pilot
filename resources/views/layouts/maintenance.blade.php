@@ -141,7 +141,6 @@
                             <li>
                                 <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
                             </li>
-                            <!--
                             <li>
                                 <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
                             </li>
@@ -150,7 +149,7 @@
                             </li>
                             <li>
                                 <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Item</a>
-                            </li>-->
+                            </li>
                             <li>
                                 <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
                             </li>
@@ -783,7 +782,6 @@
 <script type="text/javascript" charset="utf8" src="/js/jqueryUI/jquery-ui.js"></script>
 <script  type = "text/javascript" charset = "utf8" src="/js/inputMask/jquery.inputmask.bundle.js"></script>
 <script  type = "text/javascript" charset = "utf8" src="/js/select2/select2.full.js"></script>
-<script type = "text/javascript" charset = "utf8" src="/js/Chart.js"></script>
 <script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf8" src="/toaster/toastr.js"></script>
 

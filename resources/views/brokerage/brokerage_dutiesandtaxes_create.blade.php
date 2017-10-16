@@ -390,8 +390,120 @@
 </div>
 </div>
 
-<!-- Add Item Modal -->
-<div class="modal fade" id="ItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Edit Item Modal -->
+<div class="modal fade" id="EditItemModal" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+
+<div class="modal-header">
+  <button type="button" class="close" onclick="$('#EditItemModal').modal('hide');" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title">Add Item</h4>
+</div>
+<div class="modal-body">
+
+    <div class = "collapse" id = "Edititem_warning">
+      <div class="panel-body alert alert-danger">
+          <div class = "col-md-12">
+            <strong class = "col-md-10">Woopsies...theres some unexpected conflicts while attempting to submit the data</strong>
+            <button class = "btn btn-danger col-md-1 pull-right" id = "exitItemPrompt" onclick = "resetEditItemMessages();"><small>X</small></button>
+            <div class = "col-md-12">
+
+              <li class = "collapse" id = "EdititemNameError"> > <a style = "text-decoration: none; color: red;">Supply an item name</a></li>
+              <li class = "collapse" id = "EditHSCodeError"> > <a  style = "text-decoration: none; color: red;">An HS Code for the corresponding item is needed</a></li>
+              <li class = "collapse" id = "EditrateError"> > <a  style = "text-decoration: none; color: red;">Input the rate</a></li>
+              <li class = "collapse" id = "EditvalueError"> > <a style = "text-decoration: none; color: red;">Input the value</a></li>
+              <li class = "collapse" id = "EditinsuraceError"> > <a  style = "text-decoration: none; color: red;">Input the insurance</a></li>
+              <li class = "collapse" id = "EditfreightError"> > <a  style = "text-decoration: none; color: red;">Input the freight</a></li>
+
+            </div>
+          </div>
+      </div>
+    </div>
+  <form class = "form-horizontal" id = "EdititemForm">
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Section</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "Editsection_select" id="Editsection_select" >
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Category</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "Editcategory_select" id="Editcategory_select" style = "width: 100%">
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Item</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "Edititem_select" id="Edititem_select" style = "width: 100%">
+        </select>
+      </div>
+    </div>
+    <hr>
+  <div class="form-group">
+      <label class="col-md-3 control-label">Item Name</label>
+        <div class="col-md-7">
+              <input  type="text" class="form-control" name = "EdititemName" id = "EdititemName" data-rule-required="true">
+      </div>
+  </div>
+
+
+  <div class="form-group">
+      <label class="col-md-3 control-label">HS Code</label>
+        <div class="col-md-7">
+              <input  type="text" class="form-control" id = "EditHSCode" name = "EditHSCode" disabled data-rule-required="true" >
+      </div>
+  </div>
+
+  <div class="form-group">
+      <label class="col-md-3 control-label">Rate Of Duty</label>
+        <div class="col-md-7">
+              <input  type="text" class="form-control" id = "EditRateOfDuty" name = "EditRateOfDuty" disabled data-rule-required="true">
+      </div>
+  </div>
+
+  <div class="form-group">
+      <label class="col-md-3 control-label">Value</label>
+    <div class = "col-md-7">
+      <div class="input-group">
+        <span class="input-group-addon" id="valuefeeadd">$</span>
+        <input type = "text" class="form-control money value-span"  aria-describedby="valuefeeadd" id = "EditValue" name = "EditValue" data-rule-required="true">
+      </div>
+      <label for="EditValue" generated="true" class="error"></label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Freight</label>
+    <div class = "col-md-7">
+      <div class="input-group">
+        <span class="input-group-addon" id="freightadd">$</span>
+        <input type="text" class="form-control money freight-span"  aria-describedby="freightadd" id = "EditFreight" name = "EditFreight" data-rule-required="true">
+      </div>
+        <label for="EditFreight" generated="true" class="error"></label>
+    </div>
+  </div>
+
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success" id = "EditItem" onclick = "" >Edit</button>
+  <button type = "reset" class = "btn btn-danger btn-md" onclick = "clearEditItemErrors()"/>Clear</button>
+  <button type="button" class="btn btn-default money" onclick="$('#EditItemModal').modal('hide');">Close</button>
+    </form>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="ItemModal" role="dialog" aria-labelledby="myModalLabel">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 
@@ -420,52 +532,82 @@
       </div>
     </div>
 
-  <form class = "form-horizontal">
+
+  <form class = "form-horizontal" id = "itemForm">
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Section</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "section_select" id="section_select" >
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Category</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "category_select" id="category_select" style = "width: 100%">
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class = "col-md-3 control-label">Item</label>
+      <div class = "col-md-7">
+        <select class="form-control" name = "item_select" id="item_select" style = "width: 100%">
+        </select>
+      </div>
+    </div>
+    <hr>
   <div class="form-group">
       <label class="col-md-3 control-label">Item Name</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "itemName" required>
+              <input  type="text" class="form-control" name = "itemName" id = "itemName" data-rule-required="true">
       </div>
   </div>
+
 
   <div class="form-group">
       <label class="col-md-3 control-label">HS Code</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "HSCode" required>
+              <input  type="text" class="form-control" id = "HSCode" name = "HSCode" disabled data-rule-required="true" >
       </div>
   </div>
 
   <div class="form-group">
       <label class="col-md-3 control-label">Rate Of Duty</label>
         <div class="col-md-7">
-              <input  type="text" class="form-control" id = "RateOfDuty" required>
+              <input  type="text" class="form-control" id = "RateOfDuty" name = "RateOfDuty" disabled data-rule-required="true">
       </div>
   </div>
 
   <div class="form-group">
       <label class="col-md-3 control-label">Value</label>
     <div class = "col-md-7">
-    <div class="input-group">
+      <div class="input-group">
         <span class="input-group-addon" id="valuefeeadd">$</span>
-        <input type="number" class="form-control money"  aria-describedby="valuefeeadd" id = "Value" required>
+        <input type = "text" class="form-control money value-span"  aria-describedby="valuefeeadd" id = "Value" name = "Value" data-rule-required="true">
       </div>
+      <label for="Value" generated="true" class="error"></label>
     </div>
   </div>
 
   <div class="form-group">
-      <label class="col-md-3 control-label">Freight</label>
+    <label class="col-md-3 control-label">Freight</label>
     <div class = "col-md-7">
-    <div class="input-group">
+      <div class="input-group">
         <span class="input-group-addon" id="freightadd">$</span>
-        <input type="number" class="form-control money"  aria-describedby="freightadd" id = "Freight" required>
+        <input type="text" class="form-control money freight-span"  aria-describedby="freightadd" id = "Freight" name = "Freight" data-rule-required="true">
       </div>
+        <label  for="Freight" generated="true" class="error"></label>
     </div>
   </div>
 
+
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-success" id = "addItem" >Add</button>
-  <input type = "reset" class = "btn btn-danger btn-md" value = "Clear" />
+  <button type="button" class="btn btn-success" id = "addItem" onclick = "" >Add</button>
+  <button type = "reset" class = "btn btn-danger btn-md" onclick = "clearItemErrors()"/>Clear</button>
   <button type="button" class="btn btn-default money" onclick="$('#ItemModal').modal('hide');">Close</button>
     </form>
 </div>
@@ -692,6 +834,17 @@
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
 	}
+  .form-line-error .form-error-message {
+    display: none;
+  }
+  .select2-class,
+  {
+    width: 100%;
+  }
+  .redclass
+  {
+    border: 1px solid red;
+  }
 </style>
 <link href= "/js/select2/select2.css" rel = "stylesheet">
 @endpush
@@ -712,6 +865,331 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 var selectedContainerId = "";
 var temp_arrastre, temp_wharfage;
 var cargoType;
+
+var arr_section =[
+{  id: "", text: "" },
+@forelse($section as $sec)
+{ id: '{{ $sec->id }}', text:'{{ $sec->name }}' },
+@empty
+@endforelse
+];
+
+
+
+$("#section_select").select2({
+  data: arr_section,
+  width: '100%',
+  placeholder: "Select a section",
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+
+
+$("#category_select").select2({
+  width: '100%',
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+$("#item_select").select2({
+  width: '100%',
+  containerCssClass: 'select2-class',
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+
+$(document).on('change', '#section_select', function(e){
+  document.getElementById('itemName').value = '';
+  document.getElementById('HSCode').value = '';
+  document.getElementById('RateOfDuty').value =
+  document.getElementById('Value').value = '';
+  document.getElementById('Freight').value = '';
+  $('#category_select').html('').select2({data: [{id: '', text: ''}]});
+  $('#item_select').html('').select2({data: [{id: '', text: ''}]});
+
+  fill_category(0);
+
+})
+
+$(document).on('change', '#category_select', function(e){
+  document.getElementById('itemName').value = '';
+  document.getElementById('HSCode').value = '';
+  document.getElementById('RateOfDuty').value = '';
+  document.getElementById('Value').value = '';
+  document.getElementById('Freight').value = '';
+  $('#item_select').html('').select2({data: [{id: '', text: ''}]});
+
+  fill_item(0);
+})
+
+$(document).on('change', '#item_select', function(e){
+  var item_id = $('#item_select').val();
+  @forelse($item as $items)
+    if({{$items->id}} == item_id)
+    {
+        	document.getElementById('itemName').value = '{{$items->name}}';
+        	document.getElementById('HSCode').value = '{{$items->hsCode}}';
+      	  document.getElementById('RateOfDuty').value = '{{$items->rate}}';
+    }
+
+    validator.resetForm();
+    $('#itemName').removeClass('redclass');
+    $('#HSCode').removeClass('redclass');
+    $('#RateOfDuty').removeClass('redclass');
+    $('#Value').removeClass('redclass');
+    $('#Freight').removeClass('redclass');
+
+    document.getElementById('Value').value = '';
+    document.getElementById('Freight').value = '';
+  @empty
+  @endforelse
+
+  $('#hs_code').val();
+})
+
+function fill_category(num)
+{
+  console.log(num);
+  $.ajax({
+    type: 'GET',
+    url: "{{ route('get_category')}}/" + $('#section_select').val(),
+    data: {
+      '_token' : $('input[name=_token]').val(),
+    },
+    success: function(data){
+      if(typeof(data) == "object"){
+
+        var new_rows = "<option value = '0'></option>";
+        for(var i = 0; i < data.length; i++){
+          new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+        }
+        $('#category_select').find('option').not(':first').remove();
+        $('#category_select').html(new_rows);
+
+        $('#category_select').val(num);
+      }
+    },
+    error: function(data) {
+      if(data.status == 400){
+        alert("Nothing found");
+      }
+    }
+  })
+}
+
+function fill_item(num)
+{
+  console.log(num);
+  $.ajax({
+    type: 'GET',
+    url: "{{ route('get_item')}}/" + $('#category_select').val(),
+    data: {
+      '_token' : $('input[name=_token]').val(),
+    },
+    success: function(data){
+      if(typeof(data) == "object"){
+
+        var new_rows = "<option value = '0'></option>";
+        for(var i = 0; i < data.length; i++){
+          new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+        }
+        $('#item_select').find('option').not(':first').remove();
+        $('#item_select').html(new_rows);
+
+        $('#item_select').val(num);
+      }
+    },
+    error: function(data) {
+      if(data.status == 400){
+        alert("Nothing found");
+      }
+    }
+  })
+}
+
+$("#Editsection_select").select2({
+  data: arr_section,
+  width: '100%',
+  placeholder: "Select a section",
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+
+
+$("#Editcategory_select").select2({
+  width: '100%',
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+$("#Edititem_select").select2({
+  width: '100%',
+  sorter: function(data) {
+    return data.sort(function (a, b) {
+      if (a.text > b.text) {
+        return 1;
+      }
+      if (a.text < b.text) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+});
+
+
+$(document).on('change', '#Editsection_select', function(e){
+  document.getElementById('EdititemName').value = '';
+  document.getElementById('EditHSCode').value = '';
+  document.getElementById('EditRateOfDuty').value = '';
+
+  $('#Editcategory_select').html('').select2({data: [{id: '', text: ''}]});
+  $('#Edititem_select').html('').select2({data: [{id: '', text: ''}]});
+
+  fill_Editcategory(0);
+
+})
+
+$(document).on('change', '#Editcategory_select', function(e){
+  document.getElementById('EdititemName').value = '';
+  document.getElementById('EditHSCode').value = '';
+  document.getElementById('EditRateOfDuty').value = '';
+
+
+  $('#Edititem_select').html('').select2({data: [{id: '', text: ''}]});
+
+  fill_Edititem(0);
+})
+
+$(document).on('change', '#Edititem_select', function(e){
+  var item_id = $('#Edititem_select').val();
+  @forelse($item as $items)
+    if({{$items->id}} == item_id)
+    {
+        	document.getElementById('EdititemName').value = '{{$items->name}}';
+        	document.getElementById('EditHSCode').value = '{{$items->hsCode}}';
+      	  document.getElementById('EditRateOfDuty').value = '{{$items->rate}}';
+    }
+
+    edit_validator.resetForm();
+    $('#EdititemName').removeClass('redclass');
+    $('#EditHSCode').removeClass('redclass');
+    $('#EditRateOfDuty').removeClass('redclass');
+    $('#EditValue').removeClass('redclass');
+    $('#EditFreight').removeClass('redclass');
+
+  @empty
+  @endforelse
+
+})
+
+function fill_Editcategory(num)
+{
+  console.log("EditCategory"+num);
+  $.ajax({
+    type: 'GET',
+    url: "{{ route('get_category')}}/" + $('#Editsection_select').val(),
+    data: {
+      '_token' : $('input[name=_token]').val(),
+    },
+    success: function(data){
+      if(typeof(data) == "object"){
+
+        var new_rows = "<option value = '0'></option>";
+        for(var i = 0; i < data.length; i++){
+          new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+        }
+        $('#Editcategory_select').find('option').not(':first').remove();
+        $('#Editcategory_select').html(new_rows);
+
+        $('#Editcategory_select').val(num);
+      }
+    },
+    error: function(data) {
+      if(data.status == 400){
+        alert("Nothing found");
+      }
+    }
+  })
+}
+
+function fill_Edititem(num)
+{
+  console.log(num);
+  $.ajax({
+    type: 'GET',
+    url: "{{ route('get_item')}}/" + $('#Editcategory_select').val(),
+    data: {
+      '_token' : $('input[name=_token]').val(),
+    },
+    success: function(data){
+      if(typeof(data) == "object"){
+
+        var new_rows = "<option value = '0'></option>";
+        for(var i = 0; i < data.length; i++){
+          new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+        }
+        $('#Edititem_select').find('option').not(':first').remove();
+        $('#Edititem_select').html(new_rows);
+
+        $('#Edititem_select').val(num);
+      }
+    },
+    error: function(data) {
+      if(data.status == 400){
+        alert("Nothing found");
+      }
+    }
+  })
+}
 
 	$('#collapse1').addClass('in');
 
@@ -951,22 +1429,35 @@ var cargoType;
       var cell5 = row.insertCell(5);
 
       cell0.innerHTML = document.getElementById('itemName').value;
-      cell0.contentEditable = true;
       cell1.innerHTML = document.getElementById('HSCode').value;
-      cell1.contentEditable = true;
       cell2.innerHTML = document.getElementById('RateOfDuty').value;
-      cell2.contentEditable = true;
       cell3.innerHTML = document.getElementById('Value').value;
-      cell3.contentEditable = true;
       cell4.innerHTML = document.getElementById('Freight').value;
-      cell4.contentEditable = true;
-      cell5.innerHTML = "<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
-
+      cell5.innerHTML = "<button class = 'btn btn-info btn-md' onclick = 'EditRow(this)' >Edit</button>&nbsp;<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
       $('#ItemModal').modal('hide');
     }
 
 
 	});
+
+  $('#EditItem').on('click', function(e){
+
+    if(EditItemValidations() == true)
+    {
+
+    }
+    if(EditItemValidations() == false){
+      var table = document.getElementById('itemTable');
+
+      table.rows[this.value].cells[0].innerHTML = document.getElementById("EdititemName").value;
+      table.rows[this.value].cells[1].innerHTML = document.getElementById("EditHSCode").value;
+      table.rows[this.value].cells[2].innerHTML = document.getElementById("EditRateOfDuty").value;
+      table.rows[this.value].cells[3].innerHTML = document.getElementById("EditValue").value;
+      table.rows[this.value].cells[4].innerHTML = document.getElementById("EditFreight").value;
+
+      $('#EditItemModal').modal('hide');
+    }
+  });
 
 	$('#generateDAT').on('click', function(e){
 
@@ -983,10 +1474,21 @@ var cargoType;
 
         for (var r = 0, n = table.rows.length; r < n; r++) {
             for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+              if(c == 3 || c == 4)
+              {
+                var sample = table.rows[r].cells[c].innerHTML;
+                sample  = sample.replace(/\,/g,'');
+                addedItems[ctr] = parseFloat(sample).toFixed(2);
+                ctr++;
+              }
+              else
+              {
                   addedItems[ctr] = table.rows[r].cells[c].innerHTML;
                   ctr++;
+              }
             }
         }
+
     var employees = <?php echo json_encode($employees); ?>;
     localStorage.setItem("Employees", JSON.stringify(employees));
     localStorage.setItem("addedItems", JSON.stringify(addedItems));
@@ -1170,6 +1672,36 @@ function decimalsOnly(event) {
 	  $('#tableError').removeClass('in');
 
   }
+  var validator = $("#itemForm").validate({
+    rules:
+    {
+      itemName:
+      {
+        required: true,
+      },
+      HSCode:
+      {
+        required: true,
+      },
+      RateOfDuty:
+      {
+        required: true,
+      },
+      Value:
+      {
+        required: true,
+      },
+      Freight:
+      {
+        required: true,
+      },
+
+    },
+    onkeyup: false,
+    submitHandler: function (form) {
+      return false;
+    },
+  });
 
   function ItemValidations(){
 
@@ -1178,25 +1710,26 @@ function decimalsOnly(event) {
 
     if($('#itemName').valid() == false)
     {
-      $('#itemName').css('border-color', 'red');
+
+      $('#itemName').addClass('redclass');
       $('#item_warning').addClass('in');
       $('#itemNameError').addClass('in');
 
         isError = true;
     }
 
-    if($('#HSCode').valid() == false)
+    if($('#HSCode').valid() == "")
     {
-      $('#HSCode').css('border-color', 'red');
+      $('#HSCode').addClass('redclass');
       $('#item_warning').addClass('in');
       $('#HSCodeError').addClass('in');
 
         isError = true;
     }
 
-    if($('#RateOfDuty').valid() == false)
+    if($('#RateOfDuty').valid() == "")
     {
-      $('#RateOfDuty').css('border-color', 'red');
+      $('#RateOfDuty').addClass('redclass');
       $('#item_warning').addClass('in');
       $('#rateError').addClass('in');
 
@@ -1205,7 +1738,7 @@ function decimalsOnly(event) {
 
     if($('#Value').valid() == false)
     {
-      $('#Value').css('border-color', 'red');
+      $('#Value').addClass('redclass');
       $('#item_warning').addClass('in');
       $('#valueError').addClass('in');
 
@@ -1214,19 +1747,18 @@ function decimalsOnly(event) {
 
     if($('#Freight').valid() == false)
     {
-      $('#Freight').css('border-color', 'red');
+      $('#Freight').addClass('redclass');
       $('#item_warning').addClass('in');
       $('#freightError').addClass('in');
 
         isError = true;
     }
-
-
     return isError;
   }
 
   function resetItemMessages(){
 
+      $('#item_warning').removeClass('in');
 		$('#itemNameError').removeClass('in');
     $('#HSCodeError').removeClass('in');
 	  $('#rateError').removeClass('in');
@@ -1235,10 +1767,290 @@ function decimalsOnly(event) {
 
   }
 
+  function clearItemErrors(){
+
+      validator.resetForm();
+      $('#itemNameError').removeClass('in');
+      $('#HSCodeError').removeClass('in');
+      $('#rateError').removeClass('in');
+      $('#valueError').removeClass('in');
+      $('#freightError').removeClass('in');
+
+      $('#itemName').removeClass('redclass');
+    	$('#HSCode').removeClass('redclass');
+      $('#RateOfDuty').removeClass('redclass');
+      $('#Value').removeClass('redclass');
+      $('#Freight').removeClass('redclass');
+      $('#item_warning').removeClass('in');
+
+      $('#section_select').val('').trigger('change');
+  }
+
+
+  $('#ItemModal').on('hidden.bs.modal', function (e) {
+    validator.resetForm();
+    $('#itemName').removeClass('redclass');
+    $('#HSCode').removeClass('redclass');
+    $('#RateOfDuty').removeClass('redclass');
+    $('#Value').removeClass('redclass');
+    $('#Freight').removeClass('redclass');
+    $('#item_warning').removeClass('in');
+
+    $('#section_select').val('').trigger('change');
+
+    $(this)
+      .find("input,textarea")
+         .val('')
+         .end()
+      .find("input[type=checkbox], input[type=radio]")
+         .prop("checked", "")
+         .end();
+  })
+
+  function EditRow(row)
+  {
+    var table_row = row.parentNode.parentNode.rowIndex;
+    var itemName = document.getElementById("itemTable").rows[table_row].cells[0].innerHTML;
+    var HSCode = document.getElementById("itemTable").rows[table_row].cells[1].innerHTML;
+    var Rate = document.getElementById("itemTable").rows[table_row].cells[2].innerHTML;
+    var Value = document.getElementById("itemTable").rows[table_row].cells[3].innerHTML;
+    var Freight = document.getElementById("itemTable").rows[table_row].cells[4].innerHTML;
+
+    findItem(HSCode);
+
+    document.getElementById("EdititemName").value = itemName;
+    document.getElementById("EditValue").value = Value;
+    document.getElementById("EditFreight").value = Freight;
+    document.getElementById("EditRateOfDuty").value = Rate;
+    document.getElementById("EditHSCode").value = HSCode;
+    document.getElementById("EditItem").value = table_row;
+
+    $('#EditItemModal').modal('show');
+  }
+
+  function findItem(HSCode)
+  {
+    var item_id, section_id, category_id;
+        @forelse($item as $items)
+          if({{$items->hsCode}} == HSCode)
+          {
+              item_id = {{$items->id}};
+              category_id = {{$items->category_types_id}};
+          }
+        @empty
+        @endforelse
+
+        @forelse($category as $categories)
+          if({{$categories->id}} == category_id)
+          {
+            section_id = {{$categories->sections_id}};
+          }
+        @empty
+        @endforelse
+
+
+
+        $('#Editsection_select').val(section_id).trigger('change');
+
+
+
+        $.ajax({
+          type: 'GET',
+          url: "{{ route('get_category')}}/" + section_id,
+          data: {
+            '_token' : $('input[name=_token]').val(),
+          },
+          success: function(data){
+            if(typeof(data) == "object"){
+
+              var new_rows = "<option value = '0'></option>";
+              for(var i = 0; i < data.length; i++){
+                new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+              }
+              $('#Editcategory_select').find('option').not(':first').remove();
+              $('#Editcategory_select').html(new_rows);
+
+              $('#Editcategory_select').val(section_id);
+            }
+          },
+          error: function(data) {
+            if(data.status == 400){
+              alert("Nothing found");
+            }
+          }
+        })
+
+        $('#Editcategory_select').val(category_id).trigger('change');
+
+        $.ajax({
+          type: 'GET',
+          url: "{{ route('get_item')}}/" + category_id,
+          data: {
+            '_token' : $('input[name=_token]').val(),
+          },
+          success: function(data){
+            if(typeof(data) == "object"){
+
+              var new_rows = "<option value = '0'></option>";
+              for(var i = 0; i < data.length; i++){
+                new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
+              }
+              $('#Edititem_select').find('option').not(':first').remove();
+              $('#Edititem_select').html(new_rows);
+
+              $('#Edititem_select').val(item_id);
+            }
+          },
+          error: function(data) {
+            if(data.status == 400){
+              alert("Nothing found");
+            }
+          }
+        })
+
+        $('#Edititem_select').val(item_id).trigger('change');
+  }
+
+
+  var edit_validator = $("#EdititemForm").validate({
+    rules:
+    {
+      EdititemName:
+      {
+        required: true,
+      },
+      EditHSCode:
+      {
+        required: true,
+      },
+      EditRateOfDuty:
+      {
+        required: true,
+      },
+      EditValue:
+      {
+        required: true,
+      },
+      EditFreight:
+      {
+        required: true,
+      },
+
+    },
+    onkeyup: false,
+    submitHandler: function (form) {
+      return false;
+    },
+  });
+
+  function EditItemValidations(){
+
+    var isError = false;
+
+    if($('#EdititemName').valid() == false)
+    {
+
+      $('#EdititemName').addClass('redclass');
+      $('#Edititem_warning').addClass('in');
+      $('#EdititemNameError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#EditHSCode').valid() == "")
+    {
+      $('#EditHSCode').addClass('redclass');
+      $('#Edititem_warning').addClass('in');
+      $('#EditHSCodeError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#EditRateOfDuty').valid() == "")
+    {
+      $('#EditRateOfDuty').addClass('redclass');
+      $('#Edititem_warning').addClass('in');
+      $('#EditrateError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#EditValue').valid() == false)
+    {
+      $('#EditValue').addClass('redclass');
+      $('#Edititem_warning').addClass('in');
+      $('#EditvalueError').addClass('in');
+
+        isError = true;
+    }
+
+    if($('#EditFreight').valid() == false)
+    {
+      $('#EditFreight').addClass('redclass');
+      $('#Edititem_warning').addClass('in');
+      $('#EditfreightError').addClass('in');
+
+        isError = true;
+    }
+    return isError;
+  }
+
+  function resetEditItemMessages(){
+
+    $('#Edititem_warning').removeClass('in');
+		$('#EdititemNameError').removeClass('in');
+    $('#EditHSCodeError').removeClass('in');
+	  $('#EditrateError').removeClass('in');
+    $('#EditvalueError').removeClass('in');
+    $('#EditfreightError').removeClass('in');
+
+  }
+
+  function clearEditItemErrors(){
+
+      edit_validator.resetForm();
+      $('#EdititemNameError').removeClass('in');
+      $('#EditHSCodeError').removeClass('in');
+      $('#EditrateError').removeClass('in');
+      $('#freightError').removeClass('in');
+      $('#EditEditvalueError').removeClass('in');
+
+      $('#EdititemName').removeClass('redclass');
+    	$('#EditHSCode').removeClass('redclass');
+      $('#EditRateOfDuty').removeClass('redclass');
+      $('#EditValue').removeClass('redclass');
+      $('#EditFreight').removeClass('redclass');
+      $('#Edititem_warning').removeClass('in');
+
+      $('#Editsection_select').val('').trigger('change');
+  }
+
+
+  $('#EditItemModal').on('hidden.bs.modal', function (e) {
+    edit_validator.resetForm();
+    $('#EdititemName').removeClass('redclass');
+    $('#EditHSCode').removeClass('redclass');
+    $('#EditRateOfDuty').removeClass('redclass');
+    $('#EditValue').removeClass('redclass');
+    $('#EditFreight').removeClass('redclass');
+    $('#Edititem_warning').removeClass('in');
+
+    $('#Editsection_select').val('').trigger('change');
+
+    $(this)
+      .find("input,textarea")
+         .val('')
+         .end()
+      .find("input[type=checkbox], input[type=radio]")
+         .prop("checked", "")
+         .end();
+  })
+
   function RemoveRow(row)
   {
     $(row).closest("tr").remove();
   }
+
 
   function viewContainerDetails(id)
   {

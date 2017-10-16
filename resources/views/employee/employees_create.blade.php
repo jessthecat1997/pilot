@@ -226,10 +226,10 @@
 
         document.getElementById('age').value = age;
       }
-    }); 
+    });
 
     $("#commentForm").validate({
-      rules: 
+      rules:
       {
         firstName:
         {
@@ -255,7 +255,7 @@
         }
 
       },
-      onkeyup: false, 
+      onkeyup: false,
       submitHandler: function (form) {
         return false;
       }
@@ -312,7 +312,7 @@
       var dob = document.getElementById("dob").value;
 
       e.preventDefault();
-      
+
       $('#saveRecord').attr('disabled', 'true');
       $('#firstName').valid();
       $('#lastName').valid();
@@ -347,7 +347,7 @@
 
           },
 
-        })  
+        })
       }
 
     })

@@ -9,6 +9,9 @@ use App\ConsigneeServiceOrderDetail;
 use App\BrokerageServiceOrder;
 use App\DutiesAndTaxesHeader;
 use App\DutiesAndTaxesDetails;
+use App\Item;
+use App\Section;
+use App\CategoryType;
 use Illuminate\Support\Facades\DB;
 use App\Employee;
 
@@ -33,6 +36,9 @@ class DutiesAndTaxesController extends Controller
   {
 
       $employees = Employee::all();
+      $section = Section::all();
+      $category = CategoryType::all();
+      $item = Item::all();
       $brokerage_id = $request->brokerage_id;
 
 
@@ -227,7 +233,7 @@ class DutiesAndTaxesController extends Controller
               }
           }
 
-      return view('brokerage.brokerage_dutiesandtaxes_create',compact(['brokerage_id', 'employees', 'current_date',  'row_count', 'currentExchange_id', 'exchange_rate', 'currentCds_id', 'cds_fee', 'currentIpf_id', 'ipf_fee_header', 'ipf_fee_detail', 'containerized_arrastre_header', 'containerized_arrastre_detail', 'containerized_wharfage_header', 'containerized_wharfage_detail', 'lcl_arrastre_header', 'lcl_arrastre_detail', 'lcl_wharfage_header', 'lcl_wharfage_detail', 'brokerage_header', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail', 'utility_types']));//
+      return view('brokerage.brokerage_dutiesandtaxes_create',compact(['brokerage_id', 'employees', 'current_date',  'row_count', 'currentExchange_id', 'exchange_rate', 'currentCds_id', 'cds_fee', 'currentIpf_id', 'ipf_fee_header', 'ipf_fee_detail', 'containerized_arrastre_header', 'containerized_arrastre_detail', 'containerized_wharfage_header', 'containerized_wharfage_detail', 'lcl_arrastre_header', 'lcl_arrastre_detail', 'lcl_wharfage_header', 'lcl_wharfage_detail', 'brokerage_header', 'withContainer', 'brokerage_details', 'brokerage_containers', 'container_with_detail', 'utility_types', 'section', 'category', 'item']));//
   }
 
   /**
@@ -311,6 +317,24 @@ class DutiesAndTaxesController extends Controller
     return view('brokerage.dutiesandtaxes_create', compact(['consignee']));
   }
 
+  public function get_category(Request $request){
+    $cities = DB::table('category_types')
+    ->select('name', 'id')
+    ->where('sections_id', '=', $request->section_id)
+    ->where('deleted_at', '=', null)
+    ->get();
+
+    return $cities;
+  }
+
+  public function get_item(Request $request){
+    $cities = DB::table('items')
+    ->select('name', 'id')
+    ->where('category_types_id', '=', $request->category_id)
+    ->where('deleted_at', '=', null)
+    ->get();
+    return $cities;
+  }
   /**
    * Display the specified resource.
    *
