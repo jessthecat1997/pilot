@@ -278,7 +278,7 @@
                 <div class = "panel panel-default table-responsive">
                   <table id = "itemTable" class = "table table-hover table-responsive">
                     <tr  class="info">
-                      <td>Item Name</td>
+                      <td style = "width: 30%">Item Name</td>
                       <td>HS Code</td>
                       <td>Rate Of Duty</td>
                       <td>Value in USD</td>
@@ -865,11 +865,14 @@ var ipfFeeDetail = <?php echo json_encode($ipf_fee_detail); ?>;
 var selectedContainerId = "";
 var temp_arrastre, temp_wharfage;
 var cargoType;
+var sectionName;
 
 var arr_section =[
 {  id: "", text: "" },
 @forelse($section as $sec)
-{ id: '{{ $sec->id }}', text:'{{ $sec->name }}' },
+{
+  id: '{{ $sec->id }}', text: "<?php echo preg_replace( "/\r|\n/", "", $sec->name ) ?>"
+},
 @empty
 @endforelse
 ];
@@ -979,6 +982,7 @@ $(document).on('change', '#item_select', function(e){
 function fill_category(num)
 {
   console.log(num);
+
   $.ajax({
     type: 'GET',
     url: "{{ route('get_category')}}/" + $('#section_select').val(),
@@ -992,6 +996,8 @@ function fill_category(num)
         for(var i = 0; i < data.length; i++){
           new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
         }
+        console.log($('#section_select').val());
+        console.log(data);
         $('#category_select').find('option').not(':first').remove();
         $('#category_select').html(new_rows);
 
@@ -1022,6 +1028,7 @@ function fill_item(num)
         for(var i = 0; i < data.length; i++){
           new_rows += "<option value = '"+ data[i].id+"'>"+ data[i].name +"</option>";
         }
+
         $('#item_select').find('option').not(':first').remove();
         $('#item_select').html(new_rows);
 
@@ -1436,8 +1443,6 @@ function fill_Edititem(num)
       cell5.innerHTML = "<button class = 'btn btn-info btn-md' onclick = 'EditRow(this)' >Edit</button>&nbsp;<button class = 'btn btn-danger btn-md' onclick = 'RemoveRow(this)' >Delete</button>";
       $('#ItemModal').modal('hide');
     }
-
-
 	});
 
   $('#EditItem').on('click', function(e){
@@ -1832,7 +1837,7 @@ function decimalsOnly(event) {
   {
     var item_id, section_id, category_id;
         @forelse($item as $items)
-          if({{$items->hsCode}} == HSCode)
+          if("{{$items->hsCode}}" == HSCode)
           {
               item_id = {{$items->id}};
               category_id = {{$items->category_types_id}};

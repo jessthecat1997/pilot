@@ -9,7 +9,7 @@ class Item extends Model
      use SoftDeletes;
 
 	protected $fillable = [
-	'name', 'hsCode', 'rate', 'sections_id', 'category_types_id',
+	'name', 'hsCode', 'rate', 'category_types_id',
 	];
 
 	protected $dates = [

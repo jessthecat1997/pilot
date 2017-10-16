@@ -204,9 +204,6 @@
 																							{{ $delivery_detail->cubicMeters }}
 																						</td>
 																						<td>
-																							{{ $delivery_detail->lcl_type }}
-																						</td>
-																						<td>
 																							{{ $delivery_detail->grossWeight }}
 																						</td>
 																						<td>
