@@ -790,6 +790,7 @@
 
 		$(document).on('click', '.btnSave', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#zip').valid();
 			$('#name').valid();
 			$('#address').valid();
@@ -852,7 +853,7 @@
 
 
 							});
-							$('#btnSave').removeAttr('disabled');
+							$('.btnSave').removeAttr('disabled');
 						}
 
 					},
@@ -877,12 +878,14 @@
 
 		$(document).on('click', '.pick_add_new_location', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#chModal').modal('show');
 			selected_location = 0;
 		})
 
 		$(document).on('click', '.del_add_new_location', function(e){
 			e.preventDefault();
+			$('.btnSave').removeAttr('disabled');
 			$('#chModal').modal('show');
 			selected_location = 1;
 		})
@@ -1136,7 +1139,7 @@
 				$(this).css('border-color', 'green');
 				$.ajax({
 					type: 'GET',
-					url: 'http://localhost:8000/admin/' + vehicle_type_id +'/getVehicles',
+					url: '{{ route("trucking.index") }}/0/' + vehicle_type_id +'/getVehicles',
 					data: {
 						'_token' : $('input[name=_token]').val(),
 						'vehicle_type' : vehicle_type_id,

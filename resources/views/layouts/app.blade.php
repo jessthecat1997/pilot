@@ -777,9 +777,6 @@
             <div class="row">
                 @yield('content')
             </div>
-            <div class="panel-footer">
-                <strong>Copyright © 2017 <a href="#">Pilot Cargo Chain Solution Inc.</a></strong> All rights reserved.
-            </div>
         </div>
     </div>
 
