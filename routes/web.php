@@ -419,6 +419,7 @@ Route::group(['middleware' => ['admin']], function() {
 
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
+	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
 	//Backup and recovery 
 	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController'); 
 

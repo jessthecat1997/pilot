@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Archive | Container Delivery System Fee</h3>
+		<h3> Utilities | Archive | Container Delivery System Fee</h3>
 		<hr>
 		<div class="form-group col-md-3 col-md-offset-9">
 			<label>Filter</label>
@@ -116,7 +116,7 @@
 		var cdstable = $('#cds_table').DataTable({
 			processing: true,
 			serverSide: true,
-			ajax: 'http://localhost:8000/utilities/cds_fee_deactivated/' + filter,
+			ajax: '{{ route("utilities_index") }}/cds_fee_deactivated/' + filter,
 			columns: [
 			{ data: 'fee' },
 			{ data: 'dateEffective' },
@@ -226,7 +226,7 @@ $(document).on('change', '.change-filter', function(e)
 	var cdstable = $('#cds_table').DataTable({
 		processing: true,
 		serverSide: true,
-		ajax: 'http://localhost:8000/utilities/cds_fee_deactivated/' + filter,
+		ajax: '{{ route("utilities_index") }}/cds_fee_deactivated/' + filter,
 		columns: [
 		{ data: 'fee' },
 		{ data: 'dateEffective' },

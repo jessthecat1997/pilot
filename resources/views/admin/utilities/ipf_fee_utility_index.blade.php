@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Utilities | Archive | Import Processing Fee</h3>
+		<h3>Utilities | Archive | Import Processing Fee</h3>
 		<hr>
 		<div class="form-group col-md-3 col-md-offset-9">
 			<label>Filter</label>
@@ -120,7 +120,7 @@
 			processing: true,
 			serverSide: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/utilities/ipf_fee_deactivated/' + filter,
+			ajax: '{{ route("utilities_index") }}/ipf_fee_deactivated/' + filter,
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'minimum' },
@@ -236,7 +236,7 @@ $(document).on('change', '.change-filter', function(e)
 			processing: true,
 			serverSide: true,
 			'scrollx': true,
-			ajax: 'http://localhost:8000/utilities/ipf_fee_deactivated/' + filter,
+			ajax: '{{ route("utilities_index") }}/ipf_fee_deactivated/' + filter,
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'minimum' },
