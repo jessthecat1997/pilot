@@ -2,10 +2,10 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance | Less Cargo Load Types</h3>
+		<h3> Maintenance | Less Cargo Load Types</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New Less Cargo Load type</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#lclModal" style = "width: 100%;">New Less Cargo Load Type</button>
 		</div>
 	</div>
 	<br />
@@ -15,13 +15,13 @@
 				<table class = "table-responsive table table-striped cell-border table-bordered" id = "lcl_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td >
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
@@ -56,7 +56,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New LCL Type</h4>
+							<h4 class="modal-title">New Less Cargo Load Type</h4>
 						</div>
 						<div class="modal-body">			
 							<div class="form-group required">
@@ -122,13 +122,13 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
+	$('#brokeragecollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
 	var lcl_id;
 	$(document).ready(function(){
 		var lcltable = $('#lcl_table').DataTable({
-			scrollX: true,
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -166,7 +166,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New LCL Type');
+			$('.modal-title').text('New Less Cargo Load Type');
 			$('#name').val("");
 			$('#description').val("");
 			$('#lclModal').modal('show');
@@ -180,7 +180,7 @@
 			$('#description').val(data.description);
 			temp_name = data.name;
 			temp_desc = data.description;
-			$('.modal-title').text('Update LCL Type');
+			$('.modal-title').text('Update Less Cargo Load Type');
 			$('#lclModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
@@ -233,7 +233,7 @@ $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
 
-	if(title == "New LCL Type")
+	if(title == "New Less Cargo Load Type")
 	{
 		if($('#name').valid() && $('#description').valid()){
 			
@@ -253,7 +253,7 @@ $('#btnSave').on('click', function(e){
 						lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
 						$('#lclModal').modal('hide');
 						$('#description').val("");
-						$('.modal-title').text('New LCL Type');
+						$('.modal-title').text('New Less Cargo Load Type');
 
 					//Show success
 
@@ -326,7 +326,7 @@ $('#btnSave').on('click', function(e){
 							lcltable.ajax.url( '{{ route("lcl.data") }}' ).load();
 							$('#lclModal').modal('hide');
 							$('#description').val("");
-							$('.modal-title').text('New LCL Type');
+							$('.modal-title').text('New Less Cargo Load Type');
 
 					//Show success
 

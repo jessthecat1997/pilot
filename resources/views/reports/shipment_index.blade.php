@@ -48,7 +48,7 @@
 		</div>
 	</div>
 	<div class="col-md-9">
-		<iframe src="http://localhost:8000/reports/shipments/print/Daily")  +"" id = "iframe" style="width: 100%; height: 680px;">
+		<iframe src="{{route('shipment.index')}}/print/Daily" id = "iframe" style="width: 100%; height: 680px;">
 
 		</iframe>
 	</div>
@@ -198,7 +198,7 @@
 			status = $('input[name=status_filter]:checked').val();
 
 			//console.log("{{ route('delivery.index') }}/del_pdf/0/"+ status + "/" +frequency + "/" + startDate.format("Y-M-D") + "/" + endDate.format("Y-M-D"));
-			$('#iframe').attr('src', "http://localhost:8000/reports/shipments/print/"+ startDate.format("Y-M-D") + " to " + endDate.format("Y-M-D") + " ");
+			$('#iframe').attr('src', "{{route('shipment.index')}}/print/"+ startDate.format("Y-M-D") + " to " + endDate.format("Y-M-D") + " ");
 		})
 
 

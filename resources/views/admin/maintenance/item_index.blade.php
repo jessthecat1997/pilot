@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Item</h3>
+		<h3> Maintenance |Brokerage|Item</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#itemModal" style = "width: 100%;">New Item</button>
@@ -152,7 +152,7 @@
 @endsection
 @push('styles')
 <style>
-.class-section{
+.class-item{
 	border-left: 10px solid #8ddfcc;
 	background-color:rgba(128,128,128,0.1);
 	color: #fff;
@@ -168,6 +168,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
+	$('#brokeragecollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;

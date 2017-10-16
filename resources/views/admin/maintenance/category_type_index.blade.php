@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3><img src="/images/bar.png"> Maintenance |Brokerage|Category</h3>
+		<h3> Maintenance |Brokerage|Category</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#catModal" style = "width: 100%;">New Category</button>
@@ -139,6 +139,7 @@
 @push('scripts')
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
+	$('#brokeragecollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
@@ -351,6 +352,7 @@ $('#btnSave').on('click', function(e){
 						'_token' : $('input[name=_token]').val(),
 						'name' : $('#name').val(),
 						'sections_id': $('#sections_id').val(),
+						'description' : $('#description').val(),
 					},
 					success: function (data)
 					{

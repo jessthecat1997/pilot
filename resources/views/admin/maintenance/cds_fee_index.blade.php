@@ -176,6 +176,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender:true,
+			bSort: true,
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'fee',
