@@ -262,7 +262,7 @@
 	$('#collapse1').addClass('in');
 	var dep_balance = "";
 	var totalamt = @if( $total[0]->totall == null) 0 @else {{ $total[0]->totall }} @endif;
-	var balance = 
+	var balance =
 	@if( $total[0]->totdpay == null && $total[0]->totpay == null && $total[0]->balance == null && $total[0]->totall == null)
 	0
 	@else
@@ -322,7 +322,7 @@
 			if(event.keyCode == 189)
 			{
 				return false;
-			}			
+			}
 		});
 		var p_table = $('#bills_table').DataTable({
 			processing: false,
@@ -340,7 +340,7 @@
 
 	})
 
-	
+
 	$(document).on('click', '.payment_receipt', function(e){
 		e.preventDefault();
 		type = $(this).closest('tr').find('.type').val();
@@ -382,7 +382,7 @@
 		console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
 		console.log(typeof(dep_balance));
 		if(amt <= dep_balance && amt <= bals && amt > 0)
-		{	
+		{
 
 			console.log('mawo');
 			if(amt < bals)
@@ -426,7 +426,7 @@
 			}
 			else if(amt>bals)
 			{
-				toastr.options = 
+				toastr.options =
 				{
 					"closeButton": false,
 					"debug": false,
@@ -503,7 +503,7 @@
 			}
 			else if(amt > totalamt)
 			{
-				toastr.options = 
+				toastr.options =
 				{
 					"closeButton": false,
 					"debug": false,
@@ -614,8 +614,8 @@ $(document).on('click', '.deposit-payment', function(e){
 })
 
 $(document).on('click', '.make_payment', function(e){
-	var amount = $(this).val(); 
-	console.log(amount); 
+	var amount = $(this).val();
+	console.log(amount);
 	var amt = parseFloat(document.getElementById("selected_bill").value = amount);
 })
 $(document).on('click', '#check', function(e){
@@ -1129,7 +1129,7 @@ $(document).on('click', '.finalize-cheque', function(e){
 		$.ajax({
 			method: 'POST',
 			url: '{{ route("payment.store") }}',
-			data: {	Q
+			data: {	
 				'_token' : $('input[name=_token]').val(),
 				'isCheque' : 0,
 				'bi_head_id' : {{ $so_head_id }},

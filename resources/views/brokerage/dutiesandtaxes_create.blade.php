@@ -1,7 +1,17 @@
 	@extends('layouts.brokerage')
 
 	@section('content')
-	<div class = "row">
+	<div id = "loading" 	class = "container" >
+		<div class = "row " style = " font-size: 20px">
+			<i class="fa fa-spinner fa-pulse fa-5x fa-fw" ></i>
+
+		</div>
+		<br/>
+		<div width = "100%" style = "text-align: center">
+			&nbsp;&nbsp;&nbsp;Computing...
+		</div>
+	</div>
+	<div class = "row" id = "page">
 			<div class = "panel default-panel">
 				<div class = "panel-heading">
 					<h2>&nbsp;Brokerage | Duties And Taxes</h2>
@@ -224,16 +234,58 @@
 	    white-space: nowrap;
 	    width: 1%;
 	}
+
+	#page {
+    display: none;
+}
+#loading {
+    display: block;
+    position: absolute;
+		left:50%;
+top:200px;
+width:20px;
+height:25px;
+
+margin-left:-10px; /* -1/2 width */
+margin-top:-10px; /* -1/2 height */
+}
 	</style>
 	@endpush
 
 	@push('scripts')
 	<script type="text/javascript">
+	function onReady(callback) {
+
+    var intervalID = window.setInterval(checkReady, 1000);
+
+    function checkReady() {
+        if (document.getElementsByTagName('body')[0] !== undefined) {
+            window.clearInterval(intervalID);
+            callback.call(this);
+
+        }
+    }
+}
+
+function show(id, value) {
+    document.getElementById(id).style.display = value ? 'block' : 'none';
+}
+
+onReady(function () {
+	if(!window.location.hash) {
+			window.location = window.location + '#loaded';
+			window.location.reload();
+	}
+	else{
+		show('page', true);
+    show('loading', false);
+	}
+});
+
 		$('#collapse1').addClass('in');
 		var BankCharges;
 
 		window.onload = function(){
-
 			document.getElementById('consignee').innerHTML = "Consignee: "+localStorage.getItem("companyName");
 			document.getElementById('shipper').innerHTML = "Shipper: "+localStorage.getItem("shipper");
 			document.getElementById('blNo').innerHTML = "BL/AWL No.: "+localStorage.getItem("freightNumber");

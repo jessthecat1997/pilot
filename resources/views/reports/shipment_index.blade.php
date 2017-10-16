@@ -247,8 +247,16 @@
 																	break;
 
 																}
+																else
+																{
+																	$payment_format = number_format((float)2300, 2, '.', ',');
+																	$total += 2300;
+																	echo $payment_format;
+																	break;
+																}
 															}
 														}
+
 													@endphp
 												</td>
 											</tr>
@@ -290,8 +298,17 @@
 																	$payment_format = number_format((float)$payment->charge_payment, 2, '.', ',');
 																	echo $payment_format;
 																	$total += $payment->charge_payment;
+																	break;
+																}
+																else
+																{
+																	$payment_format = number_format((float)800, 2, '.', ',');
+																	$total += 800;
+																	echo $payment_format;
+																	break;
 																}
 															}
+
 														}
 													@endphp
 												</td>

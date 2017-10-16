@@ -42,6 +42,9 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
 
+	Route::get('getCategory/{section_id?}', 'DutiesAndTaxesController@get_category')->name('get_category');
+	Route::get('getItem/{category_id?}', 'DutiesAndTaxesController@get_item')->name('get_item');
+
 	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
 	Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
 	Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
@@ -631,4 +634,3 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
 	Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
 });
-

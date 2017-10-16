@@ -30,590 +30,620 @@
 
 		<div class = "panel-heading">
 			<h2>&nbsp;Brokerage | Order</h2>
+			<hr>
 		</div>
 		<div class = "panel-body panel">
 			<div class="col-md-12">
-				<h4>Brokerage Information <button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Brokerage Status</button></h4>
 
-				<br />
-				<table class="table">
+					<button class="btn btn-sm btn-primary pull-right clearfix edit-trucking-information" data-toggle="modal" data-target="#trModal">Update Brokerage Status</button>
+						<br /><br />
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+								Brokerage Information
+						</div>
+						<div class="panel-body">
+							<br />
+									<table class="table">
 
-						<tr>
-							<td class="active" width = "30%" ><strong>Brokerage Service Order #: </strong></td>
-							<td class = "success" id="consignee">{{ $brokerage_id }}</td>
-							<td class="success">
-							</td>
-						</tr>
-
-						<tr>
-							<td class="active"><strong>Status: </strong></td>
-							<td class="success">
-								@php
-								switch($brokerage_header[0]->statusType){
-								case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
-								case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
-								case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
-								default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
-								@endphp
-							</td>
-							<td class="success">
-							</td>
-						</tr>
-						<tr>
-							<td class="active">
-								<strong>Estimated Total Brokerage Fee: </strong>
-							</td>
-
-							<td class="success" colspan="2">
-								@php $totalBrokerageFee = 0.00;@endphp
-								@forelse($dutiesandtaxes_header as $brokerageFee)
-									@php
-										$totalBrokerageFee += floatval($brokerageFee->brokerageFee);
-									@endphp
-								@empty
-										@php $totalBrokerageFee = 0.00; @endphp
-								@endforelse
-								Php {{number_format((float)$totalBrokerageFee, 2, '.', ',')}}
-							</td>
-						</tr>
-				</table>
-				<div id = "containers">
-					<div class="panel-group" id = "container_copy">
-						<div class="panel panel-default" id = "0_panel">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" href="#0_container " style = "text-decoration: none;">Order Details</a>
-									<div class="pull-right">
-										<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
-										</div>
-								</h4>
-							</div>
-							<div id="0_container" class="panel-collapse collapse in">
-								<div class="panel-body">
-									<table class = "table table-borderless">
-										<tr>
-											<td width = "30%"><strong>Consignee:
-												&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->firstName  . " " . $brokerage_header[0]->lastName }}
+											<tr>
+												<td class="active" width = "30%" ><strong>Brokerage Service Order #: </strong></td>
+												<td class = "success" id="consignee">{{ $brokerage_id }}</td>
+												<td class="success">
 												</td>
-											<td width = "30%">
-				                <strong>Company Name: </strong>
-												<strong>&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->companyName }}</strong>
-											</td>
+											</tr>
 
-											<td width = "30%">
-												<label  id = "shipper"> Shipper: @php echo $brokerage_header[0]->shipper @endphp </label>
-											</td>
-										</tr>
-										<tr>
-
-											<td width = "30%">
-												<label  id = "certificateOfOrigin"> Certificate Of Origin: @php
-													if($brokerage_header[0]->withCO == 1)
-														echo 'Included';
-													if($brokerage_header[0]->withCO == 0)
-
-														echo 'Not Included'
-													@endphp </label>
-											</td>
-
-											<td width = "30%">
-													<label  id = "weight"> Weight: {{ number_format((float)$brokerage_header[0]->Weight, 2, '.', ',')}} (kgs)</label>
-											</td>
-											<td width = "30%">
-												<label  id = "blNo" > Bill No.: @php echo $brokerage_header[0]->freightBillNo @endphp </label>
-											</td>
-
-										</tr>
-										<tr>
-											<td>
-												<label  id = "arrivalDate"> Expected Date Of Arrival: <br/>
+											<tr>
+												<td class="active"><strong>Status: </strong></td>
+												<td class="success">
 													@php
-													$date = $brokerage_header[0]->expectedArrivalDate;
-														echo $date =  date("F j, Y (l)") @endphp </label>
-											</td>
-											<td>
-												<label class = "control-label" id = "port"> Pickup location: <br/> @php  echo $brokerage_header[0]->location @endphp  </label>
-											</td>
+													switch($brokerage_header[0]->statusType){
+													case 'C': echo "<span class = 'label label-default'>Cancelled</span>"; break;
+													case 'F': echo "<span class = 'label label-success'>Finished</span>"; break;
+													case 'P': echo "<span class = 'label label-warning'>Pending</span>"; break;
+													default : echo "<span class = 'label label-default'>Unknown</span>"; break; }
+													@endphp
+												</td>
+												<td class="success">
+												</td>
+											</tr>
+											<tr>
+												<td class="active">
+													<strong>Estimated Total Brokerage Fee: </strong>
+												</td>
 
-										</tr>
-
+												<td class="success" colspan="2">
+													@php $totalBrokerageFee = 0.00;@endphp
+													@forelse($dutiesandtaxes_header as $brokerageFee)
+														@php
+															$totalBrokerageFee += floatval($brokerageFee->brokerageFee);
+														@endphp
+													@empty
+															@php $totalBrokerageFee = 0.00; @endphp
+													@endforelse
+													Php {{number_format((float)$totalBrokerageFee, 2, '.', ',')}}
+												</td>
+											</tr>
 									</table>
-
-
-									@if($withContainer == false)
-									<div class = "">
-										<div class = "panel-default panel">
-											<div class = "panel-heading">
-												<h5>Delivery Details: </h5>
-											</div>
-											<div class = "panel-body">
-												<div class = "col-md-10">
-													<form class="form-horizontal" role="form">
-														<table id = "detail_table" class = "table table-responsive">
-															<thead>
-																<tr>
-																	<td>
-
-																	</td>
-																	<td>
-																		Description Of Good
-																	</td>
-																	<td>
-																		LCL Type
-																	</td>
-																	<td>
-																		Basis
-																	</td>
-																	<td>
-																		Cubic Meters
-																	</td>
-																	<td>
-																		Gross Weight(kg)
-																	</td>
-																	<td>
-																		Supplier/s
-																	</td>
-																</tr>
-															</thead>
-															<tbody>
-																@php
-																$num = 1;
-																@endphp
-																@forelse($brokerage_details as $delivery_detail)
-																<tr>
-																	<td>
-																		{{ $num++ }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->descriptionOfGoods }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->lcl_type }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->basis }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->cubicMeters }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->lcl_type }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->grossWeight }}
-																	</td>
-																	<td>
-																		{{ $delivery_detail->supplier }}
-																	</td>
-																</tr>
-																@empty
-																<tr>
-																	<td colspan="4">
-																		<h5>No records found.</h5>
-																	</td>
-																</tr>
-																@endforelse
-															</tbody>
-														</table>
-													</form>
+									<div id = "containers">
+										<div class="panel-group" id = "container_copy">
+											<div class="panel panel-default" id = "0_panel">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" href="#0_container " style = "text-decoration: none;">Order Details</a>
+														<div class="pull-right">
+															<button class="btn btn-xs btn-info" data-toggle = "collapse" href="#0_container">_</button>
+															</div>
+													</h4>
 												</div>
-											</div>
-										</div>
-									</div>
-									@endif
-									@if($withContainer == true)
-									<div class = "">
-										<div class = "panel-default panel">
-											<div class = "panel-heading">
-												<h5>List Of Containers: </h5>
-											</div>
-											<div class = "panel-body">
-												<div class = "col-md-12">
-													<form class="form-horizontal" role="form">
-														<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
-															<thead>
-																<tr>
-																	<td style="width: 5%;">
+												<div id="0_container" class="panel-collapse collapse in">
+													<div class="panel-body">
+														<table class = "table table-borderless">
+															<tr>
+																<td width = "30%"><strong>Consignee:
+																	&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->firstName  . " " . $brokerage_header[0]->lastName }}
+																	</td>
+																<td width = "30%">
+									                <strong>Company Name: </strong>
+																	<strong>&nbsp;&nbsp;&nbsp;{{ $brokerage_header[0]->companyName }}</strong>
+																</td>
 
-																	</td>
-																	<td style="width: 25%;">
-																		Container Number
-																	</td>
-																	<td>
-																		Cargo Type
-																	</td>
-																	<td style="width: 20%;">
-																		Volume
-																	</td>
+																<td width = "30%">
+																	<label  id = "shipper"> Shipper: @php echo $brokerage_header[0]->shipper @endphp </label>
+																</td>
+															</tr>
+															<tr>
 
-																	<td style="width: 20%;">
-																		Status
-																	</td>
-																	<td style="width: 20%;">
-																		Container Return Date
-																	</td>
-																	<td style="width: 20%;">
-																		Date Returned
-																	</td>
+																<td width = "30%">
+																	<label  id = "certificateOfOrigin"> Certificate Of Origin: @php
+																		if($brokerage_header[0]->withCO == 1)
+																			echo 'Included';
+																		if($brokerage_header[0]->withCO == 0)
 
-																</tr>
-															</thead>
-															<tbody>
-																@php
-																$num = 1
-																@endphp
+																			echo 'Not Included'
+																		@endphp </label>
+																</td>
 
-																@forelse($brokerage_containers as $delivery_container)
-																<tr>
-																	<td>
-																		{{ $num++ }}
-																		<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
-																		<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
-																		<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
-																		<input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
-																		<input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
-																		<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
-																		<input type = "hidden" class = "dateReturned"
-																		value = "@if($delivery_container->dateReturned == null)
-																		@else
-																		{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
-																		@endif"
-																		/>
-																		<input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
-																	</td>
-																	<td>
-																		<span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
-																	</td>
-																	<td>
+																<td width = "30%">
+																		<label  id = "weight"> Weight: {{ number_format((float)$brokerage_header[0]->Weight, 2, '.', ',')}} (kgs)</label>
+																</td>
+																<td width = "30%">
+																	<label  id = "blNo" > Bill No.: @php echo $brokerage_header[0]->freightBillNo @endphp </label>
+																</td>
+
+															</tr>
+															<tr>
+																<td>
+																	<label  id = "arrivalDate"> Expected Date Of Arrival: <br/>
 																		@php
-																		switch($delivery_container->cargoType){
-																			case 'G':  echo "General Cargo"; break;
-																			case 'C':  echo "Chemical"; break;
-																			case 'D':  echo "Dangerous Cargo"; break;
-																		default : echo "Unknown"; break; }
-																		@endphp
-																	</td>
-																	<td>
-																		<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
-																	</td>
-																	<td>
-																		<span class = "containerReturnStatus">
-																			@php
-																			switch($delivery_container->containerReturnStatus){
-																			case 'Y':  echo "<span class = 'label label-success'>Returned</span>"; break;
-																			case 'N':  echo "<span class = 'label label-warning'>Pending</span>"; break;
-																			default : echo "Unknown"; break; }
-																			@endphp
-																		</span>
-																	</td>
-																	<td>
-																		<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
-																	</td>
-																	@if($delivery_container->dateReturned != null)
-																	<td>
-																		<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}</span>
-																	</td>
-																	@else
-																	<td>
-																		<span class = "containerReturnDate">Unreturned</span>
-																	</td>
-																	@endif
+																		$date = $brokerage_header[0]->expectedArrivalDate;
+																			echo $date =  date("F j, Y (l)") @endphp </label>
+																</td>
+																<td>
+																	<label class = "control-label" id = "port"> Pickup location: <br/> @php  echo $brokerage_header[0]->location @endphp  </label>
+																</td>
 
-																</tr>
-																@empty
-																<tr>
-																	<td colspan="4">
-																		<h5>No records found.</h5>
-																	</td>
-																</tr>
-																@endforelse
-															</tbody>
+															</tr>
+
 														</table>
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
-									<br/>
-									<div class = "">
-										<div class = "panel-default panel">
-											<div class = "panel-heading">
-												<h5>Container Contents: </h5>
-											</div>
-											<div class = "panel-body">
-												<div class = "col-md-10 col-md-offset-1">
-													<form class="form-horizontal" role="form">
-														@php $cont_ctr = 0; @endphp
-														@forelse($container_with_detail as $container)
-														<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
-														<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;"
 
-															>
-															<thead>
-																<tr>
-																	<td>
-																		Description of Goods
-																	</td>
-																	@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
-																		<td>
-																			Class
-																		</td>
-																	@else
-																		<Td>
 
-																		</td>
-																	@endif
+														@if($withContainer == false)
+														<div class = "">
+															<div class = "panel-default panel">
+																<div class = "panel-heading">
+																	<h5>Delivery Details: </h5>
+																</div>
+																<div class = "panel-body">
+																	<div class = "col-md-10">
+																		<form class="form-horizontal" role="form">
+																			<table id = "detail_table" class = "table table-responsive">
+																				<thead>
+																					<tr>
+																						<td>
 
-																	<td>
-																		Gross Weight(kg)
-																	</td>
-																	<td>
-																		Supplier/s
-																	</td>
-																</tr>
-															</thead>
-															<tbody>
-																@forelse($container['details'] as $detail)
-																<tr>
-																	<td>
-																		{{ $detail->descriptionOfGoods }}
-																	</td>
+																						</td>
+																						<td>
+																							Description Of Good
+																						</td>
+																						<td>
+																							LCL Type
+																						</td>
+																						<td>
+																							Basis
+																						</td>
+																						<td>
+																							Cubic Meters
+																						</td>
+																						<td>
+																							Gross Weight(kg)
+																						</td>
+																						<td>
+																							Supplier/s
+																						</td>
+																					</tr>
+																				</thead>
+																				<tbody>
+																					@php
+																					$num = 1;
+																					@endphp
+																					@forelse($brokerage_details as $delivery_detail)
+																					<tr>
+																						<td>
+																							{{ $num++ }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->descriptionOfGoods }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->lcl_type }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->basis }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->cubicMeters }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->lcl_type }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->grossWeight }}
+																						</td>
+																						<td>
+																							{{ $delivery_detail->supplier }}
+																						</td>
+																					</tr>
+																					@empty
+																					<tr>
+																						<td colspan="4">
+																							<h5>No records found.</h5>
+																						</td>
+																					</tr>
+																					@endforelse
+																				</tbody>
+																			</table>
+																		</form>
+																	</div>
+																</div>
+															</div>
+														</div>
+														@endif
+														@if($withContainer == true)
+														<div class = "">
+															<div class = "panel-default panel">
+																<div class = "panel-heading">
+																	<h5>List Of Containers: </h5>
+																</div>
+																<div class = "panel-body">
+																	<div class = "col-md-12">
+																		<form class="form-horizontal" role="form">
+																			<table id = "detail_table" class = "table table-responsive" style="width: 100%;">
+																				<thead>
+																					<tr>
+																						<td style="width: 5%;">
 
-																	@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
-																		<td >
+																						</td>
+																						<td style="width: 25%;">
+																							Container Number
+																						</td>
+																						<td>
+																							Cargo Type
+																						</td>
+																						<td style="width: 20%;">
+																							Volume
+																						</td>
 
-																			@forelse($dangerous_cargo_types as $dct)
+																						<td style="width: 20%;">
+																							Container Return Date
+																						</td>
 
-																				@if($dct->id == $detail->class_id)
-																					{{$dct->name}}
-																				@endif
 
+																					</tr>
+																				</thead>
+																				<tbody>
+																					@php
+																					$num = 1
+																					@endphp
+
+																					@forelse($brokerage_containers as $delivery_container)
+																					<tr>
+																						<td>
+																							{{ $num++ }}
+																							<input type = "hidden" class = "containerReturnDate" value= "{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}" />
+																							<input type = "hidden" class = "containerID" value= "{{ $delivery_container->id }}" />
+																							<input type = "hidden" class = "containerReturnAddress" value= "{{ $delivery_container->containerReturnAddress }}" />
+																							<input type = "hidden" class = "shippingLine" value= "{{ $delivery_container->shippingLine }}" />
+																							<input type = "hidden" class = "portOfCfsLocation" value= "{{ $delivery_container->portOfCfsLocation }}" />
+																							<input type = "hidden" class = "containerReturnTo" value = "{{ $delivery_container->containerReturnTo }}" />
+																							<input type = "hidden" class = "dateReturned"
+																							value = "@if($delivery_container->dateReturned == null)
+																							@else
+																							{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}
+																							@endif"
+																							/>
+																							<input type = "hidden" class = "remarks" value = "{{ $delivery_container->remarks }}" />
+																						</td>
+																						<td>
+																							<span class = "containerNumber">{{ $delivery_container->containerNumber }}</span>
+																						</td>
+																						<td>
+																							@php
+																							switch($delivery_container->cargoType){
+																								case 'G':  echo "General Cargo"; break;
+																								case 'C':  echo "Chemical"; break;
+																								case 'D':  echo "Dangerous Cargo"; break;
+																							default : echo "Unknown"; break; }
+																							@endphp
+																						</td>
+																						<td>
+																							<span class = "containerVolume">{{ $delivery_container->containerVolume }}</span>
+																						</td>
+
+																						<td>
+																							<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}</span>
+																						</td>
+																						@if($delivery_container->dateReturned != null)
+																						<td>
+																							<span class = "containerReturnDate">{{ Carbon\Carbon::parse($delivery_container->dateReturned)->toFormattedDateString() }}</span>
+																						</td>
+																						@else
+
+																						@endif
+
+																					</tr>
+																					@empty
+																					<tr>
+																						<td colspan="4">
+																							<h5>No records found.</h5>
+																						</td>
+																					</tr>
+																					@endforelse
+																				</tbody>
+																			</table>
+																		</form>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br/>
+														<div class = "">
+															<div class = "panel-default panel">
+																<div class = "panel-heading">
+																	<h5>Container Contents: </h5>
+																</div>
+																<div class = "panel-body">
+																	<div class = "col-md-10 col-md-offset-1">
+																		<form class="form-horizontal" role="form">
+																			@php $cont_ctr = 0; @endphp
+																			@forelse($container_with_detail as $container)
+																			<label class = "control-label">Container Number : {{ $container['container']->containerNumber }}</label>
+																			<table class = "table table-responsive" id = "{{ $container['container']->id }}_table" style="width: 100%;"
+
+																				>
+																				<thead>
+																					<tr>
+																						<td>
+																							Description of Goods
+																						</td>
+																						@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
+																							<td>
+																								Class
+																							</td>
+																						@else
+																							<Td>
+
+																							</td>
+																						@endif
+
+																						<td>
+																							Gross Weight(kg)
+																						</td>
+																						<td>
+																							Supplier/s
+																						</td>
+																					</tr>
+																				</thead>
+																				<tbody>
+																					@forelse($container['details'] as $detail)
+																					<tr>
+																						<td>
+																							{{ $detail->descriptionOfGoods }}
+																						</td>
+
+																						@if($brokerage_containers[$cont_ctr]->cargoType == 'D')
+																							<td >
+
+																								@forelse($dangerous_cargo_types as $dct)
+
+																									@if($dct->id == $detail->class_id)
+																										{{$dct->name}}
+																									@endif
+
+																								@empty
+																								@endforelse
+																							</td>
+																						@else
+																							<Td>
+
+																							</td>
+																						@endif
+
+
+																						<td>
+																							{{ $detail->grossWeight }}
+																						</td>
+																						<td>
+																							{{ $detail->supplier }}
+																						</td>
+																					</tr>
+																					@empty
+																					<tr>
+																						<td colspan="4">
+																							<h5 style="text-align: center;">No records found.</h5>
+																						</td>
+																					</tr>
+																					@endforelse
+																				</tbody>
+																				@php $cont_ctr++ @endphp
+																			</table>
 																			@empty
 																			@endforelse
-																		</td>
-																	@else
-																		<Td>
-
-																		</td>
-																	@endif
-
-
-																	<td>
-																		{{ $detail->grossWeight }}
-																	</td>
-																	<td>
-																		{{ $detail->supplier }}
-																	</td>
-																</tr>
-																@empty
-																<tr>
-																	<td colspan="4">
-																		<h5 style="text-align: center;">No records found.</h5>
-																	</td>
-																</tr>
-																@endforelse
-															</tbody>
-															@php $cont_ctr++ @endphp
-														</table>
-														@empty
-														@endforelse
-													</form>
+																		</form>
+																	</div>
+																</div>
+															</div>
+														</div>
+														@endif
+													</div>
 												</div>
 											</div>
+										</div>
+									</div>
+						</div>
+					</div>
+					<hr />
+				</div>
+			</div>
+
+		</div>
+
+</div>
+
+<div class = "row">
+
+		<div class = "panel default-panel">
+
+
+			<div class = "panel-body">
+				<button class = "btn btn-md btn-success col-md-5 pull-right collapse" id = "newDutiesAndTaxes">New Duties and Taxes</button>
+				<br /><br />
+
+
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						Declared Duties And Taxes
+					</div>
+					<div class="panel-body">
+								<table class = "table table-responsive table-striped cell-border table-bordered" id = "dutiesandtaxes_table">
+							<thead>
+								<tr>
+									<td style="width: 5%;">
+										ID
+									</td>
+									<td style="width: 5%;">
+									  Exchange Rate
+									</td>
+									<td style="width: 20%;">
+										Brokerage Fee
+									</td>
+									<td style="width: 20%;">
+										Processed By
+									</td>
+									<td style = "width: 10%">
+										Status
+									</td>
+									<td style="width: 15%;">
+										Actions
+									</td>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+
+
+<div class = "row">
+		<div class = "panel">
+			<div class = "panel-body">
+
+			</div>
+		</div>
+
+</div>
+<hr>
+<div class = "row">
+	<div class="col-lg-12">
+		<div class="panel-body">
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Billing</h4>
+					</div>
+					<div id="collapseOne" class="panel-collapse collapse in">
+						<div class="panel-body">
+							<div class="panel-primary">
+								<div class="col-lg-6">
+									@if($brokerage_header[0]->bi_head_id_rev)
+									<h4>List of Billings <button class = "btn but new_revenue pull-right collapse">New Revenue</button></h4>
+									@else
+									<h4>List of Billings</h4>
+									@endif
+									<br />
+									@if($brokerage_header[0]->bi_head_id_rev != null)
+									<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
+										<thead>
+											<tr>
+												<td>
+													Name
+												</td>
+												<td>
+													Description
+												</td>
+												<td>
+													Amount
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									@else
+									<div class = "form-horizontal">
+										<div class = "col-md-10 collapse" id = "CreateBillingFirst">
+											Create Billing First to Add Payables.
+										</div>
+										<div class = "col-md-10 collapse" id = "NoBillingRecords">
+											No Billing Records Found
+										</div>
+
+										<div class="col-md-2">
+											<button class = "btn but new_revenue_bill btn-sm collapse">New Bill</button>
 										</div>
 									</div>
 									@endif
 								</div>
 							</div>
+							<div class="panel-primary">
+								<div class="col-lg-6">
+									@if($brokerage_header[0]->bi_head_id_exp != null)
+									<h4>List of Refundable Charges <button class = "btn but new_expense pull-right collapse">New Expense</button></h4>
+									@else
+									<h4>List of Refundable Charges</h4>
+									@endif
+									<br />
+									@if($brokerage_header[0]->bi_head_id_exp != null)
+									<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
+										<thead>
+											<tr>
+												<td>
+													Name
+												</td>
+												<td>
+													Description
+												</td>
+												<td>
+													Amount
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+												<td>
+
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									@else
+									<div class = "form-horizontal">
+										<div class = "col-md-10 collapse" id = "CreatePayableFirst">
+											Create Bill First to Add Payables.
+										</div>
+										<div class = "col-md-10 collapse" id = "NoPayableRecords">
+											No Payables Record Found.
+										</div>
+										<div class="col-md-2">
+											<button class = "btn but new_expense_bill btn-sm collapse">New Bill</button>
+										</div>
+									</div>
+									@endif
+
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h4 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Consignee Deposits</h4>
+					</div>
+					<div id="collapseTwo" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div class="panel-primary">
+								<div class="col-lg-12">
+									<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
+									<br />
+									<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
+										<thead>
+											<tr>
+												<td>
+													Date Added
+												</td>
+												<td>
+													Amount
+												</td>
+												<td>
+													Current Balance
+												</td>
+												<td>
+													Description
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div class = "row">
-		<div class = "panel default-panel">
-			<div class = "panel-body">
-
-				<h4>Duties and Taxes Declaration <button class = "btn btn-md btn-success col-md-5 pull-right collapse" id = "newDutiesAndTaxes">New Duties and Taxes</button></h4>
-				<hr />
-				<table class = "table table-responsive table-striped cell-border table-bordered" id = "dutiesandtaxes_table">
-					<thead>
-						<tr>
-							<td style="width: 5%;">
-								ID
-							</td>
-							<td style="width: 5%;">
-							  Exchange Rate
-							</td>
-							<td style="width: 20%;">
-								Brokerage Fee
-							</td>
-							<td style="width: 20%;">
-								Processed By
-							</td>
-							<td style = "width: 10%">
-								Status
-							</td>
-							<td style="width: 15%;">
-								Actions
-							</td>
-						</tr>
-					</thead>
-				</table>
-			</div>
-		</div>
 </div>
 
-
-<div class = "row">
-		<div class = "panel">
-			<div class = "panel-body">
-				@if($brokerage_header[0]->bi_head_id_rev)
-				<h4>List of Billings <button class = "btn but new_revenue pull-right collapse">New Revenue</button></h4>
-				@else
-				<h4>List of Billings</h4>
-				@endif
-				<br />
-				@if($brokerage_header[0]->bi_head_id_rev != null)
-				<table class="table table-responsive table-striped cell-border table-bordered" style="width: 100%;" id = "revenues_table">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Description
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				@else
-				<div class = "form-horizontal">
-					<div class = "col-md-10 collapse" id = "CreateBillingFirst">
-						Create Billing First to Add Payables.
-					</div>
-					<div class = "col-md-10 collapse" id = "NoBillingRecords">
-						No Billing Records Found
-					</div>
-
-					<div class="col-md-2">
-						<button class = "btn but new_revenue_bill btn-sm collapse">New Bill</button>
-					</div>
-				</div>
-				@endif
-			</div>
-		</div>
-
-</div>
-
-<div class = "row">
-		<div class = "panel">
-			<div class = "panel-body">
-				@if($brokerage_header[0]->bi_head_id_exp != null)
-				<h4>List of Refundable Charges <button class = "btn but new_expense pull-right collapse">New Expense</button></h4>
-				@else
-				<h4>List of Refundable Charges</h4>
-				@endif
-				<br />
-				@if($brokerage_header[0]->bi_head_id_exp != null)
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "expense_table">
-					<thead>
-						<tr>
-							<td>
-								Name
-							</td>
-							<td>
-								Description
-							</td>
-							<td>
-								Amount
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-							<td>
-
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
-				@else
-				<div class = "form-horizontal">
-					<div class = "col-md-10 collapse" id = "CreatePayableFirst">
-						Create Bill First to Add Payables.
-					</div>
-					<div class = "col-md-10 collapse" id = "NoPayableRecords">
-						No Payables Record Found.
-					</div>
-					<div class="col-md-2">
-						<button class = "btn but new_expense_bill btn-sm collapse">New Bill</button>
-					</div>
-				</div>
-				@endif
-
-			</div>
-		</div>
-
-</div>
-<div class = "row">
-
-		<div class = "panel">
-			<div class = "panel-body">
-
-				<h4>Consignee Deposits<button class = "btn but new_deposit pull-right">New Deposit</button></h4>
-				<br />
-				<table class="table table-responsive table-striped" style="width: 100%;" id = "deposits_table">
-					<thead>
-						<tr>
-							<td>
-								Date Added
-							</td>
-							<td>
-								Amount
-							</td>
-							<td>
-								Current Balance
-							</td>
-							<td>
-								Description
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-</div>
 
 <!-- Revenue Modal -->
 <div id="revModal" class="modal fade" role="dialog">
@@ -1279,6 +1309,7 @@ $(document).ready(function(){
     deferRender: true,
     serverSide: false,
     scrollX: true,
+		lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
     ajax: '{{route("brokerage.index")}}/{{ $brokerage_id }}/get_dutiesandtaxes',
     columns: [
 
@@ -1297,7 +1328,6 @@ $(document).ready(function(){
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{ route("brokerage.index") }}/{{  $brokerage_id }}/get_approveddutiesandtaxes',
 			columns: [
 
@@ -1372,7 +1402,6 @@ $(document).ready(function(){
 		processing: false,
 		deferRender: true,
 		serverSide: false,
-		scrollX: true,
 		ajax: '{{ route("depositView") }}/{{ $brokerage_id }}',
 		columns: [
 

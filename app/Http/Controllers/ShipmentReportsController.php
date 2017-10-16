@@ -100,7 +100,7 @@ class ShipmentReportsController extends Controller
             $payments = DB::table('payments')
             ->select('payments.id', 'payments.amount as payment_amount', 'payments.bi_head_id', 'so_head_id', 'billing_invoice_details.amount as charge_payment', 'charges.name as charge_name')
             ->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-            ->join('billing_invoice_details', 'payments.bi_head_id', '=', 'billing_invoice_details.id')
+            ->join('billing_invoice_details', 'billing_invoice_headers.bi_head_id', '=', 'billing_invoice_details.id')
             ->join('charges', 'charge_id', '=', 'charges.id')
             ->get();
 
