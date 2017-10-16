@@ -277,7 +277,7 @@
             </div>
             <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
             <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
-            <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }}" disabled>
+            <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }} {{ $employee->lastName }}" disabled>
             <input type="hidden" class="form-control" id="emp_pic" value="{{ $employee->emp_pic }}" disabled>
           </form>
         </div>

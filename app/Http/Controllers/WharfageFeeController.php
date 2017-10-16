@@ -58,9 +58,17 @@ public function update(StoreWharfageFee $request, $id)
 {
    DB::beginTransaction();
    try{
-    \DB::table('wharfage_details')
+
+    $wf = \DB::table('wharfage_details')
     ->where('wharfage_header_id','=', $request->wf_head_id)
-    ->delete();
+    ->where('deleted_at', '=', NULL)
+    ->get();
+
+    for($i = 0; $i < count($wf); $i ++)
+    {
+        $del_wf =  WharfageDetail::findOrFail($wf[$i]->id);
+        $del_wf->delete();
+    }
 
     $wf_header= WharfageHeader::findOrFail($id);
     $wf_header->dateEffective = $request->dateEffective;
@@ -99,8 +107,9 @@ public function destroy($id)
 public function wf_maintain_data(Request $request){
     $rates = DB::table('wharfage_details')
     ->join ('container_types', 'container_types.id','=','container_sizes_id') 
-    -> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
+    -> select('container_types.name AS container_size', 'amount', 'container_sizes_id', 'wharfage_details.deleted_at')
     ->where('wharfage_header_id', '=', $request->wf_id)
+    ->where('wharfage_details.deleted_at', '=', null)
     ->get();
 
     return $rates;

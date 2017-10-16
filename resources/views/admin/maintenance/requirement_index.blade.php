@@ -15,13 +15,13 @@
 				<table class = "table-responsive table table-striped cell-border table-bordered" id = "req_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td >
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td >
 								Actions
 							</td>
 						</tr>
@@ -89,7 +89,7 @@
 @endsection
 @push('styles')
 <style>
-	.class-Attachment Type-order{
+	.class-attachment{
 		border-left: 10px solid #8ddfcc;
 		background-color:rgba(128,128,128,0.1);
 		color: #fff;
