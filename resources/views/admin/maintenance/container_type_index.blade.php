@@ -26,6 +26,23 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($container_size as $cs)
+						<tr>
+							<td>
+								{{ $cs->name }}
+							</td>
+							<td>
+								{{ $cs->description }}
+							</td>
+							<td>
+								<button value = "{{ $cs->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $cs->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -146,7 +163,6 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: '{{ route("ct.data") }}',
 			columns: [
 			{ data: 'name'},
 			{ data: 'description' },
@@ -167,6 +183,38 @@
 			}
 		})
 
+
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
+
 		$(document).on('click', '.activate', function(e){
 			var ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
@@ -183,7 +231,7 @@
 				},
 				success: function (data)
 				{
-					cttable.ajax.reload();
+					cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {
@@ -221,11 +269,8 @@
 				description:
 				{
 
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
+					
+					alphanumeric: true,
 				},
 			},
 
@@ -278,7 +323,7 @@
 				},
 				success: function (data)
 				{
-					cttable.ajax.reload();
+					cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -332,7 +377,7 @@
 						success: function (data)
 						{
 							if(typeof(data) === "object"){
-								cttable.ajax.reload();
+								cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 								$('#ctModal').modal('hide');
 								$('#name').val("0");
 								$('#description').val("");
@@ -415,7 +460,7 @@
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-									cttable.ajax.reload();
+									cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
 									//$('#maxWeight').val("");
