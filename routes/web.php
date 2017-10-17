@@ -31,6 +31,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
 	Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
 
+//Brokerage Routes
 	Route::resource('/brokerage', 'BrokerageController');
 	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
 	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
@@ -104,8 +105,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/section','SectionsController');
 	Route::resource('/admin/category','CategoryTypesController');
 	Route::resource('/admin/item','ItemsController');
-
-
 
 
 //Utilities Routes
@@ -431,11 +430,11 @@ Route::group(['middleware' => ['admin']], function() {
 //Utilities home route
 	Route::resource('/utilities/settings','UtilityController');
 	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
-	//Backup and recovery 
-	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController'); 
+	//Backup and recovery
+	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
 
-//Audit Trail 
-	Route::resource('/admin/audit_trail', 'AuditTrailController'); 
+//Audit Trail
+	Route::resource('/admin/audit_trail', 'AuditTrailController');
 
 
 //Query
