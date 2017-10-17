@@ -213,6 +213,8 @@ Route::group(['middleware' => ['admin']], function() {
 
 //Vanessaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa addition before galawin ni skip
 	Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
+	Route::put('/utilities/section_reactivate/{id}','SectionsController@reactivate');
+	Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
 
 //end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaaa	
 

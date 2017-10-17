@@ -19,7 +19,7 @@ class StoreItem extends FormRequest
             case 'POST':
 
             return [
-                'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:category_types,name',
+                'name' => 'required|unique:category_types,name',
                 'sections_id' =>'required',
                 'category_types_id' => 'required',
 
@@ -30,7 +30,7 @@ class StoreItem extends FormRequest
             case 'PUT':
 
             return [
-                'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:category_types,name,'. $this->segment(3) ,
+                'name' => 'required|unique:category_types,name,'. $this->segment(3) ,
                 'sections_id' =>'required',
                 'category_types_id' => 'required',
 
