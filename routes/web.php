@@ -8,28 +8,6 @@ Route::get('/tlogin','LoginController@thome');
 Route::post('/login/tvalidateUsers','LoginController@tvalidateUsers');
 
 Route::group(['middleware' => ['admin']], function() {
-			//Maintenance
-	Route::get('/', 'DashboardController@index');
-	Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
-	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
-	Route::resource('/employees', 'EmployeesController');
-	Route::resource('/employees/newemployee', 'EmployeesController');
-	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
-	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
-		return $from_new;});
-	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
-
-	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
-	Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
-
-//Brokerage Routes
-
-	Route::resource('consignee', 'ConsigneesController');
-	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
-
-
-
 //Maintenance Routes
 
 	Route::resource('/admin/vehicletype', 'VehicleTypesController');
