@@ -44,8 +44,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
-        if ($e instanceof TokenMismatchException){
+        if ($exception instanceof ModelNotFoundException or $exception instanceof NotFoundHttpException) {
+            // ajax 404 json feedback
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Not Found'], 404);
+            }
+
+            // normal 404 view page feedback
+            return response()->view('errors.missing', [], 404);
+        }
+
+        if ($exception instanceof TokenMismatchException){
             // Redirect to a form. Here is an example of how I handle mine
             return redirect($request->fullUrl())->with('csrf_error',"Oops! Seems you couldn't submit form for a long time. Please try again.");
         }

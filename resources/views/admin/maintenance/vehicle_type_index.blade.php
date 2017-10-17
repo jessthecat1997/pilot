@@ -225,6 +225,8 @@
 			data = vtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
+
+		
 		$(document).on('click', '.activate', function(e){
 			var vt_id = $(this).val();
 			data = vtable.row($(this).parents()).data();
@@ -240,7 +242,7 @@
 				},
 				success: function (data)
 				{
-					vtable.ajax.reload();
+					vtable.ajax.url( '{{ route("vt.data") }}' ).load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {

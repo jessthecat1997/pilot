@@ -23,16 +23,16 @@ class VehiclesController extends Controller
         return $v;
     }
 
-    public function update(Request $request)
+    public function update(StoreVehicle $request)
     {
-        $plate = str_replace('%', ' ', $request->id);
-        $vehicle = \DB::table('vehicles')
-        ->where('plateNumber', $request->plate)
-        ->update([
-            'model' => $request->model,
-            'bodyType' => $request->bodyType
-            ]);
-        return $vehicle;
+
+    }
+
+    public function v_update(StoreVehicle $request)
+    {
+        $plate = str_replace('%', ' ', $request->plateNumber);
+        $v = Vehicle::where('plateNumber', $plate)->firstOrFail();
+        return $v;
     }
 
 
@@ -47,13 +47,13 @@ class VehiclesController extends Controller
     {
 
         $plate = str_replace('%', ' ', $request->id);
-       
+
         $vehicle = \DB::table('vehicles')
         ->where('plateNumber', '=', $plate)
         ->update([
             'deleted_at' => null,
         ]);
-        
+
 
     }
 

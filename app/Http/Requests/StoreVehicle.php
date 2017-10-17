@@ -20,7 +20,7 @@ class StoreVehicle extends FormRequest
 
         return [
         'vehicle_types_id' => 'required',
-        'plateNumber' => 'unique:vehicles,plateNumber|required| max:20|min:2',
+        'plateNumber' => 'required|max:20|min:2|unique:vehicles,plateNumber',
         'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
         'dateRegistered' => 'required',
         ];
@@ -31,7 +31,7 @@ class StoreVehicle extends FormRequest
         
         return [
         'vehicle_types_id' => 'required',
-        'plateNumber' => 'required| max:20|min:2|unique:vehicles,plateNumber,'. $this->segment(4),
+        'plateNumber' => 'required| max:20|min:2|unique:vehicles,plateNumber,'. $this->segment(4) . ',plateNumber',
         'model' => 'required| max:20|min:2|regex:/^[\p{L}\p{N} .-]+$/',
         'dateRegistered' => 'required',
         ];

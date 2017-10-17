@@ -340,7 +340,7 @@
 									"showMethod": "fadeIn",
 									"hideMethod": "fadeOut"
 								}
-								toastr["success"]("Record addded successfully");
+								toastr["success"]("Record added successfully");
 
 								$('#btnSave').removeAttr('disabled');
 

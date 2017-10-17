@@ -298,6 +298,7 @@
           </form>
         </div>
         <strong>Note:</strong> All fields with * are required.
+
       </div>
       <div class="modal-footer">
         <button class="btn but save-user">Save</button>
@@ -325,9 +326,9 @@
               @endforelse
               
             </div>
-            <div class="form-group">
-              <label for="password">* Password: </label>
-              <input type="password" class="form-control" id="uppass">
+            <div class="form-group required">
+              <label for="password" class="control-label">Password: </label>
+              <input type="password" class="form-control" id="uppass" >
             </div>
             @forelse($user as $u)
             <input type="hidden" class="form-control" id="user_id" value="{{ $u->id }}" disabled>

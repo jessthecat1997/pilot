@@ -285,6 +285,11 @@ class BrokerageController extends Controller
           ->where('dutiesAndTaxesHeaders_id','=', $dutiesandtaxes_header[0]->id)
           ->get();
 
+          $audit = new \App\AuditTrail;
+          $audit->user_id = \Auth::user()->id;
+          $audit->description = "Printed duties and taxes declartion, id: " . $dutiesandtaxes_header[0]->id . "from brokerage order no. " .$so_id;
+          $audit->save();
+
           $pdf = PDF::loadView('pdf_layouts.dutiesandtaxes_pdf', compact(['so_id',  'brokerage_header', 'dutiesandtaxes_header', 'dutiesandtaxes_details', 'exchangeRate', 'cds_fee', 'ipf_fee_header', 'ipf_fee_details']))->setPaper('a4', 'landscape')->setWarnings(false);
           return $pdf->stream();
       }
@@ -325,6 +330,7 @@ class BrokerageController extends Controller
 
   public function save_neworder(Request $request)
   {
+    
     $new_so_head = new ConsigneeServiceOrderHeader;
     $new_so_head->consignees_id = $request->cs_id;
     $new_so_head->employees_id = $request->employee_id;
@@ -412,6 +418,13 @@ class BrokerageController extends Controller
             }
         }
     }
+
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Created new brokerage order id: ".$new_brokerage_so->id;
+    $audit->save();
+
+
     $brokerage_id = $new_brokerage_so->id;
     return $brokerage_id;
   }
@@ -518,6 +531,12 @@ class BrokerageController extends Controller
       ->where('brokerage_service_orders.id', $brokerage_id)
     ->update(['statusType' =>  $request->status]);
 
+
+        $audit = new \App\AuditTrail;
+        $audit->user_id = \Auth::user()->id;
+        $audit->description = "Update brokerage order id: ".$brokerage_id;
+        $audit->save();
+
     return $brokerage_id;
   }
 
@@ -545,14 +564,25 @@ class BrokerageController extends Controller
       switch ($request->isRevenue) {
           case 0:
           $consignee_header->bi_head_id_exp = $billing_header->id;
+              $audit = new \App\AuditTrail;
+              $audit->user_id = \Auth::user()->id;
+              $audit->description = "Created Refundable Charges Invoice for brokerage order id:" .$br_so_id;
+              $audit->save();
           break;
           case 1:
           $consignee_header->bi_head_id_rev = $billing_header->id;
+              $audit = new \App\AuditTrail;
+              $audit->user_id = \Auth::user()->id;
+              $audit->description = "Created Billing Invoice for brokerage order id:" .$br_so_id;
+              $audit->save();
           break;
           default:
               # code...
           break;
       }
+
+
+
       $consignee_header->save();
       return $consignee_header;
 

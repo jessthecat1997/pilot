@@ -50,8 +50,5 @@ public function reactivate(Request $request)
 
 }
 
-public function req_utilities(){
 
-        //return view('admin/utilities.requirement_utility_index');
-}
 }

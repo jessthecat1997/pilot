@@ -19,8 +19,10 @@ class StoreLocationCities extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name',
-            'provinces_id' =>'required',
+            'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,
+            provinces_id',
+            
+            'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
             
             ];
 
@@ -29,8 +31,8 @@ class StoreLocationCities extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required|min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|',
-            'provinces_id' =>'required',
+            'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,' . $this->segment(4),
+           'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
             ];
 
             break;
