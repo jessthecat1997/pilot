@@ -100,10 +100,16 @@
 							<div class="form-group required">
 								<label class = "control-label">Vehicle Type</label>
 								<div class="col-md-12">
-									<select class = "form-control vehicle_types_id select2"  id = "vehicle_types_id" style="width: 100%;">
-									</select>
+									<div class="collapse in" id = "vt_collapse1">
+										<select class = "form-control vehicle_types_id select2"  id = "vehicle_types_id" style="width: 100%;">
+										</select>
+									</div>
+									<div class="collapse" id = "vt_collapse2">
+										<input type="text" class="form-control" readonly= "readonly" id = "vt_name" />
+									</div>
 								</div>
 							</div>
+
 							<br/>
 							<div><button  id = "nvt" class = "btn btn-md btn-info new_vehicle_type pull-right" data-toggle = 'modal' data-target = "#vtModal"  >New Vehicle Type </button></div>
 						</div>
@@ -299,6 +305,8 @@
 		$(document).on('click', '.new', function(e){
 			resetErrors();
 			e.preventDefault();
+			$('#vt_collapse1').addClass('in');
+			$('#vt_collapse2').removeClass('in');
 			$('#vModal-title').text('New Vehicle');
 			$('#model').val("");
 			$('#bodyType').val("");
@@ -308,10 +316,14 @@
 			var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 			$('#dateRegistered').val(today);
 			$('#vModal').modal('show');
+			$('#plateNumber').val("");
+			$('#plateNumber').removeAttr('readonly');
 
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
+			$('#vt_collapse2').addClass('in');
+			$('#vt_collapse1').removeClass('in');
 			data = vtable.row($(this).parents()).data();
 			$('#plateNumber').val(data.plateNumber)
 			$('#model').val(data.model);
@@ -322,7 +334,10 @@
 			temp_bodyType = data.bodyType;
 			temp_plateNumber = data.plateNumber;
 			temp_dateRegistered = data.dateRegistered;
+			$('#vt_name').val(data.name);
 			$('#vModal').modal('show');
+			$('#plateNumber').attr('readonly', 'true');
+			$('#vehicle_types_id').attr('disabled', 'true');
 		});
 		$(document).on('click', '.deactivate', function(e){
 			data = vtable.row($(this).parents()).data();
@@ -332,6 +347,7 @@
 		$(document).on('click', '.new_vehicle_type', function(e){
 			resetErrors();
 			e.preventDefault();
+
 			$('vtModal-title').text('New Vehicle Type');
 			$('#name').val("");
 			$('#vtModal').modal('show');
@@ -503,71 +519,71 @@
 
 
 
-		$('#btnSave_sub').on('click', function(e){
-			e.preventDefault();
+$('#btnSave_sub').on('click', function(e){
+	e.preventDefault();
 
-			var title = $('#vtModal-title').text();
+	var title = $('#vtModal-title').text();
 
-			$('#name').valid();
-			$('#description').valid();
+	$('#name').valid();
+	$('#description').valid();
 
-			if(title == "New Vehicle Type")
+	if(title == "New Vehicle Type")
 
-				if($('#name').valid() && $('#description').valid()){
+		if($('#name').valid() && $('#description').valid()){
 
-					$('#btnSave_sub').attr('disabled', 'true');
+			$('#btnSave_sub').attr('disabled', 'true');
 
-					$.ajax({
-						type: 'POST',
-						url:  '{{route("vehicletype.store")}}',
-						data: {
-							'_token' : $('input[name=_token]').val(),
-							'name' : $('#name').val(),
-							'description' : $('#description').val(),
-							
-						},
-						success: function (data)
-						{
-							if(typeof(data) === "object"){
-								var vtdata = $('#vehicle_types_id').select2('data');
+			$.ajax({
+				type: 'POST',
+				url:  '{{route("vehicletype.store")}}',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'name' : $('#name').val(),
+					'description' : $('#description').val(),
 
-
-								vehicle_type.push({id:data.id,text:data.name});
-
-								$("#vehicle_types_id").select2({
-									data: vehicle_type,
-								});
-
-								$('#vtModal').modal('hide');
-								$('#description').val("");
-								$('.modal-title').text('New Vehicle Type');
-								$('#name').val("");
-								$('#description').val("");
-								$('#btnSave').removeAttr('disabled');
+				},
+				success: function (data)
+				{
+					if(typeof(data) === "object"){
+						var vtdata = $('#vehicle_types_id').select2('data');
 
 
+						vehicle_type.push({id:data.id,text:data.name});
+
+						$("#vehicle_types_id").select2({
+							data: vehicle_type,
+						});
+
+						$('#vtModal').modal('hide');
+						$('#description').val("");
+						$('.modal-title').text('New Vehicle Type');
+						$('#name').val("");
+						$('#description').val("");
+						$('#btnSave').removeAttr('disabled');
 
 
-							}else{
-								resetErrors();
-								var invdata = JSON.parse(data);
-								$.each(invdata, function(i, v) {
-									console.log(i + " => " + v);
-									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
-								});
-								$('#btnSave_sub').removeAttr('disabled');
 
-							}
-						}
+					}else{
+						resetErrors();
+						var invdata = JSON.parse(data);
+						$.each(invdata, function(i, v) {
+							console.log(i + " => " + v);
+							var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+							$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 
-					})
+						});
+						$('#btnSave_sub').removeAttr('disabled');
+
+					}
 				}
-			});
 
-
+			})
+		}
 	});
+
+
+});
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
 	$('label.error').remove();

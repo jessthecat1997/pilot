@@ -32,6 +32,12 @@ class VehiclesController extends Controller
     {
         $plate = str_replace('%', ' ', $request->plateNumber);
         $v = Vehicle::where('plateNumber', $plate)->firstOrFail();
+        $v->model = $request->model;
+        $v->dateRegistered = $request->dateRegistered;
+        $v->bodyType = $request->bodyType;
+
+        $v->save();
+        
         return $v;
     }
 
