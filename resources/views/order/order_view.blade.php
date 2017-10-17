@@ -100,7 +100,9 @@
 				<div class="panel-body">
 					<div class = "form-horizontal col-md-12 ">
 						<br>
+						@if(Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
 						<button class = "btn but  btn-sm pull-right new_trucking">New Trucking Service Order</button>
+						@endif
 						<br>
 						<br>
 					</div>
@@ -114,7 +116,10 @@
 					<div class="panel-body">
 						<div class = "form-horizontal ">
 							<div class="col-md-12">
+								@if(Auth::user()->role_id == 3 || Auth::user()->role_id == 1)
+
 								<button class = "btn but view_trucking btn-sm pull-right">View Trucking Service Order</button>
+								@endif
 							</div>
 						</div>
 					<br>
@@ -165,7 +170,9 @@
 					<div class="panel-body">
 						<div class = "form-horizontal col-md-12 ">
 							<br>
+							@if(Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
 							<button class = "btn but  btn-sm pull-right new_brokerage">New Brokerage Service Order</button>
+							@endif
 							<br>
 							<br>
 						</div>
@@ -182,7 +189,9 @@
 
 								<div class = "form-horizontal ">
 									<div class="col-md-12">
+									@if(Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
 										<button class = "btn but view_brokerage btn-sm pull-right">View Brokerage Service Order</button>
+									@endif
 									</div>
 								</div>
 								<br>
@@ -532,7 +541,7 @@
 		})
 
 		@if(count($brokerages) > 0)
-		alert({{ $brokerages[0]->id }})
+
 		var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({
 			processing: false,
 			deferRender: true,
