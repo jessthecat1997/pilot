@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
         'broker' => \App\Http\Middleware\BrokerMiddleware::class,
         'trucking' => \App\Http\Middleware\TruckingMiddleware::class,
         'billing' => \App\Http\Middleware\BillingMiddleware::class,
+        'access' => \App\Http\Middleware\AccessMiddleware::class,
     ];
 }

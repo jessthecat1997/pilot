@@ -103,7 +103,7 @@
                                 <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
                             </li>
                             <li>
-                                <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
+                                <a href="/billing" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
                             </li>
                             <li>
                                 <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>
@@ -514,6 +514,7 @@
                     <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Vehicle Type</a>
                 </li>
                 <li>
+                    <a href="/billing" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
                     <a href = "{{ route('vehicle.index') }}"  class = "class-vehicle">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Vehicle</a>
                 </li>
             </div>
