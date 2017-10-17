@@ -451,7 +451,7 @@
 							url:  '/admin/container_type/' + data.id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
-								'name' : $('#name').val(),
+								'name' : $('#name').inputmask('unmaskedvalue'),
 								'description' : $('#description').val(),
 								'maxWeight' : "0.00",
 

@@ -426,92 +426,108 @@
 		$(document).on('click', '.finalize-lc', function(e){
 			e.preventDefault();
 			var title = $('#cModal-title').text();
-			console.log(title);
+			$('#city').valid();
+			$('#loc_province').valid();
 			if(title === "New City"){
-				$.ajax({
+				if($('#city').valid() && $('#loc_province').valid())
+				{
 
-					type: 'POST',
-					url:  '/admin/location_city',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('#city').val(),
-						'provinces_id' : $('#loc_province').val(),
+					$.ajax({
 
-					},
+						type: 'POST',
+						url:  '/admin/location_city',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#city').val(),
+							'provinces_id' : $('#loc_province').val(),
 
-					success: function (data){
+						},
 
-						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
-						$('#lcModal').modal('hide');
-						$('.modal-title').text('New City');
-						$('#city').val("");
+						success: function (data){
+							if(typeof(data) === "object"){
+								lctable.ajax.url( '{{ route("lc.data") }}' ).load();
+								$('#lcModal').modal('hide');
+								$('.modal-title').text('New City');
+								$('#city').val("");
 
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully");
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+							}
+
 						}
-						toastr["success"]("Record added successfully");
-
-					}
-				})
+					})
+				}
 			}else{
+				if($('#city').valid() && $('#loc_province').valid())
+				{
+					$.ajax({
 
-				$.ajax({
+						type: 'PUT',
+						url:  '/admin/location_city/' +lc_id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('#city').val(),
+							'provinces_id' : $('#loc_province').val(),
 
-					type: 'PUT',
-					url:  '/admin/location_city/' +lc_id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('#city').val(),
-						'provinces_id' : $('#loc_province').val(),
+						},
 
-					},
+						success: function (data){
 
-					success: function (data){
+							lctable.ajax.url( '{{ route("lc.data") }}' ).load();
+							$('#lcModal').modal('hide');
+							$('.modal-title').text('New City');
+							$('#city').val("");
 
-						lctable.ajax.url( '{{ route("lc.data") }}' ).load();
-						$('#lcModal').modal('hide');
-						$('.modal-title').text('New City');
-						$('#city').val("");
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]("Record updated successfully");
 
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
 						}
-						toastr["success"]("Record updated successfully");
-
-					}
-				})
-
-
+					})
+				}
 			}
 
 		});//submit
