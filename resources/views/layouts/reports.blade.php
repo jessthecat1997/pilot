@@ -132,31 +132,27 @@
                         <a href = "{{ route('location.index') }}"  class = "location"><i class="fa fa-circle"></i>&nbsp;&nbsp;Location</a>
                     </li>
                     <li>
-                        <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
-                    </li>
-                    <div id="brokeragecollapse" class="panel-collapse collapse">
-                      <li>
-                          <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
+                            <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
+                        </li>
+                        <div id="brokeragecollapse" class="panel-collapse collapse">
+                            <li>
+                                <a data-toggle="collapse" class="maintenance-group" href = "#tariffcollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Tariff Book</a>
+                            </li>
+                            <div id = "tariffcollapse" class="panel-collapse collapse" >
+                               <li>
+                                <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Section</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('category.index') }}"  class = "class-category">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Category</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Item</a>
+                            </li>
+                        </div>
+                       
 
-                      </li>
-                      <li>
-                        <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
-                    </li>
                     <li>
-                        <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                    </li>
-
-                    <li>
-                        <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('category.index') }}"  class = "class-category">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Category</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Item</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
                     </li>
                     <li>
                         <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
@@ -167,6 +163,18 @@
                     <li>
                         <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Brokerage Fee</a>
                     </li>
+
+                     <li>
+                          <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
+
+                      </li>
+                      <li>
+                        <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                    </li>
+
                     <li>
                         <a data-toggle="collapse" class="maintenance-group" href = "#arrastrecollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Arrastre Fee</a>
                     </li>
@@ -338,41 +346,49 @@
                             <a data-toggle="collapse" class="maintenance-group" href = "#brokeragecollapse" ><i class="fa fa-circle"></i>&nbsp;&nbsp;Brokerage</a>
                         </li>
                         <div id="brokeragecollapse" class="panel-collapse collapse">
-                          <li>
-                              <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
+                            <li>
+                                <a data-toggle="collapse" class="maintenance-group" href = "#tariffcollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Tariff Book</a>
+                            </li>
+                            <div id = "tariffcollapse" class="panel-collapse collapse" >
+                               <li>
+                                <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Section</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('category.index') }}"  class = "class-category">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Category</a>
+                            </li>
+                            <li>
+                                <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Item</a>
+                            </li>
+                        </div>
+                       
 
-                          </li>
-                          <li>
-                            <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
-                        </li>
+                    <li>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Import Processing Fee</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Brokerage Fee</a>
+                    </li>
 
-                        <li>
-                            <a href = "{{ route('section.index') }}"  class = "class-section">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Section</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('category.index') }}"  class = "class-category">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Category</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('item.index') }}"  class = "class-item">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Item</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;CDS Fee</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('ipf_fee.index') }}"  class = "class-ipf-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Import Processing Fee</a>
-                        </li>
-                        <li>
-                            <a href = "{{ route('brokerage_fee.index') }}"  class = "class-brokerage-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Brokerage Fee</a>
-                        </li>
-                        <li>
-                            <a data-toggle="collapse" class="maintenance-group" href = "#arrastrecollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Arrastre Fee</a>
-                        </li>
+                     <li>
+                          <a href = "{{ route('dangerous_cargo_type.index') }}"  class = "class-dc-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Dangerous Cargo Types</a>
+
+                      </li>
+                      <li>
+                        <a href = "{{ route('lcl_type.index') }}"  class = "class-lcl-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Less Cargo Load Types</a>
+                    </li>
+                    <li>
+                        <a href = "{{ route('basis_type.index') }}"  class = "class-basis-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Basis Types</a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="collapse" class="maintenance-group" href = "#arrastrecollapse" >&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Arrastre Fee</a>
+                    </li>
                         <div id = "arrastrecollapse" class="panel-collapse collapse" >
                             <li>
                                 <a href = "{{ route('arrastre_fee.index') }}"  class = "class-af-fee">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-circle-o"></i>&nbsp;&nbsp;Containerized</a>
