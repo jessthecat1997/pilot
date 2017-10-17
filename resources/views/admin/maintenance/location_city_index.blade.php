@@ -150,10 +150,10 @@
 					</div>
 					<div class="modal-footer">
 
-						
+						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
 						<button type="button" class="btn btn-danger
 						" data-dismiss="modal">Cancel</button>
-						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+						
 					</div>
 				</div>
 			</div>
@@ -234,7 +234,7 @@
 				},
 				success: function (data)
 				{
-					lctable.ajax.reload();
+					lctable.ajax.url( '{{ route("lc.data") }}/1').load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {

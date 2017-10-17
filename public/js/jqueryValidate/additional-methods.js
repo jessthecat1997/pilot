@@ -684,8 +684,12 @@ $.validator.addMethod( "lettersonly", function( value, element ) {
 }, "This field is only accepting letters" );
 
 $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
-	return this.optional( element ) || /^[a-z\-.,()'"\s]+$/i.test( value );
+	return this.optional( element ) || /^[a-z\-.,()'"\s ]+$/i.test( value );
 }, "Letters or punctuation only please" );
+
+$.validator.addMethod( "NoSpecialCharacters", function( value, element ) {
+	return this.optional( element ) || /^[a-z\-.,()'"\s0-9#/ ]+$/i.test( value );
+}, "Special characters are invalid." );
 
 $.validator.addMethod( "mobileNL", function( value, element ) {
 	return this.optional( element ) || /^((\+|00(\s|\s?\-\s?)?)31(\s|\s?\-\s?)?(\(0\)[\-\s]?)?|0)6((\s|\s?\-\s?)?[0-9]){8}$/.test( value );
