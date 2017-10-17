@@ -225,6 +225,8 @@
 			data = vtable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
+
+		
 		$(document).on('click', '.activate', function(e){
 			var vt_id = $(this).val();
 			data = vtable.row($(this).parents()).data();
