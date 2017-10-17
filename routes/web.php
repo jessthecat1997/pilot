@@ -45,7 +45,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
 	Route::get('admin/csDatamain', 'DatatablesController@consignee_datatable_main')->name('consignee_get_data');
 	Route::get('admin/getCities/{province_id?}', 'ConsigneesController@get_cities')->name('get_prov_cities');
-	Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
 	Route::get('/ipf_maintain_data', 'ImportProcessingFeesController@ipf_maintain_data')->name('ipf_maintain_data');
 	Route::get('/bf_maintain_data', 'BrokerageFeesController@bf_maintain_data')->name('bf_maintain_data');
 	Route::get('/af_maintain_data', 'ArrastreFeesController@af_maintain_data')->name('af_maintain_data');
@@ -214,6 +213,17 @@ Route::group(['middleware' => ['access']], function() {
 		//Consignee
 	Route::resource('consignee', 'ConsigneesController');
 	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
+	Route::get('/consignee/{id}/getConsignee', 'ConsigneesController@get_detail');
+	Route::get('/deliveryFees/{id?}', 'BillingDetailsController@getDeliveryFees')->name('getDeliveryFees');
+	Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');
+	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsController@view_delivery')->name('delivery.view');
+	Route::get('/trucking/{trucking_id}/delivery/create', 'TruckingsController@new_delivery')->name('delivery.create');
+	Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
+	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
+	Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
+	Route::get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
+	Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
+	Route::get('/get_truck_schedule','TruckingsController@getTruckSchedule')->name('get_truck_schedule');
 });
 Route::group(['middleware' => ['broker']], function() {
 		//Brokerage
@@ -269,15 +279,7 @@ Route::group(['middleware' => ['trucking']], function() {
 	Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
 	Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/reschedule', 'TruckingsController@reschedule_delivery');
 		//Delivery Receipt Routes
-	Route::get('admin/tr_soData/{type?}/view', 'DatatablesController@trucking_so_datatable')->name('tr_so.data');
-	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/view', 'TruckingsController@view_delivery')->name('delivery.view');
-	Route::get('/trucking/{trucking_id}/delivery/create', 'TruckingsController@new_delivery')->name('delivery.create');
-	Route::get('/trucking/{trucking_id}/container/{container_id}', 'TruckingsController@getContainerDetail')->name('container_detail.data');
-	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/show_pdf', 'TruckingsController@delivery_pdf')->name('delivery.pdf');
-	Route::get('/trucking/{trucking_id}/get_deliveries', 'DatatablesController@get_trucking_deliveries');
-	Route::Get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
-	Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
-	Route::get('/get_truck_schedule','TruckingsController@getTruckSchedule')->name('get_truck_schedule');
+
 		//Contract
 	Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
 	Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
@@ -320,7 +322,6 @@ Route::group(['middleware' => ['billing']], function() {
 		//Trucking Bills
 	Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
 	Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
-	Route::get('/deliveryFees/{id?}', 'BillingDetailsController@getDeliveryFees')->name('getDeliveryFees');
 	Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
 	Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
 	Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
