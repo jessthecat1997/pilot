@@ -155,7 +155,7 @@ class EmployeesController extends Controller
         ->select('id','email', 'password')
         ->where('emp_id', '=', $employee->id)
         ->get();
-
+        
 
         return view('employee/employee_view', compact(['employee_id', 'employee', 'location', 'employee_role', 'employee_accidents', 'employee_incidents', 'emp_roles', 'role', 'user']));
     }

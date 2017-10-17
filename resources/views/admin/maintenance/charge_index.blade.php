@@ -79,12 +79,14 @@
 								<label class = "control-label">Description: </label>
 								<textarea class = "form-control" name = "description" id = "description"></textarea>
 							</div>
-							<div class="form-group required">
-								<label class = "control-label" >Charge Type: &nbsp;</label>
-								<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" checked = "checked" value="R">Bill</label>
-								<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Refundable</label>
+							<div class="collapse in" id = "ct_collapse">
+								<div class="form-group required">
+									<label class = "control-label" >Charge Type: &nbsp;</label>
+									<label class="radio-inline" id="rev"><input type="radio" name="b_type" id="b_type1" checked = "checked" value="R">Bill</label>
+									<label class="radio-inline" id="exp"><input type="radio" name="b_type" id="b_type2" value="E">Refundable</label>
+								</div>
 							</div>
-							<div class="form-group" >
+							<div class="form-group">
 								<div style="display: none;">
 									<label class = "control-label">Charge Type: &nbsp;</label>
 									<input type="radio" name="chargeType" value="0"  checked = "checked"> Fixed
@@ -335,7 +337,12 @@
 			$('#amount').val("0.00");
 			$('#name').val("");
 			$('#description').val("");
+			$('#ct_collapse').addClass('in');
 			$('#chModal').modal('show');
+			$('#b_type2').removeAttr('disabled');
+			$('#b_type2').removeAttr('disabled');
+			$('#b_type1').removeAttr('checked');
+			$('#b_type2').removeAttr('checked');
 
 		});
 		$(document).on('click', '.edit',function(e){
@@ -348,8 +355,20 @@
 			temp_chargeType = data.chargeType;
 			temp_name = data.name;
 			temp_desc = data.description;
-			temp_amount = data.amount;
-
+			if($(this).closest('tr').find('td').eq(2).html() == "Bill")
+			{
+				$('#b_type2').removeAttr('checked');
+				$('#b_type1').attr('checked', 'true');
+				$('#b_type1').attr('disabled', 'true');
+				$('#b_type2').attr('disabled', 'true');
+			}
+			else
+			{
+				$('#b_type1').removeAttr('checked');
+				$('#b_type2').attr('checked', 'true');
+				$('#b_type2').attr('disabled', 'true');
+				$('#b_type1').attr('disabled', 'true');
+			}
 			$('.modal-title').text('Update Charge');
 			$('#chModal').modal('show');
 		});

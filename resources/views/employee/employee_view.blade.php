@@ -291,6 +291,7 @@
           </form>
         </div>
         <strong>Note:</strong> All fields with * are required.
+
       </div>
       <div class="modal-footer">
         <button class="btn but save-user">Save</button>
@@ -309,15 +310,15 @@
         <div class="col-sm-12">
           <form class="form">
             {{ csrf_field() }}
-            <div class="form-group">
-              <label for="username">* Username: </label>
-              <input type="text" class="form-control" id="upuser" placeholder="{{ $user[0]->email }}">
+            <div class="form-group required">
+              <label for="username" class="control-label">Username: </label>
+              <input type="text" class="form-control" id="upuser" value="@if(count($user) > 0 ){{ $user[0]->email }}@endif" placeholder="@if(count($user) > 0 ){{ $user[0]->email }}@endif">
             </div>
-            <div class="form-group">
-              <label for="password">* Password: </label>
-              <input type="password" class="form-control" id="uppass">
+            <div class="form-group required">
+              <label for="password" class="control-label">Password: </label>
+              <input type="password" class="form-control" id="uppass" >
             </div>
-            <input type="hidden" class="form-control" id="user_id" value="{{ $user[0]->id }}" disabled>
+            <input type="hidden" class="form-control" id="user_id" value="@if(count($user) > 0 ){{ $user[0]->id }}@endif" disabled>
             <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
             <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
             <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }} {{ $employee->lastName }}" disabled>
