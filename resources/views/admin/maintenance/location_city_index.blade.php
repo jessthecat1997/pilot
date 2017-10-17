@@ -344,7 +344,7 @@
 				url:  '/admin/location_city/new_province/',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'name' : $('#provincename').val(),
+					'provincename' : $('#provincename').val(),
 				},
 				success: function (data)
 				{
