@@ -617,4 +617,9 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/deliveryFees/{id?}', 'BillingDetailsController@getDeliveryFees')->name('getDeliveryFees');
 	Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
 	Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
+
+	Route::resource('/users', 'UserController');
+	Route::get('admin/users_table', 'UserController@user_table')->name('users.data');
+
+	Route::put('/update_user/{id?}', 'EmployeesController@updateUser')->name('update_user');
 });

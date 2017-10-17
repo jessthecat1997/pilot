@@ -12,6 +12,12 @@
 					{{ csrf_field() }}
 					<div class="row">
 						<h5>Basic Information</h5>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label" for="com_image">Display Picture:</label>        
+								<input type="file" class="form-control" id ="com_image" name="com_image" accept="image/*">
+							</div>
+						</div>
 						<div class = "col-md-4">
 							<div class = "form-group required">
 								<label class="control-label">First Name</label>
@@ -260,6 +266,11 @@
 
 		$(document).on('click', '#saveRecord', function(e){
 			e.preventDefault();
+			var fullpath = document.getElementById("com_image").value;
+			var backslash=fullpath.lastIndexOf("\\");
+			var filename = fullpath.substr(backslash+1);
+
+			console.log(filename);
 			$('#saveRecord').attr('disabled', true);
 			var trueToggle = new Array();
 			var ctr = 0; 
@@ -303,6 +314,7 @@
 					url: '{{ route("employees.index" )}}/{{ $employee->id }}',
 					data: {
 						'_token' : $('input[name=_token]').val(),
+							'emp_pic' : '/images/emp/'+filename,
 							'firstName' : $('#firstName').val(),
 							'middleName': $('#middleName').val(),
 							'lastName' : $('#lastName').val(),
