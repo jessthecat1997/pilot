@@ -45,7 +45,7 @@ class PaymentsController extends Controller
 
 		$paid = DB::table('payments')
 		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(SUM(amount)) as total'))
+		->select(DB::raw('CONCAT(SUM(amount)) as total', 'payments.created_at'))
 		->orderBy('payments.id', 'desc')
 		->where('payments.bi_head_id', '=', $id)
 		->get();
