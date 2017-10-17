@@ -164,12 +164,18 @@
 			serverSide: false,
 			deferRender: true,
 			columns: [
-			{ data: 'name'},
-			{ data: 'description' },
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'name',
+			"render" : function( data, type, full ) {
+				return container_size(data); } },  
+				{ data: 'description' },
+				{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
-		});
+				],	"order": [[ 0, "asc" ]],
+			});
+
+		function container_size(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ '-footer';
+		}
 
 		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
 		$('.check_deac').on('change', function(e)
@@ -290,7 +296,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
+			ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
 
 			$('#description').val(data.description);
@@ -302,11 +308,11 @@
 			temp_maxWeight = data.description;
 
 
-			$('.modal-title').text('Update Container Volume');
+			$('.modal-title').text('Update Container Sze');
 			$('#ctModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
+			ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -317,7 +323,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/container_type/' + data.id,
+				url:  '/admin/container_type/' + ct_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
@@ -448,7 +454,7 @@
 
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/container_type/' + data.id,
+							url:  '/admin/container_type/' + ct_id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'name' : $('#name').inputmask('unmaskedvalue'),
