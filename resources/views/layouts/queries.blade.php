@@ -151,7 +151,7 @@
                        
 
                     <li>
-                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Customs Documentary Stamp Fee</a>
                     </li>
                     <li>
                         <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
@@ -363,7 +363,7 @@
                        
 
                     <li>
-                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Customs Documentary Stamp Fee</a>
                     </li>
                     <li>
                         <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
