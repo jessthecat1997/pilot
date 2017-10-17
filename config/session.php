@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'lifetime' => false,
+    'lifetime' => 2000,
 
     'expire_on_close' => true,
 
