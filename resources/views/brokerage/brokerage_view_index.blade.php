@@ -1099,6 +1099,8 @@ $(document).on('click', '.confirm-create-deposit', function(e){
 $(document).on('click', '.confirm-create-bill', function(e){
 	e.preventDefault();
 
+	$('.confirm-create-bill')[0].setAttribute('disabled', 'true');
+
 	switch(create_bill){
 		case 0 :
 		$.ajax({
@@ -1109,6 +1111,7 @@ $(document).on('click', '.confirm-create-bill', function(e){
 				'_token' : $('input[name=_token]').val(),
 				'isRevenue' : create_bill,
 				'br_so_id' : '{{ $brokerage_header[0]->id }}',
+
 			},
 			success: function(data){
 				window.location.reload();

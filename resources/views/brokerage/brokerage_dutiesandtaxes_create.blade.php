@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('content')
+
 <div class = "panel-heading">
   <h2 id = "DutiesAndTaxesHeader">&nbsp;Brokerage | Create Duties And Taxes </h2>
   <hr />
 </div>
+
 <div class="panel-body">
   <div class = "collapse" id = "dutiesAndTaxes_warning">
     <div class="panel-body alert alert-danger">
@@ -311,84 +313,6 @@
            </div>
 
 
-
-<!-- New Consignee Modal -->
-<div class="modal fade" id="ConsigneeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-<div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  <h4 class="modal-title">Create Consignee</h4>
-</div>
-<form role = "form" class="form-horizontal" method = "POST" action = "/CreateConsignee">
-<div class="modal-body">
-    {{ csrf_field() }}
-      <div class="form-group">
-        <label class="control-label col-sm-4" for="firstName">Consignee:</label>
-        <div class="col-sm-6">
-          <select name = "consigneeType" id = "consigneeType" class="form-control">
-            <option value = "0">
-              Walk-in
-            </option>
-            <option value = "1">
-              Regular
-            </option>
-          </select>
-        </div>
-      </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="firstName">First Name:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter First Name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="middleName">Middle Name:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "middleName" id="middleName" placeholder="Enter Middle Name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="pwd">Last Name:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter Last Name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="companyName">Company Name:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "companyName" id="companyName" placeholder="Enter Company Name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="email">Email</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "email" id="email" placeholder="Enter Email Address">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="address">Address:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "address" id="address" placeholder="Enter Address">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-4" for="contactNumber">Contact Number:</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" name = "contactNumber" id="contactNumber" placeholder="Enter Contact Number">
-      </div>
-    </div>
-</div>
-<div class="modal-footer">
-  <input  type="submit" class="btn btn-success" value = "Create">
-    <input type = "reset" class = "btn btn-danger btn-md" value = "Clear Details" />
-  <button type="button" class="btn btn-default" onclick = "$('#ConsigneeModal').modal('hide');">Close</button>
-  </form>
-</div>
-</div>
-</div>
-</div>
 
 <!-- Edit Item Modal -->
 <div class="modal fade" id="EditItemModal" role="dialog" aria-labelledby="myModalLabel">
@@ -818,6 +742,25 @@
 <div class="modal-footer">
   <button type="button" class="btn btn-default" onclick="$('#IPFModal').modal('hide'); ">Close</button>
     </form>
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="promptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" style = "color: red;">Warning</h4>
+</div>
+
+<div class = "modal-body">
+    No Arrastre Fee/Wharfage Fee Computations Found for this location "{{$brokerage_header[0]->location}}"
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" onclick = "$('#promptModal').modal('hide');">Ok</button>
 </div>
 </div>
 </div>
@@ -1364,7 +1307,6 @@ function fill_Edititem(num)
     $('#_contactNumber').val("");
 
     $("#basic-information-heading").html('<h4 id = "basic-information-heading"><small>1</small> Consignee Information</h4>');
-
   })
 
   $('#btnConsigneeSave').on('submit', function(e){
@@ -2066,7 +2008,6 @@ function decimalsOnly(event) {
     var containerized_wharfage = [];
     var ctr = 1;
 
-
     @if($withContainer == true)
         @forelse($brokerage_containers as $delivery_container)
             containers[0] = '{{ $delivery_container->id }}'
@@ -2074,7 +2015,6 @@ function decimalsOnly(event) {
             containers[2] = '{{ $delivery_container->containerVolume }}';
             containers[3] = '{{ Carbon\Carbon::parse($delivery_container->containerReturnDate)->toFormattedDateString() }}';
             containers[4] = '{{ $delivery_container->cargoType }}';
-
 
             if(containers[0] == id)
             {
@@ -2084,7 +2024,8 @@ function decimalsOnly(event) {
               for (var x=rowCount-1; x>0; x--) {
                 table.deleteRow(x);
               }
-                cargoType = '{{ $delivery_container->cargoType }}'
+
+              cargoType = '{{ $delivery_container->cargoType }}'
               var row = table.insertRow();
               var cell0 = row.insertCell(0);
               var cell1 = row.insertCell(1);
@@ -2120,9 +2061,11 @@ function decimalsOnly(event) {
                       }
                     }
                   @empty
+                    $('#promptModal').modal('show');
                   @endforelse
 
                 @empty
+
                 @endforelse
 
               @forelse($containerized_wharfage_header as $cont_wharfage_head)
@@ -2140,6 +2083,7 @@ function decimalsOnly(event) {
 
                   }
                 @empty
+                  $('#promptModal').modal('show');
                 @endforelse
 
               @empty
@@ -2247,7 +2191,43 @@ function decimalsOnly(event) {
   }
 
 
+  function searchArrastreWharfage()
+  {
+    var missing = false;
+    @forelse($containerized_wharfage_header as $cons)
+
+    @empty
+            missing = true;
+    @endforelse
+
+    @forelse($containerized_arrastre_header as $cons)
+
+    @empty
+            missing = true;
+    @endforelse
+
+    @forelse($lcl_arrastre_header as $cons)
+
+    @empty
+            missing = true;
+    @endforelse
+
+    @forelse($lcl_wharfage_header as $cons)
+
+    @empty
+            missing = true;
+    @endforelse
+
+
+
+    return missing;
+  }
+
   window.onload = function(){
+    if(searchArrastreWharfage())
+    {
+      $('#promptModal').modal('show');
+    }
     @if($withContainer == false)
 
       var arrastre_total = 0.00;
@@ -2258,8 +2238,6 @@ function decimalsOnly(event) {
      @forelse($lcl_arrastre_header as $lcl_arrastre_hed)
 
         @forelse($lcl_arrastre_detail as $lcl_arrastre_det)
-
-
 
             @forelse($brokerage_details as $brokerage_detail)
               @if($lcl_arrastre_det->lcl_type == $brokerage_detail->lcl_type)
@@ -2277,15 +2255,18 @@ function decimalsOnly(event) {
               @else
               @endif
             @empty
+
             @endforelse
 
 
 
       @empty
+
       @endforelse
 
 
       @empty
+
       @endforelse
 
 
@@ -2314,6 +2295,7 @@ function decimalsOnly(event) {
                     @else
                     @endif
           @empty
+
           @endforelse
 
         @empty
