@@ -275,7 +275,7 @@ Route::group(['middleware' => ['access']], function() {
 	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
 	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
-	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
+	Route::get('/admin/ipfData/{isActive?}', 'DatatablesController@ipf_datatable')->name('ipf.data');
 	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
 	Route::get('/admin/sarData/{isActive?}', 'DatatablesController@sar_datatable')->name('sar.data');
 	Route::get('/admin/lpData/{isActive?}', 'DatatablesController@lp_datatable')->name('lp.data');
