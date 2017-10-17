@@ -68,13 +68,13 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="phy_address">Block/Lot/Street:</label>
 											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address">
+												<input type="text" class="form-control" name = "phy_address" id="phy_address" placeholder="Enter Address" required>
 											</div>
 										</div>
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="phy_province">Province:</label>
 											<div class="col-sm-8">          
-												<select name = "phy_province" id="phy_province" class = "form-control">
+												<select name = "phy_province" id="phy_province" class = "form-control" required>
 													<option value = '0'></option>
 													@forelse($provinces as $province)
 													<option value="{{ $province->id }}" >
@@ -89,7 +89,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="phy_city">City:</label>
 											<div class="col-sm-8">          
-												<select name = "phy_city" id="phy_city" class = "form-control">
+												<select name = "phy_city" id="phy_city" class = "form-control" required>
 													<option value="0"></option>
 												</select>
 											</div>
@@ -97,7 +97,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="phy_zip">Zip Code:</label>
 											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code">
+												<input type="text" class="form-control" name = "phy_zip" id="phy_zip" placeholder="Enter Zip Code" required >
 											</div>
 										</div>
 										<div class="form-group required">
@@ -145,7 +145,7 @@
 										<div class="form-group required">
 											<label class="control-label col-sm-3" for="bill_zip">Zip Code:</label>
 											<div class="col-sm-8">          
-												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code">
+												<input type="text" class="form-control" name = "bill_zip" id="bill_zip" placeholder="Enter Zip Code" >
 											</div>
 										</div>
 									</div>
@@ -459,9 +459,11 @@
 			$('#companyName').valid();
 			$('#businessStyle').valid();
 			$('#TIN').valid();
+			$('#address').val();
+			$('#')
 
 			var checked = $('.same_billing_address').is(":checked");
-			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid())
+			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid() && $('#TIN').val().indexOf("_") == -1  && $('#'))
 			{
 				if(validateConsignee() == true)
 				{
