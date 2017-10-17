@@ -275,9 +275,7 @@
 				},
 				description:
 				{
-
-					
-					alphanumeric: true,
+					NoSpecialCharacters:true,
 				},
 			},
 

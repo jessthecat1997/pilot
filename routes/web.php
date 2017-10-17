@@ -176,6 +176,8 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
 	Route::put('/utilities/attachment_type_reactivate/{id}','RequirementsController@reactivate');
 
+//Vanessaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa addition before galawin ni skip
+	Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
 		//Employees and Users
 	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
 	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
