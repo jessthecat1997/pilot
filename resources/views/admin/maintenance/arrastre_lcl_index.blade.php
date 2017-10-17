@@ -322,7 +322,7 @@
 		})
 
 
-		(document).on('click', '.activate', function(e){
+		$(document).on('click', '.activate', function(e){
 			af_id = $(this).val();
 			data = aftable.row($(this).parents()).data();
 			$('#confirm-activate').modal('show');

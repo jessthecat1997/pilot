@@ -124,5 +124,13 @@ class ArrastreFeeLclController extends Controller
 		->get();
 
 		return $rates;
-	}   
+	} 
+
+	 public function reactivate(Request $request)
+    {
+        $af = ArrastreLclHeader::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+
+    }  
 }
