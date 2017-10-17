@@ -688,7 +688,7 @@ $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
 }, "Letters or punctuation only please" );
 
 $.validator.addMethod( "NoSpecialCharacters", function( value, element ) {
-	return this.optional( element ) || /^[a-z\-.,()'"\s0-9#/ ]+$/i.test( value );
+	return this.optional( element ) || /^[a-z\-.,();'"\s0-9#/ ]+$/i.test( value );
 }, "Special characters are invalid." );
 
 $.validator.addMethod( "mobileNL", function( value, element ) {

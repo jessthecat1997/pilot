@@ -34,7 +34,7 @@
 			@endif
 		</h5>
 		<div class = "col-md-3 col-md-offset-9">
-			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#cdsModal" style = "width: 100%;">New CDS Fee</button>
+			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#cdsModal" style = "width: 100%;">New Customs Documentary Stamp Fee</button>
 		</div>
 	</div>
 	<br />
@@ -85,7 +85,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New CDS Fee</h4>
+							<h4 class="modal-title">New Customs Documentary Stamp Fee</h4>
 						</div>
 						<div class="modal-body">			
 
@@ -151,8 +151,9 @@
 							Confirm Data Activation
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							
 
 						</div>
 					</div>
@@ -176,7 +177,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender:true,
-			bSort: true,
+			 "ordering": 'false',
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'fee',
@@ -185,7 +186,7 @@
 				
 				{ data: 'action', orderable: false, searchable: false }
 
-				],	"order": [[ 0, "desc" ]],
+				],
 			});
 
 		$(document).on('click', '.activate', function(e){
@@ -202,6 +203,8 @@
 			}
 			else{
 				cdstable.ajax.url( '{{ route("cds.data") }}').load();
+				window.location.reload();
+
 			}
 		})
 
@@ -237,6 +240,7 @@
 						"hideMethod": "fadeOut"
 					}
 					toastr["success"]("Record Activated successfully")
+
 				}
 			})
 		});
@@ -294,7 +298,7 @@
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
-			$('.modal-title').text('New CDS Fee');
+			$('.modal-title').text('New Customs Documentary Stamp Fee');
 			$('#cdsModal').modal('show');
 			$('#fee').val("0.00");
 			var now = new Date();
@@ -353,6 +357,8 @@
 						"hideMethod": "fadeOut"
 					}
 					toastr["success"]("Record deactivated successfully")
+					window.location.reload();
+
 				}
 			})
 		});
@@ -365,7 +371,7 @@
 			e.preventDefault();
 			var title = $('.modal-title').text();
 
-			if(title == "New CDS Fee")
+			if(title == "New Customs Documentary Stamp Fee")
 			{
 				if ($('#dateEffective').valid()){
 
@@ -385,7 +391,7 @@
 							if(typeof(data) === "object"){
 								cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
 								$('#cdsModal').modal('hide');
-								$('.modal-title').text('New CDS Fee');
+								$('.modal-title').text('New Customs Documentary Stamp Fee');
 								$('#fee').val('');
 								$('#dateEffective').val('');
 
@@ -443,7 +449,7 @@
 							if(typeof(data) === "object"){
 								cdstable.ajax.url( '{{ route("cds.data") }}' ).load();
 								$('#cdsModal').modal('hide');
-								$('.modal-title').text('New CDS Fee');
+								$('.modal-title').text('New Customs Documentary Stamp Fee');
 								$('#fee').val('');
 								$('#dateEffective').val('');
 

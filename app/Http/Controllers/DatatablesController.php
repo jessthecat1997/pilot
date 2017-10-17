@@ -409,7 +409,7 @@ class DatatablesController extends Controller
 	public function item_datatable(Request $request){
 		$isActive = $request->isActive;
 		if ($isActive == null){
-			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is null  order by s.name");
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN category_types c ON c.id = i.category_types_id where c.sections_id = s.id AND s.deleted_at is null AND c.deleted_at is null AND i.deleted_at is null order by s.name");
 
 			return Datatables::of($items)
 			->addColumn('action', function ($item){
@@ -420,7 +420,7 @@ class DatatablesController extends Controller
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}else{
-			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is not null  order by s.name");
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN category_types c ON c.id = i.category_types_id where c.sections_id = s.id AND s.deleted_at is null AND c.deleted_at is null AND i.deleted_at is  NOT null order by s.name");
 			return Datatables::of($items)
 
 			->addColumn('status', function ($items){

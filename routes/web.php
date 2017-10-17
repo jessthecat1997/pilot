@@ -238,6 +238,11 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
 	Route::put('/utilities/section_reactivate/{id}','SectionsController@reactivate');
 	Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
+	Route::get('admin/getCategory/{sections_id?}', 'ItemsController@get_categories')->name('get_item_categories');
+	Route::put('/utilities/item_reactivate/{id}','ItemsController@reactivate');
+//end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
 		//Employees and Users
 	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
 	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');

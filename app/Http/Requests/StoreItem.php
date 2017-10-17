@@ -19,9 +19,10 @@ class StoreItem extends FormRequest
             case 'POST':
 
             return [
-                'name' => 'required|unique:category_types,name',
+                'name' => 'required|unique:items,name',
                 'sections_id' =>'required',
                 'category_types_id' => 'required',
+                'hsCode' => 'required|unique:items,hsCode',
 
             ];
 
@@ -30,9 +31,10 @@ class StoreItem extends FormRequest
             case 'PUT':
 
             return [
-                'name' => 'required|unique:category_types,name,'. $this->segment(3) ,
+                'name' => 'required|unique:items,name,'. $this->segment(3) ,
                 'sections_id' =>'required',
                 'category_types_id' => 'required',
+                'hsCode' => 'required|unique:items,name'
 
 
             ];
