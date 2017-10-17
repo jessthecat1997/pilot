@@ -103,7 +103,7 @@
                                 <a href="{{ route('trucking.index') }}" class="delivery"><i class="fa fa-truck"></i>&nbsp;&nbsp;Delivery</a>
                             </li>
                             <li>
-                                <a href="/billing" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
+                                <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
                             </li>
                             <li>
                                 <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>
@@ -569,7 +569,7 @@
         <div id="collapse1" class="pane;-collapse collapse">
             <ul class="list-group" style="list-style-type: circle;">
                 <li>
-                    <a href="/billing" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
+                    <a href="{{ route('view.index') }}" class = "class-billing"><i class="fa fa-money"></i>&nbsp;&nbsp;Billing</a>
                 </li>
                 <li>
                     <a href="{{ route('payment.index') }}" class = "class-payment"><i class="fa fa-rub"></i>&nbsp;&nbsp;Payment</a>

@@ -100,9 +100,7 @@
 				<div class="panel-body">
 					<div class = "form-horizontal col-md-12 ">
 						<br>
-						@if(Auth::user()->role_id == 3 || Auth::user()->role_id == 1 )
 						<button class = "btn but  btn-sm pull-right new_trucking">New Trucking Service Order</button>
-						@endif
 						<br>
 						<br>
 					</div>
@@ -167,9 +165,7 @@
 					<div class="panel-body">
 						<div class = "form-horizontal col-md-12 ">
 							<br>
-							@if(Auth::user()->role_id == 2 || Auth::user()->role_id == 1 )
 							<button class = "btn but  btn-sm pull-right new_brokerage">New Brokerage Service Order</button>
-							@endif
 							<br>
 							<br>
 						</div>
@@ -401,12 +397,12 @@
 @endsection
 @push('styles')
 <style>
-	.orders
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.orders
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
