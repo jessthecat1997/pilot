@@ -162,6 +162,15 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
 	Route::get('admin/getCategory/{sections_id?}', 'ItemsController@get_categories')->name('get_item_categories');
 	Route::put('/utilities/item_reactivate/{id}','ItemsController@reactivate');
+
+	Route::put('/utilities/dct_reactivate/{id}','DangerousCargoTypeController@reactivate');
+	Route::put('/utilities/lcl_reactivate/{id}','LclTypesController@reactivate');
+	Route::put('/utilities/bt_reactivate/{id}','BasisTypeController@reactivate');
+	Route::put('/utilities/af_reactivate/{id}','ArrastreFeesController@reactivate');
+	Route::put('/utilities/af_lcl_reactivate/{id}','ArrastreFeeLclController@reactivate');
+	Route::put('/utilities/af_dc_reactivate/{id}','ArrastreFeeDcController@reactivate');
+	Route::put('/utilities/wf_reactivate/{id}','WharfageFeeController@reactivate');
+	Route::put('/utilities/wf_lcl_reactivate/{id}','WharfageFeeLclController@reactivate');
 //end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
@@ -238,12 +247,12 @@ Route::group(['middleware' => ['access']], function() {
 	Route::get('/admin/vData/{isActive?}','DatatablesController@v_datatable')->name('v.data');
 	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
 	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
-	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
+	Route::get('/admin/bfData/{isActive?}', 'DatatablesController@bf_datatable')->name('bf.data');
 	Route::get('/admin/cdsData/{isActive?}', 'DatatablesController@cds_datatable')->name('cds.data');
 	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
-	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');
-	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wharfage.data');
-	Route::get('/admin/ipfData', 'DatatablesController@ipf_datatable')->name('ipf.data');
+	Route::get('/admin/afData/{isActive?}', 'DatatablesController@af_datatable')->name('arrastre.data');
+	Route::get('/admin/wfData/{isActive?}', 'DatatablesController@wf_datatable')->name('wharfage.data');
+	Route::get('/admin/ipfData/{isActive?}', 'DatatablesController@ipf_datatable')->name('ipf.data');
 	Route::get('/admin/vrData', 'DatatablesController@vr_datatable')->name('vr.data');
 	Route::get('/admin/sarData/{isActive?}', 'DatatablesController@sar_datatable')->name('sar.data');
 	Route::get('/admin/lpData/{isActive?}', 'DatatablesController@lp_datatable')->name('lp.data');
