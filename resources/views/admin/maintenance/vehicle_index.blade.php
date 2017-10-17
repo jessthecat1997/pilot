@@ -449,7 +449,7 @@
 						console.log(data.plateNumber);
 						$.ajax({
 							type: 'PUT',
-							url:  '{{ route("vehicle.index") }}/' + data.plateNumber,
+							url:  '{{ route("vehicle.index") }}/0/' + data.plateNumber,
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'vehicle_types_id' : vt_id,
@@ -460,6 +460,7 @@
 							},
 							success: function (data)
 							{
+								console.log(data);
 								vtable.ajax.reload();
 								$('#vModal').modal('hide');
 								$('#model').val("");

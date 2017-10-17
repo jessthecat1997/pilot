@@ -77,6 +77,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/container_type', 'ContainerTypesController');
 	Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 	Route::resource('/admin/vehicle','VehiclesController');
+	Route::put('/admin/vehicle/{id}/{plateNumber?}', 'VehiclesController@v_update');
 
 	Route::resource('/admin/billing', 'BillingsController');
 	Route::resource('/admin/charge','ChargesController');
