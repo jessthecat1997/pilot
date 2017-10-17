@@ -224,7 +224,7 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
-			
+					
 				},
 				address:
 				{
@@ -361,6 +361,8 @@
 			fill_cities(data.city_id);
 			$("#cities_id option:contains(" + data.city_name +")").attr("selected", true);
 			console.log(data.city_id);
+			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
+			
 			$('#chModal').modal('show');
 		})
 
@@ -394,7 +396,7 @@
 
 
 		$(document).on('click', '.activate', function(e){
-			 location_id = $(this).val();
+			location_id = $(this).val();
 			data = chtable.row($(this).parents()).data();
 			$('#confirm-activate').modal('show');
 		});

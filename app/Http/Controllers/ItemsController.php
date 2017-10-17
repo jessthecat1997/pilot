@@ -10,8 +10,7 @@ class ItemsController extends Controller
 {
 	public function index()
 	{
-		$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id
-			 AND c.deleted_at is null AND i.deleted_at  is null  AND s.deleted_at is null order by s.name");
+		$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN category_types c ON c.id = i.category_types_id where c.sections_id = s.id AND s.deleted_at is null AND c.deleted_at is null AND i.deleted_at is null order by s.name");
 
 		$sections = \App\Section::all();
 		$category = \App\CategoryType::all();
@@ -44,6 +43,16 @@ class ItemsController extends Controller
 	{
 		$item = Item::findOrFail($id);
 		$item->delete();
+	}
+
+	public function get_categories(Request $request){
+		$category = DB::table('category_types')
+		->select('name', 'id')
+		->where('sections_id', '=', $request->sections_id)
+		->where('deleted_at', '=', null)
+		->get();
+
+		return $category;
 	}
 
 
