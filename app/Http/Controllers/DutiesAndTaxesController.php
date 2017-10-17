@@ -314,7 +314,7 @@ class DutiesAndTaxesController extends Controller
     $new_dutiesandtaxes->wharfage = $request->wharfage;
     $new_dutiesandtaxes->bankCharges = $request->bankCharges;
     $new_dutiesandtaxes->brokerageServiceOrders_id = $request->brokerage_id;
-    $new_dutiesandtaxes->employees_id_broker = $request->employee_id;
+    $new_dutiesandtaxes->employees_id_broker = \Auth::user()->id;
     $new_dutiesandtaxes->statusType = 'P';
     $new_dutiesandtaxes->save();
 
@@ -353,6 +353,10 @@ class DutiesAndTaxesController extends Controller
       $new_dutiesandtaxes_details->save();
     }
 
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Created new duties and taxes decleration id: ".$new_dutiesandtaxes->id;
+    $audit->save();
 
     $brokerage_id = $new_dutiesandtaxes->id;
     return $brokerage_id;
@@ -366,6 +370,26 @@ class DutiesAndTaxesController extends Controller
       $brokerage_status_update = DB::table('duties_and_taxes_headers')
       ->where('duties_and_taxes_headers.id', $brokerage_id)
       ->update(['statusType' =>  $request->status]);
+
+      $audit = new \App\AuditTrail;
+      $audit->user_id = \Auth::user()->id;
+
+      if($request->status == "A")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      if($request->status == "P")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      if($request->status == "R")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      $audit->save();
 
     return $brokerage_id;
   }

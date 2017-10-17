@@ -30,10 +30,10 @@ class OrdersController extends Controller
 
 		session(['consignees_id' => '{{$so_head[0]->consignees_id}}' ]);
 	}
-	
+
 	public function show(Request $request, $id){
 		$reqs = \App\Requirement::all();
-		
+
 		$so_head = \DB::table('consignee_service_order_headers')
 		->select(
 			'consignee_service_order_headers.id',
@@ -76,14 +76,14 @@ class OrdersController extends Controller
 		->join('billing_invoice_headers as B', 'billing_invoice_details.bi_head_id', '=', 'B.id')
 		->where('A.bill_type', '=', 'E')
 		->where('so_head_id', '=', $so_head[0]->id)
-		->get();		
+		->get();
 
 		$bill_total = 0;
 		for($i = 0; $i < count($billings); $i++)
 		{
 			$bill_total += $billings[$i]->amount;
 		}
-		
+
 		$exp_total = 0;
 		for($i = 0; $i < count($expenses); $i++)
 		{
@@ -99,26 +99,23 @@ class OrdersController extends Controller
 				->select('*')
 				->where('consigneeSODetails_id', '=', $details[$i]->id)
 				->get();
-
 			}
-			else
+			else if($details[$i]->service_order_types_id == 2)
 			{
 				$truckings = \DB::table('trucking_service_orders')
 				->select('*')
 				->where('so_details_id', '=', $details[$i]->id)
 				->get();
-
-				
 			}
 		}
 		return view('order.order_view', compact(['so_head', 'truckings', 'brokerages','deliveries', 'reqs', 'billings' ,'expenses', 'exp_total', 'bill_total']));
-		
+
 	}
 
-	public function create_so_detail (Request $request) 
+
+	public function create_so_detail (Request $request)
 	{
 		switch ($request->sot_type) {
-
 			case '1':
 
 			$new_so_detail = new ConsigneeServiceOrderDetail;
@@ -159,14 +156,13 @@ class OrdersController extends Controller
 
 			return $new_trucking;
 
-
 			break;
 
 			default:
-
 			break;
 		}
 	}
+
 
 
 	public function store(Request $request)
@@ -182,45 +178,11 @@ class OrdersController extends Controller
 		$audit->save();
 
 		return $new_so_head;
-
-
-		switch ($request->sot_type) {
-
-			case '1':
-
-			$new_so_detail = new ConsigneeServiceOrderDetail;
-			$new_so_detail->so_headers_id = $request->so_headers_id;
-			$new_so_detail->service_order_types_id = 1;
-			$new_so_detail->save();
-			break;
-
-
-
-			case '2':
-
-			$new_so_detail = new ConsigneeServiceOrderDetail;
-			$new_so_detail->so_headers_id = $request->so_headers_id;
-			$new_so_detail->service_order_types_id = 2;
-			$new_so_detail->save();
-
-
-
-			break;
-
-			default:
-
-			break;
-		}
-
 	}
 
 	public function create_so_billing_header(Request $request){
-
-		
 		switch ($request->sot_type) {
-
 			case '1':
-
 			$consignee_order = \DB::table('consignee_service_order_headers')
 			->join('consignee_service_order_details AS A', 'A.so_headers_id', '=', 'consignee_service_order_headers.id')
 			->join('brokerage_service_orders AS B', 'B.consigneeSODetails_id', '=', 'A.id')
@@ -238,7 +200,6 @@ class OrdersController extends Controller
 			$billing_header->override_date = null;
 			$billing_header->due_date = null;
 			$billing_header->save();
-
 
 			$consignee_header = \App\BrokerageServiceOrder::findOrFail($request->br_so_id);
 			switch ($request->isRevenue) {
@@ -312,7 +273,7 @@ class OrdersController extends Controller
 		$attachment->so_head_id = $request->so_head_id;
 		$attachment->req_type_id = $request->req_type_id;
 		$attachment->description = $request->description;
-		
+
 
 		if($request->file_path != null){
 			$input = $request->all();
@@ -320,7 +281,7 @@ class OrdersController extends Controller
 			$attachment->file_path = "attach." . $request->file_path->getClientOriginalExtension();
 			$request->file_path->move(public_path('attach'), $input['image']);
 		}
-		
+
 		$attachment->save();
 
 		$audit = new \App\AuditTrail;
