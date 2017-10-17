@@ -132,7 +132,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/utilities/brokerage_fee_deactivated/{filter}',
 		'DatatablesController@bf_deactivated');
 	Route::get('/utilities/brokerage_fee_data','BrokerageFeesController@bf_utilities')->name('brokerage_fee.utilities_index');
-	Route::put('/utilities/brokerage_fee_reactivate/{id}','BrokerageFeesController@reactivate');
+	Route::put('/utilities/bf_fee_reactivate/{id}','BrokerageFeesController@reactivate');
 	Route::get('/utilities/charge_deactivated/{filter}',
 		'DatatablesController@ch_deactivated');
 	Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index');
@@ -194,6 +194,9 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
 	Route::get('admin/getCategory/{sections_id?}', 'ItemsController@get_categories')->name('get_item_categories');
 	Route::put('/utilities/item_reactivate/{id}','ItemsController@reactivate');
+	Route::put('/utilities/dct_reactivate/{id}','DangerousCargoTypeController@reactivate');
+	Route::put('/utilities/lcl_reactivate/{id}','LclTypesController@reactivate');
+	Route::put('/utilities/bt_reactivate/{id}','BasisTypeController@reactivate');
 //end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
@@ -270,7 +273,7 @@ Route::group(['middleware' => ['access']], function() {
 	Route::get('/admin/vData/{isActive?}','DatatablesController@v_datatable')->name('v.data');
 	Route::get('/admin/arData', 'DatatablesController@ar_datatable')->name('ar.data');
 	Route::get('/admin/blData', 'DatatablesController@bl_datatable')->name('bl.data');
-	Route::get('/admin/bfData', 'DatatablesController@bf_datatable')->name('bf.data');
+	Route::get('/admin/bfData/{isActive?}', 'DatatablesController@bf_datatable')->name('bf.data');
 	Route::get('/admin/cdsData/{isActive?}', 'DatatablesController@cds_datatable')->name('cds.data');
 	Route::get('/admin/cargoTypeData', 'DatatablesController@cargoType_datatable')->name('cargoType.data');
 	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('arrastre.data');

@@ -374,7 +374,7 @@
 					$(this).remove();
 				})
 				obj.remove();
-				$('#bf_table_warning').addClass('fade in');
+				$('#ipf_table_warning').addClass('fade in');
 
 			}
 			else{
@@ -398,7 +398,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'PUT',
-				url:  '/utilities/ipf_fee_reactivate/' + item_id,
+				url:  '/utilities/ipf_fee_reactivate/' + ipf_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},

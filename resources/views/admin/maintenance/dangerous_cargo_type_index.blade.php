@@ -15,13 +15,13 @@
 				<table class = "table-responsive table table-striped cell-border table-bordered" id = "dct_table" style="width: 100%;">
 					<thead>
 						<tr>
-							<td style="width: 25%;">
+							<td >
 								Name
 							</td>
-							<td style="width: 40%;">
+							<td >
 								Description
 							</td>
-							<td style="width: 30%;">
+							<td>
 								Actions
 							</td>
 						</tr>
@@ -102,6 +102,23 @@
 			</div>
 		</form>
 	</section>
+	<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
@@ -129,7 +146,7 @@
 	var temp_desc = null;
 	$(document).ready(function(){
 		var dcttable = $('#dct_table').DataTable({
-			scrollX: true,
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -141,6 +158,61 @@
 
 			],	"order": [[ 0, "asc" ]],
 		});
+
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				dcttable.ajax.url( '{{ route("dct.data") }}/1').load();
+			}
+			else{
+				dcttable.ajax.url( '{{ route("dct.data") }}').load();
+			}
+		})
+
+
+		$(document).on('click', '.activate', function(e){
+			dct_id = $(this).val();
+			data = dcttable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/dct_reactivate/' + dct_id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					dcttable.ajax.url( '{{ route("dct.data") }}/1' ).load();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
+		});
+
 
 
 		var validator = $("#commentForm").validate({
@@ -239,7 +311,7 @@ $('#btnSave').on('click', function(e){
 	{
 		if($('#name').valid() && $('#description').valid()){
 			
-			$('#btnSave').attr('disabled', 'true');
+		
 
 			$.ajax({
 				type: 'POST',
@@ -308,7 +380,7 @@ $('#btnSave').on('click', function(e){
 			if($('#name').val() === temp_name && $('#description').val() === temp_desc){
 				$('#name').val("");
 				$('#description').val("");
-				$('#btnSave').removeAttr('disabled');
+			
 				$('#dctModal').modal('hide');
 			}
 			else{
