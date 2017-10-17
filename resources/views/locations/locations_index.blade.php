@@ -36,7 +36,7 @@
 						</tr>
 					</thead>
 					<tbody>
-					@forelse($locations as $loc)
+						@forelse($locations as $loc)
 						<tr>
 							<td>
 								{{ $loc->location_name }}
@@ -237,8 +237,9 @@
 			$('#address').valid();
 			$('#cities_id').valid();
 
-			if($('#zipCode').valid() && $('#name').valid() && $('#address').valid() && $('#cities_id').valid()){
-				if($('.modal-title').text() == "New Location"){
+			if($('#zipCode').valid() && $('#name').valid() && $('#address').valid() && $('#cities_id').valid() && $('#zipCode').val().indexOf("_") == -1 ){
+				if($('.modal-title').text() == "New Location")
+				{
 					$('.btnSave').attr('disabled', 'true');
 					$.ajax({
 						type: 'POST',
@@ -255,6 +256,7 @@
 								$('#chModal').modal('hide');
 								chtable.ajax.url( '{{ route("location_data") }}' ).load();
 								$('.btnSave').removeAttr('disabled');
+								message("Saved successfully");
 							}
 							else{
 								resetErrors();
@@ -293,6 +295,7 @@
 								$('#chModal').modal('hide');
 								chtable.ajax.url( '{{ route("location_data") }}' ).load();
 								$('.btnSave').removeAttr('disabled');
+								message("Updated successfully");
 							}
 							else{
 								resetErrors();
@@ -356,6 +359,7 @@
 				success: function(data){
 					$('#confirm-delete').modal('hide');
 					chtable.ajax.url( '{{ route("location_data") }}' ).load();
+					message("Deactivated successfully");   
 
 				},
 				error: function(data) {
@@ -403,6 +407,28 @@
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');
 	$('label.error').remove();
+}
+function message(mess)
+{
+	toastr.options = {
+		"closeButton": false,
+		"debug": false,
+		"newestOnTop": false,
+		"progressBar": false,
+		"rtl": false,
+		"positionClass": "toast-bottom-right",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": 300,
+		"hideDuration": 1000,
+		"timeOut": 2000,
+		"extendedTimeOut": 1000,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	}
+	toastr["success"](mess);
 }
 </script>
 @endpush

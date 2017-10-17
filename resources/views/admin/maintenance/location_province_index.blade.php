@@ -305,96 +305,116 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
+			$('#name').valid();
+
 			if(title == "New Province")
 			{
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/location_province',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('input[name=name]').val(),
-					},
-					success: function (data)
-					{
-						if(typeof(data) === "object"){
-							lptable.ajax.url( '{{ route("lp.data") }}' ).load();
-							$('#lpModal').modal('hide');
-							$('#name').val("");
-							$('.modal-title').text('New Province');
+				if($('#name').valid())
+				{
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/location_province',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('input[name=name]').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								lptable.ajax.url( '{{ route("lp.data") }}' ).load();
+								$('#lpModal').modal('hide');
+								$('#name').val("");
+								$('.modal-title').text('New Province');
 
-					//Show success
 
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record added successfully")
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+							}
+						}
+
+					})
 				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-						console.log(i + " => " + v);
-						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-					});
-					
-				}
-			}
-			
-		})
 			}
 			else
 			{
-				$.ajax({
-					type: 'PUT',
-					url:  '/admin/location_province/' + p_id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('input[name=name]').val(),
-					},
-					success: function (data)
-					{
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record updated successfully")
+				if($('#name').valid())
+				{
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/location_province/' + p_id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('input[name=name]').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								lptable.ajax.url( '{{ route("lp.data") }}' ).load();
+								$('#lpModal').modal('hide');
+								$('#name').val("");
+								$('.modal-title').text('New Province');
 
-						lptable.ajax.url( '{{ route("lp.data") }}' ).load();
-						$('#lpModal').modal('hide');
-						$('#name').val("");
-						$('.modal-title').text('New Province');
-					}
-				})
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+							}
+						}
+					})
+				}
 			}
 		});
 

@@ -109,7 +109,7 @@
 				</div>
 				<div class="panel-body">
 					<div class = "col-md-12">
-						<div id = "calendar">
+						<div id = "calendar" ove>
 
 						</div>
 					</div>
@@ -144,6 +144,7 @@
 
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
+			height: 1250,
 			header: { center: 'month,agendaWeek' },
 			events: [
 			@forelse($deliveries as $delivery)

@@ -9,8 +9,10 @@ class Vehicle extends Model
 {
 	
 	use SoftDeletes;
+    public $incrementing = false;
+    
 	protected $primaryKey = 'plateNumber';
-	public $incrementing = false;
+	
     protected $fillable = [
     	'vehicle_types_id',
     	'plateNumber',
@@ -22,7 +24,7 @@ class Vehicle extends Model
     	'deleted_at',
     ];
 
-     public function vehicle_type(){
+    public function vehicle_type(){
         return $this->belongsTo('App\VehicleType', 'vehicle_types_id');
     }
 }
