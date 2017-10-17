@@ -1503,7 +1503,7 @@ function fill_Edititem(num)
     arrastre_unmasked   =  arrastre_unmasked.replace(/\,/g,'');
     arrastre_unmasked = parseFloat(arrastre_unmasked).toFixed(2);
 
-    var wharfage_unmasked = document.getElementById('arrastre').value;
+    var wharfage_unmasked = document.getElementById('wharfage').value;
     wharfage_unmasked  = wharfage_unmasked.replace(/\,/g,'');
     wharfage_unmasked = parseFloat(wharfage_unmasked).toFixed(2);
 
