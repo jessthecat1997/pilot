@@ -123,4 +123,13 @@ public function af_maintain_data(Request $request){
 
     return $rates;
 }
+
+
+    public function reactivate(Request $request)
+    {
+        $af = ArrastreHeader::withTrashed()
+        ->where('id',$request->id)
+        ->restore();
+
+    }
 }
