@@ -75,7 +75,13 @@ class EmployeesController extends Controller
 
         $location = $employee->cities_id;
 
-        return view('employee.employees_edit', compact(['employee', 'provinces', 'employee_role', 'location']));
+        $user = DB::table('users')
+        ->join('employees', 'users.emp_id', '=', 'employees.id')
+        ->select('users.id')
+        ->where('users.emp_id', '=', $id)
+        ->get();
+
+        return view('employee.employees_edit', compact(['employee', 'provinces', 'employee_role', 'location', 'user']));
     }
 
 
@@ -96,7 +102,6 @@ class EmployeesController extends Controller
         $employee->inCaseOfEmergency = $request->inCaseOfEmergency;
 
         $employee->save();
-
         return $employee;
     }
 
@@ -177,6 +182,15 @@ public function store_user(Request $request)
     $user->save();
 }
 public function updateUser(Request $request)
+{
+    $user = User::findOrFail($request->user_id);
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->save();
+
+    return $user;
+}
+public function updateUserPic(Request $request)
 {
     $user = User::findOrFail($request->user_id);
     $user->email = $request->email;

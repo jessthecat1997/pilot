@@ -23,7 +23,11 @@
                 @if(count($user) > 0)
                 <div class = "form-group">
                   <label class="control-label col-md-3">Username:</label>
-                  <span class="col-md-9">{{ $user[0]->email }}</span>
+                  @forelse($user as $u)
+                  <span class="col-md-9">{{ $u->email }}</span>
+                  @empty
+                  <span class="col-md-9">No username.</span>
+                  @endforelse
                 </div>
                 <button class="btn btn-primary col-sm-4 pull-right new_user_modal" data-toggle="modal" data-target="#editModal">Edit User Account</button>
                 @else
@@ -247,7 +251,6 @@
                 </td>
               </tr>
               @empty
-
               @endforelse
             </tbody>
           </table>
@@ -284,7 +287,11 @@
               <label for="password">* Password: </label>
               <input type="password" class="form-control" id="password">
             </div>
-            <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
+            @forelse($role as $r)
+            <input type="hidden" class="form-control" id="role_id" value="{{ $r->id }}" disabled>
+            @empty
+            <input type="hidden" class="form-control" id="role_id" value="No role" disabled>
+            @endforelse
             <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
             <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }} {{ $employee->lastName }}" disabled>
             <input type="hidden" class="form-control" id="emp_pic" value="{{ $employee->emp_pic }}" disabled>
@@ -311,13 +318,22 @@
             {{ csrf_field() }}
             <div class="form-group">
               <label for="username">* Username: </label>
-              <input type="text" class="form-control" id="upuser" placeholder="{{ $user[0]->email }}">
+              @forelse($user as $u)
+              <input type="text" class="form-control" id="upuser" placeholder="{{ $u->email }}">
+              @empty
+              <input type="hidden" class="form-control" id="user_id" value="No username" disabled>
+              @endforelse
+              
             </div>
             <div class="form-group">
               <label for="password">* Password: </label>
               <input type="password" class="form-control" id="uppass">
             </div>
-            <input type="hidden" class="form-control" id="user_id" value="{{ $user[0]->id }}" disabled>
+            @forelse($user as $u)
+            <input type="hidden" class="form-control" id="user_id" value="{{ $u->id }}" disabled>
+            @empty
+            <input type="hidden" class="form-control" id="user_id" value="No username" disabled>
+            @endforelse
             <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
             <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
             <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }} {{ $employee->lastName }}" disabled>
