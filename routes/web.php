@@ -90,6 +90,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/bank_account','BankAccountsController');
 	Route::resource('/admin/location_province','LocationProvincesController');
 	Route::resource('/admin/location_city','LocationCitiesController');
+	Route::post('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 	Route::resource('/admin/attachment_type','RequirementsController');
 	Route::resource('/admin/arrastre_fee','ArrastreFeesController');
 	Route::resource('/admin/lcl_type','LclTypesController');
@@ -206,6 +207,11 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
 	Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
 	Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
+
+
+	Route::put('/utilities/attachment_type_reactivate/{id}','RequirementsController@reactivate');
+
+	
 
 
 //Maintenance Datas
@@ -332,18 +338,18 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/admin/sarData/{isActive?}', 'DatatablesController@sar_datatable')->name('sar.data');
 	Route::get('/admin/lpData/{isActive?}', 'DatatablesController@lp_datatable')->name('lp.data');
 	Route::get('/admin/lcData/{isActive?}', 'DatatablesController@lc_datatable')->name('lc.data');
-	Route::get('/admin/atData', 'DatatablesController@req_datatable')->name('req.data');
-	Route::get('/admin/afData', 'DatatablesController@af_datatable')->name('af.data');
-	Route::get('/admin/lclData', 'DatatablesController@lcl_datatable')->name('lcl.data');
-	Route::get('/admin/btData', 'DatatablesController@bt_datatable')->name('bt.data');
-	Route::get('/admin/dctData', 'DatatablesController@dct_datatable')->name('dct.data');
-	Route::get('/admin/wfData', 'DatatablesController@wf_datatable')->name('wf.data');
-	Route::get('/admin/wf_lcl_Data', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
-	Route::get('/admin/af_lcl_Data', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
-	Route::get('/admin/af_dc_Data', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
-	Route::get('/admin/secData', 'DatatablesController@sec_datatable')->name('sec.data');
-	Route::get('/admin/catData', 'DatatablesController@cat_datatable')->name('cat.data');
-	Route::get('/admin/itemData', 'DatatablesController@item_datatable')->name('item.data');
+	Route::get('/admin/atData/{isActive?}', 'DatatablesController@req_datatable')->name('req.data');
+	Route::get('/admin/afData/{isActive?}', 'DatatablesController@af_datatable')->name('af.data');
+	Route::get('/admin/lclData/{isActive?}', 'DatatablesController@lcl_datatable')->name('lcl.data');
+	Route::get('/admin/btData/{isActive?}', 'DatatablesController@bt_datatable')->name('bt.data');
+	Route::get('/admin/dctData/{isActive?}', 'DatatablesController@dct_datatable')->name('dct.data');
+	Route::get('/admin/wfData/{isActive?}', 'DatatablesController@wf_datatable')->name('wf.data');
+	Route::get('/admin/wf_lcl_Data/{isActive?}', 'DatatablesController@wf_lcl_datatable')->name('wf_lcl.data');
+	Route::get('/admin/af_lcl_Data/{isActive?}', 'DatatablesController@af_lcl_datatable')->name('af_lcl.data');
+	Route::get('/admin/af_dc_Data/{isActive?}', 'DatatablesController@af_dc_datatable')->name('af_dc.data');
+	Route::get('/admin/secData/{isActive?}', 'DatatablesController@sec_datatable')->name('sec.data');
+	Route::get('/admin/catData/{isActive?}', 'DatatablesController@cat_datatable')->name('cat.data');
+	Route::get('/admin/itemData/{isActive?}', 'DatatablesController@item_datatable')->name('item.data');
 
 
 

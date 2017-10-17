@@ -122,8 +122,9 @@
 							Confirm Activating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							
 						</div>
 					</div>
 				</div>
@@ -237,7 +238,7 @@
 				},
 				success: function (data)
 				{
-					cttable.ajax.url( '{{ route("ct.data") }}' ).load();
+					cttable.ajax.url( '{{ route("ct.data") }}/1' ).load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {

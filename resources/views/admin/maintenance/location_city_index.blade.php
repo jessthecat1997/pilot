@@ -76,7 +76,7 @@
 						</div>
 						<div class="form-group required">
 							<label class = "control-label"><strong>City</strong></label>
-							<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" name = "city" id = "city" value=""  data-rule-required="true"/>
+							<input type = "text" class = "form-control  lc_city_valid"  placeholder="Enter a city" name = "name" id = "name" value=""  data-rule-required="true"/>
 						</div>
 						<br />
 						<small style = "color:red; text-align: left"><i>All field(s) with (*) are required.</i></small>
@@ -104,7 +104,8 @@
 					<div class="modal-body">			
 						<div class="form-group required">
 							<label class = "control-label">Name:</label>
-							<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
+							<input type = "text" class = "form-control" name = "provincename" 
+							id = "provincename"  minlength = "3" data-rule-required="true" />
 
 						</div>
 					</div>
@@ -149,8 +150,10 @@
 					</div>
 					<div class="modal-footer">
 
+						
+						<button type="button" class="btn btn-danger
+						" data-dismiss="modal">Cancel</button>
 						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -265,7 +268,7 @@
 					required: true,
 					
 				},
-				city:
+				name:
 				{
 					required: true,
 					lettersonly:true,
@@ -314,7 +317,7 @@
 			console.log(data.province);
 			$('#cModal-title').text('Update City');
 			$("#loc_province option:contains(" + data.province +")").attr("selected", true);
-			$('#city').val(data.city);
+			$('#name').val(data.city);
 			$('#lcModal').modal('show');
 		});
 
@@ -328,7 +331,7 @@
 		$(document).on('click', '.new_province', function(e){
 			resetErrors();
 			e.preventDefault();
-			$('#name').val("");
+			$('#provincename').val("");
 			$('#lpModal').modal('show');
 
 		});
@@ -338,10 +341,10 @@
 
 			$.ajax({
 				type: 'POST',
-				url:  '/admin/location_province',
+				url:  '/admin/location_city/new_province/',
 				data: {
 					'_token' : $('input[name=_token]').val(),
-					'name' : $('input[name=name]').val(),
+					'name' : $('#provincename').val(),
 				},
 				success: function (data)
 				{
@@ -349,7 +352,7 @@
 					$('#loc_province').append(newOption);
 					if(typeof(data) === "object"){
 						$('#lpModal').modal('hide');
-						$('#name').val("");
+						$('#provincename').val("");
 						$('.modal-title').text('New Province');
 
 						toastr.options = {
@@ -426,10 +429,10 @@
 		$(document).on('click', '.finalize-lc', function(e){
 			e.preventDefault();
 			var title = $('#cModal-title').text();
-			$('#city').valid();
+			$('#name').valid();
 			$('#loc_province').valid();
 			if(title === "New City"){
-				if($('#city').valid() && $('#loc_province').valid())
+				if($('#name').valid() && $('#loc_province').valid())
 				{
 
 					$.ajax({
@@ -438,7 +441,7 @@
 						url:  '/admin/location_city',
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'name' : $('#city').val(),
+							'name' : $('#name').val(),
 							'provinces_id' : $('#loc_province').val(),
 
 						},
@@ -448,7 +451,7 @@
 								lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 								$('#lcModal').modal('hide');
 								$('.modal-title').text('New City');
-								$('#city').val("");
+								$('#name').val("");
 
 								toastr.options = {
 									"closeButton": false,
@@ -485,7 +488,7 @@
 					})
 				}
 			}else{
-				if($('#city').valid() && $('#loc_province').valid())
+				if($('#name').valid() && $('#loc_province').valid())
 				{
 					$.ajax({
 
@@ -493,7 +496,7 @@
 						url:  '/admin/location_city/' +lc_id,
 						data: {
 							'_token' : $('input[name=_token]').val(),
-							'name' : $('#city').val(),
+							'name' : $('#name').val(),
 							'provinces_id' : $('#loc_province').val(),
 
 						},
@@ -503,7 +506,7 @@
 							lctable.ajax.url( '{{ route("lc.data") }}' ).load();
 							$('#lcModal').modal('hide');
 							$('.modal-title').text('New City');
-							$('#city').val("");
+							$('#name').val("");
 
 							toastr.options = {
 								"closeButton": false,
