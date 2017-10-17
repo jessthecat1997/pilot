@@ -102,21 +102,38 @@
 			</div>
 		</form>
 	</section>
+	<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
 <style>
-	.class-lcl-type{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-	.maintenance
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
+.class-lcl-type{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
+.maintenance
+{
+	border-left: 10px solid #8ddfcc;
+	background-color:rgba(128,128,128,0.1);
+	color: #fff;
+}
 </style>
 @endpush
 @push('scripts')
@@ -129,6 +146,7 @@
 	var lcl_id;
 	$(document).ready(function(){
 		var lcltable = $('#lcl_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -138,6 +156,60 @@
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "asc" ]],
+		});
+
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				lcltable.ajax.url( '{{ route("lcl.data") }}/1').load();
+			}
+			else{
+				lcltable.ajax.url( '{{ route("lcl.data") }}').load();
+			}
+		})
+
+
+		$(document).on('click', '.activate', function(e){
+			lcl_id = $(this).val();
+			data = lcltable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/lcl_reactivate/' + lcl_id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					lcltable.ajax.url( '{{ route("lcl.data") }}/1' ).load();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 

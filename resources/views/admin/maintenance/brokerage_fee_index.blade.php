@@ -188,6 +188,23 @@
         </div>
     </form>
 </section>
+<div class="modal fade" id="confirm-activate" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Activate record
+            </div>
+            <div class="modal-body">
+                Confirm Activating
+            </div>
+            <div class="modal-footer">
+                <button class = "btn btn-success" id = "btnActivate" >Activate</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 @push('styles')
@@ -250,7 +267,7 @@
             processing: false,
             serverSide: false,
             deferRender:true,
-            'scrollx': true,
+            "dom": '<"toolbar">frtip',
             columns: [
 
             { data: 'dateEffective' },
@@ -272,6 +289,59 @@
             ],  "order": [[ 0, "desc" ]],
 
 
+        });
+
+        $("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+        $('.check_deac').on('change', function(e)
+        {
+            e.preventDefault();
+            if($(this).is(':checked')){
+                bftable.ajax.url( '{{ route("bf.data") }}/1').load();
+            }
+            else{
+               bftable.ajax.url( '{{ route("bf.data") }}').load();
+            }
+        })
+
+        $(document).on('click', '.activate', function(e){
+            bf_id = $(this).val();
+            data = bftable.row($(this).parents()).data();
+            $('#confirm-activate').modal('show');
+        });
+        $('#btnActivate').on('click', function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'PUT',
+                url:  '/utilities/bf_fee_reactivate/' + bf_id,
+                data: {
+                    '_token' : $('input[name=_token').val()
+                },
+                success: function (data)
+                {
+                    bftable.ajax.url( '{{ route("bf.data") }}/1' ).load();
+                    $('#confirm-activate').modal('hide');
+
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "rtl": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": 300,
+                        "hideDuration": 1000,
+                        "timeOut": 2000,
+                        "extendedTimeOut": 1000,
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Record activated successfully")
+                }
+            })
         });
 
         $("#commentForm").validate({
@@ -361,10 +431,10 @@
         });
 
         $(document).on('click', '.deactivate', function(e){
-           bf_id = $(this).val();
-           data = bftable.row($(this).parents()).data();
-           $('#confirm-delete').modal('show');
-       });
+         bf_id = $(this).val();
+         data = bftable.row($(this).parents()).data();
+         $('#confirm-delete').modal('show');
+     });
 
 
         $(document).on('click', '.delete-bf-row', function(e){
@@ -395,13 +465,13 @@
             e.preventDefault();
             $('#bf_table_warning').removeClass('fade in');
             if(validatebfRows() === true){
-               $('input[name=maximum]').each(function(){
+             $('input[name=maximum]').each(function(){
                 $(this).attr("readonly", "true");
 
             });
 
-               $('#bf_parent_table').append(bf_row);
-               $('.money').each(function(){
+             $('#bf_parent_table').append(bf_row);
+             $('.money').each(function(){
                 $(this).inputmask("numeric", {
                     radixPoint: ".",
                     groupSeparator: ",",
@@ -413,9 +483,9 @@
 
             })
 
-               $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
-               $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
-               for(var i = 0; i < minimum.length; i++){
+             $(this).closest('tr').find('.bf_maximum_valid').attr('readonly', true);
+             $(this).closest('tr').find('.bf_minimum_valid').attr('readonly', true);
+             for(var i = 0; i < minimum.length; i++){
                 minimum[i+1].value = (parseFloat("" +$(maximum[i]).inputmask('unmaskedvalue')) + 0.01).toFixed(2);
             }
 
@@ -523,7 +593,7 @@
                 
                 if(title == "New Brokerage Fee Range"){
 
-                   if ($('#dateEffective').valid()){
+                 if ($('#dateEffective').valid()){
                     console.log('min' + minimum_id);    
                     console.log(maximum_id);    
                     jsonMinimum = JSON.stringify(minimum_id);
@@ -795,12 +865,12 @@ function validatebfRows()
         }
 
         for(var i = 0; i < minimum.length; i++){
-         amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
-         max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'));
-         min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'));
+           amt = parseFloat($(amount[i]).inputmask('unmaskedvalue'));
+           max = parseFloat($(maximum[i]).inputmask('unmaskedvalue'));
+           min = parseFloat($(minimum[i]).inputmask('unmaskedvalue'));
 
-         if(min < 0)
-         {
+           if(min < 0)
+           {
 
             error += "Minimum Required.";
             $('#bf_warning').addClass('in');

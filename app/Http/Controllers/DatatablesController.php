@@ -106,7 +106,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$dcts = DB::table('DangerousCargoType')
+			$dcts = DB::table('dangerous_cargo_types')
 			->select('id', 'name', 'description', 'created_at','deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -148,7 +148,7 @@ class DatatablesController extends Controller
 		}else{
 
 			
-			$bts = DB::table('BasisType')
+			$bts = DB::table('basis_types')
 			->select('id', 'name', 'abbreviation', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -191,7 +191,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$lcls = DB::table('LclType')
+			$lcls = DB::table('lcl_types')
 			->select('id', 'name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -1807,7 +1807,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$arrastres = DB::select("SELECT DISTINCT DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			$arrastres = DB::select("SELECT DISTINCT h.deleted_at as 'deleted_at', DATEDIFF(h.dateEffective, CURRENT_DATE()) AS diff, h.id,locations.name AS location, h.dateEffective, GROUP_CONCAT(container_types.name SEPARATOR '\n' ) AS container_size, GROUP_CONCAT(CONCAT('Php ' , FORMAT(d.amount, 2)) ORDER BY d.container_sizes_id ASC SEPARATOR '\n') AS amount FROM container_types,locations,arrastre_headers h JOIN arrastre_details d ON h.id = d.arrastre_header_id WHERE container_types.id = container_sizes_id AND locations_id = locations.id AND locations.deleted_at IS NULL AND container_types.deleted_at IS NULL AND h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 
 			return Datatables::of($arrastres)
 
@@ -1966,7 +1966,7 @@ class DatatablesController extends Controller
 			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 			->make(true);
 		}else{
-			$ipfs = DB::select("SELECT h.id, h.dateEffective , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , h.deleted_at, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 			return Datatables::of($ipfs)
 
 			->addColumn('status', function ($ipfs){

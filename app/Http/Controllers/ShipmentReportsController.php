@@ -56,7 +56,7 @@ class ShipmentReportsController extends Controller
 
         $current = \Carbon\Carbon::now('Asia/Hong_Kong');
     		$now = \Carbon\Carbon::now('Asia/Hong_Kong')->format('m/d/Y');
-      return view('reports/shipment_index', compact(['brokerage_header', 'brokerage_details', 'brokerage_containers', 'container_details', 'payments', 'arrastres', 'c']));
+      return view('reports/shipment_index', compact(['brokerage_header', 'brokerage_details', 'brokerage_containers', 'container_details', 'payments', 'arrastres', 'current', 'now']));
     }
 
     public function print(Request $request){

@@ -21,13 +21,15 @@
     </div>
   </div>
   <ul class="nav nav-pills nav-justified">
+    @if($detail_id == 0)
     <li class="active"><a data-toggle="pill" href="#home">Consignee Information</a></li>
-    <li><a data-toggle="pill" href="#menu1">Brokerage Information</a></li>
+    @endif
+    <li @if($detail_id !=0) class = "active"  @endif><a data-toggle="pill" href="#menu1">Brokerage Information</a></li>
     <li><a data-toggle="pill" href="#menu2">Container Information</a></li>
   </ul>
   <br />
   <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
+    <div id="home" class="tab-pane fade @if($detail_id == 0) in active @endif">
       <div class="panel panel-primary">
         <div class="panel-heading">
           Consignee Information
@@ -98,7 +100,7 @@
   </div>
 </div>
 </div>
-<div id="menu1" class="tab-pane fade">
+<div id="menu1" class="tab-pane fade @if($detail_id != 0) in active @endif">
  <div class="panel panel-primary">
   <div id = "brokerageInformationHeader" class="panel-heading">
     Brokerage Information
@@ -795,6 +797,7 @@
 
   window.onload = function(){
     $('#0_details td:nth-child(2)').hide();
+    alert('{{$detail_id}}');
   }
 
   function getCargoType(selectObject) {
@@ -1820,7 +1823,7 @@ error: function(data) {
 
   if(Validations() == true)
   {
-        
+
   }
   if(Validations() == false){
     if($("#choices li.active").text() === "Without Container"){
@@ -1846,6 +1849,7 @@ error: function(data) {
             'cbm' : cbm,
             'gross_weights' : gross_weights,
             'suppliers' : suppliers,
+            'detail_id' : '{{$detail_id}}',
           },
           success: function(data){
             if(typeof(data) == "object"){
@@ -1898,6 +1902,7 @@ error: function(data) {
             'portOfCfsLocation' : con_PortOfCfsLocation,
             'cargoType': con_CargoType,
             'container_data' : results,
+            'detail_id' : '{{$detail_id}}',
           },
           success: function(data){
             if(typeof(data) == "object"){
