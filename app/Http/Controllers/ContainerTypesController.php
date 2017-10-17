@@ -10,46 +10,47 @@ class ContainerTypesController extends Controller
 {
     public function index()
     {
-        return view('admin/maintenance/container_type_index');
-    }
+       $container_size = \App\ContainerType::all();
+       return view('admin/maintenance/container_type_index', compact(['container_size']));
+   }
 
 
-    public function store(StoreContainerType $request)
-    {
+   public function store(StoreContainerType $request)
+   {
 
-        $ct = ContainerType::create($request->all());
-        return $ct;
-    }
+    $ct = ContainerType::create($request->all());
+    return $ct;
+}
 
-    public function update(StoreContainerType $request, $id)
-    {
-        $container_type = ContainerType::findOrFail($id);
-        $container_type->name = $request->name;
-        $container_type->description = $request->description;
-        $container_type->maxWeight = $request->maxWeight;
+public function update(StoreContainerType $request, $id)
+{
+    $container_type = ContainerType::findOrFail($id);
+    $container_type->name = $request->name;
+    $container_type->description = $request->description;
+    $container_type->maxWeight = $request->maxWeight;
     
-        $container_type->save();
+    $container_type->save();
 
-        return $container_type;
-    }
+    return $container_type;
+}
 
 
-    public function destroy($id)
-    {
-        $container_type = ContainerType::findOrFail($id);
-        $container_type->delete();
-    }
+public function destroy($id)
+{
+    $container_type = ContainerType::findOrFail($id);
+    $container_type->delete();
+}
 
-    public function reactivate(Request $request)
-    {
-        $container_type = ContainerType::withTrashed()
-        ->where('id',$request->id)
-        ->restore();
+public function reactivate(Request $request)
+{
+    $container_type = ContainerType::withTrashed()
+    ->where('id',$request->id)
+    ->restore();
 
-    }
+}
 
-    public function ct_utilities(){
+public function ct_utilities(){
 
-        return view('admin/utilities.container_type_utility_index');
-    }
+    return view('admin/utilities.container_type_utility_index');
+}
 }

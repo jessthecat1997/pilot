@@ -19,7 +19,7 @@ class StoreContainerType extends FormRequest
 
             return [
             'name' => 'required|unique:container_types,name|numeric|between:1,1000000',
-            //'maxWeight' =>'required|numeric|between:1,1000000'
+           
             ];
 
             break;
@@ -27,16 +27,24 @@ class StoreContainerType extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'required|numeric|between:0,1000000| unique:container_types,name,'. $this->segment(3) ,
-           // 'maxWeight' => 'required|numeric|between:1,1000000'
-           
+            'name' => 'required|numeric|between:0,1000000| unique:container_types,name,'. $this->segment(3) , 
             ];
 
             break;
             
             default: break;
         }
+
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'The size is already been taken.',
+
+        ];
+    }
+    
 
     //Overriding the response 422
     public function response(array $errors)
