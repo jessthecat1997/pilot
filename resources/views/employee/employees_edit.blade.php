@@ -131,6 +131,7 @@
 							</div>
 						</div>
 					</div>
+					<input type="text" class="form-control" id="user_id" value="{{ $user[0]->id }}" disabled>
 					<div class="row">
 						<div class = "col-md-8">
 
@@ -330,11 +331,24 @@
 						},
 						success: function(data){
 
-							window.location.href = "{{ route('employees.index') }}";
-
 						},
 
 					})
+						$.ajax({
+							type: 'PUT',
+
+							url: '{{ route("employees.index" )}}/{{ $employee->id }}',
+							data: {
+								'_token' : $('input[name=_token]').val(),
+								'emp_pic' : '/images/emp/'+filename,
+							},
+							success: function(data){
+
+								window.location.href = "{{ route('employees.index') }}";
+
+							},
+
+						})
 					}
 					else{
 						$('#saveRecord').removeAttr('disabled');
