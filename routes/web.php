@@ -305,6 +305,7 @@ Route::group(['middleware' => ['trucking']], function() {
 Route::group(['middleware' => ['billing']], function() {
 //Billing
 	Route::resource('/billing', 'BillingDetailsController');
+	Route::resource('/billing_header', 'BillingDetailsController');
 	Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
 	Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
 	Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
