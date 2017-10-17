@@ -353,8 +353,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/admin/itemData/{isActive?}', 'DatatablesController@item_datatable')->name('item.data');
 
 
-
-
 //Locations
 	Route::resource('/location', 'LocationsController');
 	Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
