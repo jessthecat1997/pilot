@@ -183,9 +183,11 @@
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-
-
 				},
+				description:
+				{
+					NoSpecialCharacters:true,
+				}
 
 				
 
