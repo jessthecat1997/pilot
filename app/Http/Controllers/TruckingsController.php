@@ -49,7 +49,11 @@ class TruckingsController extends Controller
     {
 
 
-        $employees = Employee::all();
+        $employees = DB::table('employees')
+        ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
+        ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
+        ->where('B.id', '=', 5)
+        ->get();
 
         $consignees = \App\Consignee::all();
 
@@ -305,7 +309,11 @@ class TruckingsController extends Controller
 
         $container_volumes = ContainerType::all();
         $vehicle_types = VehicleType::all();
-        $employees = Employee::all();
+        $employees = DB::table('employees')
+        ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
+        ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
+        ->where('B.id', '=', 5)
+        ->get();
 
         $locations = \App\Location::all();
 
@@ -391,7 +399,11 @@ class TruckingsController extends Controller
             ->where('trucking_service_orders.id', '=', $so_id)
             ->get();
 
-            $employees = Employee::all();
+            $employees = DB::table('employees')
+            ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
+            ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
+            ->where('B.id', '=', 5)
+            ->get();
 
             $vehicle_types = VehicleType::all();
 
@@ -451,7 +463,12 @@ class TruckingsController extends Controller
         $so_id = $request->trucking_id;
         $container_volumes = ContainerType::all();
         $vehicle_types = VehicleType::all();
-        $employees = Employee::all();
+        $employees = DB::table('employees')
+        ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
+        ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
+        ->where('B.id', '=', 5)
+        ->get();
+
 
         $locations = \App\Location::all();
 
@@ -483,9 +500,9 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             if($request->emp_id_helper == 0){
-               $new_delivery_head->emp_id_helper = null;
-           }
-           else{
+             $new_delivery_head->emp_id_helper = null;
+         }
+         else{
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
         }
         $new_delivery_head->locations_id_pick = $request->locations_id_pick;
