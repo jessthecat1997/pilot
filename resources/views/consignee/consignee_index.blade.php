@@ -303,6 +303,18 @@
 			TIN:
 			{
 				required: true,
+			},
+			phy_address:
+			{
+				required: true,
+			},
+			phy_zip:
+			{
+				required: true,
+			},
+			phy_city:
+			{
+				required: true,
 			}
 
 		})
@@ -459,11 +471,12 @@
 			$('#companyName').valid();
 			$('#businessStyle').valid();
 			$('#TIN').valid();
-			$('#address').val();
-			$('#')
+			$('#phy_address').valid();
+			$('#phy_zip').valid();
+			$('#phy_city').valid();
 
 			var checked = $('.same_billing_address').is(":checked");
-			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid() && $('#TIN').val().indexOf("_") == -1  && $('#'))
+			if($('#firstName').valid() && $('#lastName').valid() && $('#email').valid() && $('#contactNumber').valid() && $('#companyName').valid() && $('#businessStyle').valid() && $('#TIN').valid() && $('#TIN').val().indexOf("_") == -1  && $('#phy_address').valid() && $('#phy_zip').valid()  && $('#phy_city').valid() && $('#phy_city').valid())
 			{
 				if(validateConsignee() == true)
 				{
