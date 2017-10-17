@@ -12,7 +12,24 @@ class EmployeeTypesTableSeeder extends Seeder
     public function run()
     {
         DB::table('employee_types')->insert([
-            'name' => 'Admin',
+        [
+        'name' => 'Admin'
+        ],
+        [
+        'name' => 'Broker'
+        ],
+        [
+        'name' => 'Trucking Manager'
+        ],
+        [
+        'name' => 'Billing Manager'
+        ],
+        [
+        'name' => 'Driver'
+        ],
+        [
+        'name' => 'Helper'
+        ]
         ]);
-    }
+ }
 }
