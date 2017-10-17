@@ -12,7 +12,7 @@ class CdsFeesController extends Controller
   public function index()
   {
 
-   $cdss = \DB::select("SELECT * FROM cds_fees as A WHERE dateEffective <= DATE(NOW())");
+   $cdss = \DB::select("SELECT * , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff FROM cds_fees where deleted_at is null ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
     
 
     $cds_fee = \App\CdsFee::all();

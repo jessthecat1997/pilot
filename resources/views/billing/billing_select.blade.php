@@ -332,11 +332,13 @@
 	});
 	$(document).on('click', '.updateBill', function(e){
 		e.preventDefault();
+		$('#updateModal').modal('show');
 		update_id = $(this).val();
 	})
 
 	$(document).on('click', '.voidBill', function(e){
 		e.preventDefault();
+		$('#voidModal').modal('show');
 		void_id = $(this).val();
 	})
 	$(document).on('click', '.save-header', function(e){

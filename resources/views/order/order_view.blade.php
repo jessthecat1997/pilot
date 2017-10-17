@@ -64,25 +64,25 @@
 					<br />
 					<div class="row">
 						<div class="col-md-12">
-							<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;"> 
-								<thead> 
-									<tr> 
-										<td > 
-											File 
-										</td> 
-										<td> 
-											File Name 
-										</td> 
-										<td > 
-											Remarks 
-										</td> 
-										<td > 
-											Action 
-										</td> 
+							<table class = "table table-responsive table-striped cell-border table-bordered" id = "attachments_table" style="width: 100%;">
+								<thead>
+									<tr>
+										<td >
+											File
+										</td>
+										<td>
+											File Name
+										</td>
+										<td >
+											Remarks
+										</td>
+										<td >
+											Action
+										</td>
 
-									</tr> 
-								</thead> 
-							</table> 
+									</tr>
+								</thead>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -111,12 +111,12 @@
 				<div class="panel-heading heading">
 					List of Deliveries
 				</div>
-				<div class="panel-body">
-					<div class = "form-horizontal ">
-						<div class="col-md-12">
-							<button class = "btn but view_trucking btn-sm pull-right">View Trucking Service Order</button>
+					<div class="panel-body">
+						<div class = "form-horizontal ">
+							<div class="col-md-12">
+								<button class = "btn but view_trucking btn-sm pull-right">View Trucking Service Order</button>
+							</div>
 						</div>
-					</div>
 					<br>
 					<br>
 					<div id = "table-trucking">
@@ -179,6 +179,16 @@
 						List of Brokerage
 					</div>
 					<div class="panel-body">
+
+								<div class = "form-horizontal ">
+									<div class="col-md-12">
+										<button class = "btn but view_brokerage btn-sm pull-right">View Brokerage Service Order</button>
+									</div>
+								</div>
+								<br>
+								<br>
+						<div class="col-md-12">
+
 						<table class = "table table-responsive table-striped cell-border table-bordered"  id = "dutiesandtaxes_table">
 							<thead>
 								<tr>
@@ -197,6 +207,7 @@
 								</tr>
 							</thead>
 						</table>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -369,7 +380,7 @@
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit-attachment" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -425,7 +436,7 @@
 			columns: [
 			{ data: 'name'},
 			{ data: 'file_path' },
-			{ data: 'description' },                              
+			{ data: 'description' },
 			{ data: 'action', orderable: false, searchable: false }
 
 			],	"order": [[ 0, "desc" ]],
@@ -447,17 +458,17 @@
 		});
 
 
-		
+
 
 		$(document).on('click', '.confirm-create-so-b', function(e){
 			e.preventDefault();
-			window.location.replace('{{route("brokerageOrder")}}');
+			window.location.replace("{{ route('brokerageOrder') }}/"+so_id);
 		});
 
 		$(document).on('click', '.new_attachment', function(e){
 			e.preventDefault();
 			$('#new-attachment').modal('show');
-			
+
 		});
 
 
@@ -496,7 +507,6 @@
 			ajax: '{{ route("trucking.index") }}/{{$truckings[0]->id}}/get_deliveries',
 			columns: [
 
-
 			{ data: 'pickup_name' },
 			{ data: 'pickup_city'},
 			{ data: 'pickupDateTime'},
@@ -505,15 +515,14 @@
 			{ data: 'deliveryDateTime'},
 			{ data: 'status' },
 
-
 			],	"order": [[ 0, "desc" ]],
 		});
 
 		$(document).on('click', '.view_trucking', function(e){
 			e.preventDefault();
 			window.location.replace('{{ route("trucking.index") }}/{{$truckings[0]->id}}/view');
-
 		});
+
 
 		@endif
 
@@ -523,21 +532,26 @@
 		})
 
 		@if(count($brokerages) > 0)
+		alert({{ $brokerages[0]->id }})
 		var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({
 			processing: false,
 			deferRender: true,
 			serverSide: false,
-			scrollX: true,
 			ajax: '{{route("brokerage.index")}}/{{ $brokerages[0]->id }}/get_dutiesandtaxes',
 			columns: [
 			{ data: 'rate'},
 			{ data: 'brokerageFee'},
 			{ data: 'processedBy'},
 			{ data: 'statusType'},
-			{ data: 'action', orderable: false, searchable: false },
 
 			],	"order": [[ 0, "desc" ]],
 		});
+
+		$(document).on('click', '.view_brokerage', function(e){
+			e.preventDefault();
+			window.location.replace('/brokerage/{{$brokerages[0]->id}}/order');
+		});
+
 		@endif
 
 		function readURL(input) {
@@ -554,7 +568,6 @@
 		$("#file_path").change(function(){
 			readURL(this);
 		});
-
 
 		$(document).on('click', '.confirm-create-so-t', function(e){
 			e.preventDefault();
@@ -596,32 +609,32 @@
 
 		});
 
-		
+
 		$("body").on("click",".submit-attachment",function(e){
 			$(this).parents("#commentForm").ajaxForm(options);
 		});
 
-		var options = { 
+		var options = {
 			success: function(data)
 			{
-				if(typeof(data) === "object"){ 
+				if(typeof(data) === "object"){
 					$('#new-attachment').modal('hide');
 					$('.submit-attachment').removeAttr('disabled');
 					attachmentstable.ajax.reload();
 					message("Successfully added attachment");
 
-				}else{ 
+				}else{
 
-					resetErrors(); 
-					var invdata = JSON.parse(data); 
-					$.each(invdata, function(i, v) { 
-						console.log(i + " => " + v);  
-						var msg = '<label class="error" for="'+i+'">'+v+'</label>'; 
-						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg); 
+					resetErrors();
+					var invdata = JSON.parse(data);
+					$.each(invdata, function(i, v) {
+						console.log(i + " => " + v);
+						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 					});
 					$('.submit-attachment').removeAttr('disabled');
 
-				}	
+				}
 			}
 		};
 	})

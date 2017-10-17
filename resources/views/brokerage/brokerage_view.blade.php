@@ -65,7 +65,6 @@
         </tr>
       </table>
 
-
     </div>
 
     <form role = "form" method = "POST">
@@ -267,18 +266,18 @@ window.onload = function(){
 
    @if($brokerage_header[0]->withCO == 1)
 
-       StoredOtherCharges[r] = items[r].otherCharges;
-       OtherCharges =  items[r].otherCharges;
-       Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2) + +parseFloat(OtherCharges).toFixed(2);
-       cell4.innerHTML = "$ " + OtherCharges.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          OtherCharges = items[r].otherCharges;
+          StoredOtherCharges[r] = OtherCharges;
+          Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2);
+          cell4.innerHTML = "$    ---   ";
 
    @endif
    @if($brokerage_header[0]->withCO == 0)
 
-       OtherCharges = items[r].otherCharges;
-       StoredOtherCharges[r] = OtherCharges;
-       Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2);
-       cell4.innerHTML = "$    ---   ";
+          StoredOtherCharges[r] = items[r].otherCharges;
+          OtherCharges =  items[r].otherCharges;
+          Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2) + +parseFloat(OtherCharges).toFixed(2);
+          cell4.innerHTML = "$ " + OtherCharges.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
    @endif
 
@@ -327,11 +326,13 @@ window.onload = function(){
  cols += '<td> $ ' + StrTotalFreight + '</td>';
  if(localStorage.getItem("withCO") == 1)
  {
-     cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
- }
+   cols += '<td> $ --- </td>';
+
+}
  else if(localStorage.getItem("withCO") == 0)
  {
-     cols += '<td> $ --- </td>';
+   cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
+
  }
  cols += '<td> $ ' + StrTotal + '</td>';
  cols += '<td> Php '  + StrTotalDutiableValue + '</td>';

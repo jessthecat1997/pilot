@@ -61,12 +61,12 @@
 						<div class="modal-body">			
 							<div class="form-group required">
 								<label class = "control-label">Name: </label>
-								<input type = "text" class = "form-control" name = "name" id = "name" required />
+								<textarea type = "text" class = "form-control" name = "name" id = "name" rows = "3" ></textarea> 
 							</div>
 
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
-								<input class = "form-control" name = "description" id = "description">
+								<textarea class = "form-control" name = "description" id = "description" rows ="5"></textarea> 
 							</div>
 
 						</div>
@@ -102,6 +102,23 @@
 			</div>
 		</form>
 	</section>
+	<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 @push('styles')
@@ -123,13 +140,14 @@
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
 	$('#brokeragecollapse').addClass('in');
+	$('#tariffcollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
 	var sec_id;
 	$(document).ready(function(){
 		var sectable = $('#sec_table').DataTable({
-			scrollX: true,
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -141,6 +159,18 @@
 			],	"order": [[ 0, "asc" ]],
 		});
 
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				sectable.ajax.url( '{{ route("sec.data") }}/1').load();
+			}
+			else{
+				sectable.ajax.url( '{{ route("sec.data") }}').load();
+			}
+		})
+
 
 		var validator = $("#commentForm").validate({
 			rules: 
@@ -148,28 +178,31 @@
 				name:
 				{
 					required: true,
-					maxlength: 50,
 					minlength: 3,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					lettersonly:true,
+					NoSpecialCharacters:true,
 
 				},
 
 				description:
 				{
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
+					NoSpecialCharacters:true,
 				},
 
 			},
 			onkeyup: function(element) {$(element).valid()}, 
 
 		});
+
+
+		function textAreaAdjust(o) {
+			o.style.height = "1px";
+			o.style.height = (25+o.scrollHeight)+"px";
+		}
+
 
 		$(document).on('click', '.new', function(e){
 			resetErrors();
@@ -194,6 +227,47 @@
 			sec_id = $(this).val();
 			data = sectable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
+		});
+
+		$(document).on('click', '.activate', function(e){
+			sec_id = $(this).val();
+			data = sectable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/section_reactivate/' + sec_id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					sectable.ajax.url( '{{ route("sec.data") }}/1' ).load();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 
@@ -282,7 +356,7 @@ $('#btnSave').on('click', function(e){
 						"showMethod": "fadeIn",
 						"hideMethod": "fadeOut"
 					}
-					toastr["success"]("Record addded successfully");
+					toastr["success"]("Record added successfully");
 
 					$('#name').val("");
 					$('#description').val("");

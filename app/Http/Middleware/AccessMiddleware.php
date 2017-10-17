@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Auth;
 use Closure;
 
-class BillingMiddleware
+class AccessMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class BillingMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 4){
+        if(Auth::guard($guard)->check() && Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3){
             return $next($request);
         }
         else

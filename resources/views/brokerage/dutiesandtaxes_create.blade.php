@@ -79,7 +79,7 @@
 			<br />
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn btn-primary" id = "" onclick = "	$('#SaveModal').modal('show');">
+	      <button type="button" class="btn btn-primary" id = "btnSave">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
@@ -205,7 +205,7 @@
 
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
+		  <button type="button" class="btn btn-success" >Finalize</button>
 
 		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
 		    </form>
@@ -396,18 +396,18 @@ onReady(function () {
 
 				if(localStorage.getItem("withCO") == 1)
 				{
-						othercharges_rate = parseFloat(OtherCharges_percent) / 100.0;
-						OtherCharges = parseFloat(Value * othercharges_rate).toFixed(2);
-						StoredOtherCharges[r] = OtherCharges;
-						Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2) + +parseFloat(OtherCharges).toFixed(2);
-						cell4.innerHTML = "$ " + OtherCharges.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+					OtherCharges = 0.000;
+					StoredOtherCharges[r] = OtherCharges;
+					Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2);
+					cell4.innerHTML = "$    ---   ";
 				}
 				else if(localStorage.getItem("withCO") == 0)
 				{
-						OtherCharges = 0.000;
-						StoredOtherCharges[r] = OtherCharges;
-						Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2);
-						cell4.innerHTML = "$    ---   ";
+					othercharges_rate = parseFloat(OtherCharges_percent) / 100.0;
+					OtherCharges = parseFloat(Value * othercharges_rate).toFixed(2);
+					StoredOtherCharges[r] = OtherCharges;
+					Total = +parseFloat(Value).toFixed(2) + +parseFloat(Freight).toFixed(2) + +parseFloat(Insurance).toFixed(2) + +parseFloat(OtherCharges).toFixed(2);
+					cell4.innerHTML = "$ " + OtherCharges.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 				}
 
 				StoredTotal[r] = Total;
@@ -455,11 +455,13 @@ onReady(function () {
 			cols += '<td> $ ' + StrTotalFreight + '</td>';
 			if(localStorage.getItem("withCO") == 1)
 			{
-					cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
+				cols += '<td> $ --- </td>';
+
 			}
 			else if(localStorage.getItem("withCO") == 0)
 			{
-					cols += '<td> $ --- </td>';
+				cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
+
 			}
 			cols += '<td> $ ' + StrTotal + '</td>';
 			cols += '<td> Php '  + StrTotalDutiableValue + '</td>';
@@ -725,7 +727,6 @@ onReady(function () {
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'brokerage_id' : Brokerage_id,
-					'employee_id' : $('#processedBy').val(),
 					'shipper' : shipper,
 					'companyName' : CompanyName,
 					'freightType' : FreightType,

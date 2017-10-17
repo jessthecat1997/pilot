@@ -43,6 +43,11 @@ class BillingInvoiceHeadersController extends Controller
 		$billing_header->override_date = $request->override_date;
 		$billing_header->due_date = $request->due_date;
 		$billing_header->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Creaye invoice";
+		$audit->save();
 	}
 	public function update(Request $request)
 	{
@@ -51,6 +56,11 @@ class BillingInvoiceHeadersController extends Controller
 		$csh->date_billed = $request->date_billed;
 		$csh->due_date = $request->due_date;
 		$csh->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Update invoice";
+		$audit->save();
 
 		return $csh;
 	}

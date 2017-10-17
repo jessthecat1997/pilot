@@ -55,51 +55,109 @@ class DutiesAndTaxesController extends Controller
       ->select('bank_charges', 'other_charges', 'insurance_gc', 'insurance_c')
       ->get();
 
-      $containerized_arrastre_header = DB::table('arrastre_headers')
+      $containerized_arrastre_header_locs = DB::table('arrastre_headers')
       ->select('arrastre_headers.id', 'locations_id')
-      ->where('locations_id', '=', $brokerage_header[0]->location_id)
       ->get();
 
-      $containerized_arrastre_detail = DB::table('arrastre_details')
-      ->select('container_sizes_id', 'amount', 'name as containerVolume')
-      ->join('container_types', 'container_sizes_id', '=', 'container_types.id')
-      ->where('arrastre_details.arrastre_header_id', '=', $containerized_arrastre_header[0]->id)
-      ->get();
+      foreach($containerized_arrastre_header_locs as $locs)
+      {
 
-      $containerized_wharfage_header = DB::table('wharfage_headers')
+        $containerized_arrastre_header = DB::table('arrastre_headers')
+        ->select('arrastre_headers.id', 'locations_id')
+        ->where('locations_id', '=', $brokerage_header[0]->location_id)
+        ->get();
+
+          if($locs->locations_id == $brokerage_header[0]->location_id)
+          {
+              $containerized_arrastre_detail = DB::table('arrastre_details')
+              ->select('container_sizes_id', 'amount', 'name as containerVolume')
+              ->join('container_types', 'container_sizes_id', '=', 'container_types.id')
+              ->where('arrastre_details.arrastre_header_id', '=', $containerized_arrastre_header[0]->id)
+              ->get();
+          }
+          else {
+              $containerized_arrastre_detail = null;
+          }
+      }
+
+      $containerized_wharfage_header_locs = DB::table('wharfage_headers')
       ->select('wharfage_headers.id', 'locations_id')
-      ->where('locations_id', '=', $brokerage_header[0]->location_id)
       ->get();
 
-      $containerized_wharfage_detail = DB::table('wharfage_details')
-      ->select('container_sizes_id', 'amount', 'name as containerVolume')
-      ->join('container_types', 'container_sizes_id', '=', 'container_types.id')
-      ->where('wharfage_details.wharfage_header_id', '=', $containerized_wharfage_header[0]->id)
+      foreach($containerized_wharfage_header_locs as $locs)
+      {
+
+                    $containerized_wharfage_header = DB::table('wharfage_headers')
+                    ->select('wharfage_headers.id', 'locations_id')
+                    ->where('locations_id', '=', $brokerage_header[0]->location_id)
+                    ->get();
+
+          if($locs->locations_id == $brokerage_header[0]->location_id)
+          {
+
+            $containerized_wharfage_detail = DB::table('wharfage_details')
+            ->select('container_sizes_id', 'amount', 'name as containerVolume')
+            ->join('container_types', 'container_sizes_id', '=', 'container_types.id')
+            ->where('wharfage_details.wharfage_header_id', '=', $containerized_wharfage_header[0]->id)
+            ->get();
+          }
+          else {
+            $containerized_wharfage_detail = null;
+          }
+    }
+
+      $lcl_arrastre_header_locs = DB::table('arrastre_lcl_headers')
+      ->select('arrastre_lcl_headers.id', 'locations_id')
       ->get();
 
-      $lcl_arrastre_header = DB::table('arrastre_lcl_headers')
-      ->select('arrastre_lcl_headers.id', 'locations_id', 'dateEffective')
-      ->where('locations_id', '=',  $brokerage_header[0]->location_id)
-      ->get();
+      foreach($lcl_arrastre_header_locs as $locs)
+      {
 
-      $lcl_arrastre_detail = DB::table('arrastre_lcl_details')
-      ->select('arrastre_lcl_details.id', 'lcl_types_id', 'lcl_types.name as lcl_type', 'basis_types_id', 'basis_types.name as basis_name', 'amount')
-      ->join('lcl_types', 'lcl_types_id', '=', 'lcl_types.id')
-      ->join('basis_types', 'basis_types_id', '=', 'basis_types.id')
-      ->where('arrastre_lcl_details.arrastre_lcl_headers_id', '=', $lcl_arrastre_header[0]->id)
-      ->get();
+          $lcl_arrastre_header = DB::table('arrastre_lcl_headers')
+          ->select('arrastre_lcl_headers.id', 'locations_id', 'dateEffective')
+          ->where('locations_id', '=',  $brokerage_header[0]->location_id)
+          ->get();
 
-      $lcl_wharfage_header = DB::table('wharfage_lcl_headers')
+          if($locs->locations_id == $brokerage_header[0]->location_id)
+          {
+
+            $lcl_arrastre_detail = DB::table('arrastre_lcl_details')
+            ->select('arrastre_lcl_details.id', 'lcl_types_id', 'lcl_types.name as lcl_type', 'basis_types_id', 'basis_types.name as basis_name', 'amount')
+            ->join('lcl_types', 'lcl_types_id', '=', 'lcl_types.id')
+            ->join('basis_types', 'basis_types_id', '=', 'basis_types.id')
+            ->where('arrastre_lcl_details.arrastre_lcl_headers_id', '=', $lcl_arrastre_header[0]->id)
+            ->get();
+          }
+
+          else {
+            $lcl_arrastre_detail = null;
+          }
+      }
+
+      $lcl_wharfage_header_locs = DB::table('wharfage_lcl_headers')
       ->select('wharfage_lcl_headers.id', 'locations_id')
-      ->where('locations_id', '=',  $brokerage_header[0]->location_id)
       ->get();
 
-      $lcl_wharfage_detail = DB::table('wharfage_lcl_details')
-      ->select('wharfage_lcl_details.id', 'basis_types_id', 'basis_types.name as basis_name','amount')
-      ->join('basis_types', 'basis_types_id', '=', 'basis_types.id')
-      ->where('wharfage_lcl_details.wharfage_lcl_headers_id', '=', $lcl_wharfage_header[0]->id)
-      ->get();
+      foreach($lcl_wharfage_header_locs as $locs)
+      {
+        $lcl_wharfage_header = DB::table('wharfage_lcl_headers')
+        ->select('wharfage_lcl_headers.id', 'locations_id')
+        ->where('locations_id', '=',  $brokerage_header[0]->location_id)
+        ->get();
 
+          if($locs->locations_id == $brokerage_header[0]->location_id)
+          {
+            $lcl_wharfage_detail = DB::table('wharfage_lcl_details')
+            ->select('wharfage_lcl_details.id', 'basis_types_id', 'basis_types.name as basis_name','amount')
+            ->join('basis_types', 'basis_types_id', '=', 'basis_types.id')
+            ->where('wharfage_lcl_details.wharfage_lcl_headers_id', '=', $lcl_wharfage_header[0]->id)
+            ->get();
+          }
+          else
+          {
+            $lcl_wharfage_detail   = null;
+          }
+      }
       $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
       ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges')
       ->where('brokerageServiceOrders_id','=', $brokerage_header[0]->id)
@@ -133,6 +191,7 @@ class DutiesAndTaxesController extends Controller
 
           $cds_fee = DB::table('cds_fees')
           ->select('id', 'fee', 'dateEffective')
+          ->where('deleted_at', '=', null)
           ->get();
 
 
@@ -156,6 +215,7 @@ class DutiesAndTaxesController extends Controller
 
           $ipf_fee_header = DB::table('import_processing_fee_headers')
           ->select('id', 'dateEffective')
+          ->where('deleted_at', '=', null)
           ->get();
 
           $row_count = count($ipf_fee_header);
@@ -254,7 +314,7 @@ class DutiesAndTaxesController extends Controller
     $new_dutiesandtaxes->wharfage = $request->wharfage;
     $new_dutiesandtaxes->bankCharges = $request->bankCharges;
     $new_dutiesandtaxes->brokerageServiceOrders_id = $request->brokerage_id;
-    $new_dutiesandtaxes->employees_id_broker = $request->employee_id;
+    $new_dutiesandtaxes->employees_id_broker = \Auth::user()->id;
     $new_dutiesandtaxes->statusType = 'P';
     $new_dutiesandtaxes->save();
 
@@ -293,6 +353,10 @@ class DutiesAndTaxesController extends Controller
       $new_dutiesandtaxes_details->save();
     }
 
+    $audit = new \App\AuditTrail;
+    $audit->user_id = \Auth::user()->id;
+    $audit->description = "Created new duties and taxes decleration id: ".$new_dutiesandtaxes->id;
+    $audit->save();
 
     $brokerage_id = $new_dutiesandtaxes->id;
     return $brokerage_id;
@@ -306,6 +370,26 @@ class DutiesAndTaxesController extends Controller
       $brokerage_status_update = DB::table('duties_and_taxes_headers')
       ->where('duties_and_taxes_headers.id', $brokerage_id)
       ->update(['statusType' =>  $request->status]);
+
+      $audit = new \App\AuditTrail;
+      $audit->user_id = \Auth::user()->id;
+
+      if($request->status == "A")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      if($request->status == "P")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      if($request->status == "R")
+      {
+        $audit->description = "Updated Duties And Taxes Decleration #".$brokerage_id." to ".$request->status;
+      }
+
+      $audit->save();
 
     return $brokerage_id;
   }

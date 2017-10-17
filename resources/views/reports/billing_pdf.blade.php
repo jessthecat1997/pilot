@@ -33,7 +33,7 @@
 		<br />
 		<hr />
 	</div>
-	<h2>Unpaid Billing Report</h2>
+	<h2>Paid Billing Report</h2>
 	<table class = "table-responsive table table-bordered table-striped" id = "customed_table">
 		<thead>
 			<tr>
@@ -58,6 +58,9 @@
 					{{ $dr->companyName }}
 				</td>
 				<td>
+					{{ $dr->bill }}
+				</td>
+				<td>
 					{{ $dr->part }}
 				</td>
 				<td>
@@ -76,6 +79,7 @@
 			@endforelse
 		</tbody>
 	</table>
+	Printed by: {{ Auth::user()->name }}
 </body>
 <script type="text/javascript">
 	var year = $('#customed_table').DataTable( {

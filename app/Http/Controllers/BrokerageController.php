@@ -55,19 +55,16 @@ class BrokerageController extends Controller
 
           if(date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d") <= $current_date)
           {
-
               if(date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d") >= $dateEffective_temp)
               {
                 $dateEffective_temp = date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d");
                 $currentExchange_id = $exchange_rate[$x]->id;
-
               }
               else {
                 $currentExchange_id = $exchange_rate[$x]->id;
               }
           }
         }
-
 
         $cds_fee = DB::table('cds_fees')
         ->select('id', 'fee', 'dateEffective')
@@ -190,7 +187,7 @@ class BrokerageController extends Controller
   public function view_brokerage(Request $request){
     try
     {
-      $so_id = $request->brokerage_id;
+          $so_id = $request->brokerage_id;
 
           $dutiesandtaxes_header = DB::table('duties_and_taxes_headers')
           ->select('duties_and_taxes_headers.id', 'exchangeRate_id', 'cdsFee_id', 'ipfFee_id', 'arrastre', 'wharfage', 'bankCharges', 'brokerageServiceOrders_id')
@@ -287,7 +284,7 @@ class BrokerageController extends Controller
 
           $audit = new \App\AuditTrail;
           $audit->user_id = \Auth::user()->id;
-          $audit->description = "Printed duties and taxes declartion, id: " . $dutiesandtaxes_header[0]->id . "from brokerage order no. " .$so_id;
+          $audit->description = "Printed duties and taxes declartion, id: " . $dutiesandtaxes_header[0]->id . " from brokerage order no: " .$dutiesandtaxes_header[0]->brokerageServiceOrders_id;
           $audit->save();
 
           $pdf = PDF::loadView('pdf_layouts.dutiesandtaxes_pdf', compact(['so_id',  'brokerage_header', 'dutiesandtaxes_header', 'dutiesandtaxes_details', 'exchangeRate', 'cds_fee', 'ipf_fee_header', 'ipf_fee_details']))->setPaper('a4', 'landscape')->setWarnings(false);
@@ -299,15 +296,21 @@ class BrokerageController extends Controller
       }
   }
 
-  public function create_new()
+  public function create_new(Request $request)
   {
     $employees = Employee::all();
 
     $consignees = \App\Consignee::all();
 
-    $provinces = \App\LocationProvince::all();
+    $provinces = DB::table('location_provinces')
+    ->select('id', 'name')
+    ->where('deleted_at', '=', null)
+		->get();
 
-    $locations = \App\Location::all();
+    $locations = DB::table('locations')
+    ->select('id', 'name', 'address', 'zipCode', 'cities_id')
+    ->where('deleted_at', '=', null)
+		->get();
 
     $dangerous_types = DB::table('dangerous_cargo_types')
     ->select('id', 'name')
@@ -324,22 +327,37 @@ class BrokerageController extends Controller
 		->where('deleted_at', '=', null)
 		->get();
 
-    $container_volumes = \App\ContainerType::all();
-      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis', 'dangerous_types']));
+    $container_volumes = DB::table('container_types')
+    ->select('id', 'name', 'maxWeight')
+    ->where('deleted_at', '=', null)
+		->get();
+
+    $detail_id = $request->detail_id;
+
+    return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis', 'dangerous_types', 'detail_id']));
   }
 
   public function save_neworder(Request $request)
   {
-    
-    $new_so_head = new ConsigneeServiceOrderHeader;
-    $new_so_head->consignees_id = $request->cs_id;
-    $new_so_head->employees_id = $request->employee_id;
-    $new_so_head->save();
+    if($request->detail_id == 0)
+    {
+        $new_so_head = new ConsigneeServiceOrderHeader;
+        $new_so_head->consignees_id = $request->cs_id;
+        $new_so_head->employees_id = $request->employee_id;
+        $new_so_head->save();
 
-    $new_so_detail = new ConsigneeServiceOrderDetail;
-    $new_so_detail->so_headers_id = $new_so_head->id;
-    $new_so_detail->service_order_types_id = 1;
-    $new_so_detail->save();
+        $new_so_detail = new ConsigneeServiceOrderDetail;
+        $new_so_detail->so_headers_id = $new_so_head->id;
+        $new_so_detail->service_order_types_id = 1;
+        $new_so_detail->save();
+    }
+    else
+    {
+        $new_so_detail = new ConsigneeServiceOrderDetail;
+        $new_so_detail->so_headers_id = $request->detail_id;
+        $new_so_detail->service_order_types_id = 1;
+        $new_so_detail->save();
+    }
 
     $date = date_format(date_create($request->arrivalDate),"Y-m-d");
     $new_brokerage_so = new BrokerageServiceOrder;
@@ -424,7 +442,6 @@ class BrokerageController extends Controller
     $audit->description = "Created new brokerage order id: ".$new_brokerage_so->id;
     $audit->save();
 
-
     $brokerage_id = $new_brokerage_so->id;
     return $brokerage_id;
   }
@@ -434,11 +451,13 @@ class BrokerageController extends Controller
     $bill_revs = DB::table('charges')
     ->select('id','name', 'amount')
     ->where('bill_type', '=', 'R')
+    ->where('deleted_at', '=', null)
     ->get();
 
     $bill_exps = DB::table('charges')
     ->select('id','name', 'amount')
     ->where('bill_type', '=', 'E')
+    ->where('deleted_at', '=', null)
     ->get();
 
     $brokerage_id = $request->brokerage_id;
@@ -529,7 +548,7 @@ class BrokerageController extends Controller
       $brokerage_id = $request->brokerage_id;
       $brokerage_status_update = DB::table('brokerage_service_orders')
       ->where('brokerage_service_orders.id', $brokerage_id)
-    ->update(['statusType' =>  $request->status]);
+      ->update(['statusType' =>  $request->status]);
 
 
         $audit = new \App\AuditTrail;
@@ -566,14 +585,14 @@ class BrokerageController extends Controller
           $consignee_header->bi_head_id_exp = $billing_header->id;
               $audit = new \App\AuditTrail;
               $audit->user_id = \Auth::user()->id;
-              $audit->description = "Created Refundable Charges Invoice for brokerage order id:" .$br_so_id;
+              $audit->description = "Created Refundable Charges Invoice for brokerage order id:" .$request->br_so_id;
               $audit->save();
           break;
           case 1:
           $consignee_header->bi_head_id_rev = $billing_header->id;
               $audit = new \App\AuditTrail;
               $audit->user_id = \Auth::user()->id;
-              $audit->description = "Created Billing Invoice for brokerage order id:" .$br_so_id;
+              $audit->description = "Created Billing Invoice for brokerage order id:" .$request->br_so_id;
               $audit->save();
           break;
           default:

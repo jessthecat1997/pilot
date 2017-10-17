@@ -165,7 +165,7 @@
 						<div class="modal-footer">
 
 							<button class = "btn btn-danger	" id = "btnDeactivate" >Deactivate</button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
 				</div>
@@ -188,7 +188,7 @@
 					</div>
 					<div class="modal-footer">
 
-						<button class = "btn btn-danger	" id = "btnActivate" >Activate</button>
+						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
@@ -277,7 +277,27 @@
 				{
 					vtable.ajax.url( '{{ route("v.data") }}/1').load();
 					$('#confirm-activate').modal('hide');
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
 				}
+
 			})
 		});
 
