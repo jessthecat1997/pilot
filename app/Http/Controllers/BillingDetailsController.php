@@ -69,6 +69,11 @@ class BillingDetailsController extends Controller
 		$new_bill_detail->bi_head_id = $request->bi_head_id;
 		$new_bill_detail->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->name;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
+
 		return $new_bill_detail;
 	}
 
@@ -81,6 +86,10 @@ class BillingDetailsController extends Controller
 		$new_bill_detail->bi_head_id = $request->bi_head_id;
 		$new_bill_detail->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->name;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
@@ -100,6 +109,11 @@ class BillingDetailsController extends Controller
 			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
 			$new_order_billedrevenue->save();
 		}
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->name;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
@@ -119,6 +133,11 @@ class BillingDetailsController extends Controller
 			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
 			$new_order_billedrevenue->save();
 		}
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->name;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
