@@ -20,7 +20,7 @@ class StoreSection extends FormRequest
         case 'POST':
 
         return [
-            'name' => 'required| max:50|regex:/^[\p{L}\p{N} .-]+$/|unique:sections,name',
+            'name' => 'required|unique:sections,name',
 
         ];
 
@@ -29,7 +29,7 @@ class StoreSection extends FormRequest
         case 'PUT':
 
         return [
-            'name' => 'required| max:50|min:3|regex:/^[\p{L}\p{N} .-]+$/|unique:sections,name,'. $this->segment(3) ,
+            'name' => 'required|unique:sections,name,'. $this->segment(3) ,
 
         ];
 

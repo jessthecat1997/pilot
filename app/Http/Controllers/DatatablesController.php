@@ -277,7 +277,7 @@ class DatatablesController extends Controller
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}else{
-			$secs = DB::table('Section')
+			$secs = DB::table('sections')
 			->select('id', 'name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();

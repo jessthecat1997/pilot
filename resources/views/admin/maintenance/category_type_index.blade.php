@@ -77,15 +77,14 @@
 
 							</div>		
 							<div class="form-group required">
-								<label class = "control-label">Category Name: </label>
-								<input type = "text" class = "form-control" name = "name" id = "name" required />
+								<label class = "control-label"> Category Name: </label>
+								<textarea type = "text" class = "form-control" name = "name" id = "name" rows = "3" ></textarea> 
 							</div>
 
 							<div class="form-group">
 								<label class = "control-label">Description: </label>
-								<input class = "form-control" name = "description" id = "description">
+								<textarea class = "form-control" name = "description" id = "description" rows ="5"></textarea> 
 							</div>
-							
 						</div>
 						<div class="modal-footer">
 							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
@@ -120,6 +119,23 @@
 		</form>
 	</section>
 </div>
+<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 @endsection
 @push('styles')
 <style>
@@ -140,6 +156,7 @@
 <script type="text/javascript">
 	$('#collapse2').addClass('in');
 	$('#brokeragecollapse').addClass('in');
+	$('#tariffcollapse').addClass('in');
 	var data;
 	var temp_name = null;
 	var temp_desc = null;
@@ -147,7 +164,7 @@
 	var cat_id;
 	$(document).ready(function(){
 		var cattable = $('#cat_table').DataTable({
-			scrollX: true,
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			serverSide: false,
 			deferRender: true,
@@ -160,6 +177,18 @@
 			],	"order": [[ 0, "asc" ]],
 		});
 
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				cattable.ajax.url( '{{ route("cat.data") }}/1').load();
+			}
+			else{
+				cattable.ajax.url( '{{ route("cat.data") }}').load();
+			}
+		})
+
 
 		var validator = $("#commentForm").validate({
 			rules: 
@@ -167,22 +196,18 @@
 				name:
 				{
 					required: true,
-					maxlength: 50,
 					minlength: 3,
 					normalizer: function(value) {
 						value = value.replace("something", "new thing");
 						return $.trim(value)
 					},
-					lettersonly:true,
+					NoSpecialCharacters:true,
 
 				},
 
 				description:
 				{
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
+					NoSpecialCharacters:true,
 				},
 				sections_id:
 				{
@@ -219,6 +244,47 @@
 			cat_id = $(this).val();
 			data = cattable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
+		});
+
+		$(document).on('click', '.activate', function(e){
+			cat_id = $(this).val();
+			data = cattable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/category_reactivate/' + cat_id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					cattable.ajax.url( '{{ route("cat.data") }}/1' ).load();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
 		});
 
 
