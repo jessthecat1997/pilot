@@ -23,16 +23,11 @@ class VehiclesController extends Controller
         return $v;
     }
 
-    public function update(Request $request)
+    public function update(StoreVehicle $request, $id)
     {
-        $plate = str_replace('%', ' ', $request->id);
-        $vehicle = \DB::table('vehicles')
-        ->where('plateNumber', $request->plate)
-        ->update([
-            'model' => $request->model,
-            'bodyType' => $request->bodyType
-            ]);
-        return $vehicle;
+        return 'aw';
+        $plate = str_replace('%', ' ', $request->plateNumber);
+        return $id;
     }
 
 

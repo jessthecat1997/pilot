@@ -13,107 +13,109 @@
 	<br />
 	<div class = "container-fluid">
 		<div class = "row">
-			<div class = "col-md-10 col-md-offset-1">
-				<div class = "panel-default panel">
-					<div class = "panel-body">
-						<table class = "table-responsive table table-striped cell-border table-bordered" id = "lp_table">
-							<thead>
-								<tr>
-									<td >
-										Province Name
-									</td>
-									<td >
-										Actions
-									</td>
-								</tr>
-							</thead>
-							<tbody>
-								@forelse($provinces as $province)
-								<tr>
-									<td>
-										{{ $province->name }}
-									</td>
-									<td>
-										<button value = "{{ $province->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
-										<button value = "{{ $province->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
-									</td>
-								</tr>
-								@empty
-								@endforelse
-							</tbody>
-						</table>
-					</div>
+			<div class = "panel-default panel">
+				<div class = "panel-body">
+					<table class = "table-responsive table table-striped cell-border table-bordered" id = "lp_table">
+						<thead>
+							<tr>
+								<td >
+									Province Name
+								</td>
+								<td >
+									Actions
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($provinces as $province)
+							<tr>
+								<td>
+									{{ $province->name }}
+								</td>
+								<td>
+									<button value = "{{ $province->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+									<button value = "{{ $province->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+								</td>
+							</tr>
+							@empty
+							@endforelse
+						</tbody>
+					</table>
 				</div>
-			</div> 
-		</div>
+			</div>
+		</div> 
 	</div>
+</div>
 
-	<section class="content">
-		<form role="form" method = "POST" id = "commentForm">
-			{{ csrf_field() }}
-			<div class="modal fade" id="lpModal" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">New Province</h4>
+<section class="content">
+	<form role="form" method = "POST" id = "commentForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lpModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">New Province</h4>
+					</div>
+					<div class="modal-body">			
+						<div class="form-group required">
+							<label class = "control-label">Name:</label>
+							<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
+
 						</div>
-						<div class="modal-body">			
-							<div class="form-group required">
-								<label class = "control-label">Name:</label>
-								<input type = "text" class = "form-control" name = "name" id = "name"  minlength = "2" data-rule-required="true" />
-								
-							</div>
-						</div>
-						<div class="modal-footer">
-							<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
-						</div>
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
 					</div>
 				</div>
 			</div>
-		</form>
-	</section>
-	<section class="content">
-		<form role = "form" method = "POST">
-			{{ csrf_field() }}
-			{{ method_field('DELETE') }}
-			<div class="modal fade" id="confirm-delete" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Deactivate record
-						</div>
-						<div class="modal-body">
-							Confirm Deactivating
-						</div>
-						<div class="modal-footer">
-							
-							<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						</div>
+		</div>
+	</form>
+</section>
+<section class="content">
+	<form role = "form" method = "POST">
+		{{ csrf_field() }}
+		{{ method_field('DELETE') }}
+		<div class="modal fade" id="confirm-delete" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Deactivate record
+					</div>
+					<div class="modal-body">
+						Confirm Deactivating
+					</div>
+					<div class="modal-footer">
+
+						<button class = "btn btn-danger	" id = "btnDelete" >Deactivate</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
-			<div class="modal fade" id="confirm-activate" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							Activate record
-						</div>
-						<div class="modal-body">
-							Confirm Activating
-						</div>
-						<div class="modal-footer">
-							
-							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						</div>
+		</div>
+		<div class="modal fade" id="confirm-activate" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						Activate record
+					</div>
+					<div class="modal-body">
+						Confirm Activating
+					</div>
+					<div class="modal-footer">
+
+						
+						
+
+						<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
 			</div>
-		</form>
-	</section>
+		</div>
+	</form>
+</section>
 </div>
 @endsection
 @push('styles')
@@ -210,7 +212,7 @@
 					name:
 					{
 						required: true,
-						minlength: 2,
+						minlength: 3,
 						maxlength: 50,
 						normalizer: function(value) {
 							value = value.replace("something", "new thing");
@@ -305,96 +307,116 @@
 		$('#btnSave').on('click', function(e){
 			e.preventDefault();
 			var title = $('.modal-title').text();
+			$('#name').valid();
+
 			if(title == "New Province")
 			{
-				$.ajax({
-					type: 'POST',
-					url:  '/admin/location_province',
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('input[name=name]').val(),
-					},
-					success: function (data)
-					{
-						if(typeof(data) === "object"){
-							lptable.ajax.url( '{{ route("lp.data") }}' ).load();
-							$('#lpModal').modal('hide');
-							$('#name').val("");
-							$('.modal-title').text('New Province');
+				if($('#name').valid())
+				{
+					$.ajax({
+						type: 'POST',
+						url:  '/admin/location_province',
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('input[name=name]').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								lptable.ajax.url( '{{ route("lp.data") }}' ).load();
+								$('#lpModal').modal('hide');
+								$('#name').val("");
+								$('.modal-title').text('New Province');
 
-					//Show success
 
-					toastr.options = {
-						"closeButton": false,
-						"debug": false,
-						"newestOnTop": false,
-						"progressBar": false,
-						"rtl": false,
-						"positionClass": "toast-bottom-right",
-						"preventDuplicates": false,
-						"onclick": null,
-						"showDuration": 300,
-						"hideDuration": 1000,
-						"timeOut": 2000,
-						"extendedTimeOut": 1000,
-						"showEasing": "swing",
-						"hideEasing": "linear",
-						"showMethod": "fadeIn",
-						"hideMethod": "fadeOut"
-					}
-					toastr["success"]("Record added successfully")
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+							}
+						}
+
+					})
 				}
-				else{
-					resetErrors();
-					var invdata = JSON.parse(data);
-					$.each(invdata, function(i, v) {
-						console.log(i + " => " + v);
-						var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-						$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-					});
-					
-				}
-			}
-			
-		})
 			}
 			else
 			{
-				$.ajax({
-					type: 'PUT',
-					url:  '/admin/location_province/' + p_id,
-					data: {
-						'_token' : $('input[name=_token]').val(),
-						'name' : $('input[name=name]').val(),
-					},
-					success: function (data)
-					{
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
-						}
-						toastr["success"]("Record updated successfully")
+				if($('#name').valid())
+				{
+					$.ajax({
+						type: 'PUT',
+						url:  '/admin/location_province/' + p_id,
+						data: {
+							'_token' : $('input[name=_token]').val(),
+							'name' : $('input[name=name]').val(),
+						},
+						success: function (data)
+						{
+							if(typeof(data) === "object"){
+								lptable.ajax.url( '{{ route("lp.data") }}' ).load();
+								$('#lpModal').modal('hide');
+								$('#name').val("");
+								$('.modal-title').text('New Province');
 
-						lptable.ajax.url( '{{ route("lp.data") }}' ).load();
-						$('#lpModal').modal('hide');
-						$('#name').val("");
-						$('.modal-title').text('New Province');
-					}
-				})
+
+								toastr.options = {
+									"closeButton": false,
+									"debug": false,
+									"newestOnTop": false,
+									"progressBar": false,
+									"rtl": false,
+									"positionClass": "toast-bottom-right",
+									"preventDuplicates": false,
+									"onclick": null,
+									"showDuration": 300,
+									"hideDuration": 1000,
+									"timeOut": 2000,
+									"extendedTimeOut": 1000,
+									"showEasing": "swing",
+									"hideEasing": "linear",
+									"showMethod": "fadeIn",
+									"hideMethod": "fadeOut"
+								}
+								toastr["success"]("Record added successfully")
+							}
+							else{
+								resetErrors();
+								var invdata = JSON.parse(data);
+								$.each(invdata, function(i, v) {
+									console.log(i + " => " + v);
+									var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+									$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+								});
+
+							}
+						}
+					})
+				}
 			}
 		});
 

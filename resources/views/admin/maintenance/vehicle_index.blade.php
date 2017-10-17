@@ -365,9 +365,10 @@
 
 			var title = $('#vModal-title').text();
 			var vt_id = $('#vehicle_types_id').val();
-			if(title == 'New Vehicle')
+
+			if(title == 'New Vehicle' && vt_id)
 			{
-				if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid()){
+				if($('#plateNumber').valid() && $('#model').valid() && $('#dateRegistered').valid() && $('#bodyType').valid() && $('#plateNumber').val().indexOf("_") == -1 ){
 					$('#btnSave').attr('disabled', 'true');
 
 

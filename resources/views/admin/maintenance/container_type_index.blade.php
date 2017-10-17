@@ -26,6 +26,23 @@
 							</td>
 						</tr>
 					</thead>
+					<tbody>
+						@forelse($container_size as $cs)
+						<tr>
+							<td>
+								{{ $cs->name }}
+							</td>
+							<td>
+								{{ $cs->description }}
+							</td>
+							<td>
+								<button value = "{{ $cs->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $cs->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -105,8 +122,9 @@
 							Confirm Activating
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							<button class = "btn btn-success	" id = "btnActivate" >Activate</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+							
 						</div>
 					</div>
 				</div>
@@ -146,14 +164,19 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: '{{ route("ct.data") }}',
 			columns: [
-			{ data: 'name'},
-			{ data: 'description' },
-			{ data: 'action', orderable: false, searchable: false }
+			{ data: 'name',
+			"render" : function( data, type, full ) {
+				return container_size(data); } },  
+				{ data: 'description' },
+				{ data: 'action', orderable: false, searchable: false }
 
-			],	"order": [[ 0, "asc" ]],
-		});
+				],	"order": [[ 0, "asc" ]],
+			});
+
+		function container_size(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+ '-footer';
+		}
 
 		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
 		$('.check_deac').on('change', function(e)
@@ -166,6 +189,38 @@
 				cttable.ajax.url( '{{ route("ct.data") }}').load();
 			}
 		})
+
+
+		$(document).on('keyup keydown keypress', '.money', function (event) {
+			var len = $('.money').val();
+			var value = $('.money').inputmask('unmaskedvalue');
+			if (event.keyCode == 8) {
+				if(parseFloat(value) == 0 || value == ""){
+					$('.money').val("0.00");
+				}
+			}
+			else
+			{
+				if(value == ""){
+					$('.money').val("0.00");
+				}
+				if(parseFloat(value) <= 9999999.99){
+					
+				}
+				else{
+					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+
+					}
+					else{
+						return false;
+					}
+				}
+			}
+			if(event.keyCode == 189)
+			{
+				return false;
+			}			
+		});
 
 		$(document).on('click', '.activate', function(e){
 			var ct_id = $(this).val();
@@ -183,7 +238,7 @@
 				},
 				success: function (data)
 				{
-					cttable.ajax.reload();
+					cttable.ajax.url( '{{ route("ct.data") }}/1' ).load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {
@@ -221,11 +276,8 @@
 				description:
 				{
 
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},
-					regex: /^[A-Za-z0-9'-.,  ]+$/,
+					
+					alphanumeric: true,
 				},
 			},
 
@@ -245,7 +297,7 @@
 		});
 		$(document).on('click', '.edit',function(e){
 			resetErrors();
-			var ct_id = $(this).val();
+			ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
 
 			$('#description').val(data.description);
@@ -257,11 +309,11 @@
 			temp_maxWeight = data.description;
 
 
-			$('.modal-title').text('Update Container Volume');
+			$('.modal-title').text('Update Container Sze');
 			$('#ctModal').modal('show');
 		});
 		$(document).on('click', '.deactivate', function(e){
-			var ct_id = $(this).val();
+			ct_id = $(this).val();
 			data = cttable.row($(this).parents()).data();
 			$('#confirm-delete').modal('show');
 		});
@@ -272,13 +324,13 @@
 			e.preventDefault();
 			$.ajax({
 				type: 'DELETE',
-				url:  '/admin/container_type/' + data.id,
+				url:  '/admin/container_type/' + ct_id,
 				data: {
 					'_token' : $('input[name=_token').val()
 				},
 				success: function (data)
 				{
-					cttable.ajax.reload();
+					cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 					$('#confirm-delete').modal('hide');
 
 					toastr.options = {
@@ -332,7 +384,7 @@
 						success: function (data)
 						{
 							if(typeof(data) === "object"){
-								cttable.ajax.reload();
+								cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 								$('#ctModal').modal('hide');
 								$('#name').val("0");
 								$('#description').val("");
@@ -403,10 +455,10 @@
 
 						$.ajax({
 							type: 'PUT',
-							url:  '/admin/container_type/' + data.id,
+							url:  '/admin/container_type/' + ct_id,
 							data: {
 								'_token' : $('input[name=_token]').val(),
-								'name' : $('#name').val(),
+								'name' : $('#name').inputmask('unmaskedvalue'),
 								'description' : $('#description').val(),
 								'maxWeight' : "0.00",
 
@@ -415,7 +467,7 @@
 							success: function (data)
 							{
 								if(typeof(data) === "object"){
-									cttable.ajax.reload();
+									cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
 									//$('#maxWeight').val("");

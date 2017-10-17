@@ -236,7 +236,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$reqs =  DB::table('Requirement')
+			$reqs =  DB::table('Requirements')
 			->select('id', 'name', 'description', 'created_at' , 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();

@@ -17,9 +17,18 @@
           <div class="col-md-12">
             <div class="row">
               <br/>
-              <button class="btn btn-primary col-sm-4 pull-right new_user_modal" data-toggle="modal" data-target="#userModal">Create User Account</button>
-              <h4>&nbsp;Basic Information</h4>
               <div class = "col-md-8">
+                <h4>&nbsp;Basic Information</h4>
+                <br/>
+                @if(count($user) > 0)
+                <div class = "form-group">
+                  <label class="control-label col-md-3">Username:</label>
+                  <span class="col-md-9">{{ $user[0]->email }}</span>
+                </div>
+                <button class="btn btn-primary col-sm-4 pull-right new_user_modal" data-toggle="modal" data-target="#editModal">Edit User Account</button>
+                @else
+                <button class="btn btn-primary col-sm-4 pull-right new_user_modal" data-toggle="modal" data-target="#userModal">Create User Account</button>
+                @endif
                 <center><img class="" src="{{ $employee->emp_pic }}" style="width: 100px; height: 100px; border-radius: 50px;"></center>
                 <br>
                 <div class = "form-group">
@@ -282,9 +291,44 @@
           </form>
         </div>
         <strong>Note:</strong> All fields with * are required.
+
       </div>
       <div class="modal-footer">
         <button class="btn but save-user">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="editModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit User Account</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+          <form class="form">
+            {{ csrf_field() }}
+            <div class="form-group required">
+              <label for="username" class="control-label">Username: </label>
+              <input type="text" class="form-control" id="upuser" value="@if(count($user) > 0 ){{ $user[0]->email }}@endif" placeholder="@if(count($user) > 0 ){{ $user[0]->email }}@endif">
+            </div>
+            <div class="form-group required">
+              <label for="password" class="control-label">Password: </label>
+              <input type="password" class="form-control" id="uppass" >
+            </div>
+            <input type="hidden" class="form-control" id="user_id" value="@if(count($user) > 0 ){{ $user[0]->id }}@endif" disabled>
+            <input type="hidden" class="form-control" id="role_id" value="{{ $role[0]->id }}" disabled>
+            <input type="hidden" class="form-control" id="emp_id" value="{{ $employee_id }}" disabled>
+            <input type="hidden" class="form-control" id="user" value="{{ $employee->firstName }} {{ $employee->lastName }}" disabled>
+            <input type="hidden" class="form-control" id="emp_pic" value="{{ $employee->emp_pic }}" disabled>
+          </form>
+        </div>
+        <strong>Note:</strong> All fields with * are required.
+      </div>
+      <div class="modal-footer">
+        <button class="btn but update-user">Save</button>
       </div>
     </div>
   </div>
@@ -307,7 +351,9 @@
 @push('scripts')
 <script src="/js/bootstrap-toggle.min.js"></script>
 <script type="text/javascript">
+  var user_id = $('#user_id').val();
   $(document).ready(function(){
+    console.log(user_id);
     $(document).on('click', '.new_incident', function(e){
       e.preventDefault();
       window.location.href = "{{ route('employees.index') }}/{{ $employee->id }}/incidents/create";
@@ -389,6 +435,24 @@
         location.reload();
       }
     })
+  })
+  $(document).on('click', '.update-user', function(e){
+    console.log($('#update_billed').val());
+
+    $.ajax({
+      method: 'PUT',
+      url: '{{ route("update_user") }}/'+user_id,
+      data: {
+        '_token' : $('input[name=_token]').val(),
+        'email' : $('#upuser').val(),
+        'password' : $('#uppass').val(),
+        'user_id' : user_id,
+      },
+      success: function (data){
+        location.reload();
+      }
+    })
+
   })
 </script>
 @endpush

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\LocationCities;
 use App\LocationProvince;
 use App\Http\Requests\StoreLocationCities;
-use App\Http\Requests\StoreLocationProvince;
+
 
 class LocationCitiesController extends Controller
 {
@@ -40,7 +40,7 @@ class LocationCitiesController extends Controller
 		
 	}
 
-	public function new_province(StoreLocationProvince $request)
+	public function new_province(StoreLocationCities $request)
 	{
 		$lp = LocationProvince::create($request->all());
         return $lp;

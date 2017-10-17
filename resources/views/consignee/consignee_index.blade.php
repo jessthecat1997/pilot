@@ -605,6 +605,14 @@
 						})	
 					}
 				}
+				else
+				{
+					$('.save-consignee-information').removeAttr('disabled');
+				}
+			}
+			else
+			{
+				$('.save-consignee-information').removeAttr('disabled');
 			}
 
 		})
