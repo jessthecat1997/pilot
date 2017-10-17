@@ -24,38 +24,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
 
 //Brokerage Routes
-	Route::resource('/brokerage', 'BrokerageController');
-	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
-	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
-
-	Route::get('getCategory/{section_id?}', 'DutiesAndTaxesController@get_category')->name('get_category');
-	Route::get('getItem/{category_id?}', 'DutiesAndTaxesController@get_item')->name('get_item');
-
-	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
-	Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
-	Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
-	Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
-	Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
-	Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
-
-	Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
-	Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
-
-
-	Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
-	Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
-	Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
-	Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
-
-	Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
-	Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
-	Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
-	Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
-	Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
-	Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
-
-	Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
-	Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
 
 	Route::resource('consignee', 'ConsigneesController');
 	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
@@ -361,7 +329,7 @@ Route::group(['middleware' => ['broker']], function() {
 	Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
 	Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
 	Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
-	Route::get('/brokerage_create_order', 'BrokerageController@create_new')->name('brokerageOrder');
+	Route::get('/brokerage_create_order/{detail_id?}', 'BrokerageController@create_new')->name('brokerageOrder');
 	Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
 	Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
 	Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
