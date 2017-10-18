@@ -95,5 +95,12 @@ class ImportProcessingFeesController extends Controller
 		return $rates;
 	}
 
+	public function reactivate(Request $request)
+{
+    $ipf = ImportProcessingFeeHeader::withTrashed()
+    ->where('id',$request->id)
+    ->restore();
+
+}
 
 }

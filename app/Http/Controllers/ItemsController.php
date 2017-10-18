@@ -28,7 +28,6 @@ class ItemsController extends Controller
 	public function update(StoreItem $request, $id)
 	{
 		$item = Item::findOrFail($id);
-		$item->sections_id = $request->sections_id;
 		$item->category_types_id = $request->category_types_id;
 		$item->name = $request->name;
 		$item->hsCode = $request->hsCode;
