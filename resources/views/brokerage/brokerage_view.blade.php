@@ -327,12 +327,10 @@ window.onload = function(){
  if(localStorage.getItem("withCO") == 1)
  {
    cols += '<td> $ --- </td>';
-
-}
+ }
  else if(localStorage.getItem("withCO") == 0)
  {
    cols += '<td> $ ' + StrTotalOtherCharges  +'</td>';
-
  }
  cols += '<td> $ ' + StrTotal + '</td>';
  cols += '<td> Php '  + StrTotalDutiableValue + '</td>';
@@ -391,7 +389,7 @@ window.onload = function(){
  console.log(ipfFeeDetail_str);
  for(var x = 0, n = ipfFeeDetail.length; x < n; x++)
  {
-
+   
      minimum = ipfFeeDetail[x].minimum;
      maximum = ipfFeeDetail[x].maximum;
      amount = ipfFeeDetail[x].amount;
