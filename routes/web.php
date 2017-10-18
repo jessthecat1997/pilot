@@ -199,6 +199,24 @@ Route::group(['middleware' => ['access']], function() {
 	Route::get('/getAreaRate', 'TruckingsController@get_area_rate')->name('get_area_rate');
 	Route::get('/truck_schedule', 'TruckingsController@show_trucks')->name('show_trucks');
 	Route::get('/get_truck_schedule','TruckingsController@getTruckSchedule')->name('get_truck_schedule');
+	Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
+	Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
+	Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
+	Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
+	Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
+	Route::get('billing', 'BillingDetailsController@index')->name('view.index');
+	Route::get('admin/brso_head', 'DatatablesController@brso_head_datatable')->name('brso_head.data');
+	Route::get('admin/trso_head', 'DatatablesController@trso_head_datatable')->name('trso_head.data');
+	Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
+	Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
+	Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
+	Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
+	Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
+	Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
+	Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
+	Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
+	Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
+	Route::post('/postDetails', 'BillingDetailsController@postBilling_details')->name('bill_details');
 
 			//Maintenance Data
 	Route::get('admin/csData', 'DatatablesController@consignee_datatable')->name('consignee.data');
@@ -352,8 +370,8 @@ Route::group(['middleware' => ['trucking']], function() {
 	Route::resource('/trucking/contracts', 'ContractsController');
 	Route::resource('/trucking', 'TruckingsController');
 	Route::get('/trucking/{trucking_id}/view', 'TruckingsController@view_trucking');
-	Route::get('admin/{trucking_id}/deliveryData', 'DatatablesController@trucking_delivery');
-	Route::get('admin/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
+	Route::get('/trucking/{trucking_id}/deliveryData', 'DatatablesController@trucking_delivery');
+	Route::get('/trucking/{trucking_id}/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
 	Route::post('/trucking/{trucking_id}/store_delivery', 'TruckingsController@store_delivery');
 	Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@update_delivery');
 	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
@@ -402,24 +420,7 @@ Route::group(['middleware' => ['billing']], function() {
 	Route::get('admin/bill_paid', 'BillingDetailsController@paid_bill')->name('paid_bill.data');
 
 		//Trucking Bills
-	Route::post('/trucking/create_tr_billing_header', 'TruckingsController@create_tr_billing_header')->name('create_tr_billing_header');
-	Route::get('/billDetails/{id?}', 'BillingDetailsController@getBillingDetails')->name('getBillingDetails');
-	Route::post('/postTruckingPayable', 'BillingDetailsController@postTruckingPayable')->name('post_trucking_payables');
-	Route::post('/postTruckingExpense', 'BillingDetailsController@postTruckingExpense')->name('post_trucking_expense');
-	Route::get('/billing/{id}/total', 'DatatablesController@totalbillings')->name('totalbill.data');
-	Route::get('billing', 'BillingDetailsController@index')->name('view.index');
-	Route::get('admin/brso_head', 'DatatablesController@brso_head_datatable')->name('brso_head.data');
-	Route::get('admin/trso_head', 'DatatablesController@trso_head_datatable')->name('trso_head.data');
-	Route::get('admin/expenses/{id}', 'DatatablesController@expenses_datatable')->name('expenses.data');
-	Route::get('admin/revenue/{id}', 'DatatablesController@revenue_datatable')->name('revenue.data');
-	Route::get('admin/paybills/{id}', 'PaymentsController@payments_table')->name('payments.data');
-	Route::get('/charge/{id}/getCharge', 'BillingDetailsController@get_detail');
-	Route::get('/charge/{id}/getExp', 'BillingDetailsController@get_expense');
-	Route::get('/billing/{billing_id}/rc_pdf', 'BillingDetailsController@ref_pdf');
-	Route::put('/billing/{id}/finalize', 'BillingDetailsController@finalize_bill')->name('finalize_bill');
-	Route::put('/billing_void/{id?}', 'BillingDetailsController@void_bill')->name('void_bill');
-	Route::post('/postHeader', 'BillingDetailsController@postBilling_header')->name('bill_header');
-	Route::post('/postDetails', 'BillingDetailsController@postBilling_details')->name('bill_details');
+	
 
 		//Payment
 	Route::get('pdfview','PaymentsController@pdfview');

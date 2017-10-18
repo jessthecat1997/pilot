@@ -619,10 +619,7 @@ public function update_delivery(Request $request){
     $delivery->cancelDateTime = $request->cancelDateTime;
     $delivery->save();
 
-    $audit = new \App\AuditTrail;
-    $audit->user_id = \Auth::user()->id;
-    $audit->description = "Updated delivery status id: " . $new_delivery_head->id;
-    $audit->save();
+    
 
     return $delivery;
 }
