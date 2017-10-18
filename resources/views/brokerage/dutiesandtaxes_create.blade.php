@@ -79,7 +79,7 @@
 			<br />
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn btn-primary" id = "" onclick = "	$('#SaveModal').modal('show');">
+	      <button type="button" class="btn btn-primary" id = "btnSave">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
@@ -205,7 +205,7 @@
 
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
+		  <button type="button" class="btn btn-success" >Finalize</button>
 
 		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
 		    </form>
@@ -456,7 +456,7 @@ onReady(function () {
 			if(localStorage.getItem("withCO") == 1)
 			{
 				cols += '<td> $ --- </td>';
-	
+
 			}
 			else if(localStorage.getItem("withCO") == 0)
 			{
@@ -727,7 +727,6 @@ onReady(function () {
 				data: {
 					'_token' : $('input[name=_token]').val(),
 					'brokerage_id' : Brokerage_id,
-					'employee_id' : $('#processedBy').val(),
 					'shipper' : shipper,
 					'companyName' : CompanyName,
 					'freightType' : FreightType,

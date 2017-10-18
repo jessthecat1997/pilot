@@ -55,19 +55,16 @@ class BrokerageController extends Controller
 
           if(date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d") <= $current_date)
           {
-
               if(date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d") >= $dateEffective_temp)
               {
                 $dateEffective_temp = date_format(date_create($exchange_rate[$x]->dateEffective), "Y-m-d");
                 $currentExchange_id = $exchange_rate[$x]->id;
-
               }
               else {
                 $currentExchange_id = $exchange_rate[$x]->id;
               }
           }
         }
-
 
         $cds_fee = DB::table('cds_fees')
         ->select('id', 'fee', 'dateEffective')
@@ -299,7 +296,7 @@ class BrokerageController extends Controller
       }
   }
 
-  public function create_new()
+  public function create_new(Request $request)
   {
     $employees = Employee::all();
 
@@ -335,21 +332,32 @@ class BrokerageController extends Controller
     ->where('deleted_at', '=', null)
 		->get();
 
-      return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis', 'dangerous_types']));
+    $detail_id = $request->detail_id;
+
+    return view('brokerage/brokerage_dutiesandtaxes', compact(['employees', 'consignees', 'provinces', 'locations', 'container_volumes', 'lcl_types', 'basis', 'dangerous_types', 'detail_id']));
   }
 
   public function save_neworder(Request $request)
   {
+    if($request->detail_id == 0)
+    {
+        $new_so_head = new ConsigneeServiceOrderHeader;
+        $new_so_head->consignees_id = $request->cs_id;
+        $new_so_head->employees_id = $request->employee_id;
+        $new_so_head->save();
 
-    $new_so_head = new ConsigneeServiceOrderHeader;
-    $new_so_head->consignees_id = $request->cs_id;
-    $new_so_head->employees_id = $request->employee_id;
-    $new_so_head->save();
-
-    $new_so_detail = new ConsigneeServiceOrderDetail;
-    $new_so_detail->so_headers_id = $new_so_head->id;
-    $new_so_detail->service_order_types_id = 1;
-    $new_so_detail->save();
+        $new_so_detail = new ConsigneeServiceOrderDetail;
+        $new_so_detail->so_headers_id = $new_so_head->id;
+        $new_so_detail->service_order_types_id = 1;
+        $new_so_detail->save();
+    }
+    else
+    {
+        $new_so_detail = new ConsigneeServiceOrderDetail;
+        $new_so_detail->so_headers_id = $request->detail_id;
+        $new_so_detail->service_order_types_id = 1;
+        $new_so_detail->save();
+    }
 
     $date = date_format(date_create($request->arrivalDate),"Y-m-d");
     $new_brokerage_so = new BrokerageServiceOrder;
