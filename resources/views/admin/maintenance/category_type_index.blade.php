@@ -2,7 +2,7 @@
 @section('content')
 <div class = "container-fluid">
 	<div class = "row">
-		<h3> Maintenance |Brokerage|Category</h3>
+		<h3> Maintenance |Brokerage|Tariff Book|Category</h3>
 		<hr>
 		<div class = "col-md-3 col-md-offset-9">
 			<button  class="btn btn-info btn-md new" data-toggle="modal" data-target="#catModal" style = "width: 100%;">New Category</button>

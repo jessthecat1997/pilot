@@ -78,6 +78,7 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/container_type', 'ContainerTypesController');
 	Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
 	Route::resource('/admin/vehicle','VehiclesController');
+	Route::put('/admin/vehicle/{id}/{plateNumber?}', 'VehiclesController@v_update');
 
 	Route::resource('/admin/billing', 'BillingsController');
 	Route::resource('/admin/charge','ChargesController');
@@ -201,7 +202,6 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
 	Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
 
-
 	Route::resource('/admin/vat_rate','VatRatesController');
 	Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
 	Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
@@ -210,7 +210,10 @@ Route::group(['middleware' => ['admin']], function() {
 
 	Route::put('/utilities/attachment_type_reactivate/{id}','RequirementsController@reactivate');
 
+//Vanessaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa addition before galawin ni skip
+	Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
 
+//end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaaa	
 
 
 //Maintenance Datas
@@ -354,8 +357,8 @@ Route::group(['middleware' => ['admin']], function() {
 
 
 //Locations
-	Route::resource('/location', 'LocationsController');
-	Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
+	Route::resource('/location/', 'LocationsController');
+	Route::get('/locationData/{isActive?}', 'DatatablesController@location_datatable')->name('location_data');
 	Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->name('get_location_data');
 
 //Quotations

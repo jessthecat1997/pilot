@@ -19,11 +19,11 @@ class StoreLocationCities extends FormRequest
             case 'POST':
 
             return [
-            'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,
-            provinces_id',
-            
-            'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
-            
+                'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,
+                provinces_id',
+
+                'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
+
             ];
 
             break;
@@ -31,15 +31,25 @@ class StoreLocationCities extends FormRequest
             case 'PUT':
 
             return [
-            'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,' . $this->segment(4),
-           'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
+                'name' => 'min:3|regex:/^[\p{L}\p{N} .-]+$/|max:50|unique:location_cities,name,' . $this->segment(4),
+                'provincename' => 'unique:location_provinces,name|min:3|regex:/^[\p{L}\p{N} .-]+$/',
             ];
 
             break;
             
             default: break;
         }
+
     }
+
+    public function messages()
+    {
+        return [
+            'provincename.unique:location_provinces,name' => 'The province name has already been taken.',
+
+        ];
+    }
+    
 
     //Overriding the response 422
     public function response(array $errors)

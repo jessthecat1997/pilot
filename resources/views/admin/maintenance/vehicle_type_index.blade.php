@@ -242,7 +242,7 @@
 				},
 				success: function (data)
 				{
-					vtable.ajax.url( '{{ route("vt.data") }}' ).load();
+					vtable.ajax.url( '{{ route("vt.data") }}/1' ).load();
 					$('#confirm-activate').modal('hide');
 
 					toastr.options = {

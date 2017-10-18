@@ -147,6 +147,23 @@
 			</div>
 		</form>
 	</section>
+	<div class="modal fade" id="confirm-activate" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					Activate record
+				</div>
+				<div class="modal-body">
+					Confirm Activating
+				</div>
+				<div class="modal-footer">
+					<button class = "btn btn-success" id = "btnActivate" >Activate</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @endsection
@@ -172,6 +189,7 @@
 
 	$(document).ready(function(){
 		var chtable = $('#ch_table').DataTable({
+			"dom": '<"toolbar">frtip',
 			processing: false,
 			deferRender: true,
 			serverSide: false,
@@ -185,6 +203,17 @@
 
 			],	"order": [[ 0, "asc" ]],
 		});
+		$("div.toolbar").html('<div class = "col-md-3"><input type = "checkbox" class = "check_deac"/>   Show Deactivated</div>');
+		$('.check_deac').on('change', function(e)
+		{
+			e.preventDefault();
+			if($(this).is(':checked')){
+				chtable.ajax.url( '{{ route("location_data") }}/1').load();
+			}
+			else{
+				chtable.ajax.url( '{{ route("location_data") }}').load();
+			}
+		})
 
 		$('#commentForm').validate({
 
@@ -195,20 +224,13 @@
 					required: true,
 					minlength: 3,
 					maxlength: 50,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},	
-
+			
 				},
 				address:
 				{
 					required: true,
 					minlength: 3,
-					normalizer: function(value) {
-						value = value.replace("something", "new thing");
-						return $.trim(value)
-					},	
+					NoSpecialCharacters:true,
 
 				}
 
@@ -369,6 +391,49 @@
 				}
 			})
 		})
+
+
+		$(document).on('click', '.activate', function(e){
+			 location_id = $(this).val();
+			data = chtable.row($(this).parents()).data();
+			$('#confirm-activate').modal('show');
+		});
+
+		$('#btnActivate').on('click', function(e){
+			e.preventDefault();
+			$.ajax({
+				type: 'PUT',
+				url:  '/utilities/location_reactivate/' + data.id,
+				data: {
+					'_token' : $('input[name=_token').val()
+				},
+				success: function (data)
+				{
+					chtable.ajax.url( '{{ route("location_data") }}/1' ).load();
+					$('#confirm-activate').modal('hide');
+
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["success"]("Record activated successfully")
+				}
+			})
+		});
 
 		$(document).on('change', '#loc_province', function(e){
 			fill_cities(0);
