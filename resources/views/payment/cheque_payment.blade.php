@@ -458,7 +458,7 @@
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "/billing";
 							}
 						})
 					}
@@ -531,7 +531,7 @@
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "/billing";
 							}
 						})
 					}
@@ -753,7 +753,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 									"hideMethod": "fadeOut"
 								}
 								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('view.index') }}";
+								window.location.href = "/billing";
 							}
 						})
 					}
@@ -828,7 +828,7 @@ $(document).on('click', '.finalize-payment-rev', function(e){
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]('Successfully saved');
-							window.location.href = "{{ route('view.index') }}";
+							window.location.href = "/billing";
 						}
 					})
 				}
@@ -1052,7 +1052,7 @@ $(document).on('click', '.finalize-payment', function(e){
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]('Successfully saved');
-							window.location.href = "{{ route('view.index') }}";
+							window.location.href = "/billing";
 						}
 					})
 				}

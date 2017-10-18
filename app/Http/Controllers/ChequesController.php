@@ -127,7 +127,7 @@ class ChequesController extends Controller
 		->join('billing_invoice_headers', 'cheques.bi_head_id', '=', 'billing_invoice_headers.id')
 		->join('consignee_service_order_headers', 'billing_invoice_headers.so_head_id', '=', 'consignee_service_order_headers.id')
 		->join('consignees', 'consignee_service_order_headers.consignees_id', '=', 'consignees.id')
-		->select('cheques.id',DB::raw('CONCAT(firstName, " ", lastName) AS consignee'),'bankName', 'amount', 'cheques.bi_head_id', 'isVerify')
+		->select('cheques.id',DB::raw('CONCAT(firstName, " ", lastName) AS consignee'),'bankName', 'cheques.amount', 'cheques.bi_head_id', 'isVerify')
 		->where('billing_invoice_headers.status', '=', 'U')
 		->get();
 

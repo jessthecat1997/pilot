@@ -118,7 +118,7 @@ public function af_maintain_data(Request $request){
     ->join ('container_types', 'container_types.id','=','container_sizes_id') 
     -> select('container_types.name AS container_size', 'amount', 'container_sizes_id', 'arrastre_details.deleted_at')
     ->where('arrastre_header_id', '=', $request->af_id)
-
+    ->where('arrastre_details.deleted_at', '=', null)
     ->get();
 
     return $rates;

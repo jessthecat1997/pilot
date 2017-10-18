@@ -222,7 +222,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
-			ajax: 'http://localhost:8000/admin/vData',
+			ajax: '/admin/vData',
 			columns: [
 			{ data: 'name' },
 			{ data: 'plateNumber' },

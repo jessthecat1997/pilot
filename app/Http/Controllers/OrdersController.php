@@ -12,11 +12,13 @@ class OrdersController extends Controller
 {
 	public function index()
 	{
-		$orders = DB::select("SELECT s.id as id, CONCAT( c.firstName, ' ', c.middleName, ' ', c.lastName ) AS consignee, c.companyName, s.created_at, CONCAT(employees.firstName, ' ', employees.lastName ) AS employee FROM consignee_service_order_headers s JOIN consignees c ON s.consignees_id = c.id JOIN employees ON s.employees_id = employees.id");
+		$orders = DB::select("SELECT s.id as id, CONCAT( c.firstName, ' ', c.lastName ) AS consignee, c.companyName, s.created_at, CONCAT(employees.firstName, ' ', employees.lastName ) AS employee FROM consignee_service_order_headers s JOIN consignees c ON s.consignees_id = c.id JOIN employees ON s.employees_id = employees.id");
 
 		$employees = Employee::all();
 
 		$consignees = \App\Consignee::all();
+
+	
 
 		return view('order.order_index', compact(['orders','employees', 'consignees']));
 	}
