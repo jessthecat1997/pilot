@@ -482,7 +482,6 @@ $('#btnSave').on('click', function(e){
 					$('#itemModal').modal('hide');
 					$('#rate').val("0");
 
-					$('#btnSave').removeAttr('disabled');
 				}
 				else{
 					resetErrors();
@@ -511,7 +510,7 @@ $('#btnSave').on('click', function(e){
 				$('#itemModal').modal('hide');
 			}
 			else{
-				$('#btnSave').attr('disabled', 'true');
+			
 
 				$.ajax({
 					type: 'PUT',

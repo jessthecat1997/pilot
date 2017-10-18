@@ -312,7 +312,7 @@
             e.preventDefault();
             $.ajax({
                 type: 'PUT',
-                url:  '/utilities/bf_fee_reactivate/' + bf_id,
+                url:  '/utilities/brokerage_fee_reactivate/' + bf_id,
                 data: {
                     '_token' : $('input[name=_token').val()
                 },

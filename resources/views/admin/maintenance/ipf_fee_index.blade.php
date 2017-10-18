@@ -712,7 +712,7 @@ function validateIpfRows()
 		}
 
 
-		if(min > max){
+		if(){
 
 			console.log(min);
 			console.log(max);
