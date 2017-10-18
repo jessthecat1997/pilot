@@ -195,6 +195,13 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::put('/utilities/dct_reactivate/{id}','DangerousCargoTypeController@reactivate');
 	Route::put('/utilities/lcl_reactivate/{id}','LclTypesController@reactivate');
 	Route::put('/utilities/bt_reactivate/{id}','BasisTypeController@reactivate');
+
+	Route::put('/utilities/af_reactivate/{id}','ArrastreFeesController@reactivate');
+	Route::put('/utilities/af_lcl_reactivate/{id}','ArrastreFeeLclController@reactivate');
+	Route::put('/utilities/af_dc_reactivate/{id}','ArrastreFeeDcController@reactivate');
+
+	Route::put('/utilities/wf_reactivate/{id}','WharfageFeeController@reactivate');
+	Route::put('/utilities/wf_lcl_reactivate/{id}','WharfageFeeLclController@reactivate');
 //end of Vanessaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
