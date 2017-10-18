@@ -144,7 +144,7 @@ class BillingDetailsController extends Controller
 	public function getBrokerageBillingDetails(Request $request){
 
 		$id = $request->id;
-		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description FROM brokerage_service_orders br_so INNER JOIN consignee_service_order_headers con_ord ON con_ord.id = br_so.consigneeSODetails_id INNER JOIN billing_invoice_headers bl_head ON bl_head.so_head_id = con_ord.id LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id INNER JOIN charges charge ON charge.id = bl_det.charge_id WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
+		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description FROM brokerage_service_orders br_so INNER JOIN consignee_service_order_details con_det ON con_det.id = br_so.consigneeSODetails_id INNER JOIN consignee_service_order_headers con_ord ON con_ord.id = con_det.so_headers_id INNER JOIN billing_invoice_headers bl_head ON bl_head.so_head_id = con_ord.id LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id INNER JOIN charges charge ON charge.id = bl_det.charge_id WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 1 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -153,7 +153,7 @@ class BillingDetailsController extends Controller
 	public function getBrokerageRefundableDetails(Request $request){
 
 		$id = $request->id;
-		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description FROM brokerage_service_orders br_so INNER JOIN consignee_service_order_headers con_ord ON con_ord.id = br_so.consigneeSODetails_id INNER JOIN billing_invoice_headers bl_head ON bl_head.so_head_id = con_ord.id LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id INNER JOIN charges charge ON charge.id = bl_det.charge_id WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
+		$billing_details = DB::select('SELECT br_so.id as br_so, bl_head.id as bl_head, bl_det.id as bl_det, charge.id as charge_id, charge.name, SUM(bl_det.amount) as amount, bl_det.description FROM brokerage_service_orders br_so INNER JOIN consignee_service_order_details con_det ON con_det.id = br_so.consigneeSODetails_id INNER JOIN consignee_service_order_headers con_ord ON con_ord.id = con_det.so_headers_id INNER JOIN billing_invoice_headers bl_head ON bl_head.so_head_id = con_ord.id LEFT JOIN billing_invoice_details bl_det ON bl_head.id = bl_det.bi_head_id INNER JOIN charges charge ON charge.id = bl_det.charge_id WHERE br_so.id = '.$id.' AND bl_head.isRevenue = 0 GROUP BY charge.id');
 		return Datatables::of($billing_details)
 		->make(true);
 
@@ -645,7 +645,7 @@ class BillingDetailsController extends Controller
 	}
 	public function unpaid_invoice(Request $request,$id)
 	{
-		$total = DB::select('SELECT t.id, 
+		$total = DB::select('SELECT t.id,
 			CONCAT("Php ", (ROUND(((p.total * t.vatRate)/100), 2) + p.total)) as Total,
 			ROUND(((p.total * t.vatRate)/100), 2) + p.total as totall,
 			pay.totpay,
@@ -653,12 +653,12 @@ class BillingDetailsController extends Controller
 			t.status,
 			dpay.totdpay
 
-			FROM billing_invoice_headers t LEFT JOIN 
+			FROM billing_invoice_headers t LEFT JOIN
 			(
 			SELECT bi_head_id, SUM(amount) total
 			FROM billing_invoice_details
 			GROUP BY bi_head_id
-			) p 
+			) p
 			ON t.id = p.bi_head_id
 
 			LEFT JOIN
@@ -710,6 +710,6 @@ class BillingDetailsController extends Controller
 			'<a href = "/billing/'. $pd->id .'/show_pdf" style="margin-right:10px; width:100;" class = "btn btn-md but bill_inv"><i class="fa fa-print"></i></a>';
 		})
 		->make(true);
-		
+
 	}
 }
