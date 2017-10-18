@@ -532,7 +532,7 @@
 		})
 
 		@if(count($brokerages) > 0)
-		alert({{ $brokerages[0]->id }})
+	
 		var dutiesandtaxes_tableVar = $('#dutiesandtaxes_table').DataTable({
 			processing: false,
 			deferRender: true,

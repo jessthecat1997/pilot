@@ -797,7 +797,7 @@
 
   window.onload = function(){
     $('#0_details td:nth-child(2)').hide();
-    alert('{{$detail_id}}');
+
   }
 
   function getCargoType(selectObject) {
