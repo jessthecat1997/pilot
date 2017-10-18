@@ -121,6 +121,7 @@ class ArrastreFeeLclController extends Controller
 		->join ('lcl_types', 'lcl_types.id','=','lcl_types_id')
 		->select('basis_types.abbreviation AS basis_type', 'amount', 'basis_types_id', 'lcl_types.name as lcl_type', 'lcl_types_id')
 		->where('arrastre_lcl_headers_id', '=', $request->af_id)
+		->where('arrastre_lcl_details.deleted_at', '=',null)
 		->get();
 
 		return $rates;
