@@ -69,6 +69,11 @@ class BillingDetailsController extends Controller
 		$new_bill_detail->bi_head_id = $request->bi_head_id;
 		$new_bill_detail->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
+
 		return $new_bill_detail;
 	}
 
@@ -81,6 +86,10 @@ class BillingDetailsController extends Controller
 		$new_bill_detail->bi_head_id = $request->bi_head_id;
 		$new_bill_detail->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new trucking payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
@@ -100,6 +109,11 @@ class BillingDetailsController extends Controller
 			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
 			$new_order_billedrevenue->save();
 		}
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new Brokerage payable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
@@ -119,6 +133,11 @@ class BillingDetailsController extends Controller
 			$new_order_billedrevenue->bi_head_id = $new_bill_detail->id;
 			$new_order_billedrevenue->save();
 		}
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Created new Brokerage refundable : " . $new_bill_detail->description . " with amount of P" .  $new_bill_detail->amount;
+		$audit->save();
 		return $new_bill_detail;
 	}
 
@@ -437,6 +456,11 @@ class BillingDetailsController extends Controller
 		$finalize->isFinalize = $request->isFinalize;
 		$finalize->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Finalize invoice header: " . $id;
+		$audit->save();
+
 		return $finalize;
 	}
 	public function void_bill(Request $request)
@@ -444,6 +468,11 @@ class BillingDetailsController extends Controller
 		$void = BillingInvoiceHeader::findOrFail($request->bi_head);
 		$void->isVoid = $request->isVoid;
 		$void->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Void invoice header: " . $request->bi_head;
+		$audit->save();
 
 		return $void;
 	}
@@ -460,6 +489,11 @@ class BillingDetailsController extends Controller
 		$billing_header->override_date = $request->override_date;
 		$billing_header->due_date = $request->due_date;
 		$billing_header->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Create billing invoice";
+		$audit->save();
 	}
 	public function postBilling_details(Request $request)
 	{
@@ -474,6 +508,11 @@ class BillingDetailsController extends Controller
 			$billing_revenue->tax = $request->tax;
 			$billing_revenue->bi_head_id = $billing_header->id;
 			$billing_revenue->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Create billing with amount of: ". $request->amount[$i];
+			$audit->save();
 		}
 	}
 	public function store(Request $request)
@@ -487,6 +526,11 @@ class BillingDetailsController extends Controller
 			$billing_revenue->tax = $request->tax;
 			$billing_revenue->bi_head_id = $request->bi_head_id;
 			$billing_revenue->save();
+
+			$audit = new \App\AuditTrail;
+			$audit->user_id = \Auth::user()->id;
+			$audit->description = "Create billing with amount of: ". $request->amount[$i];
+			$audit->save();
 		}
 	}
 	public function update(Request $request, $id)
@@ -496,7 +540,10 @@ class BillingDetailsController extends Controller
 		$csh->due_date = $request->due_date;
 		$csh->save();
 
-		return $csh;
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Update invoice";
+		$audit->save();
 	}
 	public function bill_pdf(Request $request, $id)
 	{

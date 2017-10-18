@@ -68,7 +68,7 @@ class PaymentsController extends Controller
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -88,15 +88,15 @@ class PaymentsController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
+
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
 			WHERE t.id = ?
 			', [$id]);
 
@@ -150,6 +150,11 @@ class PaymentsController extends Controller
 		$new_payment->bi_head_id = $request->bi_head_id;
 		$new_payment->utility_id = $request->utility_id;
 		$new_payment->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Make cash payment amount of: " . $request->amount;
+		$audit->save();
 	}
 	public function update(Request $request, $id)
 	{
@@ -185,7 +190,7 @@ class PaymentsController extends Controller
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -205,25 +210,25 @@ class PaymentsController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
-            
-            JOIN consignee_service_order_headers as so 
-            
-            on so.id = t.so_head_id
-            
-            JOIN consignees as con
-            
-            on con.id = so.consignees_id
 
-            where t.id = ?
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
+
+			JOIN consignee_service_order_headers as so 
+
+			on so.id = t.so_head_id
+
+			JOIN consignees as con
+
+			on con.id = so.consignees_id
+
+			where t.id = ?
 			', [$payment->bi_head_id]);
 
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
@@ -255,7 +260,7 @@ class PaymentsController extends Controller
 			(ROUND(((p.total * t.vatRate)/100), 2) + p.total) - ((pay.totpay + dpay.totdpay)) AS balance,
 			DATE_FORMAT(t.due_date, "%M %d, %Y") as due_date,
 			t.status,
-            dpay.totdpay
+			dpay.totdpay
 
 
 			FROM billing_invoice_headers t LEFT JOIN 
@@ -275,25 +280,25 @@ class PaymentsController extends Controller
 			) pay
 
 			ON t.id = pay.bi_head_id
-            
-            LEFT JOIN
-            (
-             SELECT bi_head_id, SUM(amount) totdpay
-             FROM deposit_payments
-             GROUP BY bi_head_id
-            ) dpay
-            
-            ON t.id = dpay.bi_head_id
-            
-            JOIN consignee_service_order_headers as so 
-            
-            on so.id = t.so_head_id
-            
-            JOIN consignees as con
-            
-            on con.id = so.consignees_id
 
-            where t.id = ?
+			LEFT JOIN
+			(
+			SELECT bi_head_id, SUM(amount) totdpay
+			FROM deposit_payments
+			GROUP BY bi_head_id
+			) dpay
+
+			ON t.id = dpay.bi_head_id
+
+			JOIN consignee_service_order_headers as so 
+
+			on so.id = t.so_head_id
+
+			JOIN consignees as con
+
+			on con.id = so.consignees_id
+
+			where t.id = ?
 			', [$payment->bi_head_id]);
 
 		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
@@ -305,6 +310,10 @@ class PaymentsController extends Controller
 		$chq->isVerify = $request->isVerify;
 		$chq->save();
 
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Verify cheque id: ". $request->id;
+		$audit->save();
 		return $csh;
 	}
 	public function storeCheque(Request $request)
@@ -316,5 +325,10 @@ class PaymentsController extends Controller
 		$new_chq->isVerify = $request->isVerify;
 		$new_chq->bi_head_id = $request->bi_head_id;
 		$new_chq->save();
+
+		$audit = new \App\AuditTrail;
+		$audit->user_id = \Auth::user()->id;
+		$audit->description = "Create cheque";
+		$audit->save();
 	}
 }

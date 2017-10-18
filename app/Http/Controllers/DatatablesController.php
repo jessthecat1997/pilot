@@ -106,7 +106,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$dcts = DB::table('DangerousCargoType')
+			$dcts = DB::table('dangerous_cargo_types')
 			->select('id', 'name', 'description', 'created_at','deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -148,7 +148,7 @@ class DatatablesController extends Controller
 		}else{
 
 			
-			$bts = DB::table('BasisType')
+			$bts = DB::table('basis_types')
 			->select('id', 'name', 'abbreviation', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -191,7 +191,7 @@ class DatatablesController extends Controller
 			->make(true);
 		}else{
 
-			$lcls = DB::table('LclType')
+			$lcls = DB::table('lcl_types')
 			->select('id', 'name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -277,7 +277,7 @@ class DatatablesController extends Controller
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}else{
-			$secs = DB::table('Section')
+			$secs = DB::table('sections')
 			->select('id', 'name', 'description', 'created_at', 'deleted_at')
 			->where('deleted_at','!=',null)
 			->get();
@@ -409,7 +409,7 @@ class DatatablesController extends Controller
 	public function item_datatable(Request $request){
 		$isActive = $request->isActive;
 		if ($isActive == null){
-			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is null  order by s.name");
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN category_types c ON c.id = i.category_types_id where c.sections_id = s.id AND s.deleted_at is null AND c.deleted_at is null AND i.deleted_at is null order by s.name");
 
 			return Datatables::of($items)
 			->addColumn('action', function ($item){
@@ -420,7 +420,7 @@ class DatatablesController extends Controller
 			->editColumn('id', '{{ $id }}')
 			->make(true);
 		}else{
-			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN  category_types c ON  c.id = i.category_types_id where i.sections_id = s.id AND  s.deleted_at is null AND c.deleted_at is null AND i.deleted_at  is not null  order by s.name");
+			$items = DB::select("SELECT i.id, s.name as 'section' , c.name as 'category', i.name as 'item', i.hsCode, i.rate, i.deleted_at as 'deleted_at', i.created_at FROM sections s , items i JOIN category_types c ON c.id = i.category_types_id where c.sections_id = s.id AND s.deleted_at is null AND c.deleted_at is null AND i.deleted_at is  NOT null order by s.name");
 			return Datatables::of($items)
 
 			->addColumn('status', function ($items){
@@ -1966,7 +1966,7 @@ class DatatablesController extends Controller
 			->editColumn('dateEffective', '{{ Carbon\Carbon::parse($dateEffective)->format("F d, Y") }}')
 			->make(true);
 		}else{
-			$ipfs = DB::select("SELECT h.id, h.dateEffective , DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
+			$ipfs = DB::select("SELECT h.id, h.dateEffective , h.deleted_at, DATEDIFF(dateEffective, CURRENT_DATE()) AS diff, GROUP_CONCAT(CONCAT('$ ' , FORMAT (d.minimum,2) ) ORDER BY d.minimum ASC SEPARATOR '\n') AS minimum, GROUP_CONCAT(CONCAT('$ ' ,FORMAT (d.maximum,2)) ORDER BY d.minimum ASC SEPARATOR '\n') AS maximum, GROUP_CONCAT(CONCAT('Php ' ,FORMAT (d.amount,2)) SEPARATOR '\n') AS amount FROM import_processing_fee_headers h INNER JOIN import_processing_fee_details d ON h.id = d.ipf_headers_id WHERE h.deleted_at IS NOT NULL AND d.deleted_at IS NULL GROUP BY h.id ORDER BY CASE WHEN diff < 0 THEN 1 ELSE 0 END, diff");
 			return Datatables::of($ipfs)
 
 			->addColumn('status', function ($ipfs){

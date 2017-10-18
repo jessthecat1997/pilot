@@ -88,7 +88,7 @@ public function destroy($id)
 
 public function reactivate(Request $request)
 {
-    $brokerage_fee = BrokerageFee::withTrashed()
+    $brokerage_fee = BrokerageFeeHeader::withTrashed()
     ->where('id',$request->id)
     ->restore();
 

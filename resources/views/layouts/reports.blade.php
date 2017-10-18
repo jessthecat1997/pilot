@@ -152,7 +152,7 @@
                        
 
                     <li>
-                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Customs Documentary Stamp Fee</a>
                     </li>
                     <li>
                         <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
@@ -207,7 +207,7 @@
                 <div id="deliverycollapse" class="panel-collapse collapse">
 
                     <li>
-                        <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Area Rates </a>
+                        <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Standard Area Rates </a>
                     </li>
                     <li>
                         <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Vehicle Type</a>
@@ -363,7 +363,7 @@
                        
 
                     <li>
-                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Container Documentary Stamp Fee</a>
+                        <a href = "{{ route('cds_fee.index') }}"  class = "class-cds-fee">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Customs Documentary Stamp Fee</a>
                     </li>
                     <li>
                         <a href = "{{ route('exchange_rate.index') }}"  class = "class-exchange-rate">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Exchange Rate</a>
@@ -509,7 +509,7 @@
                     <div id="deliverycollapse" class="panel-collapse collapse">
 
                         <li>
-                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Area Rates </a>
+                            <a href = "{{ route('standard_arearates.index') }}"  class = "class-area-rates">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Standard Area Rates </a>
                         </li>
                         <li>
                             <a href = "{{ route('vehicletype.index') }}"  class = "class-vehicle-type">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Vehicle Type</a>
