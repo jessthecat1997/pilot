@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaymentMode;
 use App\Payment;
+use App\Utility;
 use App\PaymentHistory;
 use App\ConsigneeServiceOrderHeader;
 use App\BillingInvoiceHeader;
@@ -45,7 +46,7 @@ class PaymentsController extends Controller
 
 		$paid = DB::table('payments')
 		->join('billing_invoice_headers', 'payments.bi_head_id', '=', 'billing_invoice_headers.id')
-		->select(DB::raw('CONCAT(SUM(amount)) as total'))
+		->select(DB::raw('CONCAT(SUM(amount)) as total', 'payments.created_at'))
 		->orderBy('payments.id', 'desc')
 		->where('payments.bi_head_id', '=', $id)
 		->get();
@@ -166,7 +167,7 @@ class PaymentsController extends Controller
 	}
 	public function payment_pdf(Request $request)
 	{
-
+		$utility = \App\UtilityType::all();
 		$payment = \App\Payment::findOrFail($request->payment_id);
 
 		$bill = DB::select('
@@ -231,7 +232,7 @@ class PaymentsController extends Controller
 			where t.id = ?
 			', [$payment->bi_head_id]);
 
-		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill']));
+		$pdf = PDF::loadView('pdf_layouts.payment_receipt', compact(['payment','bill', 'utility']));
 		return $pdf->stream();
 	}
 

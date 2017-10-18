@@ -217,7 +217,7 @@ class DatatablesController extends Controller
 		}
 	}
 
-	public function req_datatable(Request $request){
+	public function req_datatable(Request $request){ 
 		$isActive = $request->isActive;
 		if ($isActive == null){
 			

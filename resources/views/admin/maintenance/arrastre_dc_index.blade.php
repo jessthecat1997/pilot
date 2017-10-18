@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped cell-border table-bordered" id = "af_table">
+				<table class = "table-responsive table  table-striped cell-border table-bordered" id = "af_table" style="width: 100%;">
 					<thead>
 						<tr>
 							<td>
@@ -55,7 +55,7 @@
 								{{ $a->amount}}
 							</td>
 							<td>
-								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">Update</button>
+								<button value = "{{ $a->id }}" style="margin-right:10px;" class="btn btn-md btn-primary edit">View</button>
 								<button value = "{{ $a->id }}" class="btn btn-md btn-danger deactivate">Deactivate</button>
 								<input type = "hidden" value = "{{ Carbon\Carbon::parse($a->dateEffective)->format('Y-m-d') }}"  class = "date_Effective" />
 							</td>
@@ -148,32 +148,34 @@
 													<div class = "form-group input-group"  >
 														<select name = "dc_types_id" id = "dc_types_id" class = "form-control select2-allow-clear dc_types_id" 
 														style="width: 150px;" multiple="multiple">
-															@forelse($dc_types as $dc)
-															<option value="{{ $dc->id }}">{{ $dc->name }}</option>
-															@empty
-															@endforelse
-														</select>
-													</div>
-												</td>
-												<td>
-													<div class = "form-group input-group " >
-														<span class = "input-group-addon">Php</span>
-														<input type = "text" class = "form-control money amount_valid"
-														value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
-													</div>
+														@forelse($dc_types as $dc)
+														<option value="{{ $dc->id }}">{{ $dc->name }}</option>
+														@empty
+														@endforelse
+													</select>
+												</div>
+											</td>
+											<td>
+												<div class = "form-group input-group " >
+													<span class = "input-group-addon">Php</span>
+													<input type = "text" class = "form-control money amount_valid"
+													value ="0.00" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/>
+												</div>
 
-												</td>
-												
-											</tr>
-										</table>
-										
-									</div>
-								</div>					
-							</div>
-							<small style = "color:red; text-align: left"><i>All fields are required.</i></small>
+											</td>
+
+										</tr>
+									</table>
+
+								</div>
+							</div>					
 						</div>
-						<div class="modal-footer">
-							<button id = "btnSave" type = "submit" class="btn btn-success finalize-af">Save</button>
+						<small style = "color:red; text-align: left"><i>All fields are required.</i></small>
+					</div>
+					<div class="modal-footer">
+						<div class="collapse in" id = "sv_collapse">
+							<button id = "btnSave" type = "submit" class="btn btn-success finalize-af">Save</button></div>
+							<br/>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
 						</div>
 					</div>
@@ -332,7 +334,7 @@
 			e.preventDefault();
 			resetErrors();
 			$('#amount').val("0.00");
-
+			$('#sv_collapse').addClass('in');
 			$('#af_parent_table > tbody').html("");
 			var rows = "";
 			for(var i = 0; i < arr_container_size_id.length; i++){
@@ -379,22 +381,23 @@
 			$("#locations_id option").filter(function(index) { return $(this).text() === data.location; }).attr('selected', 'selected');
 			$('#locations_id').attr('disabled','true');
 			$('#dateEffective').val($(this).closest('tr').find('.date_Effective').val());
-			
+			$('#sv_collapse').removeClass('in');
 			$('#afModal').modal('show');
-
+			id = $(this).val();
 			$.ajax({
 				type: 'GET',
-				url:  '{{ route("af_maintain_data") }}',
+				url:  '{{ route("af_dc_maintain_data") }}',
 				data: {
 					'_token' : $('input[name=_token').val(),
-					'af_id' : $(this).val(),
+					'af_id' : id,
 				},
 				success: function (data)
 				{
+					console.log(data);
 					var rows = "";
 					for(var i = 0; i < data.length; i++){
 
-						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+data[i].container_sizes_id+'" ><input   class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
+						rows += '<tr id = "af-row"><td><div class = "form-group input-group" ><input type="hidden" class = "form-control" id = "container_size" name = "container_size" data-rule-required="true"  disabled = "true" value ="'+ data[i].container_sizes_id +'" ><input type = "text"  class = "form-control" id = "container_size_name" name = "container_size_name" data-rule-required="true"  disabled = "true" value ="'+data[i].container_size+'" ><span class = "input-group-addon">-footer</span></div></td><td>' +data[i].dc_name + '<td><div class = "form-group input-group " ><span class = "input-group-addon">Php</span><input type = "text" readonly = "readonly" class = "form-control amount_valid" value ="'+data[i].amount+'" name = "amount" id = "amount"  data-rule-required="true"  style="text-align: right;"/></div></td></tr>';
 
 					}
 					$('#af_parent_table > tbody').html("");
@@ -578,8 +581,6 @@
 			amount_value = [];
 			range_pairs = [];
 
-
-
 			dangerous_cargo_type = document.getElementsByName('dc_types_id');
 			container_size = document.getElementsByName('container_size');
 			amount = document.getElementsByName('amount');
@@ -618,13 +619,13 @@
 				{
 					amount[i].style.borderColor = 'green';
 					container_size_id.push(container_size[i].value);
-					amount_value.push(amount[i].value);
+					amount_value.push($(amount[i]).inputmask('unmaskedvalue'));
 					$('#af_warning').removeClass('in');
 
 				}
-
+				console.log($(amount[i]).inputmask('unmaskedvalue'));
 				pair = {
-					amount: amount[i].value,
+					amount: $(amount[i]).inputmask('unmaskedvalue'),
 					container_size: container_size[i].value
 				};
 				range_pairs.push(pair);

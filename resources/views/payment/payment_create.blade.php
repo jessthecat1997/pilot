@@ -83,524 +83,524 @@
 							<form class="form" onsubmit="this.preventDefault();">
 								{{ csrf_field() }}
 								<div class="checkbox">
-									<label><input type="checkbox" id="mng_cheque">Manager's Cheque</label>
-								</div>
-								<div class="form-group">
-									<label for="bank">*Cheque Number: &nbsp;</label>
-									&nbsp;&nbsp;<input type="text" id="chqNo" class="form-control">
-								</div>
-								<div class="form-group">
-									<label for="bank">*Bank Name: &nbsp;</label>
-									&nbsp;&nbsp;<input type="text" id="bank" class="form-control">
-								</div>
-								<div class="form-group">
-									<label for="check_amt">*Amount: &nbsp;</label>
-									&nbsp;&nbsp;<input type="number" id="check_amt" class="form-control money" style="text-align: right;">
-								</div>
-								<button type="button" class="btn btn-primary finalize-cheque collapse in">Save</button>
-								<button type="button" class="btn btn-primary finalize-cheque collapse">Save</button>
-							</form>
-						</div>
-						<div id="menu2" class="tab-pane fade">
-							<br>
-							<table class = "table table-hover">
-								<thead>
-									<tr>
-										<th style="text-align: center;">
-											Remaining Balance
-										</th>
-										<th style="text-align: center;">
-											Action
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									@if($pays[0]->status != 'P')
-									@forelse($deposits as $deposit)
-									<tr>
-										<td style="text-align: right;">
-											Php {{ $deposit->currentBalance }}
-										</td>
-										<td style="text-align: center;">
-											<button class="btn but deposit-payment">Make Payment</button>
-											<input type = "hidden" class = "deposit_id" value="{{ $deposit->id }}" />
-										</td>
-									</tr>
-									@empty
-									<tr>
-										<td colspan="3">No Deposits</td>
-									</tr>
-									@endforelse
-									@else
-									@forelse($deposits as $deposit)
-									<tr>
-										<td>
-											{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
-										</td>
-										<td style="text-align: right;">
-											Php {{ $deposit->currentBalance }}
-										</td>
-										<td style="text-align: center;">
+									<button type="button" class="btn btn-primary" id="mng_cheque">Manager's Cheque
+									</div>
+									<div class="form-group">
+										<label for="bank">*Cheque Number: &nbsp;</label>
+										&nbsp;&nbsp;<input type="text" id="chqNo" class="form-control">
+									</div>
+									<div class="form-group">
+										<label for="bank">*Bank Name: &nbsp;</label>
+										&nbsp;&nbsp;<input type="text" id="bank" class="form-control">
+									</div>
+									<div class="form-group">
+										<label for="check_amt">*Amount: &nbsp;</label>
+										&nbsp;&nbsp;<input type="number" id="check_amt" class="form-control money" style="text-align: right;">
+									</div>
+									<button type="button" class="btn btn-primary finalize-mngcheque collapse">Save Manager's Cheque</button>
+									<button type="button" class="btn btn-primary finalize-cheque collapse in">Save Cheque</button>
+								</form>
+							</div>
+							<div id="menu2" class="tab-pane fade">
+								<br>
+								<table class = "table table-hover">
+									<thead>
+										<tr>
+											<th style="text-align: center;">
+												Remaining Balance
+											</th>
+											<th style="text-align: center;">
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										@if($pays[0]->status != 'P')
+										@forelse($deposits as $deposit)
+										<tr>
+											<td style="text-align: right;">
+												Php {{ $deposit->currentBalance }}
+											</td>
+											<td style="text-align: center;">
+												<button class="btn but deposit-payment">Make Payment</button>
+												<input type = "hidden" class = "deposit_id" value="{{ $deposit->id }}" />
+											</td>
+										</tr>
+										@empty
+										<tr>
+											<td colspan="3">No Deposits</td>
+										</tr>
+										@endforelse
+										@else
+										@forelse($deposits as $deposit)
+										<tr>
+											<td>
+												{{ Carbon\Carbon::parse($deposit->created_at)->toFormattedDateString() }}
+											</td>
+											<td style="text-align: right;">
+												Php {{ $deposit->currentBalance }}
+											</td>
+											<td style="text-align: center;">
 
-										</td>
-									</tr>
-									@empty
-									<tr>
-										<td colspan="3">No Deposits</td>
-									</tr>
-									@endforelse
-									@endif
+											</td>
+										</tr>
+										@empty
+										<tr>
+											<td colspan="3">No Deposits</td>
+										</tr>
+										@endforelse
+										@endif
 
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-4">
-			<div class="panel panel-primary">
-				<div class="panel-heading">List of Payables</div>
-				<div class="panel-body">
-					<table class = "table-responsive table" id = "bills_table">
-						<thead>
-							<tr>
-								<th>
-									Name
-								</th>
-								<th>
-									Amount
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="col-lg-8">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Payment History</div>
-				<div class="panel-body">
-					<table class = "table-hover table" id = "hist_table">
-						<thead>
-							<tr>
-								<th>
-									Date of Payment
-								</th>
-								<th>
-									No.
-								</th>
-								<th>
-									Amount
-								</th>
-								<th>
-									Remarks
-								</th>
-								<th>
-									Action
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="depModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">New Deposit Payment</h4>
-			</div>
-			<div class="modal-body">
-				<form class = "form-horizontal">
-					<div class = "form-group">
-						<label class = "col-md-5 control-label pull-left">Remaining Balance: </label>
-						<label class="col-md-7 control-label pull-left" id = "remain_balance" style="text-align: left;"></label>
-					</div>
-					<div class = "form-group required">
-						<label class = "col-md-3 control-label pull-left">Amount: </label>
-						<div class= "col-md-9">
-							<div class="input-group">
-								<span class="input-group-addon" id="freightadd">Php</span>
-								<input type="number" class="form-control"  id = "depositPayment" style = "text-align: right" required>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
-					<div class = "form-group">
-						<label class = "col-md-3 control-label pull-left" >Description:</label>
-						<div class = "col-md-9">
-							<textarea class="form-control" id = "depositDescription"></textarea>
-						</div>
-					</div>
-				</form>
+				</div>
 			</div>
-			<div class="modal-footer">
-				<button  class="btn but finalize-deposit-payment">Save</button>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">List of Payables</div>
+					<div class="panel-body">
+						<table class = "table-responsive table" id = "bills_table">
+							<thead>
+								<tr>
+									<th>
+										Name
+									</th>
+									<th>
+										Amount
+									</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Payment History</div>
+					<div class="panel-body">
+						<table class = "table-hover table" id = "hist_table">
+							<thead>
+								<tr>
+									<th>
+										Date of Payment
+									</th>
+									<th>
+										No.
+									</th>
+									<th>
+										Amount
+									</th>
+									<th>
+										Remarks
+									</th>
+									<th>
+										Action
+									</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+	<div id="depModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">New Deposit Payment</h4>
+				</div>
+				<div class="modal-body">
+					<form class = "form-horizontal">
+						<div class = "form-group">
+							<label class = "col-md-5 control-label pull-left">Remaining Balance: </label>
+							<label class="col-md-7 control-label pull-left" id = "remain_balance" style="text-align: left;"></label>
+						</div>
+						<div class = "form-group required">
+							<label class = "col-md-3 control-label pull-left">Amount: </label>
+							<div class= "col-md-9">
+								<div class="input-group">
+									<span class="input-group-addon" id="freightadd">Php</span>
+									<input type="number" class="form-control"  id = "depositPayment" style = "text-align: right" required>
+								</div>
+							</div>
+						</div>
+						<div class = "form-group">
+							<label class = "col-md-3 control-label pull-left" >Description:</label>
+							<div class = "col-md-9">
+								<textarea class="form-control" id = "depositDescription"></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button  class="btn but finalize-deposit-payment">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-@endsection
-@push('styles')
-<style>
-	.class-payment
-	{
-		border-left: 10px solid #8ddfcc;
-		background-color:rgba(128,128,128,0.1);
-		color: #fff;
-	}
-</style>
-@endpush
-@push('scripts')
-<script type="text/javascript">
-	$('#collapse1').addClass('in');
-	var dep_balance = "";
-	var totalamt = @if( $total[0]->totall == null) 0 @else {{ $total[0]->totall }} @endif;
-	var balance =
-	@if( $total[0]->totdpay == null && $total[0]->totpay == null && $total[0]->balance == null && $total[0]->totall == null)
-	0
-	@else
-	@if($total[0]->totpay == null && $total[0]->totdpay != null)
-	{{ ( $total[0]->totall - $total[0]->totdpay )}}
-	@elseif($total[0]->totpay != null && $total[0]->totdpay == null)
-	{{ ( $total[0]->totall - $total[0]->totpay )}}
-	@else
-	{{ $total[0]->balance }}
-	@endif
-	{{ $total[0]->totall }}
-	@endif ;
-	var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay + $total[0]->totdpay }} @endif ;
-	n = totalamt - paid;
-	var bals = balance.toFixed(2);
-	document.getElementById("bal").value = bals;
+	@endsection
+	@push('styles')
+	<style>
+		.class-payment
+		{
+			border-left: 10px solid #8ddfcc;
+			background-color:rgba(128,128,128,0.1);
+			color: #fff;
+		}
+	</style>
+	@endpush
+	@push('scripts')
+	<script type="text/javascript">
+		$('#collapse1').addClass('in');
+		var dep_balance = "";
+		var totalamt = @if( $total[0]->totall == null) 0 @else {{ $total[0]->totall }} @endif;
+		var balance =
+		@if( $total[0]->totdpay == null && $total[0]->totpay == null && $total[0]->balance == null && $total[0]->totall == null)
+		0
+		@else
+		@if($total[0]->totpay == null && $total[0]->totdpay != null)
+		{{ ( $total[0]->totall - $total[0]->totdpay )}}
+		@elseif($total[0]->totpay != null && $total[0]->totdpay == null)
+		{{ ( $total[0]->totall - $total[0]->totpay )}}
+		@else
+		{{ $total[0]->balance }}
+		@endif
+		{{ $total[0]->totall }}
+		@endif ;
+		var paid =  @if( $total[0]->totpay == null) 0 @else {{ $total[0]->totpay + $total[0]->totdpay }} @endif ;
+		n = totalamt - paid;
+		var bals = balance.toFixed(2);
+		document.getElementById("bal").value = bals;
 
-	$(document).ready(function(){
-		var b_table = $('#hist_table').DataTable({
-			processing: false,
-			serverSide: false,
-			deferRender:true,
-			ajax: "{{ route('payments.data', $so_head_id) }}",
-			columns: [
-			{ data: 'created_at'},
-			{ data: 'record' },
-			{ data: 'amount' },
-			{ data: 'description'},
-			{data : 'action'}
-			]
-		})
-		$(document).on('keyup keydown keypress', '.money', function (event) {
-			var len = $('.money').val();
-			var value = $('.money').inputmask('unmaskedvalue');
-			if (event.keyCode == 8) {
-				if(parseFloat(value) == 0 || value == ""){
-					$('.money').val("0.00");
+		$(document).ready(function(){
+			var b_table = $('#hist_table').DataTable({
+				processing: false,
+				serverSide: false,
+				deferRender:true,
+				ajax: "{{ route('payments.data', $so_head_id) }}",
+				columns: [
+				{ data: 'created_at'},
+				{ data: 'record' },
+				{ data: 'amount' },
+				{ data: 'description'},
+				{data : 'action'}
+				]
+			})
+			$(document).on('keyup keydown keypress', '.money', function (event) {
+				var len = $('.money').val();
+				var value = $('.money').inputmask('unmaskedvalue');
+				if (event.keyCode == 8) {
+					if(parseFloat(value) == 0 || value == ""){
+						$('.money').val("0.00");
+					}
 				}
-			}
-			else
-			{
-				if(value == ""){
-					$('.money').val("0.00");
-				}
-				if(parseFloat(value) <= 9999999999999999.99){
-
-				}
-				else{
-					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
+				else
+				{
+					if(value == ""){
+						$('.money').val("0.00");
+					}
+					if(parseFloat(value) <= 9999999999999999.99){
 
 					}
 					else{
-						return false;
-					}
-				}
-			}
-			if(event.keyCode == 189)
-			{
-				return false;
-			}
-		});
-		var p_table = $('#bills_table').DataTable({
-			processing: false,
-			serverSide: false,
-			deferRender: true,
-			ajax: "{{ route('paybills.data', $so_head_id) }}",
-			columns: [
-			{ data: 'name' },
-			{ data: 'Total',
-			"render" : function( data, type, full ) {
-				return formatNumber(data); } },
+						if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
 
-				]
-			})
-
-	})
-
-
-	$(document).on('click', '.payment_receipt', function(e){
-		e.preventDefault();
-		type = $(this).closest('tr').find('.type').val();
-		console.log($(this).val());
-		if(type == 1){
-			window.open("{{ route('payment_receipt') }}/" + $(this).val());
-		}
-		else
-		{
-			window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
-		}
-
-	})
-	$(document).on('click', '.finalize-payment-check', function(e){
-		$.ajax({
-			method: 'POST',
-			url: 'cheques/{{ $pays[0]->bi_head }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'bankName' : $('#bank').val(),
-				'amount' : $('#check_amt').val(),
-				'bi_head_id' : {{ $pays[0]->bi_head }},
-				'utility_id' : {{ $allowance[0]->id }},
-				'isVerify' : 1
-			},
-			success: function (data){
-				$('#checkModal').modal('hide');
-				$('#depModal').modal('show');
-			}
-		})
-		console.log({{ $pays[0]->bi_head }})
-
-	})
-
-	$(document).on('click', '.finalize-deposit-payment', function(e){
-
-		var amt = parseFloat($('#depositPayment').val());
-		var rem = $('#depositDescription').val();
-		console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
-		console.log(typeof(dep_balance));
-		if(amt <= dep_balance && amt <= bals && amt > 0)
-		{
-
-			console.log('mawo');
-			if(amt < bals)
-			{
-				var tot = totalamt - amt;
-				$('.finalize-deposit-payment').attr('disabled', true);
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("dpayment.index") }}',
-					data : {
-						'_token' : $('input[name=_token]').val(),
-						'deposit_id' : deposit_id,
-						'description' : $('#depositDescription').val(),
-						'bi_head_id' : "{{ $pays[0]->bi_head }}",
-						'utility_id' : {{ $allowance[0]->id }},
-						'amount' : $('#depositPayment').val(),
-					},
-					success: function (data){
-						toastr.options = {
-							"closeButton": false,
-							"debug": false,
-							"newestOnTop": false,
-							"progressBar": false,
-							"rtl": false,
-							"positionClass": "toast-bottom-right",
-							"preventDuplicates": false,
-							"onclick": null,
-							"showDuration": 300,
-							"hideDuration": 1000,
-							"timeOut": 2000,
-							"extendedTimeOut": 1000,
-							"showEasing": "swing",
-							"hideEasing": "linear",
-							"showMethod": "fadeIn",
-							"hideMethod": "fadeOut"
 						}
-						toastr["success"]('Successfully saved');
-						location.reload();
+						else{
+							return false;
+						}
 					}
-				})
-			}
-			else if(amt>bals)
-			{
-				toastr.options =
-				{
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
 				}
-				toastr["warning"]("The amount must not be higher than the balance");
-				$('.finalize-payment').removeAttr('disabled');
-			}
-			else if(amt==bals)
-			{
-				console.log('wow');
-				var tot = totalamt - amt;
-				$('.finalize-deposit-payment').attr('disabled', true);
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("dpayment.index") }}',
-					data : {
-						'_token' : $('input[name=_token]').val(),
-						'deposit_id' : deposit_id,
-						'description' : $('#depositDescription').val(),
-						'bi_head_id' : "{{ $pays[0]->bi_head }}",
-						'utility_id' : {{ $allowance[0]->id }},
-						'amount' : $('#depositPayment').val(),
-					},
-					success: function (data){
-						console.log('wow');
-						var val = 'P';
-						$.ajax({
-							type: 'PUT',
-							url:  "{{ route('payment.update', $so_head_id) }}",
-							data: {
-								'_token' : $('input[name=_token]').val(),
-								'status' : val
-							},
-							success: function (data)
-							{
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('payment.index') }}";
-							}
-						})
-					}
-				})
-			}
-			else if(amt > totalamt)
-			{
-				toastr.options =
+				if(event.keyCode == 189)
 				{
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
+					return false;
 				}
-				toastr["warning"]("The amount must not be higher than the total");
-				$('.finalize-payment').removeAttr('disabled');
-			}
-			else if(amt==totalamt)
-			{
-				var tot = totalamt - amt;
-				$('.finalize-deposit-payment').attr('disabled', true);
-				$.ajax({
-					type: 'POST',
-					url: '{{ route("dpayment.index") }}',
-					data : {
-						'_token' : $('input[name=_token]').val(),
-						'deposit_id' : deposit_id,
-						'description' : $('#depositDescription').val(),
-						'bi_head_id' : "{{ $pays[0]->bi_head }}",
-						'utility_id' : {{ $allowance[0]->id }},
-						'amount' : $('#depositPayment').val(),
-					},
-					success: function (data){
-						var val = 'P';
-						$.ajax({
-							type: 'PUT',
-							url:  "{{ route('payment.update', $so_head_id) }}",
-							data: {
-								'_token' : $('input[name=_token]').val(),
-								'paymentStatus' : val
-							},
-							success: function (data){
-								toastr.options = {
-									"closeButton": false,
-									"debug": false,
-									"newestOnTop": false,
-									"progressBar": false,
-									"rtl": false,
-									"positionClass": "toast-bottom-right",
-									"preventDuplicates": false,
-									"onclick": null,
-									"showDuration": 300,
-									"hideDuration": 1000,
-									"timeOut": 2000,
-									"extendedTimeOut": 1000,
-									"showEasing": "swing",
-									"hideEasing": "linear",
-									"showMethod": "fadeIn",
-									"hideMethod": "fadeOut"
-								}
-								toastr["success"]('Successfully saved');
-								window.location.href = "{{ route('payment.index') }}";
-							}
-						})
-					}
+			});
+			var p_table = $('#bills_table').DataTable({
+				processing: false,
+				serverSide: false,
+				deferRender: true,
+				ajax: "{{ route('paybills.data', $so_head_id) }}",
+				columns: [
+				{ data: 'name' },
+				{ data: 'Total',
+				"render" : function( data, type, full ) {
+					return formatNumber(data); } },
+
+					]
 				})
+
+		})
+
+
+		$(document).on('click', '.payment_receipt', function(e){
+			e.preventDefault();
+			type = $(this).closest('tr').find('.type').val();
+			console.log($(this).val());
+			if(type == 1){
+				window.open("{{ route('payment_receipt') }}/" + $(this).val());
 			}
 			else
 			{
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["warning"]('Invalid payment');
-				$('.finalize-deposit-payment').attr('disabled', true);
+				window.open("{{ route('payment_deposit_receipt') }}/" + $(this).val());
 			}
-		}
 
-	})
+		})
+		$(document).on('click', '.finalize-payment-check', function(e){
+			$.ajax({
+				method: 'POST',
+				url: 'cheques/{{ $pays[0]->bi_head }}',
+				data: {
+					'_token' : $('input[name=_token]').val(),
+					'bankName' : $('#bank').val(),
+					'amount' : $('#check_amt').val(),
+					'bi_head_id' : {{ $pays[0]->bi_head }},
+					'utility_id' : {{ $allowance[0]->id }},
+					'isVerify' : 1
+				},
+				success: function (data){
+					$('#checkModal').modal('hide');
+					$('#depModal').modal('show');
+				}
+			})
+			console.log({{ $pays[0]->bi_head }})
+
+		})
+
+		$(document).on('click', '.finalize-deposit-payment', function(e){
+
+			var amt = parseFloat($('#depositPayment').val());
+			var rem = $('#depositDescription').val();
+			console.log("AMOUNT : " + amt + " DEP BALANCE: " + dep_balance + " BALS :" + bals);
+			console.log(typeof(dep_balance));
+			if(amt <= dep_balance && amt <= bals && amt > 0)
+			{
+
+				console.log('mawo');
+				if(amt < bals)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-deposit-payment').attr('disabled', true);
+					$.ajax({
+						type: 'POST',
+						url: '{{ route("dpayment.index") }}',
+						data : {
+							'_token' : $('input[name=_token]').val(),
+							'deposit_id' : deposit_id,
+							'description' : $('#depositDescription').val(),
+							'bi_head_id' : "{{ $pays[0]->bi_head }}",
+							'utility_id' : {{ $allowance[0]->id }},
+							'amount' : $('#depositPayment').val(),
+						},
+						success: function (data){
+							toastr.options = {
+								"closeButton": false,
+								"debug": false,
+								"newestOnTop": false,
+								"progressBar": false,
+								"rtl": false,
+								"positionClass": "toast-bottom-right",
+								"preventDuplicates": false,
+								"onclick": null,
+								"showDuration": 300,
+								"hideDuration": 1000,
+								"timeOut": 2000,
+								"extendedTimeOut": 1000,
+								"showEasing": "swing",
+								"hideEasing": "linear",
+								"showMethod": "fadeIn",
+								"hideMethod": "fadeOut"
+							}
+							toastr["success"]('Successfully saved');
+							location.reload();
+						}
+					})
+				}
+				else if(amt>bals)
+				{
+					toastr.options =
+					{
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["warning"]("The amount must not be higher than the balance");
+					$('.finalize-payment').removeAttr('disabled');
+				}
+				else if(amt==bals)
+				{
+					console.log('wow');
+					var tot = totalamt - amt;
+					$('.finalize-deposit-payment').attr('disabled', true);
+					$.ajax({
+						type: 'POST',
+						url: '{{ route("dpayment.index") }}',
+						data : {
+							'_token' : $('input[name=_token]').val(),
+							'deposit_id' : deposit_id,
+							'description' : $('#depositDescription').val(),
+							'bi_head_id' : "{{ $pays[0]->bi_head }}",
+							'utility_id' : {{ $allowance[0]->id }},
+							'amount' : $('#depositPayment').val(),
+						},
+						success: function (data){
+							console.log('wow');
+							var val = 'P';
+							$.ajax({
+								type: 'PUT',
+								url:  "{{ route('payment.update', $so_head_id) }}",
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'status' : val
+								},
+								success: function (data)
+								{
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]('Successfully saved');
+									window.location.href = "{{ route('payment.index') }}";
+								}
+							})
+						}
+					})
+				}
+				else if(amt > totalamt)
+				{
+					toastr.options =
+					{
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["warning"]("The amount must not be higher than the total");
+					$('.finalize-payment').removeAttr('disabled');
+				}
+				else if(amt==totalamt)
+				{
+					var tot = totalamt - amt;
+					$('.finalize-deposit-payment').attr('disabled', true);
+					$.ajax({
+						type: 'POST',
+						url: '{{ route("dpayment.index") }}',
+						data : {
+							'_token' : $('input[name=_token]').val(),
+							'deposit_id' : deposit_id,
+							'description' : $('#depositDescription').val(),
+							'bi_head_id' : "{{ $pays[0]->bi_head }}",
+							'utility_id' : {{ $allowance[0]->id }},
+							'amount' : $('#depositPayment').val(),
+						},
+						success: function (data){
+							var val = 'P';
+							$.ajax({
+								type: 'PUT',
+								url:  "{{ route('payment.update', $so_head_id) }}",
+								data: {
+									'_token' : $('input[name=_token]').val(),
+									'paymentStatus' : val
+								},
+								success: function (data){
+									toastr.options = {
+										"closeButton": false,
+										"debug": false,
+										"newestOnTop": false,
+										"progressBar": false,
+										"rtl": false,
+										"positionClass": "toast-bottom-right",
+										"preventDuplicates": false,
+										"onclick": null,
+										"showDuration": 300,
+										"hideDuration": 1000,
+										"timeOut": 2000,
+										"extendedTimeOut": 1000,
+										"showEasing": "swing",
+										"hideEasing": "linear",
+										"showMethod": "fadeIn",
+										"hideMethod": "fadeOut"
+									}
+									toastr["success"]('Successfully saved');
+									window.location.href = "{{ route('payment.index') }}";
+								}
+							})
+						}
+					})
+				}
+				else
+				{
+					toastr.options = {
+						"closeButton": false,
+						"debug": false,
+						"newestOnTop": false,
+						"progressBar": false,
+						"rtl": false,
+						"positionClass": "toast-bottom-right",
+						"preventDuplicates": false,
+						"onclick": null,
+						"showDuration": 300,
+						"hideDuration": 1000,
+						"timeOut": 2000,
+						"extendedTimeOut": 1000,
+						"showEasing": "swing",
+						"hideEasing": "linear",
+						"showMethod": "fadeIn",
+						"hideMethod": "fadeOut"
+					}
+					toastr["warning"]('Invalid payment');
+					$('.finalize-deposit-payment').attr('disabled', true);
+				}
+			}
+
+		})
 $(document).on('click', '.deposit-payment', function(e){
 	e.preventDefault();
 	deposit_id = $(this).closest('tr').find('.deposit_id').val();
@@ -1121,98 +1121,97 @@ $(document).on('click', '.finalize-payment', function(e){
 		$('.finalize-payment').removeAttr('disabled');
 	}
 })
+$(document).on('click', '#mng_cheque', function(e){
+	$('.finalize-mngcheque').addClass('in');
+})
+$(document).on('click', '.finalize-mngcheque', function(e){
+	var bi_id = {{ $so_head_id }};
+	$.ajax({
+		method: 'POST',
+		url: '{{ route("payment.store") }}',
+		data: {	
+			'_token' : $('input[name=_token]').val(),
+			'isCheque' : 2,
+			'bi_head_id' : {{ $so_head_id }},
+			'utility_id' : {{ $allowance[0]->id }},
+			'amount' : $('#check_amt').val(),
+			'description' : null
+		},
+		success: function (data){
+		}
+	})
+	$.ajax({
+		method: 'POST',
+		url: '{{ route("cheque.store") }}',
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'chequeNumber' : $('#chqNo').val(),
+			'bankName' : $('#bank').val(),
+			'amount' : $('#check_amt').val(),
+			'isVerify' : 1,
+			'bi_head_id' : bi_id,
+		},
+		success: function (data){
+			toastr.options = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"rtl": false,
+				"positionClass": "toast-bottom-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": 300,
+				"hideDuration": 1000,
+				"timeOut": 2000,
+				"extendedTimeOut": 1000,
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+			toastr["success"]('Successfully saved');
+			window.location.href = "{{ route('payment.index') }}";
+		}
+	})
+})
 $(document).on('click', '.finalize-cheque', function(e){
-	if(document.getElementById('mng_cheque').checked == true)
-	{
-		var bi_id = {{ $so_head_id }};
-		console.log('cheked');
-		$.ajax({
-			method: 'POST',
-			url: '{{ route("payment.store") }}',
-			data: {	
-				'_token' : $('input[name=_token]').val(),
-				'isCheque' : 0,
-				'bi_head_id' : {{ $so_head_id }},
-				'utility_id' : {{ $allowance[0]->id }},
-				'amount' : $('#check_amt').val(),
-				'description' : null
-			},
-			success: function (data){
+	var bi_id = {{ $so_head_id }};
+	console.log('uncheked');
+	$.ajax({
+		method: 'POST',
+		url: '{{ route("cheque.store") }}',
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'chequeNumber' : $('#chqNo').val(),
+			'bankName' : $('#bank').val(),
+			'amount' : $('#check_amt').val(),
+			'isVerify' : 0,
+			'bi_head_id' : bi_id,
+		},
+		success: function (data){
+			toastr.options = {
+				"closeButton": false,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"rtl": false,
+				"positionClass": "toast-bottom-right",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": 300,
+				"hideDuration": 1000,
+				"timeOut": 2000,
+				"extendedTimeOut": 1000,
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
 			}
-		})
-		$.ajax({
-			method: 'POST',
-			url: '{{ route("cheque.store") }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'chequeNumber' : $('#chqNo').val(),
-				'bankName' : $('#bank').val(),
-				'amount' : $('#check_amt').val(),
-				'isVerify' : 1,
-				'bi_head_id' : bi_id,
-			},
-			success: function (data){
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]('Successfully saved');
-			}
-		})
-	}
-	else(document.getElementById('mng_cheque').checked == false)
-	{
-		var bi_id = {{ $so_head_id }};
-		console.log('uncheked');
-		$.ajax({
-			method: 'POST',
-			url: '{{ route("cheque.store") }}',
-			data: {
-				'_token' : $('input[name=_token]').val(),
-				'chequeNumber' : $('#chqNo').val(),
-				'bankName' : $('#bank').val(),
-				'amount' : $('#check_amt').val(),
-				'isVerify' : 0,
-				'bi_head_id' : bi_id,
-			},
-			success: function (data){
-				toastr.options = {
-					"closeButton": false,
-					"debug": false,
-					"newestOnTop": false,
-					"progressBar": false,
-					"rtl": false,
-					"positionClass": "toast-bottom-right",
-					"preventDuplicates": false,
-					"onclick": null,
-					"showDuration": 300,
-					"hideDuration": 1000,
-					"timeOut": 2000,
-					"extendedTimeOut": 1000,
-					"showEasing": "swing",
-					"hideEasing": "linear",
-					"showMethod": "fadeIn",
-					"hideMethod": "fadeOut"
-				}
-				toastr["success"]('Successfully saved');
-				window.location.href = "{{ route('cheque.index') }}";
-			}
-		})
-	}
+			toastr["success"]('Successfully saved');
+			window.location.href = "{{ route('cheque.index') }}";
+		}
+	})
 })
 </script>
 @endpush

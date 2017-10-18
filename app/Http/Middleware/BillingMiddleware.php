@@ -16,7 +16,7 @@ class BillingMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 4){
+        if(Auth::guard($guard)->check() && Auth::user()->role_id == 4 || Auth::user()->role_id == 1){
             return $next($request);
         }
         else

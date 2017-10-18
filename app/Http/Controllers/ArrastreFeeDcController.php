@@ -114,8 +114,8 @@ class ArrastreFeeDcController extends Controller
 		$rates = DB::table('arrastre_dc_details')
 		->join ('container_types', 'container_types.id','=','container_sizes_id') 
 		->join ('dangerous_cargo_types', 'dangerous_cargo_types.id','=','dc_types_id')
-		-> select('container_types.name AS container_size', 'amount', 'container_sizes_id')
-		->where('arrastre_header_id', '=', $request->af_id)
+		->select('container_types.name AS container_size', 'amount', 'container_sizes_id', DB::raw('dangerous_cargo_types.name as dc_name'))
+		->where('arrastre_dc_headers_id', '=', $request->af_id)
 		->get();
 
 		return $rates;

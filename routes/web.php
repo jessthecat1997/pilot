@@ -17,56 +17,10 @@ Route::get('/home', 'HomeController@index');
 
 //ADMIN SIDE
 Route::group(['middleware' => ['admin']], function() {
-	Route::get('/', 'DashboardController@index');
-	Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
-	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
-	Route::resource('/employees', 'EmployeesController');
-	Route::resource('/employees/newemployee', 'EmployeesController');
-	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
-	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
-		return $from_new;});
-	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
+			//Maintenance
 
-	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
-	Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
 
-//Brokerage Routes
-	Route::resource('/brokerage', 'BrokerageController');
-	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
-	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
 
-	Route::get('getCategory/{section_id?}', 'DutiesAndTaxesController@get_category')->name('get_category');
-	Route::get('getItem/{category_id?}', 'DutiesAndTaxesController@get_item')->name('get_item');
-
-	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
-	Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
-	Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
-	Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
-
-	Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
-	Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
-
-	Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
-	Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
-
-	Route::get('/brokerage_create_order/{detail_id?}', 'BrokerageController@create_new')->name('brokerageOrder');
-	Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
-	Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
-	Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
-
-	Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
-	Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
-	Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
-	Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
-	Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
-	Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
-
-	Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
-	Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
-
-	Route::resource('consignee', 'ConsigneesController');
-	Route::post('CreateConsignee', 'ConsigneesController@store')->name('createconsignee');
 
 //Maintenance Routes
 
@@ -104,8 +58,30 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::resource('/admin/item','ItemsController');
 
 
+		//Reports
+	Route::resource('/reports/shipment', 'ShipmentReportsController');
+	Route::resource('/reports/delivery', 'DeliveryReportsController');
+	Route::resource('/reports/billing_rep', 'BillingReportsController');
+	Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
+	Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
+	Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
+	Route::get('/reports/delivery/del_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'DeliveryReportsController@delivery_pdf_report');
+	Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
+	Route::get('reports/shipment/print/{frequency}', 'ShipmentReportsController@print');
+
+		//Queries
+	Route::get('queries', 'QueriesController@index')->name('queries.index');
+	Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
+	Route::get('queries/get_peMM<nding_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+	Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
+	Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
+	Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
+	Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
+
+//Utilities home route
+	Route::resource('/utilities/settings','UtilityController');
+	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
 //Utilities Routes
-	Route::resource('/utilities/settings','UtilitiesBrokerageController');
 
 
 	Route::resource('/utilities/employee', 'EmployeesController');
@@ -418,10 +394,6 @@ Route::group(['middleware' => ['admin']], function() {
 
 //FullCalendar
 	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
-
-//Utilities home route
-	Route::resource('/utilities/settings','UtilityController');
-	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
 	//Backup and recovery
 	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
 
