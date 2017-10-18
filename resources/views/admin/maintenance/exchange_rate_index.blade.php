@@ -187,6 +187,7 @@
 			processing: false,
 			serverSide: false,
 			deferRender: true,
+			"bSort": false,
 			columns: [
 			{ data: 'dateEffective' },
 			{ data: 'rate' },

@@ -196,13 +196,13 @@
 			var value = $('.money').inputmask('unmaskedvalue');
 			if (event.keyCode == 8) {
 				if(parseFloat(value) == 0 || value == ""){
-					$('.money').val("0.00");
+					$('.money').val("0");
 				}
 			}
 			else
 			{
 				if(value == ""){
-					$('.money').val("0.00");
+					$('.money').val("0");
 				}
 				if(parseFloat(value) <= 9999999.99){
 					
