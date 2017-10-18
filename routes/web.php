@@ -180,11 +180,11 @@ Route::group(['middleware' => ['admin']], function() {
 	Route::get('admin/users_table', 'UserController@user_table')->name('users.data');
 	Route::put('/update_user/{id?}', 'EmployeesController@updateUser')->name('update_user');
 
-		//Backup and recovery 
-	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController'); 
+		//Backup and recovery
+	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
 
-		//Audit Trail 
-	Route::resource('/admin/audit_trail', 'AuditTrailController'); 
+		//Audit Trail
+	Route::resource('/admin/audit_trail', 'AuditTrailController');
 });
 Route::group(['middleware' => ['access']], function() {
 	Route::resource('/orders', 'OrdersController');
@@ -260,6 +260,12 @@ Route::group(['middleware' => ['access']], function() {
 	Route::get('/admin/secData/{isActive?}', 'DatatablesController@sec_datatable')->name('sec.data');
 	Route::get('/admin/catData/{isActive?}', 'DatatablesController@cat_datatable')->name('cat.data');
 	Route::get('/admin/itemData/{isActive?}', 'DatatablesController@item_datatable')->name('item.data');
+
+	//Deposits
+Route::resource('/cdeposit', 'ConsigneeDepositsController');
+Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
+Route::resource('/dpayment', 'DepositPaymentsController');
+
 });
 Route::group(['middleware' => ['broker']], function() {
 		//Brokerage
@@ -335,7 +341,7 @@ Route::group(['middleware' => ['broker']], function() {
 	Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
 	Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
 	Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
-	Route::get('/brokerage/{brokerage_id}/print', 'BrokerageController@print');
+	Route::get('/brokerage/{brokerage_id?}/print', 'BrokerageController@print')->name('brokeragepdfprint');
 	Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
 	Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
 	Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
@@ -442,8 +448,4 @@ Route::group(['middleware' => ['billing']], function() {
 	Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
 	Route::resource('/cheque', 'ChequesController');
 	Route::put('/confirm_cheque/{id?}', 'ChequesController@confirm_cheque')->name('con_cheque');
-		//Deposits
-	Route::resource('/cdeposit', 'ConsigneeDepositsController');
-	Route::get('/getDeposits/{id?}', 'ConsigneeDepositsController@view_deposit')->name('depositView');
-	Route::resource('/dpayment', 'DepositPaymentsController');
 });

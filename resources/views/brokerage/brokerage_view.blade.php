@@ -389,7 +389,7 @@ window.onload = function(){
  console.log(ipfFeeDetail_str);
  for(var x = 0, n = ipfFeeDetail.length; x < n; x++)
  {
-   
+
      minimum = ipfFeeDetail[x].minimum;
      maximum = ipfFeeDetail[x].maximum;
      amount = ipfFeeDetail[x].amount;
@@ -540,7 +540,7 @@ return result;
 }
 $(document).on('click', '.print-dutiesandtaxes', function(e){
  e.preventDefault();
- window.open("http://localhost:8000/brokerage/" + <?php echo $so_id ?> + "/print");
+ window.open("/brokerage/" + <?php echo $so_id ?> + "/print");
 })
 </script>
 </script>
