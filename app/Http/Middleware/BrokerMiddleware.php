@@ -29,6 +29,5 @@ class BrokerMiddleware
             else
                 return redirect()->back();
         }
-
     }
 }
