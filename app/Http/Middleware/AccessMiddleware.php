@@ -16,10 +16,18 @@ class AccessMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4){
-            return $next($request);
+        $user = Auth::user();
+        if($user == null)
+        {
+            return redirect('/login');
         }
         else
-            return redirect()->back();
+        {
+            if(Auth::guard($guard)->check() && Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3 || Auth::user()->role_id == 4){
+                return $next($request);
+            }
+            else
+                return redirect()->back();
+        }
     }
 }

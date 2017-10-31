@@ -180,7 +180,6 @@
 @endpush
 @push('scripts')
 <script type="text/javascript">
-	$('#deliverycollapse').addClass('in');
 	$('#collapse2').addClass('in');
 	var location_id = null;
 

@@ -16,11 +16,22 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 1)
+        $user = Auth::user();
+        if($user == null)
         {
-            return $next($request);
+            return redirect('/login');
         }
         else
-            return redirect('/login');
+        {
+            if(Auth::guard($guard)->check() && Auth::user()->role_id == 1)
+                {
+                    return $next($request);
+                }
+                else
+                {
+                    return redirect('/login');
+                }
+            }
+        }
     }
 }

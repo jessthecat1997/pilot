@@ -13,52 +13,57 @@
 	</div>
 	<br />
 	<div class="row">
-		<div class="col-md-12">
-			<table class = "table-responsive table cell-border table-striped table-bordered" id = "order_table">
-				<thead>
-					<tr>
-						<td >
-							Consignee Company
-						</td>
-						<td >
-							Consignee Name
-						</td>
-						<td>
-							Created at
-						</td>
-						<td>
-							Processed By
-						</td>
-						<td>
-							Action
-						</td>
-					</tr>
-				</thead>
-				<tbody>
-					@forelse($orders as $order)
-					<tr>
-						<td>
-							{{ $order->companyName }}
-						</td>
-						<td>
-							{{ $order->consignee }}
-						</td>
-						
-						<td>
-							{{ Carbon\Carbon::parse($order->created_at)->toFormattedDateString() }}
-						</td>
-						<td>
-							{{ $order->employee}}
-						</td>
-						<td>
-							<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>
-							<input type = 'hidden' value = '{{ $order->id }}' class = 'order-id' />
-						</td>
-					</tr>
-					@empty
-					@endforelse
-				</tbody>
-			</table>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				List of Orders
+			</div>
+			<div class="panel-body">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "order_table">
+					<thead>
+						<tr>
+							<td>
+								Consignee Company
+							</td>
+							<td >
+								Consignee Name
+							</td>
+							<td>
+								Created at
+							</td>
+							<td>
+								Processed By
+							</td>
+							<td>
+								Action
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($orders as $order)
+						<tr>
+							<td>
+								{{ $order->companyName }}
+							</td>
+							<td>
+								{{ $order->consignee }}
+							</td>
+
+							<td>
+								{{ Carbon\Carbon::parse($order->created_at)->toFormattedDateString() }}
+							</td>
+							<td>
+								{{ $order->employee}}
+							</td>
+							<td>
+								<button class = 'btn btn-info view_order' title = 'Manage'>Manage</button>
+								<input type = 'hidden' value = '{{ $order->id }}' class = 'order-id' />
+							</td>
+						</tr>
+						@empty
+						@endforelse
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	<section class="content">
@@ -74,7 +79,7 @@
 						<div class="modal-body">	
 							<div class = "form-group">
 								<label class = "control-label ">Consignee: </label>
-								<div class = "input-group">
+								<div class = "input-group" style="width: 100%;">
 									<select id = "consignee_id" class = "form-control">
 										<option value = "0">Select Consignee</option>
 										@forelse($consignees as $consignee)
@@ -84,7 +89,6 @@
 
 										@endforelse
 									</select>
-
 								</div>
 							</div>		
 
@@ -235,8 +239,10 @@
 
 		$(document).on('click', '.submit', function(e){
 			e.preventDefault();
+			$('.submit').attr('disabled', 'true');
 			console.log($('#consignee_id').val());
-			if(validateOrder() == true){
+			if(validateOrder() == true)
+			{
 				console.log($('#consignee_id').val());
 				$.ajax({
 					type: 'POST',
@@ -271,49 +277,54 @@
 								"hideMethod": "fadeOut"
 							}
 							toastr["success"]("Record added successfully");
-							$('#btnSave').removeAttr('disabled');
+							$('.submit').removeAttr('disabled');
 							
+						}
+						else
+						{
+							resetErrors();
+							var invdata = JSON.parse(data);
+							$.each(invdata, function(i, v) {
+								console.log(i + " => " + v); 
+								var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+								$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+							});
+							$('.submit').removeAttr('disabled');
 						}
 					}
 				})
-			}else{
-
-				resetErrors();
-				var invdata = JSON.parse(data);
-				$.each(invdata, function(i, v) {
-					console.log(i + " => " + v); 
-					var msg = '<label class="error" for="'+i+'">'+v+'</label>';
-					$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
-				});
+			}
+			else{
+				$('.submit').removeAttr('disabled');	
 			}
 		})
 
 		function validateOrder()
-	{
-		error = "";
-		if(consigneeID == null || consigneeID == 0){
-			error += "No selected consignee.\n";
-			$('#consignee_id').css('border-color', 'red');
+		{
+			error = "";
+			if(consigneeID == null || consigneeID == 0){
+				error += "No selected consignee.\n";
+				$('#consignee_id').css('border-color', 'red');
+			}
+			else{
+				$('#consignee_id').css('border-color', 'green');
+			}
+			if($('#processedBy').val() == "0"){
+				error += "No processed By";
+				$('#processedBy').css('border-color', 'red');
+			}
+			else{
+				$('#processedBy').css('border-color', 'green');
+			}
+			if(error.length == 0){
+				return true;
+			}
+			else{
+				console.log(error);
+				return false;
+			}
 		}
-		else{
-			$('#consignee_id').css('border-color', 'green');
-		}
-		if($('#processedBy').val() == "0"){
-			error += "No processed By";
-			$('#processedBy').css('border-color', 'red');
-		}
-		else{
-			$('#processedBy').css('border-color', 'green');
-		}
-		if(error.length == 0){
-			return true;
-		}
-		else{
-			console.log(error);
-			return false;
-		}
-	}
 	})
-	
+
 </script>
 @endpush

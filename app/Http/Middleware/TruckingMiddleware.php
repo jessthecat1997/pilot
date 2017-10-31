@@ -15,10 +15,18 @@ class TruckingMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->check() && Auth::user()->role_id == 3 || Auth::user()->role_id == 1){
-            return $next($request);
-        }
+        $user = Auth::user();
+        if($user == null)
+        {
+            return redirect('/login');
+        } 
         else
-            return redirect()->back();
+        {
+            if(Auth::guard($guard)->check() && Auth::user()->role_id == 3 || Auth::user()->role_id == 1){
+                return $next($request);
+            }
+            else
+                return redirect()->back();
+        }
     }
 }
