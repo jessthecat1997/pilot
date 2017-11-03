@@ -33,7 +33,7 @@
 					Pending Invoice
 				</div>
 				<div class="panel-body">
-					<table class = "table table-hover" id = "hist_table">
+					<table class = "table table-hover table-responsive table-bordered" id = "hist_table" style="width: 100%;">
 						<thead>
 							<tr>
 								<th>
@@ -60,7 +60,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">Unpaid Invoice</div>
 				<div class="panel-body">
-					<table class = "table table-hover" id = "unpaid_table">
+					<table class = "table table-hover table-responsive table-bordered" id = "unpaid_table">
 						<thead>
 							<tr>
 								<th>

@@ -427,24 +427,7 @@
                 </li>
             </ul>
         </div>
-        <li>
-            <a data-toggle="collapse" href="#collapse4" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
-        </li>
-        <div id="collapse4" class ="panel-collapse collapse">
-            <ul class="list-group" style="list-style-type: circle;">
-                <li>
-                    <a href = "{{ route('settings.index') }}"  class = "class-utility-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Settings</a>
-                </li>
-                
-                <li>
-                    <a href = "{{ route('audit_trail.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Audit Trail</a>
-                </li>
-                <li>
-                    <a href = "{{ route('backup_and_recovery.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Back up and Recovery</a>
-                </li>
-            </ul>
-        </div>
-        <br>
+        
         <li>
             <a href="{{ url('/logout') }}"
             onclick="event.preventDefault();
@@ -534,35 +517,7 @@
                 </li>
             </ul>
         </div>
-        <li>
-            <a data-toggle="collapse" href="#collapse4" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
-        </li>
-        <div id="collapse4" class ="panel-collapse collapse">
-            <ul class="list-group" style="list-style-type: circle;">
-                <li>
-                    <a href = "{{ route('settings.index') }}"  class = "class-utility-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Settings</a>
-                </li>
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#templatescollapse"><i class="fa fa-circle"></i>&nbsp;&nbsp;Templates</a>
-                </li>
-                <div id="templatescollapse" class="panel-collapse collapse">
-                    <li>
-                        <a href = "{{ route('contract_template.index') }}"  class = "class-contract-template">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Contract Agreements</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('quotation_template.index') }}"  class = "class-quotation-template">&nbsp;&nbsp;&nbsp;<i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Quotation Terms</a>
-                    </li>
-                </div>
-                
-                <li>
-                    <a href = "{{ route('audit_trail.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Audit Trail</a>
-                </li>
-                <li>
-                    <a href = "{{ route('backup_and_recovery.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Back up and Recovery</a>
-                </li>
-            </ul>
-        </div>
-        <br>
+        
         <li>
             <a href="{{ url('/logout') }}"
             onclick="event.preventDefault();
@@ -625,36 +580,7 @@
                 </li>
             </ul>
         </div>
-        <li>
-            <a data-toggle="collapse" href="#collapse4" class="utilities"><i class="fa fa-gear"></i>&nbsp;&nbsp;Utilities</a>
-        </li>
-        <div id="collapse4" class ="panel-collapse collapse">
-            <ul class="list-group" style="list-style-type: circle;">
-                <li>
-                    <a href = "{{ route('settings.index') }}"  class = "class-utility-fee"><i class="fa fa-circle"></i>&nbsp;&nbsp;Settings</a>
-                </li>
-
-                <li>
-                    <a data-toggle="collapse" class="maintenance-group" href = "#employeecollapse"><i class="fa fa-circle"></i>&nbsp;&nbsp;Employee</a>
-                </li>
-                <div id="employeecollapse" class="panel-collapse collapse">
-                    <li>
-                        <a href = "{{ route('employee_type.index') }}"  class = "class-vat-rate"><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;Employee Type</a>
-                    </li>
-                    <li>
-                        <a href = "{{ route('employee.index') }}"  class = "class-charges"><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;Employee</a>
-                    </li>
-                </div>
-                
-                <li>
-                    <a href = "{{ route('audit_trail.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Audit Trail</a>
-                </li>
-                <li>
-                    <a href = "{{ route('backup_and_recovery.index') }}"  class = "class-audit"><i class="fa fa-circle"></i>&nbsp;&nbsp;Back up and Recovery</a>
-                </li>
-            </ul>
-        </div>
-        <br>
+    
         <li>
             <a href="{{ url('/logout') }}"
             onclick="event.preventDefault();

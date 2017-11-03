@@ -53,6 +53,7 @@ class TruckingsController extends Controller
         ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
         ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
         ->where('B.id', '=', 5)
+        ->select('employees.id', 'employees.firstName', 'employees.lastName')
         ->get();
 
         $consignees = \App\Consignee::all();
@@ -155,6 +156,7 @@ class TruckingsController extends Controller
         ->where('quotation_details.locations_id_from', '=', $request->area_from)
         ->where('quotation_details.locations_id_to', '=', $request->area_to)
         ->get();
+
         
         $location = DB::table('standard_area_rates')
         ->where('areaFrom', '=', $request->area_from)
@@ -313,6 +315,7 @@ class TruckingsController extends Controller
         ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
         ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
         ->where('B.id', '=', 5)
+        ->select('employees.id', 'employees.firstName', 'employees.lastName')
         ->get();
 
         $locations = \App\Location::all();
@@ -403,6 +406,7 @@ class TruckingsController extends Controller
             ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
             ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
             ->where('B.id', '=', 5)
+            ->select('employees.id', 'employees.firstName', 'employees.lastName')
             ->get();
 
             $vehicle_types = VehicleType::all();
@@ -467,6 +471,7 @@ class TruckingsController extends Controller
         ->join('employee_roles as A', 'employees.id', '=', 'A.employee_id')
         ->join('employee_types as B', 'A.employee_type_id', '=', 'B.id')
         ->where('B.id', '=', 5)
+        ->select('employees.id', 'employees.firstName', 'employees.lastName')
         ->get();
 
 
@@ -481,6 +486,7 @@ class TruckingsController extends Controller
         ->join('consignee_service_order_headers as A', 'A.consignees_id', '=', 'consignees.id')
         ->join('consignee_service_order_details as B', 'B.so_headers_id', '=', 'A.id')
         ->join('trucking_service_orders as C', 'C.so_details_id', '=', 'B.id')
+        ->where('C.id', '=', $so_id)
         ->get();
 
         if($delivery->status == 'P')
@@ -500,9 +506,9 @@ class TruckingsController extends Controller
             $new_delivery_head = new DeliveryReceiptHeader;
             $new_delivery_head->emp_id_driver = $request->emp_id_driver;
             if($request->emp_id_helper == 0){
-             $new_delivery_head->emp_id_helper = null;
-         }
-         else{
+               $new_delivery_head->emp_id_helper = null;
+           }
+           else{
             $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
         }
         $new_delivery_head->locations_id_pick = $request->locations_id_pick;

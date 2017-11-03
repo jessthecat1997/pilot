@@ -1203,8 +1203,8 @@
 								'descrp_goods' : descrp_goods,
 								'gross_weights' : gross_weights,
 								'suppliers' : suppliers,
-								'emp_id_driver' : 1,
-								'emp_id_helper' : 1,
+								'emp_id_driver' : $('#driver').val(),
+								'emp_id_helper' : $('#helper').val(),
 								'locations_id_pick' : $('#pickup_id').val(),
 								'locations_id_del' : $('#deliver_id').val(),
 								'deliveryDate' : $('#deldatecon').val(),
@@ -1229,8 +1229,8 @@
 							data: {
 								'_token' : $('input[name=_token]').val(),
 								'plateNumber' : $('#vehicle').val(),
-								'emp_id_driver' : 1,
-								'emp_id_helper' : 1,
+								'emp_id_driver' : $('#driver').val(),
+								'emp_id_helper' : $('#helper').val(),
 								'locations_id_pick' : $('#pickup_id').val(),
 								'locations_id_del' : $('#deliver_id').val(),
 								'deliveryDate' : $('#deldatecon').val(),
@@ -1312,7 +1312,7 @@
 					data: {
 						'area_from' : selected_from,
 						'area_to' : selected_to,
-						'consignee_id' : {{ $consignee[0]->id }}
+						'consignee_id' : '{{ $consignee[0]->id }}'
 					},
 					success : function(data) {
 						if(data[1].length == 0){
