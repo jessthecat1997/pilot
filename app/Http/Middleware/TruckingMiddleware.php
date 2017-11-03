@@ -26,7 +26,7 @@ class TruckingMiddleware
                 return $next($request);
             }
             else
-                return redirect()->back();
+                return redirect()->route('invalid_access.denied');
         }
     }
 }

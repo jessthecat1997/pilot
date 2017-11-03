@@ -49,6 +49,10 @@ class DashboardController extends Controller
 
    return view('dashboard', compact(['deliveries', 'delivery_status', 'today_deliveries', 'unreturned_containers']));
  }
+ public function permission_access_denied(Request $request)
+ {
+    return view('errors.access_denied');
+ }
 
  public function create()
  {

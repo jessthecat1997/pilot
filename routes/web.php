@@ -7,166 +7,12 @@ Route::post('/login/validateUsers','LoginController@validateUsers');
 Route::get('/tlogin','LoginController@thome');
 Route::post('/login/tvalidateUsers','LoginController@tvalidateUsers');
 
-Route::group(['middleware' => ['admin']], function() {
-	//Maintenance Routes
-	Route::resource('/admin/vehicletype', 'VehicleTypesController');
-	Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
-	Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
-	Route::resource('/admin/container_type', 'ContainerTypesController');
-	Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
-	Route::resource('/admin/vehicle','VehiclesController');
-	Route::put('/admin/vehicle/{id}/{plateNumber?}', 'VehiclesController@v_update');
-	Route::resource('/admin/billing', 'BillingsController');
-	Route::resource('/admin/charge','ChargesController');
-	Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
-	Route::resource('/admin/cds_fee','CdsFeesController');
-	Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
-	Route::resource('/admin/arrastre_fee', 'ArrastreFeesController');
-	Route::resource('/admin/wharfage_fee', 'wharfageFeesController');
-	Route::resource('/admin/cargo_type', 'CargoTypesController');
-	Route::resource('/admin/standard_arearates','StandardAreaRatesController');
-	Route::resource('/admin/bank_account','BankAccountsController');
-	Route::resource('/admin/location_province','LocationProvincesController');
-	Route::resource('/admin/location_city','LocationCitiesController');
-	Route::post('/admin/location_city/new_province', 'LocationCitiesController@new_province');
-	Route::resource('/admin/attachment_type','RequirementsController');
-	Route::resource('/admin/arrastre_fee','ArrastreFeesController');
-	Route::resource('/admin/lcl_type','LclTypesController');
-	Route::resource('/admin/basis_type','BasisTypeController');
-	Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
-	Route::resource('/admin/wharfage_fee','WharfageFeeController');
-	Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
-	Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
-	Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
-	Route::resource('/admin/section','SectionsController');
-	Route::resource('/admin/category','CategoryTypesController');
-	Route::resource('/admin/item','ItemsController');
-
-	//Reports
-	Route::resource('/reports/shipment', 'ShipmentReportsController');
-	Route::resource('/reports/delivery', 'DeliveryReportsController');
-	Route::resource('/reports/billing_rep', 'BillingReportsController');
-	Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
-	Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
-	Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
-	Route::get('/reports/delivery/del_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'DeliveryReportsController@delivery_pdf_report');
-	Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
-	Route::get('reports/shipment/print/{frequency}', 'ShipmentReportsController@print');
-
-	//Queries
-	Route::get('queries', 'QueriesController@index')->name('queries.index');
-	Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
-	Route::get('queries/get_peMM<nding_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
-	Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
-	Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
-	Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
-	Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
-
-	//Utilities
-	Route::resource('/utilities/settings','UtilityController');
-	//Utilities Routes
-	Route::resource('/utilities/settings','UtilitiesBrokerageController');
-	Route::resource('/utilities/employee', 'EmployeesController');
-	Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
-	Route::get('/utilities/cds_fee_deactivated/{filter}','DatatablesController@cds_deactivated');
-	Route::get('/utilities/cds_fee_data','CdsFeesController@cds_utilities')->name('cds_fee.utilities_index');
-	Route::put('/utilities/cds_fee_reactivate/{id}','CdsFeesController@reactivate');
-	Route::get('/utilities/brokerage_fee_deactivated/{filter}',
-		'DatatablesController@bf_deactivated');
-	Route::get('/utilities/brokerage_fee_data','BrokerageFeesController@bf_utilities')->name('brokerage_fee.utilities_index');
-	Route::put('/utilities/brokerage_fee_reactivate/{id}','BrokerageFeesController@reactivate');
-	Route::get('/utilities/charge_deactivated/{filter}',
-		'DatatablesController@ch_deactivated');
-	Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index');
-	Route::put('/utilities/charge_reactivate/{id}','ChargesController@reactivate');
-	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
-	Route::get('/utilities/container_type_deactivated/{filter}','DatatablesController@ct_deactivated');
-	Route::get('/utilities/container_type_data','ContainerTypesController@ct_utilities')->name('container_type.utilities_index');
-	Route::put('/utilities/container_type_reactivate/{id}','ContainerTypesController@reactivate');
-	Route::get('/utilities/brokerage_status_type_deactivated/{filter}','DatatablesController@bst_deactivated');
-	Route::get('/utilities/brokerage_status_type_data','BrokerageStatusTypesController@bst_utilities')->name('brokerage_status_type.utilities_index');
-	Route::put('/utilities/brokerage_status_type_reactivate/{id}','BrokerageStatusTypesController@reactivate');
-	Route::resource('/utilities/employee_type', 'EmployeeTypesController');
-	Route::get('/utilities/employee_type_deactivated/{filter}','DatatablesController@et_deactivated');
-	Route::get('/utilities/employee_type_data','EmployeeTypesController@employee_type_utilities')->name('employee_type.utilities_index');
-	Route::put('/utilities/employee_type_reactivate/{id}','EmployeeTypesController@reactivate');
-	Route::get('/utilities/exchange_rate_deactivated/{filter}','DatatablesController@er_deactivated');
-	Route::get('/utilities/exchange_rate_data','ExchangeRatesController@er_utilities')->name('exchange_rate.utilities_index');
-	Route::put('/utilities/exchange_rate_reactivate/{id}','ExchangeRatesController@reactivate');
-	Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_deactivated');
-	Route::get('/utilities/ipf_fee_data','ImportProcessingFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
-	Route::put('/utilities/ipf_fee_reactivate/{id}','ImportProcessingFeesController@reactivate');
-	Route::resource('/utilities/receive_type', 'ReceiveTypesController');
-	Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
-	Route::get('/utilities/receive_type_data','ReceiveTypesController@rt_utilities')->name('receive_type.utilities_index');
-	Route::put('/utilities/receive_type_reactivate/{id}','ReceiveTypesController@reactivate');
-	Route::get('/utilities/service_order_type_deactivated/{filter}','DatatablesController@sot_deactivated');
-	Route::get('/utilities/service_order_type_data','ServiceOrderTypesController@sot_utilities')->name('sot.utilities_index');
-	Route::put('/utilities/service_order_type_reactivate/{id}','ServiceOrderTypesController@reactivate');
-	Route::get('/utilities/vehicle_type_deactivated/{filter}','DatatablesController@vt_deactivated');
-	Route::get('/utilities/vehicle_type_data','VehicleTypesController@vt_utilities')->name('vehicle_type.utilities_index');
-	Route::put('/utilities/vehicle_type_reactivate/{id}','VehicleTypesController@reactivate');
-	Route::get('/utilities/vehicle_deactivated/{filter}','DatatablesController@v_deactivated');
-	Route::get('/utilities/vehicle_data','VehiclesController@v_utilities')->name('vehicle.utilities_index');
-	Route::put('/utilities/vehicle_reactivate/{id}','VehiclesController@reactivate');
-	Route::get('/utilities/location_province_deactivated/{filter}','DatatablesController@lp_deactivated');
-	Route::get('/utilities/location_province_data','LocationProvincesController@lp_utilities')->name('location_province.utilities_index');
-	Route::put('/utilities/location_province_reactivate/{id}','LocationProvincesController@reactivate');
-	Route::get('/utilities/location_city_deactivated/{filter}','DatatablesController@lc_deactivated');
-	Route::get('/utilities/location_city_data','LocationCitiesController@lc_utilities')->name('location_city.utilities_index');
-	Route::put('/utilities/location_city_reactivate/{id}','LocationCitiesController@reactivate');
-	Route::get('/utilities/standard_arearates_deactivated/{filter}','DatatablesController@sar_deactivated');
-	Route::get('/utilities/standard_arearates_data','StandardAreaRatesController@sar_utilities')->name('standard_area_rate.utilities_index');
-	Route::put('/utilities/standard_arearates_reactivate/{id}','StandardAreaRatesController@reactivate');
-	Route::get('/utilities/locations_deactivated/{filter}','DatatablesController@location_deactivated');
-	Route::get('/utilities/locations_data','LocationsController@location_utilities')->name('location.utilities_index');
-	Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivate');
-	Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@employees_deactivated');
-	Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
-	Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
-	Route::resource('/admin/vat_rate','VatRatesController');
-	Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
-	Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
-	Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
-	Route::put('/utilities/attachment_type_reactivate/{id}','RequirementsController@reactivate');
-
-	Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
-	Route::put('/utilities/section_reactivate/{id}','SectionsController@reactivate');
-	Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
-	Route::get('admin/getCategory/{sections_id?}', 'ItemsController@get_categories')->name('get_item_categories');
-	Route::put('/utilities/item_reactivate/{id}','ItemsController@reactivate');
-
-	Route::put('/utilities/dct_reactivate/{id}','DangerousCargoTypeController@reactivate');
-	Route::put('/utilities/lcl_reactivate/{id}','LclTypesController@reactivate');
-	Route::put('/utilities/bt_reactivate/{id}','BasisTypeController@reactivate');
-	Route::put('/utilities/af_reactivate/{id}','ArrastreFeesController@reactivate');
-	Route::put('/utilities/af_lcl_reactivate/{id}','ArrastreFeeLclController@reactivate');
-	Route::put('/utilities/af_dc_reactivate/{id}','ArrastreFeeDcController@reactivate');
-	Route::put('/utilities/wf_reactivate/{id}','WharfageFeeController@reactivate');
-	Route::put('/utilities/wf_lcl_reactivate/{id}','WharfageFeeLclController@reactivate');
-
-	//Employees and Users
-	Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
-	Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
-	Route::resource('/employees', 'EmployeesController');
-	Route::resource('/employees/newemployee', 'EmployeesController');
-	Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
-	Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
-		return $from_new;});
-	Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
-	Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
-	Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
-	Route::resource('/users', 'UserController');
-	Route::get('admin/users_table', 'UserController@user_table')->name('users.data');
-	Route::put('/update_user/{id?}', 'EmployeesController@updateUser')->name('update_user');
-
-	//Backup and recovery
-	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
-
-});
 
 //All access
 Route::group(['middleware' => ['access']], function() {
+	//Access error
+	Route::get('/invalid_access', 'DashboardController@permission_access_denied')->name('invalid_access.denied');
+
 	Route::resource('/orders', 'OrdersController');
 	Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
@@ -268,152 +114,310 @@ Route::group(['middleware' => ['access']], function() {
 	Route::resource('/admin/audit_trail', 'AuditTrailController');
 
 	//Transactions
+	Route::group(['middleware' => ['admin']], function() {
+		//Maintenance Routes
+		Route::resource('/admin/vehicletype', 'VehicleTypesController');
+		Route::resource('/admin/service_ordertype', 'ServiceOrderTypesController');
+		Route::resource('/admin/brokerage_status_type', 'BrokerageStatusTypesController');
+		Route::resource('/admin/container_type', 'ContainerTypesController');
+		Route::resource('/admin/exchange_rate', 'ExchangeRatesController');
+		Route::resource('/admin/vehicle','VehiclesController');
+		Route::put('/admin/vehicle/{id}/{plateNumber?}', 'VehiclesController@v_update');
+		Route::resource('/admin/billing', 'BillingsController');
+		Route::resource('/admin/charge','ChargesController');
+		Route::resource('/admin/brokerage_fee', 'BrokerageFeesController');
+		Route::resource('/admin/cds_fee','CdsFeesController');
+		Route::resource('/admin/ipf_fee','ImportProcessingFeesController');
+		Route::resource('/admin/arrastre_fee', 'ArrastreFeesController');
+		Route::resource('/admin/wharfage_fee', 'wharfageFeesController');
+		Route::resource('/admin/cargo_type', 'CargoTypesController');
+		Route::resource('/admin/standard_arearates','StandardAreaRatesController');
+		Route::resource('/admin/bank_account','BankAccountsController');
+		Route::resource('/admin/location_province','LocationProvincesController');
+		Route::resource('/admin/location_city','LocationCitiesController');
+		Route::post('/admin/location_city/new_province', 'LocationCitiesController@new_province');
+		Route::resource('/admin/attachment_type','RequirementsController');
+		Route::resource('/admin/arrastre_fee','ArrastreFeesController');
+		Route::resource('/admin/lcl_type','LclTypesController');
+		Route::resource('/admin/basis_type','BasisTypeController');
+		Route::resource('/admin/dangerous_cargo_type','DangerousCargoTypeController');
+		Route::resource('/admin/wharfage_fee','WharfageFeeController');
+		Route::resource('/admin/wharfage_fee_lcl','WharfageFeeLclController');
+		Route::resource('/admin/arrastre_fee_lcl','ArrastreFeeLclController');
+		Route::resource('/admin/arrastre_fee_dc','ArrastreFeeDcController');
+		Route::resource('/admin/section','SectionsController');
+		Route::resource('/admin/category','CategoryTypesController');
+		Route::resource('/admin/item','ItemsController');
+
+		//Reports
+		Route::resource('/reports/shipment', 'ShipmentReportsController');
+		Route::resource('/reports/delivery', 'DeliveryReportsController');
+		Route::resource('/reports/billing_rep', 'BillingReportsController');
+		Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
+		Route::get('/reports/deliveryData/{frequency?}', 'DatatablesController@delivery_datatable')->name('delivery.data');
+		Route::get('/reports/billrepData', 'BillingReportsController@bill_table')->name('billRep.data');
+		Route::get('/reports/delivery/del_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'DeliveryReportsController@delivery_pdf_report');
+		Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
+		Route::get('reports/shipment/print/{frequency}', 'ShipmentReportsController@print');
+
+		//Queries
+		Route::get('queries', 'QueriesController@index')->name('queries.index');
+		Route::get('queries/get_active_contract/{status?}', 'DatatablesController@get_active_contract')->name('get_active_contract');
+		Route::get('queries/get_peMM<nding_deliveries/{status?}', 'DatatablesController@get_pending_deliveries')->name('get_pending_deliveries');
+		Route::get('queries/get_unreturned_containers', 'DatatablesController@get_unreturned_containers')->name('get_unreturned_containers');
+		Route::get('queries/get_query_bills/{status?}', 'DatatablesController@get_query_bills')->name('get_query_bills');
+		Route::get('queries/get_finished_trucking_orders', 'DatatablesController@get_finished_trucking_orders')->name('get_finished_trucking_orders');
+		Route::get('queries/get_expiring_vehicle_registrations', 'DatatablesController@get_expiring_vehicle_registrations')->name('get_expiring_vehicle_registrations');
+
+		//Utilities
+		Route::resource('/utilities/settings','UtilityController');
+		//Utilities Routes
+		Route::resource('/utilities/settings','UtilitiesBrokerageController');
+		Route::resource('/utilities/employee', 'EmployeesController');
+		Route::resource('/utilities/employee/{employee}/view', 'EmployeeRolesController');
+		Route::get('/utilities/cds_fee_deactivated/{filter}','DatatablesController@cds_deactivated');
+		Route::get('/utilities/cds_fee_data','CdsFeesController@cds_utilities')->name('cds_fee.utilities_index');
+		Route::put('/utilities/cds_fee_reactivate/{id}','CdsFeesController@reactivate');
+		Route::get('/utilities/brokerage_fee_deactivated/{filter}',
+			'DatatablesController@bf_deactivated');
+		Route::get('/utilities/brokerage_fee_data','BrokerageFeesController@bf_utilities')->name('brokerage_fee.utilities_index');
+		Route::put('/utilities/brokerage_fee_reactivate/{id}','BrokerageFeesController@reactivate');
+		Route::get('/utilities/charge_deactivated/{filter}',
+			'DatatablesController@ch_deactivated');
+		Route::get('/utilities/charge_data','ChargesController@ch_utilities')->name('charges.utilities_index');
+		Route::put('/utilities/charge_reactivate/{id}','ChargesController@reactivate');
+		Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
+		Route::get('/utilities/container_type_deactivated/{filter}','DatatablesController@ct_deactivated');
+		Route::get('/utilities/container_type_data','ContainerTypesController@ct_utilities')->name('container_type.utilities_index');
+		Route::put('/utilities/container_type_reactivate/{id}','ContainerTypesController@reactivate');
+		Route::get('/utilities/brokerage_status_type_deactivated/{filter}','DatatablesController@bst_deactivated');
+		Route::get('/utilities/brokerage_status_type_data','BrokerageStatusTypesController@bst_utilities')->name('brokerage_status_type.utilities_index');
+		Route::put('/utilities/brokerage_status_type_reactivate/{id}','BrokerageStatusTypesController@reactivate');
+		Route::resource('/utilities/employee_type', 'EmployeeTypesController');
+		Route::get('/utilities/employee_type_deactivated/{filter}','DatatablesController@et_deactivated');
+		Route::get('/utilities/employee_type_data','EmployeeTypesController@employee_type_utilities')->name('employee_type.utilities_index');
+		Route::put('/utilities/employee_type_reactivate/{id}','EmployeeTypesController@reactivate');
+		Route::get('/utilities/exchange_rate_deactivated/{filter}','DatatablesController@er_deactivated');
+		Route::get('/utilities/exchange_rate_data','ExchangeRatesController@er_utilities')->name('exchange_rate.utilities_index');
+		Route::put('/utilities/exchange_rate_reactivate/{id}','ExchangeRatesController@reactivate');
+		Route::get('/utilities/ipf_fee_deactivated/{filter}','DatatablesController@ipf_deactivated');
+		Route::get('/utilities/ipf_fee_data','ImportProcessingFeesController@ipf_utilities')->name('ipf_fee.utilities_index');
+		Route::put('/utilities/ipf_fee_reactivate/{id}','ImportProcessingFeesController@reactivate');
+		Route::resource('/utilities/receive_type', 'ReceiveTypesController');
+		Route::get('/utilities/receive_type_deactivated/{filter}','DatatablesController@rt_deactivated');
+		Route::get('/utilities/receive_type_data','ReceiveTypesController@rt_utilities')->name('receive_type.utilities_index');
+		Route::put('/utilities/receive_type_reactivate/{id}','ReceiveTypesController@reactivate');
+		Route::get('/utilities/service_order_type_deactivated/{filter}','DatatablesController@sot_deactivated');
+		Route::get('/utilities/service_order_type_data','ServiceOrderTypesController@sot_utilities')->name('sot.utilities_index');
+		Route::put('/utilities/service_order_type_reactivate/{id}','ServiceOrderTypesController@reactivate');
+		Route::get('/utilities/vehicle_type_deactivated/{filter}','DatatablesController@vt_deactivated');
+		Route::get('/utilities/vehicle_type_data','VehicleTypesController@vt_utilities')->name('vehicle_type.utilities_index');
+		Route::put('/utilities/vehicle_type_reactivate/{id}','VehicleTypesController@reactivate');
+		Route::get('/utilities/vehicle_deactivated/{filter}','DatatablesController@v_deactivated');
+		Route::get('/utilities/vehicle_data','VehiclesController@v_utilities')->name('vehicle.utilities_index');
+		Route::put('/utilities/vehicle_reactivate/{id}','VehiclesController@reactivate');
+		Route::get('/utilities/location_province_deactivated/{filter}','DatatablesController@lp_deactivated');
+		Route::get('/utilities/location_province_data','LocationProvincesController@lp_utilities')->name('location_province.utilities_index');
+		Route::put('/utilities/location_province_reactivate/{id}','LocationProvincesController@reactivate');
+		Route::get('/utilities/location_city_deactivated/{filter}','DatatablesController@lc_deactivated');
+		Route::get('/utilities/location_city_data','LocationCitiesController@lc_utilities')->name('location_city.utilities_index');
+		Route::put('/utilities/location_city_reactivate/{id}','LocationCitiesController@reactivate');
+		Route::get('/utilities/standard_arearates_deactivated/{filter}','DatatablesController@sar_deactivated');
+		Route::get('/utilities/standard_arearates_data','StandardAreaRatesController@sar_utilities')->name('standard_area_rate.utilities_index');
+		Route::put('/utilities/standard_arearates_reactivate/{id}','StandardAreaRatesController@reactivate');
+		Route::get('/utilities/locations_deactivated/{filter}','DatatablesController@location_deactivated');
+		Route::get('/utilities/locations_data','LocationsController@location_utilities')->name('location.utilities_index');
+		Route::put('/utilities/locations_reactivate/{id}','LocationsController@reactivate');
+		Route::get('/utilities/employees_deactivated/{filter}','DatatablesController@employees_deactivated');
+		Route::get('/utilities/employee_data','EmployeesController@employee_utilities')->name('location.utilities_index');
+		Route::put('/utilities/employees_reactivate/{id}','EmployeesController@reactivate');
+		Route::resource('/admin/vat_rate','VatRatesController');
+		Route::get('/utilities/vat_rate_deactivated/{filter}','DatatablesController@vr_deactivated');
+		Route::get('/utilities/vat_rate_data','VatRatesController@vr_utilities');
+		Route::put('/utilities/vat_rate_reactivate/{id}','VatRatesController@reactivate');
+		Route::put('/utilities/attachment_type_reactivate/{id}','RequirementsController@reactivate');
+
+		Route::put('/utilities/location_reactivate/{id}','LocationsController@reactivate');
+		Route::put('/utilities/section_reactivate/{id}','SectionsController@reactivate');
+		Route::put('/utilities/category_reactivate/{id}','CategoryTypesController@reactivate');
+		Route::get('admin/getCategory/{sections_id?}', 'ItemsController@get_categories')->name('get_item_categories');
+		Route::put('/utilities/item_reactivate/{id}','ItemsController@reactivate');
+
+		Route::put('/utilities/dct_reactivate/{id}','DangerousCargoTypeController@reactivate');
+		Route::put('/utilities/lcl_reactivate/{id}','LclTypesController@reactivate');
+		Route::put('/utilities/bt_reactivate/{id}','BasisTypeController@reactivate');
+		Route::put('/utilities/af_reactivate/{id}','ArrastreFeesController@reactivate');
+		Route::put('/utilities/af_lcl_reactivate/{id}','ArrastreFeeLclController@reactivate');
+		Route::put('/utilities/af_dc_reactivate/{id}','ArrastreFeeDcController@reactivate');
+		Route::put('/utilities/wf_reactivate/{id}','WharfageFeeController@reactivate');
+		Route::put('/utilities/wf_lcl_reactivate/{id}','WharfageFeeLclController@reactivate');
+
+		//Employees and Users
+		Route::resource('/employees/{employee_id}/incidents', 'EmployeeIncidentsController');
+		Route::resource('/employees/{employee_id}/accidents', 'EmployeeAccidentsController');
+		Route::resource('/employees', 'EmployeesController');
+		Route::resource('/employees/newemployee', 'EmployeesController');
+		Route::post('/StoreEmployee', 'EmployeesController@store')->name('EmployeeSave');
+		Route::get('/employees/{employee_id}/view', 'EmployeesController@view_employee', function ($from_new = null) {
+			return $from_new;});
+		Route::get('/employees/{employee_id}/edit', 'EmployeesController@edit_employee');
+		Route::get('/employeeData', 'DatatablesController@employee_datatable')->name('employee.data');
+		Route::post('/storeUser', 'EmployeesController@store_user')->name('UserStore');
+		Route::resource('/users', 'UserController');
+		Route::get('admin/users_table', 'UserController@user_table')->name('users.data');
+		Route::put('/update_user/{id?}', 'EmployeesController@updateUser')->name('update_user');
+
+		//Backup and recovery
+		Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
+
+	});
+
 	Route::group(['middleware' => ['broker']], function() {
 		//Brokerage
-		Route::resource('/brokerage', 'BrokerageController');
-		Route::resource('/brokerage/newserviceorder', 'BrokerageController');
-		Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
-		Route::get('getCategory/{section_id?}', 'DutiesAndTaxesController@get_category')->name('get_category');
-		Route::get('getItem/{category_id?}', 'DutiesAndTaxesController@get_item')->name('get_item');
+	Route::resource('/brokerage', 'BrokerageController');
+	Route::resource('/brokerage/newserviceorder', 'BrokerageController');
+	Route::resource('/dutiesandtaxes', 'DutiesAndTaxesController');
+	Route::get('getCategory/{section_id?}', 'DutiesAndTaxesController@get_category')->name('get_category');
+	Route::get('getItem/{category_id?}', 'DutiesAndTaxesController@get_item')->name('get_item');
 		//Contract
-		Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
-		Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
-		Route::get('/trucking/contracts/create_view', 'ContractsController@view_contract');
-		Route::get('/trucking/contracts/{contract_id}/view', 'ContractsController@manage_contract');
-		Route::get('/trucking/contracts/{contract_id}/amend', 'ContractsController@amend_contract');
-		Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor?}', 'DatatablesController@get_contracts')->name('get_contracts');
-		Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
-		Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
-		Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
-		Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
-		Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
-		Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
-		Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
-		Route::get('/trucking/contracts/get_con_contracts/{consignee_id}', 'ContractsController@get_con_contracts');
-		Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
-		Route::resource('/admin/contract_template','ContractTemplatesController');
+	Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
+	Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
+	Route::get('/trucking/contracts/create_view', 'ContractsController@view_contract');
+	Route::get('/trucking/contracts/{contract_id}/view', 'ContractsController@manage_contract');
+	Route::get('/trucking/contracts/{contract_id}/amend', 'ContractsController@amend_contract');
+	Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor?}', 'DatatablesController@get_contracts')->name('get_contracts');
+	Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
+	Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
+	Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
+	Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
+	Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
+	Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
+	Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
+	Route::get('/trucking/contracts/get_con_contracts/{consignee_id}', 'ContractsController@get_con_contracts');
+	Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
+	Route::resource('/admin/contract_template','ContractTemplatesController');
 
 
 		//Delivery to Temporary Billing
-		Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
-		Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
-		Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/store_delivery_bill', 'TruckingsController@store_delivery_bill');
+	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
+	Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
+	Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/store_delivery_bill', 'TruckingsController@store_delivery_bill');
 
 		//DOMPDF
-		Route::get('/dompdfExample', 'TruckingsController@create_pdf');
+	Route::get('/dompdfExample', 'TruckingsController@create_pdf');
 
 		//FullCalendar
-		Route::get('/FullCalendar', 'TruckingsController@show_calendar');
+	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
 
 		//Utilities home route
-		Route::resource('/utilities/settings','UtilityController');
-		Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
+	Route::resource('/utilities/settings','UtilityController');
+	Route::get('/utilities', 'UtilityController@utility_index')->name('utilities_index');
 		//Backup and recovery
-		Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
+	Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
 		//Brokerage
-		Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
-		Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
-		Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
-		Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
-		Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
-		Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
-		Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
-		Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
-		Route::get('/brokerage_create_order/{detail_id?}', 'BrokerageController@create_new')->name('brokerageOrder');
-		Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
-		Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
-		Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
-		Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
-		Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
-		Route::get('/brokerage/{brokerage_id?}/print', 'BrokerageController@print')->name('brokeragepdfprint');
-		Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
-		Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
-		Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
-		Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
-		Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
-		});
+	Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
+	Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
+	Route::post('/brokerage/create_br_billing_header', 'BrokerageController@create_br_billing_header')->name("create_br_billing_header");
+	Route::post('/storeheader', 'BrokerageController@save_neworder')->name('saveBrokerageOrder');
+	Route::post('/postBrokeragePayable', 'BillingDetailsController@postBrokeragePayable')->name('post_brokerage_payables');
+	Route::post('/postBrokerageRefundable', 'BillingDetailsController@postBrokerageRefundable')->name('postBrokerageRefundable');
+	Route::patch('/brokerage/{brokerage_id}/order/statusTaxUpdate', 'DutiesAndTaxesController@update_taxstatus');
+	Route::patch('/brokerage/{brokerage_id}/order/statusupdate', 'BrokerageController@update_status');
+	Route::get('/brokerage_create_order/{detail_id?}', 'BrokerageController@create_new')->name('brokerageOrder');
+	Route::get('/brokerage/{brokerage_id}/order', 'BrokerageController@view_order');
+	Route::get('/brokerage/{brokerage_id}/get_dutiesandtaxes', 'DatatablesController@get_dutiesandtaxes_table');
+	Route::get('/brokerage/{brokerage_id}/create_dutiesandtaxes', 'DutiesAndTaxesController@create');
+	Route::get('/brokerage/{brokerage_id}/view', 'BrokerageController@view_brokerage');
+	Route::get('brokerageData', 'DatatablesController@brokerage_datatable')->name('br.data');
+	Route::get('/brokerage/{brokerage_id?}/print', 'BrokerageController@print')->name('brokeragepdfprint');
+	Route::get('/brokerage/{brokerage_id}/get_approveddutiesandtaxes', 'BrokerageController@get_approveddutiesandtaxes');
+	Route::get('/brokerageFees/{id?}', 'BillingDetailsController@getBrokerageFees')->name('getBrokerageFees');
+	Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
+	Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
+	Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
+});
 
-	Route::group(['middleware' => ['trucking']], function() {
+Route::group(['middleware' => ['trucking']], function() {
 		//Trucking-Locations
-		Route::resource('/location', 'LocationsController');
-		Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
-		Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->name('get_location_data');
+	Route::resource('/location', 'LocationsController');
+	Route::get('/locationData', 'DatatablesController@location_datatable')->name('location_data');
+	Route::get('/location/{id}/getLocation', 'LocationsController@get_location')->name('get_location_data');
 		//Trucking-Quotations
-		Route::resource('/quotation', 'QuotationsController');
-		Route::get('/quotation/{id}/print', 'QuotationsController@print');
-		Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
-		Route::get('/admin/get_quotation_location/{location_id?}', 'QuotationsController@get_quotation_location')->name('get_quotation_location');
-		Route::get('/admin/get_quotation_rates', 'QuotationsController@get_quotation_rates')->name('get_quotation_rates');
-		Route::resource('admin/quotation_template','QuotationTemplateController');
+	Route::resource('/quotation', 'QuotationsController');
+	Route::get('/quotation/{id}/print', 'QuotationsController@print');
+	Route::get('/admin/getQuotations', 'DatatablesController@get_quotations')->name('quotation_data');
+	Route::get('/admin/get_quotation_location/{location_id?}', 'QuotationsController@get_quotation_location')->name('get_quotation_location');
+	Route::get('/admin/get_quotation_rates', 'QuotationsController@get_quotation_rates')->name('get_quotation_rates');
+	Route::resource('admin/quotation_template','QuotationTemplateController');
 		//Trucking Route
-		Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');
-		Route::resource('/trucking/contracts', 'ContractsController');
-		Route::resource('/trucking', 'TruckingsController');
-		Route::get('/trucking/{trucking_id}/view', 'TruckingsController@view_trucking');
-		Route::get('/trucking/{trucking_id}/deliveryData', 'DatatablesController@trucking_delivery');
-		Route::get('/trucking/{trucking_id}/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
-		Route::post('/trucking/{trucking_id}/store_delivery', 'TruckingsController@store_delivery');
-		Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@update_delivery');
-		Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
-		Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery', 'TruckingsController@update_delivery_record');
-		Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
-		Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/reschedule', 'TruckingsController@reschedule_delivery');
+	Route::resource('/trucking/delivery_receipts', 'DeliveryReceiptsController');
+	Route::resource('/trucking/contracts', 'ContractsController');
+	Route::resource('/trucking', 'TruckingsController');
+	Route::get('/trucking/{trucking_id}/view', 'TruckingsController@view_trucking');
+	Route::get('/trucking/{trucking_id}/deliveryData', 'DatatablesController@trucking_delivery');
+	Route::get('/trucking/{trucking_id}/{vehicle_type}/getVehicles', 'TruckingsController@getVehicles');
+	Route::post('/trucking/{trucking_id}/store_delivery', 'TruckingsController@store_delivery');
+	Route::put('/trucking/{trucking_id}/update_delivery', 'TruckingsController@update_delivery');
+	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/edit', 'TruckingsController@edit_delivery');
+	Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery', 'TruckingsController@update_delivery_record');
+	Route::put('/trucking/{trucking_id}/update_container/{container_id}', 'TruckingsController@update_container');
+	Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/reschedule', 'TruckingsController@reschedule_delivery');
 		//Delivery Receipt Routes
 
 		//Contract
-		Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
-		Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
-		Route::get('/trucking/contracts/create_view', 'ContractsController@view_contract');
-		Route::get('/trucking/contracts/{contract_id}/view', 'ContractsController@manage_contract');
-		Route::get('/trucking/contracts/{contract_id}/amend', 'ContractsController@amend_contract');
-		Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor?}', 'DatatablesController@get_contracts')->name('get_contracts');
-		Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
-		Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
-		Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
-		Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
-		Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
-		Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
-		Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
-		Route::get('/trucking/contracts/get_con_contracts/{consignee_id}', 'ContractsController@get_con_contracts');
-		Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
-		Route::resource('/admin/contract_template','ContractTemplatesController');
+	Route::get('/admin/conheadData', 'DatatablesController@contracts_datatable')->name('contract.data');
+	Route::post('/trucking/contracts/create_view', 'ContractsController@create_contract')->name('create_contract');
+	Route::get('/trucking/contracts/create_view', 'ContractsController@view_contract');
+	Route::get('/trucking/contracts/{contract_id}/view', 'ContractsController@manage_contract');
+	Route::get('/trucking/contracts/{contract_id}/amend', 'ContractsController@amend_contract');
+	Route::get('/trucking/contracts/consignee_contracts/{consignee_id?}/{contractFor?}', 'DatatablesController@get_contracts')->name('get_contracts');
+	Route::get('/trucking/contracts/consignee_con_details/{contract_id?}', 'TruckingsController@get_contract_details')->name('get_contract_details');
+	Route::get('/trucking/contracts/{contract_id}/show_pdf', 'ContractsController@contract_pdf');
+	Route::get('/trucking/contracts/{contract_id}/agreement_pdf', 'ContractsController@agreement_pdf');
+	Route::get('/trucking/contracts/{contract_id}/rates', 'DatatablesController@get_contract_details');
+	Route::get('/trucking/contracts/{contract_id}/draft', 'ContractsController@draft_contract');
+	Route::post('/trucking/contracts/{contract_id}/store_rates', 'ContractsController@store_contract_rates');
+	Route::get('/trucking/contracts/get_quotations/{consignee_id}', 'ContractsController@get_quotations');
+	Route::get('/trucking/contracts/get_con_contracts/{consignee_id}', 'ContractsController@get_con_contracts');
+	Route::get('/admin/ctempData', 'DatatablesController@ctemp_datatable')->name('ctemp.data');
+	Route::resource('/admin/contract_template','ContractTemplatesController');
 		//Delivery to Temporary Billing
-		Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
-		Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
-		Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/store_delivery_bill', 'TruckingsController@store_delivery_bill');
+	Route::get('/trucking/{trucking_id}/delivery/{delivery_id}/bill', 'TruckingsController@bill_delivery');
+	Route::put('/trucking/{trucking_id}/delivery/{delivery_id}/update_delivery_bill', 'TruckingsController@update_delivery_bill');
+	Route::post('/trucking/{trucking_id}/delivery/{delivery_id}/store_delivery_bill', 'TruckingsController@store_delivery_bill');
 		//DOMPDF
-		Route::get('/dompdfExample', 'TruckingsController@create_pdf');
+	Route::get('/dompdfExample', 'TruckingsController@create_pdf');
 		//FullCalendar
-		Route::get('/FullCalendar', 'TruckingsController@show_calendar');
-		});
+	Route::get('/FullCalendar', 'TruckingsController@show_calendar');
+});
 
-	Route::group(['middleware' => ['billing']], function() {
+Route::group(['middleware' => ['billing']], function() {
 
 
-		Route::resource('/billing', 'BillingDetailsController');
-		Route::resource('/billing_header', 'BillingDetailsController');
-		Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
-		Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
-		Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
-		Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
-		Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
-		Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
-		Route::get('/paid_bill', 'BillingDetailsController@paid_bill')->name('paid.data');
-		Route::get('admin/bill_paid', 'BillingDetailsController@paid_bill')->name('paid_bill.data');
+	Route::resource('/billing', 'BillingDetailsController');
+	Route::resource('/billing_header', 'BillingDetailsController');
+	Route::get('/billing/{id}/create', 'BillingDetailsController@show_billing');
+	Route::get('/billing/{id}/view', 'BillingDetailsController@view_billing');
+	Route::get('/billing/{billing_id}/show_pdf', 'BillingDetailsController@bill_pdf');
+	Route::get('admin/bill_invoice', 'BillingDetailsController@billing_invoice')->name('invoice.data');
+	Route::get('admin/bill_history/{id}', 'BillingDetailsController@billing_history')->name('history.data');
+	Route::get('admin/bill_unpaid/{id}', 'BillingDetailsController@unpaid_invoice')->name('unpaid.data');
+	Route::get('/paid_bill', 'BillingDetailsController@paid_bill')->name('paid.data');
+	Route::get('admin/bill_paid', 'BillingDetailsController@paid_bill')->name('paid_bill.data');
 		//Payment
-		Route::get('pdfview','PaymentsController@pdfview');
-		Route::resource('/payment', 'PaymentsController');
-		Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
-		Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->name('payment_receipt');
-		Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
-		Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
-		Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
-		Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
-		Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
-		Route::get('admin/cheque_confirm', 'ChequesController@cheque_table')->name('chq.data');
-		Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
-		Route::resource('/cheque', 'ChequesController');
-		Route::put('/confirm_cheque/{id?}', 'ChequesController@confirm_cheque')->name('con_cheque');
-		});
+	Route::get('pdfview','PaymentsController@pdfview');
+	Route::resource('/payment', 'PaymentsController');
+	Route::get('admin/pso_head', 'DatatablesController@pso_head_datatable')->name('pso_head.data');
+	Route::get('/payment_receipt/{payment_id?}', 'PaymentsController@payment_pdf')->name('payment_receipt');
+	Route::get('/payment_deposit_receipt/{payment_id?}', 'PaymentsController@payment_deposit_pdf')->name('payment_deposit_receipt');
+	Route::get('admin/rev/{id}', 'DatatablesController@prev_datatable')->name('prev.data');
+	Route::get('admin/payment_bills/{id}', 'PaymentsController@bills_table')->name('paybills.data');
+	Route::put('payment/{id?}/cheques', 'PaymentsController@verify_cheque')->name('verify_chq');
+	Route::get('admin/p_order', 'DatatablesController@pso_datatable')->name('p_order.data');
+	Route::get('admin/cheque_confirm', 'ChequesController@cheque_table')->name('chq.data');
+	Route::post('/postCheque', 'PaymentsController@storeCheque')->name('postCheque');
+	Route::resource('/cheque', 'ChequesController');
+	Route::put('/confirm_cheque/{id?}', 'ChequesController@confirm_cheque')->name('con_cheque');
+});
 });
 
