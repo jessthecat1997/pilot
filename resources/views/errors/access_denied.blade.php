@@ -33,7 +33,7 @@
 							<input type="button" name="clockButton" style="background-color: transparent; border-style: none;" />
 						</form>
 					</li>
-					@if (!Auth::user())
+					@if ($user == null)
 					<li><a href="{{ url('/login') }}" id="useracc">Login</a></li>
 					<li><a href="{{ url('/register') }}" id="useracc">Register</a></li>
 					@else

@@ -27,7 +27,7 @@ class AdminMiddleware
                 return $next($request);
             }
             else
-                return redirect('/login');
+                return redirect()->route('invalid_access.denied');
         }
     }
 }
