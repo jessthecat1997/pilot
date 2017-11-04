@@ -18,9 +18,12 @@
 				List of Orders
 			</div>
 			<div class="panel-body">
-				<table class = "table-responsive table cell-border table-striped table-bordered" id = "order_table">
+				<table class = "table-responsive table cell-border table-striped table-bordered" id = "order_table" style="width: 100%;">
 					<thead>
 						<tr>
+							<td>
+								Order No.
+							</td>
 							<td>
 								Consignee Company
 							</td>
@@ -41,6 +44,9 @@
 					<tbody>
 						@forelse($orders as $order)
 						<tr>
+							<td>
+								{{ $order->id }}
+							</td>
 							<td>
 								{{ $order->companyName }}
 							</td>
@@ -172,6 +178,7 @@
 			serverSide: false,
 			deferRender: true,
 			columns: [
+			{ data: 'id' },
 			{ data: 'companyName' },
 			{ data: 'consignee' },
 			{ data: 'created_at'},

@@ -12,7 +12,7 @@
 	<div class = "row">
 		<div class = "panel-default panel">
 			<div class = "panel-body">
-				<table class = "table-responsive table  table-striped" id = "ipf_table">
+				<table class = "table-responsive table  table-striped table-bordered" style="width: 100%;" id = "ipf_table">
 					<thead>
 						<tr>
 							<td>
@@ -712,7 +712,7 @@ function validateIpfRows()
 		}
 
 
-		if(){
+		if(min > max){
 
 			console.log(min);
 			console.log(max);
@@ -722,8 +722,8 @@ function validateIpfRows()
 
 		}
 		pair = {
-			minimum: minimum[i].value,
-			maximum : maximum[i].value
+			minimum: $(minimum[i]).inputmask('unmaskedvalue'),
+			maximum : $(maximum[i]).inputmask('unmaskedvalue')
 		};
 		range_pairs.push(pair);
 	}
@@ -791,7 +791,7 @@ function validateIpfRows()
 			else
 			{
 				minimum_id_descrp.push(min);
-				var min = minimum[i].value
+				var min = $(minimum[i]).inputmask('unmaskedvalue');
 				minimum_id.push(min);
 			}
 			if(max < 0)
