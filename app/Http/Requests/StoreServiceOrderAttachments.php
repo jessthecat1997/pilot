@@ -15,7 +15,7 @@ class StoreServiceOrderAttachments extends FormRequest
     {
         return [
 
-            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,svg,doc,pdf,docx,zip|max:2048',
+            'file_path' => 'required|file|mimes:jpeg,png,jpg,gif,bmp,svg,doc,pdf,docx,zip',
             'req_type_id' => 'required',
         ];
     }

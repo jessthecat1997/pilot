@@ -13,6 +13,7 @@ Route::group(['middleware' => ['access']], function() {
 	//Access error
 	Route::get('/invalid_access', 'DashboardController@permission_access_denied')->name('invalid_access.denied');
 
+	Route::resource('/attachment', 'ServiceOrderAttachmentsController');
 	Route::resource('/orders', 'OrdersController');
 	Route::get('/orderData', 'DatatablesController@order_datatable')->name('order.data');
 	Route::post('/orders/create_so_detail', 'OrdersController@create_so_detail')->name('create_so_detail');
