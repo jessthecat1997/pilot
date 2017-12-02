@@ -17,8 +17,11 @@ public function index()
     public function store(StoreLocationProvince $request)
     {
 
-        $lp = LocationProvince::create($request->all());
-        return $lp;
+        $new_lp = new \App\LocationProvince;
+        $new_lp->name = $request->provincename;
+        $new_lp->save();
+
+        return $new_lp; 
     }
 
     public function update(StoreLocationProvince $request, $id)

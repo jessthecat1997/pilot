@@ -142,7 +142,6 @@ Route::group(['middleware' => ['access']], function() {
 		Route::resource('/admin/bank_account','BankAccountsController');
 		Route::resource('/admin/location_province','LocationProvincesController');
 		Route::resource('/admin/location_city','LocationCitiesController');
-		Route::post('/admin/location_city/new_province', 'LocationCitiesController@new_province');
 		Route::resource('/admin/attachment_type','RequirementsController');
 		Route::resource('/admin/arrastre_fee','ArrastreFeesController');
 		Route::resource('/admin/lcl_type','LclTypesController');

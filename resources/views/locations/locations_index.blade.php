@@ -92,20 +92,30 @@
 							<div class="form-group required">
 								<label class = "control-label col-md-3">Province: </label>
 								<div class = "col-md-9">
-									<select name = "loc_province" id="loc_province" class = "form-control"  data-rule-required="true">
-										@forelse($provinces as $province)
-										<option value = "{{ $province->id }}">{{ $province->name }}</option>
-										@empty
+									<div class = "input-group " >
+										<select name = "loc_province" id="loc_province" class = "form-control"  data-rule-required="true">
+											@forelse($provinces as $province)
+											<option value = "{{ $province->id }}">{{ $province->name }}</option>
+											@empty
 
-										@endforelse
-									</select>     
+											@endforelse
+										</select> 
+										<span class="input-group-btn">
+											<button class="btn btn-primary new_province" type="button">+</button>
+										</span>
+									</div>    
 								</div>
 							</div>
 							<div class="form-group required">
 								<label class = "control-label col-md-3">City: </label>
 								<div class = "col-md-9">
-									<select name = "cities_id" id="cities_id" class = "form-control"  data-rule-required="true" required>
-									</select>
+									<div class = "input-group " >
+										<select name = "cities_id" id="cities_id" class = "form-control"  data-rule-required="true" required>
+										</select>
+										<span class="input-group-btn">
+											<button class="btn btn-primary new_city" type="button">+</button>
+										</span>
+									</div>    
 								</div>
 							</div>
 							<div class="form-group required">
@@ -165,6 +175,36 @@
 		</div>
 	</div>
 </div>
+
+<section class="content">
+	<form role="form" method = "POST" id="provinceForm">
+		{{ csrf_field() }}
+		<div class="modal fade" id="lpModal" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="pmodal-title">New Province</h4>
+					</div>
+					<div class="modal-body">			
+						<div class="form-group required">
+							<label class = "control-label">Name:</label>
+							<input type = "text" class = "form-control" name = "provincename" 
+							id = "provincename"  minlength = "3" data-rule-required="true" />
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input id = "btnSave_province" type = "submit" class="btn btn-success submit" value = "Save" />
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
+
+
 
 @endsection
 
@@ -496,5 +536,71 @@ function message(mess)
 	}
 	toastr["success"](mess);
 }
+
+
+/*	New province */
+$(document).on('click', '.new_province', function(e){
+	resetErrors();
+	e.preventDefault();
+	$('#provincename').val("");
+	$('#lpModal').modal('show');
+
+});
+
+$('#btnSave_province').on('click', function(e){
+	e.preventDefault();
+
+	$.ajax({
+		type: 'POST',
+		url:  '/admin/location_province/',
+		data: {
+			'_token' : $('input[name=_token]').val(),
+			'provincename' : $('#provincename').val(),
+		},
+		success: function (data)
+		{
+			
+			if(typeof(data) === "object"){
+				var newOption = $('<option selected value="'+data.id+'">'+data.name+'</option>');
+				$('#loc_province').append(newOption);
+				$('#lpModal').modal('hide');
+				$('#provincename').val("");
+				$('.modal-title').text('New Province');
+
+				toastr.options = {
+					"closeButton": false,
+					"debug": false,
+					"newestOnTop": false,
+					"progressBar": false,
+					"rtl": false,
+					"positionClass": "toast-bottom-right",
+					"preventDuplicates": false,
+					"onclick": null,
+					"showDuration": 300,
+					"hideDuration": 1000,
+					"timeOut": 2000,
+					"extendedTimeOut": 1000,
+					"showEasing": "swing",
+					"hideEasing": "linear",
+					"showMethod": "fadeIn",
+					"hideMethod": "fadeOut"
+				}
+				toastr["success"]("Record added new province")
+			}
+			else{
+				resetErrors();
+				var invdata = JSON.parse(data);
+				$.each(invdata, function(i, v) {
+					console.log(i + " => " + v); 
+					var msg = '<label class="error" for="'+i+'">'+v+'</label>';
+					$('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
+				});
+
+			}
+		},
+
+	})
+});
+/* end of new province */
 </script>
 @endpush
