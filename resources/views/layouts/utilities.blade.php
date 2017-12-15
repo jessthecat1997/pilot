@@ -229,7 +229,7 @@
                         <a href = "{{ route('delivery.index') }}"  class = "class-del_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Delivery Report</a>
                     </li>
                     <li>
-                        <a href = "{{ route('billing_rep.index') }}"  class = "class-bill_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Unpaid Billing Report</a>
+                        <a href = "{{ route('billing_rep.index') }}"  class = "class-bill_rep"><i class="fa fa-circle"></i>&nbsp;&nbsp;Billing Report</a>
                     </li>
                 </ul>
             </div>

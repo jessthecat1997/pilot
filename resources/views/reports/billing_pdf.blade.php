@@ -33,7 +33,7 @@
 		<br />
 		<hr />
 	</div>
-	<h2>Paid Billing Report</h2>
+	<h2>Billing Report</h2>
 	<table class = "table-responsive table table-bordered table-striped" id = "customed_table">
 		<thead>
 			<tr>
@@ -45,6 +45,9 @@
 				</td>
 				<td>
 					Amount
+				</td>
+				<td>
+					Status
 				</td>
 				<td>
 					Date
@@ -61,10 +64,10 @@
 					{{ $dr->bill }}
 				</td>
 				<td>
-					{{ $dr->part }}
+					{{ $dr->amount }}
 				</td>
 				<td>
-					{{ $dr->amount }}
+					{{ $dr->status }}
 				</td>
 				<td>
 					{{ $dr->date_billed }}

@@ -21,19 +21,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="row">
-			<div class="form-group">
-				<label class="control-label">Filter by Status</label>
-				<div class="col-md-8 col-md-offset-2">
-					<div class="row">
-						<input type = "radio" name = "status_filter" value = "P" checked> <label class = "control-label">Paid</label>
-					</div>
-					<div class="row">
-						<input type = "radio" name = "status_filter" value = "U"> <label class = "control-label">Unpaid</label>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		<hr />
 		<div class="row">
 			<div class="col-md-12">

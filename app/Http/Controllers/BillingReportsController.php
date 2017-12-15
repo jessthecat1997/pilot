@@ -32,18 +32,18 @@ class BillingReportsController extends Controller
 			$status_filter = "";
 			switch ($request->status) {
 				case '0':
-				$status_filter =  'AND bh.status IN ("P") ';
+				$status_filter =  "bh.status IN ('P') ";
 				break;
 				case '1':
-				$status_filter =  'AND bh.status IN ("U") ';
+				$status_filter =  "bh.status IN ('U') ";
 				break;
 				default:
 					# code...
 				break;
 			}
 
-			
-			$bills = DB::select('SELECT c.companyName,(CASE cg.bill_type when cg.bill_type = "R" then "Refundable Charges" when cg.bill_type = "E" then "Billing Invoice" end) as bill, GROUP_CONCAT(CONCAT(cg.name)SEPARATOR "\n") AS part, GROUP_CONCAT(CONCAT("Php " ,FORMAT (bd.amount,2)) SEPARATOR "\n") AS amount, bh.date_billed FROM billing_invoice_headers bh INNER JOIN billing_invoice_details bd ON bh.id = bd.bi_head_id INNER JOIN charges as cg on bd.charge_id = cg.id INNER JOIN consignee_service_order_headers as ch on bh.so_head_id = ch.id INNER JOIN consignees as c on ch.consignees_id = c.id GROUP BY bh.id BETWEEN ? AND ?'. $status_filter , [\Carbon\Carbon::createFromFormat("Y-m-d", $request->date_from)->format("Y-m-d"), \Carbon\Carbon::createFromFormat("Y-m-d", $request->date_to)->format("Y-m-d")]);
+			$bills = DB::select('SELECT c.companyName,(CASE cg.bill_type when cg.bill_type = "R" then "Refundable Charges" when cg.bill_type = "E" then "Billing Invoice" end) as bill,  CONCAT("Php " ,FORMAT (bd.amount,2)) AS amount, (CASE bh.status when bh.status = "P" then "Unpaid" when bh.status = "U" then "Paid" end) as status, bh.date_billed FROM billing_invoice_headers bh INNER JOIN billing_invoice_details bd ON bh.id = bd.bi_head_id INNER JOIN charges as cg on bd.charge_id = cg.id INNER JOIN consignee_service_order_headers as ch on bh.so_head_id = ch.id INNER JOIN consignees as c on ch.consignees_id = c.id GROUP BY bh.id BETWEEN ? AND ? ', [\Carbon\Carbon::createFromFormat("Y-m-d", $request->date_from)->format("Y-m-d"), \Carbon\Carbon::createFromFormat("Y-m-d", $request->date_to)->format("Y-m-d")]);
+
 
 
 			$pdf = PDF::loadView('reports.billing_pdf', compact(['bills', 'utility']));	
