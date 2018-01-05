@@ -276,7 +276,7 @@ Route::group(['middleware' => ['access']], function() {
 		//Backup and recovery
 		Route::resource('/admin/backup_and_recovery', 'BackupRecoveryController');
 	});
-	
+
 	//Brokerage
 	Route::group(['middleware' => ['broker']], function() {
 		Route::resource('/brokerage', 'BrokerageController');
@@ -289,8 +289,8 @@ Route::group(['middleware' => ['access']], function() {
 		Route::get('/reports/shipmentData', 'DatatablesController@shipment_datatable')->name('shipment.data');
 		Route::get('reports/shipment/print/{frequency}', 'ShipmentReportsController@print');
 
-			
-		
+
+
 		//Brokerage Routes
 		Route::post('/storedutiesandtaxes', 'DutiesAndTaxesController@store')->name('storedutiesandtaxes');
 		Route::get('/generatedutiesandtaxes', 'DutiesAndTaxesController@generate_taxes')->name('generatedutiesandtaxes');
@@ -312,6 +312,7 @@ Route::group(['middleware' => ['access']], function() {
 		Route::get('/charges/{id?}', 'BillingDetailsController@getBrokerageCharges')->name('getCharges');
 		Route::get('/brokerageBillingDetails/{id?}', 'BillingDetailsController@getBrokerageBillingDetails')->name('getBrokerageBillingDetails');
 		Route::get('/brokerageRefundableDetails/{id?}', 'BillingDetailsController@getBrokerageRefundableDetails')->name('getBrokerageRefundableDetails');
+		Route::get('/brokerage_create_order/{detail_id?}', 'BrokerageController@create_new')->name('brokerageOrder');
 	});
 	//Trucking
 	Route::group(['middleware' => ['trucking']], function() {
@@ -405,4 +406,3 @@ Route::group(['middleware' => ['access']], function() {
 		Route::get('/reports/billing/bill_pdf/{blank?}/{status?}/{frequency?}/{date_from?}/{date_to?}', 'BillingReportsController@billing_pdf_report');
 	});
 });
-

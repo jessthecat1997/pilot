@@ -31,7 +31,6 @@ class BasisTypeController extends Controller
         return $bt;
     }
 
-
     public function destroy($id)
     {
         $bt = BasisType::findOrFail($id);

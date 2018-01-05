@@ -79,11 +79,10 @@
 			<br />
 			<form role = "form" method = "POST">
 					{{ csrf_field() }}
-	      <button type="button" class="btn btn-primary" id = "btnSave">
+	      <button type="button" class="btn btn-primary" id = "btn" onclick = "	$('#SaveModal').modal('show');">
 	        Save <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
 
 	      </button>
-
 			</form>
 			<br />
 			<button id = "editButton" class = "btn btn-md but view-service-order">Edit</button>';
@@ -205,7 +204,7 @@
 
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-success" >Finalize</button>
+		  <button type="button" class="btn btn-success" id = "btnSave" >Finalize</button>
 
 		  <button type="button" class="btn btn-default" onclick="$('#SaveModal').modal('hide');">Close</button>
 		    </form>
