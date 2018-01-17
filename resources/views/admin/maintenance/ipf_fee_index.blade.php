@@ -301,7 +301,7 @@
 		});
 		$(document).on('click', '.new', function(e){
 			e.preventDefault();
-			//resetErrors();
+	
 			$('.modal-title').text('New Import Processing Fee Range');
 
 			$('#dateEffective').val(today);
@@ -746,7 +746,7 @@ function validateIpfRows()
 	if(found == true){
 		error+= "Existing rate.";
 	}
-		//Final validation
+
 		if(error.length == 0){
 
 			return true;

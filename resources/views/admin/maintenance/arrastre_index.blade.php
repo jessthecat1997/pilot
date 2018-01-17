@@ -651,7 +651,7 @@ function validateIpfRows()
 		range_pairs.push(pair);
 	}
 
-		//Final validation
+		
 		if(error.length == 0){
 
 			return true;
@@ -661,47 +661,6 @@ function validateIpfRows()
 			return false;
 		}
 	}
-
-/*	$(document).on('keyup keydown keypress', '.money', function (event) {
-
-		var len;
-		var value;
-		var container_size = document.getElementsByName('container_size');
-		var amount = document.getElementsByName('amount');
-
-		for(var i = 0; i < container_size.length; i++){
-
-			
-			value = $(amount[i]).inputmask('unmaskedvalue');
-
-			if (event.keyCode == 8) {
-				if(parseFloat(value) == 0 || value == ""){
-					amount[i].value = "0.00";
-				}
-			}
-			else
-			{
-				if(value == ""){
-					amount[i].value = "0.00";
-				}
-				if(parseFloat(value) <= 9999999.99){
-					
-				}
-				else{
-					if(event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 116){
-
-					}
-					else{
-						return false;
-					}
-				}
-			}
-			if(event.keyCode == 189)
-			{
-				return false;
-			}	
-		}		
-	});*/
 
 	function finalvalidateAfRows()
 	{

@@ -132,7 +132,7 @@
 
 
 
-// Confirm Deactivate Button
+ 
 $('#btnDeactivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
@@ -170,7 +170,7 @@ $('#btnDeactivate').on('click', function(e){
 });
 
 
-// Confirm Activate Button
+ 
 $('#btnActivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({

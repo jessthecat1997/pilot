@@ -559,7 +559,7 @@ function validateIpfRows()
 		range_pairs.push(pair);
 	}
 
-		//Final validation
+		
 		if(error.length == 0){
 
 			return true;

@@ -129,7 +129,7 @@
 					},
 
 				},
-        onkeyup: false, //turn off auto validate whilst typing
+        onkeyup: false,
         submitHandler: function (form) {
         	return false;
         }
@@ -159,7 +159,6 @@
 
 
 
-// Confirm Delete Button
 $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
@@ -196,7 +195,7 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
-// Confirm Save Button
+
 $('#btnSave').on('click', function(e){
 
 	$("#commentForm").validate({
@@ -238,7 +237,6 @@ $('#btnSave').on('click', function(e){
 					$('#description').val("");
 					$('.modal-title').text('New Brokerage Status');
 
-					//Show success
 
 					toastr.options = {
 						"closeButton": false,
@@ -264,7 +262,7 @@ $('#btnSave').on('click', function(e){
 					resetErrors();
 					var invdata = JSON.parse(data);
 					$.each(invdata, function(i, v) {
-	        console.log(i + " => " + v); // view in console for error messages
+	        console.log(i + " => " + v); 
 	        var msg = '<label class="error" for="'+i+'">'+v+'</label>';
 	        $('input[name="' + i + '"], select[name="' + i + '"]').addClass('inputTxtError').after(msg);
 	    });

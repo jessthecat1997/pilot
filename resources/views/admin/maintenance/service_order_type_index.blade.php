@@ -175,7 +175,7 @@
 
 
 
-// Confirm Delete Button
+
 $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
@@ -212,7 +212,6 @@ $('#btnDelete').on('click', function(e){
 	})
 });
 
-// Confirm Save Button
 $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
@@ -239,7 +238,7 @@ $('#btnSave').on('click', function(e){
 						$('#description').val("");
 						$('.modal-title').text('New Service Order Type');
 
-					//Show success
+				
 
 					toastr.options = {
 						"closeButton": false,
@@ -312,8 +311,7 @@ $('#btnSave').on('click', function(e){
 							$('#description').val("");
 							$('.modal-title').text('New Service Order Type');
 
-					//Show success
-
+				
 					toastr.options = {
 						"closeButton": false,
 						"debug": false,

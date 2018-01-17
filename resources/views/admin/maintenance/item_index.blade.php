@@ -359,7 +359,6 @@
 
 
 
-// Confirm Delete Button
 $('#btnDelete').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
@@ -426,7 +425,7 @@ function fill_category(num)
 }
 
 
-// Confirm Save Button
+
 $('#btnSave').on('click', function(e){
 	e.preventDefault();
 	var title = $('.modal-title').text();
@@ -455,8 +454,7 @@ $('#btnSave').on('click', function(e){
 						$('#hsCode').val("");
 						$('.modal-title').text('New Item');
 
-					//Show success
-
+				
 					toastr.options = {
 						"closeButton": false,
 						"debug": false,
@@ -532,7 +530,7 @@ $('#btnSave').on('click', function(e){
 							$('#rate').val("0");
 							$('.modal-title').text('New Item');
 
-					//Show success
+				
 
 					toastr.options = {
 						"closeButton": false,

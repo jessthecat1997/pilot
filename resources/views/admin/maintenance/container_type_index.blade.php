@@ -468,8 +468,7 @@
 									cttable.ajax.url( '{{ route("ct.data") }}' ).load();
 									$('#ctModal').modal('hide');
 									$('#description').val("");
-									//$('#maxWeight').val("");
-
+								
 									$('.modal-title').text('New Container Size');
 
 

@@ -261,7 +261,7 @@
 
         })
         
-        //$(minimum).attr("disabled", true);
+
 
         var bftable = $('#bf_table').DataTable({
             processing: false,
@@ -659,7 +659,7 @@
                 
             }else{
                 if ($('#dateEffective').valid()){
-                       // $('#btnSave').attr('disabled', 'true');
+                       
                        jsonMinimum = JSON.stringify(minimum_id);
                        jsonMaximum = JSON.stringify(maximum_id);
                        jsonAmount = JSON.stringify(amount_value);
@@ -827,7 +827,7 @@ function validatebfRows()
         error+= "Existing rate.";
     }
 
-        //Final validation
+        
         if(error.length == 0){
             return true;
         }

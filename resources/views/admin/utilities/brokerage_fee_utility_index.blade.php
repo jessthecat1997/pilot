@@ -150,7 +150,7 @@
         });
 
 
-// Confirm Activate
+
 $('#btnActivate').on('click', function(e){
     e.preventDefault();
     $.ajax({
@@ -190,7 +190,7 @@ $('#btnActivate').on('click', function(e){
 
 
 
-// Confirm Deactivate
+
 $('#btnDeactivate').on('click', function(e){
     e.preventDefault();
     $.ajax({

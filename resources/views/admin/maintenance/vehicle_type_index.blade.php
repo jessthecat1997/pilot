@@ -363,9 +363,7 @@
 								$('#description').val("");
 								$('#btnSave').removeAttr('disabled');
 
-								//EDIT MOTO
-								//vtable.fnDatatable.ajax = "{{ route('vt.data') }}";
-								//vtable.ajax.reload();
+						
 							}
 							else{
 								resetErrors();
