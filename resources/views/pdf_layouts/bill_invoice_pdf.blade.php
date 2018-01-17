@@ -26,7 +26,7 @@
 			<div style="margin-left: 200px;">
 				<br />
 				@forelse($utility as $util)
-				<small><strong style="text-align: center;">Hauling Service Company</strong></small>
+				<small><strong style="text-align: center;">{{ $util->company_name }}</strong></small>
 				<br />
 				<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
 				<br />

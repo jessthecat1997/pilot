@@ -20,7 +20,7 @@
 </head>
 <body>
 	<div style="text-align:center">
-		<p align="center"><strong>HAULING SERVICES AGREEMENT</strong>
+		<p align="center"><strong>{{ strtoupper($contract[0]->companyName) }}</strong>
 			<br/>
 			(On a Per Trip Basis)
 			<br/>
