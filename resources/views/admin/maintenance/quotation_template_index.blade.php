@@ -201,7 +201,7 @@
 
 				}
 
-				} //if validate
+				}
 			})
 	});
 	function textAreaAdjust(o) {

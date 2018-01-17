@@ -633,7 +633,7 @@
 			console.log(dc_arr);
 			console.log(dc_arr[0][0]);
 
-		//Final validation
+
 		if(error.length == 0){
 
 			return true;

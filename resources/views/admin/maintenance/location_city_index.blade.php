@@ -533,9 +533,9 @@
 				}
 			}
 
-		});//submit
+		});
 
-	});//end
+	});
 
 function resetErrors() {
 	$('form input, form select').removeClass('inputTxtError');

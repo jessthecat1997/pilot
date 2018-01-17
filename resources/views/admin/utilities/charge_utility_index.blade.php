@@ -182,7 +182,7 @@ $('#btnActivate').on('click', function(e){
 });
 
 
-// Confirm Deactivate Button
+ 
 $('#btnDeactivate').on('click', function(e){
 	e.preventDefault();
 	$.ajax({
