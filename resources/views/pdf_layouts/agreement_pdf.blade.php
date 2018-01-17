@@ -42,7 +42,7 @@
 		<p align="center">
 			<strong> -and-</strong>
 		</p>
-		<strong>PILOT CARGO CHAIN SOLUTION INC.</strong>, likewise a domestic corporation duly
+		<strong>HAULING SERVICE COMPANY</strong>, likewise a domestic corporation duly
 		organized and existing under and by virtue of the Republic of the Phillipines, with
 		office address at 318 Velco Centre cor Oca and Delgado Sts. South Harbor, Manila
 		represented by its President, <strong>JOSELITO A. CASTILLO</strong>, hereinafter referred to as 
@@ -88,9 +88,9 @@
 					</td>
 					<td style="width: 35%; text-align: center;">
 						<hr />
-						<strong>Joselito A. Castillo</strong>
+						<strong>Mr. President</strong>
 						<br />
-						Pilot Cargo Chain Solution Inc.
+						Hauling Service Company
 					</td>
 				</tr>
 				<tr>

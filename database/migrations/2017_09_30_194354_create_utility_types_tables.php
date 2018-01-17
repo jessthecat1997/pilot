@@ -35,7 +35,7 @@ class CreateUtilityTypesTables extends Migration
         ->insert(
             array(
                 'company_logo' => 'pics/pilotlogo2017.png',
-                'company_name' => 'Pilot Cargo Chain Solution Inc.',
+                'company_name' => 'Hauling Service Company',
                 'company_address' => 'Unit 318 3/F Velco Centre R.S. Oca St, cor, A.C. Delgado Street Brgy, 650 Zone 68 South Harbort, Port Area, Manila',
                 'company_tin' => '007-603-178-000',
                 'company_contact' => '523-0201',

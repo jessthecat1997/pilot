@@ -26,7 +26,7 @@
 			<div style="margin-left: 200px;">
 				<br />
 				@forelse($utility as $util)
-				<small><strong style="text-align: center;">{{ $util->company_name }}</strong></small>
+				<small><strong style="text-align: center;">Hauling Service Company</strong></small>
 				<br />
 				<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
 				<br />
@@ -34,7 +34,7 @@
 				<br />
 				<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
 				<br />
-				<small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
+				<small><strong style="text-align: center;">Email add: sample@yahoo.com </strong></small>
 				@empty
 				@endforelse
 			</div>

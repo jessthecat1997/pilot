@@ -89,7 +89,7 @@
   </div>
   <div style="margin-left: 200px;">
     <br />
-    <small><strong style="text-align: center;">PILOT CARGO CHAIN SOLUTION INC.</strong></small>
+    <small><strong style="text-align: center;">HAULING SERVICE COMPANY.</strong></small>
     <br />
     <small><strong style="text-align: center;">Suite 318 Velco Center Building Port Area Manila</strong></small>
     <br />
@@ -97,7 +97,7 @@
     <br />
     <small><strong style="text-align: center;">Fax: 523-0201</strong></small>
     <br />
-    <small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
+    <small><strong style="text-align: center;">Email add: sample@yahoo.com</strong></small>
   </div>
   <br />
   <br />
