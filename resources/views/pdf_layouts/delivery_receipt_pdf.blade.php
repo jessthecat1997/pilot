@@ -48,13 +48,10 @@
 <body>
 	<div class="row">
 		<div class = "container" style="text-align: center;">
-			<h2><small><strong style="text-align: center;">HAULING SERVICE COMPANY</strong></small></h2>
-			
-			<small><strong style="text-align: center;">3rd Floor, Unit 318 Velco Center Building, R.S. Oca &amp; A.C. Delgado St.</strong></small>
+			<h2><small><strong style="text-align: center;">{{ $company_setting->company_name }}</strong></small></h2>
+
+			<small><strong style="text-align: center;">{{ $company_setting->company_address }}</strong></small>
 			<br />
-			<small><strong style="text-align: center;">South Harbor, Port Area, Manila</strong></small>
-			<br />
-			<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
 		</div>
 		<table style="width: 100%;" id = "header" >
 			<tr>
@@ -120,7 +117,7 @@
 	</div>
 
 	<br />
-	
+
 	@if($delivery[0]->withContainer == 1)
 	<section>
 		<table style="width: 100%;">
@@ -201,7 +198,7 @@
 									<hr  style="margin-top: 18px;" />
 								</td>
 								<td class="remove_table_tr" style="width: 5%;">
-									Signature: 
+									Signature:
 								</td>
 								<td class = "remove_table_tr" style="width: 30%;">
 									<hr  style="margin-top: 18px;" />
@@ -221,7 +218,7 @@
 									<hr  style="margin-top: 18px;" />
 								</td>
 								<td class="remove_table_tr" style="width: 5%;">
-									Signature: 
+									Signature:
 								</td>
 								<td class = "remove_table_tr" style="width: 30%;">
 									<hr  style="margin-top: 18px;" />
@@ -289,7 +286,7 @@
 								<hr  style="margin-top: 18px;" />
 							</td>
 							<td class="remove_table_tr" style="width: 5%;">
-								Signature: 
+								Signature:
 							</td>
 							<td class = "remove_table_tr" style="width: 30%;">
 								<hr  style="margin-top: 18px;" />
@@ -309,7 +306,7 @@
 								<hr  style="margin-top: 18px;" />
 							</td>
 							<td class="remove_table_tr" style="width: 5%;">
-								Signature: 
+								Signature:
 							</td>
 							<td class = "remove_table_tr" style="width: 30%;">
 								<hr  style="margin-top: 18px;" />
@@ -351,6 +348,6 @@
 	<br />
 	<br />
 	<br />
-	<small><small>NOTE: Responsibility of HAULING SERVICE COMPANY., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small>
+	<small><small>NOTE: Responsibility of {{ $company_setting->company_name }}., ceases upon delivery to the consignee of all goods mentioned in this delivery.</small></small>
 </body>
 </html>

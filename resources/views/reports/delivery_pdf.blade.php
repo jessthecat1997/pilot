@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>
-		
+
 	</title>
 	<style type="text/css">	</style>
 	<link href="/css/app.css" rel="stylesheet">
@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/js/jqueryDatatable/dataTables.bootstrap.min.css">
 	<script src="/js/app.js"></script>
 	<script type="text/javascript" charset="utf8" src="/js/jqueryDatatable/jquery.dataTables.min.js"></script>
-	
+
 </head>
 <body>
 	<div style="float: left;">
@@ -22,12 +22,6 @@
 		<small><strong style="text-align: center;">{{ $util->company_name }}</strong></small>
 		<br />
 		<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
-		<br />
-		<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
-		<br />
-		<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
-		<br />
-		<small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
 		@empty
 		@endforelse
 		<br />
@@ -63,7 +57,7 @@
 				</td>
 				<td>
 					Status
-				</td>	
+				</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -121,7 +115,7 @@
 		],
 		order: [[5, 'asc']],
 		rowGroup: {
-			startRender: null,   
+			startRender: null,
 			endRender: function ( rows, group ) {
 
 				var ageAvg = rows

@@ -720,6 +720,7 @@ class DatatablesController extends Controller
 
 	public function v_datatable(Request $request){
 		$isActive = $request->isActive;
+
 		if ($isActive == null){
 			$vs = DB::table('vehicles')
 			->join('vehicle_types', 'vehicle_types_id','=', 'vehicle_types.id')

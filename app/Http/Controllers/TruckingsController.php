@@ -63,12 +63,12 @@ class TruckingsController extends Controller
         return view('trucking.trucking_service_order_create', compact(['employees', 'consignees', 'provinces']));
     }
 
-    
+
     public function store(Request $request)
     {
         $new_so_head = new ConsigneeServiceOrderHeader;
         $new_so_head->consignees_id = $request->consignees_id;
-        $new_so_head->employees_id = $request->processedBy;
+        $new_so_head->employees_id = \Auth::user()->id;
         $new_so_head->save();
 
 
@@ -125,7 +125,7 @@ class TruckingsController extends Controller
                     ->where('plateNumber', '=', $vh->plateNumber)
                     ->get();
                 }
-                $new_row['vehicle_type']['deliveries'] = 
+                $new_row['vehicle_type']['deliveries'] =
                 $new_row['vehicle_type'] = $vt;
                 $new_row['vehicles'] = $vehicles;
                 array_push($vehicle_type_with_vehicles, $new_row);
@@ -143,6 +143,7 @@ class TruckingsController extends Controller
     }
 
     public function get_area_rate(Request $request){
+
         $quotation = DB::table('quotation_details')
         ->join('quotation_headers as A', 'quotation_details.quot_header_id', '=', 'A.id')
         ->join('consignees AS B', 'A.consignees_id', '=', 'B.id')
@@ -152,17 +153,18 @@ class TruckingsController extends Controller
         ->join('contract_headers as F', 'F.quot_head_id', '=', 'A.id')
         ->select('C.name as from', 'D.name as to', 'E.name as volume', 'amount')
         ->where('B.id' ,'=', $request->consignee_id)
-        ->whereRaw('DATE(NOW()) BETWEEN dateEffective AND dateExpiration')
+        ->whereRaw('NOW() BETWEEN DATE_FORMAT(dateEffective, "%Y/%m/%d") AND DATE_FORMAT(dateExpiration, "%Y/%m/%d")')
         ->where('quotation_details.locations_id_from', '=', $request->area_from)
         ->where('quotation_details.locations_id_to', '=', $request->area_to)
         ->get();
 
-        
+
+
         $location = DB::table('standard_area_rates')
         ->where('areaFrom', '=', $request->area_from)
         ->where('areaTo', '=', $request->area_to)
         ->get();
-        
+
         return Response::make(array($quotation , $location));
     }
     public function reschedule_delivery(Request $request){
@@ -191,7 +193,7 @@ class TruckingsController extends Controller
             ->get();
 
 
-            foreach ($delivery_non_containers as $key => $detail) 
+            foreach ($delivery_non_containers as $key => $detail)
             {
                 $new_delivery_head_non_con = new \App\DeliveryHeadNonContainer;
                 $new_delivery_head_non_con->del_head_id = $new_delivery->id;
@@ -208,7 +210,7 @@ class TruckingsController extends Controller
             ->get();
 
 
-            foreach ($delivery_containers as $key => $detail) 
+            foreach ($delivery_containers as $key => $detail)
             {
                 $new_delivery_head_con = new \App\DeliveryHeadContainer;
                 $new_delivery_head_con->del_head_id = $new_delivery->id;
@@ -274,7 +276,7 @@ class TruckingsController extends Controller
             ->join('delivery_head_non_containers as B', 'B.non_con_id', '=', 'delivery_non_container_details.id')
             ->join('delivery_receipt_headers as A', 'B.del_head_id', 'A.id')
             ->select('descriptionOfGoods', 'grossWeight', 'supplier', 'delivery_non_container_details.id', 'delivery_non_container_details.deleted_at')
-            ->where('B.del_head_id', '=', $request->delivery_id)    
+            ->where('B.del_head_id', '=', $request->delivery_id)
             ->get();
         }
 
@@ -454,7 +456,7 @@ class TruckingsController extends Controller
             ->where('currentBalance', '>', 0)
             ->get();
 
-            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate', 'deposits']));   
+            return view('trucking/trucking_service_order_view', compact(['so_id', 'service_order', 'employees', 'vehicles', 'deliveries', 'success_trucking', 'cancelled_trucking', 'pending_trucking', 'vehicle_types', 'container_volumes', 'service_order_details', 'bill_revs', 'bill_exps', 'estimate', 'deposits']));
         }
         catch(ModelNotFoundException $e)
         {
@@ -509,7 +511,7 @@ class TruckingsController extends Controller
                $new_delivery_head->emp_id_helper = null;
            }
            else{
-            $new_delivery_head->emp_id_helper = $request->emp_id_helper;    
+            $new_delivery_head->emp_id_helper = $request->emp_id_helper;
         }
         $new_delivery_head->locations_id_pick = $request->locations_id_pick;
         $new_delivery_head->locations_id_del = $request->locations_id_del;
@@ -542,7 +544,7 @@ class TruckingsController extends Controller
     }
     else
     {
-        $response = ""; 
+        $response = "";
         $new_delivery_head = new DeliveryReceiptHeader;
         $new_delivery_head->emp_id_driver = $request->emp_id_driver;
         $new_delivery_head->emp_id_helper = $request->emp_id_helper;
@@ -625,7 +627,7 @@ public function update_delivery(Request $request){
     $delivery->cancelDateTime = $request->cancelDateTime;
     $delivery->save();
 
-    
+
 
     return $delivery;
 }
@@ -946,7 +948,7 @@ public function bill_delivery(Request $request){
     $total_penalty_consignee = 0;
     $total_penalty_client = 0;
 
-    for($i = 0; $i <count($delivery_bills); $i++) 
+    for($i = 0; $i <count($delivery_bills); $i++)
     {
         if($delivery_bills[$i]->isBilledTo == 0){
             $total_penalty_consignee += $delivery_bills[$i]->amount;
@@ -1027,6 +1029,8 @@ public function create_pdf(){
 public function delivery_pdf(Request $request){
     $so_id = $request->trucking_id;
 
+    $company_setting = \App\UtilityType::all()->first();
+
     $delivery = DB::table('delivery_receipt_headers')
     ->join('vehicles AS B', 'delivery_receipt_headers.plateNumber', '=', 'B.plateNumber')
     ->join('employees AS C', 'delivery_receipt_headers.emp_id_driver', '=', 'C.id')
@@ -1091,7 +1095,7 @@ public function delivery_pdf(Request $request){
     $audit->description = "Delivery receipt printed id : " . $delivery[0]->id;
     $audit->save();
 
-    $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'printedby']));
+    $pdf = PDF::loadView('pdf_layouts.delivery_receipt_pdf', compact(['delivery', 'delivery_details', 'delivery_containers', 'so_id', 'container_with_detail', 'printedby', 'company_setting']));
     return $pdf->stream();
 }
 
