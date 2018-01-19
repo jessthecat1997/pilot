@@ -38,7 +38,6 @@ class BillingReportsController extends Controller
 				$status_filter =  "bh.status IN ('U') ";
 				break;
 				default:
-					# code...
 				break;
 			}
 
@@ -56,9 +55,7 @@ class BillingReportsController extends Controller
 		view()->share('users',$users);
 
 		if($request->has('download')) {
-        	// pass view file
 			$pdf = PDF::loadView('reports.pdfview');
-            // download pdf
 			return $pdf->download('userlist.pdf');
 		}
 		return view('reports.pdfview');

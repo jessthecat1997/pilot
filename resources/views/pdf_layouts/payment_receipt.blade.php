@@ -35,9 +35,9 @@
 				<br />
 				<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
 				<br />
-				<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
+				<small><strong style="text-align: center;">Tel. Nos. 999-9999</strong></small>
 				<br />
-				<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
+				<small><strong style="text-align: center;">Fax: 999-999</strong></small>
 				<br />
 				<small><strong style="text-align: center;">Email add: sample@yahoo.com</</strong></small>
 				@empty

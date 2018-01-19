@@ -11,7 +11,6 @@
     <title>Hauling Services</title>
 
     <!-- Styles -->
-    <link rel="icon" href="/images/icon.ico">
     <link href="/css/app.css" rel="stylesheet">
     <link href= "/js/select2/select2.css" rel = "stylesheet">
     <link rel="stylesheet" href="/js/jqueryDatatable/dataTables.bootstrap.min.css">

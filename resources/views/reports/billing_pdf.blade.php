@@ -22,18 +22,17 @@
 		<small><strong style="text-align: center;">{{ $util->company_name }}</strong></small>
 		<br />
 		<small><strong style="text-align: center;">{{ $util->company_address }}</strong></small>
+		<br/>
+		<small><strong style="text-align: center;">Tel. Nos. 999-9999</strong></small>
 		<br />
-		<small><strong style="text-align: center;">Tel. Nos. 523-0201, 495-0832</strong></small>
+		<small><strong style="text-align: center;">Fax: 999-999</strong></small>
 		<br />
-		<small><strong style="text-align: center;">Fax: 523-0201</strong></small>
-		<br />
-		<small><strong style="text-align: center;">Email add: jay@pilotcargochain.com / jca_pilot@yahoo.com.ph</</strong></small>
 		@empty
 		@endforelse
 		<br />
 		<hr />
 	</div>
-	<h2>Billing Report</h2>
+	<h2><center>Billing Report</center></h2>
 	<table class = "table-responsive table table-bordered table-striped" id = "customed_table">
 		<thead>
 			<tr>
